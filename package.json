@@ -1,0 +1,11 @@
+{
+  "name": "white-core",
+  "version": "1.0.0",
+  "description": "white framework core",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "logicfeel",
+  "license": "ISC"
+}
