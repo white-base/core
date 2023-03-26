@@ -19,4 +19,7 @@ https://jcon.tistory.com/185
 
 
 맥에서 재부팅시 자동 ssh-add 추가 확인중
-https://docs.github.com/ko/github-ae@latest/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
+https://qa.apthow.com/archives/28672
+
+Host * 를 추가하는게 핵심
