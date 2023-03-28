@@ -2,7 +2,6 @@
  * namespace _W.Collection.BaseCollection
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -374,6 +373,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = BaseCollection;
     } else {
+        global._W.BaseCollection = BaseCollection;
+        // namespace
         global._W.Collection.BaseCollection = BaseCollection;
     }
 

@@ -2,7 +2,6 @@
  * namespace _W.Interface.IGroupControl
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -50,6 +49,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IGroupControl;
     } else {
+        global._W.IGroupControl = IGroupControl;
+        // namespace
         global._W.Interface.IGroupControl = IGroupControl;
     }
 

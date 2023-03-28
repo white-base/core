@@ -2,7 +2,6 @@
  * namespace _W.Collection.ArrayCollection
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -116,13 +115,14 @@
         return ArrayCollection;
 
     }(BaseCollection));
-    
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ArrayCollection;
     } else {
+        global._W.ArrayCollection = ArrayCollection;
+        // namespace
         global._W.Collection.ArrayCollection = ArrayCollection;
     }
 

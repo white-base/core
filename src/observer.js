@@ -2,7 +2,6 @@
  * namespace _W.Common.Observer
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -30,7 +29,6 @@
          * @param {object} p_this 함수 호출 본문에서 this 역활 publish.apply(p_this, ...)
          */
         function Observer(p_onwer, p_this) {
-
             this.isDebug = false;
 
             /**
@@ -119,7 +117,6 @@
          *  - p_code 를 입력하지 않으면 전체 등록된 이벤트가 취소된다.
          */
         Observer.prototype.unsubscribeAll = function(p_code) {
-
             if (typeof p_code === 'undefined') {     // 전체 구독 삭제
                 this.subscribers = {any: []};
             } else {                        // 코드명 구독(함수) 전체 삭제
@@ -169,6 +166,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = Observer;
     } else {
+        global._W.Observer = Observer;
+        // namespace
         global._W.Common.Observer = Observer;
     }
 

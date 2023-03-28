@@ -2,7 +2,6 @@
  * namespace _W.Meta.MetaObject
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -36,7 +35,6 @@
          * @implements {_W.Interface.IObject}
          */
         function MetaObject() {
-            
             var _name = '';
 
             /**
@@ -65,7 +63,6 @@
          * @returns {Array}
          */
         MetaObject.prototype.getTypes  = function() {
-            
             var type = ['MetaObject'];
             
             return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
@@ -77,7 +74,6 @@
          * @returns {Boolean}
          */
         MetaObject.prototype.instanceOf  = function(p_name) {
-
             var arr = this.getTypes();
     
             if (typeof p_name !== 'string') throw new Error('Only [p_name] type name "string" can be added');
@@ -100,6 +96,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = MetaObject;
     } else {
+        global._W.MetaObject = MetaObject;
+        // namespace
         global._W.Meta.MetaObject = MetaObject;
     }
 

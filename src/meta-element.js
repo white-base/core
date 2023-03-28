@@ -2,7 +2,6 @@
  * namespace _W.Meta.MetaElement
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -65,7 +64,6 @@
     
         /** @override **/
         MetaElement.prototype.getTypes = function() {
-            
             var type = ['MetaElement'];
             
             return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
@@ -99,7 +97,6 @@
          * @returns {Object}
          */
         MetaElement.prototype.getObject  = function(p_context) {
-
             var obj     = {};
 
             for (var prop in this) {
@@ -113,7 +110,7 @@
         };
 
         return MetaElement;
-    
+
     }(MetaObject));
 
 
@@ -122,6 +119,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = MetaElement;
     } else {
+        global._W.MetaElement = MetaElement;
+        // namespace
         global._W.Meta.MetaElement = MetaElement;
     }
 

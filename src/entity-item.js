@@ -4,7 +4,6 @@
  * namespace _W.Meta.Entity.ItemViewCollection
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -464,7 +463,6 @@
          * @returns {Item}
          */
         Item.prototype.clone = function() {
-            
             var clone = new Item(this.name);
             var constraints = [];
 
@@ -665,7 +663,6 @@
          * @returns {*} 
          */
         ItemCollection.prototype.contains = function(p_elem) {
-
             if (p_elem instanceof Item) {
                 return this.indexOfName(p_elem.name) > -1;
             } else {
@@ -680,7 +677,6 @@
          * @returns {Item}
          */
         ItemCollection.prototype.addValue  = function(p_name, p_value) {
-
             var item;
             var property = {};
 
@@ -703,7 +699,6 @@
          * @returns {Item}
          */
          ItemCollection.prototype.initValue  = function() {
-
             for (var i = 0; this.count > i; i++) {
                 this[i].value = this[i].default;
             }
@@ -734,7 +729,6 @@
          * @returns {Item} 등록한 아이템
          */
         ItemTableCollection.prototype.add  = function(p_object) {
-
             var i_value;
             var i_name;
 
@@ -800,7 +794,6 @@
          *  TODO:: 객체 비교는 string 이 아니고 값과 타입을 비교해야함 (그래야 참조를 사용)
          */
         ItemViewCollection.prototype.add  = function(p_object, p_baseCollection) {
-            
             var collection;
             var i_name;
             var i_value;
@@ -878,6 +871,11 @@
         module.exports.ItemTableCollection          = ItemTableCollection;
 
     } else {
+        global._W.Item                              = Item;
+        global._W.ItemCollection                    = ItemCollection;
+        global._W.ItemViewCollection                = ItemViewCollection;
+        global._W.ItemTableCollection               = ItemTableCollection;
+        // namespace
         global._W.Meta.Entity.Item                  = Item;
         global._W.Meta.Entity.ItemCollection        = ItemCollection;
         global._W.Meta.Entity.ItemViewCollection    = ItemViewCollection;

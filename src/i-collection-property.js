@@ -2,7 +2,6 @@
  * namespace _W.Interface.IPropertyCollection
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -56,6 +55,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IPropertyCollection;
     } else {
+        global._W.IPropertyCollection = IPropertyCollection;
+        // namespace
         global._W.Interface.IPropertyCollection = IPropertyCollection;
     }
     

@@ -5,7 +5,6 @@
 // var $local = {};
 
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -82,7 +81,6 @@
 
         /** @override **/
         Row.prototype.getTypes  = function() {
-                    
             var type = ['Row'];
             
             return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
@@ -93,7 +91,6 @@
          * @param {Object} p_filter 필터객체
          */
         Row.prototype.copy = function(p_filter) {
-          
             var clone = new Row(this.entity);
             
             if (this.value) clone['value'] = this.value;
@@ -104,7 +101,6 @@
          * @returns {Row}
          */
         Row.prototype.clone  = function() {
-          
             var clone = new Row(this.entity);
             var itemName;
 
@@ -141,7 +137,6 @@
          * @returns {Row} 등록한 로우
          */
         RowCollection.prototype.add  = function(p_row) {
-
             var i_value;
 
             if (typeof p_row === 'undefined') {      
@@ -165,6 +160,9 @@
         module.exports.Row = Row;
         module.exports.RowCollection = RowCollection;
     } else {
+        global._W.Row = Row;
+        global._W.RowCollection = RowCollection;
+        // namespace
         global._W.Meta.Entity.Row = Row;
         global._W.Meta.Entity.RowCollection = RowCollection;
     }

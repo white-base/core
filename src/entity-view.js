@@ -3,7 +3,6 @@
  * namespace _W.Meta.Entity.EntityViewCollection
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -80,7 +79,6 @@
         
         /** @override **/
         EntityView.prototype.getTypes  = function() {
-            
             var type = ['EntityView'];
             
             return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
@@ -96,7 +94,6 @@
          * @returns {*}
          */
         EntityView.prototype.clone  = function() {
-            
             var clone = new EntityView(this.name);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
 
             // 참조 복제 REVIEW::  필요성 검토 필요
@@ -176,6 +173,9 @@
         module.exports.EntityView = EntityView;
         module.exports.EntityViewCollection = EntityViewCollection;
     } else {
+        global._W.EntityView = EntityView;
+        global._W.EntityViewCollection = EntityViewCollection;
+        // namespace
         global._W.Meta.Entity.EntityView = EntityView;
         global._W.Meta.Entity.EntityViewCollection = EntityViewCollection;
     }

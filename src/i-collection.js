@@ -2,7 +2,6 @@
  * namespace _W.Interface.ICollection
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -111,6 +110,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ICollection;
     } else {
+        global._W.ICollection = ICollection;
+        // namespace
         global._W.Interface.ICollection = ICollection;
     }
 

@@ -3,7 +3,6 @@
  * namespace _W.Meta.Entity.EntityTableCollection
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -56,7 +55,6 @@
 
         /** @override **/
         EntityTable.prototype.getTypes  = function() {
-            
             var type = ['EntityTable'];
             
             return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
@@ -72,7 +70,6 @@
          * @returns {*}
          */
         EntityTable.prototype.clone  = function() {
-            
             var clone = new EntityTable(this.name);
             
             // items 복제본 추가
@@ -114,7 +111,6 @@
          * @returns {Item} 등록한 아이템
          */
         EntityTableCollection.prototype.add  = function(p_object) {
-
             var i_value;
             var i_name;
 
@@ -145,6 +141,9 @@
         module.exports.EntityTable = EntityTable;
         module.exports.EntityTableCollection = EntityTableCollection;
     } else {
+        global._W.EntityTable = EntityTable;
+        global._W.EntityTableCollection = EntityTableCollection;
+        // namespace
         global._W.Meta.Entity.EntityTable = EntityTable;
         global._W.Meta.Entity.EntityTableCollection = EntityTableCollection;
     }

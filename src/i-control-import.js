@@ -2,7 +2,6 @@
  * namespace _W.Interface.IImportControl
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -42,6 +41,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IImportControl;
     } else {
+        global._W.IImportControl = IImportControl;
+        // namespace
         global._W.Interface.IImportControl = IImportControl;
     }
 

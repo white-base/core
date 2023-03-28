@@ -2,7 +2,6 @@
  * namespace _W.Interface.IExportControl
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -42,6 +41,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IExportControl;
     } else {
+        global._W.IExportControl = IExportControl;
+        // namespace
         global._W.Interface.IExportControl = IExportControl;
     }
 

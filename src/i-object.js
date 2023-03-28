@@ -2,7 +2,6 @@
  * namespace _W.Interface.IObject
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -50,6 +49,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IObject;
     } else {
+        global._W.IObject = IObject;
+        // namespace
         global._W.Interface.IObject = IObject;
     }
 

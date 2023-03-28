@@ -2,7 +2,6 @@
  * namespace _W.Collection.PropertyCollection
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -71,7 +70,6 @@
          * @returns {number} 삭제한 인덱스
          */
         PropertyCollection.prototype._remove = function(p_idx) {
-            
             var count = this._element.length - 1;
             var propName;
             
@@ -149,7 +147,6 @@
          * 속성컬렉션을 전체 삭제한다. [구현]
          */
         PropertyCollection.prototype.clear = function() {
-            
             var propName;
             
             this._onChanging();                     // 이벤트 발생 : 변경전
@@ -172,7 +169,6 @@
          * @param {String} p_name 
          */
         PropertyCollection.prototype.indexOfName = function(p_name) {
-            
             var obj;
             
             if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
@@ -201,6 +197,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = PropertyCollection;
     } else {
+        global._W.PropertyCollection = PropertyCollection;
+        // namespace
         global._W.Collection.PropertyCollection = PropertyCollection;
     }
 

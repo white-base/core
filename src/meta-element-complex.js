@@ -2,7 +2,6 @@
  * namespace _W.Meta.ComplexElement
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -77,7 +76,6 @@
 
         /** @override **/
         ComplexElement.prototype.getTypes  = function() {
-                            
             var type = ['ComplexElement'];
             
             return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
@@ -102,6 +100,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ComplexElement;
     } else {
+        global._W.ComplexElement = ComplexElement;
+        // namespace
         global._W.Meta.ComplexElement = ComplexElement;
     }
 

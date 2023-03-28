@@ -2,7 +2,6 @@
  * namespace _W.Meta.Entity.Entity
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -124,7 +123,6 @@
          * @param {*} p_target 
          */
         Entity.prototype.__fillRow  = function(p_target) {
-            
             var itemName;
             
             for (var i = 0 ; i < this.rows.count; i++) {
@@ -257,7 +255,6 @@
 
         /** @override **/
         Entity.prototype.getTypes = function() {
-            
             var type = ['Entity'];
             
             return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
@@ -280,7 +277,6 @@
          * @param {*} p_row 
          */
         Entity.prototype.setValue  = function(p_row) {
-            
             var _name = '';
 
             if (!(p_row instanceof Row)) throw new Error('Only [p_row] type "Row" can be added');
@@ -298,7 +294,6 @@
          * @returns {Row}
          */
         Entity.prototype.getValue  = function() {
-            
             var row = this.newRow();
             
             for(var i = 0; this.items.count > i; i++) {
@@ -322,7 +317,6 @@
          * }
          */
         Entity.prototype.select  = function(p_filter, p_index, p_end) {
-            
             var EXECEPT = '__except';
             var list = [];
             var excepts = [];
@@ -407,7 +401,6 @@
          * @param {*} p_end 
          */
         Entity.prototype.copy  = function(p_filter, p_index, p_end) {
-            
             var entity = this.select(p_filter, p_index, p_end);
 
             return entity.clone();
@@ -489,7 +482,6 @@
          * @param {Number} p_option.2 존재하는 item 데이터만 가져오기
          */
         Entity.prototype.load  = function(p_object, p_option) {
-            
             if (p_object instanceof Entity) {
                 this.__loadEntity(p_object, p_option);
             } else {
@@ -501,7 +493,6 @@
          * 아이템과 로우를 초기화 한다.
          */
         Entity.prototype.clear  = function() {
-            
             this.items.clear();
             this.rows.clear();
         };
@@ -521,6 +512,7 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = Entity;
     } else {
+        global._W.Entity = Entity;
         global._W.Meta.Entity.Entity = Entity;
     }
 

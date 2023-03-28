@@ -2,7 +2,6 @@
  * namespace _W.Interface.ILookupControl
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -42,6 +41,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ILookupControl;
     } else {
+        global._W.ILookupControl = ILookupControl;
+        // namespace
         global._W.Interface.ILookupControl = ILookupControl;
     }
 

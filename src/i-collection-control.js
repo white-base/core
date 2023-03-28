@@ -102,6 +102,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IControlCollection;
     } else {
+        global._W.IControlCollection = IControlCollection;
+        // namespace
         global._W.Interface.IControlCollection = IControlCollection;
     }
     

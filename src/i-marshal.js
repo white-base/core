@@ -2,7 +2,6 @@
  * namespace _W.Interface.IMarshal
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -67,6 +66,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IMarshal;
     } else {
+        global._W.IMarshal = IMarshal;
+        // namespace
         global._W.Interface.IMarshal = IMarshal;
     }
     

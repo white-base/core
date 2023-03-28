@@ -2,7 +2,6 @@
  * namespace _W.Interface.IPartControl
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -50,6 +49,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IPartControl;
     } else {
+        global._W.IPartControl = IPartControl;
+        // namespace
         global._W.Interface.IPartControl = IPartControl;
     }
 

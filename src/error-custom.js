@@ -2,7 +2,6 @@
  * namespace _W.Common.CustomError
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
@@ -86,8 +85,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = CustomError;
     } else {
+        global._WCustomError = CustomError;
+        // namespace
         global._W.Common.CustomError = CustomError;
-        global._W.CustomError = CustomError;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

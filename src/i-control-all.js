@@ -2,7 +2,6 @@
  * namespace _W.Interface.IAllControl
  */
 (function(global) {
-    
     'use strict';
 
     //==============================================================
@@ -58,6 +57,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IAllControl;
     } else {
+        global._W.IAllControl = IAllControl;
+        // namespace
         global._W.Interface.IAllControl = IAllControl;
     }
 

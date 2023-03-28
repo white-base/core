@@ -1,5 +1,6 @@
 /**
  * namespace _W.Collection.PropertyObjectCollection
+ * TODO: 제거 대상
  */
 (function(global) {
 
