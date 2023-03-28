@@ -14,6 +14,9 @@ var EntityView                  = require('./src/entity-view').EntityView;
 var EntityViewCollection        = require('./src/entity-view').EntityViewCollection;
 var EntityTable                 = require('./src/entity-table').EntityTable;
 var Item                        = require('./src/entity-item').Item;
+var ItemCollection              = require('./src/entity-item').ItemCollection;
+var ItemViewCollection          = require('./src/entity-item').ItemViewCollection;
+var ItemTableCollection         = require('./src/entity-item').ItemTableCollection;
 var CustomError                 = require('./src/error-custom');
 var utils                       = require('./src/utils');
 
@@ -29,6 +32,9 @@ module.exports = {
     EntityViewCollection: EntityViewCollection,
     EntityTable: EntityTable,
     Item: Item,
+    ItemCollection: ItemCollection,
+    ItemViewCollection: ItemViewCollection,
+    ItemTableCollection: ItemTableCollection,
     CustomError: CustomError,
     Util: utils,
     Common: {

@@ -22,6 +22,9 @@ describe('index 타입 검사', () => {
         expect(typeof index.EntityViewCollection).toBe('function');
         expect(typeof index.EntityTable).toBe('function');
         expect(typeof index.Item).toBe('function');
+        expect(typeof index.ItemCollection).toBe('function');
+        expect(typeof index.ItemViewCollection).toBe('function');
+        expect(typeof index.ItemTableCollection).toBe('function');
         expect(typeof index.CustomError).toBe('function');
         expect(typeof index.Util.inherits).toBe('function');
         expect(typeof index.Util.getArrayLevel).toBe('function');
