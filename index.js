@@ -24,6 +24,7 @@ module.exports = {
     BaseCollection: BaseCollection,
     ArrayCollection: ArrayCollection,
     PropertyCollection: PropertyCollection,
+    PropertyFunctionCollection: PropertyFunctionCollection,
     MetaObject: MetaObject,
     MetaElement: MetaElement,
     Observer: Observer,
