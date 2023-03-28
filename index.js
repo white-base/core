@@ -24,6 +24,7 @@ module.exports = {
     MetaObject: MetaObject,
     MetaElement: MetaElement,
     Observer: Observer,
+    Entity: Entity,
     EntityView: EntityView,
     EntityViewCollection: EntityViewCollection,
     EntityTable: EntityTable,
