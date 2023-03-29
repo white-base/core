@@ -10,6 +10,26 @@ if ((typeof Object.prototype._implements === 'undefined') ||
     (function(global) {
         'use strict';
 
+        /**
+         * 전체 프로퍼티 조회
+         * @param {object} obj Object를 제외한 프로터피 리턴
+         * @param {boolean?} isObject Object를 포함여부
+         * @returns {array}  
+         */
+        function getAllProperties(obj, isObject){
+            var allProps = [], curr = obj;
+            var is = isObject || false;
+            do{
+                var props = Object.getOwnPropertyNames(curr);
+                props.forEach(function(prop) {
+                    if (allProps.indexOf(prop) === -1 && (isObject 
+                        || !Object.prototype.hasOwnProperty(prop)))
+                        allProps.push(prop);
+                })
+            }while(curr = Object.getPrototypeOf(curr))
+            return allProps;
+        }
+
         /***
          * 객체의 타입 비교
          * ori 의 속성 타입별 비교 기준 (Interface 역활)
@@ -26,39 +46,75 @@ if ((typeof Object.prototype._implements === 'undefined') ||
         function equalType(ori, tar, oriName){
             var typeName = '';
             var oriName = oriName ? oriName : 'this';
-            
-            for (var key in ori) {
-                // 대상 null 검사
-                if (ori[key] !== null && tar[key] === null) {
-                    throw new Error(' 대상 null ' + oriName + '.' + key);   // COVER:
-                }
-                // 대상 여부 검사                
-                if (!(key in tar)) {
-                    throw new Error(' 대상 없음 ' + oriName + '.' + key + ' : ' + typeof ori[key] + ' ');
-                }
-                // arrary 타입 검사
-                if (Array.isArray(ori[key]) && !Array.isArray(tar[key])){
-                    throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : array ');
-                }
-                // function 타입 검사
-                if (typeof ori[key] === 'function' && typeof tar[key] === 'function') {
+            var list = getAllProperties(ori);
+
+            for(var i = 0; i < list.length; i++) {
+                var key = list[i];
+                
+                // 통과 검사
+                if (false
+                    || (typeof ori[key] === 'function' && typeof tar[key] === 'function')
+                    || (Array.isArray(ori[key]) && Array.isArray(tar[key]))
+                    || (typeof ori[key] === 'function' && typeof tar[key] === 'object' && tar[key] instanceof ori[key])) {
                     continue;
                 }
-                // class(function) 타입 검사
-                if (typeof ori[key] === 'function' && typeof tar[key] === 'object') {
-                    if (tar[key] instanceof ori[key]) continue;   // 통과
-                    else throw new Error( ori[key].name +' 객체 아님 '+ oriName +'.'+ key +' : class ');
-                }
-                // object 타입 검사
-                if (typeof ori[key] === 'object' && ori[key] !== null) {
-                    if (equalType(ori[key], tar[key], oriName +'.'+ key) === false) return false;
-                }
-                // stiring, number, boolean, function 타입 검사 (null 아니면서)
-                if (ori[key] !== null && !(typeof ori[key] === typeof tar[key])) {  /** 원본 null 비교 안함 */
+                // 타입 검사
+                if (ori[key] !== null && tar[key] === null) {
+                    throw new Error(' 대상 null ' + oriName + '.' + key);   // COVER:
+                } else if (!(key in tar)) {
+                    throw new Error(' 대상 없음 ' + oriName + '.' + key + ' : ' + typeof ori[key]);
+                } else  if (Array.isArray(ori[key]) && !Array.isArray(tar[key])){
+                    throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : array ');
+                } else if (typeof ori[key] === 'function' && typeof tar[key] === 'object' && !(tar[key] instanceof ori[key])) {
+                    throw new Error( ori[key].name +' 객체 아님 '+ oriName +'.'+ key +' : class ');
+                } else if (ori[key] !== null && !(typeof ori[key] === typeof tar[key])) {  /** 원본 null 비교 안함 */
                     throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : ' + typeof ori[key] + ' ');
+                }
+                // 재귀호출
+                if (typeof ori[key] === 'object' && !Array.isArray(ori[key]) && ori[key] !== null) {
+                    if (equalType(ori[key], tar[key], oriName +'.'+ key) === false) return false;
                 }
             }
         }
+        // REVIEW:
+        // function equalType(ori, tar, oriName){
+        //     var typeName = '';
+        //     var oriName = oriName ? oriName : 'this';
+        //     var list = getAllProperties(ori);
+
+        //     for(var i = 0; i < list.length; i++) {
+        //         var key = list[i];
+        //         // 대상 null 검사
+        //         if (ori[key] !== null && tar[key] === null) {
+        //             throw new Error(' 대상 null ' + oriName + '.' + key);   // COVER:
+        //         }
+        //         // 대상 여부 검사                
+        //         if (!(key in tar)) {
+        //             throw new Error(' 대상 없음 ' + oriName + '.' + key + ' : ' + typeof ori[key]);
+        //         }
+        //         // arrary 타입 검사
+        //         if (Array.isArray(ori[key]) && !Array.isArray(tar[key])){
+        //             throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : array ');
+        //         }
+        //         // function 타입 검사
+        //         if (typeof ori[key] === 'function' && typeof tar[key] === 'function') {
+        //             continue;
+        //         }
+        //         // class(function) 타입 검사
+        //         if (typeof ori[key] === 'function' && typeof tar[key] === 'object') {
+        //             if (tar[key] instanceof ori[key]) continue;   // 통과
+        //             else throw new Error( ori[key].name +' 객체 아님 '+ oriName +'.'+ key +' : class ');
+        //         }
+        //         // object 타입 검사
+        //         if (typeof ori[key] === 'object' && !Array.isArray(ori[key]) && ori[key] !== null) {
+        //             if (equalType(ori[key], tar[key], oriName +'.'+ key) === false) return false;
+        //         }
+        //         // stiring, number, boolean, function 타입 검사 (null 아니면서)
+        //         if (ori[key] !== null && !(typeof ori[key] === typeof tar[key])) {  /** 원본 null 비교 안함 */
+        //             throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : ' + typeof ori[key] + ' ');
+        //         }
+        //     }
+        // }
 
         /**
          * 인터페이스 객체 유무 검사
@@ -67,9 +123,9 @@ if ((typeof Object.prototype._implements === 'undefined') ||
          */
         var isImplementOf = function(p_imp) {
             for (var i = 0; i < this._interface.length; i++) {
-                if (this._interface[i] === p_imp) return true;  // COVER:
+                if (this._interface[i] === p_imp) return true;  
             }
-            return false;
+            return false; // COVER:
         };    
 
         /**

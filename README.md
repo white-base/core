@@ -25,6 +25,14 @@ https://qa.apthow.com/archives/28672
 Host * 를 추가하는게 핵심
 
 
+# npm 배포 정리 잘된곳
+https://heropy.blog/2019/01/31/node-js-npm-module-publish/
+
+
+# for in class 변경점 우회방법
+https://developer.mozilla.org/ko/docs/Web/JavaScript/Enumerability_and_ownership_of_properties
+
+## 2023-03-28
 ----------------------------------------
 File                                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                           
 -----------------------------------------|---------|----------|---------|---------|--

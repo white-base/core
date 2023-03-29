@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const nothing   = require('../src/object-implement'); // Object._implements() : 폴리필
+const none      = require('../src/object-implement'); // Object._implements() : 폴리필
 const util      = require('../src/utils');
 
 //==============================================================
@@ -11,14 +11,6 @@ const util      = require('../src/utils');
 describe('this._implements(interface)', () => {
     beforeAll(() => {
     });
-    // it('- this형 인터페이스 선언 ', () => {
-    //     function ISuper() {
-    //         this.m1 = function() { return 'I1'; };
-    //     }
-    //     const i = new ISuper();
-        
-    //     expect(i.m1()).toBe('I1');
-    // });
     it('- this 인터페이스 선언 : 예외 (인터페이스 미구현)', () => {
         function ISuper() {
             this.m1 = function() {};
@@ -63,8 +55,9 @@ describe('this._implements(interface)', () => {
 
     it('- this 인터페이스 선언 <-- 구현', () => {
         function ISuper() {
-            this.m1 = function() {  };
+            this.m1 = function() { };
         }
+        ISuper.prototype.m1 = function() { return 'C1' }
         function CoClass() {
             this._implements(ISuper);    /** @implements */
         }
@@ -233,13 +226,110 @@ describe('this._implements(interface)', () => {
         expect(()=> new CoClass()).toThrow(/m1/);
     });
     
+    it('- class 다중 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
+        class ISuper1 {
+            fun = function() {};
+            m1() {};
+        }
+        class ISuper2 {
+            arr = [];
+            m2() {};
+        }
+        class CoClass1 {
+            fun = function() {};
+            arr = [];
+            constructor() { this._implements(ISuper1, ISuper2); }
+            m1() { return 'M1' };
+            m2() { return 'M2' };
+        }
+        class CoClass2 {
+            fun = function() {};
+            constructor() { this._implements(ISuper1, ISuper2); }
+            m1() { return 'M1' };
+            m2() { return 'M2' };
+        }
+        let obj = new CoClass1();
+
+        expect(obj.m1()).toBe('M1');
+        expect(()=> new CoClass2()).toThrow(/arr/);
+    });
+    
+    it('- class 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
+        class ISuper {
+            arr = [];
+            m1() {};
+        }
+        class ISub {
+            arr = [];           // 재정의
+            fun = function() {};
+            constructor() { this._implements(ISuper); }
+            m1() {};            // 재정의
+            m2() {};
+        }
+        class CoClass1 {
+            arr = [];
+            fun = function() { return 'FUN' };
+            constructor() { this._implements(ISub); }
+            m1() { return 'M1' };
+            m2() { return 'M2' };
+        }
+        class CoClass2 {
+            fun = function() {};
+            constructor() { this._implements(ISub); }
+            m1() { return 'M1' };
+            m2() { return 'M2' };
+        }
+        let obj = new CoClass1();
+
+        expect(obj.m1()).toBe('M1');
+        expect(obj.m2()).toBe('M2');
+        expect(()=> new CoClass2()).toThrow(/arr/);
+    });
+    it('- function 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
+        function ISuper() {
+            this.arr = [];
+        }
+        ISuper.prototype.m1 = function() {};
+        function ISub() {
+            this.arr = [];                  // 재정의
+            this.fun = function() {};
+            this._implements(ISuper);
+        }
+        ISub.prototype.m1 = function() {};  // 재정의
+        ISub.prototype.m2 = function() {};
+        function CoClass1() {   // 정상 작동
+            this.fun = function() { return 'FUN' };
+            this.arr = [];
+            this._implements(ISub);
+        }
+        CoClass1.prototype.m1 = function() { return 'M1' };
+        CoClass1.prototype.m2 = function() { return 'M2' };
+        function CoClass2() {
+            this.fun = function() { return 'FUN' };
+            this._implements(ISub); 
+        }
+        CoClass2.prototype.m1 = function() { return 'M1' };
+        CoClass2.prototype.m2 = function() { return 'M2' };
+        let obj = new CoClass1();
+
+        expect(obj.fun()).toBe('FUN');
+        expect(obj.m2()).toBe('M2');
+        expect(()=> new CoClass2()).toThrow(/arr/);
+    });
+
+    it('- 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
+    });
+    
     /**
      * 테스트 항목
      *  - 다중 인터페이스 
-     *      - 중복된 인터페이스 명칭은 ? 각각 검사함 타입이 다를 경우 오류 : any 만 유효할듯
+     *      + 중복된 인터페이스 명칭은 ? 각각 검사함 타입이 다를 경우 오류 : any 만 유효할듯
      *  - 인터페이스 상속 인터페이스
-     *      - 상속한 인터페이스를 구현한 경우 검사 : extends, inherits()
+     *      + 상속한 인터페이스를 구현한 경우 검사 : extends, inherits()
      *  - 인터페이스 구현 인터페이스
+     *  - 예외 조건
+     *      + cover 참조
      */
+
 
 });
