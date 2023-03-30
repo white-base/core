@@ -12,17 +12,17 @@
    
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var MetaObject;
     var IMarshal;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('./utils');
+        utils                = require('./utils');
         MetaObject          = require('./meta-object');
         IMarshal            = require('./i-marshal');
 
     } else {
-        util                = global._W.Common.Util;
+        utils                = global._W.Common.Util;
         MetaObject          = global._W.Meta.MetaObject;
         IMarshal            = global._W.Interface.IMarshal;
 
@@ -30,7 +30,7 @@
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
 
@@ -60,7 +60,7 @@
             /** implements IMarshal 인터페이스 구현 */
             this._implements(IMarshal);            
         }
-        util.inherits(MetaElement, _super);
+        utils.inherits(MetaElement, _super);
     
         /** @override **/
         MetaElement.prototype.getTypes = function() {
@@ -75,7 +75,7 @@
          * @returns {String}
          */
         MetaObject.prototype.__newGUID  = function() {
-            return util.createGUID();
+            return utils.createGUID();
         };
 
         /**

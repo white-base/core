@@ -11,24 +11,24 @@
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var MetaElement;
     var IPropertyCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                    = require('./utils');
+        utils                    = require('./utils');
         MetaElement             = require('./meta-element');
         IPropertyCollection     = require('./i-collection-property');
 
     } else {
-        util                    = global._W.Common.Util;
+        utils                    = global._W.Common.Util;
         MetaElement             = global._W.Meta.MetaElement;
         IPropertyCollection     = global._W.Interface.IPropertyCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
 
@@ -72,7 +72,7 @@
             /** implements IPropertyCollection 인터페이스 선언 */
             this._implements(IPropertyCollection);                
         }
-        util.inherits(ComplexElement, _super);
+        utils.inherits(ComplexElement, _super);
 
         /** @override **/
         ComplexElement.prototype.getTypes  = function() {

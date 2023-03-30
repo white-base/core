@@ -12,18 +12,18 @@
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var ICollection;
     var IGroupControl;
     var IAllControl;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('./utils');
+        utils                = require('./utils');
         ICollection         = require('./i-collection');
         IGroupControl        = require('./i-control-group');
         IAllControl         = require('./i-control-all');
     } else {
-        util                = global._W.Common.Util;
+        utils                = global._W.Common.Util;
         ICollection         = global._W.Interface.ICollection;
         IGroupControl        = global._W.Interface.IGroupControl;
         IAllControl         = global._W.Interface.IAllControl;        
@@ -31,7 +31,7 @@
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
     if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
@@ -52,7 +52,7 @@
 
             this._implements(IGroupControl, IAllControl);            
         }
-        util.inherits(IControlCollection, _super);        
+        utils.inherits(IControlCollection, _super);        
     
         /**
          * 병합, 합침

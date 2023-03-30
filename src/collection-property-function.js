@@ -13,20 +13,20 @@
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var PropertyCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('./utils');
+        utils                = require('./utils');
         PropertyCollection  = require('./collection-property');
     } else {
-        util                = global._W.Common.Util;
+        utils                = global._W.Common.Util;
         PropertyCollection  = global._W.Collection.PropertyCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     
     //==============================================================
@@ -44,7 +44,7 @@
 
             this.elementType = Function;
         }
-        util.inherits(PropertyFunctionCollection, _super);
+        utils.inherits(PropertyFunctionCollection, _super);
 
         /**
          * 함수속성 컬렉션을 추가한다.

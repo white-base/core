@@ -11,20 +11,20 @@
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var BaseCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('./utils');
+        utils                = require('./utils');
         BaseCollection      = require('./collection-base');
     } else {
-        util                = global._W.Common.Util;
+        utils                = global._W.Common.Util;
         BaseCollection      = global._W.Collection.BaseCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
 
     //==============================================================
@@ -40,7 +40,7 @@
             _super.call(this, p_onwer);
 
         }
-        util.inherits(ArrayCollection, _super);
+        utils.inherits(ArrayCollection, _super);
 
         /**
          * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]

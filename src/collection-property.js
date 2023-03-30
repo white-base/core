@@ -11,23 +11,23 @@
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var BaseCollection;
     var IPropertyCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('./utils');
+        utils                = require('./utils');
         BaseCollection      = require('./collection-base');
         IPropertyCollection = require('./i-collection-property');
     } else {
-        util                = global._W.Common.Util;
+        utils                = global._W.Common.Util;
         BaseCollection      = global._W.Collection.BaseCollection;
         IPropertyCollection = global._W.Interface.IPropertyCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
     
@@ -61,7 +61,7 @@
             /** implements IPropertyCollection 인터페이스 구현 */
             this._implements(IPropertyCollection);            
         }
-        util.inherits(PropertyCollection, _super);
+        utils.inherits(PropertyCollection, _super);
 
         /**
          * 속성 컬렉션을 삭제한다. (내부처리) [구현]

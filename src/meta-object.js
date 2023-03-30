@@ -14,7 +14,7 @@
     var IObject;
     
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        require('./object-implement'); // _implements() : 폴리필
+        require('./_object-implement'); // _implements() : 폴리필
         
         IObject             = require('./i-object');
     } else {

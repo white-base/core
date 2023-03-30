@@ -13,16 +13,24 @@ describe('index 타입 검사', () => {
     it('- _W.Common.* ', () => {
         expect(typeof index.Observer).toBe('function');
         expect(typeof index.CustomError).toBe('function');
-        expect(typeof index.util.inherits).toBe('function');
-        expect(typeof index.util.getArrayLevel).toBe('function');
-        expect(typeof index.util.createGUID).toBe('function');
+        expect(typeof index.utils.inherits).toBe('function');
+        expect(typeof index.utils.getArrayLevel).toBe('function');
+        expect(typeof index.utils.createGUID).toBe('function');
+        expect(typeof index.utils.validSelector).toBe('function');
+        expect(typeof index.utils.getAllProperties).toBe('function');
+        expect(typeof index.utils.implements).toBe('function');
+        expect(typeof index.utils.isImplementsOf).toBe('function');
         // namespace
         expect(typeof index.Common).toBe('object');
         expect(typeof index.Common.Observer).toBe('function');
         expect(typeof index.Common.CustomError).toBe('function');
-        expect(typeof index.Common.util.inherits).toBe('function');
-        expect(typeof index.Common.util.getArrayLevel).toBe('function');
-        expect(typeof index.Common.util.createGUID).toBe('function');
+        expect(typeof index.Common.utils.inherits).toBe('function');
+        expect(typeof index.Common.utils.getArrayLevel).toBe('function');
+        expect(typeof index.Common.utils.createGUID).toBe('function');
+        expect(typeof index.Common.utils.validSelector).toBe('function');
+        expect(typeof index.Common.utils.getAllProperties).toBe('function');
+        expect(typeof index.Common.utils.implements).toBe('function');
+        expect(typeof index.Common.utils.isImplementsOf).toBe('function');
     });
     it('- _W.Collection.* ', () => {
         expect(typeof index.BaseCollection).toBe('function');

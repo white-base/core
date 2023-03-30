@@ -11,17 +11,17 @@
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                        = require('./utils');
+        utils                        = require('./utils');
     } else {
-        util                        = global._W.Common.Util;
+        utils                        = global._W.Common.Util;
     }
 
     //==============================================================Á
     // 3. 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -67,7 +67,7 @@
             // TODO:: 추후 [내부처리] 부분 구현
             this.innerExecute();
         }
-        util.inherits(CustomError, _super);
+        utils.inherits(CustomError, _super);
 
         /**
          * 내부처리

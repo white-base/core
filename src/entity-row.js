@@ -15,18 +15,18 @@
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var MetaObject;
     var PropertyCollection;
     var ArrayCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('./utils');
+        utils                = require('./utils');
         MetaObject          = require('./meta-object');
         PropertyCollection  = require('./collection-property');
         ArrayCollection     = require('./collection-array');
     } else {
-        util                = global._W.Common.Util;
+        utils                = global._W.Common.Util;
         MetaObject          = global._W.Meta.MetaObject;
         PropertyCollection  = global._W.Collection.PropertyCollection;
         ArrayCollection     = global._W.Collection.ArrayCollection;
@@ -34,7 +34,7 @@
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
@@ -77,7 +77,7 @@
                 enumerable: true
             });            
         }
-        util.inherits(Row, _super);
+        utils.inherits(Row, _super);
 
         /** @override **/
         Row.prototype.getTypes  = function() {
@@ -129,7 +129,7 @@
 
             this.elementType = Row;   // 컬렉션타입 설정
         }
-        util.inherits(RowCollection, _super);
+        utils.inherits(RowCollection, _super);
 
         /**
          * 로우컬렉션에 로우를 추가한다.

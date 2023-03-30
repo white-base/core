@@ -36,7 +36,7 @@ var ILookupControl              = require('./src/i-control-lookup');
 var IPartControl                = require('./src/i-control-part');
 
 module.exports = {
-    util: utils,
+    utils: utils,
     Observer: Observer,
     CustomError: CustomError,
     BaseCollection: BaseCollection,
@@ -70,7 +70,7 @@ module.exports = {
     IPartControl: IPartControl,
     // namespace
     Common: {
-        util: utils,
+        utils: utils,
         Observer: Observer,
         CustomError: CustomError,
     },

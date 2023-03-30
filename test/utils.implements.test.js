@@ -3,12 +3,11 @@
  */
 //==============================================================
 // gobal defined
-const none      = require('../src/object-implement'); // Object._implements() : 폴리필
-const util      = require('../src/utils');
+const utils      = require('../src/utils');
 
 //==============================================================
 // test
-describe('this._implements(interface)', () => {
+describe('utils.implements(this, interface)', () => {
     beforeAll(() => {
     });
     it('- this 인터페이스 선언 : 예외 (인터페이스 미구현)', () => {
@@ -16,7 +15,7 @@ describe('this._implements(interface)', () => {
             this.m1 = function() {};
         }
         function CoClass() {
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(() => new CoClass()).toThrow(/대상 없음/);
@@ -25,7 +24,7 @@ describe('this._implements(interface)', () => {
         function ISuper() {}
         ISuper.prototype.m1 = function() {};
         function CoClass() {
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
         
         expect(() => new CoClass()).toThrow(/대상 없음/);
@@ -37,7 +36,7 @@ describe('this._implements(interface)', () => {
         }
         class CoClass {
             constructor() {
-                this._implements(ISuper);    /** @implements */
+                utils.implements(this, ISuper);    /** @implements */
             }
         }
 
@@ -47,7 +46,7 @@ describe('this._implements(interface)', () => {
         function ISuper() {}
         ISuper.prototype.m1 = function() {};
         function CoClass() {
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
         
         expect(() => new CoClass()).toThrow(/대상 없음/);
@@ -59,14 +58,14 @@ describe('this._implements(interface)', () => {
         }
         ISuper.prototype.m1 = function() { return 'C1' }
         function CoClass() {
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
         CoClass.prototype.m1 = function() { return 'C1' }
         const i = new CoClass();
 
         expect(i.m1()).toBe('C1');
         expect(i._interface.length).toBe(1);
-        expect(i.isImplementOf(ISuper)).toBe(true);
+        expect(utils.isImplementsOf(i, ISuper)).toBe(true);
     });
     it('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = 인스턴스) ', () => {
         function ISuper() {
@@ -74,7 +73,7 @@ describe('this._implements(interface)', () => {
         }
         function CoClass() {
             this.obj = /err/;    // 객체(Regex)
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(()=> new CoClass()).toThrow(/AClass/);
@@ -85,7 +84,7 @@ describe('this._implements(interface)', () => {
         }
         function CoClass() {
             this.obj = 'err'
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(()=> new CoClass()).toThrow(/function/);
@@ -96,7 +95,7 @@ describe('this._implements(interface)', () => {
         }
         function CoClass() {
             this.arr = 'err';
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(()=> new CoClass()).toThrow(/array/);
@@ -107,7 +106,7 @@ describe('this._implements(interface)', () => {
         }
         function CoClass() {
             this.str = 1;
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(()=> new CoClass()).toThrow(/string/);
@@ -118,7 +117,7 @@ describe('this._implements(interface)', () => {
         }
         function CoClass() {
             this.num = 'err';
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(()=> new CoClass()).toThrow(/number/);
@@ -129,7 +128,7 @@ describe('this._implements(interface)', () => {
         }
         function CoClass() {
             this.bool   = 'err';
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(()=> new CoClass()).toThrow(/boolean/);
@@ -159,7 +158,7 @@ describe('this._implements(interface)', () => {
                 add: {}     // 확장 속성
             };
             this.add = 1;   // 확장 속성
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
         function CoClass2() {
             this.sub = {
@@ -172,7 +171,7 @@ describe('this._implements(interface)', () => {
                 add: {}     // 확장 속성
             };
             this.add = 1;   // 확장 속성
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
 
         expect(()=> new CoClass1()).toThrow(/boolean/);
@@ -220,7 +219,7 @@ describe('this._implements(interface)', () => {
                 bool: false,
                 any: null,
             };
-            this._implements(ISuper);    /** @implements */
+            utils.implements(this, ISuper);    /** @implements */
         }
         
         expect(()=> new CoClass()).toThrow(/m1/);
@@ -238,13 +237,13 @@ describe('this._implements(interface)', () => {
         class CoClass1 {
             fun = function() {};
             arr = [];
-            constructor() { this._implements(ISuper1, ISuper2); }
+            constructor() { utils.implements(this, ISuper1, ISuper2); }
             m1() { return 'M1' };
             m2() { return 'M2' };
         }
         class CoClass2 {
             fun = function() {};
-            constructor() { this._implements(ISuper1, ISuper2); }
+            constructor() { utils.implements(this, ISuper1, ISuper2); }
             m1() { return 'M1' };
             m2() { return 'M2' };
         }
@@ -262,20 +261,20 @@ describe('this._implements(interface)', () => {
         class ISub {
             arr = [];           // 재정의
             fun = function() {};
-            constructor() { this._implements(ISuper); }
+            constructor() { utils.implements(this, ISuper); }
             m1() {};            // 재정의
             m2() {};
         }
         class CoClass1 {
             arr = [];
             fun = function() { return 'FUN' };
-            constructor() { this._implements(ISub); }
+            constructor() { utils.implements(this, ISub); }
             m1() { return 'M1' };
             m2() { return 'M2' };
         }
         class CoClass2 {
             fun = function() {};
-            constructor() { this._implements(ISub); }
+            constructor() { utils.implements(this, ISub); }
             m1() { return 'M1' };
             m2() { return 'M2' };
         }
@@ -293,20 +292,20 @@ describe('this._implements(interface)', () => {
         function ISub() {
             this.arr = [];                  // 재정의
             this.fun = function() {};
-            this._implements(ISuper);
+            utils.implements(this, ISuper);
         }
         ISub.prototype.m1 = function() {};  // 재정의
         ISub.prototype.m2 = function() {};
         function CoClass1() {   // 정상 작동
             this.fun = function() { return 'FUN' };
             this.arr = [];
-            this._implements(ISub);
+            utils.implements(this, ISub);
         }
         CoClass1.prototype.m1 = function() { return 'M1' };
         CoClass1.prototype.m2 = function() { return 'M2' };
         function CoClass2() {
             this.fun = function() { return 'FUN' };
-            this._implements(ISub); 
+            utils.implements(this, ISub); 
         }
         CoClass2.prototype.m1 = function() { return 'M1' };
         CoClass2.prototype.m2 = function() { return 'M2' };
@@ -317,7 +316,65 @@ describe('this._implements(interface)', () => {
         expect(()=> new CoClass2()).toThrow(/arr/);
     });
 
-    it('- 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
+    it('- function 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
+        function ISuper() {
+            this.arr = [];
+        }
+        ISuper.prototype.m1 = function() {};
+        function ISub() {
+            ISuper.call(this); 
+            this.fun = function() {};
+        }
+        utils.inherits(ISub, ISuper);
+        ISub.prototype.m2 = function() {};
+        // 클래스 정의
+        function CoClass1() {   // 정상 작동
+            this.fun = function() { return 'FUN' };
+            this.arr = [];
+            utils.implements(this, ISub);
+        }
+        CoClass1.prototype.m1 = function() { return 'M1' };
+        CoClass1.prototype.m2 = function() { return 'M2' };
+        function CoClass2() {
+            this.fun = function() { return 'FUN' };
+            utils.implements(this, ISub); 
+        }
+        CoClass2.prototype.m1 = function() { return 'M1' };
+        CoClass2.prototype.m2 = function() { return 'M2' };
+        let obj = new CoClass1();
+
+        expect(obj.fun()).toBe('FUN');
+        expect(obj.m2()).toBe('M2');
+        expect(()=> new CoClass2()).toThrow(/arr/);
+    });
+    it('- class 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
+        class ISuper {
+            arr = [];
+            m1() {};
+        }
+        class ISub extends ISuper {
+            fun = function() {};
+            m2 = function() {};
+        }
+        // 클래스 정의
+        function CoClass1() {
+            this.fun = function() { return 'FUN' };
+            this.arr = [];
+            utils.implements(this, ISub);
+        }
+        CoClass1.prototype.m1 = function() { return 'M1' };
+        CoClass1.prototype.m2 = function() { return 'M2' };
+        function CoClass2() {
+            this.fun = function() { return 'FUN' };
+            utils.implements(this, ISub); 
+        }
+        CoClass2.prototype.m1 = function() { return 'M1' };
+        CoClass2.prototype.m2 = function() { return 'M2' };
+        let obj = new CoClass1();
+
+        expect(obj.fun()).toBe('FUN');
+        expect(obj.m2()).toBe('M2');
+        expect(()=> new CoClass2()).toThrow(/arr/);
     });
     
     /**

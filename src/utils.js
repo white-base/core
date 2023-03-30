@@ -141,18 +141,145 @@
         return null;
     };
 
+    /**
+         * 전체 프로퍼티 조회
+         * @param {object} obj Object를 제외한 프로터피 리턴
+         * @param {boolean?} isObject Object를 포함 여부
+         * @returns {array}  
+         */
+    var getAllProperties = function(obj, isObject) {
+        var allProps = [], curr = obj;
+        var is = isObject || false;
+
+        do{
+            var props = Object.getOwnPropertyNames(curr);
+            props.forEach(function(prop) {
+                if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
+                    allProps.push(prop);
+            })
+        }while(curr = Object.getPrototypeOf(curr))
+        return allProps;
+    }
+
+    /***
+         * 객체의 타입 비교
+         * ori 의 속성 타입별 비교 기준 (Interface 역활)
+         *  - function() {} : function 타입 또는 대상의 인스턴스 (파라메티 검사 안함)
+         *  - []            : array 타입
+         *  - ''            : string 타입
+         *  - 0, 1, 2..     : number 타입
+         *  - true, false   : boolean 타입
+         *  - null          : any 타입
+         *  - {}            : 재귀호출 검사!
+         * @param ori 원본 객체 (인터페이스 : 타입선언)
+         * @param tar 비교 객체
+         */
+    var equalType = function(ori, tar, oriName) {
+        var typeName = '';
+        var oriName = oriName ? oriName : 'this';
+        var list = getAllProperties(ori);
+
+        for(var i = 0; i < list.length; i++) {
+            var key = list[i];
+            
+            // 통과 검사
+            if (false
+                || (typeof ori[key] === 'function' && typeof tar[key] === 'function')
+                || (Array.isArray(ori[key]) && Array.isArray(tar[key]))
+                || (typeof ori[key] === 'function' && typeof tar[key] === 'object' && tar[key] instanceof ori[key])) {
+                continue;
+            }
+            // 타입 검사
+            if (ori[key] !== null && tar[key] === null) {
+                throw new Error(' 대상 null ' + oriName + '.' + key);   // COVER:
+            } else if (!(key in tar)) {
+                throw new Error(' 대상 없음 ' + oriName + '.' + key + ' : ' + typeof ori[key]);
+            } else  if (Array.isArray(ori[key]) && !Array.isArray(tar[key])){
+                throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : array ');
+            } else if (typeof ori[key] === 'function' && typeof tar[key] === 'object' && !(tar[key] instanceof ori[key])) {
+                throw new Error( ori[key].name +' 객체 아님 '+ oriName +'.'+ key +' : class ');
+            } else if (ori[key] !== null && !(typeof ori[key] === typeof tar[key])) {  /** 원본 null 비교 안함 */
+                throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : ' + typeof ori[key] + ' ');
+            }
+            // 재귀호출
+            if (typeof ori[key] === 'object' && !Array.isArray(ori[key]) && ori[key] !== null) {
+                if (equalType(ori[key], tar[key], oriName +'.'+ key) === false) return false;
+            }
+        }
+    }
+
+    /**
+     * 구현 제약 조건 검사
+     * @param {object} object 대상 객체
+     * @param {function} args 대상 함수
+     */
+    var implement = function(object, args) {
+        var typeName;
+        var obj;    
+        var _interface = [];
+
+        if (typeof object !== 'object') throw new Error(' object 타입이 아닙니다. ');
+
+        Object.defineProperty(object, '_interface', {
+            enumerable: false,
+            configurable: true,
+            get: function() { 
+                return _interface;
+            }
+        });
+    
+        for(var i = 1; i < arguments.length; i++) {
+            if (typeof arguments[i] === 'function') {
+                // 중복 제거
+                if (object._interface.indexOf(arguments[i]) < 0) {
+                    object._interface.push(arguments[i]);
+                    object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
+                }
+            } else throw new Error('함수타입만 가능합니다.');   // COVER:
+            // 비교 원본 인터페이스 임시 객체 생성    
+            obj = new arguments[i];
+    
+            // 객체 타입을 비교 (값은 비교 안함, 타입만 비교함)
+            equalType(obj, object);
+        }
+    }
+
+
+    /**
+     * 
+     * @param {*} object 대상 객체 : this
+     * @param {*} target 비고 클래스
+     * @returns 
+     */
+    var isImplementsOf = function(object, target) {
+        if (typeof target !== 'function') throw new Error(' 함수만 타입이 아닙니다. ');
+        for (var i = 0; i < object._interface.length; i++) {
+            if (object._interface[i] === target) return true;  
+        }
+        return false; // COVER:
+    }
+
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports.inherits = inherits;
         module.exports.getArrayLevel = getArrayLevel;
         module.exports.createGUID = createGUID;
+        module.exports.validSelector = validSelector;
+        module.exports.getAllProperties = getAllProperties;
+        // module.exports.equalType = equalType;
+        module.exports.implements = implement;
+        module.exports.isImplementsOf = isImplementsOf;
         // REVIEW:: validSelector는 사용 안함
     } else {
         global._W.Common.Util.inherits = inherits;
         global._W.Common.Util.getArrayLevel = getArrayLevel;
         global._W.Common.Util.createGUID = createGUID;
         global._W.Common.Util.validSelector = validSelector;
+        global._W.Common.Util.getAllProperties = getAllProperties;
+        // global._W.Common.Util.equalType = equalType;
+        global._W.Common.Util.implements = implement;
+        global._W.Common.Util.isImplementsOf = isImplementsOf;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

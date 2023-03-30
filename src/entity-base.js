@@ -12,7 +12,7 @@
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var MetaElement;
     var IPropertyCollection;
     var IGroupControl;
@@ -22,7 +22,7 @@
     var ItemCollection;
     
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                    = require('./utils');
+        utils                    = require('./utils');
         MetaElement             = require('./meta-element');
         IGroupControl           = require('./i-control-group');
         IAllControl             = require('./i-control-all');
@@ -30,7 +30,7 @@
         Row                     = require('./entity-row').Row;
         ItemCollection          = require('./entity-item').ItemCollection;
     } else {
-        util                    = global._W.Common.Util;
+        utils                    = global._W.Common.Util;
         MetaElement             = global._W.Meta.MetaElement;
         IGroupControl           = global._W.Interface.IGroupControl;
         IAllControl             = global._W.Interface.IAllControl;
@@ -41,7 +41,7 @@
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
@@ -99,7 +99,7 @@
 
             this._implements(IGroupControl, IAllControl);                
         }
-        util.inherits(Entity, _super);
+        utils.inherits(Entity, _super);
 
         /**
          * 아이템 추가한다. (내부)

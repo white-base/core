@@ -11,20 +11,20 @@
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var utils;
     var IObject;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('./utils');
+        utils                = require('./utils');
         IObject             = require('./i-object');
     } else {
-        util                = global._W.Common.Util;
+        utils                = global._W.Common.Util;
         IObject             = global._W.Interface.IObject;
     }
 
     //==============================================================
     // 3. 모듈의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
     if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
 
     //==============================================================
@@ -39,7 +39,7 @@
         function IMarshal() {
             _super.call(this);
         }
-        util.inherits(IMarshal, _super);
+        utils.inherits(IMarshal, _super);
 
         /**
          * 객체 얻기
