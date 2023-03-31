@@ -1,5 +1,5 @@
 /**
- * namespace _W.Interface.IControlCollection
+ * namespace _L.Interface.IControlCollection
  */
 (function(global) {
 
@@ -7,31 +7,31 @@
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var ICollection;
     var IGroupControl;
     var IAllControl;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                = require('./utils');
+        Util                = require('./util');
         ICollection         = require('./i-collection');
-        IGroupControl        = require('./i-control-group');
+        IGroupControl       = require('./i-control-group');
         IAllControl         = require('./i-control-all');
     } else {
-        utils                = global._W.Common.Util;
-        ICollection         = global._W.Interface.ICollection;
-        IGroupControl        = global._W.Interface.IGroupControl;
-        IAllControl         = global._W.Interface.IAllControl;        
+        Util                = global._L.Common.Util;
+        ICollection         = global._L.Interface.ICollection;
+        IGroupControl       = global._L.Interface.IGroupControl;
+        IAllControl         = global._L.Interface.IAllControl;        
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
     if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
@@ -41,18 +41,20 @@
     var IControlCollection  = (function (_super) {
         /** 
          * 컨트롤 컬렉션 엔터페이스
-         * @constructs _W.Interface.IControlCollection
+         * @constructs _L.Interface.IControlCollection
          * @interface
-         * @extends _W.Interface.ICollection
-         * @implements {_W.Interface.IGroupControl}
-         * @implements {_W.Interface.IAllControl}
+         * @extends _L.Interface.ICollection
+         * @implements {_L.Interface.IGroupControl}
+         * @implements {_L.Interface.IAllControl}
          */
         function IControlCollection() {
             _super.call(this);
 
-            this._implements(IGroupControl, IAllControl);            
+            // this._implements(IGroupControl, IAllControl);            
+            Util.implements(this, IGroupControl, IAllControl);
+
         }
-        utils.inherits(IControlCollection, _super);        
+        Util.inherits(IControlCollection, _super);        
     
         /**
          * 병합, 합침
@@ -103,9 +105,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IControlCollection;
     } else {
-        global._W.IControlCollection = IControlCollection;
+        global._L.IControlCollection = IControlCollection;
         // namespace
-        global._W.Interface.IControlCollection = IControlCollection;
+        global._L.Interface.IControlCollection = IControlCollection;
     }
     
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

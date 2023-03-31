@@ -1,29 +1,35 @@
 /**
- * namespace _W.Interface.ICollection
+ * namespace _L.Interface.ICollection
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};    
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};    
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
     var IPartControl;
     var ILookupControl;
+    var Util;
     
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         IPartControl        = require('./i-control-part');
         ILookupControl      = require('./i-control-lookup');
+        Util                = require('./util');
     } else {
-        IPartControl        = global._W.Interface.IPartControl;
-        ILookupControl      = global._W.Interface.ILookupControl;
+        IPartControl        = global._L.Interface.IPartControl;
+        ILookupControl      = global._L.Interface.ILookupControl;
+        Util                = global._L.Common.Util
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
+    if (typeof IPartControl === 'undefined') throw new Error('[IPartControl] module load fail...');
+    if (typeof ILookupControl === 'undefined') throw new Error('[ILookupControl] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -31,10 +37,10 @@
         /**
          * 컬렉션 최상위
          * @classdesc 컬렉션 최상위 컬렉션 인터페이스
-         * @constructs _W.Interface.ICollection
+         * @constructs _L.Interface.ICollection
          * @interface
-         * @implements {_W.Interface.IPartControl}
-         * @implements {_W.Interface.ILookupControl}
+         * @implements {_L.Interface.IPartControl}
+         * @implements {_L.Interface.ILookupControl}
          */
         function ICollection() {
             /**
@@ -51,7 +57,8 @@
 
             /** implements IPartControl 인터페이스 구현 */
             /** implements ILookupControl 인터페이스 구현 */
-            this._implements(IPartControl, ILookupControl);            
+            // this._implements(IPartControl, ILookupControl);            
+            Util.implements(this, IPartControl, ILookupControl);
         }
     
         /**
@@ -111,9 +118,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ICollection;
     } else {
-        global._W.ICollection = ICollection;
+        global._L.ICollection = ICollection;
         // namespace
-        global._W.Interface.ICollection = ICollection;
+        global._L.Interface.ICollection = ICollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

@@ -1,24 +1,26 @@
 /**
- * namespace _W.Meta.MetaObject
+ * namespace _L.Meta.MetaObject
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
     var IObject;
+    var Util;
     
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        require('./_object-implement'); // _implements() : 폴리필
-        
+        // require('./_object-implement'); // _implements() : 폴리필
+        Util                = require('./util');
         IObject             = require('./i-object');
     } else {
-        IObject             = global._W.Interface.IObject;
+        Util                = global._L.Common.Util
+        IObject             = global._L.Interface.IObject;
     }
 
     //==============================================================
@@ -30,16 +32,16 @@
     var MetaObject  = (function () {
         /**
          * 메타 최상위 클래스 (실체)
-         * @constructs _W.Meta.MetaObject
+         * @constructs _L.Meta.MetaObject
          * @abstract
-         * @implements {_W.Interface.IObject}
+         * @implements {_L.Interface.IObject}
          */
         function MetaObject() {
             var _name = '';
 
             /**
              * 이름
-             * @member _W.Meta.MetaObject#name
+             * @member _L.Meta.MetaObject#name
              * @protected
              */
              Object.defineProperty(this, 'name', 
@@ -54,7 +56,8 @@
              });
 
             /** implements IObject 인터페이스 구현 */
-            this._implements(IObject);
+            // this._implements(IObject);
+            Util.implements(this, IObject);
         }
         
         /**
@@ -96,9 +99,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = MetaObject;
     } else {
-        global._W.MetaObject = MetaObject;
+        global._L.MetaObject = MetaObject;
         // namespace
-        global._W.Meta.MetaObject = MetaObject;
+        global._L.Meta.MetaObject = MetaObject;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

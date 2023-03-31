@@ -1,41 +1,41 @@
 /**
- * namespace _W.Meta.Entity.EntityView
- * namespace _W.Meta.Entity.EntityViewCollection
+ * namespace _L.Meta.Entity.EntityView
+ * namespace _L.Meta.Entity.EntityViewCollection
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
-    global._W.Meta.Entity   = global._W.Meta.Entity || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
+    global._L.Meta.Entity   = global._L.Meta.Entity || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var Util;
     var MetaObject;
     var Entity;
     var ItemViewCollection;
     var PropertyCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('util');
+        Util                = require('./util');
         MetaObject          = require('./meta-object');
         Entity              = require('./entity-base');
-        ItemViewCollection   = require('./entity-item').ItemViewCollection;
+        ItemViewCollection  = require('./entity-item').ItemViewCollection;
         PropertyCollection  = require('./collection-property');
     } else {
-        util                = global._W.Common.Util;
-        MetaObject          = global._W.Meta.MetaObject;
-        Entity              = global._W.Meta.Entity.Entity;
-        ItemViewCollection   = global._W.Meta.Entity.ItemViewCollection;
-        PropertyCollection  = global._W.Collection.PropertyCollection;
+        Util                = global._L.Common.Util;
+        MetaObject          = global._L.Meta.MetaObject;
+        Entity              = global._L.Meta.Entity.Entity;
+        ItemViewCollection  = global._L.Meta.Entity.ItemViewCollection;
+        PropertyCollection  = global._L.Collection.PropertyCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof Entity === 'undefined') throw new Error('[Entity] module load fail...');
     if (typeof ItemViewCollection === 'undefined') throw new Error('[ItemViewCollection] module load fail...');
@@ -46,8 +46,8 @@
     var EntityView  = (function (_super) {
         /**
          * 뷰 엔티티
-         * @constructs _W.Meta.Entity.EntityView
-         * @extends _W.Meta.Entity.Entity
+         * @constructs _L.Meta.Entity.EntityView
+         * @extends _L.Meta.Entity.Entity
          * @param {*} p_name 
          * @param {*} p_baseEntity 
          */
@@ -66,7 +66,7 @@
 
             this.items = new ItemViewCollection(this, refCollection);
         }
-        util.inherits(EntityView, _super);
+        Util.inherits(EntityView, _super);
 
         /**
          * 뷰 엔티티에 참조를 등록한다.
@@ -120,8 +120,8 @@
     var EntityViewCollection  = (function (_super) {
         /**
          * 뷰 엔티티 컬렉션
-         * @constructs _W.Meta.Entity.EntityViewCollection
-         * @extends _W.Meta.Entity.PropertyCollection
+         * @constructs _L.Meta.Entity.EntityViewCollection
+         * @extends _L.Meta.Entity.PropertyCollection
          * @param {*} p_onwer 소유자 
          */
         function EntityViewCollection(p_onwer) {
@@ -129,7 +129,7 @@
 
             this.elementType = EntityView;   // 컬렉션타입 설정
         }
-        util.inherits(EntityViewCollection, _super);
+        Util.inherits(EntityViewCollection, _super);
 
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.
@@ -173,11 +173,11 @@
         module.exports.EntityView = EntityView;
         module.exports.EntityViewCollection = EntityViewCollection;
     } else {
-        global._W.EntityView = EntityView;
-        global._W.EntityViewCollection = EntityViewCollection;
+        global._L.EntityView = EntityView;
+        global._L.EntityViewCollection = EntityViewCollection;
         // namespace
-        global._W.Meta.Entity.EntityView = EntityView;
-        global._W.Meta.Entity.EntityViewCollection = EntityViewCollection;
+        global._L.Meta.Entity.EntityView = EntityView;
+        global._L.Meta.Entity.EntityViewCollection = EntityViewCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

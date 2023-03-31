@@ -12,8 +12,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         // util = require('util');
     } else {
-        // global._W = global._W || {};
-        // util = global._W.util || {};
+        // global._L = global._L || {};
+        // util = global._L.util || {};
     }
 
     //==============================================================
@@ -32,7 +32,7 @@
     // if (typeof module === 'object' && typeof module.exports === 'object') {     
     //     module.exports = namespace;
     // } else {
-    //     global._W.namespace = namespace;
+    //     global._L.namespace = namespace;
     // }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

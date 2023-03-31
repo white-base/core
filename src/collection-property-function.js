@@ -1,5 +1,5 @@
 /**
- * namespace _W.Collection.PropertyFunctionCollection
+ * namespace _L.Collection.PropertyFunctionCollection
  * TODO: 제거 대상
  */
 (function(global) {
@@ -8,25 +8,25 @@
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Collection    = global._W.Collection || {};
+    global._L               = global._L || {};
+    global._L.Collection    = global._L.Collection || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var PropertyCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                = require('./utils');
+        Util                = require('./util');
         PropertyCollection  = require('./collection-property');
     } else {
-        utils                = global._W.Common.Util;
-        PropertyCollection  = global._W.Collection.PropertyCollection;
+        Util                = global._L.Common.Util;
+        PropertyCollection  = global._L.Collection.PropertyCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     
     //==============================================================
@@ -35,16 +35,16 @@
      var PropertyFunctionCollection  = (function (_super) {
         /**
          * 함수 프로퍼티 컬렉션
-         * @constructs _W.Collection.PropertyFunctionCollection
+         * @constructs _L.Collection.PropertyFunctionCollection
          * @param {*} p_onwer 소유자 
-         * @extends _W.Collection.ProperyCollection
+         * @extends _L.Collection.ProperyCollection
          */
         function PropertyFunctionCollection(p_onwer) {
             _super.call(this, p_onwer);
 
             this.elementType = Function;
         }
-        utils.inherits(PropertyFunctionCollection, _super);
+        Util.inherits(PropertyFunctionCollection, _super);
 
         /**
          * 함수속성 컬렉션을 추가한다.
@@ -70,7 +70,7 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = PropertyFunctionCollection;
     } else {
-        global._W.Collection.PropertyFunctionCollection = PropertyFunctionCollection;
+        global._L.Collection.PropertyFunctionCollection = PropertyFunctionCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

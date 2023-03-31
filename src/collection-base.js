@@ -1,31 +1,35 @@
 /**
- * namespace _W.Collection.BaseCollection
+ * namespace _L.Collection.BaseCollection
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Collection    = global._W.Collection || {};
+    global._L               = global._L || {};
+    global._L.Collection    = global._L.Collection || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
     var ICollection;
     var Observer;    
-
+    var Util;
+    
     if (typeof module === 'object' && typeof module.exports === 'object') {
         ICollection         = require('./i-collection');
         Observer            = require('./observer');
+        Util                = require('./util');
     } else {
-        ICollection         = global._W.Interface.ICollection;
-        Observer            = global._W.Common.Observer;
+        ICollection         = global._L.Interface.ICollection;
+        Observer            = global._L.Common.Observer;
+        Util                = global._L.Common.Util
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
     if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
+    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현 
@@ -33,8 +37,8 @@
     var BaseCollection  = (function () {
        /**
         * 컬렉션 최상위 클래스 (추상클래스)
-        * @constructs _W.Collection.BaseCollection
-        * @implements {_W.Interface.ICollection}
+        * @constructs _L.Collection.BaseCollection
+        * @implements {_L.Interface.ICollection}
         * @param {Object} p_onwer 소유객체
         */
         function BaseCollection(p_onwer) { 
@@ -48,7 +52,7 @@
             /** 
              * 이벤트 객체
              * @private 
-             * @member {Object} _W.Collection.BaseCollection#__event  
+             * @member {Object} _L.Collection.BaseCollection#__event  
              */
             Object.defineProperty(this, '__event', {
                 enumerable: false,
@@ -61,7 +65,7 @@
              /** 
              * 소유객체
              * @protected 
-             * @member {Object} _W.Collection.BaseCollection#_onwer  
+             * @member {Object} _L.Collection.BaseCollection#_onwer  
              */
               Object.defineProperty(this, '_onwer', {
                 enumerable: false,
@@ -77,7 +81,7 @@
             /** 
              * 컬랙선 내부값 
              * @protected 
-             * @member {Array} _W.Collection.BaseCollection#_element  
+             * @member {Array} _L.Collection.BaseCollection#_element  
              */
             Object.defineProperty(this, '_element', {
                 enumerable: false,
@@ -93,7 +97,7 @@
             /** 
              * 심볼 예약어 목록 
              * @protected
-             * @member {Array}  _W.Collection.BaseCollection#_symbol  
+             * @member {Array}  _L.Collection.BaseCollection#_symbol  
              */
              Object.defineProperty(this, '_symbol', {
                 enumerable: false,
@@ -108,7 +112,7 @@
 
             /** 
              * 요소타입
-             * @member {Observer}  _W.Collection.BaseCollection#elementType  
+             * @member {Observer}  _L.Collection.BaseCollection#elementType  
              */
             Object.defineProperty(this, 'elementType', {
                 enumerable: false,
@@ -127,7 +131,7 @@
 
             /**
              * 컬렉션 목록 
-             * @member {Array}  _W.Collection.BaseCollection#list  
+             * @member {Array}  _L.Collection.BaseCollection#list  
              */
             Object.defineProperty(this, 'list', {
                 enumerable: false,
@@ -139,7 +143,7 @@
 
             /**
              * 컬랙션 갯수 
-             * @member {Number} _W.Collection.BaseCollection#count 
+             * @member {Number} _L.Collection.BaseCollection#count 
              */
             Object.defineProperty(this, 'count', {
                 enumerable: false,
@@ -151,7 +155,7 @@
 
             /** 
              * 변경(등록/삭제) 후 이벤트  
-             * @event _W.Collection.BaseCollection#onAdd 
+             * @event _L.Collection.BaseCollection#onAdd 
              */
             Object.defineProperty(this, 'onAdd', {
                 enumerable: false,
@@ -163,7 +167,7 @@
 
             /** 
              * 제거 이벤트
-             * @event _W.Collection.BaseCollection#onRemove
+             * @event _L.Collection.BaseCollection#onRemove
              */
             Object.defineProperty(this, 'onRemove', {
                 enumerable: false,
@@ -175,7 +179,7 @@
 
             /** 
              * 전체 제거 이벤트
-             * @event _W.Collection.BaseCollection#onClear
+             * @event _L.Collection.BaseCollection#onClear
              */
             Object.defineProperty(this, 'onClear', {
                 enumerable: false,
@@ -187,7 +191,7 @@
 
             /** 
              * 변경(등록/삭제) 전 이벤트  
-             * @event _W.Collection.BaseCollection#onChanging 
+             * @event _L.Collection.BaseCollection#onChanging 
              */
             Object.defineProperty(this, 'onChanging', {
                 enumerable: false,
@@ -199,7 +203,7 @@
 
             /** 
              * 변경(등록/삭제) 후 이벤트  
-             * @event _W.Collection.BaseCollection#onChanged 
+             * @event _L.Collection.BaseCollection#onChanged 
              */
             Object.defineProperty(this, 'onChanged', {
                 enumerable: false,
@@ -216,7 +220,8 @@
             this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf']);
 
             /** implements ICollection 인터페이스 구현 */
-             this._implements(ICollection);
+            //  this._implements(ICollection);
+             Util.implements(this, ICollection);
         }
     
         /**
@@ -245,7 +250,7 @@
 
         /**
          * 추가 이벤트 수신자
-         * @listens _W.Collection.BaseCollection#onClear
+         * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
             this.__event.publish('add', p_idx, p_value); 
@@ -253,7 +258,7 @@
 
         /**
          * 삭제 이벤트 수신자
-         * @listens _W.Collection.BaseCollection#onRemove
+         * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx) {
             this.__event.publish('remove', p_idx); 
@@ -261,7 +266,7 @@
 
         /** 
          *  전체삭제 수신자 이벤트
-         * @listens _W.Collection.BaseCollection#onClear
+         * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
             this.__event.publish('clear'); 
@@ -269,7 +274,7 @@
 
         /** 
          *  변경(등록/삭제) 전 수신자 이벤트
-         * @listens _W.Collection.BaseCollection#onChanging
+         * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function() {
             this.__event.publish('changing'); 
@@ -277,7 +282,7 @@
 
         /** 
          *  변경(등록/삭제) 후 수신자 이벤트
-         * @listens _W.Collection.BaseCollection#onChanged
+         * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function() {
             this.__event.publish('changed'); 
@@ -302,7 +307,7 @@
         /**
          * 전체삭제(초기화)한다.
          * @abstract 
-         * @fires _W.Collection.BaseCollection#onClear 
+         * @fires _L.Collection.BaseCollection#onClear 
          */
         BaseCollection.prototype.clear  = function() {
             throw new Error('[ clear() ] Abstract method definition, fail...');
@@ -373,9 +378,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = BaseCollection;
     } else {
-        global._W.BaseCollection = BaseCollection;
+        global._L.BaseCollection = BaseCollection;
         // namespace
-        global._W.Collection.BaseCollection = BaseCollection;
+        global._L.Collection.BaseCollection = BaseCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

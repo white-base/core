@@ -1,18 +1,18 @@
 /**
- * namespace _W.Meta.Entity.Entity
+ * namespace _L.Meta.Entity.Entity
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
-    global._W.Meta.Entity   = global._W.Meta.Entity || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
+    global._L.Meta.Entity   = global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var MetaElement;
     var IPropertyCollection;
     var IGroupControl;
@@ -22,7 +22,7 @@
     var ItemCollection;
     
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                    = require('./utils');
+        Util                    = require('./util');
         MetaElement             = require('./meta-element');
         IGroupControl           = require('./i-control-group');
         IAllControl             = require('./i-control-all');
@@ -30,18 +30,18 @@
         Row                     = require('./entity-row').Row;
         ItemCollection          = require('./entity-item').ItemCollection;
     } else {
-        utils                    = global._W.Common.Util;
-        MetaElement             = global._W.Meta.MetaElement;
-        IGroupControl           = global._W.Interface.IGroupControl;
-        IAllControl             = global._W.Interface.IAllControl;
-        RowCollection           = global._W.Meta.Entity.RowCollection;
-        Row                     = global._W.Meta.Entity.Row;
-        ItemCollection          = global._W.Meta.Entity.ItemCollection;
+        Util                    = global._L.Common.Util;
+        MetaElement             = global._L.Meta.MetaElement;
+        IGroupControl           = global._L.Interface.IGroupControl;
+        IAllControl             = global._L.Interface.IAllControl;
+        RowCollection           = global._L.Meta.Entity.RowCollection;
+        Row                     = global._L.Meta.Entity.Row;
+        ItemCollection          = global._L.Meta.Entity.ItemCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
@@ -55,10 +55,10 @@
     var Entity  = (function (_super) {
         /**
          * 엔티티
-         * @constructs _W.Meta.Entity.Entity
-         * @extends _W.Meta.MetaElement
-         * @implements {_W.Interface.IGroupControl}
-         * @implements {_W.Interface.IAllControl}
+         * @constructs _L.Meta.Entity.Entity
+         * @extends _L.Meta.MetaElement
+         * @implements {_L.Interface.IGroupControl}
+         * @implements {_L.Interface.IAllControl}
          * @param {*} p_name 
          */
         function Entity(p_name) {
@@ -69,7 +69,7 @@
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
-             * @member {ItemCollection} _W.Meta.Entity.Entity#items
+             * @member {ItemCollection} _L.Meta.Entity.Entity#items
              */
             Object.defineProperty(this, 'items', 
             {
@@ -84,7 +84,7 @@
             
             /**
              * 엔티티의 데이터(로우) 컬렉션
-             * @member {RowCollection} _W.Meta.Entity.Entity#rows
+             * @member {RowCollection} _L.Meta.Entity.Entity#rows
              */
             Object.defineProperty(this, 'rows', 
             {
@@ -97,9 +97,10 @@
                 enumerable: true
             });
 
-            this._implements(IGroupControl, IAllControl);                
+            // this._implements(IGroupControl, IAllControl);
+            Util.implements(this, IGroupControl, IAllControl);
         }
-        utils.inherits(Entity, _super);
+        Util.inherits(Entity, _super);
 
         /**
          * 아이템 추가한다. (내부)
@@ -512,8 +513,8 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = Entity;
     } else {
-        global._W.Entity = Entity;
-        global._W.Meta.Entity.Entity = Entity;
+        global._L.Entity = Entity;
+        global._L.Meta.Entity.Entity = Entity;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

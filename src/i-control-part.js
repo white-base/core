@@ -1,13 +1,13 @@
 /**
- * namespace _W.Interface.IPartControl
+ * namespace _L.Interface.IPartControl
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};    
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};    
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -19,7 +19,7 @@
     // 4. 모듈 구현    
     var IPartControl  = (function () {
         /**
-         * @constructs _W.Interface.IPartControl
+         * @constructs _L.Interface.IPartControl
          * @interface
          */
         function IPartControl() {
@@ -50,9 +50,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IPartControl;
     } else {
-        global._W.IPartControl = IPartControl;
+        global._L.IPartControl = IPartControl;
         // namespace
-        global._W.Interface.IPartControl = IPartControl;
+        global._L.Interface.IPartControl = IPartControl;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

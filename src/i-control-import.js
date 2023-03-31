@@ -1,13 +1,13 @@
 /**
- * namespace _W.Interface.IImportControl
+ * namespace _L.Interface.IImportControl
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};    
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};    
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -19,7 +19,7 @@
     // 4. 모듈 구현    
     var IImportControl  = (function () {
         /**
-         * @constructs _W.Interface.IImportControl
+         * @constructs _L.Interface.IImportControl
          * @interface
          */
         function IImportControl() {
@@ -42,9 +42,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IImportControl;
     } else {
-        global._W.IImportControl = IImportControl;
+        global._L.IImportControl = IImportControl;
         // namespace
-        global._W.Interface.IImportControl = IImportControl;
+        global._L.Interface.IImportControl = IImportControl;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

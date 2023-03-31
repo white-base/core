@@ -1,36 +1,36 @@
 /**
- * namespace _W.Meta.MetaElement
+ * namespace _L.Meta.MetaElement
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
 
    
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var MetaObject;
     var IMarshal;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                = require('./utils');
+        Util                = require('./util');
         MetaObject          = require('./meta-object');
         IMarshal            = require('./i-marshal');
 
     } else {
-        utils                = global._W.Common.Util;
-        MetaObject          = global._W.Meta.MetaObject;
-        IMarshal            = global._W.Interface.IMarshal;
+        Util                = global._L.Common.Util;
+        MetaObject          = global._L.Meta.MetaObject;
+        IMarshal            = global._L.Interface.IMarshal;
 
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
 
@@ -39,10 +39,10 @@
     var MetaElement  = (function (_super) {
         /**
          * IMarshal 인터페이스 구현 및 ..
-         * @constructs _W.Meta.MetaElement
+         * @constructs _L.Meta.MetaElement
          * @abstract
-         * @extends _W.Meta.MetaObject
-         * @implements {_W.Interface.IMarshal}
+         * @extends _L.Meta.MetaObject
+         * @implements {_L.Interface.IMarshal}
          * @param {*} p_name 
          */
         function MetaElement(p_name) {
@@ -58,9 +58,10 @@
             this.__GUID = null;
             
             /** implements IMarshal 인터페이스 구현 */
-            this._implements(IMarshal);            
+            // this._implements(IMarshal);            
+            Util.implements(this, IMarshal);
         }
-        utils.inherits(MetaElement, _super);
+        Util.inherits(MetaElement, _super);
     
         /** @override **/
         MetaElement.prototype.getTypes = function() {
@@ -75,7 +76,7 @@
          * @returns {String}
          */
         MetaObject.prototype.__newGUID  = function() {
-            return utils.createGUID();
+            return Util.createGUID();
         };
 
         /**
@@ -119,9 +120,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = MetaElement;
     } else {
-        global._W.MetaElement = MetaElement;
+        global._L.MetaElement = MetaElement;
         // namespace
-        global._W.Meta.MetaElement = MetaElement;
+        global._L.Meta.MetaElement = MetaElement;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

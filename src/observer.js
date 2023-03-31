@@ -1,13 +1,13 @@
 /**
- * namespace _W.Common.Observer
+ * namespace _L.Common.Observer
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Common        = global._W.Common || {};
+    global._L               = global._L || {};
+    global._L.Common        = global._L.Common || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -24,7 +24,7 @@
     var Observer = (function () {
         /**
          * 구독자 클래스 (이벤트에 활용)
-         * @constructs _W.Common.Observer
+         * @constructs _L.Common.Observer
          * @param {obejct} p_onwer Observer 클래스의 소유 함수 또는 클래스
          * @param {object} p_this 함수 호출 본문에서 this 역활 publish.apply(p_this, ...)
          */
@@ -166,9 +166,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = Observer;
     } else {
-        global._W.Observer = Observer;
+        global._L.Observer = Observer;
         // namespace
-        global._W.Common.Observer = Observer;
+        global._L.Common.Observer = Observer;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

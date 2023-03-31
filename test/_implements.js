@@ -4,7 +4,7 @@
 //==============================================================
 // gobal defined
 const none      = require('../src/_object-implement'); // Object._implements() : 폴리필
-const utils     = require('../src/utils');
+const Util     = require('../src/Util');
 
 //==============================================================
 // test
@@ -66,7 +66,7 @@ describe('this._implements(interface)', () => {
 
         expect(i.m1()).toBe('C1');
         expect(i._interface.length).toBe(1);
-        expect(i.isImplementsOf(ISuper)).toBe(true);
+        expect(i.isImplementOf(ISuper)).toBe(true);
     });
     it('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = 인스턴스) ', () => {
         function ISuper() {
@@ -326,7 +326,7 @@ describe('this._implements(interface)', () => {
             ISuper.call(this); 
             this.fun = function() {};
         }
-        utils.inherits(ISub, ISuper);
+        Util.inherits(ISub, ISuper);
         ISub.prototype.m2 = function() {};
         // 클래스 정의
         function CoClass1() {   // 정상 작동

@@ -1,34 +1,34 @@
 /**
- * namespace _W.Meta.ComplexElement
+ * namespace _L.Meta.ComplexElement
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W                   = global._W || {};
-    global._W.Meta              = global._W.Meta || {};
+    global._L                   = global._L || {};
+    global._L.Meta              = global._L.Meta || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var MetaElement;
     var IPropertyCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                    = require('./utils');
+        Util                    = require('./util');
         MetaElement             = require('./meta-element');
         IPropertyCollection     = require('./i-collection-property');
 
     } else {
-        utils                    = global._W.Common.Util;
-        MetaElement             = global._W.Meta.MetaElement;
-        IPropertyCollection     = global._W.Interface.IPropertyCollection;
+        Util                    = global._L.Common.Util;
+        MetaElement             = global._L.Meta.MetaElement;
+        IPropertyCollection     = global._L.Interface.IPropertyCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
 
@@ -37,10 +37,10 @@
     var ComplexElement  = (function (_super) {
         /**
          * 복합요소
-         * @constructs _W.Meta.ComplexElement
+         * @constructs _L.Meta.ComplexElement
          * @abstract
-         * @extends _W.Meta.MetaElement
-         * @implements {_W.Interface.IPropertyCollection}
+         * @extends _L.Meta.MetaElement
+         * @implements {_L.Interface.IPropertyCollection}
          */
         function ComplexElement() {
             _super.call(this);
@@ -49,7 +49,7 @@
 
             /**
              * 요소 갯수
-             * @member _W.Meta.ComplexElement#count
+             * @member _L.Meta.ComplexElement#count
              */
             Object.defineProperty(this, 'count', 
             {
@@ -60,7 +60,7 @@
 
             /**
              * 요소 목록
-             * @member _W.Meta.ComplexElement#list
+             * @member _L.Meta.ComplexElement#list
              */
             Object.defineProperty(this, 'list', 
             {
@@ -70,9 +70,11 @@
             });
 
             /** implements IPropertyCollection 인터페이스 선언 */
-            this._implements(IPropertyCollection);                
+            // this._implements(IPropertyCollection);                
+            Util.implements(this, IPropertyCollection);
+
         }
-        utils.inherits(ComplexElement, _super);
+        Util.inherits(ComplexElement, _super);
 
         /** @override **/
         ComplexElement.prototype.getTypes  = function() {
@@ -100,9 +102,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ComplexElement;
     } else {
-        global._W.ComplexElement = ComplexElement;
+        global._L.ComplexElement = ComplexElement;
         // namespace
-        global._W.Meta.ComplexElement = ComplexElement;
+        global._L.Meta.ComplexElement = ComplexElement;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

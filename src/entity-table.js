@@ -1,38 +1,38 @@
 /**
- * namespace _W.Meta.Entity.EntityTable
- * namespace _W.Meta.Entity.EntityTableCollection
+ * namespace _L.Meta.Entity.EntityTable
+ * namespace _L.Meta.Entity.EntityTableCollection
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
-    global._W.Meta.Entity   = global._W.Meta.Entity || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
+    global._L.Meta.Entity   = global._L.Meta.Entity || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var Util;
     var Entity;
     var PropertyCollection;
     var ItemTableCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('util');
+        Util                = require('./util');
         Entity              = require('./entity-base');
         PropertyCollection  = require('./collection-property');
-        ItemTableCollection      = require('./entity-item').ItemTableCollection;
+        ItemTableCollection = require('./entity-item').ItemTableCollection;
     } else {
-        util                = global._W.Common.Util;
-        Entity              = global._W.Meta.Entity.Entity;
-        PropertyCollection  = global._W.Collection.PropertyCollection;
-        ItemTableCollection      = global._W.Meta.Entity.ItemTableCollection;
+        Util                = global._L.Common.Util;
+        Entity              = global._L.Meta.Entity.Entity;
+        PropertyCollection  = global._L.Collection.PropertyCollection;
+        ItemTableCollection = global._L.Meta.Entity.ItemTableCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof Entity === 'undefined') throw new Error('[Entity] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof ItemTableCollection === 'undefined') throw new Error('[ItemTableCollection] module load fail...');
@@ -42,8 +42,8 @@
     var EntityTable  = (function (_super) {
         /**
          * 테이블 엔티티
-         * @constructs _W.Meta.Entity.EntityTable
-         * @extends _W.Meta.Entity.Entity
+         * @constructs _L.Meta.Entity.EntityTable
+         * @extends _L.Meta.Entity.Entity
          * @param {*} p_name 
          */
         function EntityTable(p_name) {
@@ -51,7 +51,7 @@
 
             this.items = new ItemTableCollection(this);
         }
-        util.inherits(EntityTable, _super);
+        Util.inherits(EntityTable, _super);
 
         /** @override **/
         EntityTable.prototype.getTypes  = function() {
@@ -94,8 +94,8 @@
      var EntityTableCollection  = (function (_super) {
         /**
          * 테이블 컬렉션
-         * @constructs _W.Meta.Entity.EntityTableCollection
-         * @extends _W.Collection.PropertyCollection
+         * @constructs _L.Meta.Entity.EntityTableCollection
+         * @extends _L.Collection.PropertyCollection
          * @param {*} p_onwer 소유자 
          */
         function EntityTableCollection(p_onwer) {
@@ -103,7 +103,7 @@
 
             this.elementType = EntityTable;   // 컬렉션타입 설정
         }
-        util.inherits(EntityTableCollection, _super);
+        Util.inherits(EntityTableCollection, _super);
 
         /**
          * 테이블 컬렉션에 엔티티 추가한다.
@@ -141,11 +141,11 @@
         module.exports.EntityTable = EntityTable;
         module.exports.EntityTableCollection = EntityTableCollection;
     } else {
-        global._W.EntityTable = EntityTable;
-        global._W.EntityTableCollection = EntityTableCollection;
+        global._L.EntityTable = EntityTable;
+        global._L.EntityTableCollection = EntityTableCollection;
         // namespace
-        global._W.Meta.Entity.EntityTable = EntityTable;
-        global._W.Meta.Entity.EntityTableCollection = EntityTableCollection;
+        global._L.Meta.Entity.EntityTable = EntityTable;
+        global._L.Meta.Entity.EntityTableCollection = EntityTableCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

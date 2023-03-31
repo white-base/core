@@ -1,30 +1,30 @@
 /**
- * namespace _W.Collection.ArrayCollection
+ * namespace _L.Collection.ArrayCollection
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Collection    = global._W.Collection || {};
+    global._L               = global._L || {};
+    global._L.Collection    = global._L.Collection || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var BaseCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                = require('./utils');
+        Util                = require('./util');
         BaseCollection      = require('./collection-base');
     } else {
-        utils                = global._W.Common.Util;
-        BaseCollection      = global._W.Collection.BaseCollection;
+        Util                = global._L.Common.Util;
+        BaseCollection      = global._L.Collection.BaseCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
 
     //==============================================================
@@ -32,15 +32,15 @@
     var ArrayCollection  = (function (_super) {
         /**
          * 배열타입 컬렉션 클래스
-         * @constructs _W.Collection.ArrayCollection
-         * @extends _W.Collection.BaseCollection
+         * @constructs _L.Collection.ArrayCollection
+         * @extends _L.Collection.BaseCollection
          * @param {Object} p_onwer 소유객체
          */
         function ArrayCollection(p_onwer) {
             _super.call(this, p_onwer);
 
         }
-        utils.inherits(ArrayCollection, _super);
+        Util.inherits(ArrayCollection, _super);
 
         /**
          * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]
@@ -121,9 +121,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ArrayCollection;
     } else {
-        global._W.ArrayCollection = ArrayCollection;
+        global._L.ArrayCollection = ArrayCollection;
         // namespace
-        global._W.Collection.ArrayCollection = ArrayCollection;
+        global._L.Collection.ArrayCollection = ArrayCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

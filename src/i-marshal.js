@@ -1,30 +1,30 @@
 /**
- * namespace _W.Interface.IMarshal
+ * namespace _L.Interface.IMarshal
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var IObject;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                = require('./utils');
+        Util                = require('./util');
         IObject             = require('./i-object');
     } else {
-        utils                = global._W.Common.Util;
-        IObject             = global._W.Interface.IObject;
+        Util                = global._L.Common.Util;
+        IObject             = global._L.Interface.IObject;
     }
 
     //==============================================================
     // 3. 모듈의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
 
     //==============================================================
@@ -32,14 +32,14 @@
     var IMarshal  = (function (_super) {
         /**
          * 최상위 객체
-         * @constructs _W.Interface.IMarshal
+         * @constructs _L.Interface.IMarshal
          * @interface
          * @extends Interface.IObject
          */
         function IMarshal() {
             _super.call(this);
         }
-        utils.inherits(IMarshal, _super);
+        Util.inherits(IMarshal, _super);
 
         /**
          * 객체 얻기
@@ -67,9 +67,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IMarshal;
     } else {
-        global._W.IMarshal = IMarshal;
+        global._L.IMarshal = IMarshal;
         // namespace
-        global._W.Interface.IMarshal = IMarshal;
+        global._L.Interface.IMarshal = IMarshal;
     }
     
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

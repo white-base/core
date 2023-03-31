@@ -1,13 +1,13 @@
 /**
- * namespace _W.Interface.ILookupControl
+ * namespace _L.Interface.ILookupControl
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};    
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};    
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -19,7 +19,7 @@
     // 4. 모듈 구현    
     var ILookupControl  = (function () {
         /**
-         * @constructs _W.Interface.ILookupControl
+         * @constructs _L.Interface.ILookupControl
          * @interface
          */
         function ILookupControl() {
@@ -42,9 +42,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ILookupControl;
     } else {
-        global._W.ILookupControl = ILookupControl;
+        global._L.ILookupControl = ILookupControl;
         // namespace
-        global._W.Interface.ILookupControl = ILookupControl;
+        global._L.Interface.ILookupControl = ILookupControl;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

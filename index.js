@@ -1,7 +1,7 @@
 /**
  * ES5
  */
-var utils                       = require('./src/utils');
+var Util                       = require('./src/util');
 var Observer                    = require("./src/observer");
 var CustomError                 = require('./src/error-custom');
 var BaseCollection              = require("./src/collection-base");
@@ -36,7 +36,7 @@ var ILookupControl              = require('./src/i-control-lookup');
 var IPartControl                = require('./src/i-control-part');
 
 module.exports = {
-    utils: utils,
+    Util: Util,
     Observer: Observer,
     CustomError: CustomError,
     BaseCollection: BaseCollection,
@@ -70,7 +70,7 @@ module.exports = {
     IPartControl: IPartControl,
     // namespace
     Common: {
-        utils: utils,
+        Util: Util,
         Observer: Observer,
         CustomError: CustomError,
     },

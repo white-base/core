@@ -1,27 +1,27 @@
 /**
- * namespace _W.Common.CustomError
+ * namespace _L.Common.CustomError
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Common        = global._W.Common || {};
+    global._L               = global._L || {};
+    global._L.Common        = global._L.Common || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                        = require('./utils');
+        Util                        = require('./util');
     } else {
-        utils                        = global._W.Common.Util;
+        Util                        = global._L.Common.Util;
     }
 
     //==============================================================Á
     // 3. 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -29,7 +29,7 @@
     var CustomError = (function (_super) {
         /**
          * 구독자 클래스 (이벤트에 활용)
-         * @constructs _W.Common.CustomError
+         * @constructs _L.Common.CustomError
          * @param {String} p_message 사용자 메세지 내용
          * @param {?String} p_target 대상(값)
          * @param {?String} p_name 에러명
@@ -40,7 +40,7 @@
 
             /**
              * 에러 스텍
-             * @member {String} _W.Common.CustomError#stack
+             * @member {String} _L.Common.CustomError#stack
              */
             if (Error.captureStackTrace) {
                 Error.captureStackTrace(this, CustomError);
@@ -67,7 +67,7 @@
             // TODO:: 추후 [내부처리] 부분 구현
             this.innerExecute();
         }
-        utils.inherits(CustomError, _super);
+        Util.inherits(CustomError, _super);
 
         /**
          * 내부처리
@@ -85,9 +85,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = CustomError;
     } else {
-        global._WCustomError = CustomError;
+        global._LCustomError = CustomError;
         // namespace
-        global._W.Common.CustomError = CustomError;
+        global._L.Common.CustomError = CustomError;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

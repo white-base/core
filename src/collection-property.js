@@ -1,33 +1,33 @@
 /**
- * namespace _W.Collection.PropertyCollection
+ * namespace _L.Collection.PropertyCollection
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Collection    = global._W.Collection || {};
+    global._L               = global._L || {};
+    global._L.Collection    = global._L.Collection || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var BaseCollection;
     var IPropertyCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                = require('./utils');
+        Util                = require('./util');
         BaseCollection      = require('./collection-base');
         IPropertyCollection = require('./i-collection-property');
     } else {
-        utils                = global._W.Common.Util;
-        BaseCollection      = global._W.Collection.BaseCollection;
-        IPropertyCollection = global._W.Interface.IPropertyCollection;
+        Util                = global._L.Common.Util;
+        BaseCollection      = global._L.Collection.BaseCollection;
+        IPropertyCollection = global._L.Interface.IPropertyCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
     
@@ -36,9 +36,9 @@
     var PropertyCollection  = (function (_super) {
         /**
          * 속성타입 컬렉션 클래스
-         * @constructs _W.Collection.PropertyCollection
-         * @implements {_W.Interface.IPropertyCollection}
-         * @extends _W.Collection.BaseCollection
+         * @constructs _L.Collection.PropertyCollection
+         * @implements {_L.Interface.IPropertyCollection}
+         * @extends _L.Collection.BaseCollection
          * @param {Object} p_onwer 소유자
          */
         function PropertyCollection(p_onwer) {
@@ -46,7 +46,7 @@
 
             var __properties = [];
 
-            /** @member {Array} _W.Collection.PropertyCollection#properties 속성들값 */
+            /** @member {Array} _L.Collection.PropertyCollection#properties 속성들값 */
             Object.defineProperty(this, 'properties', 
             {
                 configurable: true,
@@ -61,7 +61,7 @@
             /** implements IPropertyCollection 인터페이스 구현 */
             this._implements(IPropertyCollection);            
         }
-        utils.inherits(PropertyCollection, _super);
+        Util.inherits(PropertyCollection, _super);
 
         /**
          * 속성 컬렉션을 삭제한다. (내부처리) [구현]
@@ -197,9 +197,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = PropertyCollection;
     } else {
-        global._W.PropertyCollection = PropertyCollection;
+        global._L.PropertyCollection = PropertyCollection;
         // namespace
-        global._W.Collection.PropertyCollection = PropertyCollection;
+        global._L.Collection.PropertyCollection = PropertyCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

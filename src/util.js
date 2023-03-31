@@ -1,15 +1,14 @@
 /**
- * namespace _W.Common.Util
+ * namespace _L.Common.Util
  */
 (function(global) {
-
     'use strict';
 
     //==============================================================
     // 1. 의존 모듈 선언
-    global._W               = global._W || {};
-    global._W.Common        = global._W.Common || {};
-    global._W.Common.Util   = global._W.Common.Util || {};
+    global._L               = global._L || {};
+    global._L.Common        = global._L.Common || {};
+    global._L.Common.Util   = global._L.Common.Util || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -23,14 +22,14 @@
     /**
      * inherits(대상, 부모) : 상속
      * @function
-     * @memberof _W.Common.Util
+     * @memberof _L.Common.Util
      */
     var inherits = (function () {
         if (typeof Object.create === 'function') {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
                 if (superCtor) {
-                    ctor.super = superCtor
+                    ctor.super = superCtor;
                     ctor.prototype = Object.create(superCtor.prototype, {
                         constructor: {
                         	value: ctor,
@@ -41,15 +40,15 @@
                     });
                 }
             };
-        } else {
+        } else {    // COVER:
             // old school shim for old browsers
             return function (ctor, superCtor) {
                 if (superCtor) {
-                    ctor.super = superCtor
-                    var TempCtor = function () {}
-                    TempCtor.prototype = superCtor.prototype
-                    ctor.prototype = new TempCtor()
-                    ctor.prototype.constructor = ctor
+                    ctor.super = superCtor;
+                    var TempCtor = function () {};
+                    TempCtor.prototype = superCtor.prototype;
+                    ctor.prototype = new TempCtor();
+                    ctor.prototype.constructor = ctor;
                 }
             }
         }
@@ -59,10 +58,9 @@
      * 배열 깊이 얻기
      * @param {*} p_elem 
      * @param {*} p_depts 
-     * @memberof _W.Common.Util
+     * @memberof _L.Common.Util
      */
-    var getArrayLevel = function (p_elem, p_depts) {
-        
+    var getArrayLevel = function (p_elem, p_depts) {    // COVER:
         var MAX     = 10;
         var level   = 0;
         
@@ -78,7 +76,7 @@
     
     /**
      * createGUID GUID 생성
-     * @memberof _W.Common.Util
+     * @memberof _L.Common.Util
      */
     var createGUID = function() {
         function _p8(s) {  
@@ -88,65 +86,55 @@
         return _p8() + _p8(true) + _p8(true) + _p8();
     };
 
-
     /**
      * 셀렉터의 유효성 검사 : 대상을 모두 검사하여 결과를 리턴한다.
      * 주의!! DOM(web) 에서만 작동한다.
      * @param {String | Object | Array<Object>} p_obj 
      * @returns {String} 없는 셀렉터, 통화하면 null 리턴
-     * @memberof _W.Common.Util
+     * @memberof _L.Common.Util
      */
-    var validSelector = function(p_obj, p_isJQuery) {
-        
-        var selectors = [];
+    // var validSelector = function(p_obj, p_isJQuery) {   // COVER: => bind model 로 이동함
+    //     var selectors = [];
 
-        // 입력형식에 따른 배열에 삽입
-        if (typeof p_obj === 'string') selectors.push(p_obj);
-        else if (typeof p_obj === 'array') {
-            selectors = p_obj;
-        } else if (typeof p_obj === 'object') {
-            for(var prop in p_obj) {
-                if (p_obj.hasOwnProperty(prop)) {
-                    if (Array.isArray(p_obj[prop])) {
-                        selectors = selectors.concat(p_obj[prop]);
-                    } else { 
-                        selectors.push(p_obj[prop]);
-                    }
-                }
-            }
-        }
+    //     // 입력형식에 따른 배열에 삽입
+    //     if (typeof p_obj === 'string') selectors.push(p_obj);
+    //     else if (typeof p_obj === 'array') {
+    //         selectors = p_obj;
+    //     } else if (typeof p_obj === 'object') {
+    //         for(var prop in p_obj) {
+    //             if (p_obj.hasOwnProperty(prop)) {
+    //                 if (Array.isArray(p_obj[prop])) {
+    //                     selectors = selectors.concat(p_obj[prop]);
+    //                 } else { 
+    //                     selectors.push(p_obj[prop]);
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        if (typeof document === 'object' && typeof document.querySelector === 'function') {     
-            // 유효성 검사
-            for(var i = 0; selectors.length > i; i++) {
-                if (typeof selectors[i] !== 'string') throw new Error('Only [selectors] type "string" can be added');
+    //     if (typeof document === 'object' && typeof document.querySelector === 'function') {     
+    //         // 유효성 검사
+    //         for(var i = 0; selectors.length > i; i++) {
+    //             if (typeof selectors[i] !== 'string') throw new Error('Only [selectors] type "string" can be added');
 
-                // if (document.querySelector(selectors[i]) === null) {
-                //     return selectors[i];
-                // }
-                if (p_isJQuery === true) {
-                    if (jQuery(selectors[i]).length === 0) {
-                        return selectors[i];
-                    }
-                } else {
-                    if (document.querySelector(selectors[i]) === null) {
-                        return selectors[i];
-                    }
-                }
-            }
-        } else {
-            throw new Error('[document.querySelector] module load fail...');
-        }
-
-        return null;
-    };
+    //             if (p_isJQuery === true && jQuery(selectors[i]).length === 0) {
+    //                 return selectors[i];
+    //             } else if (document.querySelector(selectors[i]) === null) {
+    //                 return selectors[i];
+    //             }
+    //         }
+    //     } else {
+    //         throw new Error('[document.querySelector] module load fail...');
+    //     }
+    //     return null;
+    // };
 
     /**
-         * 전체 프로퍼티 조회
-         * @param {object} obj Object를 제외한 프로터피 리턴
-         * @param {boolean?} isObject Object를 포함 여부
-         * @returns {array}  
-         */
+     * 전체 프로퍼티 조회
+     * @param {object} obj Object를 제외한 프로터피 리턴
+     * @param {boolean?} isObject Object를 포함 여부
+     * @returns {array}  
+     */
     var getAllProperties = function(obj, isObject) {
         var allProps = [], curr = obj;
         var is = isObject || false;
@@ -181,18 +169,20 @@
 
         for(var i = 0; i < list.length; i++) {
             var key = list[i];
-            
             // 통과 검사
             if (false
+                || '_interface' === key || 'isImplementOf' === key  // 내부 예약어
+                || (ori[key] === null && typeof tar[key] !== 'undefined')
                 || (typeof ori[key] === 'function' && typeof tar[key] === 'function')
                 || (Array.isArray(ori[key]) && Array.isArray(tar[key]))
                 || (typeof ori[key] === 'function' && typeof tar[key] === 'object' && tar[key] instanceof ori[key])) {
                 continue;
             }
-            // 타입 검사
-            if (ori[key] !== null && tar[key] === null) {
-                throw new Error(' 대상 null ' + oriName + '.' + key);   // COVER:
-            } else if (!(key in tar)) {
+            // 타입 검사 (예외조건)
+            // if (ori[key] !== null && tar[key] === null) {
+            //     throw new Error(' 대상 null ' + oriName + '.' + key);   // COVER:
+            // } 
+            if (!(key in tar)) {
                 throw new Error(' 대상 없음 ' + oriName + '.' + key + ' : ' + typeof ori[key]);
             } else  if (Array.isArray(ori[key]) && !Array.isArray(tar[key])){
                 throw new Error(' 타입 다름 ' + oriName + '.' + key + ' : array ');
@@ -218,6 +208,14 @@
         var obj;    
         var _interface = [];
 
+        function isImplementOf(target) {
+            if (typeof target !== 'function') throw new Error(' 함수 타입이 아닙니다. ');
+            for (var i = 0; i < this._interface.length; i++) {
+                if (this._interface[i] === target) return true;  
+            }
+            return false; // COVER:
+        }
+
         if (typeof object !== 'object') throw new Error(' object 타입이 아닙니다. ');
 
         Object.defineProperty(object, '_interface', {
@@ -242,21 +240,12 @@
             // 객체 타입을 비교 (값은 비교 안함, 타입만 비교함)
             equalType(obj, object);
         }
-    }
-
-
-    /**
-     * 
-     * @param {*} object 대상 객체 : this
-     * @param {*} target 비고 클래스
-     * @returns 
-     */
-    var isImplementsOf = function(object, target) {
-        if (typeof target !== 'function') throw new Error(' 함수만 타입이 아닙니다. ');
-        for (var i = 0; i < object._interface.length; i++) {
-            if (object._interface[i] === target) return true;  
-        }
-        return false; // COVER:
+        // obj.prototype.isImplementOf = isImplementOf;
+        Object.defineProperty(object, 'isImplementOf',
+        {
+            value: isImplementOf,
+            enumerable: false
+        });
     }
 
     //==============================================================
@@ -265,21 +254,16 @@
         module.exports.inherits = inherits;
         module.exports.getArrayLevel = getArrayLevel;
         module.exports.createGUID = createGUID;
-        module.exports.validSelector = validSelector;
+        // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         module.exports.getAllProperties = getAllProperties;
-        // module.exports.equalType = equalType;
         module.exports.implements = implement;
-        module.exports.isImplementsOf = isImplementsOf;
-        // REVIEW:: validSelector는 사용 안함
-    } else {
-        global._W.Common.Util.inherits = inherits;
-        global._W.Common.Util.getArrayLevel = getArrayLevel;
-        global._W.Common.Util.createGUID = createGUID;
-        global._W.Common.Util.validSelector = validSelector;
-        global._W.Common.Util.getAllProperties = getAllProperties;
-        // global._W.Common.Util.equalType = equalType;
-        global._W.Common.Util.implements = implement;
-        global._W.Common.Util.isImplementsOf = isImplementsOf;
+    } else {    // COVER:
+        global._L.Common.Util.inherits = inherits;
+        global._L.Common.Util.getArrayLevel = getArrayLevel;
+        global._L.Common.Util.createGUID = createGUID;
+        // global._L.Common.Util.validSelector = validSelector;
+        global._L.Common.Util.getAllProperties = getAllProperties;
+        global._L.Common.Util.implements = implement;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

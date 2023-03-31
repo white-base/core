@@ -1,7 +1,7 @@
 /**
  * ES5
  * Object : 폴리필
- * namespace Object.prototype.isImplementsOf [protected] 구현 여부
+ * namespace Object.prototype.isImplementOf [protected] 구현 여부
  * namespace Object.prototype._implements 인터페이스(클래스 포함) 등록 *다중상속*
  */
 /**
@@ -9,7 +9,7 @@
  *  - Object 폴리필 보다 함수로 노출 검토
  */
 if ((typeof Object.prototype._implements === 'undefined') ||
-    (typeof Object.prototype.isImplementsOf === 'undefined')) {
+    (typeof Object.prototype.isImplementOf === 'undefined')) {
 
     (function(global) {
         'use strict';
@@ -125,7 +125,7 @@ if ((typeof Object.prototype._implements === 'undefined') ||
          * @function  
          * @param {function} p_imp 
          */
-        var isImplementsOf = function(p_imp) {
+        var isImplementOf = function(p_imp) {
             for (var i = 0; i < this._interface.length; i++) {
                 if (this._interface[i] === p_imp) return true;  
             }
@@ -175,9 +175,9 @@ if ((typeof Object.prototype._implements === 'undefined') ||
 	        value: _implements,
 	        enumerable: false
 	    });
-	    Object.defineProperty(Object.prototype, 'isImplementsOf',
+	    Object.defineProperty(Object.prototype, 'isImplementOf',
 	    {
-	        value: isImplementsOf,
+	        value: isImplementOf,
 	        enumerable: false
         });
         

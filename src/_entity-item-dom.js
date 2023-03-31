@@ -1,5 +1,5 @@
 /**
- * namespace _W.Meta.Entity.ItemDOM
+ * namespace _L.Meta.Entity.ItemDOM
  */
 (function(global) {
 
@@ -7,9 +7,9 @@
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
-    global._W.Meta.Entity   = global._W.Meta.Entity || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
+    global._L.Meta.Entity   = global._L.Meta.Entity || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -19,11 +19,11 @@
     var ajax;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                    = require('./utils');
+        util                    = require('./util');
         Item                    = require('./entity-item').Item;
     } else {
-        util                    = global._W.Common.Util;
-        Item                    = global._W.Meta.Entity.Item;
+        util                    = global._L.Common.Util;
+        Item                    = global._L.Meta.Entity.Item;
         jquery                  = global.jQuery || global.$;     // jquery 로딩 REVIEW:: 로딩 확인
     }
 
@@ -37,8 +37,8 @@
     // 4. 모듈 구현    
     var ItemDOM  = (function (_super) {
         /**
-         * @constructs _W.Meta.Entity.ItemDOM
-         * @extends _W.Meta.Entity.Item
+         * @constructs _L.Meta.Entity.ItemDOM
+         * @extends _L.Meta.Entity.Item
          */
         function ItemDOM(p_name, p_entity, p_option) {
             _super.call(this, p_name, p_entity, p_option);
@@ -53,7 +53,7 @@
 
             /**
              * 아이템 DOM 타입
-             * @member {*} _W.Meta.Entity.ItemDOM#domType
+             * @member {*} _L.Meta.Entity.ItemDOM#domType
              */
             Object.defineProperty(this, 'domType', 
             {
@@ -69,7 +69,7 @@
             
             /**
              * 읽기전용 여부
-             * @member {*} _W.Meta.Entity.ItemDOM#isReadOnly
+             * @member {*} _L.Meta.Entity.ItemDOM#isReadOnly
              */
             Object.defineProperty(this, 'isReadOnly', 
             {
@@ -84,7 +84,7 @@
             
             /**
              * 숨김 여부
-             * @member {*} _W.Meta.Entity.ItemDOM#isHide
+             * @member {*} _L.Meta.Entity.ItemDOM#isHide
              */
             Object.defineProperty(this, 'isHide', 
             {
@@ -99,7 +99,7 @@
             
             /**
              * DOM 요소
-             * @member {*} _W.Meta.Entity.ItemDOM#element
+             * @member {*} _L.Meta.Entity.ItemDOM#element
              */
             Object.defineProperty(this, 'element', 
             {
@@ -114,7 +114,7 @@
 
             /**
              * 셀렉터
-             * @member _W.Meta.Entity.ItemDOM#selector
+             * @member _L.Meta.Entity.ItemDOM#selector
              * @example
              * type
              *  - val | value   : 요소의 value 속성값
@@ -146,7 +146,7 @@
 
             /**
              * value 값 필터
-             * @member {Function} _W.Meta.Entity.ItemDOM#getFilter
+             * @member {Function} _L.Meta.Entity.ItemDOM#getFilter
              */
              Object.defineProperty(this, 'getFilter', 
              {
@@ -161,7 +161,7 @@
                       
              /**
              * value 값 필터
-             * @member {Function} _W.Meta.Entity.ItemDOM#setFilter
+             * @member {Function} _L.Meta.Entity.ItemDOM#setFilter
              */
               Object.defineProperty(this, 'setFilter', 
               {
@@ -176,7 +176,7 @@
 
             /**
              * 아이템 값 (오버라이딩)
-             * @member {*} _W.Meta.Entity.ItemDOM#value
+             * @member {*} _L.Meta.Entity.ItemDOM#value
              */
             Object.defineProperty(this, 'value', 
             {
@@ -443,7 +443,7 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = ItemDOM;
     } else {
-        global._W.Meta.Entity.ItemDOM = ItemDOM;
+        global._L.Meta.Entity.ItemDOM = ItemDOM;
         global.ItemDOM = ItemDOM;
     }
 

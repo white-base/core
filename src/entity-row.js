@@ -1,6 +1,6 @@
 /**
- * namespace _W.Meta.Entity.Row
- * namespace _W.Meta.Entity.RowCollection
+ * namespace _L.Meta.Entity.Row
+ * namespace _L.Meta.Entity.RowCollection
  */
 // var $local = {};
 
@@ -9,32 +9,32 @@
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
-    global._W.Meta.Entity   = global._W.Meta.Entity || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
+    global._L.Meta.Entity   = global._L.Meta.Entity || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var utils;
+    var Util;
     var MetaObject;
     var PropertyCollection;
     var ArrayCollection;
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        utils                = require('./utils');
+        Util                = require('./util');
         MetaObject          = require('./meta-object');
         PropertyCollection  = require('./collection-property');
         ArrayCollection     = require('./collection-array');
     } else {
-        utils                = global._W.Common.Util;
-        MetaObject          = global._W.Meta.MetaObject;
-        PropertyCollection  = global._W.Collection.PropertyCollection;
-        ArrayCollection     = global._W.Collection.ArrayCollection;
+        Util                = global._L.Common.Util;
+        MetaObject          = global._L.Meta.MetaObject;
+        PropertyCollection  = global._L.Collection.PropertyCollection;
+        ArrayCollection     = global._L.Collection.ArrayCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof utils === 'undefined') throw new Error('[utils] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
@@ -44,8 +44,8 @@
     var Row  = (function (_super) {
         /**
          * 로우
-         * @constructs _W.Meta.Entity.Row
-         * @extends _W.Collection.PropertyCollection
+         * @constructs _L.Meta.Entity.Row
+         * @extends _L.Collection.PropertyCollection
          */
         function Row(p_entity) {
             _super.call(this, p_entity);
@@ -68,7 +68,7 @@
 
             /**
              * 로우의 소유 엔티티
-             * @member {Entity} _W.Meta.Entity.Row#entity
+             * @member {Entity} _L.Meta.Entity.Row#entity
              */
             Object.defineProperty(this, 'entity', 
             {
@@ -77,7 +77,7 @@
                 enumerable: true
             });            
         }
-        utils.inherits(Row, _super);
+        Util.inherits(Row, _super);
 
         /** @override **/
         Row.prototype.getTypes  = function() {
@@ -120,8 +120,8 @@
     var RowCollection  = (function (_super) {
         /**
          * 로우 컬렉션
-         * @constructs _W.Meta.Entity.RowCollection
-         * @extends _W.Collection.ArrayCollection
+         * @constructs _L.Meta.Entity.RowCollection
+         * @extends _L.Collection.ArrayCollection
          * @param {*} p_onwer 소유자 
          */
         function RowCollection(p_onwer) {
@@ -129,7 +129,7 @@
 
             this.elementType = Row;   // 컬렉션타입 설정
         }
-        utils.inherits(RowCollection, _super);
+        Util.inherits(RowCollection, _super);
 
         /**
          * 로우컬렉션에 로우를 추가한다.
@@ -160,11 +160,11 @@
         module.exports.Row = Row;
         module.exports.RowCollection = RowCollection;
     } else {
-        global._W.Row = Row;
-        global._W.RowCollection = RowCollection;
+        global._L.Row = Row;
+        global._L.RowCollection = RowCollection;
         // namespace
-        global._W.Meta.Entity.Row = Row;
-        global._W.Meta.Entity.RowCollection = RowCollection;
+        global._L.Meta.Entity.Row = Row;
+        global._L.Meta.Entity.RowCollection = RowCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

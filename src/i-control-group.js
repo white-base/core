@@ -1,13 +1,13 @@
 /**
- * namespace _W.Interface.IGroupControl
+ * namespace _L.Interface.IGroupControl
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};    
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};    
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -19,7 +19,7 @@
     // 4. 모듈 구현    
     var IGroupControl  = (function () {
         /**
-         * @constructs _W.Interface.IGroupControl
+         * @constructs _L.Interface.IGroupControl
          * @interface
          */
         function IGroupControl() {
@@ -50,9 +50,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IGroupControl;
     } else {
-        global._W.IGroupControl = IGroupControl;
+        global._L.IGroupControl = IGroupControl;
         // namespace
-        global._W.Interface.IGroupControl = IGroupControl;
+        global._L.Interface.IGroupControl = IGroupControl;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

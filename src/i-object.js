@@ -1,13 +1,13 @@
 /**
- * namespace _W.Interface.IObject
+ * namespace _L.Interface.IObject
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Interface     = global._W.Interface || {};
+    global._L               = global._L || {};
+    global._L.Interface     = global._L.Interface || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
@@ -20,7 +20,7 @@
     var IObject  = (function () {
         /**
          * 최상위 객체 인터페이스
-         * @constructs _W.Interface.IObject 
+         * @constructs _L.Interface.IObject 
          * @interface
          */
         function IObject() {
@@ -50,9 +50,9 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = IObject;
     } else {
-        global._W.IObject = IObject;
+        global._L.IObject = IObject;
         // namespace
-        global._W.Interface.IObject = IObject;
+        global._L.Interface.IObject = IObject;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

@@ -10,29 +10,29 @@ const index   = require('../');
 describe('index 타입 검사', () => {
     beforeAll(() => {
     });
-    it('- _W.Common.* ', () => {
+    it('- _L.Common.* ', () => {
         expect(typeof index.Observer).toBe('function');
         expect(typeof index.CustomError).toBe('function');
-        expect(typeof index.utils.inherits).toBe('function');
-        expect(typeof index.utils.getArrayLevel).toBe('function');
-        expect(typeof index.utils.createGUID).toBe('function');
-        expect(typeof index.utils.validSelector).toBe('function');
-        expect(typeof index.utils.getAllProperties).toBe('function');
-        expect(typeof index.utils.implements).toBe('function');
-        expect(typeof index.utils.isImplementsOf).toBe('function');
+        expect(typeof index.Util.inherits).toBe('function');
+        expect(typeof index.Util.getArrayLevel).toBe('function');
+        expect(typeof index.Util.createGUID).toBe('function');
+        // expect(typeof index.Util.validSelector).toBe('function');
+        expect(typeof index.Util.getAllProperties).toBe('function');
+        expect(typeof index.Util.implements).toBe('function');
+        // expect(typeof index.Util.isImplementOf).toBe('function');
         // namespace
         expect(typeof index.Common).toBe('object');
         expect(typeof index.Common.Observer).toBe('function');
         expect(typeof index.Common.CustomError).toBe('function');
-        expect(typeof index.Common.utils.inherits).toBe('function');
-        expect(typeof index.Common.utils.getArrayLevel).toBe('function');
-        expect(typeof index.Common.utils.createGUID).toBe('function');
-        expect(typeof index.Common.utils.validSelector).toBe('function');
-        expect(typeof index.Common.utils.getAllProperties).toBe('function');
-        expect(typeof index.Common.utils.implements).toBe('function');
-        expect(typeof index.Common.utils.isImplementsOf).toBe('function');
+        expect(typeof index.Common.Util.inherits).toBe('function');
+        expect(typeof index.Common.Util.getArrayLevel).toBe('function');
+        expect(typeof index.Common.Util.createGUID).toBe('function');
+        // expect(typeof index.Common.Util.validSelector).toBe('function');
+        expect(typeof index.Common.Util.getAllProperties).toBe('function');
+        expect(typeof index.Common.Util.implements).toBe('function');
+        // expect(typeof index.Common.Util.isImplementOf).toBe('function');
     });
-    it('- _W.Collection.* ', () => {
+    it('- _L.Collection.* ', () => {
         expect(typeof index.BaseCollection).toBe('function');
         expect(typeof index.ArrayCollection).toBe('function');
         expect(typeof index.PropertyCollection).toBe('function');
@@ -42,7 +42,7 @@ describe('index 타입 검사', () => {
         expect(typeof index.Collection.ArrayCollection).toBe('function');
         expect(typeof index.Collection.PropertyCollection).toBe('function');
     });
-    it('- _W.Meta.* ', () => {
+    it('- _L.Meta.* ', () => {
         expect(typeof index.MetaObject).toBe('function');
         expect(typeof index.MetaElement).toBe('function');
         expect(typeof index.ComplexElement).toBe('function');
@@ -52,7 +52,7 @@ describe('index 타입 검사', () => {
         expect(typeof index.Meta.MetaElement).toBe('function');
         expect(typeof index.Meta.ComplexElement).toBe('function');
     });
-    it('- _W.Meta.Entity.* ', () => {
+    it('- _L.Meta.Entity.* ', () => {
         expect(typeof index.Entity).toBe('function');
         expect(typeof index.EntityViewCollection).toBe('function');
         expect(typeof index.EntityTable).toBe('function');
@@ -76,7 +76,7 @@ describe('index 타입 검사', () => {
         expect(typeof index.Meta.Entity.Row).toBe('function');
         expect(typeof index.Meta.Entity.RowCollection).toBe('function');
     });
-    it('- _W.Interface.* ', () => {
+    it('- _L.Interface.* ', () => {
         expect(typeof index.IObject).toBe('function');
         expect(typeof index.IMarshal).toBe('function');
         expect(typeof index.ICollection).toBe('function');

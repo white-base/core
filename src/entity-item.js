@@ -1,42 +1,42 @@
 /**
- * namespace _W.Meta.Entity.Item
- * namespace _W.Meta.Entity.ItemCollection
- * namespace _W.Meta.Entity.ItemViewCollection
+ * namespace _L.Meta.Entity.Item
+ * namespace _L.Meta.Entity.ItemCollection
+ * namespace _L.Meta.Entity.ItemViewCollection
  */
 (function(global) {
     'use strict';
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._W               = global._W || {};
-    global._W.Meta          = global._W.Meta || {};
-    global._W.Meta.Entity   = global._W.Meta.Entity || {};
+    global._L               = global._L || {};
+    global._L.Meta          = global._L.Meta || {};
+    global._L.Meta.Entity   = global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
-    var util;
+    var Util;
     var CustomError;
     var MetaElement;
     var PropertyCollection;
     var Observer;
     
     if (typeof module === 'object' && typeof module.exports === 'object') {     
-        util                = require('util');
+        Util                = require('./util');
         CustomError         = require('./error-custom');
         MetaElement         = require('./meta-element');
         PropertyCollection  = require('./collection-property');
         Observer            = require('./observer');
     } else {
-        util                = global._W.Common.Util;
-        CustomError         = global._W.Common.CustomError;
-        MetaElement         = global._W.Meta.MetaElement;
-        PropertyCollection  = global._W.Collection.PropertyCollection;
-        Observer            = global._W.Common.Observer;
+        Util                = global._L.Common.Util;
+        CustomError         = global._L.Common.CustomError;
+        MetaElement         = global._L.Meta.MetaElement;
+        PropertyCollection  = global._L.Collection.PropertyCollection;
+        Observer            = global._L.Common.Observer;
     }
 
     //==============================================================
     // 3. 의존성 검사
-    if (typeof util === 'undefined') throw new Error('[util] module load fail...');
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof CustomError === 'undefined') throw new Error('[CustomError] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
@@ -48,8 +48,8 @@
     var Item  = (function (_super) {
         /**
          * 아이템
-         * @constructs _W.Meta.Entity.Item
-         * @extends _W.Meta.MetaElement
+         * @constructs _L.Meta.Entity.Item
+         * @extends _L.Meta.MetaElement
          * @param {String} p_name 아이템명
          * @param {Entity} p_entity 소유 Entity
          */
@@ -85,7 +85,7 @@
             /**
              * value 내부값 (필터 및 getter/setter 무시)
              * @private
-             * @member {*} _W.Meta.Entity.Item#__value
+             * @member {*} _L.Meta.Entity.Item#__value
              */
             Object.defineProperty(this, '__value', 
             {
@@ -101,7 +101,7 @@
 
             /**
              * 아이템 소유 엔티티
-             * @member {Entity} _W.Meta.Entity.Item#entity
+             * @member {Entity} _L.Meta.Entity.Item#entity
              */
             Object.defineProperty(this, 'entity', 
             {
@@ -119,7 +119,7 @@
 
             /**
              * 아이템 타입 (내부속성)
-             * @member {String} _W.Meta.Entity.Item#type
+             * @member {String} _L.Meta.Entity.Item#type
              */
             Object.defineProperty(this, 'type', 
             {
@@ -135,7 +135,7 @@
 
             /**
              * 아이템 크기 (내부속성)
-             * @member {Number} _W.Meta.Entity.Item#size
+             * @member {Number} _L.Meta.Entity.Item#size
              */
             Object.defineProperty(this, 'size', 
             {
@@ -150,7 +150,7 @@
 
             /**
              * 아이템 기본값 (내부속성)
-             * @member {String | Number | Boolean} _W.Meta.Entity.Item#default
+             * @member {String | Number | Boolean} _L.Meta.Entity.Item#default
              */
             Object.defineProperty(this, 'default', 
             {
@@ -165,7 +165,7 @@
 
             /**
              * 아이템 설명 (내부속성)
-             * @member {String} _W.Meta.Entity.Item#caption
+             * @member {String} _L.Meta.Entity.Item#caption
              */
             Object.defineProperty(this, 'caption', 
             {
@@ -180,7 +180,7 @@
 
             /**
              * 아이템 value의 Null 여부
-             * @member {Boolean} _W.Meta.Entity.Item#isNotNull
+             * @member {Boolean} _L.Meta.Entity.Item#isNotNull
              */
             Object.defineProperty(this, 'isNotNull', 
             {
@@ -200,7 +200,7 @@
 
             /**
              * 아이템 value null 통과 여부 (기본값 = false)
-             * @member {Boolean} _W.Meta.Entity.Item#isNullPass
+             * @member {Boolean} _L.Meta.Entity.Item#isNullPass
              */
             Object.defineProperty(this, 'isNullPass', 
             {
@@ -216,7 +216,7 @@
             /**
              * 아이템 콜백 함수
              * REVIEW: 필요성 검토 필요
-             * @member {String} _W.Meta.Entity.Item#callback
+             * @member {String} _L.Meta.Entity.Item#callback
              */
             Object.defineProperty(this, 'callback', 
             {
@@ -231,7 +231,7 @@
 
             /**
              * 아이템 제약 조건 
-             * @member {Array<Object>} _W.Meta.Entity.Item#constraints
+             * @member {Array<Object>} _L.Meta.Entity.Item#constraints
              * @example
              * var c = {
              *  regex: /aa/,
@@ -263,7 +263,7 @@
 
             /**
              * 아이템 코드 타입
-             * @member {Object} _W.Meta.Entity.Item#codeType
+             * @member {Object} _L.Meta.Entity.Item#codeType
              */
             Object.defineProperty(this, 'codeType', 
             {
@@ -275,7 +275,7 @@
 
             /**
              * 아이템 순서
-             * @member {String} _W.Meta.Entity.Item#order
+             * @member {String} _L.Meta.Entity.Item#order
              */
             Object.defineProperty(this, 'order', 
             {
@@ -290,7 +290,7 @@
 
             /**
              * 아이템 순서 증가 수
-             * @member {Number} _W.Meta.Entity.Item#increase
+             * @member {Number} _L.Meta.Entity.Item#increase
              */
             Object.defineProperty(this, 'increase', 
             {
@@ -305,7 +305,7 @@
             
             /**
              * 아이템 value
-             * @member {*} _W.Meta.Entity.Item#value
+             * @member {*} _L.Meta.Entity.Item#value
              */
             Object.defineProperty(this, 'value', 
             {
@@ -362,7 +362,7 @@
 
             /**
              * 아이템의 value 의 getter
-             * @member {Function} _W.Meta.Entity.Item#getter
+             * @member {Function} _L.Meta.Entity.Item#getter
              */
             Object.defineProperty(this, 'getter', 
             {
@@ -377,7 +377,7 @@
 
             /**
              * 아이템의 value 의 setter
-             * @member {Function} _W.Meta.Entity.Item#setter
+             * @member {Function} _L.Meta.Entity.Item#setter
              */
             Object.defineProperty(this, 'setter', 
             {
@@ -397,7 +397,7 @@
              * - BaseBind.setValue(row) : 로우값 을 엔티티에 설정시
              * - getValue() : row 에 활용함
              * 기본값 = name 값
-             * @member {String} _W.Meta.Entity.Item#alias
+             * @member {String} _L.Meta.Entity.Item#alias
              */
              Object.defineProperty(this, 'alias', 
              {
@@ -412,7 +412,7 @@
 
             /**
              * 변경 이벤트 
-             * @event _W.Meta.Entity.Item#onChanged 
+             * @event _L.Meta.Entity.Item#onChanged 
              */
             Object.defineProperty(this, 'onChanged', {
                 enumerable: true,
@@ -440,10 +440,10 @@
             }
 
         }
-        util.inherits(Item, _super);
+        Util.inherits(Item, _super);
 
         /**
-         * @listens _W.Meta.Entity.Item#_onChanged
+         * @listens _L.Meta.Entity.Item#_onChanged
          */
          Item.prototype._onChanged = function(p_nValue, p_oValue) {
             p_oValue = p_oValue || this.__value;
@@ -628,8 +628,8 @@
     var ItemCollection  = (function (_super) {
         /**
          * 아이템 컬렉션 (최상위)
-         * @constructs _W.Meta.Entity.ItemCollection
-         * @extends _W.Collection.PropertyCollection
+         * @constructs _L.Meta.Entity.ItemCollection
+         * @extends _L.Collection.PropertyCollection
          * @abstract
          * @param {*} p_onwer 소유자 
          */
@@ -640,7 +640,7 @@
             
             /**
              * 아이템의 타입
-             * @member {Function} _W.Meta.Entity.ItemCollection#itemType
+             * @member {Function} _L.Meta.Entity.ItemCollection#itemType
              */
             Object.defineProperty(this, 'itemType', 
             {
@@ -655,7 +655,7 @@
 
             
         }
-        util.inherits(ItemCollection, _super);
+        Util.inherits(ItemCollection, _super);
         
         /**
          * 컬렉션에 아이템 유무를 검사한다.
@@ -713,15 +713,15 @@
     var ItemTableCollection  = (function (_super) {
         /**
          * 테이블 아이템 컬렉션
-         * @constructs _W.Meta.Entity.ItemTableCollection
-         * @extends _W.Meta.Entity.ItemCollection
+         * @constructs _L.Meta.Entity.ItemTableCollection
+         * @extends _L.Meta.Entity.ItemCollection
          * @param {*} p_onwer 소유자
          * @param {?ItemCollection} p_baseCollection 참조기본 컬렉션
          */
         function ItemTableCollection(p_onwer) {
             _super.call(this, p_onwer);
         }
-        util.inherits(ItemTableCollection, _super);
+        Util.inherits(ItemTableCollection, _super);
 
         /**
          * 테이블컬렉션에 아이템을 추가한다.
@@ -757,8 +757,8 @@
     //---------------------------------------
     var ItemViewCollection  = (function (_super) {
         /**
-         * @constructs _W.Meta.Entity.ItemViewCollection
-         * @extends _W.Meta.Entity.ItemCollection
+         * @constructs _L.Meta.Entity.ItemViewCollection
+         * @extends _L.Meta.Entity.ItemCollection
          * @param {*} p_onwer 소유자
          * @param {?ItemCollection} p_baseCollection 참조기본 컬렉션
          */
@@ -772,7 +772,7 @@
             /** @protected */
             this._baseCollection = p_baseCollection;
         }
-        util.inherits(ItemViewCollection, _super);
+        Util.inherits(ItemViewCollection, _super);
 
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.
@@ -871,15 +871,15 @@
         module.exports.ItemTableCollection          = ItemTableCollection;
 
     } else {
-        global._W.Item                              = Item;
-        global._W.ItemCollection                    = ItemCollection;
-        global._W.ItemViewCollection                = ItemViewCollection;
-        global._W.ItemTableCollection               = ItemTableCollection;
+        global._L.Item                              = Item;
+        global._L.ItemCollection                    = ItemCollection;
+        global._L.ItemViewCollection                = ItemViewCollection;
+        global._L.ItemTableCollection               = ItemTableCollection;
         // namespace
-        global._W.Meta.Entity.Item                  = Item;
-        global._W.Meta.Entity.ItemCollection        = ItemCollection;
-        global._W.Meta.Entity.ItemViewCollection    = ItemViewCollection;
-        global._W.Meta.Entity.ItemTableCollection   = ItemTableCollection;
+        global._L.Meta.Entity.Item                  = Item;
+        global._L.Meta.Entity.ItemCollection        = ItemCollection;
+        global._L.Meta.Entity.ItemViewCollection    = ItemViewCollection;
+        global._L.Meta.Entity.ItemTableCollection   = ItemTableCollection;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
