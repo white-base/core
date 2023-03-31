@@ -32,6 +32,13 @@ https://heropy.blog/2019/01/31/node-js-npm-module-publish/
 # for in class 변경점 우회방법
 https://developer.mozilla.org/ko/docs/Web/JavaScript/Enumerability_and_ownership_of_properties
 
+
+# 테스트 비교 
+https://ui.toast.com/fe-guide/ko_TEST
+
+# php mvc 프레임웍 (임실)
+https://codeigniter.com/user_guide/database/configuration.html
+
 ## 2023-03-28
 ----------------------------------------
 File                                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                           
