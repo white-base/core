@@ -241,11 +241,13 @@
             equalType(obj, object);
         }
         // obj.prototype.isImplementOf = isImplementOf;
-        Object.defineProperty(object, 'isImplementOf',
-        {
-            value: isImplementOf,
-            enumerable: false
-        });
+        if (typeof object.isImplementOf === 'undefined') {
+            Object.defineProperty(object, 'isImplementOf',
+            {
+                value: isImplementOf,
+                enumerable: false
+            });
+        }
     }
 
     //==============================================================
