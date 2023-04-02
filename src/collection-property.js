@@ -59,7 +59,8 @@
             this._symbol = this._symbol.concat(['properties', 'indexOfName', 'propertyOf']);
 
             /** implements IPropertyCollection 인터페이스 구현 */
-            this._implements(IPropertyCollection);            
+            // this._implements(IPropertyCollection);
+            Util.implements(this, IPropertyCollection);
         }
         Util.inherits(PropertyCollection, _super);
 
