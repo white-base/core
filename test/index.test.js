@@ -14,7 +14,7 @@ describe('index 타입 검사', () => {
         expect(typeof index.Observer).toBe('function');
         expect(typeof index.CustomError).toBe('function');
         expect(typeof index.Util.inherits).toBe('function');
-        expect(typeof index.Util.getArrayLevel).toBe('function');
+        expect(typeof index.Util.getArrayDepth).toBe('function');
         expect(typeof index.Util.createGUID).toBe('function');
         // expect(typeof index.Util.validSelector).toBe('function');
         expect(typeof index.Util.getAllProperties).toBe('function');
@@ -25,7 +25,7 @@ describe('index 타입 검사', () => {
         expect(typeof index.Common.Observer).toBe('function');
         expect(typeof index.Common.CustomError).toBe('function');
         expect(typeof index.Common.Util.inherits).toBe('function');
-        expect(typeof index.Common.Util.getArrayLevel).toBe('function');
+        expect(typeof index.Common.Util.getArrayDepth).toBe('function');
         expect(typeof index.Common.Util.createGUID).toBe('function');
         // expect(typeof index.Common.Util.validSelector).toBe('function');
         expect(typeof index.Common.Util.getAllProperties).toBe('function');

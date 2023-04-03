@@ -19,12 +19,11 @@ describe('Util.*', () => {
         expect(guid1).not.toBe(guid2);
     });
 
-    // TODO: level >> Depth 으로 변경해야함
-    it('- Util.getArrayLevel() : 난수 비교와 길이 검사', () => {
+    it('- Util.getArrayDepth() : 난수 비교와 길이 검사', () => {
         const lvl3 = [[[]]];
         // const lvl3 = [[[]]];
 
-        expect(Util.getArrayLevel(lvl3)).toBe(3);
+        expect(Util.getArrayDepth(lvl3)).toBe(3);
     });
     // it('- Util.createGUID() : 난수 비교와 길이 검사', () => {
     // });

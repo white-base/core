@@ -60,7 +60,7 @@
      * @param {*} p_depts 
      * @memberof _L.Common.Util
      */
-    var getArrayLevel = function (p_elem, p_depts) {    // COVER:
+    var getArrayDepth = function (p_elem, p_depts) {    // COVER:
         var MAX     = 10;
         var level   = 0;
         
@@ -69,7 +69,7 @@
         if (p_elem instanceof Array && MAX > p_depts) {
             level++;
             p_depts++;
-            level = level + this.getArrayLevel(p_elem[0], p_depts);  // 재귀호출을 통해 깊이 얻기
+            level = level + this.getArrayDepth(p_elem[0], p_depts);  // 재귀호출을 통해 깊이 얻기
         }
         return level;
     };
@@ -254,14 +254,14 @@
     // 5. 모듈 내보내기 (node | web)
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports.inherits = inherits;
-        module.exports.getArrayLevel = getArrayLevel;
+        module.exports.getArrayDepth = getArrayDepth;
         module.exports.createGUID = createGUID;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         module.exports.getAllProperties = getAllProperties;
         module.exports.implements = implement;
     } else {    // COVER:
         global._L.Common.Util.inherits = inherits;
-        global._L.Common.Util.getArrayLevel = getArrayLevel;
+        global._L.Common.Util.getArrayDepth = getArrayDepth;
         global._L.Common.Util.createGUID = createGUID;
         // global._L.Common.Util.validSelector = validSelector;
         global._L.Common.Util.getAllProperties = getAllProperties;
