@@ -25,137 +25,134 @@
         /**
          * 구독자 클래스 (이벤트에 활용)
          * @constructs _L.Common.Observer
-         * @param {obejct} p_onwer Observer 클래스의 소유 함수 또는 클래스
-         * @param {object} p_this 함수 호출 본문에서 this 역활 publish.apply(p_this, ...)
+         * @param {object} p_caller 함수 호출 본문에서 this 역활 publish.apply(p_caller, ...)
          */
-        function Observer(p_onwer, p_this) {
-            this.isDebug = false;
+        function Observer(p_caller) {
+            if (typeof p_caller !== 'object') throw new Error('pubulish()  apply() 대상객체를 지정해야 합니다.');
+            
+            var isLog = false;
+            var isSingleMode = false;
+            var __subscribers = { any: [] };
+
+            /*_______________________________________*/        
+            // public property
+            Object.defineProperty(this, 'isLog', 
+            {
+                get: function() { return isLog; },
+                set: function(nVal) {
+                    if (typeof nVal !== 'boolean') throw new Error('Only [isLog] type "boolean" can be added');
+                    isLog = nVal;
+                }
+            });
+
+            /** 
+             * 싱글모드는 callback 같이 작동함
+             * 구독자 멀티모드, 단일시(false) 마지막 등록 구독자만 활성화 (기본값:true)  
+             * @member {Boolean} 
+             */
+            Object.defineProperty(this, 'isSingleMode', 
+            {
+                get: function() { return isSingleMode; },
+                set: function(nVal) { 
+                    if (typeof nVal !== 'boolean') throw new Error('Only [isSingleMode] type "boolean" can be added');
+                    isSingleMode = nVal;
+                }
+            });
+
+            /*_______________________________________*/        
+            // protected property
 
             /**
              * 등록함수의 this 
              * @protected
-             * @member {Object} 
-             * */
-            this._this = p_this;    
-
-            /** 
-             * 이벤트의 소유자
-             * @protected
-             * @member {Object}   
+             * @member {object}
              */
-            this._onwer = p_onwer;
+            Object.defineProperty(this, '_caller', {
+                value: p_caller,
+                writable: false
+            });
             
+            /*_______________________________________*/        
+            // priavte property
+
             /**
              * 전역 구독자
-             * @member {Object}
+             * @member {object}
              */
-            this.subscribers = {
-                any: []
-            };
+            Object.defineProperty(this, '__subscribers', 
+            {
+                get: function() { return __subscribers; },
+                set: function(nVal) { 
+                    if (typeof nVal !== 'object') throw new Error('Only [__subscribers] type "object" can be added');
+                    if (typeof nVal.any === 'undefined') throw new Error('Only [__subscribers.any] type "array" can be added');
+                    __subscribers = nVal;
+                }
+            });
             
-            /** 
-             * 이벤트 전파 설정 (기본값:true)
-             * @member {Boolean}
-             */
-            this.propagation = true;
-
-            /** 
-             * 구독자 멀티모드, 단일시(false) 마지막 등록 구독자만 활성화 (기본값:true)  
-             * @member {Boolean} 
-             */
-            this.isMultiMode = true;
         }
 
         /**
          * 구독 신청
          * 이벤트 'p_code'를 입력하지 않으면 전역(any)에 등록 된다.
-         * @param {Function} p_fn  구독 콜백 함수
-         * @param {?String} p_code 구독 코드명 : 기본값 'any'
+         * @param {function?} p_fn  구독 콜백 함수
+         * @param {string?} p_code 구독 코드명 : 기본값 'any'
          */
         Observer.prototype.subscribe = function(p_fn, p_code) {
             p_code = p_code || 'any';
 
-            var subscribers = null;
-
-            if (typeof p_fn === 'undefined') throw new Error('p_fn param request fail...');
             if (typeof p_fn !== 'function') throw new Error('Only [p_fn] type "function" can be added');
-
-            // 싱글모드일 경우 기존내용 모두 제거
-            if (!this.isMultiMode) this.unsubscribeAll(p_code);
-
-            if (typeof this.subscribers[p_code] === 'undefined') {
-                this.subscribers[p_code] = [];
+            
+            if (this.isSingleMode && this.__subscribers[p_code]) this.unsubscribe(p_code);    // 싱글모드시 초기화
+            if (typeof this.__subscribers[p_code] === 'undefined') {
+                this.__subscribers[p_code] = [];
             }
-            subscribers = this.subscribers[p_code];
-            subscribers.push(p_fn);
+            this.__subscribers[p_code].push(p_fn);
         };
         
         /**
          * 이벤트 'p_code'를 입력하지 않으면 전역(any)에서 취소 된다.
-         * @param {Function} p_fn [필수] 이벤트 콜백 함수
-         * @param {?String} p_code 이벤트 코드명 : 기본값 'any'
+         * @param {string?} p_code 이벤트 코드명 : 없으면 전체 초기함
+         * @param {function?} p_fn 이벤트 콜백 함수
          */
-        Observer.prototype.unsubscribe = function(p_fn, p_code) {
-            p_code = p_code || 'any';
+        Observer.prototype.unsubscribe = function(p_code, p_fn) {
+            if (typeof p_code === 'undefined')  {
+                this.__subscribers = {any: []};
+                return;
+            }
 
-            if (typeof p_fn === 'undefined') throw new Error('p_fn param request fail...');
-
-            if (this.subscribers[p_code]) {
-                for (var i = 0; i < this.subscribers[p_code].length; i++) {
-                    if (this.subscribers[p_code][i] === p_fn) {
-                        this.subscribers[p_code].splice(i, 1);
+            if (this.__subscribers[p_code]) {
+                if (typeof p_fn === 'function') {
+                    for (var i = 0; i < this.__subscribers[p_code].length; i++) {
+                        if (this.__subscribers[p_code][i] === p_fn) {
+                            this.__subscribers[p_code].splice(i, 1);
+                        }
                     }
-                }
-            }
+                } else delete this.__subscribers[p_code];
+            } 
         };
 
         /**
-         * 전체 또는 지정 구독을 취소한다.
-         * @param {?String} p_code 이벤트 코드명
-         * @desc 
-         *  - p_code 입력하면 해당 콜백함수들 구독 취소한다.
-         *  - p_code 를 입력하지 않으면 전체 등록된 이벤트가 취소된다.
-         */
-        Observer.prototype.unsubscribeAll = function(p_code) {
-            if (typeof p_code === 'undefined') {     // 전체 구독 삭제
-                this.subscribers = {any: []};
-            } else {                        // 코드명 구독(함수) 전체 삭제
-                delete this.subscribers[p_code];
-            }
-        };
-
-        /**
-         * 구독 함수 전체 또는 지정 구독을 호출한다.
-         * @param {?String} p_code 이벤트 코드명 : 기본값 'any'
+         * 구독 함수 전체 또는 지정 구독을 호출한다. publishAny(p1, p2);
+         * @param {string?} p_code 이벤트 코드명 : 기본값 'any'
          */
         Observer.prototype.publish = function(p_code) {
             p_code = p_code || 'any';
             
             var args = Array.prototype.slice.call(arguments);
-            var params = args.length >= 1 ? args.splice(1) : [];
-
-            // this.propagation = true;    // 이벤트 전파
-
-            if (p_code in this.subscribers) {
-                for (var i = 0; i < this.subscribers[p_code].length; i++) {
-                    if (typeof this.subscribers[p_code][i] === 'function') {
-                        // this.subscribers[p_code][i].call(this._this, this._onwer);  // REVIEW:: _onwer 인수 확인필요! >> 전달파라메터 
-                        this.subscribers[p_code][i].apply(this._this, params);
+            var arr = args.length >= 1 ? args.splice(1) : [];
+            
+            if (p_code in this.__subscribers) {
+                for (var i = 0; i < this.__subscribers[p_code].length; i++) {
+                    if (typeof this.__subscribers[p_code][i] === 'function') {
+                        this.__subscribers[p_code][i].apply(this._caller, arr);
                     }
                 }
             }
             
-            if (this.isDebug) {
-                console.log('publish() 이벤트 발생 [' + this._this.constructor.name + '] type:' + p_code);
+            if (this.isLog) {
+                console.log('publish() 이벤트 발생 [' + this._caller.constructor.name + '] type:' + p_code);
             }
         };
-
-        /**
-         * 이벤트 전달을 중단한다. 기본값 'true'
-         */
-        Observer.prototype.stopPropagation = function() {
-            this.propagation = false;
-        }
 
         return Observer;
         

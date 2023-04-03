@@ -40,7 +40,7 @@
                     });
                 }
             };
-        } else {    // COVER:
+        } else {    // COVER:  강제 삭제후 테스트
             // old school shim for old browsers
             return function (ctor, superCtor) {
                 if (superCtor) {
