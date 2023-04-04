@@ -144,7 +144,7 @@
             props.forEach(function(prop) {
                 if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
                     allProps.push(prop);
-            })
+            });
         }while(curr = Object.getPrototypeOf(curr))
         return allProps;
     }
