@@ -488,9 +488,9 @@
             if (this.setter) clone['setter']            = this.setter;
             
             // 이벤트 복사 (REVIEW:: 개선필요!!)
-            if (this.__event.subscribers.onChanged) {
-                for (var i = 0; this.__event.subscribers.onChanged.length > i; i++) {
-                    clone['onChanged'] = this.__event.subscribers.onChanged[i];
+            if (this.__event.__subscribers.onChanged) {
+                for (var i = 0; this.__event.__subscribers.onChanged.length > i; i++) {
+                    clone['onChanged'] = this.__event.__subscribers.onChanged[i];
                 }
             }
             
