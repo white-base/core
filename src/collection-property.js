@@ -56,7 +56,7 @@
             });
 
             // 예약어 등록
-            this._symbol = this._symbol.concat(['properties', 'indexOfName', 'propertyOf']);
+            this._symbol = this._symbol.concat(['properties', 'indexOfName', 'propertyOf', 'removeByname']);
 
             /** implements IPropertyCollection 인터페이스 구현 */
             // this._implements(IPropertyCollection);
@@ -99,7 +99,7 @@
          * 속성컬렉션을 등록한다.[구현]
          * @param {string} p_name [필수] 속성명
          * @param {?any} p_value 속성값
-         * @returns {any} 입력 속성 참조값 REVIEW:: 필요성 검토
+         * @returns {boolean} 처리결과
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
             p_value = p_value || '';
@@ -107,30 +107,33 @@
             var typeName;
             var index   = -1;
 
-            this._onChanging();                     // 이벤트 발생 : 변경전
-        
+            
             if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
             if (this.elementType !== null && !(p_value instanceof this.elementType)) {
                 typeName = this.elementType.constructor.name;
                 throw new Error('Only [' + typeName + '] type instances can be added');
             }
-
+            
             // 예약어 검사
             if (this._symbol.indexOf(p_name) > -1) {
                 throw new Error(' [' + p_name + '] is a Symbol word');   
             }
-
+            
             if (this.indexOfName(p_name) > -1) {
                 console.warn('Warning:: 프로퍼티 이름 중복 !!');
-                return this[p_name];     // 중복 등록 방지
+                // return this[p_name];     // 중복 등록 방지
+                return false;
             }
+
+            this._onChanging();                     // 이벤트 발생 : 변경전
 
             this._element.push(p_value);
             this.properties.push(p_name);
 
             index = (this._element.length === 1) ? 0 : this._element.length  - 1;
 
-            if (typeof p_desc === 'object' && (typeof p_desc.get === 'function' || typeof p_desc.set === 'function')) {
+            // if (typeof p_desc === 'object' && (typeof p_desc.get === 'function' || typeof p_desc.set === 'function')) {
+            if (typeof p_desc === 'object') {
                 Object.defineProperty(this, [index], p_desc);
                 Object.defineProperty(this, p_name, p_desc);
             } else {
@@ -141,42 +144,55 @@
             this._onAdd(index, p_value);            // 이벤트 발생 : 등록
             this._onChanged();                      // 이벤트 발생 : 변경후
 
-            return this[index];
+            return true;
+        };
+
+        /**
+         * 요소 삭제
+         * @param {string} p_name 삭제핳 요소명
+         */
+        PropertyCollection.prototype.removeByName = function(p_name) {
+            var idx = this.indexOfName(p_name);
+
+            if (typeof idx === 'number') return this.removeAt(idx);
+            return false;
         };
 
         /**
          * 속성컬렉션을 전체 삭제한다. [구현]
          */
         PropertyCollection.prototype.clear = function() {
-            var propName;
+            var propName
+            var isChange = false;
             
-            this._onChanging();                     // 이벤트 발생 : 변경전
+            if (this._element.length > 0) isChange = true;
+            if (isChange) this._onChanging();   // 이벤트 발생 : 변경전
 
             for (var i = 0; i < this._element.length; i++) {
                 propName = this.propertyOf(i);
                 delete this[i];
                 delete this[propName];
             }
-
             this._element = [];
             this.properties = [];
 
-            this._onClear();                        // 이벤트 발생 : 전체삭제
-            this._onChanged();                      // 이벤트 발생 : 변경후                
+            this._onClear();                                    // 이벤트 발생 : 전체삭제
+            if (isChange) this._onChanged();    // 이벤트 발생 : 변경후                
         };
         
         /**
          * 이름으로 index값 조회한다.
          * @param {String} p_name 
+         * @returns {number}
          */
         PropertyCollection.prototype.indexOfName = function(p_name) {
-            var obj;
+            var idx = -1;
             
             if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
-            
-            obj = this[p_name];
-
-            return this._element.indexOf(obj);;
+            for (var i = 0; i < this.properties.length; i++) {
+                if (this.properties[i] === p_name) return i;
+            }
+            return idx;
         };
 
         /**

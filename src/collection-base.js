@@ -316,39 +316,36 @@
         /**
          * 컬렉션을 삭제한다.
          * @param {Object} p_elem 속성명
-         * @returns {Number} 삭제한 인덱스
+         * @returns {boolean} 처리결과
          */
         BaseCollection.prototype.remove = function(p_elem) {
-            
             var idx;
             
-            this._onChanging();                     // 이벤트 발생 : 변경전
-            
             if (this.contains(p_elem)) {
+                this._onChanging();                     // 이벤트 발생 : 변경전
                 idx = this.indexOf(p_elem);
                 this._remove(idx);
+                this._onRemove(idx);                    // 이벤트 발생 : 삭제
+                this._onChanged();                      // 이벤트 발생 : 변경후
             }
-            
-            this._onRemove(idx);                    // 이벤트 발생 : 삭제
-            this._onChanged();                      // 이벤트 발생 : 변경후
-
-            return idx;
+            return typeof idx === 'number' ? true : false;
         };
         
         /**
          * 배열속성 삭제한다.
          * @param {Number} p_idx 인덱스
+         * @returns {boolean} 처리 결과
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
-
             var obj = this._element[p_idx];
             
-            this._onChanging();                     // 이벤트 발생 : 변경전
-            
-            if (typeof obj !== 'undefined') this._remove(p_idx);
-
-            this._onRemove();                       // 이벤트 발생 : 삭제
-            this._onChanged();                      // 이벤트 발생 : 변경후
+            if (typeof obj !== 'undefined') {
+                this._onChanging();            // 이벤트 발생 : 변경전
+                this._remove(p_idx);
+                this._onRemove();                       // 이벤트 발생 : 삭제
+                this._onChanged();                      // 이벤트 발생 : 변경후
+            }
+            return typeof obj === 'undefined' ? false : true;
         };
 
         /**
