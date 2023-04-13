@@ -82,8 +82,28 @@ describe("< PropertyCollection >", () => {
             expect(result).not.toBeTruthy();
             logSpy.mockRestore();
         });
-        it("- add(name) : 내부속성명 사용시 (예외)", () => {
+        it("- add(name) : 예약어 사용시 (예외)", () => {
+            expect(() => s.items.add('_onwer')).toThrow(/Symbol word/);
+            expect(() => s.items.add('_element')).toThrow(/Symbol word/);
+            expect(() => s.items.add('_symbol')).toThrow(/Symbol word/);
+            expect(() => s.items.add('elementType')).toThrow(/Symbol word/);
             expect(() => s.items.add('list')).toThrow(/Symbol word/);
+            expect(() => s.items.add('count')).toThrow(/Symbol word/);
+            expect(() => s.items.add('onAddr')).toThrow(/Symbol word/);
+            expect(() => s.items.add('onRemove')).toThrow(/Symbol word/);
+            expect(() => s.items.add('onClear')).toThrow(/Symbol word/);
+            expect(() => s.items.add('onChanging')).toThrow(/Symbol word/);
+            expect(() => s.items.add('onChanged')).toThrow(/Symbol word/);
+            expect(() => s.items.add('_remove')).toThrow(/Symbol word/);
+            expect(() => s.items.add('add')).toThrow(/Symbol word/);
+            expect(() => s.items.add('clear')).toThrow(/Symbol word/);
+            expect(() => s.items.add('remove')).toThrow(/Symbol word/);
+            expect(() => s.items.add('removeAt')).toThrow(/Symbol word/);
+            expect(() => s.items.add('indexOf')).toThrow(/Symbol word/);
+            expect(() => s.items.add('properties')).toThrow(/Symbol word/);
+            expect(() => s.items.add('indexOfName')).toThrow(/Symbol word/);
+            expect(() => s.items.add('propertyOf')).toThrow(/Symbol word/);
+            expect(() => s.items.add('removeByname')).toThrow(/Symbol word/);
         });
         it("- add(name) : 이름을 숫자로 사용할 경우 (예외)", () => {
             expect(() => s.items.add(10)).toThrow(/"string" can be added/);
@@ -321,13 +341,4 @@ describe("< PropertyCollection >", () => {
         expect(s.items.propertyOf(4)).toBeUndefined();
         expect(s.items.count).toBe(4);
     });
-
-    /**
-     * TODO: 
-     * - _getPropDescriptor() : 상속할때 오버라이딩해서 변형 => 나중에..
-     * - elementType 타입 지정시 해당 인스턴스만 입력가능
-     * ###############################
-     * - 이벤트 => 별도로 파일로 분리
-     * - 삭제 : collection-property-function, collection-property-object
-     */
 });

@@ -258,6 +258,7 @@
         module.exports.createGUID = createGUID;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         module.exports.getAllProperties = getAllProperties;
+        module.exports.equalType = equalType;
         module.exports.implements = implement;
     } else {    // COVER:
         global._L.Common.Util.inherits = inherits;
@@ -265,6 +266,7 @@
         global._L.Common.Util.createGUID = createGUID;
         // global._L.Common.Util.validSelector = validSelector;
         global._L.Common.Util.getAllProperties = getAllProperties;
+        global._L.Common.Util.equalType = equalType;
         global._L.Common.Util.implements = implement;
     }
 

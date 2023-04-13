@@ -233,9 +233,7 @@
             return {
                 get: function() { return this._element[p_idx]; },
                 set: function(newValue) {
-                    
                     var typeName;
-
                     if (this.elementType !== null && !(newValue instanceof this.elementType)) {
                         // typeName = this.elementType.constructor.name; // REVIEW::
                         typeName = this.elementType.name || this.elementType.constructor.name;

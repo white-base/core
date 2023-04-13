@@ -110,7 +110,8 @@
             
             if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
             if (this.elementType !== null && !(p_value instanceof this.elementType)) {
-                typeName = this.elementType.constructor.name;
+                // typeName = this.elementType.constructor.name;
+                typeName = this.elementType.name;
                 throw new Error('Only [' + typeName + '] type instances can be added');
             }
             
@@ -147,6 +148,44 @@
             return true;
         };
 
+        
+        /**
+         * 속성컬렉션을 전체 삭제한다. [구현]
+        */
+       PropertyCollection.prototype.clear = function() {
+           var propName
+           var isChange = false;
+           
+           if (this._element.length > 0) isChange = true;
+           if (isChange) this._onChanging();   // 이벤트 발생 : 변경전
+           
+           for (var i = 0; i < this._element.length; i++) {
+               propName = this.propertyOf(i);
+               delete this[i];
+               delete this[propName];
+            }
+            this._element = [];
+            this.properties = [];
+            
+            this._onClear();                                    // 이벤트 발생 : 전체삭제
+            if (isChange) this._onChanged();    // 이벤트 발생 : 변경후                
+        };
+        
+        /**
+         * 이름으로 index값 조회한다.
+         * @param {String} p_name 
+         * @returns {number}
+        */
+       PropertyCollection.prototype.indexOfName = function(p_name) {
+           var idx = -1;
+           
+           if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
+           for (var i = 0; i < this.properties.length; i++) {
+               if (this.properties[i] === p_name) return i;
+            }
+            return idx;
+        };
+        
         /**
          * 요소 삭제
          * @param {string} p_name 삭제핳 요소명
@@ -157,44 +196,7 @@
             if (typeof idx === 'number') return this.removeAt(idx);
             return false;
         };
-
-        /**
-         * 속성컬렉션을 전체 삭제한다. [구현]
-         */
-        PropertyCollection.prototype.clear = function() {
-            var propName
-            var isChange = false;
-            
-            if (this._element.length > 0) isChange = true;
-            if (isChange) this._onChanging();   // 이벤트 발생 : 변경전
-
-            for (var i = 0; i < this._element.length; i++) {
-                propName = this.propertyOf(i);
-                delete this[i];
-                delete this[propName];
-            }
-            this._element = [];
-            this.properties = [];
-
-            this._onClear();                                    // 이벤트 발생 : 전체삭제
-            if (isChange) this._onChanged();    // 이벤트 발생 : 변경후                
-        };
         
-        /**
-         * 이름으로 index값 조회한다.
-         * @param {String} p_name 
-         * @returns {number}
-         */
-        PropertyCollection.prototype.indexOfName = function(p_name) {
-            var idx = -1;
-            
-            if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
-            for (var i = 0; i < this.properties.length; i++) {
-                if (this.properties[i] === p_name) return i;
-            }
-            return idx;
-        };
-
         /**
          * 배열속성 이름 찾는다. [구현]
          * @param {Number} p_idx 인덱스
