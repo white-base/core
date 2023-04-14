@@ -19,6 +19,13 @@
     //==============================================================
     // 4. 모듈 구현    
 
+    // polyfill
+    if (!Array.isArray) {
+        Array.isArray = function(arg) {
+          return Object.prototype.toString.call(arg) === '[object Array]';
+        };
+    }
+
     /**
      * inherits(대상, 부모) : 상속
      * @function
@@ -150,18 +157,18 @@
     }
 
     /***
-         * 객체의 타입 비교
-         * ori 의 속성 타입별 비교 기준 (Interface 역활)
-         *  - function() {} : function 타입 또는 대상의 인스턴스 (파라메티 검사 안함)
-         *  - []            : array 타입
-         *  - ''            : string 타입
-         *  - 0, 1, 2..     : number 타입
-         *  - true, false   : boolean 타입
-         *  - null          : any 타입
-         *  - {}            : 재귀호출 검사!
-         * @param ori 원본 객체 (인터페이스 : 타입선언)
-         * @param tar 비교 객체
-         */
+     * 객체의 타입 비교
+     * ori 의 속성 타입별 비교 기준 (Interface 역활)
+     *  - function() {} : function 타입 또는 대상의 인스턴스 (파라메티 검사 안함)
+     *  - []            : array 타입
+     *  - ''            : string 타입
+     *  - 0, 1, 2..     : number 타입
+     *  - true, false   : boolean 타입
+     *  - null          : any 타입
+     *  - {}            : 재귀호출 검사!
+     * @param ori 원본 객체 (인터페이스 : 타입선언)
+     * @param tar 비교 객체
+     */
     var equalType = function(ori, tar, oriName) {
         var typeName = '';
         var oriName = oriName ? oriName : 'this';
@@ -197,6 +204,8 @@
             }
         }
     }
+
+
 
     /**
      * 구현 제약 조건 검사
