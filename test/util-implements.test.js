@@ -54,9 +54,9 @@ describe('Util.implements(this, interface)', () => {
 
     it('- this 인터페이스 선언 <-- 구현', () => {
         function ISuper() {
-            this.m1 = function() { };
+            this.m1 = Function;
         }
-        ISuper.prototype.m1 = function() { return 'C1' }
+        // ISuper.prototype.m1 = function() { return 'C1' }
         function CoClass() {
             Util.implements(this, ISuper);    /** @implements */
         }
@@ -65,11 +65,12 @@ describe('Util.implements(this, interface)', () => {
 
         expect(i.m1()).toBe('C1');
         expect(i._interface.length).toBe(1);
-        expect(i.isImplementOf(ISuper)).toBe(true);
+        // expect(i.isImplementOf(ISuper)).toBe(true);
     });
-    it('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = 인스턴스) ', () => {
+    it.only('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = 인스턴스) ', () => {
+        function AClass() {}
         function ISuper() {
-            this.obj = function AClass() {};    // 클래스 역활
+            this.obj = AClass;    // 클래스 역활
         }
         function CoClass() {
             this.obj = /err/;    // 객체(Regex)

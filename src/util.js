@@ -12,9 +12,33 @@
 
     //==============================================================
     // 2. 모듈 가져오기 (node | web)
+    var getAllProperties;
+    var checkType;
+    var checkUnionType;
+    var validType;
+    var validUnionType;
+
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        getAllProperties    = require('./util-type').getAllProperties;
+        checkType           = require('./util-type').checkType;
+        checkUnionType      = require('./util-type').checkUnionType;
+        validType           = require('./util-type').validType;
+        validUnionType      = require('./util-type').validUnionType;
+    } else {
+        getAllProperties    = global._L.Common.Util.getAllProperties
+        checkType           = global._L.Common.Util.checkType
+        checkTypeAll        = global._L.Common.Util.checkTypeAll
+        validType           = global._L.Common.Util.validType
+        validUnionType      = global._L.Common.Util.validUnionType
+    }
 
     //==============================================================
     // 3. 의존성 검사
+    if (typeof getAllProperties === 'undefined') throw new Error('[getAllProperties] module load fail...');
+    if (typeof checkType === 'undefined') throw new Error('[checkType] module load fail...');
+    if (typeof checkUnionType === 'undefined') throw new Error('[checkUnionType] module load fail...');
+    if (typeof validType === 'undefined') throw new Error('[checkUnionType] module load fail...');
+    if (typeof validUnionType === 'undefined') throw new Error('[checkUnionType] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -142,19 +166,19 @@
      * @param {boolean?} isObject Object를 포함 여부
      * @returns {array}  
      */
-    var getAllProperties = function(obj, isObject) {
-        var allProps = [], curr = obj;
-        var is = isObject || false;
+    // var getAllProperties = function(obj, isObject) {
+    //     var allProps = [], curr = obj;
+    //     var is = isObject || false;
 
-        do{
-            var props = Object.getOwnPropertyNames(curr);
-            props.forEach(function(prop) {
-                if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
-                    allProps.push(prop);
-            });
-        }while(curr = Object.getPrototypeOf(curr))
-        return allProps;
-    }
+    //     do{
+    //         var props = Object.getOwnPropertyNames(curr);
+    //         props.forEach(function(prop) {
+    //             if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
+    //                 allProps.push(prop);
+    //         });
+    //     }while(curr = Object.getPrototypeOf(curr))
+    //     return allProps;
+    // }
 
     /***
      * 객체의 타입 비교
@@ -235,6 +259,21 @@
             }
         });
     
+        // for(var i = 1; i < arguments.length; i++) {
+        //     if (typeof arguments[i] === 'function') {
+        //         // 중복 제거
+        //         if (object._interface.indexOf(arguments[i]) < 0) {
+        //             object._interface.push(arguments[i]);
+        //             object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
+        //         }
+        //     } else throw new Error('함수타입만 가능합니다.');   // COVER:
+        //     // 비교 원본 인터페이스 임시 객체 생성    
+        //     obj = new arguments[i];
+    
+        //     // 객체 타입을 비교 (값은 비교 안함, 타입만 비교함)
+        //     equalType(obj, object);
+        // }
+
         for(var i = 1; i < arguments.length; i++) {
             if (typeof arguments[i] === 'function') {
                 // 중복 제거
@@ -242,13 +281,16 @@
                     object._interface.push(arguments[i]);
                     object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
                 }
-            } else throw new Error('함수타입만 가능합니다.');   // COVER:
+            } else throw new Error('함수타입만 가능합니다.');
             // 비교 원본 인터페이스 임시 객체 생성    
-            obj = new arguments[i];
+            // obj = new arguments[i];
     
             // 객체 타입을 비교 (값은 비교 안함, 타입만 비교함)
-            equalType(obj, object);
+            // equalType(obj, object);
+            validType(object, arguments[i]);
         }
+        // var types = Array.prototype.slice.call(arguments, 1);
+
         // obj.prototype.isImplementOf = isImplementOf;
         if (typeof object.isImplementOf === 'undefined') {
             Object.defineProperty(object, 'isImplementOf',
