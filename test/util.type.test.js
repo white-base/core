@@ -77,6 +77,6 @@ describe('Util.*', () => {
         var obj;
         
         expect(checkTypeAll(obj, str)).toBe(true);
-        expect(obj).not.toBe('STR');                            // 값이 전달되어 값이 설정 안됨
+        expect(obj).not.toBe('STR');                            // 참조 타입이 아값이 전달되어 값이 설정 안됨
     });
 });
