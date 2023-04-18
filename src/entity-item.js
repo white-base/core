@@ -644,7 +644,7 @@
              */
             Object.defineProperty(this, 'itemType', 
             {
-                get: function() { return this.elementType; },
+                get: function() { return this.elementType.pop(); },
                 set: function(newValue) { 
                     if (!(new newValue() instanceof Item)) throw new Error('Only [Item] type "Item" can be added');
                     this.elementType = newValue; 

@@ -47,7 +47,7 @@
             var _onwer = p_onwer || null;
             var _element = [];
             var _symbol = [];
-            var __elementType   = null;
+            var __elementType  = [];
 
             /** 
              * 이벤트 객체
@@ -120,13 +120,17 @@
                 get: function() {
                     return __elementType;
                 },
-                set: function(newValue) {
-                    if(typeof newValue !== 'function') throw new Error('Only [elementType] type "function" can be added');
-                    if(typeof newValue === 'function' && typeof ['number', 'string', 'boolean'].indexOf(newValue.name) > -1) {
-                        throw new Error('Only [elementType] type Not "number, string, boolean" can be added');
-                    }
-                    __elementType = newValue;
+                set: function(val) {
+                    var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
+                    __elementType = arrType;
                 }
+                // set: function(newValue) {
+                //     if(typeof newValue !== 'function') throw new Error('Only [elementType] type "function" can be added');
+                //     if(typeof newValue === 'function' && typeof ['number', 'string', 'boolean'].indexOf(newValue.name) > -1) {
+                //         throw new Error('Only [elementType] type Not "number, string, boolean" can be added');
+                //     }
+                //     __elementType = newValue;
+                // }
             });
 
             /**
@@ -234,11 +238,12 @@
                 get: function() { return this._element[p_idx]; },
                 set: function(newValue) {
                     var typeName;
-                    if (this.elementType !== null && !(newValue instanceof this.elementType)) {
-                        // typeName = this.elementType.constructor.name; // REVIEW::
-                        typeName = this.elementType.name || this.elementType.constructor.name;
-                        throw new Error('Only [' + typeName + '] type instances can be added');
-                    }
+                    if (this.elementType.length > 0) Util.validType(newValue, this.elementType);
+                    // if (this.elementType !== null && !(newValue instanceof this.elementType)) {
+                    //     // typeName = this.elementType.constructor.name; // REVIEW::
+                    //     typeName = this.elementType.name || this.elementType.constructor.name;
+                    //     throw new Error('Only [' + typeName + '] type instances can be added');
+                    // }
                     this._element[p_idx] = newValue; 
                 },
                 enumerable: true,

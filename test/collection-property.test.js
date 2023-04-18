@@ -10,6 +10,82 @@ let Student, s;
 
 //==============================================================
 // test
+
+describe("< BaseCollection >", () => {
+    beforeAll(() => {
+        jest.resetModules();
+        // 클래스 정의
+        Student = class {
+            level = 0;
+            constructor(level) { this.level = level }
+        }
+        School = class {
+            items = new PropertyCollection(this);
+            constructor() { this.items.elementType = Student }
+        }
+    });
+    describe("[ this.elementType 전체 타입을 설정할 경우 : 클래스타입 ]", () => {
+        beforeAll(() => {
+            jest.resetModules();
+            // 클래스 정의
+            Student = class {
+                level = 0;
+                constructor(level) { this.level = level }
+            }
+            School = class {
+                items = new PropertyCollection(this);
+                constructor() { this.items.elementType = Student }
+            }
+        });
+        it("- items.add(name, obj) ", () => {
+            const sc = new School();
+            const s1 = new Student(1);
+            const result = sc.items.add('a1', s1);
+            
+            expect(() => sc.items.add('a2')).toThrow(/null/);
+            // expect(() => sc.items.add('a2', 'str')).toThrow(/instance/);
+            // expect(result).toBeTruthy();
+        });
+        it("- items.요소명 = obj ", () => {
+            const sc = new School();
+            const s1 = new Student(1);
+            const s2 = new Student(2);
+            const result = sc.items.add('a1', s1);
+            sc.items['a1'] = s2;
+
+            expect(() => sc.items['a1'] = 10 ).toThrow(/instance/);
+            expect(sc.items['a1'].level).toBe(2);                   // 교체된 객체
+            expect(sc.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
+            expect(result).toBeTruthy();
+        });
+    });
+    describe("[ this.elementType 전체 타입을 설정할 경우 : 원시타입(String)  ]", () => {
+        beforeAll(() => {
+            jest.resetModules();
+            // 클래스 정의
+            Student = class {
+                level = 0;
+                constructor(level) { this.level = level }
+            }
+            School = class {
+                items = new PropertyCollection(this);
+                constructor() { this.items.elementType = String }
+            }
+        });
+        it("- items.add(name, obj) ", () => {
+            const sc = new School();
+            const s1 = new Student(1);
+            const result1 = sc.items.add('a1', 'A1');
+            const result2 = sc.items.add('a2', '');
+            
+            expect(() => sc.items.add('a3')).toThrow(/string/);     // 공백 예외
+            expect(() => sc.items.add('a3', 10)).toThrow(/string/); // 타입 예외
+            expect(result1).toBeTruthy();
+            expect(result2).toBeTruthy();
+        });
+    });
+});
+
 describe("< PropertyCollection >", () => {
     beforeAll(() => {
         jest.resetModules();
@@ -26,8 +102,8 @@ describe("< PropertyCollection >", () => {
         it("- add(name)", () => {
             const result = s.items.add('a1');
     
-            expect(s.items['a1']).toBe('');
-            expect(s.items.a1).toBe('');
+            expect(s.items['a1']).toBe(null);
+            expect(s.items.a1).toBe(null);
             expect(s.items.count).toBe(1);
             expect(result).toBeTruthy();
         });

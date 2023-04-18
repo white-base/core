@@ -40,83 +40,41 @@
     }
 
     /**
-     * 
-     * @param {*} type 
-     * @param {*} target 
-     * @param {*} parentName 
-     * @returns {true | }
+     * 공백객체 인지 확인
+     * @param {*} obj 검사대상
+     * @returns 
      */
-    var __validType = function(type, target, parentName) {
-        var parentName = parentName ? parentName : 'this';
-        var typeDef = {type: type, name: '', default: null};
-        
-        // [] 여부시 OR 조건 재귀검사
-        if (Array.isArray(type)) {
-            for(var i = 0; i < type.length; i++) if (validType(type[i], target) === true) return true;
-            return false;
+    function isEmptyObj(obj)  {
+        if(typeof obj === 'object' && Object.keys(obj).length === 0 && getAllProperties(obj).length === 0) {
+          return true;
         }
-        
-        // 타입 설정 TODO: 함수로 도출 예정
-        if (typeof type !== 'function' && typeof type !== 'object' && typeof type !== 'undefined') {
-            typeDef.name = typeof type;
-            typeDef.default = type;
-            // if (typeof target === 'undefined') target = type;   // 기본값 설정 REVIEW: => 필요성 여부
-        } else if (typeof type === 'function' && (type === Number || type === String || type === Boolean || type === Object)) 
-            typeDef.name = typeof type();
-        else if (type === null) typeDef.name = 'null';
-        else if (type === Array) typeDef.name = 'array';
-        else if (type === Function) typeDef.name = 'function';
-        else if (typeof type === 'function') typeDef.name = 'class';
-        else if (typeof type === 'object') typeDef.name = 'object';
-        else throw new Error('타입이 존재하지 않습니다.');
+        return false;
+    }
+    /**
+     * 공백이 아닌 객체 (prototype 및 속성 있는것)
+     * @param {*} obj 대상 
+     * @returns 
+     */
+    function isFillObj(obj)  {
+        if(typeof obj === 'object' && getAllProperties(obj).length > 0) {
+          return true;
+        }
+        return false;
+    }
     
-        // 비교
-        if ((typeDef.name === 'null' && typeof target !== 'undefined')
-            || (typeDef.name !== 'class' && typeDef.name !== 'object' && typeDef.name === typeof target)) {
-            return true;
-        }
-        // } else if (typeDef.name === 'string' && typeof target === 'string') {
-        //     return true;
-        // } else if (typeDef.name === 'number' && typeof target === 'number') {
-        //     return true;
-        // } else if (typeDef.name === 'boolean' && typeof target === 'boolean') {
-        //     return true;
-        // } else if (typeDef.name === 'function' && typeof target === 'function') {
-        //     return true;
-        if (typeDef.name === 'class') {
-            if (target instanceof typeDef.type) return true;
-            else if (typeof target === 'object') return validType(new typeDef.type, target, parentName);
-            else return false;
-        }
-        if (typeDef.name === 'object') {
-            var list = getAllProperties(typeDef.type);
-            for (var i = 0; i < list.length; i++) {
-                var key = list[i];
-                var keyValue = typeDef.type[key];
-                // 통과 조건 (예약어, null)
-                if ('_interface' === key || 'isImplementOf' === key
-                    || (type[key] === null && typeof target[key] !== 'undefined')) continue;
-                // 기본값 설정
-                if (typeof keyValue !== 'function' && typeof keyValue !== 'object' 
-                    && typeof keyValue !== 'undefined' && typeof target[key] === 'undefined') target[key] = keyValue;
-
-                if (!(key in target)) {
-                    console.warn(' 대상 없음 ' + parentName + '.' + key + ' : ' + typeof type[key]); 
-                    return false;
-                } else {
-                    if (validType(type[key], target[key], parentName +'.'+ key) === false) return false;
-                }
-            }
-            return true;
-        }
-    };
-
-    // valid type check message
-    // _checkTypeMesage() :
-
-    var _getTypeMap = function(type) {
+    /**
+     * js 의 타입을 객체로 리턴한다.
+     * return {name: , default: null}
+     * @param {any} type 대상타입
+     * @returns {object}
+     */
+    var getTypeMap = function(type) {
         var obj =  {name: '', default: null};
 
+        if (typeof type === 'undefined') {
+            obj.name = 'undefined';
+            return obj;
+        }
         if (type === null) {
             obj.name = 'any';
             return obj;
@@ -137,12 +95,25 @@
             obj.name = 'array';
             return obj;
         }
+        if (type instanceof Array) {
+            if (type.length > 0) obj.name = 'or';
+            else obj.name = 'array'
+            return obj;
+        }
         if (type === Function) {
             obj.name = 'function';
             return obj;
         }
         if (type === Object) {
             obj.name = 'object';
+            return obj;
+        }
+        if (isEmptyObj(type)) {
+            obj.name = 'object'
+            return obj;
+        }
+        if (isFillObj(type)) {
+            obj.name = 'and'
             return obj;
         }
         if (typeof type === 'number') {
@@ -171,57 +142,92 @@
         throw new Error('타입이 존재하지 않습니다.');
     }
 
+    /**
+     * 타입을 검사하여 메세지를 리턴
+     * @param {any} type 검사할 타입
+     * @param {any} target 검사대상
+     * @param {string} parentName '' 공백시 성공
+     * @returns 
+     */
     var _checkTypeMessage = function(type, target, parentName) {
         var parentName = parentName ? parentName : 'this';
         var typeDef = {type: type, name: '', default: null};
         var returnMsg = '';
         var defType;
 
-        if (Array.isArray(type)) {
+        defType = getTypeMap(type);
+        
+        // if (target === null || typeof type === 'undefined') return '대상이 null, undefined 는 검사할 수 없습니다.';
+
+        if (defType.name === 'or') {                                                    // or
             for(var i = 0; i < type.length; i++) {
                 returnMsg = _checkTypeMessage(type[i], target);
                 if (returnMsg.length > 0) return returnMsg;
             }
         }
-        defType = _getTypeMap(type);
-
-        if (defType.name === 'any' && typeof target !== 'undefined') return '';
-        if (defType.name !== 'object' && defType.name === typeof target) return '';
-        if (defType.name === 'class' && target instanceof type) return '';
-        if (defType.default !== null && typeof target === 'undefined') {
-            target = defType.default;
-            return '';
+        if (defType.name === 'any') {
+            if (typeof target !== 'undefined') return '';
+            return parentName +'에 속성이 없습니다.';
         }
-        if (defType.name === 'class' && typeof target === 'object') return _checkTypeMessage(new type, target, parentName);
+        if (defType.name === 'number') {
+            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof target === 'number') return '';
+            return parentName +'은 number 타입이 아닙니다.';
+        }
+        if (defType.name === 'string') {
+            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof target === 'string') return '';
+            return parentName +'은 string 타입이 아닙니다.';
+        }
+        if (defType.name === 'boolean') {
+            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof target === 'boolean') return '';
+            return parentName +'은 boolean 타입이 아닙니다.';
+        }
+        if (defType.name === 'array') {
+            if (Array.isArray(target)) return '';
+            return parentName +'은 array 타입이 아닙니다.';
+        }
+        if (defType.name === 'function') {
+            if (typeof target === 'function') return '';
+            return parentName +'은 function 타입이 아닙니다.';
+        }
         if (defType.name === 'object') {
+            if (typeof target === 'object') return '';
+            return parentName +'은 object 타입이 아닙니다.';
+        }
+        if (defType.name === 'class') {
+            if (typeof target === 'object' && target instanceof type) return '';
+            if (typeof target === 'object') return _checkTypeMessage(new type, target, parentName);
+            return parentName +'은 instance 타입이 아닙니다.';
+        }
+        if (defType.name === 'and') {
             var list = getAllProperties(typeDef.type);
 
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                var objType = type[key];
-                var objDefType = _getTypeMap(objType);
+                var andDefType = getTypeMap(type[key]);
+                var msg = '';
                 
-                if ('_interface' === key || 'isImplementOf' === key ) continue; // 예약어
-                if (objDefType.name === 'any' && typeof target[key] !== 'undefined') continue;
-                if (objDefType.default !== null && typeof target[key] === 'undefined') {
-                    target[key] = objDefType.default;
-                    continue;
-                }
-                if (!(key in target)) return ' 대상 없음 ' + parentName + '.' + key + ' : ' + typeof objType; 
-                if (objDefType.name === 'class' && !(target[key] instanceof objType)) return '인스턴스 타입이 아닙니다.';
+                if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+                if (andDefType.default !== null && typeof target[key] === 'undefined')      // default 설정
+                    target[key] = andDefType.default;
+                if (target !== null && !(key in target)) 
+                    return ' 대상 없음 ' + parentName + '.' + key + ' : ' + typeof objType;
+                if (andDefType.name === 'class'){
+                    if (typeof target[key] === 'function') continue;                        // class method
+                    if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
+                    else return parentName + '.' + key + '은 instance 타입이 아닙니다.';
+                } 
 
-
-                // POINT: 
-                if (objDefType.name === 'object') {
-
-                }
-                returnMsg = _checkTypeMessage(objType, target[key], parentName +'.'+ key);
-                if (returnMsg.length > 0) return returnMsg;
+                msg = _checkTypeMessage(type[key], target[key], parentName +'.'+ key);
+                if (msg.length > 0) return msg;
             }
             return '';
         }
         return '맞는 타입이 없습니다.' + defType.name;
     };
+
 
     var validType = function(target, types) {
         var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
@@ -247,7 +253,6 @@
         for(var i = 0; i < arrType.length; i++) {
             msg = _checkTypeMessage(arrType[i], target);
             if(msg.length > 0)  throw new Error(msg);
-            // if (validType(arrType[i], target) === false) return false;
         }
         return true;
     };
@@ -288,12 +293,14 @@
         module.exports.checkUnionType = checkUnionType;
         module.exports.validType = validType;
         module.exports.validUnionType = validUnionType;
+        module.exports.getTypeMap = getTypeMap;
     } else {    // COVER:
         global._L.Common.Util.getAllProperties = getAllProperties;
         global._L.Common.Util.checkType = checkType;
         global._L.Common.Util.checkUnionType = checkUnionType;
         global._L.Common.Util.validType = validType;
         global._L.Common.Util.validUnionType = validUnionType;
+        global._L.Common.Util.getTypeMap = getTypeMap;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));

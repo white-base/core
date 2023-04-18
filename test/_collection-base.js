@@ -41,8 +41,8 @@ describe("< BaseCollection >", () => {
             const s1 = new Student(1);
             const result = sc.items.add('a1', s1);
             
-            expect(() => sc.items.add('a2')).toThrow(/type instances/);
-            expect(() => sc.items.add('a2', 'str')).toThrow(/type instances/);
+            expect(() => sc.items.add('a2')).toThrow(/instance/);
+            expect(() => sc.items.add('a2', 'str')).toThrow(/instance/);
             expect(result).toBeTruthy();
         });
         it("- items.요소명 = obj ", () => {
@@ -52,7 +52,7 @@ describe("< BaseCollection >", () => {
             const result = sc.items.add('a1', s1);
             sc.items['a1'] = s2;
 
-            expect(() => sc.items['a1'] = 10 ).toThrow(/type instances/);
+            expect(() => sc.items['a1'] = 10 ).toThrow(/instance/);
             expect(sc.items['a1'].level).toBe(2);                   // 교체된 객체
             expect(sc.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result).toBeTruthy();
@@ -77,27 +77,12 @@ describe("< BaseCollection >", () => {
             const result1 = sc.items.add('a1', 'A1');
             const result2 = sc.items.add('a2', '');
             
-            expect(() => sc.items.add('a3')).toThrow(/type instances/);     // 공백 예외
-            expect(() => sc.items.add('a3', 10)).toThrow(/type instances/); // 타입 예외
+            expect(() => sc.items.add('a3')).toThrow(/string/);     // 공백 예외
+            expect(() => sc.items.add('a3', 10)).toThrow(/string/); // 타입 예외
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
-        // it("- items.요소명 = obj ", () => {
-        //     const sc = new School();
-        //     const s1 = new Student(1);
-        //     const s2 = new Student(2);
-        //     const result = sc.items.add('a1', s1);
-        //     sc.items['a1'] = s2;
-
-        //     expect(() => sc.items['a1'] = 10 ).toThrow(/type instances/);
-        //     expect(sc.items['a1'].level).toBe(2);                   // 교체된 객체
-        //     expect(sc.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
-        //     expect(result).toBeTruthy();
-        // });
     });
-    /**
-     * this.items.elementType  예외
-     */
         
 
 });

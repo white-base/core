@@ -70,16 +70,16 @@
          * @returns {boolean} 처리결과
          */
         ArrayCollection.prototype.add = function(p_value) {
-        
             var typeName;
             var index   = -1;
 
             
             if (typeof p_value === 'undefined') throw new Error('p_value param request fail...');
-            if (this.elementType !== null && !(p_value instanceof this.elementType)) {
-                typeName = this.elementType.constructor.name;
-                throw new Error('Only [' + typeName + '] type instances can be added');
-            }
+            if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
+            // if (this.elementType !== null && !(p_value instanceof this.elementType)) {
+            //     typeName = this.elementType.constructor.name;
+            //     throw new Error('Only [' + typeName + '] type instances can be added');
+            // }
             
             this._onChanging();                     // 이벤트 발생 : 변경전
 

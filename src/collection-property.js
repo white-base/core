@@ -102,18 +102,19 @@
          * @returns {boolean} 처리결과
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
-            p_value = p_value || '';
+            p_value = typeof p_value === 'undefined' ? null : p_value;
             
             var typeName;
             var index   = -1;
 
             
             if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
-            if (this.elementType !== null && !(p_value instanceof this.elementType)) {
-                // typeName = this.elementType.constructor.name;
-                typeName = this.elementType.name;
-                throw new Error('Only [' + typeName + '] type instances can be added');
-            }
+            if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
+            // if (this.elementType !== null && !(p_value instanceof this.elementType)) {
+            //     // typeName = this.elementType.constructor.name;
+            //     typeName = this.elementType.name;
+            //     throw new Error('Only [' + typeName + '] type instances can be added');
+            // }
             
             // 예약어 검사
             if (this._symbol.indexOf(p_name) > -1) {

@@ -27,7 +27,7 @@
     } else {
         getAllProperties    = global._L.Common.Util.getAllProperties
         checkType           = global._L.Common.Util.checkType
-        checkTypeAll        = global._L.Common.Util.checkTypeAll
+        checkTypeAll        = global._L.Common.Util.checkUnionType
         validType           = global._L.Common.Util.validType
         validUnionType      = global._L.Common.Util.validUnionType
     }
@@ -308,17 +308,25 @@
         module.exports.getArrayDepth = getArrayDepth;
         module.exports.createGUID = createGUID;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
-        module.exports.getAllProperties = getAllProperties;
-        module.exports.equalType = equalType;
+        // module.exports.equalType = equalType;
         module.exports.implements = implement;
+        module.exports.getAllProperties = getAllProperties;
+        module.exports.checkType = checkType;
+        module.exports.checkUnionType = checkUnionType;
+        module.exports.validType = validType;
+        module.exports.validUnionType = validUnionType;
     } else {    // COVER:
         global._L.Common.Util.inherits = inherits;
         global._L.Common.Util.getArrayDepth = getArrayDepth;
         global._L.Common.Util.createGUID = createGUID;
         // global._L.Common.Util.validSelector = validSelector;
-        global._L.Common.Util.getAllProperties = getAllProperties;
-        global._L.Common.Util.equalType = equalType;
+        // global._L.Common.Util.equalType = equalType;
         global._L.Common.Util.implements = implement;
+        global._L.Common.Util.getAllProperties = getAllProperties;
+        global._L.Common.Util.checkType = checkType;
+        global._L.Common.Util.checkUnionType = checkUnionType;
+        global._L.Common.Util.validType = validType;
+        global._L.Common.Util.validUnionType = validUnionType;
     }
 
 }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
