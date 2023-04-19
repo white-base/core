@@ -19,7 +19,7 @@
         ICollection         = require('./i-collection');
         Observer            = require('./observer');
         Util                = require('./util');
-    } else {
+    } else {    // COVER:
         ICollection         = global._L.Interface.ICollection;
         Observer            = global._L.Common.Observer;
         Util                = global._L.Common.Util
@@ -67,7 +67,7 @@
              * @protected 
              * @member {Object} _L.Collection.BaseCollection#_onwer  
              */
-              Object.defineProperty(this, '_onwer', {
+              Object.defineProperty(this, '_onwer', {   // COVER:
                 enumerable: false,
                 configurable: true,
                 get: function() {
@@ -165,7 +165,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'add');
+                    this.__event.subscribe(p_fn, 'add');    // COVER:
                 }
             });
 
@@ -177,7 +177,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'remove');
+                    this.__event.subscribe(p_fn, 'remove');     // COVER:
                 }
             });
 
@@ -189,7 +189,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'clear');
+                    this.__event.subscribe(p_fn, 'clear');      // COVER:
                 }
             });
 
@@ -201,7 +201,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'changing');
+                    this.__event.subscribe(p_fn, 'changing');   // COVER:
                 }
             });
 
@@ -213,7 +213,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'changed');
+                    this.__event.subscribe(p_fn, 'changed');    // COVER:
                 }
             });
 
@@ -296,7 +296,7 @@
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
-            throw new Error('[ _remove() ] Abstract method definition, fail...');
+            throw new Error('[ _remove() ] Abstract method definition, fail...');   // COVER:
         };
 
         /** 
@@ -304,7 +304,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            throw new Error('[ add() ] Abstract method definition, fail...');
+            throw new Error('[ add() ] Abstract method definition, fail...');   // COVER:
         };
         
         /**
@@ -313,7 +313,7 @@
          * @fires _L.Collection.BaseCollection#onClear 
          */
         BaseCollection.prototype.clear  = function() {
-            throw new Error('[ clear() ] Abstract method definition, fail...');
+            throw new Error('[ clear() ] Abstract method definition, fail...'); // COVER:
         };
 
         /**
@@ -377,7 +377,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = BaseCollection;
-    } else {
+    } else {    // COVER:
         global._L.BaseCollection = BaseCollection;
         // namespace
         global._L.Collection.BaseCollection = BaseCollection;

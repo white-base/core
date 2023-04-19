@@ -19,7 +19,7 @@
         Util                = require('./util');
         BaseCollection      = require('./collection-base');
         IPropertyCollection = require('./i-collection-property');
-    } else {
+    } else {    // COVER:
         Util                = global._L.Common.Util;
         BaseCollection      = global._L.Collection.BaseCollection;
         IPropertyCollection = global._L.Interface.IPropertyCollection;
@@ -195,7 +195,7 @@
             var idx = this.indexOfName(p_name);
 
             if (typeof idx === 'number') return this.removeAt(idx);
-            return false;
+            return false;   // COVER:
         };
         
         /**
@@ -216,7 +216,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = PropertyCollection;
-    } else {
+    } else {    // COVER:
         global._L.PropertyCollection = PropertyCollection;
         // namespace
         global._L.Collection.PropertyCollection = PropertyCollection;

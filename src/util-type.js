@@ -136,12 +136,12 @@
             else obj.name = 'class';
             return obj;
         }
-        if (typeof type === 'object') {
+        if (typeof type === 'object') { // COVER:
             obj.name = 'object';
             return obj;
         }
 
-        throw new Error('타입이 존재하지 않습니다.');
+        throw new Error('타입이 존재하지 않습니다.');   // COVER:
     }
 
     /**
@@ -154,7 +154,7 @@
             if (['String', 'Number', 'Boolean', 'Symbol'].indexOf(type.name) > -1) return type();
             return new type;
         }
-        throw new Error('함수 타입만 생성할 수 있습니다.');
+        throw new Error('함수 타입만 생성할 수 있습니다.'); // COVER:
     }
 
     /**
@@ -175,14 +175,14 @@
         // if (target === null || typeof type === 'undefined') return '대상이 null, undefined 는 검사할 수 없습니다.';
 
         if (defType.name === 'or') {                                                    // or
-            for(var i = 0; i < type.length; i++) {
+            for(var i = 0; i < type.length; i++) {  // COVER:
                 returnMsg = _checkTypeMessage(type[i], target);
                 if (returnMsg.length > 0) return returnMsg;
             }
         }
         if (defType.name === 'any') {
             if (typeof target !== 'undefined') return '';
-            return parentName +'에 속성이 없습니다.';
+            return parentName +'에 속성이 없습니다.';   // COVER:
         }
         if (defType.name === 'number') {
             if (defType.default && typeof target === 'undefined') target = defType.default;
@@ -209,7 +209,7 @@
         }
         if (defType.name === 'function') {
             if (typeof target === 'function') return '';
-            return parentName +'은 function 타입이 아닙니다.';
+            return parentName +'은 function 타입이 아닙니다.';  // COVER:
         }
         if (defType.name === 'object') {
             if (typeof target === 'object') return '';
@@ -273,7 +273,7 @@
             msg = _checkTypeMessage(arrType[i], target);
             if(msg.length > 0)  throw new Error(msg);
         }
-        return true;
+        return true;    // COVER:
     };
 
     // OR 조건
