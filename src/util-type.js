@@ -132,14 +132,29 @@
             return obj;
         }
         if (typeof type === 'function') {
-            obj.name = 'class';
+            if (type.name === 'Symbol') obj.name = 'symbol';
+            else obj.name = 'class';
             return obj;
         }
         if (typeof type === 'object') {
             obj.name = 'object';
             return obj;
         }
+
         throw new Error('타입이 존재하지 않습니다.');
+    }
+
+    /**
+     * function 생성하는 생성자
+     * @param {*} type 
+     * @returns 
+     */
+    var _creator = function(type) {
+        if (typeof type === 'function') {
+            if (['String', 'Number', 'Boolean', 'Symbol'].indexOf(type.name) > -1) return type();
+            return new type;
+        }
+        throw new Error('함수 타입만 생성할 수 있습니다.');
     }
 
     /**
@@ -184,6 +199,10 @@
             if (typeof target === 'boolean') return '';
             return parentName +'은 boolean 타입이 아닙니다.';
         }
+        if (defType.name === 'symbol') {
+            if (typeof target === 'symbol') return '';
+            return parentName +'은 symbol 타입이 아닙니다.';
+        }
         if (defType.name === 'array') {
             if (Array.isArray(target)) return '';
             return parentName +'은 array 타입이 아닙니다.';
@@ -198,7 +217,7 @@
         }
         if (defType.name === 'class') {
             if (typeof target === 'object' && target instanceof type) return '';
-            if (typeof target === 'object') return _checkTypeMessage(new type, target, parentName);
+            if (typeof target === 'object') return _checkTypeMessage(_creator(type), target, parentName);
             return parentName +'은 instance 타입이 아닙니다.';
         }
         if (defType.name === 'and') {
