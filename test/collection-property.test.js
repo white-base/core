@@ -217,7 +217,7 @@ describe("< PropertyCollection >", () => {
         });
         it("- add(name) : 예약어 사용시 (예외)", () => {
             let s = new Student();
-            expect(() => s.items.add('_onwer')).toThrow(/Symbol word/);
+            expect(() => s.items.add('_owner')).toThrow(/Symbol word/);
             expect(() => s.items.add('_element')).toThrow(/Symbol word/);
             expect(() => s.items.add('_symbol')).toThrow(/Symbol word/);
             expect(() => s.items.add('elementType')).toThrow(/Symbol word/);
@@ -333,6 +333,8 @@ describe("< PropertyCollection >", () => {
             expect(s.items.a2).toBeDefined();
             expect(s.items['a3']).toBeDefined();
             expect(s.items.a3).toBeDefined();
+            expect(s.items[0] === s.items['a2']).toBe(true);
+            expect(s.items[1] === s.items['a3']).toBe(true);
             expect(s.items.indexOfName('a2')).toBe(0);  // 바뀐 idx 확인
             expect(s.items.indexOfName('a3')).toBe(1);  // 바뀐 idx 확인
             expect(s.items.count).toBe(2);
@@ -352,6 +354,8 @@ describe("< PropertyCollection >", () => {
             expect(s.items.a2).not.toBeDefined();
             expect(s.items['a3']).toBeDefined();
             expect(s.items.a3).toBeDefined();
+            expect(s.items[0] === s.items['a1']).toBe(true);
+            expect(s.items[1] === s.items['a3']).toBe(true);
             expect(s.items.indexOfName('a1')).toBe(0);  
             expect(s.items.indexOfName('a3')).toBe(1);  // 바뀐 idx 확인
             expect(s.items.count).toBe(2);
@@ -374,6 +378,8 @@ describe("< PropertyCollection >", () => {
             expect(s.items.a3).not.toBeDefined();
             expect(s.items['a4']).toBeDefined();
             expect(s.items.a4).toBeDefined();
+            expect(s.items[0] === s.items['a1']).toBe(true);
+            expect(s.items[1] === s.items['a2']).toBe(true);
             expect(s.items.indexOfName('a1')).toBe(0);  
             expect(s.items.indexOfName('a2')).toBe(1);
             expect(s.items.indexOfName('a4')).toBe(2);

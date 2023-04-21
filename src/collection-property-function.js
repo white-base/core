@@ -36,11 +36,11 @@
         /**
          * 함수 프로퍼티 컬렉션
          * @constructs _L.Collection.PropertyFunctionCollection
-         * @param {*} p_onwer 소유자 
+         * @param {*} p_owner 소유자 
          * @extends _L.Collection.ProperyCollection
          */
-        function PropertyFunctionCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function PropertyFunctionCollection(p_owner) {
+            _super.call(this, p_owner);
 
             this.elementType = Function;
         }

@@ -96,10 +96,10 @@
          * 테이블 컬렉션
          * @constructs _L.Meta.Entity.EntityTableCollection
          * @extends _L.Collection.PropertyCollection
-         * @param {*} p_onwer 소유자 
+         * @param {*} p_owner 소유자 
          */
-        function EntityTableCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function EntityTableCollection(p_owner) {
+            _super.call(this, p_owner);
 
             this.elementType = EntityTable;   // 컬렉션타입 설정
         }

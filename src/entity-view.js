@@ -122,10 +122,10 @@
          * 뷰 엔티티 컬렉션
          * @constructs _L.Meta.Entity.EntityViewCollection
          * @extends _L.Meta.Entity.PropertyCollection
-         * @param {*} p_onwer 소유자 
+         * @param {*} p_owner 소유자 
          */
-        function EntityViewCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function EntityViewCollection(p_owner) {
+            _super.call(this, p_owner);
 
             this.elementType = EntityView;   // 컬렉션타입 설정
         }

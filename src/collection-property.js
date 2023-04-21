@@ -39,10 +39,10 @@
          * @constructs _L.Collection.PropertyCollection
          * @implements {_L.Interface.IPropertyCollection}
          * @extends _L.Collection.BaseCollection
-         * @param {Object} p_onwer 소유자
+         * @param {Object} p_owner 소유자
          */
-        function PropertyCollection(p_onwer) {
-            _super.call(this, p_onwer); 
+        function PropertyCollection(p_owner) {
+            _super.call(this, p_owner); 
 
             var __properties = [];
 
@@ -54,12 +54,9 @@
                 get: function() { return __properties; },
                 set: function(newValue) { __properties = newValue; }
             });
-
             // 예약어 등록
             this._symbol = this._symbol.concat(['properties', 'indexOfName', 'propertyOf', 'removeByname']);
-
             /** implements IPropertyCollection 인터페이스 구현 */
-            // this._implements(IPropertyCollection);
             Util.implements(this, IPropertyCollection);
         }
         Util.inherits(PropertyCollection, _super);
@@ -72,16 +69,15 @@
          */
         PropertyCollection.prototype._remove = function(p_idx) {
             var count = this._element.length - 1;
-            var propName;
+            var propName = this.propertyOf(p_idx);
             
-            // 프로퍼티 삭제
-            propName = this.propertyOf(p_idx);
-            delete this[propName];                      
+            if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added');
 
+            // 프로퍼티 삭제
+            delete this[propName];                      
             // 원시 자료 변경
             this._element.splice(p_idx, 1);
             this.properties.splice(p_idx, 1);
-
             // 참조 자료 변경
             if (p_idx < count) {
                 for (var i = p_idx; i < count; i++) {
@@ -104,37 +100,24 @@
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
             p_value = typeof p_value === 'undefined' ? null : p_value;
             
-            var typeName;
-            var index   = -1;
-
+            var index   = this._element.length;;
             
             if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
             if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
-            // if (this.elementType !== null && !(p_value instanceof this.elementType)) {
-            //     // typeName = this.elementType.constructor.name;
-            //     typeName = this.elementType.name;
-            //     throw new Error('Only [' + typeName + '] type instances can be added');
-            // }
-            
             // 예약어 검사
             if (this._symbol.indexOf(p_name) > -1) {
                 throw new Error(' [' + p_name + '] is a Symbol word');   
             }
-            
             if (this.indexOfName(p_name) > -1) {
                 console.warn('Warning:: 프로퍼티 이름 중복 !!');
-                // return this[p_name];     // 중복 등록 방지
                 return false;
             }
-
-            this._onChanging();                     // 이벤트 발생 : 변경전
-
+            // before event
+            this._onChanging();
+            this._onAdd(index, p_value);
+            // process
             this._element.push(p_value);
             this.properties.push(p_name);
-
-            index = (this._element.length === 1) ? 0 : this._element.length  - 1;
-
-            // if (typeof p_desc === 'object' && (typeof p_desc.get === 'function' || typeof p_desc.set === 'function')) {
             if (typeof p_desc === 'object') {
                 Object.defineProperty(this, [index], p_desc);
                 Object.defineProperty(this, p_name, p_desc);
@@ -142,10 +125,8 @@
                 Object.defineProperty(this, [index], this._getPropDescriptor(index));
                 Object.defineProperty(this, p_name, this._getPropDescriptor(index));
             }
-
-            this._onAdd(index, p_value);            // 이벤트 발생 : 등록
-            this._onChanged();                      // 이벤트 발생 : 변경후
-
+            // after event
+            this._onChanged();
             return true;
         };
 
@@ -155,11 +136,11 @@
         */
        PropertyCollection.prototype.clear = function() {
            var propName
-           var isChange = false;
            
-           if (this._element.length > 0) isChange = true;
-           if (isChange) this._onChanging();   // 이벤트 발생 : 변경전
-           
+           // before event
+           this._onChanging();
+           this._onClear();
+            // process
            for (var i = 0; i < this._element.length; i++) {
                propName = this.propertyOf(i);
                delete this[i];
@@ -167,9 +148,8 @@
             }
             this._element = [];
             this.properties = [];
-            
-            this._onClear();                                    // 이벤트 발생 : 전체삭제
-            if (isChange) this._onChanged();    // 이벤트 발생 : 변경후                
+            // after event
+            this._onChanged();
         };
         
         /**

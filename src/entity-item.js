@@ -631,10 +631,10 @@
          * @constructs _L.Meta.Entity.ItemCollection
          * @extends _L.Collection.PropertyCollection
          * @abstract
-         * @param {*} p_onwer 소유자 
+         * @param {*} p_owner 소유자 
          */
-        function ItemCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function ItemCollection(p_owner) {
+            _super.call(this, p_owner);
             
             this.elementType = Item;    // 기본 컬렉션 타입
             
@@ -687,7 +687,7 @@
             
             property = { value: p_value };
 
-            item = new this.itemType(p_name, this._onwer, property);
+            item = new this.itemType(p_name, this._owner, property);
 
             return this.add(item);
         };
@@ -715,11 +715,11 @@
          * 테이블 아이템 컬렉션
          * @constructs _L.Meta.Entity.ItemTableCollection
          * @extends _L.Meta.Entity.ItemCollection
-         * @param {*} p_onwer 소유자
+         * @param {*} p_owner 소유자
          * @param {?ItemCollection} p_baseCollection 참조기본 컬렉션
          */
-        function ItemTableCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function ItemTableCollection(p_owner) {
+            _super.call(this, p_owner);
         }
         Util.inherits(ItemTableCollection, _super);
 
@@ -734,12 +734,12 @@
 
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
-                i_value = new this.itemType(i_name, this._onwer);
+                i_value = new this.itemType(i_name, this._owner);
             } else if (p_object instanceof this.itemType) {
                 // EntityTable은 직접만 적용(참조형 아이템 소유 못함)
                 i_name  = p_object.name;
                 i_value = p_object.clone();
-                i_value.entity = this._onwer;
+                i_value.entity = this._owner;
             } else {
                 throw new Error('string | Item object [p_object].');
             }
@@ -759,11 +759,11 @@
         /**
          * @constructs _L.Meta.Entity.ItemViewCollection
          * @extends _L.Meta.Entity.ItemCollection
-         * @param {*} p_onwer 소유자
+         * @param {*} p_owner 소유자
          * @param {?ItemCollection} p_baseCollection 참조기본 컬렉션
          */
-        function ItemViewCollection(p_onwer, p_baseCollection) {
-            _super.call(this, p_onwer);
+        function ItemViewCollection(p_owner, p_baseCollection) {
+            _super.call(this, p_owner);
 
             if (p_baseCollection && !(p_baseCollection instanceof ItemCollection)) {
                 throw new Error('Error!! ItemCollection object [p_baseCollection].');
@@ -800,12 +800,12 @@
 
             if (p_object instanceof Item) {
                 // 아이템 소유자 설정
-                if (p_object.entity === null) p_object.entity = this._onwer;
+                if (p_object.entity === null) p_object.entity = this._owner;
                 i_name = p_object.name;
                 i_value = p_object;
             } else if (typeof p_object === 'string') {
                 i_name = p_object;
-                i_value = new this.itemType(i_name, this._onwer);
+                i_value = new this.itemType(i_name, this._owner);
 // POINT::
             // } else if (p_object instanceof MetaElement && p_object.instanceOf('Entity')) {
             //     // 아아템 가져오기
@@ -834,8 +834,8 @@
                 
                 // REVIEW:: 의존성을 낮추기 위해서 검사후 등록
                 // 소유객체에 참조 등록 (중복제거됨)
-                if (this._onwer._regRefer) {
-                    this._onwer._regRefer(collection._onwer);
+                if (this._owner._regRefer) {
+                    this._owner._regRefer(collection._owner);
                 }
             }
             

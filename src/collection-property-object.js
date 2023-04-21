@@ -37,10 +37,10 @@
          * 객체 프로퍼티 컬렉션
          * @constructs _L.Collection.PropertyObjectCollection
          * @extends _L.Collection.ProperyCollection
-         * @param {*} p_onwer 소유자 
+         * @param {*} p_owner 소유자 
          */
-        function PropertyObjectCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function PropertyObjectCollection(p_owner) {
+            _super.call(this, p_owner);
 
             this.elementType = Object;
         }

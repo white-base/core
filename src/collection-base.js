@@ -39,12 +39,12 @@
         * 컬렉션 최상위 클래스 (추상클래스)
         * @constructs _L.Collection.BaseCollection
         * @implements {_L.Interface.ICollection}
-        * @param {Object} p_onwer 소유객체
+        * @param {Object} p_owner 소유객체
         */
-        function BaseCollection(p_onwer) { 
+        function BaseCollection(p_owner) { 
             
             var __event  = new Observer(this, this);
-            var _onwer = p_onwer || null;
+            var _owner = p_owner || null;
             var _element = [];
             var _symbol = [];
             var __elementType  = [];
@@ -65,16 +65,16 @@
              /** 
              * 소유객체
              * @protected 
-             * @member {Object} _L.Collection.BaseCollection#_onwer  
+             * @member {Object} _L.Collection.BaseCollection#_owner  
              */
-              Object.defineProperty(this, '_onwer', {   // COVER:
+              Object.defineProperty(this, '_owner', {   // COVER:
                 enumerable: false,
                 configurable: true,
                 get: function() {
-                    return _onwer;
+                    return _owner;
                 },
                 set: function(val) {
-                    _onwer = val;
+                    _owner = val;
                 }
             });
 
@@ -218,7 +218,7 @@
             });
 
             // 예약어 등록
-            this._symbol = this._symbol.concat(['__event', '_onwer', '_element', '_symbol', 'elementType', 'list', 'count']);
+            this._symbol = this._symbol.concat(['__event', '_owner', '_element', '_symbol', 'elementType', 'list', 'count']);
             this._symbol = this._symbol.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
             this._symbol = this._symbol.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
             this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf']);
@@ -256,15 +256,15 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
-            this.__event.publish('add', p_idx, p_value); 
+            this.__event.publish('add', p_idx, p_value, this); 
         };
 
         /**
          * 삭제 이벤트 수신자
          * @listens _L.Collection.BaseCollection#onRemove
          */
-        BaseCollection.prototype._onRemove = function(p_idx) {
-            this.__event.publish('remove', p_idx); 
+        BaseCollection.prototype._onRemove = function(p_idx, p_value) {
+            this.__event.publish('remove', p_idx, p_value, this);
         };
 
         /** 
@@ -272,7 +272,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
-            this.__event.publish('clear'); 
+            this.__event.publish('clear', this); 
         };
 
         /** 
@@ -280,7 +280,7 @@
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function() {
-            this.__event.publish('changing'); 
+            this.__event.publish('changing', this); 
         };
 
         /** 
@@ -288,7 +288,7 @@
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function() {
-            this.__event.publish('changed'); 
+            this.__event.publish('changed', this); 
         };
 
         /** 
@@ -322,16 +322,9 @@
          * @returns {boolean} 처리결과
          */
         BaseCollection.prototype.remove = function(p_elem) {
-            var idx;
+            var idx = this.indexOf(p_elem);
             
-            if (this.contains(p_elem)) {
-                this._onChanging();                     // 이벤트 발생 : 변경전
-                idx = this.indexOf(p_elem);
-                this._remove(idx);
-                this._onRemove(idx);                    // 이벤트 발생 : 삭제
-                this._onChanged();                      // 이벤트 발생 : 변경후
-            }
-            return typeof idx === 'number' ? true : false;
+            return idx < 0 ? false : this.removeAt(idx);
         };
         
         /**
@@ -340,15 +333,18 @@
          * @returns {boolean} 처리 결과
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
-            var obj = this._element[p_idx];
-            
-            if (typeof obj !== 'undefined') {
-                this._onChanging();            // 이벤트 발생 : 변경전
+            var elem = this._element[p_idx];
+
+            if (typeof elem !== 'undefined') {
+                // before event
+                this._onChanging();
+                // process
                 this._remove(p_idx);
-                this._onRemove();                       // 이벤트 발생 : 삭제
-                this._onChanged();                      // 이벤트 발생 : 변경후
+                this._onRemove(p_idx, elem);
+                // after event
+                this._onChanged();
             }
-            return typeof obj === 'undefined' ? false : true;
+            return typeof elem === 'undefined' ? false : true;
         };
 
         /**

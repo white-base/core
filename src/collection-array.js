@@ -34,10 +34,10 @@
          * 배열타입 컬렉션 클래스
          * @constructs _L.Collection.ArrayCollection
          * @extends _L.Collection.BaseCollection
-         * @param {Object} p_onwer 소유객체
+         * @param {Object} p_owner 소유객체
          */
-        function ArrayCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function ArrayCollection(p_owner) {
+            _super.call(this, p_owner);
 
         }
         Util.inherits(ArrayCollection, _super);
@@ -48,7 +48,6 @@
          * @param {*} p_idx 인덱스 번호
          */
         ArrayCollection.prototype._remove = function(p_idx) {
-            
             var count = this._element.length - 1;   // [idx] 포인트 이동
             
             this._element.splice(p_idx, 1);
@@ -72,25 +71,18 @@
         ArrayCollection.prototype.add = function(p_value) {
             var typeName;
             var index   = -1;
-
             
             if (typeof p_value === 'undefined') throw new Error('p_value param request fail...');
             if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
-            // if (this.elementType !== null && !(p_value instanceof this.elementType)) {
-            //     typeName = this.elementType.constructor.name;
-            //     throw new Error('Only [' + typeName + '] type instances can be added');
-            // }
-            
-            this._onChanging();                     // 이벤트 발생 : 변경전
-
+            index = this._element.length;
+            // before event
+            this._onChanging();
+            this._onAdd(index, p_value);
+            // process
             this._element.push(p_value);
-            
-            index = (this._element.length === 1) ? 0 : this._element.length  - 1;
             Object.defineProperty(this, [index], this._getPropDescriptor(index));
-
-            this._onAdd(index, p_value);            // 이벤트 발생 : 등록
-            this._onChanged();                      // 이벤트 발생 : 변경후
-
+            // after event
+            this._onChanged();
             return true;
         };
 
@@ -98,21 +90,14 @@
          * 배열속성 컬렉션을 전체삭제한다. [구현]
          */
         ArrayCollection.prototype.clear = function() {
-            var obj;
-            var isChange = false;
-            
-            if (this._element.length > 0) isChange = true;
-
-            if (isChange) this._onChanging();       // 이벤트 발생 : 변경전
-
-            for (var i = 0; i < this._element.length; i++) {
-                delete this[i];
-            }
-
+            // before evnet
+            this._onChanging();
+            // process
+            for (var i = 0; i < this._element.length; i++) delete this[i];
             this._element = [];
-        
-            this._onClear();                        // 이벤트 발생 : 전체삭제
-            if (isChange) this._onChanged();        // 이벤트 발생 : 변경후            
+            // after event
+            this._onClear();
+            this._onChanged();
         };
 
         return ArrayCollection;

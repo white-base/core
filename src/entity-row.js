@@ -122,10 +122,10 @@
          * 로우 컬렉션
          * @constructs _L.Meta.Entity.RowCollection
          * @extends _L.Collection.ArrayCollection
-         * @param {*} p_onwer 소유자 
+         * @param {*} p_owner 소유자 
          */
-        function RowCollection(p_onwer) {
-            _super.call(this, p_onwer);
+        function RowCollection(p_owner) {
+            _super.call(this, p_owner);
 
             this.elementType = Row;   // 컬렉션타입 설정
         }
@@ -140,7 +140,7 @@
             var i_value;
 
             if (typeof p_row === 'undefined') {      
-                i_value = new Row(this._onwer);
+                i_value = new Row(this._owner);
             } else if (p_row instanceof Row) {
                 i_value = p_row;
             } else {
