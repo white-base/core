@@ -24,15 +24,13 @@ describe("< BaseCollection >", () => {
             constructor() { this.items.elementType = Student }
         }
     });
-    it("- items.add(name, obj) ", () => {
-        // const sc = new School();
-        // const s1 = new Student(1);
-        // const result1 = sc.items.add('a1', 'A1');
-        // const result2 = sc.items.add('a2', '');
+    it("- 단일 타입 : items.add(name, obj) ", () => {
+        const sc = new School();
+        const s1 = new Student(1);
+        const result = sc.items.add('a1', s1);
         
-        // expect(() => sc.items.add('a3')).toThrow();     // 공백 예외
-        // expect(() => sc.items.add('a3', 10)).toThrow(/string/); // 타입 예외
-        // expect(result1).toBeTruthy();
-        // expect(result2).toBeTruthy();
+        expect(() => sc.items.add('a2')).toThrow(/null/);
+        expect(() => sc.items.add('a2', 'str')).toThrow(/instance/);
+        expect(result).toBeTruthy();
     });
 });
