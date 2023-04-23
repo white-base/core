@@ -69,12 +69,12 @@
          * @returns {boolean} 처리결과
          */
         ArrayCollection.prototype.add = function(p_value) {
-            var typeName;
-            var index   = -1;
+            // var typeName;
+            var index   = this._element.length;
             
-            if (typeof p_value === 'undefined') throw new Error('p_value param request fail...');
+            // if (typeof p_value === 'undefined') throw new Error('p_value param request fail...');
             if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
-            index = this._element.length;
+            // index = this._element.length;
             // before event
             this._onChanging();
             this._onAdd(index, p_value);

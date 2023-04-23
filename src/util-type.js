@@ -217,7 +217,7 @@
         }
         if (defType.name === 'class') {
             if (typeof target === 'object' && target instanceof type) return '';
-            if (typeof target === 'object') return _checkTypeMessage(_creator(type), target, parentName);
+            if (typeof target === 'object' && target !== null) return _checkTypeMessage(_creator(type), target, parentName);
             return parentName +'은 instance 타입이 아닙니다.';
         }
         if (defType.name === 'and') {

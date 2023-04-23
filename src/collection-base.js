@@ -333,9 +333,10 @@
          * @returns {boolean} 처리 결과
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
+            if (typeof p_idx !== 'number') throw new Error('Only [p_key] type "p_idx" can be added');
             var elem = this._element[p_idx];
 
-            if (typeof elem !== 'undefined') {
+            if (this.exist(p_idx)) {
                 // before event
                 this._onChanging();
                 // process
@@ -343,8 +344,9 @@
                 this._onRemove(p_idx, elem);
                 // after event
                 this._onChanged();
+                return true;
             }
-            return typeof elem === 'undefined' ? false : true;
+            return false;
         };
 
         /**
@@ -363,6 +365,17 @@
          */
         BaseCollection.prototype.indexOf = function(p_elem) {
             return this._element.indexOf(p_elem);
+        };
+
+        /**
+         * 키 유무 조회
+         * @param {number | string} p_key index, key
+         * @returns
+         */
+        BaseCollection.prototype.exist = function(p_key) {
+            if (typeof p_key === 'number' || typeof p_key === 'string') 
+                return this.hasOwnProperty(p_key);
+            throw new Error('Only [p_key] type "number, string" can be added');
         };
 
         return BaseCollection;

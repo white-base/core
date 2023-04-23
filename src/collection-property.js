@@ -98,8 +98,7 @@
          * @returns {boolean} 처리결과
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
-            p_value = typeof p_value === 'undefined' ? null : p_value;
-            
+            // p_value = typeof p_value === 'undefined' ? null : p_value;
             var index   = this._element.length;;
             
             if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
@@ -108,7 +107,7 @@
             if (this._symbol.indexOf(p_name) > -1) {
                 throw new Error(' [' + p_name + '] is a Symbol word');   
             }
-            if (this.indexOfName(p_name) > -1) {
+            if (this.exist(p_name)) {
                 console.warn('Warning:: 프로퍼티 이름 중복 !!');
                 return false;
             }

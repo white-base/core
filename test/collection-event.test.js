@@ -7,7 +7,9 @@
 
 const PropertyCollection            = require('../src/collection-property');
 const ArrayCollection               = require('../src/collection-array');
+let School;
 let arrResult = [];
+
 
 //==============================================================
 // test
@@ -138,15 +140,15 @@ describe("< ArrayCollection >", () => {
         expect(arrResult.length).toBe(3);
         expect(result).toBeTruthy();
     });
-    it("- add() : 실패 (예외) ", () => {
-        const i = new School();
-        const result1 = i.items.add('A1');
-        arrResult = [];
+    // it("- add() : 실패 (예외) ", () => {
+    //     const i = new School();
+    //     const result1 = i.items.add('A1');
+    //     arrResult = [];
 
-        expect(()=> i.items.add(undefined)).toThrow(/value/);
-        expect(arrResult.length).toBe(0);
-        expect(result1).toBeTruthy();
-    });
+    //     expect(()=> i.items.add(undefined)).toThrow(/value/);
+    //     expect(arrResult.length).toBe(0);
+    //     expect(result1).toBeTruthy();
+    // });
     it("- remove() : 성공 ", () => {
         const i = new School();
         const result1 = i.items.add('A1');
@@ -184,13 +186,4 @@ describe("< ArrayCollection >", () => {
         expect(arrResult.length).toBe(3);
         expect(result1).toBeTruthy();
     });
-});    
-/**
- * 이벤트 종류
- * - onAdd
- * - onRemove
- * - onClear : 
- * - onChanging : 변화하는
- * - onChanged : 달라진
- * 
- */
+});

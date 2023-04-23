@@ -6,23 +6,23 @@
 'use strict';
 
 const PropertyCollection          = require('../src/collection-property');
-// let Student, s;
+let Student, School, Member, Corp, Space;
 
 //==============================================================
 // test
 
 describe("< BaseCollection >", () => {
     beforeAll(() => {
-        jest.resetModules();
+        // jest.resetModules();
         // 클래스 정의
-        Student = class {
-            level = 0;
-            constructor(level) { this.level = level }
-        }
-        School = class {
-            items = new PropertyCollection(this);
-            constructor() { this.items.elementType = Student }
-        }
+        // Student = class {
+        //     level = 0;
+        //     constructor(level) { this.level = level }
+        // }
+        // School = class {
+        //     items = new PropertyCollection(this);
+        //     constructor() { this.items.elementType = Student }
+        // }
     });
     describe("[ this.elementType 전체 타입을 설정할 경우 : 클래스타입 ]", () => {
         beforeAll(() => {
@@ -44,13 +44,17 @@ describe("< BaseCollection >", () => {
                 items = new PropertyCollection(this);
                 constructor() { this.items.elementType = [Member, Student] }
             }
+            Space = class {
+                items = new PropertyCollection(this);
+                constructor() { this.items.elementType = null }
+            }
         });
         it("- 단일 타입 : items.add(name, obj) ", () => {
             const sc = new School();
             const s1 = new Student(1);
             const result = sc.items.add('a1', s1);
             
-            expect(() => sc.items.add('a2')).toThrow(/null/);
+            expect(() => sc.items.add('a2')).toThrow(/instance/);
             expect(() => sc.items.add('a2', 'str')).toThrow(/instance/);
             expect(result).toBeTruthy();
         });
@@ -66,6 +70,16 @@ describe("< BaseCollection >", () => {
             expect(sc.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result).toBeTruthy();
         });
+        it("- null 타입 : items.add(name, obj) ", () => {
+            const sc = new Space();
+            const s1 = new Student(1);
+            const result1 = sc.items.add('a1', s1);
+            const result2 = sc.items.add('a2', 'str');
+            
+            expect(() => sc.items.add('a3')).toThrow(/없습니다./);
+            expect(result1).toBeTruthy();
+            expect(result2).toBeTruthy();
+        });
         it("- 복합 타입 : items.add(name, obj) ", () => {
             const sc = new Corp();
             const s1 = new Student(1);
@@ -73,7 +87,7 @@ describe("< BaseCollection >", () => {
             const result1 = sc.items.add('a1', s1);
             const result2 = sc.items.add('a2', m1);
             
-            expect(() => sc.items.add('a3')).toThrow(/null/);
+            expect(() => sc.items.add('a3')).toThrow(/instance/);
             expect(() => sc.items.add('a3', 'str')).toThrow(/instance/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
@@ -134,6 +148,17 @@ describe("< BaseCollection >", () => {
             expect(() => i.items['a1'] = 10).toThrow(/(boolean)|(string)/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
+            expect(result1).toBeTruthy();
+            expect(i.items.exist('a1')).toBe(true);
+            expect(i.items.exist('a2')).toBe(true);
+            expect(i.items.exist('a3')).toBe(false);
+            expect(i.items.exist(0)).toBe(true);
+            expect(i.items.exist(1)).toBe(true);
+            expect(i.items.exist(2)).toBe(false);
+            expect(i.items.exist('0')).toBe(true);
+            expect(i.items.exist('1')).toBe(true);
+            expect(i.items.exist('2')).toBe(false);
+
         });
     });
 });
@@ -153,8 +178,8 @@ describe("< PropertyCollection >", () => {
             let s = new Student();
             const result = s.items.add('a1');
     
-            expect(s.items['a1']).toBe(null);
-            expect(s.items.a1).toBe(null);
+            expect(s.items['a1']).toBe(undefined);
+            expect(s.items.a1).toBe(undefined);
             expect(s.items.count).toBe(1);
             expect(result).toBeTruthy();
         });
