@@ -6,7 +6,7 @@
 'use strict';
 
 const PropertyCollection          = require('../src/collection-property');
-let Student, School, Member, Corp, Space;
+let Student, School, Member, Corp, House, Space;
 
 //==============================================================
 // test
@@ -44,69 +44,97 @@ describe("< BaseCollection >", () => {
                 items = new PropertyCollection(this);
                 constructor() { this.items.elementType = [Member, Student] }
             }
-            Space = class {
+            House = class {
                 items = new PropertyCollection(this);
                 constructor() { this.items.elementType = null }
             }
+            Space = class {
+                items = new PropertyCollection(this);
+            }
         });
         it("- 단일 타입 : items.add(name, obj) ", () => {
-            const sc = new School();
-            const s1 = new Student(1);
-            const result = sc.items.add('a1', s1);
+            const elem = new School();
+            const c1 = new Student(1);
+            const result = elem.items.add('a1', c1);
             
-            expect(() => sc.items.add('a2')).toThrow(/instance/);
-            expect(() => sc.items.add('a2', 'str')).toThrow(/instance/);
+            expect(() => elem.items.add('a2')).toThrow(/instance/);
+            expect(() => elem.items.add('a2', 'str')).toThrow(/instance/);
             expect(result).toBeTruthy();
         });
         it("- 단일 타입 : items.요소명 = obj ", () => {
-            const sc = new School();
-            const s1 = new Student(1);
+            const elem = new School();
+            const c1 = new Student(1);
             const s2 = new Student(2);
-            const result = sc.items.add('a1', s1);
-            sc.items['a1'] = s2;
+            const result = elem.items.add('a1', c1);
+            elem.items['a1'] = s2;
 
-            expect(() => sc.items['a1'] = 10 ).toThrow(/instance/);
-            expect(sc.items['a1'].level).toBe(2);                   // 교체된 객체
-            expect(sc.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
+            expect(() => elem.items['a1'] = 10 ).toThrow(/instance/);
+            expect(elem.items['a1'].level).toBe(2);                   // 교체된 객체
+            expect(elem.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result).toBeTruthy();
         });
         it("- null 타입 : items.add(name, obj) ", () => {
-            const sc = new Space();
-            const s1 = new Student(1);
-            const result1 = sc.items.add('a1', s1);
-            const result2 = sc.items.add('a2', 'str');
+            const elem = new House();
+            const c1 = new Student(1);
+            const result1 = elem.items.add('a1', c1);
+            const result2 = elem.items.add('a2', 'str');
             
-            expect(() => sc.items.add('a3')).toThrow(/없습니다./);
+            expect(() => elem.items.add('a3')).toThrow(/없습니다./);
+            expect(elem.items[0].level).toBe(1);
+            expect(elem.items['a1'].level).toBe(1);
+            elem.items['a1'] = 'OVER';
+            expect(elem.items[0]).toBe('OVER');
+            expect(elem.items['a1']).toBe('OVER');
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
+        it("- undefined 타입 : items.add(name, obj) ", () => {
+            const elem = new Space();
+            const c1 = new Student(1);
+            const result1 = elem.items.add('a1', c1);
+            const result2 = elem.items.add('a2', 'str');
+            const result3 = elem.items.add('a3');
+
+            expect(elem.items[0].level).toBe(1);
+            expect(elem.items['a1'].level).toBe(1);
+            expect(elem.items[1]).toBe('str');
+            expect(elem.items['a2']).toBe('str');
+            expect(elem.items[2]).toBeUndefined();
+            expect(elem.items['a3']).toBeUndefined();
+            elem.items['a3'] = 'OVER';    // 수정
+            expect(elem.items[2]).toBe('OVER');
+            expect(elem.items['a3']).toBe('OVER');
+            expect(result1).toBeTruthy();
+            expect(result2).toBeTruthy();
+            expect(result3).toBeTruthy();
+        });
         it("- 복합 타입 : items.add(name, obj) ", () => {
-            const sc = new Corp();
-            const s1 = new Student(1);
+            const elem = new Corp();
+            const c1 = new Student(1);
             const m1 = new Member(1);
-            const result1 = sc.items.add('a1', s1);
-            const result2 = sc.items.add('a2', m1);
+            const result1 = elem.items.add('a1', c1);
+            const result2 = elem.items.add('a2', m1);
             
-            expect(() => sc.items.add('a3')).toThrow(/instance/);
-            expect(() => sc.items.add('a3', 'str')).toThrow(/instance/);
+            expect(() => elem.items.add('a3')).toThrow(/instance/);
+            expect(() => elem.items.add('a3', 'str')).toThrow(/instance/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- 복합 타입 : items.요소명 = obj ", () => {
-            const sc = new Corp();
-            const s1 = new Student(1);
+            const elem = new Corp();
+            const c1 = new Student(1);
             const s2 = new Student(2);
             const m1 = new Member(1);
-            const result1 = sc.items.add('a1', s1);
-            const result2 = sc.items.add('a2', m1);
-            sc.items['a1'] = s2;
-            sc.items['a2'] = s2;
+            const result1 = elem.items.add('a1', c1);
+            const result2 = elem.items.add('a2', m1);
+            elem.items['a1'] = s2;
+            elem.items['a2'] = s2;
 
-            expect(() => sc.items['a1'] = 'str' ).toThrow(/instance/);
-            expect(sc.items['a1'].level).toBe(2);                   // 교체된 객체
-            expect(sc.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(sc.items['a2'].level).toBe(2);                   // 교체된 객체
-            expect(sc.items['a2'] instanceof Student).toBeTruthy(); // 인스턴스 검사
+            expect(() => elem.items['a1'] = 'str' ).toThrow(/instance/);
+            expect(elem.items['a1'].level).toBe(2);                   // 교체된 객체
+            expect(elem.items['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
+            expect(elem.items['a2'].level).toBe(2);                   // 교체된 객체
+            expect(elem.items['a2'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -148,7 +176,14 @@ describe("< BaseCollection >", () => {
             expect(() => i.items['a1'] = 10).toThrow(/(boolean)|(string)/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
+        });
+        it("- 유무 검사 : exist(key) ", () => {
+            const i = new Corp();
+            const result1 = i.items.add('a1', 'A1');
+            const result2 = i.items.add('a2', true);
+            
             expect(result1).toBeTruthy();
+            expect(result2).toBeTruthy();
             expect(i.items.exist('a1')).toBe(true);
             expect(i.items.exist('a2')).toBe(true);
             expect(i.items.exist('a3')).toBe(false);
@@ -158,7 +193,6 @@ describe("< BaseCollection >", () => {
             expect(i.items.exist('0')).toBe(true);
             expect(i.items.exist('1')).toBe(true);
             expect(i.items.exist('2')).toBe(false);
-
         });
     });
 });
@@ -174,7 +208,7 @@ describe("< PropertyCollection >", () => {
     describe("< this.add(name, value?, desc?) >", () => {
         beforeAll(() => {
         });
-        it("- add(name)", () => {
+        it("- add(name) : undefined", () => {
             let s = new Student();
             const result = s.items.add('a1');
     
@@ -185,24 +219,24 @@ describe("< PropertyCollection >", () => {
         });
         it("- add(name, value) ", () => {
             let s = new Student();
-            const result = s.items.add('a2', 'A2');
+            const result = s.items.add('a1', 'A1');
     
-            expect(s.items['a2']).toBe('A2');
-            expect(s.items.a2).toBe('A2');
+            expect(s.items['a1']).toBe('A1');
+            expect(s.items.a1).toBe('A1');
             expect(s.items.count).toBe(1);
             expect(result).toBeTruthy();
         });
         it("- add(name, value, desc) : 읽기 전용", () => {
             let s = new Student();
             const desc = {
-                value: 'A3',
+                value: 'A1',
                 writable: false
             };
-            const result = s.items.add('a3', null, desc);
+            const result = s.items.add('a1', null, desc);
 
-            expect(() => s.items['a3'] = 1).toThrow(/a3/);
-            expect(s.items['a3']).toBe('A3');
-            expect(s.items.a3).toBe('A3');
+            expect(() => s.items['a1'] = 1).toThrow(/a1/);
+            expect(s.items['a1']).toBe('A1');
+            expect(s.items.a1).toBe('A1');
             expect(s.items.count).toBe(1);
             expect(result).toBeTruthy();
         });
@@ -220,12 +254,12 @@ describe("< PropertyCollection >", () => {
                 enumerable: true,
                 configurable: true,
             }
-            const result = s.items.add('a4', null, desc);
-            s.items['a4'] = 'A4';
+            const result = s.items.add('a1', null, desc);
+            s.items['a1'] = 'A1';
 
-            expect(() => s.items['a4'] = 1).toThrow(/string/);
-            expect(s.items['a4']).toBe('A4');
-            expect(s.items.a4).toBe('A4');
+            expect(() => s.items['a1'] = 1).toThrow(/string/);
+            expect(s.items['a1']).toBe('A1');
+            expect(s.items.a1).toBe('A1');
             expect(s.items.count).toBe(1);
             expect(result).toBeTruthy();
         });
@@ -259,6 +293,7 @@ describe("< PropertyCollection >", () => {
             expect(() => s.items.add('remove')).toThrow(/Symbol word/);
             expect(() => s.items.add('removeAt')).toThrow(/Symbol word/);
             expect(() => s.items.add('indexOf')).toThrow(/Symbol word/);
+            expect(() => s.items.add('exist')).toThrow(/Symbol word/);
             expect(() => s.items.add('properties')).toThrow(/Symbol word/);
             expect(() => s.items.add('indexOfName')).toThrow(/Symbol word/);
             expect(() => s.items.add('propertyOf')).toThrow(/Symbol word/);
@@ -339,8 +374,8 @@ describe("< PropertyCollection >", () => {
             const idx = s.items.indexOfName('a1');
             const result = s.items.removeAt(idx + 1);
 
-            expect(s.items['a1']).not.toBeUndefined();
-            expect(s.items.a1).not.toBeUndefined();
+            expect(s.items['a1']).toBeTruthy();
+            expect(s.items.a1).toBeTruthy();
             expect(s.items.count).toBe(1);
             expect(s.items.list.length).toBe(1);
             expect(result).not.toBeTruthy();
@@ -453,7 +488,6 @@ describe("< PropertyCollection >", () => {
         expect(s.items.count).toBe(0);
         expect(s.items.list.length).toBe(0);
         expect(s.items.properties.length).toBe(0);
-
     });
     it("- contains(elem) : 존재하는지 확인, {특정요소를 찾을경우 : name}", () => {
         let s = new Student();
@@ -466,9 +500,7 @@ describe("< PropertyCollection >", () => {
         expect(s.items.contains(a2)).toBeTruthy();
         expect(s.items.contains(10)).toBeTruthy();
         expect(s.items.count).toBe(3);
-
     });
-
     it("- indexOf() : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
         let s = new Student();
         const a2 = { style: 1};

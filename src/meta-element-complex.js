@@ -69,6 +69,9 @@
                 enumerable: true
             });
 
+            // this.typeName = ComplexElement;     // 타입명 설정
+            // this.type = ComplexElement;
+
             /** implements IPropertyCollection 인터페이스 선언 */
             // this._implements(IPropertyCollection);                
             Util.implements(this, IPropertyCollection);
@@ -77,11 +80,11 @@
         Util.inherits(ComplexElement, _super);
 
         /** @override **/
-        ComplexElement.prototype.getTypes  = function() {
-            var type = ['ComplexElement'];
+        // ComplexElement.prototype.getTypes  = function() {
+        //     var type = ['ComplexElement'];
             
-            return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        };        
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };        
         
         // TODO::
         ComplexElement.prototype.add  = function() {};

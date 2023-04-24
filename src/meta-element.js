@@ -56,7 +56,12 @@
              * @private 
              */
             this.__GUID = null;
+
+
+            // this.typeName = MetaElement;  // 타입명 설정
+            // this.type = MetaElement;
             
+
             /** implements IMarshal 인터페이스 구현 */
             // this._implements(IMarshal);            
             Util.implements(this, IMarshal);
@@ -64,11 +69,11 @@
         Util.inherits(MetaElement, _super);
     
         /** @override **/
-        MetaElement.prototype.getTypes = function() {
-            var type = ['MetaElement'];
+        // MetaElement.prototype.getTypes = function() {
+        //     var type = ['MetaElement'];
             
-            return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        };
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };
 
         /**
          * GUID 생성한다.

@@ -251,13 +251,15 @@
 
         if (typeof object !== 'object') throw new Error(' object 타입이 아닙니다. ');
 
-        Object.defineProperty(object, '_interface', {
-            enumerable: false,
-            configurable: true,
-            get: function() { 
-                return _interface;
-            }
-        });
+        if (typeof object._interface === 'undefined') {
+            Object.defineProperty(object, '_interface', {
+                enumerable: false,
+                configurable: true,
+                get: function() { 
+                    return _interface;
+                }
+            });
+        }
     
         // for(var i = 1; i < arguments.length; i++) {
         //     if (typeof arguments[i] === 'function') {
@@ -279,7 +281,7 @@
                 // 중복 제거
                 if (object._interface.indexOf(arguments[i]) < 0) {
                     object._interface.push(arguments[i]);
-                    object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
+                    // object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
                 }
             } else throw new Error('함수타입만 가능합니다.');
             // 비교 원본 인터페이스 임시 객체 생성    

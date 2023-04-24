@@ -15,6 +15,12 @@
     var Observer;    
     var Util;
     
+    // coverage를 위한 코드 REVIEW: 검토 필요
+    // if (typeof module !== 'object' || global.isNamespace) {
+    //     ICollection         = global._L.Interface.ICollection;
+    //     Observer            = global._L.Common.Observer;
+    //     Util                = global._L.Common.Util;
+    // }
     if (typeof module === 'object' && typeof module.exports === 'object') {
         ICollection         = require('./i-collection');
         Observer            = require('./observer');
@@ -22,7 +28,7 @@
     } else {    // COVER:
         ICollection         = global._L.Interface.ICollection;
         Observer            = global._L.Common.Observer;
-        Util                = global._L.Common.Util
+        Util                = global._L.Common.Util;
     }
 
     //==============================================================
@@ -221,7 +227,7 @@
             this._symbol = this._symbol.concat(['__event', '_owner', '_element', '_symbol', 'elementType', 'list', 'count']);
             this._symbol = this._symbol.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
             this._symbol = this._symbol.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
-            this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf']);
+            this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
 
             /** implements ICollection 인터페이스 구현 */
             //  this._implements(ICollection);

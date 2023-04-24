@@ -68,7 +68,7 @@
          * @param {*} p_value [필수] 속성값
          * @returns {boolean} 처리결과
          */
-        ArrayCollection.prototype.add = function(p_value) {
+        ArrayCollection.prototype.add = function(p_value, p_desc) {
             // var typeName;
             var index   = this._element.length;
             
@@ -80,7 +80,11 @@
             this._onAdd(index, p_value);
             // process
             this._element.push(p_value);
-            Object.defineProperty(this, [index], this._getPropDescriptor(index));
+            if (typeof p_desc === 'object') {
+                Object.defineProperty(this, [index], p_desc);
+            } else {
+                Object.defineProperty(this, [index], this._getPropDescriptor(index));
+            }
             // after event
             this._onChanged();
             return true;
