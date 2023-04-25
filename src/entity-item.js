@@ -80,7 +80,7 @@
             }
 
             /** @private */
-            this.__event    = new Observer(this, this);
+            this._event    = new Observer(this, this);
 
             /**
              * value 내부값 (필터 및 getter/setter 무시)
@@ -418,7 +418,7 @@
                 enumerable: true,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'onChanged');
+                    this._event.subscribe(p_fn, 'onChanged');
                 }
             });
             
@@ -447,16 +447,16 @@
          */
          Item.prototype._onChanged = function(p_nValue, p_oValue) {
             p_oValue = p_oValue || this.__value;
-            this.__event.publish('onChanged', p_nValue, p_oValue);
+            this._event.publish('onChanged', p_nValue, p_oValue);
         };
 
-        /** @override **/
-        Item.prototype.getTypes  = function() {
+        // /** @override **/
+        // Item.prototype.getTypes  = function() {
                     
-            var type = ['Item'];
+        //     var type = ['Item'];
             
-            return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        };
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };
         
         /** 
          * 아이템을 복제한다. 
@@ -488,19 +488,19 @@
             if (this.setter) clone['setter']            = this.setter;
             
             // 이벤트 복사 (REVIEW:: 개선필요!!)
-            if (this.__event.__subscribers.onChanged) {
-                for (var i = 0; this.__event.__subscribers.onChanged.length > i; i++) {
-                    clone['onChanged'] = this.__event.__subscribers.onChanged[i];
+            if (this._event.__subscribers.onChanged) {
+                for (var i = 0; this._event.__subscribers.onChanged.length > i; i++) {
+                    clone['onChanged'] = this._event.__subscribers.onChanged[i];
                 }
             }
             
             return clone;
         };
 
-        /** @override */
-        Item.prototype.getObject = function() {
-            // TODO::
-        };
+        // /** @override */
+        // Item.prototype.getObject = function() {
+        //     // TODO::
+        // };
 
         /**
          * 제약조건을 추가한다.
@@ -633,25 +633,30 @@
          * @abstract
          * @param {*} p_owner 소유자 
          */
-        function ItemCollection(p_owner) {
+        function ItemCollection(p_owner, p_itemType) {
             _super.call(this, p_owner);
             
-            this.elementType = Item;    // 기본 컬렉션 타입
-            
+            var _itemType;
+
             /**
              * 아이템의 타입
              * @member {Function} _L.Meta.Entity.ItemCollection#itemType
              */
             Object.defineProperty(this, 'itemType', 
             {
-                get: function() { return this.elementType.pop(); },
-                set: function(newValue) { 
-                    if (!(new newValue() instanceof Item)) throw new Error('Only [Item] type "Item" can be added');
-                    this.elementType = newValue; 
+                get: function() { 
+                    return _itemType; 
                 },
-                configurable: true,
-                enumerable: true
+                set: function(newValue) { 
+                    if (typeof p_itemType === 'function')  throw new Error('It is not a function type.');
+                    if (!(new newValue() instanceof Item)) throw new Error('Item is not a subfunction.');
+                    _itemType = newValue; 
+                },
+                enumerable: true,
+                configurable: false,
             });
+
+            this.itemType = p_itemType || Item;
 
             
         }
@@ -664,7 +669,7 @@
          */
         ItemCollection.prototype.contains = function(p_elem) {
             if (p_elem instanceof Item) {
-                return this.indexOfName(p_elem.name) > -1;
+                return this.indexOfProp(p_elem.name) > -1;
             } else {
                 return _super.prototype.contains.call(this, p_elem);
             }

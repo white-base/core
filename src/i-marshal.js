@@ -50,12 +50,12 @@
         };
 
         /**
-         * GUID 얻기
+         * Guid 얻기
          * @abstract
          * @returns {Stirng}
          */
-        IMarshal.prototype.getGUID  = function() {
-            throw new Error('[ getGUID() ] Abstract method definition, fail...');
+        IMarshal.prototype.getGuid  = function() {
+            throw new Error('[ getGuid() ] Abstract method definition, fail...');
         };
 
         return IMarshal;

@@ -108,6 +108,16 @@
         ICollection.prototype.indexOf  = function() {
             throw new Error('[ indexOf() ] Abstract method definition, fail...');
         };
+
+        /**
+         * 키 유무
+         * @abstract
+         */
+        ICollection.prototype.exist  = function() {
+            throw new Error('[ exist() ] Abstract method definition, fail...');
+        };
+
+        
     
         return ICollection;
         

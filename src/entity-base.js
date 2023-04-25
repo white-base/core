@@ -255,16 +255,16 @@
         };
 
         /** @override **/
-        Entity.prototype.getTypes = function() {
-            var type = ['Entity'];
+        // Entity.prototype.getTypes = function() {
+        //     var type = ['Entity'];
             
-            return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        };
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };
 
-        /** @override */
-        Entity.prototype.getObject = function() {
-            // TODO::
-        };
+        // /** @override */
+        // Entity.prototype.getObject = function() {
+        //     // TODO::
+        // };
 
         /**
          * 새로운 Row를 추가한다.

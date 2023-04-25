@@ -37,53 +37,14 @@
          * @implements {_L.Interface.IObject}
          */
         function MetaObject() {
-            var _name = '';
-            var _type = [];
 
-            /**
-             * 이름
-             * @member _L.Meta.MetaObject#name
-             * @protected
-             */
-             Object.defineProperty(this, 'name', 
-             {
-                 get: function() { return _name; },
-                 set: function(newValue) { 
-                     if (typeof newValue !== 'string') throw new Error('Only [name] type "string" can be added');
-                     _name = newValue;
-                 },
-                 configurable: true,
-                 enumerable: true
-             });
-
-            /**
-             * 타입명
-             * @member _L.Meta.MetaObject#type
-             * @protected
-             */
-            Object.defineProperty(this, 'type', 
-            {
-                get: function() { return _type; },
-                set: function(newValue) { 
-                    if (typeof newValue !== 'function') throw new Error('Only [name] type "function" can be added');
-                    _type.push(newValue);
-                },
-                configurable: false,
-                enumerable: true
-            });
-            
-            // this.typeName = 'MetaObject';     // 타입명 설정
-            this.type = MetaObject;
-
-            /** implements IObject 인터페이스 구현 */
-            // this._implements(IObject);
+            /** @implements {_L.Interface.IObject} */
             Util.implements(this, IObject);
         }
         
         /**
-         * 객체 타입 얻기
-         * @virtual
-         * @returns {Array}
+         * 객체 타입 이름 얻기
+         * @returns {array<string>}
          */
         MetaObject.prototype.getTypeNames  = function() {
             var types = this.getTypes();
@@ -94,6 +55,11 @@
             }
             return arr;
         };
+        
+        /**
+         * 객체 타입 이름 얻기
+         * @returns {array<function>}
+         */
         MetaObject.prototype.getTypes  = function() {
             var arr = [];
             
@@ -109,16 +75,10 @@
             return parentFunction(this);
         };
 
-        // MetaObject.prototype.getTypes  = function() {
-        //     var type = ['MetaObject'];
-            
-        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        // };
-
         /**
          * 상위 클래스 또는 인터페이스 구현 여부 검사
          * @param {string | function} p_func 함수명으로 넣으면 이름만 검색, 클래스를 넣은면 클래스 검색
-         * @returns {Boolean}
+         * @returns {boolean}
          */
         MetaObject.prototype.instanceOf  = function(p_func) {
             var _this = this;
@@ -152,24 +112,6 @@
             if (typeof p_func === 'function') return findFunction(p_func);
             return false;
         };
-        /**
-         * 상위 클래스 또는 인터페이스 구현 여부 검사
-         * @param {String} p_name 클래스명
-         * @returns {Boolean}
-         */
-        // MetaObject.prototype.instanceOf  = function(p_name) {
-        //     var arr = this.getTypes();
-    
-        //     if (typeof p_name !== 'string') throw new Error('Only [p_name] type name "string" can be added');
-        
-        //     if (this._interface) {
-        //         for (var i = 0; i < this._interface.length; i++) {
-        //             arr.push(this._interface[i].name);
-        //         }
-        //     }
-        
-        //     return arr.indexOf(p_name) > -1;
-        // };
 
         return MetaObject;
         

@@ -10,9 +10,9 @@ const Util      = require('../src/util');
 describe('Util.*', () => {
     beforeAll(() => {
     });
-    it('- Util.createGUID() : 난수 비교와 길이 검사', () => {
-        const guid1 = Util.createGUID();
-        const guid2 = Util.createGUID();
+    it('- Util.createGuid() : 난수 비교와 길이 검사', () => {
+        const guid1 = Util.createGuid();
+        const guid2 = Util.createGuid();
 
         expect(guid1.length).toBe(36);
         expect(guid2.length).toBe(36); // guid 길이
@@ -25,6 +25,6 @@ describe('Util.*', () => {
 
         expect(Util.getArrayDepth(lvl3)).toBe(3);
     });
-    // it('- Util.createGUID() : 난수 비교와 길이 검사', () => {
+    // it('- Util.createGuid() : 난수 비교와 길이 검사', () => {
     // });
 });

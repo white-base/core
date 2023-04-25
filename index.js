@@ -7,7 +7,7 @@ var CustomError                 = require('./src/error-custom');
 var BaseCollection              = require("./src/collection-base");
 var ArrayCollection             = require("./src/collection-array");
 var PropertyCollection          = require("./src/collection-property");
-var PropertyFunctionCollection  = require('./src/collection-property-function');    // TODO: 삭제 대기
+// var PropertyFunctionCollection  = require('./src/collection-property-function');    // TODO: 삭제 대기
 var MetaObject                  = require("./src/meta-object");
 var MetaElement                 = require("./src/meta-element");
 var ComplexElement              = require("./src/meta-element-complex");
@@ -42,7 +42,7 @@ module.exports = {
     BaseCollection: BaseCollection,
     ArrayCollection: ArrayCollection,
     PropertyCollection: PropertyCollection,
-    PropertyFunctionCollection: PropertyFunctionCollection,
+    // PropertyFunctionCollection: PropertyFunctionCollection,
     MetaObject: MetaObject,
     MetaElement: MetaElement,
     ComplexElement: ComplexElement,

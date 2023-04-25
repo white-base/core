@@ -41,7 +41,8 @@
     // 4. 모듈 구현 
     
     var BaseCollection  = (function () {
-       /**
+
+        /**
         * 컬렉션 최상위 클래스 (추상클래스)
         * @constructs _L.Collection.BaseCollection
         * @implements {_L.Interface.ICollection}
@@ -49,22 +50,23 @@
         */
         function BaseCollection(p_owner) { 
             
-            var __event  = new Observer(this, this);
+            // private variable
             var _owner = p_owner || null;
             var _element = [];
             var _symbol = [];
-            var __elementType  = [];
+            var _event = new Observer(this, this);
+            var _elementType  = [];  
 
             /** 
              * 이벤트 객체
              * @private 
-             * @member {Object} _L.Collection.BaseCollection#__event  
+             * @member {Object} _L.Collection.BaseCollection#_event  
              */
-            Object.defineProperty(this, '__event', {
+            Object.defineProperty(this, '_event', {
                 enumerable: false,
-                configurable: true,
+                configurable: false,
                 get: function() { 
-                    return __event;
+                    return _event;
                 }
             });
 
@@ -74,8 +76,8 @@
              * @member {Object} _L.Collection.BaseCollection#_owner  
              */
               Object.defineProperty(this, '_owner', {   // COVER:
-                enumerable: false,
-                configurable: true,
+                enumerable: true,
+                configurable: false,
                 get: function() {
                     return _owner;
                 },
@@ -90,8 +92,8 @@
              * @member {Array} _L.Collection.BaseCollection#_element  
              */
             Object.defineProperty(this, '_element', {
-                enumerable: false,
-                configurable: true,
+                enumerable: true,
+                configurable: false,
                 get: function() {
                     return _element;
                 },
@@ -107,7 +109,7 @@
              */
              Object.defineProperty(this, '_symbol', {
                 enumerable: false,
-                configurable: true,
+                configurable: false,
                 get: function() { 
                     return _symbol;
                 },
@@ -121,22 +123,15 @@
              * @member {Observer}  _L.Collection.BaseCollection#elementType  
              */
             Object.defineProperty(this, 'elementType', {
-                enumerable: false,
-                configurable: true,
+                enumerable: true,
+                configurable: false,
                 get: function() {
-                    return __elementType;
+                    return _elementType;
                 },
                 set: function(val) {
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
-                    __elementType = arrType;
+                    _elementType = arrType;
                 }
-                // set: function(newValue) {
-                //     if(typeof newValue !== 'function') throw new Error('Only [elementType] type "function" can be added');
-                //     if(typeof newValue === 'function' && typeof ['number', 'string', 'boolean'].indexOf(newValue.name) > -1) {
-                //         throw new Error('Only [elementType] type Not "number, string, boolean" can be added');
-                //     }
-                //     __elementType = newValue;
-                // }
             });
 
             /**
@@ -171,7 +166,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'add');    // COVER:
+                    this._event.subscribe(p_fn, 'add');    // COVER:
                 }
             });
 
@@ -183,7 +178,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'remove');     // COVER:
+                    this._event.subscribe(p_fn, 'remove');     // COVER:
                 }
             });
 
@@ -195,7 +190,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'clear');      // COVER:
+                    this._event.subscribe(p_fn, 'clear');      // COVER:
                 }
             });
 
@@ -207,7 +202,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'changing');   // COVER:
+                    this._event.subscribe(p_fn, 'changing');   // COVER:
                 }
             });
 
@@ -219,12 +214,12 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'changed');    // COVER:
+                    this._event.subscribe(p_fn, 'changed');    // COVER:
                 }
             });
 
             // 예약어 등록
-            this._symbol = this._symbol.concat(['__event', '_owner', '_element', '_symbol', 'elementType', 'list', 'count']);
+            this._symbol = this._symbol.concat(['_event', '_owner', '_element', '_symbol', 'elementType', 'list', 'count']);
             this._symbol = this._symbol.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
             this._symbol = this._symbol.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
             this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
@@ -262,7 +257,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
-            this.__event.publish('add', p_idx, p_value, this); 
+            this._event.publish('add', p_idx, p_value, this); 
         };
 
         /**
@@ -270,7 +265,7 @@
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_value) {
-            this.__event.publish('remove', p_idx, p_value, this);
+            this._event.publish('remove', p_idx, p_value, this);
         };
 
         /** 
@@ -278,7 +273,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
-            this.__event.publish('clear', this); 
+            this._event.publish('clear', this); 
         };
 
         /** 
@@ -286,7 +281,7 @@
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function() {
-            this.__event.publish('changing', this); 
+            this._event.publish('changing', this); 
         };
 
         /** 
@@ -294,7 +289,7 @@
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function() {
-            this.__event.publish('changed', this); 
+            this._event.publish('changed', this); 
         };
 
         /** 

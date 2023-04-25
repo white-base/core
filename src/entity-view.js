@@ -77,17 +77,17 @@
             if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
         };
         
-        /** @override **/
-        EntityView.prototype.getTypes  = function() {
-            var type = ['EntityView'];
+        // /** @override **/
+        // EntityView.prototype.getTypes  = function() {
+        //     var type = ['EntityView'];
             
-            return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        };
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };
         
-        /** @override */
-        EntityView.prototype.getObject = function() {
-            // TODO::
-        };
+        // /** @override */
+        // EntityView.prototype.getObject = function() {
+        //     // TODO::
+        // };
 
         /**
          * 뷰 엔티티를 복제한다.

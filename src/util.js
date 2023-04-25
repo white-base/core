@@ -106,10 +106,10 @@
     };
     
     /**
-     * createGUID GUID 생성
+     * createGuid Guid 생성
      * @memberof _L.Common.Util
      */
-    var createGUID = function() {
+    var createGuid = function() {
         function _p8(s) {  
             var p = (Math.random().toString(16)+'000000000').substr(2,8);  
             return s ? '-' + p.substr(0,4) + '-' + p.substr(4,4) : p ;  
@@ -308,7 +308,7 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports.inherits = inherits;
         module.exports.getArrayDepth = getArrayDepth;
-        module.exports.createGUID = createGUID;
+        module.exports.createGuid = createGuid;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         // module.exports.equalType = equalType;
         module.exports.implements = implement;
@@ -320,7 +320,7 @@
     } else {    // COVER:
         global._L.Common.Util.inherits = inherits;
         global._L.Common.Util.getArrayDepth = getArrayDepth;
-        global._L.Common.Util.createGUID = createGUID;
+        global._L.Common.Util.createGuid = createGuid;
         // global._L.Common.Util.validSelector = validSelector;
         // global._L.Common.Util.equalType = equalType;
         global._L.Common.Util.implements = implement;

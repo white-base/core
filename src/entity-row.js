@@ -79,12 +79,12 @@
         }
         Util.inherits(Row, _super);
 
-        /** @override **/
-        Row.prototype.getTypes  = function() {
-            var type = ['Row'];
+        // /** @override **/
+        // Row.prototype.getTypes  = function() {
+        //     var type = ['Row'];
             
-            return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        };
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };
 
         /**
          * 로우를 복사한다. (생성 후 복제)

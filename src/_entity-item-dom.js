@@ -422,10 +422,10 @@
         //     });
         // };
 
-        /** @override */
-        ItemDOM.prototype.getObject = function() {
-            // TODO::
-        };
+        // /** @override */
+        // ItemDOM.prototype.getObject = function() {
+        //     // TODO::
+        // };
 
         /**
          * TODO:

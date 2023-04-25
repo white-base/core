@@ -34,6 +34,7 @@
     //==============================================================
     // 4. 모듈 구현    
     var PropertyCollection  = (function (_super) {
+        
         /**
          * 속성타입 컬렉션 클래스
          * @constructs _L.Collection.PropertyCollection
@@ -44,18 +45,26 @@
         function PropertyCollection(p_owner) {
             _super.call(this, p_owner); 
 
-            var __properties = [];
+            var _properties = [];
 
-            /** @member {Array} _L.Collection.PropertyCollection#properties 속성들값 */
-            Object.defineProperty(this, 'properties', 
+            Object.defineProperty(this, '_properties',
             {
-                configurable: true,
+                configurable: false,
                 enumerable: false,
-                get: function() { return __properties; },
-                set: function(newValue) { __properties = newValue; }
+                get: function() { return _properties; },
+                set: function(newValue) { _properties = newValue; },
             });
+            /** @member {Array} _L.Collection.PropertyCollection#_properties 속성들값 */
+
+            Object.defineProperty(this, 'properties',
+            {
+                configurable: false,
+                enumerable: false,
+                get: function() { return _properties; },
+            });
+
             // 예약어 등록
-            this._symbol = this._symbol.concat(['properties', 'indexOfName', 'propertyOf', 'removeByname']);
+            this._symbol = this._symbol.concat(['properties', '_properties', 'indexOfProp', 'propertyOf', 'removeByProp']);
             /** implements IPropertyCollection 인터페이스 구현 */
             Util.implements(this, IPropertyCollection);
         }
@@ -77,7 +86,7 @@
             delete this[propName];                      
             // 원시 자료 변경
             this._element.splice(p_idx, 1);
-            this.properties.splice(p_idx, 1);
+            this._properties.splice(p_idx, 1);
             // 참조 자료 변경
             if (p_idx < count) {
                 for (var i = p_idx; i < count; i++) {
@@ -116,7 +125,7 @@
             this._onAdd(index, p_value);
             // process
             this._element.push(p_value);
-            this.properties.push(p_name);
+            this._properties.push(p_name);
             if (typeof p_desc === 'object') {
                 Object.defineProperty(this, [index], p_desc);
                 Object.defineProperty(this, p_name, p_desc);
@@ -146,7 +155,7 @@
                delete this[propName];
             }
             this._element = [];
-            this.properties = [];
+            this._properties = [];
             // after event
             this._onChanged();
         };
@@ -156,25 +165,14 @@
          * @param {String} p_name 
          * @returns {number}
         */
-       PropertyCollection.prototype.indexOfName = function(p_name) {
+       PropertyCollection.prototype.indexOfProp = function(p_name) {
            var idx = -1;
            
            if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
-           for (var i = 0; i < this.properties.length; i++) {
-               if (this.properties[i] === p_name) return i;
+           for (var i = 0; i < this._properties.length; i++) {
+               if (this._properties[i] === p_name) return i;
             }
             return idx;
-        };
-        
-        /**
-         * 요소 삭제
-         * @param {string} p_name 삭제핳 요소명
-         */
-        PropertyCollection.prototype.removeByName = function(p_name) {
-            var idx = this.indexOfName(p_name);
-
-            if (typeof idx === 'number') return this.removeAt(idx);
-            return false;   // COVER:
         };
         
         /**
@@ -183,7 +181,18 @@
          * @returns {String}
          */
         PropertyCollection.prototype.propertyOf = function(p_idx) {
-            return this.properties[p_idx];
+            return this._properties[p_idx];
+        };
+
+        /**
+         * 요소 삭제
+         * @param {string} p_name 삭제핳 요소명
+         */
+        PropertyCollection.prototype.removeByProp = function(p_name) {
+            var idx = this.indexOfProp(p_name);
+
+            if (typeof idx === 'number') return this.removeAt(idx);
+            return false;   // COVER:
         };
 
         return PropertyCollection;

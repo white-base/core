@@ -46,6 +46,7 @@
             _super.call(this);
 
             var __element = [];
+            var __properties = [];
 
             /**
              * 요소 갯수
@@ -69,31 +70,35 @@
                 enumerable: true
             });
 
-            // this.typeName = ComplexElement;     // 타입명 설정
-            // this.type = ComplexElement;
-
-            /** implements IPropertyCollection 인터페이스 선언 */
-            // this._implements(IPropertyCollection);                
+            /**
+             * 요소 목록
+             * @member _L.Meta.ComplexElement#list
+             */
+            Object.defineProperty(this, '_properties', 
+            {
+                configurable: true,
+                enumerable: false,
+                get: function() { return __properties; },
+                set: function(newValue) { __properties = newValue; }
+            });
+            
+            /** @implements {_L.Interface.IPropertyCollection} */
             Util.implements(this, IPropertyCollection);
 
         }
         Util.inherits(ComplexElement, _super);
 
-        /** @override **/
-        // ComplexElement.prototype.getTypes  = function() {
-        //     var type = ['ComplexElement'];
-            
-        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        // };        
-        
         // TODO::
-        ComplexElement.prototype.add  = function() {};
-        ComplexElement.prototype.remove  = function() {};
-        ComplexElement.prototype.removeAt  = function() {};
-        ComplexElement.prototype.clear  = function() {};
-        ComplexElement.prototype.indexOf  = function() {};
-        ComplexElement.prototype.contains  = function() {};
-        ComplexElement.prototype.propertyOf  = function() {};
+        ComplexElement.prototype.add = function() {};
+        ComplexElement.prototype.remove = function() {};
+        ComplexElement.prototype.removeAt = function() {};
+        ComplexElement.prototype.clear = function() {};
+        ComplexElement.prototype.indexOf = function() {};
+        ComplexElement.prototype.exist = function() {};
+        ComplexElement.prototype.contains = function() {};
+        ComplexElement.prototype.propertyOf = function() {};
+        ComplexElement.prototype.removeByProp = function() {};
+        ComplexElement.prototype.indexOfProp  = function() {};
 
         return ComplexElement;
     

@@ -53,17 +53,17 @@
         }
         Util.inherits(EntityTable, _super);
 
-        /** @override **/
-        EntityTable.prototype.getTypes  = function() {
-            var type = ['EntityTable'];
+        // /** @override **/
+        // EntityTable.prototype.getTypes  = function() {
+        //     var type = ['EntityTable'];
             
-            return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        };
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };
 
-        /** @override */
-        EntityTable.prototype.getObject = function() {
-            // TODO::
-        };
+        // /** @override */
+        // EntityTable.prototype.getObject = function() {
+        //     // TODO::
+        // };
 
         /**
          * 테이블 엔티티를 복제한다.

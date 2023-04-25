@@ -46,6 +46,20 @@
         IPropertyCollection.prototype.propertyOf  = function() {
             throw new Error('[ propertyOf() ] Abstract method definition, fail...');
         };
+
+        /**
+         * 키(이름)로 삭제
+         */
+        IPropertyCollection.prototype.removeByProp  = function() {
+            throw new Error('[ propertyOf() ] Abstract method definition, fail...');
+        };
+
+        /**
+         * 키(이름)로 인덱스 조회
+         */
+        IPropertyCollection.prototype.indexOfProp  = function() {
+            throw new Error('[ propertyOf() ] Abstract method definition, fail...');
+        };
     
         return IPropertyCollection;
         
