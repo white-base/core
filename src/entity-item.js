@@ -834,7 +834,9 @@
                 if (collection.contains(collection[i_name])) {
                     i_value = collection[i_name];                      // 참조 가져옴
                 } else {
-                    i_value = collection.add(p_object);                // 컬렉션에 등록
+                    collection.add(p_object);                          // 컬렉션에 등록
+                    i_value = collection[i_name];
+
                 }
                 
                 // REVIEW:: 의존성을 낮추기 위해서 검사후 등록
