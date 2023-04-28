@@ -25,7 +25,7 @@
         MetaObject          = require('./meta-object');
         PropertyCollection  = require('./collection-property');
         ArrayCollection     = require('./collection-array');
-    } else {
+    } else {    // COVER:
         Util                = global._L.Common.Util;
         MetaObject          = global._L.Meta.MetaObject;
         PropertyCollection  = global._L.Collection.PropertyCollection;
@@ -90,7 +90,7 @@
          * 로우를 복사한다. (생성 후 복제)
          * @param {Object} p_filter 필터객체
          */
-        Row.prototype.copy = function(p_filter) {
+        Row.prototype.copy = function(p_filter) {   // COVER:
             var clone = new Row(this.entity);
             
             if (this.value) clone['value'] = this.value;
@@ -144,7 +144,7 @@
             } else if (p_row instanceof Row) {
                 i_value = p_row;
             } else {
-                throw new Error('Row | Row object [p_row].');
+                throw new Error('Row | Row object [p_row].');   // COVER:
             }
 
             return _super.prototype.add.call(this, i_value);
@@ -159,7 +159,7 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports.Row = Row;
         module.exports.RowCollection = RowCollection;
-    } else {
+    } else {    // COVER:
         global._L.Row = Row;
         global._L.RowCollection = RowCollection;
         // namespace

@@ -15,7 +15,7 @@
 
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         Util                        = require('./util');
-    } else {
+    } else {    // COVER:
         Util                        = global._L.Common.Util;
     }
 
@@ -35,7 +35,7 @@
          * @param {?String} p_name 에러명
          * 우선순위 : 메세지 > 타겟 > 에러명
          */
-        function CustomError(p_message, p_target, p_name) {
+        function CustomError(p_message, p_target, p_name) { // COVER:
             _super.call(this, p_message);
 
             /**
@@ -84,7 +84,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = CustomError;
-    } else {
+    } else {    // COVER:
         global._LCustomError = CustomError;
         // namespace
         global._L.Common.CustomError = CustomError;

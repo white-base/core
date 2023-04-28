@@ -29,7 +29,7 @@
         RowCollection           = require('./entity-row').RowCollection;
         Row                     = require('./entity-row').Row;
         ItemCollection          = require('./entity-item').ItemCollection;
-    } else {
+    } else {    // COVER:
         Util                    = global._L.Common.Util;
         MetaElement             = global._L.Meta.MetaElement;
         IGroupControl           = global._L.Interface.IGroupControl;
@@ -89,8 +89,8 @@
             Object.defineProperty(this, 'rows', 
             {
                 get: function() { return __rows; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof RowCollection)) throw new Error('Only [rows] type "RowCollection" can be added');
+                set: function(newValue) { // COVER:
+                    if (!(newValue instanceof RowCollection)) throw new Error('Only [rows] type "RowCollection" can be added'); 
                     __rows = newValue;
                 },
                 configurable: true,
@@ -244,7 +244,7 @@
                     if (typeof entity.rows[i][itemName] !== 'undefined') {
                         row[itemName] = entity.rows[i][itemName];    
                     } else {
-                        row[itemName] = '';
+                        row[itemName] = ''; // COVER:
                     }
                 }
                 this.rows.add(row);
@@ -346,7 +346,7 @@
             // 1.제외 아이템 조회
             if (p_filter && p_filter[EXECEPT]) {
                 if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
-                else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);
+                else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
             } 
             for (var i = 0; this.items.count > i; i++) {
                 if (excepts.indexOf(this.items[i].name) < 0)  {
@@ -500,7 +500,7 @@
 
         /** @abstract */
         Entity.prototype.clone  = function() {
-            throw new Error('[ clone() ] Abstract method definition, fail...');
+            throw new Error('[ clone() ] Abstract method definition, fail...'); // COVER:
         };
 
         return Entity;
@@ -512,7 +512,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports = Entity;
-    } else {
+    } else {    // COVER:
         global._L.Entity = Entity;
         global._L.Meta.Entity.Entity = Entity;
     }

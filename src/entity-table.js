@@ -23,7 +23,7 @@
         Entity              = require('./entity-base');
         PropertyCollection  = require('./collection-property');
         ItemTableCollection = require('./entity-item').ItemTableCollection;
-    } else {
+    } else {    
         Util                = global._L.Common.Util;
         Entity              = global._L.Meta.Entity.Entity;
         PropertyCollection  = global._L.Collection.PropertyCollection;
@@ -98,7 +98,7 @@
          * @extends _L.Collection.PropertyCollection
          * @param {*} p_owner 소유자 
          */
-        function EntityTableCollection(p_owner) {
+        function EntityTableCollection(p_owner) {   // COVER:
             _super.call(this, p_owner);
 
             this.elementType = EntityTable;   // 컬렉션타입 설정
@@ -110,7 +110,7 @@
          * @param {String | Item} p_object 
          * @returns {Item} 등록한 아이템
          */
-        EntityTableCollection.prototype.add  = function(p_object) {
+        EntityTableCollection.prototype.add  = function(p_object) { // COVER:
             var i_value;
             var i_name;
 
@@ -140,7 +140,7 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports.EntityTable = EntityTable;
         module.exports.EntityTableCollection = EntityTableCollection;
-    } else {
+    } else {    // COVER:
         global._L.EntityTable = EntityTable;
         global._L.EntityTableCollection = EntityTableCollection;
         // namespace

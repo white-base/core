@@ -1,5 +1,6 @@
 /**
- * namespace _L.Interface.IControlCollection
+ * @namespace _L.Interface.IControlCollection
+ * REVIEW: 필요성 여부 검토
  */
 (function(global) {
 

@@ -26,7 +26,7 @@
         MetaElement         = require('./meta-element');
         PropertyCollection  = require('./collection-property');
         Observer            = require('./observer');
-    } else {
+    } else {    // COVER:
         Util                = global._L.Common.Util;
         CustomError         = global._L.Common.CustomError;
         MetaElement         = global._L.Meta.MetaElement;
@@ -109,7 +109,7 @@
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
                     if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('Entity'))) {
-                        throw new Error('Only [entity] type "Entity" can be added');
+                        throw new Error('Only [entity] type "Entity" can be added');    // COVER:
                     }
                     __entity = newValue;
                 },
@@ -221,7 +221,7 @@
             Object.defineProperty(this, 'callback', 
             {
                 get: function() { return __callback; },
-                set: function(newValue) { 
+                set: function(newValue) { // COVER:
                     if(newValue !== null && typeof newValue !== 'function') throw new Error('Only [callback] type "function" can be added');
                     __callback = newValue; 
                 },
@@ -247,12 +247,12 @@
                     
                     // 배열로 일반화
                     if (Array.isArray(newValue))  list = newValue;
-                    else list.push(newValue);
+                    else list.push(newValue);   // COVER:
 
                     // 유효성 검사
                     for(var i = 0; list.length > i; i++) {
                         if (!(typeof list[i] === 'function' || (typeof list[i].regex === 'object' && typeof list[i].msg === 'string'))) {
-                            throw new Error('Only [constraints] type "function OR {regex:object, msg:string, ?code:number}" can be added');
+                            throw new Error('Only [constraints] type "function OR {regex:object, msg:string, ?code:number}" can be added'); // COVER:
                          }
                     }
                     __constraints = list;
@@ -268,7 +268,7 @@
             Object.defineProperty(this, 'codeType', 
             {
                 get: function() { return __codeType; },
-                set: function(newValue) { __codeType = newValue; },
+                set: function(newValue) { __codeType = newValue; }, // COVER:
                 configurable: true,
                 enumerable: true
             });
@@ -350,7 +350,7 @@
 
                     __val = __val === null ? '' : __val;  // null 등록 오류 처리
                     if(['number', 'string', 'boolean'].indexOf(typeof __val) < 0) {
-                        throw new Error('Only [value] type "number, string, boolean" can be added');
+                        throw new Error('Only [value] type "number, string, boolean" can be added');    // COVER:
                     }
                     this.__value = __val;
                     // 검사 및 이벤트 발생
@@ -436,7 +436,7 @@
                     }
                 }
             } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
-                this['value'] = p_property;
+                this['value'] = p_property; // COVER:
             }
 
         }
@@ -489,7 +489,7 @@
             
             // 이벤트 복사 (REVIEW:: 개선필요!!)
             if (this._event.__subscribers.onChanged) {
-                for (var i = 0; this._event.__subscribers.onChanged.length > i; i++) {
+                for (var i = 0; this._event.__subscribers.onChanged.length > i; i++) {  // COVER:
                     clone['onChanged'] = this._event.__subscribers.onChanged[i];
                 }
             }
@@ -596,7 +596,7 @@
             for(var i = 0; this.constraints.length > i; i++) {
 
                 if (typeof this.constraints[i] === 'function') {
-                    return this.constraints[i].call(this, this, p_value, r_result);     // 함수형 제약조건
+                    return this.constraints[i].call(this, this, p_value, r_result);     // 함수형 제약조건  // COVER:
                 } else {
                     result = p_value.match(this.constraints[i].regex);
     
@@ -687,7 +687,7 @@
 
             if (typeof p_name !== 'string') throw new Error('There is no required value [p_name].');
             if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
-                throw new Error('Only [value] type "number, string, boolean" can be added');
+                throw new Error('Only [value] type "number, string, boolean" can be added');    // COVER:
             }
             
             property = { value: p_value };
@@ -746,7 +746,7 @@
                 i_value = p_object.clone();
                 i_value.entity = this._owner;
             } else {
-                throw new Error('string | Item object [p_object].');
+                throw new Error('string | Item object [p_object].');    // COVER:
             }
 
             if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
@@ -771,7 +771,7 @@
             _super.call(this, p_owner);
 
             if (p_baseCollection && !(p_baseCollection instanceof ItemCollection)) {
-                throw new Error('Error!! ItemCollection object [p_baseCollection].');
+                throw new Error('Error!! ItemCollection object [p_baseCollection].');   // COVER:
             }
             
             /** @protected */
@@ -818,7 +818,7 @@
             //         this.add(p_object.items[i]);
             //     }
             } else {
-                throw new Error('p_object string | Item instance param request fail...');
+                throw new Error('p_object string | Item instance param request fail...');   // COVER:
             }
 
             // TODO:: 이름 충돌검사
@@ -856,7 +856,7 @@
          */
         ItemViewCollection.prototype.addEntity  = function(p_entity) {
             if (typeof p_entity === 'undefined' && !(p_entity instanceof MetaElement && p_entity.instanceOf('Entity'))) {
-                throw new Error('Only [p_entity] type "Entity" can be added');
+                throw new Error('Only [p_entity] type "Entity" can be added');  // COVER:
             }
 
             for (var i = 0; p_entity.items.count > i; i++) {
@@ -877,7 +877,7 @@
         module.exports.ItemViewCollection           = ItemViewCollection;
         module.exports.ItemTableCollection          = ItemTableCollection;
 
-    } else {
+    } else {    // COVER:
         global._L.Item                              = Item;
         global._L.ItemCollection                    = ItemCollection;
         global._L.ItemViewCollection                = ItemViewCollection;

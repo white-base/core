@@ -25,7 +25,7 @@
         Entity              = require('./entity-base');
         ItemViewCollection  = require('./entity-item').ItemViewCollection;
         PropertyCollection  = require('./collection-property');
-    } else {
+    } else {    // COVER:
         Util                = global._L.Common.Util;
         MetaObject          = global._L.Meta.MetaObject;
         Entity              = global._L.Meta.Entity.Entity;
@@ -124,7 +124,7 @@
          * @extends _L.Meta.Entity.PropertyCollection
          * @param {*} p_owner 소유자 
          */
-        function EntityViewCollection(p_owner) {
+        function EntityViewCollection(p_owner) {    // COVER:
             _super.call(this, p_owner);
 
             this.elementType = EntityView;   // 컬렉션타입 설정
@@ -142,7 +142,7 @@
          *  - entityView                :         entityView  이름으로 등록
          *  - entityView, collection    :         entityView  이름으로 등록 (collection보냄) => 오류발생
          */
-        EntityViewCollection.prototype.add  = function(p_object, p_baseEntity) {
+        EntityViewCollection.prototype.add  = function(p_object, p_baseEntity) {    // COVER:
 
             var i_value;
             var i_name;
@@ -172,7 +172,7 @@
     if (typeof module === 'object' && typeof module.exports === 'object') {     
         module.exports.EntityView = EntityView;
         module.exports.EntityViewCollection = EntityViewCollection;
-    } else {
+    } else {    // COVER:
         global._L.EntityView = EntityView;
         global._L.EntityViewCollection = EntityViewCollection;
         // namespace
