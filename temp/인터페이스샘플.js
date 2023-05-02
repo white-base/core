@@ -86,3 +86,12 @@ var type2 = function() {
  *      + Util.checkType() 호출 => 예외호출
  * 
  */
+
+class ICollection{
+    attr = Number;
+}
+
+if (this.instanceOf(ICollection)) {
+    this.attr = 10;
+    
+}
