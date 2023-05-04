@@ -1,29 +1,30 @@
 /**
  * namespace _L.Meta.MetaElement
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Meta          = global._L.Meta || {};
-
-   
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var MetaObject;
     var IMarshal;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Meta          = _global._L.Meta || {};
+
+   
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         Util                = require('./util');
         MetaObject          = require('./meta-object');
         IMarshal            = require('./i-marshal');
     } else {
-        Util                = global._L.Common.Util;
-        MetaObject          = global._L.Meta.MetaObject;
-        IMarshal            = global._L.Interface.IMarshal;
+        Util                = _global._L.Common.Util;
+        MetaObject          = _global._L.Meta.MetaObject;
+        IMarshal            = _global._L.Interface.IMarshal;
     }
 
     //==============================================================
@@ -132,12 +133,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = MetaElement;
     } else {
-        global._L.MetaElement = MetaElement;
-        // namespace
-        global._L.Meta.MetaElement = MetaElement;
+        _global._L.MetaElement = MetaElement;
+        _global._L.Meta.MetaElement = MetaElement;  // namespace
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

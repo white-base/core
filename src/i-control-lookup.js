@@ -1,16 +1,18 @@
 /**
  * namespace _L.Interface.ILookupControl
  */
-(function(global) {
+(function(_global) {
     'use strict';
+
+    var isNode = typeof window !== 'undefined' ? false : true;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Interface     = global._L.Interface || {};    
+    _global._L               = _global._L || {};
+    _global._L.Interface     = _global._L.Interface || {};    
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    // 2. 모듈 가져오기 (node | window)
 
     //==============================================================
     // 3. 모듈 의존성 검사
@@ -39,12 +41,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = ILookupControl;
     } else {
-        global._L.ILookupControl = ILookupControl;
-        // namespace
-        global._L.Interface.ILookupControl = ILookupControl;
+        _global._L.ILookupControl = ILookupControl;
+        _global._L.Interface.ILookupControl = ILookupControl;   // namespace
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

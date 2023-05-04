@@ -12,13 +12,13 @@
     global._L.Meta.Entity   = global._L.Meta.Entity || {};
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    // 2. 모듈 가져오기 (node | window)
     var util;
     var Item;
     var jquery;
     var ajax;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         util                    = require('./util');
         Item                    = require('./entity-item').Item;
     } else {
@@ -440,11 +440,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = ItemDOM;
     } else {
         global._L.Meta.Entity.ItemDOM = ItemDOM;
         global.ItemDOM = ItemDOM;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

@@ -1,28 +1,29 @@
 /**
  * namespace _L.Collection.PropertyCollection
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Collection    = global._L.Collection || {};
-    
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var BaseCollection;
     var IPropertyCollection;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Collection    = _global._L.Collection || {};
+    
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         Util                = require('./util');
         BaseCollection      = require('./collection-base');
         IPropertyCollection = require('./i-collection-property');
     } else {    // COVER:
-        Util                = global._L.Common.Util;
-        BaseCollection      = global._L.Collection.BaseCollection;
-        IPropertyCollection = global._L.Interface.IPropertyCollection;
+        Util                = _global._L.Common.Util;
+        BaseCollection      = _global._L.Collection.BaseCollection;
+        IPropertyCollection = _global._L.Interface.IPropertyCollection;
     }
 
     //==============================================================
@@ -202,12 +203,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = PropertyCollection;
     } else {    // COVER:
-        global._L.PropertyCollection = PropertyCollection;
-        // namespace
-        global._L.Collection.PropertyCollection = PropertyCollection;
+        _global._L.PropertyCollection = PropertyCollection;
+        _global._L.Collection.PropertyCollection = PropertyCollection;      // namespace
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

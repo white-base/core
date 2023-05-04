@@ -4,6 +4,7 @@
 //==============================================================
 // gobal defined
 'use strict';
+
 const Util                  = require('../src/util');
 const MetaObject            = require('../src/meta-object');
 const MetaElement           = require('../src/meta-element');
@@ -19,7 +20,6 @@ const IGroupControl         = require('../src/i-control-group');
 const IImportControl        = require('../src/i-control-import');
 const ILookupControl        = require('../src/i-control-lookup');
 const IPartControl          = require('../src/i-control-part');
-
 
 //==============================================================
 // test

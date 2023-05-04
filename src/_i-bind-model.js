@@ -11,7 +11,7 @@
     global._L.Interface     = global._L.Interface || {};
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    // 2. 모듈 가져오기 (node | window)
 
     //==============================================================
     // 3. 모듈 의존성 검사
@@ -292,10 +292,10 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = IBindModel;
     } else {
         global._L.Interface.IBindModel = IBindModel;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

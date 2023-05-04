@@ -15,8 +15,8 @@
     var util;
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         util                = require('./util');
         Observer            = require('./observer');
     } else {
@@ -32,7 +32,7 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports.util             = util;
         module.exports.Observer         = Observer;
     } else {
@@ -40,4 +40,4 @@
         global._L.Common.Observer       = Observer;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

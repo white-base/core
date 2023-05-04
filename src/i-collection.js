@@ -1,28 +1,31 @@
 /**
  * namespace _L.Interface.ICollection
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Interface     = global._L.Interface || {};    
-    
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var IPartControl;
     var ILookupControl;
     var Util;
+
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};    
+    _global._L.Interface     = _global._L.Interface || {};    
     
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    
+    if (isNode) {     
         IPartControl        = require('./i-control-part');
         ILookupControl      = require('./i-control-lookup');
         Util                = require('./util');
     } else {
-        IPartControl        = global._L.Interface.IPartControl;
-        ILookupControl      = global._L.Interface.ILookupControl;
-        Util                = global._L.Common.Util
+        IPartControl        = _global._L.Interface.IPartControl;
+        ILookupControl      = _global._L.Interface.ILookupControl;
+        Util                = _global._L.Common.Util
     }
 
     //==============================================================
@@ -125,12 +128,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = ICollection;
     } else {
-        global._L.ICollection = ICollection;
-        // namespace
-        global._L.Interface.ICollection = ICollection;
+        _global._L.ICollection = ICollection;
+        _global._L.Interface.ICollection = ICollection;     // namespace
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

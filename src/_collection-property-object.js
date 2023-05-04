@@ -12,11 +12,11 @@
     global._L.Collection    = global._L.Collection || {};
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    // 2. 모듈 가져오기 (node | window)
     var Util;
     var PropertyCollection;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         Util                = require('./util');
         PropertyCollection  = require('./collection-property');
     } else {
@@ -67,10 +67,10 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = PropertyObjectCollection;
     } else {
         global._L.Collection.PropertyObjectCollection = PropertyObjectCollection;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

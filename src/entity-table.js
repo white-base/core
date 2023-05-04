@@ -2,32 +2,33 @@
  * namespace _L.Meta.Entity.EntityTable
  * namespace _L.Meta.Entity.EntityTableCollection
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Meta          = global._L.Meta || {};
-    global._L.Meta.Entity   = global._L.Meta.Entity || {};
-    
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var Entity;
     var PropertyCollection;
     var ItemTableCollection;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Meta          = _global._L.Meta || {};
+    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         Util                = require('./util');
         Entity              = require('./entity-base');
         PropertyCollection  = require('./collection-property');
         ItemTableCollection = require('./entity-item').ItemTableCollection;
     } else {    
-        Util                = global._L.Common.Util;
-        Entity              = global._L.Meta.Entity.Entity;
-        PropertyCollection  = global._L.Collection.PropertyCollection;
-        ItemTableCollection = global._L.Meta.Entity.ItemTableCollection;
+        Util                = _global._L.Common.Util;
+        Entity              = _global._L.Meta.Entity.Entity;
+        PropertyCollection  = _global._L.Collection.PropertyCollection;
+        ItemTableCollection = _global._L.Meta.Entity.ItemTableCollection;
     }
 
     //==============================================================
@@ -137,15 +138,15 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports.EntityTable = EntityTable;
         module.exports.EntityTableCollection = EntityTableCollection;
     } else {    // COVER:
-        global._L.EntityTable = EntityTable;
-        global._L.EntityTableCollection = EntityTableCollection;
+        _global._L.EntityTable = EntityTable;
+        _global._L.EntityTableCollection = EntityTableCollection;
         // namespace
-        global._L.Meta.Entity.EntityTable = EntityTable;
-        global._L.Meta.Entity.EntityTableCollection = EntityTableCollection;
+        _global._L.Meta.Entity.EntityTable = EntityTable;
+        _global._L.Meta.Entity.EntityTableCollection = EntityTableCollection;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

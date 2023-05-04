@@ -1,17 +1,10 @@
 /**
  * namespace _L.Meta.Entity.Entity
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Meta          = global._L.Meta || {};
-    global._L.Meta.Entity   = global._L.Meta.Entity || {};
-
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var MetaElement;
     var IPropertyCollection;
@@ -20,8 +13,16 @@
     var RowCollection;
     var Row;
     var ItemCollection;
-    
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Meta          = _global._L.Meta || {};
+    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         Util                    = require('./util');
         MetaElement             = require('./meta-element');
         IGroupControl           = require('./i-control-group');
@@ -30,13 +31,13 @@
         Row                     = require('./entity-row').Row;
         ItemCollection          = require('./entity-item').ItemCollection;
     } else {    // COVER:
-        Util                    = global._L.Common.Util;
-        MetaElement             = global._L.Meta.MetaElement;
-        IGroupControl           = global._L.Interface.IGroupControl;
-        IAllControl             = global._L.Interface.IAllControl;
-        RowCollection           = global._L.Meta.Entity.RowCollection;
-        Row                     = global._L.Meta.Entity.Row;
-        ItemCollection          = global._L.Meta.Entity.ItemCollection;
+        Util                    = _global._L.Common.Util;
+        MetaElement             = _global._L.Meta.MetaElement;
+        IGroupControl           = _global._L.Interface.IGroupControl;
+        IAllControl             = _global._L.Interface.IAllControl;
+        RowCollection           = _global._L.Meta.Entity.RowCollection;
+        Row                     = _global._L.Meta.Entity.Row;
+        ItemCollection          = _global._L.Meta.Entity.ItemCollection;
     }
 
     //==============================================================
@@ -510,11 +511,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = Entity;
     } else {    // COVER:
-        global._L.Entity = Entity;
-        global._L.Meta.Entity.Entity = Entity;
+        _global._L.Entity = Entity;
+        _global._L.Meta.Entity.Entity = Entity;     // namespace
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

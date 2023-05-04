@@ -181,5 +181,5 @@ if ((typeof Object.prototype._implements === 'undefined') ||
 	        enumerable: false
         });
         
-    }(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+    }(typeof window !== 'undefined' ? window : global));
 }

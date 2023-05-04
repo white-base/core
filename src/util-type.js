@@ -1,17 +1,19 @@
 /**
  * namespace _L.Common.Util
  */
-(function(global) {
+(function(_global) {
     'use strict';
+
+    var isNode = typeof window !== 'undefined' ? false : true;
 
     //==============================================================
     // 1. 의존 모듈 선언
-    global._L               = global._L || {};
-    global._L.Common        = global._L.Common || {};
-    global._L.Common.Util   = global._L.Common.Util || {};
+    _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Common.Util   = _global._L.Common.Util || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    // 2. 모듈 가져오기 (node | window)
 
     //==============================================================
     // 3. 의존성 검사
@@ -306,7 +308,7 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports.getAllProperties = getAllProperties;
         module.exports.checkType = checkType;
         module.exports.checkUnionType = checkUnionType;
@@ -314,12 +316,12 @@
         module.exports.validUnionType = validUnionType;
         module.exports.getTypeMap = getTypeMap;
     } else {    // COVER:
-        global._L.Common.Util.getAllProperties = getAllProperties;
-        global._L.Common.Util.checkType = checkType;
-        global._L.Common.Util.checkUnionType = checkUnionType;
-        global._L.Common.Util.validType = validType;
-        global._L.Common.Util.validUnionType = validUnionType;
-        global._L.Common.Util.getTypeMap = getTypeMap;
+        _global._L.Common.Util.getAllProperties = getAllProperties;
+        _global._L.Common.Util.checkType = checkType;
+        _global._L.Common.Util.checkUnionType = checkUnionType;
+        _global._L.Common.Util.validType = validType;
+        _global._L.Common.Util.validUnionType = validUnionType;
+        _global._L.Common.Util.getTypeMap = getTypeMap;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

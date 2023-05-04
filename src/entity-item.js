@@ -3,35 +3,36 @@
  * namespace _L.Meta.Entity.ItemCollection
  * namespace _L.Meta.Entity.ItemViewCollection
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Meta          = global._L.Meta || {};
-    global._L.Meta.Entity   = global._L.Meta.Entity || {};
-
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var CustomError;
     var MetaElement;
     var PropertyCollection;
     var Observer;
-    
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Meta          = _global._L.Meta || {};
+    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         Util                = require('./util');
         CustomError         = require('./error-custom');
         MetaElement         = require('./meta-element');
         PropertyCollection  = require('./collection-property');
         Observer            = require('./observer');
     } else {    // COVER:
-        Util                = global._L.Common.Util;
-        CustomError         = global._L.Common.CustomError;
-        MetaElement         = global._L.Meta.MetaElement;
-        PropertyCollection  = global._L.Collection.PropertyCollection;
-        Observer            = global._L.Common.Observer;
+        Util                = _global._L.Common.Util;
+        CustomError         = _global._L.Common.CustomError;
+        MetaElement         = _global._L.Meta.MetaElement;
+        PropertyCollection  = _global._L.Collection.PropertyCollection;
+        Observer            = _global._L.Common.Observer;
     }
 
     //==============================================================
@@ -871,22 +872,22 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports.Item                         = Item;
         module.exports.ItemCollection               = ItemCollection;
         module.exports.ItemViewCollection           = ItemViewCollection;
         module.exports.ItemTableCollection          = ItemTableCollection;
 
     } else {    // COVER:
-        global._L.Item                              = Item;
-        global._L.ItemCollection                    = ItemCollection;
-        global._L.ItemViewCollection                = ItemViewCollection;
-        global._L.ItemTableCollection               = ItemTableCollection;
+        _global._L.Item                              = Item;
+        _global._L.ItemCollection                    = ItemCollection;
+        _global._L.ItemViewCollection                = ItemViewCollection;
+        _global._L.ItemTableCollection               = ItemTableCollection;
         // namespace
-        global._L.Meta.Entity.Item                  = Item;
-        global._L.Meta.Entity.ItemCollection        = ItemCollection;
-        global._L.Meta.Entity.ItemViewCollection    = ItemViewCollection;
-        global._L.Meta.Entity.ItemTableCollection   = ItemTableCollection;
+        _global._L.Meta.Entity.Item                  = Item;
+        _global._L.Meta.Entity.ItemCollection        = ItemCollection;
+        _global._L.Meta.Entity.ItemViewCollection    = ItemViewCollection;
+        _global._L.Meta.Entity.ItemTableCollection   = ItemTableCollection;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

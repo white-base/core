@@ -2,32 +2,34 @@
  * @namespace _L.Interface.IControlCollection
  * REVIEW: 필요성 여부 검토
  */
-(function(global) {
+(function(_global) {
 
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Interface     = global._L.Interface || {};
-
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var ICollection;
     var IGroupControl;
     var IAllControl;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};
+
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         Util                = require('./util');
         ICollection         = require('./i-collection');
         IGroupControl       = require('./i-control-group');
         IAllControl         = require('./i-control-all');
     } else {
-        Util                = global._L.Common.Util;
-        ICollection         = global._L.Interface.ICollection;
-        IGroupControl       = global._L.Interface.IGroupControl;
-        IAllControl         = global._L.Interface.IAllControl;        
+        Util                = _global._L.Common.Util;
+        ICollection         = _global._L.Interface.ICollection;
+        IGroupControl       = _global._L.Interface.IGroupControl;
+        IAllControl         = _global._L.Interface.IAllControl;        
     }
 
     //==============================================================
@@ -103,12 +105,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = IControlCollection;
     } else {
-        global._L.IControlCollection = IControlCollection;
-        // namespace
-        global._L.Interface.IControlCollection = IControlCollection;
+        _global._L.IControlCollection = IControlCollection;
+        _global._L.Interface.IControlCollection = IControlCollection;   // namespace
     }
     
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

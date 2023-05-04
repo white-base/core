@@ -1,25 +1,27 @@
 /**
  * namespace _L.Interface.IPropertyCollection
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Interface     = global._L.Interface || {};
-
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var ICollection;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};
+
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         Util                = require('./util');
         ICollection         = require('./i-collection');
     } else {
-        Util                = global._L.Common.Util;
-        ICollection         = global._L.Interface.ICollection;
+        Util                = _global._L.Common.Util;
+        ICollection         = _global._L.Interface.ICollection;
     }
 
     //==============================================================
@@ -67,12 +69,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = IPropertyCollection;
     } else {
-        global._L.IPropertyCollection = IPropertyCollection;
-        // namespace
-        global._L.Interface.IPropertyCollection = IPropertyCollection;
+        _global._L.IPropertyCollection = IPropertyCollection;
+        _global._L.Interface.IPropertyCollection = IPropertyCollection; // namespace
     }
     
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

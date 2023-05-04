@@ -1,19 +1,18 @@
 /**
  * namespace _L.Common.Observer
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
+    var isNode = typeof window !== 'undefined' ? false : true;
+    
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Common        = global._L.Common || {};
+    _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
-    } else {
-    }
+    // 2. 모듈 가져오기 (node | window)
 
     //==============================================================Á
     // 3. 의존성 검사
@@ -160,12 +159,12 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = Observer;
     } else {
-        global._L.Observer = Observer;
+        _global._L.Observer = Observer;
         // namespace
-        global._L.Common.Observer = Observer;
+        _global._L.Common.Observer = Observer;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

@@ -1,26 +1,27 @@
 /**
  * namespace _L.Meta.MetaObject
  */
-(function(global) {
+(function(_global) {
     'use strict';
+
+    var isNode = typeof window !== 'undefined' ? false : true;
+    var IObject;
+    var Util;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Meta          = global._L.Meta || {};
+    _global._L               = _global._L || {};
+    _global._L.Meta          = _global._L.Meta || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
-    var IObject;
-    var Util;
-    
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         // require('./_object-implement'); // _implements() : 폴리필
         Util                = require('./util');
         IObject             = require('./i-object');
     } else {
-        Util                = global._L.Common.Util
-        IObject             = global._L.Interface.IObject;
+        Util                = _global._L.Common.Util
+        IObject             = _global._L.Interface.IObject;
     }
 
     //==============================================================
@@ -119,12 +120,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = MetaObject;
     } else {
-        global._L.MetaObject = MetaObject;
-        // namespace
-        global._L.Meta.MetaObject = MetaObject;
+        _global._L.MetaObject = MetaObject;
+        _global._L.Meta.MetaObject = MetaObject;    // namespace
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

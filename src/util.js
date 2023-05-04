@@ -1,35 +1,36 @@
 /**
  * namespace _L.Common.Util
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 의존 모듈 선언
-    global._L               = global._L || {};
-    global._L.Common        = global._L.Common || {};
-    global._L.Common.Util   = global._L.Common.Util || {};
-
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var getAllProperties;
     var checkType;
     var checkUnionType;
     var validType;
     var validUnionType;
 
-    if (typeof module === 'object' && typeof module.exports === 'object') {
+    //==============================================================
+    // 1. 의존 모듈 선언
+    _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Common.Util   = _global._L.Common.Util || {};
+
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {
         getAllProperties    = require('./util-type').getAllProperties;
         checkType           = require('./util-type').checkType;
         checkUnionType      = require('./util-type').checkUnionType;
         validType           = require('./util-type').validType;
         validUnionType      = require('./util-type').validUnionType;
     } else {    // COVER:
-        getAllProperties    = global._L.Common.Util.getAllProperties
-        checkType           = global._L.Common.Util.checkType
-        checkTypeAll        = global._L.Common.Util.checkUnionType
-        validType           = global._L.Common.Util.validType
-        validUnionType      = global._L.Common.Util.validUnionType
+        getAllProperties    = _global._L.Common.Util.getAllProperties
+        checkType           = _global._L.Common.Util.checkType
+        checkUnionType      = _global._L.Common.Util.checkUnionType
+        validType           = _global._L.Common.Util.validType
+        validUnionType      = _global._L.Common.Util.validUnionType
     }
 
     //==============================================================
@@ -305,30 +306,30 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports.inherits = inherits;
         module.exports.getArrayDepth = getArrayDepth;
         module.exports.createGuid = createGuid;
-        // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
-        // module.exports.equalType = equalType;
         module.exports.implements = implement;
         module.exports.getAllProperties = getAllProperties;
         module.exports.checkType = checkType;
         module.exports.checkUnionType = checkUnionType;
         module.exports.validType = validType;
         module.exports.validUnionType = validUnionType;
+        // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
+        // module.exports.equalType = equalType;
     } else {    // COVER:
-        global._L.Common.Util.inherits = inherits;
-        global._L.Common.Util.getArrayDepth = getArrayDepth;
-        global._L.Common.Util.createGuid = createGuid;
-        // global._L.Common.Util.validSelector = validSelector;
-        // global._L.Common.Util.equalType = equalType;
-        global._L.Common.Util.implements = implement;
-        global._L.Common.Util.getAllProperties = getAllProperties;
-        global._L.Common.Util.checkType = checkType;
-        global._L.Common.Util.checkUnionType = checkUnionType;
-        global._L.Common.Util.validType = validType;
-        global._L.Common.Util.validUnionType = validUnionType;
+        _global._L.Common.Util.inherits = inherits;
+        _global._L.Common.Util.getArrayDepth = getArrayDepth;
+        _global._L.Common.Util.createGuid = createGuid;
+        _global._L.Common.Util.implements = implement;
+        _global._L.Common.Util.getAllProperties = getAllProperties;
+        _global._L.Common.Util.checkType = checkType;
+        _global._L.Common.Util.checkUnionType = checkUnionType;
+        _global._L.Common.Util.validType = validType;
+        _global._L.Common.Util.validUnionType = validUnionType;
+        // _global._L.Common.Util.equalType = equalType;
+        // _global._L.Common.Util.validSelector = validSelector;
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

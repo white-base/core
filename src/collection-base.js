@@ -1,34 +1,29 @@
 /**
  * namespace _L.Collection.BaseCollection
  */
-(function(global) {
+(function(_global) {
     'use strict';
 
-    //==============================================================
-    // 1. 모듈 네임스페이스 선언
-    global._L               = global._L || {};
-    global._L.Collection    = global._L.Collection || {};
-
-    //==============================================================
-    // 2. 모듈 가져오기 (node | web)
+    var isNode = typeof window !== 'undefined' ? false : true;
     var ICollection;
     var Observer;    
     var Util;
     
-    // coverage를 위한 코드 REVIEW: 검토 필요
-    // if (typeof module !== 'object' || global.isNamespace) {
-    //     ICollection         = global._L.Interface.ICollection;
-    //     Observer            = global._L.Common.Observer;
-    //     Util                = global._L.Common.Util;
-    // }
-    if (typeof module === 'object' && typeof module.exports === 'object') {
+    //==============================================================
+    // 1. 모듈 네임스페이스 선언
+    _global._L               = _global._L || {};
+    _global._L.Collection    = _global._L.Collection || {};
+
+    //==============================================================
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {
         ICollection         = require('./i-collection');
         Observer            = require('./observer');
         Util                = require('./util');
     } else {    // COVER:
-        ICollection         = global._L.Interface.ICollection;
-        Observer            = global._L.Common.Observer;
-        Util                = global._L.Common.Util;
+        ICollection         = _global._L.Interface.ICollection;
+        Observer            = _global._L.Common.Observer;
+        Util                = _global._L.Common.Util;
     }
 
     //==============================================================
@@ -385,12 +380,11 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    if (isNode) {     
         module.exports = BaseCollection;
     } else {    // COVER:
-        global._L.BaseCollection = BaseCollection;
-        // namespace
-        global._L.Collection.BaseCollection = BaseCollection;
+        _global._L.BaseCollection = BaseCollection;
+        _global._L.Collection.BaseCollection = BaseCollection;      // namespace
     }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));

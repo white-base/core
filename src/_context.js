@@ -8,8 +8,8 @@
     //var util;
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | web)
-    if (typeof module === 'object' && typeof module.exports === 'object') {     
+    // 2. 모듈 가져오기 (node | window)
+    if (isNode) {     
         // util = require('util');
     } else {
         // global._L = global._L || {};
@@ -29,10 +29,10 @@
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
-    // if (typeof module === 'object' && typeof module.exports === 'object') {     
+    // if (isNode) {     
     //     module.exports = namespace;
     // } else {
     //     global._L.namespace = namespace;
     // }
 
-}(typeof module === 'object' && typeof module.exports === 'object' ? global : window));
+}(typeof window !== 'undefined' ? window : global));
