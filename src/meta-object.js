@@ -47,15 +47,15 @@
          * 객체 타입 이름 얻기
          * @returns {array<string>}
          */
-        MetaObject.prototype.getTypeNames  = function() {
-            var types = this.getTypes();
-            var arr = [];
+        // MetaObject.prototype.getTypeNames  = function() {
+        //     var types = this.getTypes();
+        //     var arr = [];
             
-            for (var i = 0; i < types.length; i++) {
-                arr.push(types[i].name);
-            }
-            return arr;
-        };
+        //     for (var i = 0; i < types.length; i++) {
+        //         arr.push(types[i].name);
+        //     }
+        //     return arr;
+        // };
         
         /**
          * 객체 타입 이름 얻기
@@ -74,6 +74,15 @@
                 return list;
             }
             return parentFunction(this);
+        };
+        /**
+         * 객체 타입 이름 얻기
+         * @returns {array<function>}
+         */
+        MetaObject.prototype.getType  = function() {
+            
+            var proto = this.__proto__ || Object.getPrototypeOf(this);            
+            return proto.constructor;
         };
 
         /**
@@ -97,10 +106,15 @@
                 return false
             }
             function findFunctionName(funName) {
-                var typeNames = _this.getTypeNames();
-                for (var i = 0; i < typeNames.length; i++) {
-                    if (funName === typeNames[i]) return true;
+                var types = _this.getTypes();
+                for (var i = 0; i < types.length; i++) {
+                    if (funName === types[i].name) return true;
                 }
+                
+                // var typeNames = _this.getTypeNames();
+                // for (var i = 0; i < typeNames.length; i++) {
+                //     if (funName === typeNames[i]) return true;
+                // }
                 if (_this._interface) {
                     for (var i = 0; i < _this._interface.length; i++) {
                         if (funName === _this._interface[i].name) return true;

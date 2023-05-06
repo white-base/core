@@ -83,10 +83,13 @@ describe("< IMarshal >", () => {
         expect(global._L.IMarshal).toBeDefined();
         expect(global._L.Interface.IMarshal).toBeDefined();
     });
+    it("- 예외 : Util 로딩이 인된경우", () => {
+        expect(() => require('../src/i-marshal')).toThrow(/Util/);
+    });
     it("- 예외 : IObject 로딩이 인된경우", () => {
         require('../src/util-type');
         require('../src/util');
-        expect(() => require('../src/i-marshal')).toThrow(/module load fail/);
+        expect(() => require('../src/i-marshal')).toThrow(/IObject/);
     });
 });
 describe("< IPartControl >", () => {

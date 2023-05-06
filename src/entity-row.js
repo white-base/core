@@ -160,7 +160,7 @@
     if (isNode) {     
         module.exports.Row = Row;
         module.exports.RowCollection = RowCollection;
-    } else {    // COVER:
+    } else {
         _global._L.Row = Row;
         _global._L.RowCollection = RowCollection;
         // namespace

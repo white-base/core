@@ -25,14 +25,20 @@ describe("< MetaObject >", () => {
         }
         EmpytClass = class EmpytClass {};
     });
-    it("- getTypeNames() : array<string> ", () => {
-        const c = new MetaObjectSub();
-        const typeNames = c.getTypeNames();
+    // it("- getTypeNames() : array<string> ", () => {
+    //     const c = new MetaObjectSub();
+    //     const typeNames = c.getTyps();
 
-        expect(typeNames[0]).toBe('Object');
-        expect(typeNames[1]).toBe('MetaObject');
-        expect(typeNames[2]).toBe('MetaObjectSub');
-        expect(typeNames.length).toBe(3);
+    //     expect(typeNames[0]).toBe('Object');
+    //     expect(typeNames[1]).toBe('MetaObject');
+    //     expect(typeNames[2]).toBe('MetaObjectSub');
+    //     expect(typeNames.length).toBe(3);
+    // });
+    it("- getType() : function ", () => {
+        const c = new MetaObjectSub();
+        const type = c.getType();
+
+        expect(type).toBe(MetaObjectSub);
     });
     it("- getTypes() : array<function> ", () => {
         const c = new MetaObjectSub();
@@ -68,7 +74,7 @@ describe("< MetaObject >", () => {
     it("- EmpytClass : 검사 ", () => {
         const c = new EmpytClass();
 
-        expect(c.getTypeNames).not.toBeDefined();
+        expect(c.getType).not.toBeDefined();
         expect(c.getTypes).not.toBeDefined();
         expect(c.instanceOf).not.toBeDefined();
     });
@@ -81,15 +87,25 @@ describe("< MetaElement >", () => {
             constructor(name) { super(name) }
         }
     });
-    it("- getTypeNames() : array<string> ", () => {
-        const c = new MetaElementSub();
-        const typeNames = c.getTypeNames();
+    // it("- getTypeNames() : array<string> ", () => {
+    //     const c = new MetaElementSub();
+    //     const typeNames = c.getTypeNames();
 
-        expect(typeNames[0]).toBe('Object');
-        expect(typeNames[1]).toBe('MetaObject');
-        expect(typeNames[2]).toBe('MetaElement');
-        expect(typeNames[3]).toBe('MetaElementSub');
-        expect(typeNames.length).toBe(4);
+    //     expect(typeNames[0]).toBe('Object');
+    //     expect(typeNames[1]).toBe('MetaObject');
+    //     expect(typeNames[2]).toBe('MetaElement');
+    //     expect(typeNames[3]).toBe('MetaElementSub');
+    //     expect(typeNames.length).toBe(4);
+    // });
+    it("- getType() : function ", () => {
+        const c = new MetaElementSub();
+        const types = c.getTypes();
+
+        expect(types[0]).toBe(Object);
+        expect(types[1]).toBe(MetaObject);
+        expect(types[2]).toBe(MetaElement);
+        expect(types[3]).toBe(MetaElementSub);
+        expect(types.length).toBe(4);
     });
     it("- getTypes() : array<function> ", () => {
         const c = new MetaElementSub();
@@ -188,16 +204,22 @@ describe("< MetaComplexElement >", () => {
             constructor(name) { super(name) }
         }
     });
-    it("- getTypeNames() : array<string> ", () => {
-        const c = new ComplexElementSub();
-        const typeNames = c.getTypeNames();
+    // it("- getTypeNames() : array<string> ", () => {
+    //     const c = new ComplexElementSub();
+    //     const typeNames = c.getTypeNames();
 
-        expect(typeNames[0]).toBe('Object');
-        expect(typeNames[1]).toBe('MetaObject');
-        expect(typeNames[2]).toBe('MetaElement');
-        expect(typeNames[3]).toBe('ComplexElement');
-        expect(typeNames[4]).toBe('ComplexElementSub');
-        expect(typeNames.length).toBe(5);
+    //     expect(typeNames[0]).toBe('Object');
+    //     expect(typeNames[1]).toBe('MetaObject');
+    //     expect(typeNames[2]).toBe('MetaElement');
+    //     expect(typeNames[3]).toBe('ComplexElement');
+    //     expect(typeNames[4]).toBe('ComplexElementSub');
+    //     expect(typeNames.length).toBe(5);
+    // });
+    it("- getType() : function ", () => {
+        const c = new ComplexElementSub();
+        const type = c.getType();
+
+        expect(type).toBe(ComplexElementSub);
     });
     it("- getTypes() : array<function> ", () => {
         const c = new ComplexElementSub();
