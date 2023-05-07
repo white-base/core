@@ -300,6 +300,29 @@ describe('Util.implements(this, interface)', () => {
         expect(obj.m1()).toBe('M1');
         expect(()=> new CoClass2()).toThrow(/arr/);
     });
+    it('- class 다중 인터페이스 선언 : 중복 등록', () => {
+        // 인터페이스
+        class Fun {}
+        class ISuper1 {
+            fun = Fun;
+            m1 = Function;
+        }
+        class ISuper2 {
+            arr = [];
+            m2 = Function;
+        }
+        // 클래스 구현
+        class CoClass1 {
+            fun = new Fun;
+            arr = [];
+            constructor() { Util.implements(this, ISuper1, ISuper2, ISuper1); }
+            m1() { return 'M1' };
+            m2() { return 'M2' };
+        }
+        let obj = new CoClass1();
+
+        expect(obj._interface.length).toBe(2);
+    });
     it('- class 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
         // 인터페이스
         class ISuper {
@@ -456,6 +479,17 @@ describe('Util.implements(this, interface)', () => {
 
         expect(()=> new CoClass1()).toThrow(/함수/);
     });
-    it('- 속성 = null : 예외 및 검사', () => {
+    it('- implements(any) : object 가 아닌 객체 ', () => {
+        function CoClass1() {
+            this.arr = [];
+        }
+        // const i = new CoClass1();
+        
+        expect(()=> Util.implements(1, CoClass1)).toThrow(/object/);
+        expect(()=> Util.implements(function(){}, CoClass1)).toThrow(/object/);
+        expect(()=> Util.implements('str', CoClass1)).toThrow(/object/);
+        expect(()=> Util.implements(true, CoClass1)).toThrow(/object/);
     });
+    // it('- 속성 = null : 예외 및 검사', () => {
+    // });
 });

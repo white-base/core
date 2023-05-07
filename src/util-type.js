@@ -46,7 +46,7 @@
      * @param {*} obj 검사대상
      * @returns 
      */
-    function isEmptyObj(obj)  {
+    function _isEmptyObj(obj)  {
         if(typeof obj === 'object' && Object.keys(obj).length === 0 && getAllProperties(obj).length === 0) {
           return true;
         }
@@ -57,8 +57,8 @@
      * @param {*} obj 대상 
      * @returns 
      */
-    function isFillObj(obj)  {
-        if(typeof obj === 'object' && getAllProperties(obj).length > 0) {
+    function _isFillObj(obj)  {
+        if(typeof obj === 'object' && getAllProperties(obj).length > 0 && !(obj instanceof RegExp)) {
           return true;
         }
         return false;
@@ -110,11 +110,11 @@
             obj.name = 'object';
             return obj;
         }
-        if (isEmptyObj(type)) {
+        if (_isEmptyObj(type)) {
             obj.name = 'object'
             return obj;
         }
-        if (isFillObj(type)) {
+        if (_isFillObj(type)) {
             obj.name = 'and'
             return obj;
         }
@@ -138,12 +138,12 @@
             else obj.name = 'class';
             return obj;
         }
-        if (typeof type === 'object') { // COVER:
+        if (typeof type === 'object') {
             obj.name = 'object';
             return obj;
         }
 
-        throw new Error('타입이 존재하지 않습니다.');   // COVER:
+        throw new Error('타입이 존재하지 않습니다.');
     }
 
     /**
@@ -152,11 +152,11 @@
      * @returns 
      */
     var _creator = function(type) {
-        if (typeof type === 'function') {
+        if (typeof type === 'function') {   // COVER: 2
             if (['String', 'Number', 'Boolean', 'Symbol'].indexOf(type.name) > -1) return type();
             return new type;
         }
-        throw new Error('함수 타입만 생성할 수 있습니다.'); // COVER:
+        // throw new Error('함수 타입만 생성할 수 있습니다.');    => 불필요함 내부적으로 사용함
     }
 
     /**
@@ -169,7 +169,7 @@
     var _checkTypeMessage = function(type, target, parentName) {
         var parentName = parentName ? parentName : 'this';
         var typeDef = {type: type, name: '', default: null};
-        var returnMsg = '';
+        var returnMsg = '', arrMsg = [];;
         var defType;
 
         defType = getTypeMap(type);
@@ -177,17 +177,19 @@
         // if (target === null || typeof type === 'undefined') return '대상이 null, undefined 는 검사할 수 없습니다.';
 
         if (defType.name === 'or') {                                                    // or
-            for(var i = 0; i < type.length; i++) {  // COVER:
+            for(var i = 0; i < type.length; i++) {
                 returnMsg = _checkTypeMessage(type[i], target);
-                if (returnMsg.length > 0) return returnMsg;
+                if(returnMsg.length === 0) return '';
+                else arrMsg.push(returnMsg);
             }
+            return arrMsg.toString();
         }
         if (defType.name === 'any') {
             if (typeof target !== 'undefined') return '';
-            return parentName +'에 속성이 없습니다.';   // COVER:
+            return parentName +'에 속성이 없습니다.';
         }
         if (defType.name === 'number') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (defType.default && typeof target === 'undefined') target = defType.default; // COVER: 2
             if (typeof target === 'number') return '';
             return parentName +'은 number 타입이 아닙니다.';
         }
@@ -197,7 +199,7 @@
             return parentName +'은 string 타입이 아닙니다.';
         }
         if (defType.name === 'boolean') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (defType.default && typeof target === 'undefined') target = defType.default; // COVER: 2
             if (typeof target === 'boolean') return '';
             return parentName +'은 boolean 타입이 아닙니다.';
         }
@@ -211,7 +213,7 @@
         }
         if (defType.name === 'function') {
             if (typeof target === 'function') return '';
-            return parentName +'은 function 타입이 아닙니다.';  // COVER:
+            return parentName +'은 function 타입이 아닙니다.';
         }
         if (defType.name === 'object') {
             if (typeof target === 'object') return '';
@@ -249,38 +251,10 @@
         return '맞는 타입이 없습니다.' + defType.name;
     };
 
-
-    var validType = function(target, types) {
-        var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
-        var msg = '', arrMsg = [];
-
-        if (arrType.length === 0) return new Error('검사할 타입이 없습니다.');
-
-        for(var i = 0; i < arrType.length; i++) {
-            msg = _checkTypeMessage(arrType[i], target);
-            
-            if(msg.length === 0) return true;
-            else arrMsg.push(msg);
-        }
-        throw new Error(arrMsg);
-    };
-
-    var validUnionType = function(target, types) {
-        var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
-        var msg = '';
-        
-        if (arrType.length === 0) return new Error('검사할 타입이 없습니다.');
-
-        for(var i = 0; i < arrType.length; i++) {
-            msg = _checkTypeMessage(arrType[i], target);
-            if(msg.length > 0)  throw new Error(msg);
-        }
-        return true;    // COVER:
-    };
-
     // OR 조건
     var checkType = function(target, types) {
-        var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
+        // var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
+        var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
 
         if (arrType.length === 0) return false;
@@ -292,12 +266,27 @@
         return false;
     };
 
+    var validType = function(target, types) {
+        var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
+        var msg = '', arrMsg = [];
+
+        if (arrType.length === 0) throw new Error('검사할 타입이 없습니다.');
+
+        for(var i = 0; i < arrType.length; i++) {
+            msg = _checkTypeMessage(arrType[i], target);
+            
+            if(msg.length === 0) return true;
+            else arrMsg.push(msg);
+        }
+        throw new Error(arrMsg);
+    };
+
     // AND 조건
     var checkUnionType = function(target, types) {
-        var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
+        var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);  // COVER: 2
         var msg = '';
         
-        if (arrType.length === 0) return false;
+        if (arrType.length === 0) return false; // COVER: 2
 
         for(var i = 0; i < arrType.length; i++) {
             msg = _checkTypeMessage(arrType[i], target);
@@ -306,22 +295,38 @@
         return true;
     };
 
+
+    var validUnionType = function(target, types) {
+        var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);  // COVER: 2
+        var msg = '';
+        
+        if (arrType.length === 0) throw new Error('검사할 타입이 없습니다.');
+
+        for(var i = 0; i < arrType.length; i++) {
+            msg = _checkTypeMessage(arrType[i], target);
+            if(msg.length > 0)  throw new Error(msg);
+        }
+        return true;
+    };
+
+
+
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
         module.exports.getAllProperties = getAllProperties;
+        module.exports.getTypeMap = getTypeMap;
         module.exports.checkType = checkType;
         module.exports.checkUnionType = checkUnionType;
         module.exports.validType = validType;
         module.exports.validUnionType = validUnionType;
-        module.exports.getTypeMap = getTypeMap;
-    } else {    // COVER:
+    } else {
         _global._L.Common.Util.getAllProperties = getAllProperties;
+        _global._L.Common.Util.getTypeMap = getTypeMap;
         _global._L.Common.Util.checkType = checkType;
         _global._L.Common.Util.checkUnionType = checkUnionType;
         _global._L.Common.Util.validType = validType;
         _global._L.Common.Util.validUnionType = validUnionType;
-        _global._L.Common.Util.getTypeMap = getTypeMap;
     }
 
 }(typeof window !== 'undefined' ? window : global));

@@ -68,15 +68,16 @@
                 var list = [];
                 var proto = obj.__proto__ || Object.getPrototypeOf(obj);
                 if (proto) {
-                    list = list.concat(parentFunction(proto));
                     list.push(proto.constructor);
+                    list = list.concat(parentFunction(proto));
                 }
                 return list;
             }
             return parentFunction(this);
         };
         /**
-         * 객체 타입 이름 얻기
+         * 객체 타입 이름 얻기   
+         * 검토: 중복은 피하지만, 성능의 이슈
          * @returns {array<function>}
          */
         MetaObject.prototype.getType  = function() {

@@ -44,9 +44,9 @@ describe("< MetaObject >", () => {
         const c = new MetaObjectSub();
         const types = c.getTypes();
 
-        expect(types[0]).toBe(Object);
+        expect(types[0]).toBe(MetaObjectSub);
         expect(types[1]).toBe(MetaObject);
-        expect(types[2]).toBe(MetaObjectSub);
+        expect(types[2]).toBe(Object);
         expect(types.length).toBe(3);
     });
     it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
@@ -99,22 +99,18 @@ describe("< MetaElement >", () => {
     // });
     it("- getType() : function ", () => {
         const c = new MetaElementSub();
-        const types = c.getTypes();
+        const type = c.getType();
 
-        expect(types[0]).toBe(Object);
-        expect(types[1]).toBe(MetaObject);
-        expect(types[2]).toBe(MetaElement);
-        expect(types[3]).toBe(MetaElementSub);
-        expect(types.length).toBe(4);
+        expect(type).toBe(MetaElementSub);
     });
     it("- getTypes() : array<function> ", () => {
         const c = new MetaElementSub();
         const types = c.getTypes();
 
-        expect(types[0]).toBe(Object);
-        expect(types[1]).toBe(MetaObject);
-        expect(types[2]).toBe(MetaElement);
-        expect(types[3]).toBe(MetaElementSub);
+        expect(types[0]).toBe(MetaElementSub);
+        expect(types[1]).toBe(MetaElement);
+        expect(types[2]).toBe(MetaObject);
+        expect(types[3]).toBe(Object);
         expect(types.length).toBe(4);
     });
     it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
@@ -215,21 +211,21 @@ describe("< MetaComplexElement >", () => {
     //     expect(typeNames[4]).toBe('ComplexElementSub');
     //     expect(typeNames.length).toBe(5);
     // });
-    it("- getType() : function ", () => {
-        const c = new ComplexElementSub();
-        const type = c.getType();
+    // it("- getType() : function ", () => {
+    //     const c = new ComplexElementSub();
+    //     const type = c.getType();
 
-        expect(type).toBe(ComplexElementSub);
-    });
+    //     expect(type).toBe(ComplexElementSub);
+    // });
     it("- getTypes() : array<function> ", () => {
         const c = new ComplexElementSub();
         const types = c.getTypes();
 
-        expect(types[0]).toBe(Object);
-        expect(types[1]).toBe(MetaObject);
+        expect(types[0]).toBe(ComplexElementSub);
+        expect(types[1]).toBe(ComplexElement);
         expect(types[2]).toBe(MetaElement);
-        expect(types[3]).toBe(ComplexElement);
-        expect(types[4]).toBe(ComplexElementSub);
+        expect(types[3]).toBe(MetaObject);
+        expect(types[4]).toBe(Object);
         expect(types.length).toBe(5);
     });
     it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {

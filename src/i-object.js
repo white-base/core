@@ -32,8 +32,8 @@
         /**
          * 객체타입 얻기
          */
-        IObject.prototype.getType  = function() {
-            throw new Error('[ getType() ] Abstract method definition, fail...');
+        IObject.prototype.getTypes  = function() {
+            throw new Error('[ getTypes() ] Abstract method definition, fail...');
         };
         
         /**
