@@ -25,7 +25,7 @@
         checkUnionType      = require('./util-type').checkUnionType;
         validType           = require('./util-type').validType;
         validUnionType      = require('./util-type').validUnionType;
-    } else {    // COVER:
+    } else {    
         getAllProperties    = _global._L.Common.Util.getAllProperties
         checkType           = _global._L.Common.Util.checkType
         checkUnionType      = _global._L.Common.Util.checkUnionType
@@ -60,7 +60,7 @@
         if (typeof Object.create === 'function') {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
-                if (superCtor) {
+                if (superCtor) {    // COVER: 2
                     ctor.super = superCtor;
                     ctor.prototype = Object.create(superCtor.prototype, {
                         constructor: {
@@ -189,7 +189,7 @@
         module.exports.validUnionType = validUnionType;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         // module.exports.equalType = equalType;
-    } else {    // COVER:
+    } else {    
         _global._L.Common.Util.inherits = inherits;
         _global._L.Common.Util.getArrayDepth = getArrayDepth;
         _global._L.Common.Util.createGuid = createGuid;

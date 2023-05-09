@@ -38,6 +38,19 @@ describe('Util.*', () => {
         expect(i.foo).toBe(1);
         expect(i.bar).toBe(10);
     });
+    it('- Util.inherits : Object.create() ', () => {
+        const Util      = require('../src/util');
+        const Super = function() { this.foo = 1 };
+        const Bar = function() { 
+            Super.call(this);
+            this.bar = 10 
+        };
+        Util.inherits(Bar, Super);
+        const i = new Bar();
+
+        expect(i.foo).toBe(1);
+        expect(i.bar).toBe(10);
+    });
     it('- Util.getArrayDepth() : 배열 깊이 얻기 ', () => {
         const Util      = require('../src/util');
         const lvl3 = [[[]]];

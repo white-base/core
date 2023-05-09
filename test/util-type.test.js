@@ -53,6 +53,7 @@ describe('Util.*', () => {
         expect(getTypeMap(true).default).toBe(true);
         // Symbol   => new 생성이 안됨
         expect(getTypeMap(Symbol).name).toBe('symbol');  
+        expect(getTypeMap(Symbol('a')).name).toBe('symbol');  // 존재하지 않는 타입
         // BigInt는 사용 안함
         expect(() => getTypeMap(2n ** 53n).name).toThrow('타입이 존재하지 않습니다');
 
@@ -60,6 +61,7 @@ describe('Util.*', () => {
     describe('< target 기준 >', () => {
         it('- 타입이 없는 경우 ', () => {
             expect(checkType(1)).toBe(false);
+            expect(checkUnionType(1)).toBe(false);
             expect(()=> validType(1)).toThrow(/검사할.*타입이/);
             expect(()=> validUnionType(1)).toThrow(/검사할.*타입이/);
         });
@@ -114,24 +116,135 @@ describe('Util.*', () => {
             expect(()=> validType(Symbol, Number)).toThrow(/number.*타입/);
         });
         it('- String, "str" : string 타입 ', () => {
+            // true
+            expect(checkType('', 'str')).toBe(true);
+            expect(checkType('', String)).toBe(true);
+            // false (예외)
+            expect(()=> validType(function any(){}, 'str')).toThrow(/string.*타입/);
+            expect(()=> validType(function any(){}, String)).toThrow(/string.*타입/);
+            expect(()=> validType(null, String)).toThrow(/string.*타입/);
+            expect(()=> validType(true, String)).toThrow(/string.*타입/);
+            expect(()=> validType(/reg/, String)).toThrow(/string.*타입/);
+            expect(()=> validType(1, String)).toThrow(/string.*타입/);
+            expect(()=> validType(Symbol(), String)).toThrow(/string.*타입/);
+            expect(()=> validType([], String)).toThrow(/string.*타입/);
+            expect(()=> validType({aa:1}, String)).toThrow(/string.*타입/);
+            expect(()=> validType(Number, String)).toThrow(/string.*타입/);
+            expect(()=> validType(Symbol, String)).toThrow(/string.*타입/);
         });
         it('- Boolean, true, false : boolean 타입 ', () => {
+            // true
+            expect(checkType(false, true)).toBe(true);
+            expect(checkType(false, Boolean)).toBe(true);
+            // false (예외)
+            expect(()=> validType(function any(){}, true)).toThrow(/boolean.*타입/);
+            expect(()=> validType(function any(){}, Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType(null, Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType('str', Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType(/reg/, Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType(1, Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType(Symbol(), Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType([], Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType({aa:1}, Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType(Number, Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType(Symbol, Boolean)).toThrow(/boolean.*타입/);
         });
-        it('- Symbol : symbol 타입', () => {
+        it('- Symbol() : symbol 타입', () => {
+            // true
+            expect(checkType(Symbol(), Symbol)).toBe(true);
+            // false (예외)
+            expect(()=> validType(function any(){}, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(function any(){}, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(null, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType('str', Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(/reg/, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(1, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(true, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType([], Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType({aa:1}, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(Number, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(Symbol, Symbol)).toThrow(/symbol.*타입/);
         });
-        it('- Array : array 타입 ', () => {
+        it('- Array, [] : array 타입 ', () => {
+            // true
+            expect(checkType([], Array)).toBe(true);
+            expect(checkType([false], [])).toBe(true);
+            // false (예외)
+            expect(()=> validType(function any(){}, Array)).toThrow(/array.*타입/);
+            expect(()=> validType(function any(){}, [])).toThrow(/array.*타입/);
+            expect(()=> validType(null, Array)).toThrow(/array.*타입/);
+            expect(()=> validType('str', Array)).toThrow(/array.*타입/);
+            expect(()=> validType(/reg/, Array)).toThrow(/array.*타입/);
+            expect(()=> validType(1, Array)).toThrow(/array.*타입/);
+            expect(()=> validType(Symbol(), Array)).toThrow(/array.*타입/);
+            expect(()=> validType(true, Array)).toThrow(/array.*타입/);
+            expect(()=> validType({aa:1}, Array)).toThrow(/array.*타입/);
+            expect(()=> validType(Number, Array)).toThrow(/array.*타입/);
+            expect(()=> validType(Symbol, Array)).toThrow(/array.*타입/);
         });
         it('- Function : function 타입 ', () => {
+            // true
+            expect(checkType(function any(){}, Function)).toBe(true);
+            // false (예외)
+            expect(()=> validType([], Function)).toThrow(/function.*타입/);
+            expect(()=> validType(null, Function)).toThrow(/function.*타입/);
+            expect(()=> validType('str', Function)).toThrow(/function.*타입/);
+            expect(()=> validType(/reg/, Function)).toThrow(/function.*타입/);
+            expect(()=> validType(1, Function)).toThrow(/function.*타입/);
+            expect(()=> validType(Symbol(), Function)).toThrow(/function.*타입/);
+            expect(()=> validType(true, Function)).toThrow(/function.*타입/);
+            expect(()=> validType({aa:1}, Function)).toThrow(/function.*타입/);
         });
-        it('- Object, {}, 빈객체(Object제외), /정규식/ : object 타입 ', () => {
+        it('- Object, {} : object 타입 (regex, new, null) ', () => {
+            const Func = function() {};
+            // true
+            expect(checkType({}, Object)).toBe(true);
+            expect(checkType(null, Object)).toBe(true);
+            expect(checkType(/reg/, {})).toBe(true);
+            expect(checkType(new Func(), {})).toBe(true);
+            // false (예외)
+            expect(()=> validType(function any(){}, Object)).toThrow(/object.*타입/);
+            expect(()=> validType('str', Object)).toThrow(/object.*타입/);
+            expect(()=> validType(1, Object)).toThrow(/object.*타입/);
+            expect(()=> validType(Symbol(), Object)).toThrow(/object.*타입/);
+            expect(()=> validType(true, Object)).toThrow(/object.*타입/);
+            expect(()=> validType(Number, Object)).toThrow(/object.*타입/);
+            expect(()=> validType(Symbol, Object)).toThrow(/object.*타입/);
         });
         it('- function() : class 타입', () => {
+            const Func1 = function() { this.aa = Number };
+            const Func2 = function() { this.aa = 1 };   // 기본값으로 설정
+            const Func3 = function() { this.aa = Date };
+            // true
+            expect(checkType(new Func2(), Func1)).toBe(true);
+            expect(checkType(new Func1(), Func1)).toBe(true);
+            expect(checkType({ aa:10 }, Func1)).toBe(true);
+            expect(checkType({ aa:10 }, Func2)).toBe(true);
+            expect(checkType({ aa: new Date() }, Func3)).toBe(true);
+            // false (예외)
+                // expect(()=> validType(new Func1(), Func1)).toThrow(/aa.*number.*타입/);   // function 으로 생각하므로 오류
+            expect(()=> validType(function any(){}, Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType(null, Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType('str', Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType(/reg/, Func1)).toThrow(/target.*객체/);
+            expect(()=> validType(1, Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType(Symbol(), Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType(true, Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType(Number, Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType(Symbol, Func1)).toThrow(/instance.*타입/);
         });
         it('- [] : or 타입 ', () => {
+            // REVIEW: 빈 클래스?
+            // const Func1 = function() { this.aa =  1 };  // 기본값이 있는 경우
+
+            // expect(()=> validType(/reg/, Func1)).toThrow(/instance.*타입/);
         });
         it('- {obj:...} : and 타입 ', () => {
         });
         it('- 예외 타입 ', () => {
+        });
+        it('- Date : class ', () => {
+
         });
     });
 
@@ -145,6 +258,7 @@ describe('Util.*', () => {
         expect(checkType(new Func1(), Func1)).toBe(true);           // new 객체 (프로퍼티를 검사)
         expect(checkType(new Func1(), Func2)).toBe(true);           // new 객체 (프로퍼티를 검사)
         expect(checkType({}, Func1)).toBe(true);                    // 빈 객체
+        expect(checkType(new Date(), Date)).toBe(true);
         // 실패 조건 : checkType()
         expect(checkType(new Func1(), Date)).toBe(false);           // new 객체
         expect(checkType(Func1, Func1, Number)).toBe(false);
@@ -152,7 +266,7 @@ describe('Util.*', () => {
         // 예외 조건 : validType()
         expect(() => validType(Func1, Number, '', true)).toThrow(/타입이/);     // 숫자, 문자, 부울
         expect(() => validType(Func1, String, Number)).toThrow(/타입이/);       // 문자 또는 숫자
-        expect(() => validType(Func1, Func1, Number)).toThrow(/instance/);    // 객체 또는 숫자
+        expect(() => validType(Func1, Func1, Number)).toThrow(/instance.*number/);    // 객체 또는 숫자
         expect(() => validType(Func1, Func1)).toThrow(/타입이/);                // 객체여야함
     });
     it('- 예외 : validType(), validUnionType()  ', () => {
@@ -201,8 +315,8 @@ describe('Util.*', () => {
         var Func1 = function() { this.aa = Date };
 
         // true
-        expect(checkType(Symbol(), Symbol)).toBe(true);
         expect(checkType(new Func1(), Func1)).toBe(true);
+        expect(checkType(Symbol(), Symbol)).toBe(true);
         expect(checkType(function() {}, Function)).toBe(true);
         expect(checkType({a:1}, Object)).toBe(true);
         expect(checkType([1,2,3], Array)).toBe(true);
@@ -243,7 +357,7 @@ describe('Util.*', () => {
         // 객체 내부에서 검사
         expect(checkType(obj1, Func1)).toBe(true);
         expect(checkType(obj2, Func1)).toBe(false);
-        // validType 로 검사
+        // // validType 로 검사
         expect(validType(obj1, Func1)).toBe(true);
         expect(() => validType(obj2, Func1)).toThrow(/symbol/);
     });
@@ -354,9 +468,13 @@ describe('Util.*', () => {
     });
     it('- checkUnionType() : 원시 기본값 ', () => {
         var str = 'STR';
+        var num = 100;
+        var bool = true;
         var obj;
         
         expect(checkUnionType(obj, str)).toBe(true);
+        expect(checkUnionType(obj, num)).toBe(true);
+        expect(checkUnionType(obj, bool)).toBe(true);
         expect(obj).not.toBe('STR');                            // 참조 타입이 값이 전달되어 값이 설정 안됨
     });
     it('- checkUnionType() : null ', () => {
