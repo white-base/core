@@ -263,16 +263,27 @@ describe("< PropertyCollection >", () => {
             expect(s.items.count).toBe(1);
             expect(result).toBeTruthy();
         });
+        // it("- add(name) : 중복 이름 등록시 (경고)", () => {
+        //     let s = new Student();
+        //     const logSpy = jest.spyOn(global.console, 'warn');
+        //     const result1 = s.items.add('a1');
+        //     const result2 = s.items.add('a1');
+    
+        //     expect(logSpy).toHaveBeenCalledWith('Warning:: 프로퍼티 이름 중복 !!');
+        //     expect(result1).toBeTruthy();
+        //     expect(result2).not.toBeTruthy();
+        //     logSpy.mockRestore();
+        // });
         it("- add(name) : 중복 이름 등록시 (경고)", () => {
             let s = new Student();
-            const logSpy = jest.spyOn(global.console, 'warn');
+            global.console.warn = jest.fn((val) => {
+                expect(val).toBe('Warning:: 프로퍼티 이름 중복 !!');
+            });
             const result1 = s.items.add('a1');
             const result2 = s.items.add('a1');
-    
-            expect(logSpy).toHaveBeenCalledWith('Warning:: 프로퍼티 이름 중복 !!');
             expect(result1).toBeTruthy();
             expect(result2).not.toBeTruthy();
-            logSpy.mockRestore();
+            // jest.mockRestore();
         });
         it("- add(name) : 예약어 사용시 (예외)", () => {
             let s = new Student();

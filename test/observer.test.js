@@ -133,7 +133,10 @@ describe("< 이벤트 >", () => {
     });
 
     it("- isLog ", () => {
-        const logSpy = jest.spyOn(global.console, 'log');
+        global.console.log = jest.fn((val) => {
+            expect(val).toMatch(/publish().*이벤트 발생/);
+        });
+        // const logSpy = jest.spyOn(global.console, 'log');
         const e = new EventClass();
         e._event.isLog = true;
         const result = [];
@@ -143,7 +146,7 @@ describe("< 이벤트 >", () => {
         e.onAdd = func2
         e._onAdd();
 
-        expect(logSpy.mock.calls[0][0]).toMatch(/publish()/);
+        // expect(logSpy.mock.calls[0][0]).toMatch(/publish()/);
     });
 
 

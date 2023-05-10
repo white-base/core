@@ -53,6 +53,9 @@ describe("< PropertyCollection >", () => {
         expect(result).toBeTruthy();
     });
     it("- add() : 실패 (중복, 예외) ", () => {
+        global.console.warn = jest.fn((val) => {
+            expect(val).toBe('Warning:: 프로퍼티 이름 중복 !!');
+        });
         const i = new School();
         const result1 = i.items.add('a1', 'A1');
         arrResult = [];

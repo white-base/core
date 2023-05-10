@@ -47,8 +47,8 @@
      * @returns 
      */
     function _isObject(obj)  {
-        if(typeof obj === 'object' && obj !== null && !(obj instanceof RegExp) 
-            && !(obj instanceof Array) && !(obj instanceof Symbol)  && !(obj instanceof Date)) {
+        if(typeof obj === 'object' && obj !== null && !_isPrimitiveObj(obj)) {
+            // && !(obj instanceof RegExp) && !(obj instanceof Array) && !(obj instanceof Symbol)  && !(obj instanceof Date)) {
             return true;
         }
         return false;
@@ -77,106 +77,39 @@
         }
         return false;
     }
-
     /**
-     * 원시 함수 유무
+     * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부
      * @param {*} obj 
      * @returns 
      */
-    function _isPrimitiveFunction(obj) {
+    function _isPrimitiveObj(obj) {
+        if(typeof obj === 'object' && obj !== null 
+            && (obj instanceof RegExp || obj instanceof Date || typeof obj === 'symbol')) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * 내장함수 유무 => REVIEW: Function?
+     * @param {*} obj 
+     * @returns 
+     */
+    function _isBuiltFunction(obj) {
         if (typeof obj === 'function' && (false 
-            || obj === RegExp || obj === Date || obj === Symbol || obj === BigInt
-            || obj === Object || obj === Array
             || obj === Number || obj === String || obj === Boolean
+            || obj === Object || obj === Array
+            || obj === RegExp || obj === Date 
+            || obj === Symbol || obj === BigInt
         )) return true;
         return false;
     }
-    
+
     /**
      * js 의 타입을 객체로 리턴한다.
      * return {name: , default: null}
      * @param {any} type 대상타입
      * @returns {object}
      */
-    // var getTypeMap = function(type) {
-    //     var obj =  {name: '', default: null};
-
-    //     if (typeof type === 'undefined') {
-    //         obj.name = 'undefined';
-    //         return obj;
-    //     }
-    //     if (type === null) {
-    //         obj.name = 'any';
-    //         return obj;
-    //     }
-    //     if (type === Number) {
-    //         obj.name = 'number';
-    //         return obj;
-    //     }
-    //     if (type === String) {
-    //         obj.name = 'string';
-    //         return obj;
-    //     }
-    //     if (type === Boolean) {
-    //         obj.name = 'boolean';
-    //         return obj;
-    //     }
-    //     if (type === Array) {
-    //         obj.name = 'array';
-    //         return obj;
-    //     }
-    //     if (type instanceof Array) {
-    //         if (type.length > 0) obj.name = 'or';
-    //         else obj.name = 'array'
-    //         return obj;
-    //     }
-    //     if (type === Function) {
-    //         obj.name = 'function';
-    //         return obj;
-    //     }
-    //     if (type === Object) {
-    //         obj.name = 'object';
-    //         return obj;
-    //     }
-    //     if (type === RegExp) {
-    //         obj.name = 'regexp';
-    //         return obj;
-    //     }
-    //     if (_isEmptyObj(type)) {
-    //         obj.name = 'object'
-    //         return obj;
-    //     }
-    //     if (_isFillObj(type)) {
-    //         obj.name = 'and'
-    //         return obj;
-    //     }
-    //     if (typeof type === 'number') {
-    //         obj.name = 'number';
-    //         obj.default = type;
-    //         return obj;
-    //     }
-    //     if (typeof type === 'string') {
-    //         obj.name = 'string';
-    //         obj.default = type;
-    //         return obj;
-    //     }
-    //     if (typeof type === 'boolean') {
-    //         obj.name = 'boolean';
-    //         obj.default = type;
-    //         return obj;
-    //     }
-    //     if (typeof type === 'function') {
-    //         if (type.name === 'Symbol') obj.name = 'symbol';
-    //         else obj.name = 'class';
-    //         return obj;
-    //     }
-    //     if (typeof type === 'object') {
-    //         if (type instanceof RegExp) obj.name = 'regexp';  
-    //         else obj.name = 'object';
-    //         return obj;
-    //     }
-    //     throw new Error('타입이 존재하지 않습니다.');
-    // }
     var getTypeMap = function(type) {
         var obj =  {name: '', default: null};
 
@@ -244,19 +177,23 @@
             else obj.name = 'array'
             return obj;
         }
-        // seq 3: funciton
+        // seq 4: funciton
         if (_isFillObj(type)) {
-            obj.name = 'and'
+            obj.name = 'and';
             return obj;
         }
         if (_isEmptyObj(type)) {        // {..}, 빈 생성자
-            obj.name = 'object'
-            return obj;
-        }
-        if (typeof type === 'object') {
             obj.name = 'object';
             return obj;
         }
+        if(_isPrimitiveObj(type)) {
+            obj.name = 'object';
+            return obj;
+        }
+        // if (typeof type === 'object') {
+            // obj.name = 'object';
+            // return obj;
+        // }
         
         // if (typeof type === 'object') {
         //     if (type instanceof RegExp) obj.name = 'regexp';  
@@ -337,12 +274,14 @@
             return parentName +'은 function 타입이 아닙니다.';
         }
         if (defType.name === 'object') {
-            if (typeof target === 'object') return '';
+            // if (typeof target === 'object') return '';
+            if (type === Object && target instanceof type) return '';
+            if (type !== Object && target instanceof type.constructor) return '';
             return parentName +'은 object 타입이 아닙니다.';
         }
         if (defType.name === 'class') {
         
-            if (_isPrimitiveFunction(type)) {
+            if (_isBuiltFunction(type)) {
                 if (target instanceof type) return ''; 
                 else return '대상 instance 가 아닙니다.';
             } else {
@@ -352,7 +291,7 @@
             }
             // && target instanceof type) return '';
             // if (typeof target === 'object' && target !== null) return _checkTypeMessage(_creator(type), target, parentName);
-            // if (!_isPrimitiveFunction(type)) return _checkTypeMessage(_creator(type), target, parentName);
+            // if (!_isBuiltFunction(type)) return _checkTypeMessage(_creator(type), target, parentName);
             // return parentName +'은 instance 타입이 아닙니다.';
 
         }
