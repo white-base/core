@@ -49,7 +49,7 @@
          * @returns {Object}
          */
         IMarshal.prototype.getObject  = function() {
-            throw new Error('[ getObject() ] Abstract method definition, fail...');
+            throw new Error('[ getObject() : object ] Abstract method definition, fail...');
         };
 
         /**
@@ -58,7 +58,7 @@
          * @returns {Stirng}
          */
         IMarshal.prototype.getGuid  = function() {
-            throw new Error('[ getGuid() ] Abstract method definition, fail...');
+            throw new Error('[ getGuid() : string ] Abstract method definition, fail...');
         };
 
         return IMarshal;

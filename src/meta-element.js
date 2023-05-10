@@ -95,18 +95,6 @@
         };
 
         /**
-         * 조건 : Guid는 한번만 생성해야 함
-         * Guid를 얻는다.
-         * @returns {String}
-         */
-        MetaObject.prototype.getGuid  = function() {
-            if (!this._guid) {
-                this._guid = __newGuid();
-            }
-            return this._guid;
-        };
-
-        /**
          * 객체를 얻는다
          * @virtual
          * @returns {Object}
@@ -124,6 +112,18 @@
                 }
             }
             return obj;                        
+        };
+
+        /**
+         * 조건 : Guid는 한번만 생성해야 함
+         * Guid를 얻는다.
+         * @returns {String}
+         */
+        MetaElement.prototype.getGuid  = function() {
+            if (!this._guid) {
+                this._guid = __newGuid();
+            }
+            return this._guid;
         };
 
         return MetaElement;
