@@ -305,11 +305,11 @@ describe("< PropertyCollection >", () => {
             expect(() => s.items.add('removeAt')).toThrow(/Symbol word/);
             expect(() => s.items.add('indexOf')).toThrow(/Symbol word/);
             expect(() => s.items.add('exist')).toThrow(/Symbol word/);
-            expect(() => s.items.add('properties')).toThrow(/Symbol word/);
-            expect(() => s.items.add('_properties')).toThrow(/Symbol word/);
-            expect(() => s.items.add('indexOfProp')).toThrow(/Symbol word/);
-            expect(() => s.items.add('propertyOf')).toThrow(/Symbol word/);
-            expect(() => s.items.add('removeByProp')).toThrow(/Symbol word/);
+            expect(() => s.items.add('keys')).toThrow(/Symbol word/);
+            expect(() => s.items.add('_keys')).toThrow(/Symbol word/);
+            // expect(() => s.items.add('indexOfProp')).toThrow(/Symbol word/);
+            expect(() => s.items.add('keyOf')).toThrow(/Symbol word/);
+            // expect(() => s.items.add('removeByProp')).toThrow(/Symbol word/);
         });
         it("- add(name) : 이름을 숫자로 사용할 경우 (예외)", () => {
             let s = new Student();
@@ -371,7 +371,7 @@ describe("< PropertyCollection >", () => {
         it("- removeAt(idx) ", () => {
             let s = new Student();
             s.items.add('a1', 'A1');
-            const idx = s.items.indexOfProp('a1');
+            const idx = s.items.indexOf('a1', 1);
             const result = s.items.removeAt(idx);
 
             expect(s.items['a1']).toBeUndefined();
@@ -383,7 +383,7 @@ describe("< PropertyCollection >", () => {
         it("- removeAt(idx) : 없을 경우", () => {
             let s = new Student();
             s.items.add('a1', 'A1');
-            const idx = s.items.indexOfProp('a1');
+            const idx = s.items.indexOf('a1', 1);
             const result = s.items.removeAt(idx + 1);
 
             expect(s.items['a1']).toBeTruthy();
@@ -407,8 +407,8 @@ describe("< PropertyCollection >", () => {
             expect(s.items.a3).toBeDefined();
             expect(s.items[0] === s.items['a2']).toBe(true);
             expect(s.items[1] === s.items['a3']).toBe(true);
-            expect(s.items.indexOfProp('a2')).toBe(0);  // 바뀐 idx 확인
-            expect(s.items.indexOfProp('a3')).toBe(1);  // 바뀐 idx 확인
+            expect(s.items.indexOf('a2', 1)).toBe(0);  // 바뀐 idx 확인
+            expect(s.items.indexOf('a3', 1)).toBe(1);  // 바뀐 idx 확인
             expect(s.items.count).toBe(2);
             expect(s.items.list.length).toBe(2);
             expect(result).toBeTruthy();
@@ -428,8 +428,8 @@ describe("< PropertyCollection >", () => {
             expect(s.items.a3).toBeDefined();
             expect(s.items[0] === s.items['a1']).toBe(true);
             expect(s.items[1] === s.items['a3']).toBe(true);
-            expect(s.items.indexOfProp('a1')).toBe(0);  
-            expect(s.items.indexOfProp('a3')).toBe(1);  // 바뀐 idx 확인
+            expect(s.items.indexOf('a1', 1)).toBe(0);  
+            expect(s.items.indexOf('a3', 1)).toBe(1);  // 바뀐 idx 확인
             expect(s.items.count).toBe(2);
             expect(s.items.list.length).toBe(2);
             expect(result).toBeTruthy();
@@ -452,23 +452,25 @@ describe("< PropertyCollection >", () => {
             expect(s.items.a4).toBeDefined();
             expect(s.items[0] === s.items['a1']).toBe(true);
             expect(s.items[1] === s.items['a2']).toBe(true);
-            expect(s.items.indexOfProp('a1')).toBe(0);  
-            expect(s.items.indexOfProp('a2')).toBe(1);
-            expect(s.items.indexOfProp('a4')).toBe(2);
+            expect(s.items.indexOf('a1', 1)).toBe(0);  
+            expect(s.items.indexOf('a2', 1)).toBe(1);
+            expect(s.items.indexOf('a4', 1)).toBe(2);
             expect(s.items.count).toBe(3);
             expect(s.items.list.length).toBe(3);
             expect(result).toBeTruthy();
         });
     });
-    describe("< this.removeByProp(string) >", () => {
+    describe("< this.removeAt(this.indexOf(name, 1)) <=  this.removeByProp(string) >", () => {
         // beforeAll(() => {
         //     let s = new Student();
         // });
-        it("- removeByProp(name) : object ", () => {
+        it("- this.removeAt(this.indexOf(name, 1)) : object ", () => {
             let s = new Student();
             const a1 = { name: 'O1' };
+
             s.items.add('a1', a1);
-            const result = s.items.removeByProp('a1');
+            // const result = s.items.removeByProp('a1');
+            const result = s.items.removeAt(s.items.indexOf('a1', 1));
 
             expect(s.items['a1']).toBeUndefined();
             expect(s.items.a1).toBeUndefined();
@@ -476,11 +478,12 @@ describe("< PropertyCollection >", () => {
             expect(s.items.list.length).toBe(0);
             expect(result).toBeTruthy();
         });
-        it("- removeByProp(name) : 없는 경우 ", () => {
+        it("- this.removeAt(this.indexOf(name, 1)) : 없는 경우 ", () => {
             let s = new Student();
             const a1 = { name: 'O1' };
             s.items.add('a1', a1);
-            const result = s.items.removeByProp('a5');
+            // const result = s.items.removeByProp('a5');
+            const result =  s.items.removeAt(s.items.indexOf('a5', 1));
 
             expect(s.items['a1']).not.toBeUndefined();
             expect(s.items.a1).not.toBeUndefined();
@@ -499,7 +502,7 @@ describe("< PropertyCollection >", () => {
 
         expect(s.items.count).toBe(0);
         expect(s.items.list.length).toBe(0);
-        // expect(s.items._properties.length).toBe(0);  // 내부 함수는 검사에 사용안하는게 원칙임
+        // expect(s.items._keys.length).toBe(0);  // 내부 함수는 검사에 사용안하는게 원칙임
     });
     it("- contains(elem) : 존재하는지 확인, {특정요소를 찾을경우 : name}", () => {
         let s = new Student();
@@ -513,7 +516,7 @@ describe("< PropertyCollection >", () => {
         expect(s.items.contains(10)).toBeTruthy();
         expect(s.items.count).toBe(3);
     });
-    it("- indexOf() : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
+    it("- indexOf(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
         let s = new Student();
         const a2 = { style: 1};
         s.items.add('a1', 'A1');
@@ -526,7 +529,7 @@ describe("< PropertyCollection >", () => {
         expect(s.items.indexOf(10)).toBe(2);    // 원시타입 사용시 값으로 조회해서 a4는 조회 못함
         expect(s.items.count).toBe(4);
     });
-    it("- indexOfProp(name) ", () => {
+    it("- indexOf(name, 1) ", () => {
         let s = new Student();
         const a2 = { style: 1};
         s.items.add('a1', 'A1');
@@ -534,14 +537,29 @@ describe("< PropertyCollection >", () => {
         s.items.add('a3', 10);
         s.items.add('a4', 10);
 
-        expect(s.items.indexOfProp('a1')).toBe(0);
-        expect(s.items.indexOfProp('a2')).toBe(1);
-        expect(s.items.indexOfProp('a3')).toBe(2);
-        expect(s.items.indexOfProp('a4')).toBe(3);
-        expect(s.items.indexOfProp('a5')).toBe(-1); // 없는 경우
+        expect(s.items.indexOf('a1', 1)).toBe(0);
+        expect(s.items.indexOf('a2', 1)).toBe(1);
+        expect(s.items.indexOf('a3', 1)).toBe(2);
+        expect(s.items.indexOf('a4', 1)).toBe(3);
+        expect(s.items.indexOf('a5', 1)).toBe(-1); // 없는 경우
         expect(s.items.count).toBe(4);
     });
-    it("- propertyOf(idx) ", () => {
+    // it("- keyOf(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
+    //     let s = new Student();
+    //     const a2 = { style: 1};
+    //     s.items.add('a1', 'A1');
+    //     s.items.add('a2', a2);
+    //     s.items.add('a3', 10);
+    //     s.items.add('a4', 10);
+
+    //     expect(s.items.keyOf('A1')).toBe('a1');
+    //     expect(s.items.keyOf(a2)).toBe('a2');
+    //     expect(s.items.keyOf(10)).toBe('a3');
+    //     expect(s.items.keyOf(10)).toBe('a3');
+    //     expect(s.items.keyOf(4)).toBeUndefined();
+    //     expect(s.items.count).toBe(4);
+    // });
+    it("- keyOf(idx) ", () => {
         let s = new Student();
         const a2 = { style: 1};
         s.items.add('a1', 'A1');
@@ -549,11 +567,11 @@ describe("< PropertyCollection >", () => {
         s.items.add('a3', 10);
         s.items.add('a4', 10);
 
-        expect(s.items.propertyOf(0)).toBe('a1');
-        expect(s.items.propertyOf(1)).toBe('a2');
-        expect(s.items.propertyOf(2)).toBe('a3');
-        expect(s.items.propertyOf(3)).toBe('a4');
-        expect(s.items.propertyOf(4)).toBeUndefined();
+        expect(s.items.keyOf(0)).toBe('a1');
+        expect(s.items.keyOf(1)).toBe('a2');
+        expect(s.items.keyOf(2)).toBe('a3');
+        expect(s.items.keyOf(3)).toBe('a4');
+        expect(s.items.keyOf(4)).toBeUndefined();
         expect(s.items.count).toBe(4);
     });
 });

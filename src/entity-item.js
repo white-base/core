@@ -670,7 +670,7 @@
          */
         ItemCollection.prototype.contains = function(p_elem) {
             if (p_elem instanceof Item) {
-                return this.indexOfProp(p_elem.name) > -1;
+                return this.indexOf(p_elem.name, 1) > -1;
             } else {
                 return _super.prototype.contains.call(this, p_elem);
             }

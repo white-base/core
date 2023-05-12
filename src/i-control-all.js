@@ -32,7 +32,7 @@
          * @abstract
          */
         IAllControl.prototype.clone  = function() {
-            throw new Error('[ clone() ] Abstract method definition, fail...');
+            throw new Error('[ clone() : obj ] Abstract method definition, fail...');
         };
 
         /**
@@ -40,7 +40,7 @@
          * @abstract
          */
         IAllControl.prototype.load  = function() {
-            throw new Error('[ load() ] Abstract method definition, fail...');
+            throw new Error('[ load(any) ] Abstract method definition, fail...');
         };
 
         /**

@@ -113,22 +113,6 @@
                 }
             });
 
-            /** 
-             * 요소타입
-             * @member {Observer}  _L.Collection.BaseCollection#elementType  
-             */
-            Object.defineProperty(this, 'elementType', {
-                enumerable: true,
-                configurable: false,
-                get: function() {
-                    return _elementType;
-                },
-                set: function(val) {
-                    var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
-                    _elementType = arrType;
-                }
-            });
-
             /**
              * 컬렉션 목록 
              * @member {Array}  _L.Collection.BaseCollection#list  
@@ -150,6 +134,22 @@
                 configurable: true,
                 get: function() {
                     return this._element.length;
+                }
+            });
+
+            /** 
+             * 요소타입
+             * @member {Observer}  _L.Collection.BaseCollection#elementType  
+             */
+            Object.defineProperty(this, 'elementType', {
+                enumerable: true,
+                configurable: false,
+                get: function() {
+                    return _elementType;
+                },
+                set: function(val) {
+                    var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
+                    _elementType = arrType;
                 }
             });
 
@@ -292,7 +292,7 @@
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
-            throw new Error('[ _remove() ] Abstract method definition, fail...');   // COVER:
+            throw new Error('[ _remove(idx) ] Abstract method definition, fail...');   // COVER:
         };
 
         /** 
@@ -300,7 +300,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            throw new Error('[ add() ] Abstract method definition, fail...');   // COVER:
+            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');   // COVER:
         };
         
         /**

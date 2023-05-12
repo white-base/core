@@ -32,7 +32,7 @@
          * @abstract
          */
         IPartControl.prototype.add  = function() {
-            throw new Error('[ add() ] Abstract method definition, fail...');
+            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
         };
 
         /**
@@ -40,7 +40,7 @@
          * @abstract
          */
         IPartControl.prototype.remove  = function() {
-            throw new Error('[ remove() ] Abstract method definition, fail...');
+            throw new Error('[ remove(any) : boolean ] Abstract method definition, fail...');
         };
     
         return IPartControl;

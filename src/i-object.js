@@ -41,7 +41,7 @@
          * @returns {Boolean}
          */
         IObject.prototype.instanceOf  = function() {
-            throw new Error('[ instanceOf(function | string) : Boolean ] Abstract method definition, fail...');
+            throw new Error('[ instanceOf(function | string) : boolean ] Abstract method definition, fail...');
         };
     
         return IObject;

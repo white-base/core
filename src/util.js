@@ -60,7 +60,7 @@
         if (typeof Object.create === 'function') {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
-                if (superCtor) {    // COVER: 2
+                if (superCtor) {
                     ctor.super = superCtor;
                     ctor.prototype = Object.create(superCtor.prototype, {
                         constructor: {

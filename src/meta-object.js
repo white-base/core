@@ -12,6 +12,8 @@
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
     _global._L.Meta          = _global._L.Meta || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};    
 
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
@@ -26,6 +28,7 @@
 
     //==============================================================
     // 3. 모듈 의존성 검사
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
 
     //==============================================================
@@ -61,7 +64,7 @@
          * 객체 타입 이름 얻기
          * @returns {array<function>}
          */
-        MetaObject.prototype.getTypes  = function() {
+        MetaObject.prototype.getTypes = function() {
             var arr = [];
             
             function parentFunction(obj) {
@@ -80,9 +83,9 @@
          * 검토: 중복은 피하지만, 성능의 이슈
          * @returns {array<function>}
          */
-        MetaObject.prototype.getType  = function() {
+        MetaObject.prototype.getType = function() {
             
-            var proto = this.__proto__ || Object.getPrototypeOf(this);            
+            var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
             return proto.constructor;
         };
 
@@ -91,7 +94,7 @@
          * @param {string | function} p_func 함수명으로 넣으면 이름만 검색, 클래스를 넣은면 클래스 검색
          * @returns {boolean}
          */
-        MetaObject.prototype.instanceOf  = function(p_func) {
+        MetaObject.prototype.instanceOf = function(p_func) {
             var _this = this;
             
             function findFunction(fun) {
@@ -104,7 +107,7 @@
                         if (fun === _this._interface[i]) return true;
                     }
                 }
-                return false
+                return false;
             }
             function findFunctionName(funName) {
                 var types = _this.getTypes();
@@ -121,7 +124,7 @@
                         if (funName === _this._interface[i].name) return true;
                     }
                 }
-                return false
+                return false;
             }
 
             if (typeof p_func === 'string') return findFunctionName(p_func);
@@ -137,7 +140,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
         module.exports = MetaObject;
-    } else {
+    } else {    // COVER:
         _global._L.MetaObject = MetaObject;
         _global._L.Meta.MetaObject = MetaObject;    // namespace
     }

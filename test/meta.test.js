@@ -40,6 +40,13 @@ describe("< MetaObject >", () => {
 
         expect(type).toBe(MetaObjectSub);
     });
+    // it("- getType() : 강제 예외 ", () => {
+    //     const c = new MetaObjectSub();
+    //     const temp = c.__proto__;
+    //     const type = c.getType();
+    //     c.__proto__ = temp; // 복구
+    //     expect(type).toBe(MetaObjectSub);
+    // });
     it("- getTypes() : array<function> ", () => {
         const c = new MetaObjectSub();
         const types = c.getTypes();
@@ -70,6 +77,31 @@ describe("< MetaObject >", () => {
         // false
         expect(c.instanceOf(Array)).toBe(false);
         expect(c.instanceOf(String)).toBe(false);
+    });
+    it("- instanceOf(function) : 예외 (_inteface 강제삭제) ", () => {
+        const c = new MetaObjectSub();
+        delete c._interface;
+
+        expect(c.instanceOf(IObject)).toBe(false);
+        expect(c.instanceOf(Object)).toBe(true);
+        expect(c.instanceOf(MetaObject)).toBe(true);
+        expect(c.instanceOf(MetaObjectSub)).toBe(true);
+    });
+    it("- instanceOf(string) : 예외 (_inteface 강제삭제) ", () => {
+        const c = new MetaObjectSub();
+        delete c._interface;
+
+        expect(c.instanceOf('IObject')).toBe(false);
+        expect(c.instanceOf('Object')).toBe(true);
+        expect(c.instanceOf('MetaObject')).toBe(true);
+        expect(c.instanceOf('MetaObjectSub')).toBe(true);
+    });
+    it("- instanceOf(function) : 예외  ", () => {
+        const c = new MetaObjectSub();
+        delete c._interface;
+
+        expect(c.instanceOf(Function)).toBe(false);
+        expect(c.instanceOf({})).toBe(false);
     });
     it("- EmpytClass : 검사 ", () => {
         const c = new EmpytClass();

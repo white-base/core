@@ -8,8 +8,72 @@ let EventClass;
 
 //==============================================================
 // test
+describe("< 이벤트 단독 사용 >", () => {
+    beforeAll(() => {
+        jest.resetModules();
+    });
 
-describe("< 이벤트 >", () => {
+    it("- 생성자에 전달 없을 경우", () => {
+        expect(()=> new Observer()).toThrow(/caller/);
+    });
+});
+describe("< 이벤트 직접 호출 >", () => {
+    beforeAll(() => {
+        jest.resetModules();
+        // 이벤트 클래스 정의
+        EventClass = class EventClass {
+            _event = new Observer(this);
+        }
+    });
+
+    it("- 이벤트 구독 : any ", () => {
+        const result = [];
+        const func1 = function(){ result.push('fun1') };
+        const func2 = function(){ result.push('fun2') };
+        const e = new EventClass();
+        e._event.subscribe(func1);
+        e._event.subscribe(func2);
+        e._event.publish();
+        
+        expect(result).toEqual(['fun1', 'fun2']);
+        expect(result.length).toBe(2);
+    });
+    it("- 이벤트 구독 : 지정 ", () => {
+        const result = [];
+        const func1 = function(){ result.push('fun1') };
+        const func2 = function(){ result.push('fun2') };
+        const e = new EventClass();
+        e._event.subscribe(func1, 'e1');
+        e._event.subscribe(func2, 'e2');
+        e._event.publish('e1');
+        
+        expect(result).toEqual(['fun1']);
+        expect(result.length).toBe(1);
+    });
+    it("- 이벤트 구독 : 예외 ", () => {
+        const e = new EventClass();
+        
+        // subscribe()
+        expect(()=> e._event.subscribe()).toThrow(/type.*function/);
+        expect(()=> e._event.subscribe('str')).toThrow(/type.*function/);
+        // __subscribers
+        expect(()=> e._event.__subscribers = 1).toThrow(/type.*object/);
+        expect(()=> e._event.__subscribers = 'str').toThrow(/type.*object/);
+        expect(()=> e._event.__subscribers = {}).toThrow(/any/);
+    });
+    it("- __subscribers 강제삽입 : 강제 예외 (any 함수 아닌 값을 삽입) ", () => {
+        const result = [];
+        const e = new EventClass();
+        const subs ={
+            any: ['str', func1 = function(){ result.push('fun1') }]
+        };
+        e._event.__subscribers = subs;
+        e._event.publish();
+
+        expect(result).toEqual(['fun1']);
+    });
+});
+describe("< 이벤트 onEvent 속성 사용 >", () => {
     beforeAll(() => {
         jest.resetModules();
         // 이벤트 클래스 정의
@@ -62,9 +126,10 @@ describe("< 이벤트 >", () => {
         e.onAdd = () => { 
             result.push('ADD2') 
         }
-
         e._onAdd('P1', 'P2');    // 이벤트 강제 호출
+
         expect(result).toEqual(['ADD2']);
+        expect(()=> e._event.isSingleMode = 1).toThrow(/boolean/);
     });
     it("- 이벤트 onAdd 모두 해지 ", () => {
         const e = new EventClass();
@@ -136,7 +201,6 @@ describe("< 이벤트 >", () => {
         global.console.log = jest.fn((val) => {
             expect(val).toMatch(/publish().*이벤트 발생/);
         });
-        // const logSpy = jest.spyOn(global.console, 'log');
         const e = new EventClass();
         e._event.isLog = true;
         const result = [];
@@ -145,8 +209,16 @@ describe("< 이벤트 >", () => {
         e.onAdd = func1
         e.onAdd = func2
         e._onAdd();
+        
+        expect(()=> e._event.isLog = 1).toThrow(/type.*boolean/)
+    });
+    it("- this._caller ", () => {
+        global.console.log = jest.fn((val) => {
+            expect(val).toMatch(/publish().*이벤트 발생/);
+        });
+        const e = new EventClass();
 
-        // expect(logSpy.mock.calls[0][0]).toMatch(/publish()/);
+        expect(e._event._caller).toEqual(e);
     });
 
 

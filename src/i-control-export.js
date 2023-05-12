@@ -32,7 +32,7 @@
          * @abstract
          */
         IExportControl.prototype.write  = function() {
-            throw new Error('[ write() ] Abstract method definition, fail...');
+            throw new Error('[ write(any) ] Abstract method definition, fail...');
         };
     
         return IExportControl;

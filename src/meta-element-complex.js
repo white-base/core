@@ -47,7 +47,7 @@
             _super.call(this);
 
             var __element = [];
-            var __properties = [];
+            var __keys = [];
 
             /**
              * 요소 갯수
@@ -75,12 +75,12 @@
              * 요소 목록
              * @member _L.Meta.ComplexElement#list
              */
-            Object.defineProperty(this, '_properties', 
+            Object.defineProperty(this, '_keys', 
             {
                 configurable: true,
                 enumerable: false,
-                get: function() { return __properties; },
-                set: function(newValue) { __properties = newValue; }
+                get: function() { return __keys; },
+                set: function(newValue) { __keys = newValue; }
             });
             
             /** @implements {_L.Interface.IPropertyCollection} */
@@ -97,9 +97,9 @@
         ComplexElement.prototype.indexOf = function() {};
         ComplexElement.prototype.exist = function() {};
         ComplexElement.prototype.contains = function() {};
-        ComplexElement.prototype.propertyOf = function() {};
-        ComplexElement.prototype.removeByProp = function() {};
-        ComplexElement.prototype.indexOfProp  = function() {};
+        ComplexElement.prototype.keyOf = function() {};
+        // ComplexElement.prototype.removeByProp = function() {};
+        ComplexElement.prototype.indexOf  = function() {};
 
         return ComplexElement;
     

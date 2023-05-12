@@ -175,9 +175,9 @@ describe("< EntityTable >", () => {
             expect(()=> s.contains()).toThrow(/Abstract/);
             expect(()=> s.indexOf()).toThrow(/Abstract/);
             expect(()=> s.exist()).toThrow(/Abstract/);
-            expect(()=> s.propertyOf()).toThrow(/Abstract/);
-            expect(()=> s.removeByProp()).toThrow(/Abstract/);
-            expect(()=> s.indexOfProp()).toThrow(/Abstract/);
+            expect(()=> s.keyOf()).toThrow(/Abstract/);
+            // expect(()=> s.removeByProp()).toThrow(/Abstract/);
+            // expect(()=> s.indexOfProp()).toThrow(/Abstract/);
             // create
             expect(()=> i.add()).toThrow(/Abstract/);
             expect(()=> i.remove()).toThrow(/Abstract/);
@@ -186,9 +186,9 @@ describe("< EntityTable >", () => {
             expect(()=> i.contains()).toThrow(/Abstract/);
             expect(()=> i.indexOf()).toThrow(/Abstract/);
             expect(()=> i.exist()).toThrow(/Abstract/);
-            expect(()=> i.propertyOf()).toThrow(/Abstract/);
-            expect(()=> i.removeByProp()).toThrow(/Abstract/);
-            expect(()=> i.indexOfProp()).toThrow(/Abstract/);
+            expect(()=> i.keyOf()).toThrow(/Abstract/);
+            // expect(()=> i.removeByProp()).toThrow(/Abstract/);
+            // expect(()=> i.indexOfProp()).toThrow(/Abstract/);
         });
     });
     

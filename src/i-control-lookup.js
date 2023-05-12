@@ -32,7 +32,7 @@
          * @abstract
          */
         ILookupControl.prototype.contains  = function() {
-            throw new Error('[ contains() ] Abstract method definition, fail...');
+            throw new Error('[ contains(any) : boolean ] Abstract method definition, fail...');
         };
 
         return ILookupControl;

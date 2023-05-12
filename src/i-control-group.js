@@ -32,7 +32,7 @@
          * @abstract
          */
         IGroupControl.prototype.merge  = function() {
-            throw new Error('[ merge() ] Abstract method definition, fail...');
+            throw new Error('[ merge(any) ] Abstract method definition, fail...');
         };
 
         /**
@@ -40,7 +40,7 @@
          * @abstract
          */
         IGroupControl.prototype.copy  = function() {
-            throw new Error('[ copyTo() ] Abstract method definition, fail...');
+            throw new Error('[ copy() ] Abstract method definition, fail...');
         };
 
         return IGroupControl;

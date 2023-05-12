@@ -196,6 +196,9 @@ describe("< ICollection >", () => {
         require('../src/i-control-lookup');
         expect(() => require('../src/i-collection')).toThrow(/Util/);
     });
+    it("- 예외 : 모두 로딩이 인된경우", () => {
+        expect(() => require('../src/i-collection')).toThrow(/module load/);
+    });
 });
 
 describe("< IPropertyCollection >", () => {
@@ -221,5 +224,8 @@ describe("< IPropertyCollection >", () => {
         require('../src/i-control-part');
 
         expect(() => require('../src/i-collection-property')).toThrow(/ICollection/);
+    });
+    it("- 예외 : 모두 로딩이 인된경우", () => {
+        expect(() => require('../src/i-collection-property')).toThrow(/module load/);
     });
 });

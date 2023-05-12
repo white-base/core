@@ -69,7 +69,7 @@
          * @abstract
          */
         ICollection.prototype.add  = function() {
-            throw new Error('[ add() ] Abstract method definition, fail...');
+            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
         };
 
         /**
@@ -77,7 +77,7 @@
          * @abstract
          */
         ICollection.prototype.remove  = function() {
-            throw new Error('[ remove() ] Abstract method definition, fail...');
+            throw new Error('[ remove(elem) : boolean ] Abstract method definition, fail...');
         };
 
         /**
@@ -85,7 +85,7 @@
          * @abstract
          */
         ICollection.prototype.removeAt  = function() {
-            throw new Error('[ removeAt() ] Abstract method definition, fail...');
+            throw new Error('[ removeAt(idx) : boolean ] Abstract method definition, fail...');
         };
 
         /**

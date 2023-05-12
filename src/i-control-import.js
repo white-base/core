@@ -32,7 +32,7 @@
          * @abstract
          */
         IImportControl.prototype.read  = function() {
-            throw new Error('[ read() ] Abstract method definition, fail...');
+            throw new Error('[ read(any) ] Abstract method definition, fail...');
         };
     
         return IImportControl;

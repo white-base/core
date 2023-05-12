@@ -13,7 +13,8 @@
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
     _global._L.Meta          = _global._L.Meta || {};
-
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};    
    
     //==============================================================
     // 2. 모듈 가져오기 (node | window)

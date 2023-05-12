@@ -34,6 +34,7 @@
     
     //==============================================================
     // 4. 모듈 구현    
+    // KeyCollection
     var PropertyCollection  = (function (_super) {
         
         /**
@@ -46,26 +47,26 @@
         function PropertyCollection(p_owner) {
             _super.call(this, p_owner); 
 
-            var _properties = [];
+            var _keys = [];
 
-            Object.defineProperty(this, '_properties',
+            Object.defineProperty(this, '_keys',
             {
                 configurable: false,
                 enumerable: false,
-                get: function() { return _properties; },
-                set: function(newValue) { _properties = newValue; },
+                get: function() { return _keys; },
+                set: function(newValue) { _keys = newValue; },
             });
-            /** @member {Array} _L.Collection.PropertyCollection#_properties 속성들값 */
+            /** @member {Array} _L.Collection.PropertyCollection#_keys 속성들값 */
 
-            Object.defineProperty(this, 'properties',
-            {
-                configurable: false,
-                enumerable: false,
-                get: function() { return _properties; },
-            });
+            // Object.defineProperty(this, 'keys',
+            // {
+            //     configurable: false,
+            //     enumerable: false,
+            //     get: function() { return _keys; },
+            // });
 
             // 예약어 등록
-            this._symbol = this._symbol.concat(['properties', '_properties', 'indexOfProp', 'propertyOf', 'removeByProp']);
+            this._symbol = this._symbol.concat(['keys', '_keys', 'indexOf', 'keyOf']);
             /** implements IPropertyCollection 인터페이스 구현 */
             Util.implements(this, IPropertyCollection);
         }
@@ -79,7 +80,7 @@
          */
         PropertyCollection.prototype._remove = function(p_idx) {
             var count = this._element.length - 1;
-            var propName = this.propertyOf(p_idx);
+            var propName = this.keyOf(p_idx);
             
             if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added');
 
@@ -87,12 +88,12 @@
             delete this[propName];                      
             // 원시 자료 변경
             this._element.splice(p_idx, 1);
-            this._properties.splice(p_idx, 1);
+            this._keys.splice(p_idx, 1);
             // 참조 자료 변경
             if (p_idx < count) {
                 for (var i = p_idx; i < count; i++) {
                     Object.defineProperty(this, [i], this._getPropDescriptor(i));
-                    propName = this.propertyOf(i);
+                    propName = this.keyOf(i);
                     Object.defineProperty(this, propName, this._getPropDescriptor(i));
                 }
                 delete this[count];                     // 마지막 idx 삭제
@@ -126,7 +127,7 @@
             this._onAdd(index, p_value);
             // process
             this._element.push(p_value);
-            this._properties.push(p_name);
+            this._keys.push(p_name);
             if (typeof p_desc === 'object') {
                 Object.defineProperty(this, [index], p_desc);
                 Object.defineProperty(this, p_name, p_desc);
@@ -151,51 +152,76 @@
            this._onClear();
             // process
            for (var i = 0; i < this._element.length; i++) {
-               propName = this.propertyOf(i);
+               propName = this.keyOf(i);
                delete this[i];
                delete this[propName];
             }
             this._element = [];
-            this._properties = [];
+            this._keys = [];
             // after event
             this._onChanged();
         };
         
-        /**
-         * 이름으로 index값 조회한다.
-         * @param {String} p_name 
-         * @returns {number}
-        */
-       PropertyCollection.prototype.indexOfProp = function(p_name) {
-           var idx = -1;
+    //     /**
+    //      * 이름으로 index값 조회한다.
+    //      * @param {String} p_name 
+    //      * @returns {number}
+    //     */
+    //    PropertyCollection.prototype.indexOfProp = function(p_name) {
+    //        var idx = -1;
            
-           if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
-           for (var i = 0; i < this._properties.length; i++) {
-               if (this._properties[i] === p_name) return i;
+    //        if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
+    //        for (var i = 0; i < this._keys.length; i++) {
+    //            if (this._keys[i] === p_name) return i;
+    //         }
+    //         return idx;
+    //     };
+    
+        /**
+         * 
+         * @param {string | any} p_obj key 또는 대상 객체
+         * @param {number} p_opt 옵션 :  0 = 요소로 조회, 1 = idx로 조회  REVIEW: 타입은 소문자로 바꿔야 함
+         * @returns 
+         */
+        PropertyCollection.prototype.indexOf = function(p_obj, p_opt) {
+            var opt = p_opt || 0;
+            
+            if (opt === 0) {
+                return this._element.indexOf(p_obj);
             }
-            return idx;
+            if (opt === 1) {
+                var idx = -1;
+                if (typeof p_obj !== 'string')  throw new Error('Only [p_obj] type "string" can be added');
+                // return this._element.indexOf(this[p_obj]);
+                for (var i = 0; i < this._keys.length; i++) {
+                    if (this._keys[i] === p_obj) return i;
+                 }
+                return idx;
+            }            
         };
         
         /**
          * 배열속성 이름 찾는다. [구현]
-         * @param {Number} p_idx 인덱스
-         * @returns {String}
+         * @param {number | any} p_obj 대상객체 또는 idx
+         * @returns {string}
          */
-        PropertyCollection.prototype.propertyOf = function(p_idx) {
-            return this._properties[p_idx];
+        PropertyCollection.prototype.keyOf = function(p_idx, p_opt) {
+            if (typeof p_idx !== 'number')  throw new Error('Only [p_obj] type "number" can be added');
+            return this._keys[p_idx];
         };
 
-        /**
-         * 요소 삭제
-         * @param {string} p_name 삭제핳 요소명
-         */
-        PropertyCollection.prototype.removeByProp = function(p_name) {
-            var idx = this.indexOfProp(p_name);
+        // /**
+        //  * 요소 삭제
+        //  * @param {string} p_name 삭제핳 요소명
+        //  */
+        // PropertyCollection.prototype.removeByProp = function(p_name) {
+        //     var idx = this.indexOfProp(p_name);
 
-            if (typeof idx === 'number') return this.removeAt(idx);
-            return false;   // COVER:
-        };
-
+        //     if (typeof idx === 'number') return this.removeAt(idx);
+        //     return false;   // COVER:
+        // };
+        // overriding
+        // overload
         return PropertyCollection;
 
     }(BaseCollection));

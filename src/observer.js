@@ -27,7 +27,7 @@
          * @param {object} p_caller 함수 호출 본문에서 this 역활 publish.apply(p_caller, ...)
          */
         function Observer(p_caller) {
-            if (typeof p_caller !== 'object') throw new Error('pubulish()  apply() 대상객체를 지정해야 합니다.');
+            if (typeof p_caller !== 'object') throw new Error('p_caller 대상객체를 지정해야 합니다.');
             
             var isLog = false;
             var isSingleMode = false;
@@ -49,7 +49,7 @@
              * 구독자 멀티모드, 단일시(false) 마지막 등록 구독자만 활성화 (기본값:true)  
              * @member {Boolean} 
              */
-            Object.defineProperty(this, 'isSingleMode', 
+            Object.defineProperty(this, 'isSingleMode',
             {
                 get: function() { return isSingleMode; },
                 set: function(nVal) { 
@@ -78,7 +78,7 @@
              * 전역 구독자
              * @member {object}
              */
-            Object.defineProperty(this, '__subscribers', 
+            Object.defineProperty(this, '__subscribers',
             {
                 get: function() { return __subscribers; },
                 set: function(nVal) { 
