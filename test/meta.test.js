@@ -223,6 +223,29 @@ describe("< MetaElement >", () => {
 
         expect(obj).toEqual({ str: 'STR', name: 'foo', prop: 10 });
     });
+    it("- getObject() : Meta 속성 ", () => {
+        class Bar extends MetaElement {
+            sub = true;
+            constructor() { super() }
+        }
+        class Foo extends MetaElement {
+            str = 'STR';
+            bar = new Bar();
+            constructor(name) { super(name) }
+            getStr() {}
+        }
+        const c = new Foo('foo');
+        const obj = c.getObject();
+
+        expect(obj).toEqual({ str: 'STR', name: 'foo', bar: { name: '', sub: true } });
+    });
+    it("- 예외 : name, __guid ", () => {
+        const i = new MetaElement('name');
+
+        expect(()=> i.name = 10).toThrow(/name.*string/);
+        expect(()=> i.__guid = 10).toThrow(/__guid.*string/); // 직접 설정할 경우는 없음
+    });
+
 });
 describe("< MetaComplexElement >", () => {
     beforeAll(() => {

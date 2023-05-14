@@ -20,8 +20,8 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        MetaObject          = require('./meta-object');
         IMarshal            = require('./i-marshal');
+        MetaObject          = require('./meta-object');
     } else {
         Util                = _global._L.Common.Util;
         MetaObject          = _global._L.Meta.MetaObject;
@@ -31,8 +31,8 @@
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
+    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현
@@ -51,7 +51,7 @@
         function MetaElement(p_name) {
             _super.call(this);
             
-            var _guid;
+            var __guid;
             var _name;
 
             /** @member {Array} _L.Meta.MetaElement#name 속성들값 */
@@ -59,20 +59,20 @@
             {
                 get: function() { return _name; },
                 set: function(newValue) { 
-                    if (typeof newValue !== 'string')  throw new Error('Only [p_name] type "string" can be added');
+                    if (typeof newValue !== 'string')  throw new Error('Only [name] type "string" can be added');   // COVER: 2
                     _name = newValue;
                 },
                 configurable: false,
                 enumerable: true
             });
 
-            /** @member {Array} _L.Meta.MetaElement#_guid 속성들값 */
-            Object.defineProperty(this, '_guid', 
+            /** @member {Array} _L.Meta.MetaElement#__guid 속성들값 */
+            Object.defineProperty(this, '__guid', 
             {
-                get: function() { return _guid; },
+                get: function() { return __guid; },
                 set: function(newValue) { 
-                    if (typeof newValue !== 'string')  throw new Error('Only [p_name] type "string" can be added');
-                    _guid = newValue;
+                    if (typeof newValue !== 'string')  throw new Error('Only [__guid] type "string" can be added'); // COVER: 2
+                    __guid = newValue;
                 },
                 configurable: false,
                 enumerable: true
@@ -121,10 +121,10 @@
          * @returns {String}
          */
         MetaElement.prototype.getGuid  = function() {
-            if (!this._guid) {
-                this._guid = __newGuid();
+            if (!this.__guid) {
+                this.__guid = __newGuid();
             }
-            return this._guid;
+            return this.__guid;
         };
 
         return MetaElement;

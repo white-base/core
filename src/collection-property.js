@@ -12,25 +12,27 @@
     //==============================================================
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};  
     _global._L.Collection    = _global._L.Collection || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        BaseCollection      = require('./collection-base');
         IPropertyCollection = require('./i-collection-property');
-    } else {    // COVER:
+        BaseCollection      = require('./collection-base');
+    } else {
         Util                = _global._L.Common.Util;
-        BaseCollection      = _global._L.Collection.BaseCollection;
         IPropertyCollection = _global._L.Interface.IPropertyCollection;
+        BaseCollection      = _global._L.Collection.BaseCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
+    if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
     
     //==============================================================
     // 4. 모듈 구현    
@@ -80,9 +82,9 @@
          */
         PropertyCollection.prototype._remove = function(p_idx) {
             var count = this._element.length - 1;
-            var propName = this.keyOf(p_idx);
+            var propName = this.keyOf(p_idx);   // number 검사함
             
-            if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added');
+            // if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added'); 
 
             // 프로퍼티 삭제
             delete this[propName];                      
@@ -189,24 +191,23 @@
             if (opt === 0) {
                 return this._element.indexOf(p_obj);
             }
-            if (opt === 1) {
-                var idx = -1;
-                if (typeof p_obj !== 'string')  throw new Error('Only [p_obj] type "string" can be added');
+            if (opt === 1) {    
+                if (typeof p_obj !== 'string')  throw new Error('Only [p_obj] type "string" can be added'); 
                 // return this._element.indexOf(this[p_obj]);
                 for (var i = 0; i < this._keys.length; i++) {
                     if (this._keys[i] === p_obj) return i;
                  }
-                return idx;
             }            
+            return -1;
         };
         
         /**
          * 배열속성 이름 찾는다. [구현]
-         * @param {number | any} p_obj 대상객체 또는 idx
+         * @param {number} p_obj 대상객체 또는 idx
          * @returns {string}
          */
-        PropertyCollection.prototype.keyOf = function(p_idx, p_opt) {
-            if (typeof p_idx !== 'number')  throw new Error('Only [p_obj] type "number" can be added');
+        PropertyCollection.prototype.keyOf = function(p_idx) {
+            if (typeof p_idx !== 'number')  throw new Error('Only [p_idx] type "number" can be added'); 
             return this._keys[p_idx];
         };
 
@@ -218,7 +219,7 @@
         //     var idx = this.indexOfProp(p_name);
 
         //     if (typeof idx === 'number') return this.removeAt(idx);
-        //     return false;   // COVER:
+        //     return false;   
         // };
         // overriding
         // overload
@@ -231,7 +232,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
         module.exports = PropertyCollection;
-    } else {    // COVER:
+    } else {
         _global._L.PropertyCollection = PropertyCollection;
         _global._L.Collection.PropertyCollection = PropertyCollection;      // namespace
     }

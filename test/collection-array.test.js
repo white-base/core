@@ -10,183 +10,169 @@ let Student, School, Corp, Member, House, Space;
 
 //==============================================================
 // test
-
-describe("< BaseCollection >", () => {
+describe("[ this.elementType 전체 타입을 설정할 경우 : 클래스타입 ]", () => {
     beforeAll(() => {
-        // jest.resetModules();
+        jest.resetModules();
         // 클래스 정의
-        // Student = class {
-        //     level = 0;
-        //     constructor(level) { this.level = level }
-        // }
-        // School = class {
-        //     items = new ArrayCollection(this);
-        //     constructor() { this.items.elementType = Student }
-        // }
+        Student = class {
+            level = 0;
+            constructor(level) { this.level = level }
+        }
+        Member = class {
+            type = 10;
+            constructor(type) { this.type = type }
+        }
+        School = class {
+            items = new ArrayCollection(this);
+            constructor() { this.items.elementType = Student }
+        }
+        Corp = class {
+            items = new ArrayCollection(this);
+            constructor() { this.items.elementType = [Member, Student] }
+        }
+        House = class {
+            items = new ArrayCollection(this);
+            constructor() { this.items.elementType = null }
+        }
+        Space = class {
+            items = new ArrayCollection(this);
+        }
+
     });
-    describe("[ this.elementType 전체 타입을 설정할 경우 : 클래스타입 ]", () => {
-        beforeAll(() => {
-            jest.resetModules();
-            // 클래스 정의
-            Student = class {
-                level = 0;
-                constructor(level) { this.level = level }
-            }
-            Member = class {
-                type = 10;
-                constructor(type) { this.type = type }
-            }
-            School = class {
-                items = new ArrayCollection(this);
-                constructor() { this.items.elementType = Student }
-            }
-            Corp = class {
-                items = new ArrayCollection(this);
-                constructor() { this.items.elementType = [Member, Student] }
-            }
-            House = class {
-                items = new ArrayCollection(this);
-                constructor() { this.items.elementType = null }
-            }
-            Space = class {
-                items = new ArrayCollection(this);
-            }
-
-        });
-        it("- 단일 타입 : items.add(name, obj) ", () => {
-            const elem = new School();
-            const c1 = new Student(1);
-            const result = elem.items.add(c1);
-            
-            expect(() => elem.items.add(null)).toThrow(/instance/);
-            expect(() => elem.items.add('str')).toThrow(/instance/);
-            expect(result).toBeTruthy();
-        });
-        it("- 단일 타입 : items.요소명 = obj ", () => {
-            const elem = new School();
-            const c1 = new Student(1);
-            const c2 = new Student(2);
-            const result = elem.items.add(c1);
-            elem.items[0] = c2;
-
-            expect(() => elem.items[0] = 10 ).toThrow(/instance/);
-            expect(elem.items[0].level).toBe(2);                   // 교체된 객체
-            expect(elem.items[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(result).toBeTruthy();
-        });
-        it("- null 타입 : items.add(name, obj) ", () => {
-            const elem = new House();
-            const c1 = new Student(1);
-            const result1 = elem.items.add( c1);
-            const result2 = elem.items.add('str');
-            
-            expect(() => elem.items.add()).toThrow(/없습니다./);
-            expect(elem.items[0].level).toBe(1);
-            elem.items[0] = 'OVER';
-            expect(elem.items[0]).toBe('OVER');
-            expect(result1).toBeTruthy();
-            expect(result2).toBeTruthy();
-        });
-        it("- undefined 타입 : items.add(name, obj) ", () => {
-            const elem = new Space();
-            const c1 = new Student(1);
-            const result1 = elem.items.add(c1);
-            const result2 = elem.items.add('str');
-            const result3 = elem.items.add();
-
-            expect(elem.items[0].level).toBe(1);
-            expect(elem.items[1]).toBe('str');
-            expect(elem.items[2]).toBeUndefined();
-            elem.items[2] = 'OVER';    // 수정
-            expect(elem.items[2]).toBe('OVER');
-            expect(result1).toBeTruthy();
-            expect(result2).toBeTruthy();
-            expect(result3).toBeTruthy();
-        });
-        it("- 복합 타입 : items.add(name, obj) ", () => {
-            const elem = new Corp();
-            const c1 = new Student(1);
-            const m1 = new Member(1);
-            const result1 = elem.items.add(c1);
-            const result2 = elem.items.add(m1);
-            
-            expect(() => elem.items.add(null)).toThrow(/instance/);
-            expect(() => elem.items.add('str')).toThrow(/instance/);
-            expect(result1).toBeTruthy();
-            expect(result2).toBeTruthy();
-        });
-        it("- 복합 타입 : items.요소명 = obj ", () => {
-            const elem = new Corp();
-            const c1 = new Student(1);
-            const c2 = new Student(2);
-            const m1 = new Member(1);
-            const result1 = elem.items.add(c1);
-            const result2 = elem.items.add(m1);
-            elem.items[0] = c2;
-            elem.items[1] = c2;
-
-            expect(() => elem.items[0] = 'str' ).toThrow(/instance/);
-            expect(elem.items[0].level).toBe(2);                   // 교체된 객체
-            expect(elem.items[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(elem.items[1].level).toBe(2);                   // 교체된 객체
-            expect(elem.items[1] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(result1).toBeTruthy();
-            expect(result2).toBeTruthy();
-        });
+    it("- 단일 타입 : items.add(name, obj) ", () => {
+        const elem = new School();
+        const c1 = new Student(1);
+        const result = elem.items.add(c1);
+        
+        expect(() => elem.items.add(null)).toThrow(/instance/);
+        expect(() => elem.items.add('str')).toThrow(/instance/);
+        expect(result).toBeTruthy();
     });
-    describe("[ this.elementType 전체 타입을 설정할 경우 : 원시타입  ]", () => {
-        beforeAll(() => {
-            jest.resetModules();
-            // 클래스 정의
-            School = class {
-                items = new ArrayCollection(this);
-                constructor() { this.items.elementType = String }
-            }
-            Corp = class {
-                items = new ArrayCollection(this);
-                constructor() { this.items.elementType = [String, Boolean] }
-            }
-        });
-        it("- 단일 타입 : items.add(name, obj) ", () => {
-            const i = new School();
-            const result1 = i.items.add('A1');
-            const result2 = i.items.add('');
-            i.items[0] = 'AA1';
-            i.items[1] = 'AA2';
+    it("- 단일 타입 : items.요소명 = obj ", () => {
+        const elem = new School();
+        const c1 = new Student(1);
+        const c2 = new Student(2);
+        const result = elem.items.add(c1);
+        elem.items[0] = c2;
 
-            expect(() => i.items.add(null)).toThrow(/string/);     // 공백 예외
-            expect(() => i.items.add(10)).toThrow(/string/); // 타입 예외
-            expect(() => i.items[0] = 10).toThrow(/string/);
-            expect(result1).toBeTruthy();
-            expect(result2).toBeTruthy();
-        });
-        it("- 복합 타입 : items.add(name, obj)  [String, Boolean] ", () => {
-            const i = new Corp();
-            const result1 = i.items.add('A1');
-            const result2 = i.items.add(true);
-            
-            expect(() => i.items.add(undefined)).toThrow(/(boolean)|(string)/);  // 값이 없음
-            expect(() => i.items.add(null)).toThrow(/(boolean)|(string)/);    // 공백 예외
-            expect(() => i.items.add(10)).toThrow(/(boolean)|(string)/);// 타입 예외
-            expect(() => i.items.add({})).toThrow(/(boolean)|(string)/);
-            expect(() => i.items[0] = 10).toThrow(/(boolean)|(string)/);
-            expect(result1).toBeTruthy();
-            expect(result2).toBeTruthy();
-        });
-        it("- 유무 검사 : exist(key) ", () => {
-            const i = new Corp();
-            const result1 = i.items.add('A1');
-            const result2 = i.items.add(true);
-            
-            expect(result1).toBeTruthy();
-            expect(result2).toBeTruthy();
-            expect(i.items.exist(0)).toBe(true);
-            expect(i.items.exist(1)).toBe(true);
-            expect(i.items.exist(2)).toBe(false);
-            expect(i.items.exist('0')).toBe(true);
-            expect(i.items.exist('1')).toBe(true);
-            expect(i.items.exist('2')).toBe(false);
-        });
+        expect(() => elem.items[0] = 10 ).toThrow(/instance/);
+        expect(elem.items[0].level).toBe(2);                   // 교체된 객체
+        expect(elem.items[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
+        expect(result).toBeTruthy();
+    });
+    it("- null 타입 : items.add(name, obj) ", () => {
+        const elem = new House();
+        const c1 = new Student(1);
+        const result1 = elem.items.add( c1);
+        const result2 = elem.items.add('str');
+        
+        expect(() => elem.items.add()).toThrow(/없습니다./);
+        expect(elem.items[0].level).toBe(1);
+        elem.items[0] = 'OVER';
+        expect(elem.items[0]).toBe('OVER');
+        expect(result1).toBeTruthy();
+        expect(result2).toBeTruthy();
+    });
+    it("- undefined 타입 : items.add(name, obj) ", () => {
+        const elem = new Space();
+        const c1 = new Student(1);
+        const result1 = elem.items.add(c1);
+        const result2 = elem.items.add('str');
+        const result3 = elem.items.add();
+
+        expect(elem.items[0].level).toBe(1);
+        expect(elem.items[1]).toBe('str');
+        expect(elem.items[2]).toBeUndefined();
+        elem.items[2] = 'OVER';    // 수정
+        expect(elem.items[2]).toBe('OVER');
+        expect(result1).toBeTruthy();
+        expect(result2).toBeTruthy();
+        expect(result3).toBeTruthy();
+    });
+    it("- 복합 타입 : items.add(name, obj) ", () => {
+        const elem = new Corp();
+        const c1 = new Student(1);
+        const m1 = new Member(1);
+        const result1 = elem.items.add(c1);
+        const result2 = elem.items.add(m1);
+        
+        expect(() => elem.items.add(null)).toThrow(/instance/);
+        expect(() => elem.items.add('str')).toThrow(/instance/);
+        expect(result1).toBeTruthy();
+        expect(result2).toBeTruthy();
+    });
+    it("- 복합 타입 : items.요소명 = obj ", () => {
+        const elem = new Corp();
+        const c1 = new Student(1);
+        const c2 = new Student(2);
+        const m1 = new Member(1);
+        const result1 = elem.items.add(c1);
+        const result2 = elem.items.add(m1);
+        elem.items[0] = c2;
+        elem.items[1] = c2;
+
+        expect(() => elem.items[0] = 'str' ).toThrow(/instance/);
+        expect(elem.items[0].level).toBe(2);                   // 교체된 객체
+        expect(elem.items[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
+        expect(elem.items[1].level).toBe(2);                   // 교체된 객체
+        expect(elem.items[1] instanceof Student).toBeTruthy(); // 인스턴스 검사
+        expect(result1).toBeTruthy();
+        expect(result2).toBeTruthy();
+    });
+});
+describe("[ this.elementType 전체 타입을 설정할 경우 : 원시타입  ]", () => {
+    beforeAll(() => {
+        jest.resetModules();
+        // 클래스 정의
+        School = class {
+            items = new ArrayCollection(this);
+            constructor() { this.items.elementType = String }
+        }
+        Corp = class {
+            items = new ArrayCollection(this);
+            constructor() { this.items.elementType = [String, Boolean] }
+        }
+    });
+    it("- 단일 타입 : items.add(name, obj) ", () => {
+        const i = new School();
+        const result1 = i.items.add('A1');
+        const result2 = i.items.add('');
+        i.items[0] = 'AA1';
+        i.items[1] = 'AA2';
+
+        expect(() => i.items.add(null)).toThrow(/string/);     // 공백 예외
+        expect(() => i.items.add(10)).toThrow(/string/); // 타입 예외
+        expect(() => i.items[0] = 10).toThrow(/string/);
+        expect(result1).toBeTruthy();
+        expect(result2).toBeTruthy();
+    });
+    it("- 복합 타입 : items.add(name, obj)  [String, Boolean] ", () => {
+        const i = new Corp();
+        const result1 = i.items.add('A1');
+        const result2 = i.items.add(true);
+        
+        expect(() => i.items.add(undefined)).toThrow(/(boolean)|(string)/);  // 값이 없음
+        expect(() => i.items.add(null)).toThrow(/(boolean)|(string)/);    // 공백 예외
+        expect(() => i.items.add(10)).toThrow(/(boolean)|(string)/);// 타입 예외
+        expect(() => i.items.add({})).toThrow(/(boolean)|(string)/);
+        expect(() => i.items[0] = 10).toThrow(/(boolean)|(string)/);
+        expect(result1).toBeTruthy();
+        expect(result2).toBeTruthy();
+    });
+    it("- 유무 검사 : exist(key) ", () => {
+        const i = new Corp();
+        const result1 = i.items.add('A1');
+        const result2 = i.items.add(true);
+        
+        expect(result1).toBeTruthy();
+        expect(result2).toBeTruthy();
+        expect(i.items.exist(0)).toBe(true);
+        expect(i.items.exist(1)).toBe(true);
+        expect(i.items.exist(2)).toBe(false);
+        expect(i.items.exist('0')).toBe(true);
+        expect(i.items.exist('1')).toBe(true);
+        expect(i.items.exist('2')).toBe(false);
+        expect(()=> i.items.exist(true)).toThrow(/key.*number.*string/);
     });
 });
 describe("< ArrayCollection >", () => {
@@ -386,6 +372,11 @@ describe("< ArrayCollection >", () => {
             expect(s.items.count).toBe(3);
             expect(s.items.list.length).toBe(3);
             expect(result).toBeTruthy();
+        });
+        it("- removeAt(str) : 예외 ", () => {
+            let s = new Student();
+
+            expect(()=> s.items.removeAt('1')).toThrow(/idx.*number/);
         });
     });
     it("- clear() ", () => {

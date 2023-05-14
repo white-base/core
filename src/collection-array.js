@@ -11,6 +11,7 @@
     //==============================================================
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
     _global._L.Collection    = _global._L.Collection || {};
 
     //==============================================================
@@ -18,7 +19,7 @@
     if (isNode) {     
         Util                = require('./util');
         BaseCollection      = require('./collection-base');
-    } else {
+    } else {    
         Util                = _global._L.Common.Util;
         BaseCollection      = _global._L.Collection.BaseCollection;
     }
@@ -113,7 +114,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
         module.exports = ArrayCollection;
-    } else {
+    } else {    
         _global._L.ArrayCollection = ArrayCollection;
         _global._L.Collection.ArrayCollection = ArrayCollection;    // namespace
     }

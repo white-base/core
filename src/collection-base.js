@@ -12,25 +12,27 @@
     //==============================================================
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};  
     _global._L.Collection    = _global._L.Collection || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {
-        ICollection         = require('./i-collection');
-        Observer            = require('./observer');
         Util                = require('./util');
-    } else {    // COVER:
-        ICollection         = _global._L.Interface.ICollection;
-        Observer            = _global._L.Common.Observer;
+        Observer            = require('./observer');
+        ICollection         = require('./i-collection');
+    } else {
         Util                = _global._L.Common.Util;
+        Observer            = _global._L.Common.Observer;
+        ICollection         = _global._L.Interface.ICollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
-    if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
-    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
+    if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현 
@@ -70,7 +72,7 @@
              * @protected 
              * @member {Object} _L.Collection.BaseCollection#_owner  
              */
-              Object.defineProperty(this, '_owner', {   // COVER:
+              Object.defineProperty(this, '_owner', {   
                 enumerable: true,
                 configurable: false,
                 get: function() {
@@ -161,7 +163,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'add');    // COVER:
+                    this._event.subscribe(p_fn, 'add');
                 }
             });
 
@@ -173,7 +175,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'remove');     // COVER:
+                    this._event.subscribe(p_fn, 'remove');
                 }
             });
 
@@ -185,7 +187,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'clear');      // COVER:
+                    this._event.subscribe(p_fn, 'clear');
                 }
             });
 
@@ -197,7 +199,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'changing');   // COVER:
+                    this._event.subscribe(p_fn, 'changing');
                 }
             });
 
@@ -209,7 +211,7 @@
                 enumerable: false,
                 configurable: true,
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'changed');    // COVER:
+                    this._event.subscribe(p_fn, 'changed');
                 }
             });
 
@@ -292,7 +294,7 @@
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
-            throw new Error('[ _remove(idx) ] Abstract method definition, fail...');   // COVER:
+            throw new Error('[ _remove(idx) ] Abstract method definition, fail...');
         };
 
         /** 
@@ -300,7 +302,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');   // COVER:
+            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
         };
         
         /**
@@ -309,7 +311,7 @@
          * @fires _L.Collection.BaseCollection#onClear 
          */
         BaseCollection.prototype.clear  = function() {
-            throw new Error('[ clear() ] Abstract method definition, fail...'); // COVER:
+            throw new Error('[ clear() ] Abstract method definition, fail...');
         };
 
         /**
@@ -329,7 +331,7 @@
          * @returns {boolean} 처리 결과
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
-            if (typeof p_idx !== 'number') throw new Error('Only [p_key] type "p_idx" can be added');
+            if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added');
             var elem = this._element[p_idx];
 
             if (this.exist(p_idx)) {
@@ -382,7 +384,7 @@
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
         module.exports = BaseCollection;
-    } else {    // COVER:
+    } else {    
         _global._L.BaseCollection = BaseCollection;
         _global._L.Collection.BaseCollection = BaseCollection;      // namespace
     }
