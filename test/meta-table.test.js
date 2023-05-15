@@ -646,7 +646,7 @@ describe("< MetaTable >", () => {
             expect(table1.rows.count).toBe(0);
         });
     });
-    it("- clear() : 지우기 ", () => {
+    it("- clear() : 지우기 (rows) ", () => {
         var table1 = new MetaTable('T1');
         table1.columns.add('i1');
         table1.columns.add('i2');
@@ -655,6 +655,19 @@ describe("< MetaTable >", () => {
         row['i2'] = 'R2';
         table1.rows.add(row);
         table1.clear();
+
+        expect(table1.columns.count).toBe(2);
+        expect(table1.rows.count).toBe(0);
+    });
+    it("- reset() : 지우기 (rows, columns) ", () => {
+        var table1 = new MetaTable('T1');
+        table1.columns.add('i1');
+        table1.columns.add('i2');
+        var row = table1.newRow();
+        row['i1'] = 'R1';
+        row['i2'] = 'R2';
+        table1.rows.add(row);
+        table1.reset();
 
         expect(table1.columns.count).toBe(0);
         expect(table1.rows.count).toBe(0);
@@ -691,6 +704,25 @@ describe("< MetaTable >", () => {
         expect(table1.columns['i2'] === table2.columns['i2']).toBe(false);
         expect(table1.rows[0] === table2.rows[0]).toBe(false);
     });
+    it("- row : 설정 ", () => {
+        /**
+         * 로울을 설정할때 전제 조건이 많다.
+         * - 규칙을 정해야 한다. TODO:
+         */
+        // var table1 = new MetaTable('T1');
+        // table1.columns.addValue('i1', 'V1');
+        // table1.columns.addValue('i2', 'V2');
+        // var row = new MetaRow(table1);
+        // row['i1'] = 'R1';
+        // row['i2'] = 'R2';
+        // table1.rows.add(row);
+        
+        // expect(table1.rows[0].count).toBe(2);
+        // expect(table1.rows[0]['i1']).toBe('R1');
+        // expect(table1.rows[0]['i2']).toBe('R2');
+        // expect(table1.rows[0]['i3']).toBe(undefined);
+    });
+
     it("- getTypes() : array<function> ", () => {
         const c = new MetaTable();
         const types = c.getTypes();

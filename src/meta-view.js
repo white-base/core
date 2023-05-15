@@ -15,32 +15,34 @@
     //==============================================================
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Collection    = _global._L.Collection || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
     
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
-        Util                = require('./util');
-        MetaObject          = require('./meta-object');
-        MetaEntity              = require('./meta-entity');
-        MetaViewColumnCollection  = require('./meta-column').MetaViewColumnCollection;
-        PropertyCollection  = require('./collection-property');
-    } else {    // COVER:
-        Util                = _global._L.Common.Util;
-        MetaObject          = _global._L.Meta.MetaObject;
-        MetaEntity              = _global._L.Meta.Entity.MetaEntity;
-        MetaViewColumnCollection  = _global._L.Meta.Entity.MetaViewColumnCollection;
-        PropertyCollection  = _global._L.Collection.PropertyCollection;
+        Util                        = require('./util');
+        PropertyCollection          = require('./collection-property');
+        MetaObject                  = require('./meta-object');
+        MetaEntity                  = require('./meta-entity');
+        MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
+    } else {
+        Util                        = _global._L.Common.Util;
+        PropertyCollection          = _global._L.Collection.PropertyCollection;
+        MetaObject                  = _global._L.Meta.MetaObject;
+        MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
+        MetaViewColumnCollection    = _global._L.Meta.Entity.MetaViewColumnCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof MetaViewColumnCollection === 'undefined') throw new Error('[MetaViewColumnCollection] module load fail...');
-    if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -173,7 +175,7 @@
     if (isNode) {     
         module.exports.MetaView = MetaView;
         module.exports.MetaViewCollection = MetaViewCollection;
-    } else {    // COVER:
+    } else {
         _global._L.MetaView = MetaView;
         _global._L.MetaViewCollection = MetaViewCollection;
         // namespace

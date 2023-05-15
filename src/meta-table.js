@@ -14,6 +14,8 @@
     //==============================================================
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Collection    = _global._L.Collection || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
     
@@ -21,21 +23,21 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                        = require('./util');
-        MetaEntity                  = require('./meta-entity');
         PropertyCollection          = require('./collection-property');
+        MetaEntity                  = require('./meta-entity');
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
     } else {    
         Util                        = _global._L.Common.Util;
-        MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
         PropertyCollection          = _global._L.Collection.PropertyCollection;
+        MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
         MetaTableColumnCollection   = _global._L.Meta.Entity.MetaTableColumnCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
+    if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof MetaTableColumnCollection === 'undefined') throw new Error('[MetaTableColumnCollection] module load fail...');
 
     //==============================================================
@@ -151,7 +153,7 @@
     if (isNode) {     
         module.exports.MetaTable = MetaTable;
         module.exports.MetaTableCollection = MetaTableCollection;
-    } else {    // COVER:
+    } else {
         _global._L.MetaTable = MetaTable;
         _global._L.MetaTableCollection = MetaTableCollection;
         // namespace

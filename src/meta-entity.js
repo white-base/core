@@ -17,6 +17,8 @@
     //==============================================================
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
+    _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};    
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
@@ -24,17 +26,17 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                        = require('./util');
-        MetaElement                 = require('./meta-element');
         IGroupControl               = require('./i-control-group');
         IAllControl                 = require('./i-control-all');
+        MetaElement                 = require('./meta-element');
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
         MetaRow                     = require('./meta-row').MetaRow;
         MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
-    } else {    // COVER:
+    } else {
         Util                    = _global._L.Common.Util;
-        MetaElement             = _global._L.Meta.MetaElement;
         IGroupControl           = _global._L.Interface.IGroupControl;
         IAllControl             = _global._L.Interface.IAllControl;
+        MetaElement             = _global._L.Meta.MetaElement;
         MetaRowCollection       = _global._L.Meta.Entity.MetaRowCollection;
         MetaRow                 = _global._L.Meta.Entity.MetaRow;
         MetaColumnCollection    = _global._L.Meta.Entity.MetaColumnCollection;
@@ -43,9 +45,9 @@
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
+    if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof MetaRowCollection === 'undefined') throw new Error('[MetaRowCollection] module load fail...');
     if (typeof MetaRow === 'undefined') throw new Error('[MetaRow] module load fail...');
     if (typeof MetaColumnCollection === 'undefined') throw new Error('[MetaColumnCollection] module load fail...');
@@ -500,11 +502,12 @@
          * 아이템과 로우를 초기화 한다.
          */
         MetaEntity.prototype.clear  = function() {
-            this.columns.clear();
+            // this.columns.clear();
             this.rows.clear();
         };
         MetaEntity.prototype.reset  = function() {
-            console.log('구현해야함');  // COVER:
+            this.columns.clear();
+            this.rows.clear();
         };
 
         return MetaEntity;
@@ -516,8 +519,8 @@
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
         module.exports = MetaEntity;
-    } else {    // COVER:
-        _global._L.Entity = MetaEntity;
+    } else {
+        _global._L.MetaEntity = MetaEntity;
         _global._L.Meta.Entity.MetaEntity = MetaEntity;     // namespace
     }
 

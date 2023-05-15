@@ -43,33 +43,32 @@ https://codeigniter.com/user_guide/database/configuration.html
 ----------------------------------------
 File                                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                           
 -----------------------------------------|---------|----------|---------|---------|--
-All files                 |   89.29 |    83.76 |   90.41 |   92.22 |                                                                               
- collection-array.js      |     100 |      100 |     100 |     100 |                                                                               
- collection-base.js       |     100 |      100 |     100 |     100 |                                                                               
- collection-property.js   |     100 |      100 |     100 |     100 |                                                                               
- entity-base.js           |   87.17 |    73.28 |    91.3 |   92.59 | 34-40,94-95,248,350,504,517-518                                               
- entity-item.js           |   82.54 |    72.05 |   96.42 |   89.93 | 31-35,113,226-227,251,256,272,354,440,493-494,600,691,750,775,822,860,882-890 
- entity-row.js            |   75.38 |    57.57 |   88.88 |   81.03 | 30-33,95-97,148,164-168                                                       
- entity-table.js          |   58.33 |    39.28 |   71.42 |   62.26 | 28-31,103-105,118-132,145-149                                                 
- entity-view.js           |   60.81 |    48.78 |      75 |   66.66 | 30-34,129-131,151-164,177-181                                                 
- error-custom.js          |   54.16 |       35 |      50 |   56.52 | 20,40-69,89-90                                                                
- i-collection-control.js  |   58.53 |       50 |      25 |   64.86 | 29-32,54-57,67,75,83,91,99,111-112                                            
- i-collection-property.js |     100 |      100 |     100 |     100 |                                                                               
- i-collection.js          |     100 |      100 |     100 |     100 |                                                                               
- i-control-all.js         |     100 |      100 |     100 |     100 |                                                                               
- i-control-export.js      |     100 |      100 |     100 |     100 |                                                                               
- i-control-group.js       |     100 |      100 |     100 |     100 |                                                                               
- i-control-import.js      |     100 |      100 |     100 |     100 |                                                                               
- i-control-lookup.js      |     100 |      100 |     100 |     100 |                                                                               
- i-control-part.js        |     100 |      100 |     100 |     100 |                                                                               
- i-marshal.js             |     100 |      100 |     100 |     100 |                                                                               
- i-object.js              |     100 |      100 |     100 |     100 |                                                                               
- meta-element-complex.js  |   77.27 |       50 |   31.25 |   82.92 | 25-27,82-83,114-115                                                           
- meta-element.js          |     100 |      100 |     100 |     100 |                                                                               
- meta-object.js           |     100 |    97.61 |     100 |     100 | 88                                                                            
- observer.js              |     100 |      100 |     100 |     100 |                                                                               
- util-type.js             |     100 |      100 |     100 |     100 |                                                                               
- util.js                  |     100 |      100 |     100 |     100 |      
+All files                 |   92.48 |    89.01 |   89.69 |   94.54 |                                                                 
+ collection-array.js      |     100 |      100 |     100 |     100 |                                                                 
+ collection-base.js       |     100 |      100 |     100 |     100 |                                                                 
+ collection-property.js   |     100 |      100 |     100 |     100 |                                                                 
+ error-custom.js          |   66.66 |       55 |      50 |   69.56 | 40-69                                                           
+ i-collection-property.js |     100 |      100 |     100 |     100 |                                                                 
+ i-collection.js          |     100 |      100 |     100 |     100 |                                                                 
+ i-control-all.js         |     100 |      100 |     100 |     100 |                                                                 
+ i-control-export.js      |     100 |      100 |     100 |     100 |                                                                 
+ i-control-group.js       |     100 |      100 |     100 |     100 |                                                                 
+ i-control-import.js      |     100 |      100 |     100 |     100 |                                                                 
+ i-control-lookup.js      |     100 |      100 |     100 |     100 |                                                                 
+ i-control-part.js        |     100 |      100 |     100 |     100 |                                                                 
+ i-marshal.js             |     100 |      100 |     100 |     100 |                                                                 
+ i-object.js              |     100 |      100 |     100 |     100 |                                                                 
+ meta-column.js           |   86.39 |    73.79 |   96.42 |   94.44 | 113,226-227,251,256,272,354,440,493-494,600,691,750,775,822,860 
+ meta-element.js          |     100 |      100 |     100 |     100 |                                                                 
+ meta-entity.js           |   94.53 |    82.66 |   95.83 |   97.92 | 96-97,250,352                                                   
+ meta-object.js           |     100 |    97.61 |     100 |     100 | 88                                                              
+ meta-row.js              |   85.91 |    72.97 |   72.72 |   92.18 | 97-99,119,122,157                                               
+ meta-set.js              |   57.53 |    76.47 |   11.76 |   55.38 | 26-31,62-98,103,106,109,112,115,118,121,124,127,130,141         
+ meta-table.js            |   76.47 |    81.25 |      50 |    75.4 | 92,95,98,115-117,130-144                                        
+ meta-view.js             |   80.26 |       80 |      75 |   81.53 | 131-133,153-166                                                 
+ observer.js              |     100 |      100 |     100 |     100 |                                                                 
+ util-type.js             |     100 |      100 |     100 |     100 |                                                                 
+ util.js                  |     100 |      100 |     100 |     100 |    
 ----------------------------------------
 
 잔디 체크
