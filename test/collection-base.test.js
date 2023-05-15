@@ -20,11 +20,11 @@ describe("< BaseCollection >", () => {
         //     constructor(level) { this.level = level }
         // }
         // School = class {
-        //     items = new ArrayCollection(this);
-        //     constructor() { this.items.elementType = Student }
+        //     columns = new ArrayCollection(this);
+        //     constructor() { this.columns.elementType = Student }
         // }
         School = class {
-            items = new BaseCollection(this);
+            columns = new BaseCollection(this);
             constructor() { }
         }
         Corp = class {
@@ -34,15 +34,15 @@ describe("< BaseCollection >", () => {
     it("- 예외 : 상속 없이 사용할 경우 ", () => {
         const i = new School();
         
-        expect(()=> i.items.add('a1')).toThrow(/add.*Abstract/);
-        expect(()=> i.items.clear()).toThrow(/clear.*Abstract/);
-        expect(()=> i.items._remove('a1')).toThrow(/_remove.*Abstract/);
+        expect(()=> i.columns.add('a1')).toThrow(/add.*Abstract/);
+        expect(()=> i.columns.clear()).toThrow(/clear.*Abstract/);
+        expect(()=> i.columns._remove('a1')).toThrow(/_remove.*Abstract/);
     });
     it("- _owner : 변경  ", () => {
         const i1 = new School();
         const i2 = new Corp();
-        i1.items._owner = i2;
+        i1.columns._owner = i2;
         
-        expect(i1.items._owner instanceof Corp).toBe(true);
+        expect(i1.columns._owner instanceof Corp).toBe(true);
     });
 });

@@ -23,8 +23,8 @@ describe("< MetaRow >", () => {
     });
     it("- new Row(entity) : 생성 ", () => {
         var table1 = new MetaTable('T1');
-        table1.items.addValue('i1', 'V1');
-        table1.items.addValue('i2', 'V2');
+        table1.columns.addValue('i1', 'V1');
+        table1.columns.addValue('i2', 'V2');
         var row1 = new MetaRow();
         var row2 = new MetaRow(table1);
         table1.rows.add(row1);
@@ -38,8 +38,8 @@ describe("< MetaRow >", () => {
     // TODO: 필요성 확인 검토
     // it("- copy() : 복사 ", () => {
     //     var table1 = new MetaTable('T1');
-    //     table1.items.addValue('i1', 'V1');
-    //     table1.items.addValue('i2', 'V2');
+    //     table1.columns.addValue('i1', 'V1');
+    //     table1.columns.addValue('i2', 'V2');
     //     var row1 = new MetaRow(table1);
     //     row1['i1'] = 'R1';
     //     row1['i2'] = 'R2';
@@ -63,8 +63,8 @@ describe("< MetaRow >", () => {
 describe("< MetaRowCollection >", () => {
     it("- add() : 빈 row 등록 ", () => {
         var table1 = new MetaTable('T1');
-        table1.items.addValue('i1', 'V1');
-        table1.items.addValue('i2', 'V2');
+        table1.columns.addValue('i1', 'V1');
+        table1.columns.addValue('i2', 'V2');
         table1.rows.add();
         
         expect(table1.rows[0].count).toBe(2);
@@ -74,8 +74,8 @@ describe("< MetaRowCollection >", () => {
     });
     it("- add(row) : row 등록 ", () => {
         var table1 = new MetaTable('T1');
-        table1.items.addValue('i1', 'V1');
-        table1.items.addValue('i2', 'V2');
+        table1.columns.addValue('i1', 'V1');
+        table1.columns.addValue('i2', 'V2');
         var row = new MetaRow(table1);
         row['i1'] = 'R1';
         row['i2'] = 'R2';

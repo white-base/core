@@ -58,14 +58,14 @@
             var refCollection;
 
             if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
-                refCollection = p_baseEntity.items;
+                refCollection = p_baseEntity.columns;
             }
             
             this._refEntity = p_baseEntity;
             
             this._refEntities = [];
 
-            this.items = new MetaViewColumnCollection(this, refCollection);
+            this.columns = new MetaViewColumnCollection(this, refCollection);
         }
         Util.inherits(MetaView, _super);
 
@@ -102,8 +102,8 @@
             //     clone._refEntities.push(this._refEntities[i]);
             // }
            
-            for(var i = 0; i < this.items.count; i++) {
-                clone.items.add(this.items[i].clone());
+            for(var i = 0; i < this.columns.count; i++) {
+                clone.columns.add(this.columns[i].clone());
             }
 
             for(var i = 0; i < this.rows.count; i++) {

@@ -10,7 +10,7 @@ var PropertyCollection          = require("./src/collection-property");
 // var PropertyFunctionCollection  = require('./src/collection-property-function');    // TODO: 삭제 대기
 var MetaObject                  = require("./src/meta-object");
 var MetaElement                 = require("./src/meta-element");
-var ComplexElement              = require("./src/meta-element-complex");
+// var ComplexElement              = require("./src/meta-element-complex");
 var MetaEntity                      = require('./src/meta-entity');
 var MetaView                  = require('./src/meta-view').MetaView;
 var MetaViewCollection        = require('./src/meta-view').MetaViewCollection;
@@ -25,7 +25,7 @@ var MetaRowCollection               = require('./src/meta-row').MetaRowCollectio
 var IObject                     = require('./src/i-object');
 var IMarshal                    = require('./src/i-marshal');
 var ICollection                 = require('./src/i-collection');
-var IControlCollection          = require('./src/i-collection-control');
+// var IControlCollection          = require('./src/i-collection-control');
 var IPropertyCollection         = require('./src/i-collection-property');
 var IAllControl                 = require('./src/i-control-all');
 var IExportControl              = require('./src/i-control-export');
@@ -44,7 +44,7 @@ module.exports = {
     // PropertyFunctionCollection: PropertyFunctionCollection,
     MetaObject: MetaObject,
     MetaElement: MetaElement,
-    ComplexElement: ComplexElement,
+    // ComplexElement: ComplexElement,
     MetaEntity: MetaEntity,
     MetaView: MetaView,
     MetaViewCollection: MetaViewCollection,
@@ -59,7 +59,7 @@ module.exports = {
     IObject: IObject,
     IMarshal: IMarshal,
     ICollection: ICollection,
-    IControlCollection: IControlCollection,
+    // IControlCollection: IControlCollection,
     IPropertyCollection: IPropertyCollection,
     IAllControl: IAllControl,
     IExportControl: IExportControl,
@@ -81,7 +81,7 @@ module.exports = {
     Meta: {
         MetaObject: MetaObject,
         MetaElement: MetaElement,
-        ComplexElement: ComplexElement,
+        // ComplexElement: ComplexElement,
         Entity: {
             MetaEntity: MetaEntity,
             MetaView: MetaView,
@@ -100,7 +100,7 @@ module.exports = {
         IObject: IObject,
         IMarshal: IMarshal,
         ICollection: ICollection,
-        IControlCollection: IControlCollection,
+        // IControlCollection: IControlCollection,
         IPropertyCollection: IPropertyCollection,
         IAllControl: IAllControl,
         IExportControl: IExportControl,

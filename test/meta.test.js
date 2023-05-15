@@ -7,7 +7,7 @@
 const Util                  = require('../src/util');
 const MetaObject            = require('../src/meta-object');
 const MetaElement           = require('../src/meta-element');
-const ComplexElement        = require('../src/meta-element-complex');
+// const ComplexElement        = require('../src/meta-element-complex');
 const IObject               = require('../src/i-object');
 const IMarshal              = require('../src/i-marshal');
 const IPropertyCollection   = require('../src/i-collection-property');
@@ -247,70 +247,70 @@ describe("< MetaElement >", () => {
     });
 
 });
-describe("< MetaComplexElement >", () => {
-    beforeAll(() => {
-        jest.resetModules();
-        // 클래스 정의        
-        ComplexElementSub = class ComplexElementSub extends ComplexElement {
-            constructor(name) { super(name) }
-        }
-    });
-    // it("- getTypeNames() : array<string> ", () => {
-    //     const c = new ComplexElementSub();
-    //     const typeNames = c.getTypeNames();
+// describe("< MetaComplexElement >", () => {
+//     beforeAll(() => {
+//         jest.resetModules();
+//         // 클래스 정의        
+//         ComplexElementSub = class ComplexElementSub extends ComplexElement {
+//             constructor(name) { super(name) }
+//         }
+//     });
+//     // it("- getTypeNames() : array<string> ", () => {
+//     //     const c = new ComplexElementSub();
+//     //     const typeNames = c.getTypeNames();
 
-    //     expect(typeNames[0]).toBe('Object');
-    //     expect(typeNames[1]).toBe('MetaObject');
-    //     expect(typeNames[2]).toBe('MetaElement');
-    //     expect(typeNames[3]).toBe('ComplexElement');
-    //     expect(typeNames[4]).toBe('ComplexElementSub');
-    //     expect(typeNames.length).toBe(5);
-    // });
-    // it("- getType() : function ", () => {
-    //     const c = new ComplexElementSub();
-    //     const type = c.getType();
+//     //     expect(typeNames[0]).toBe('Object');
+//     //     expect(typeNames[1]).toBe('MetaObject');
+//     //     expect(typeNames[2]).toBe('MetaElement');
+//     //     expect(typeNames[3]).toBe('ComplexElement');
+//     //     expect(typeNames[4]).toBe('ComplexElementSub');
+//     //     expect(typeNames.length).toBe(5);
+//     // });
+//     // it("- getType() : function ", () => {
+//     //     const c = new ComplexElementSub();
+//     //     const type = c.getType();
 
-    //     expect(type).toBe(ComplexElementSub);
-    // });
-    it("- getTypes() : array<function> ", () => {
-        const c = new ComplexElementSub();
-        const types = c.getTypes();
+//     //     expect(type).toBe(ComplexElementSub);
+//     // });
+//     it("- getTypes() : array<function> ", () => {
+//         const c = new ComplexElementSub();
+//         const types = c.getTypes();
 
-        expect(types[0]).toBe(ComplexElementSub);
-        expect(types[1]).toBe(ComplexElement);
-        expect(types[2]).toBe(MetaElement);
-        expect(types[3]).toBe(MetaObject);
-        expect(types[4]).toBe(Object);
-        expect(types.length).toBe(5);
-    });
-    it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-        const c = new ComplexElementSub();
+//         expect(types[0]).toBe(ComplexElementSub);
+//         expect(types[1]).toBe(ComplexElement);
+//         expect(types[2]).toBe(MetaElement);
+//         expect(types[3]).toBe(MetaObject);
+//         expect(types[4]).toBe(Object);
+//         expect(types.length).toBe(5);
+//     });
+//     it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
+//         const c = new ComplexElementSub();
 
-        expect(c.instanceOf('IObject')).toBe(true);
-        expect(c.instanceOf('IMarshal')).toBe(true);
-        expect(c.instanceOf('IPropertyCollection')).toBe(true);
-        expect(c.instanceOf('Object')).toBe(true);
-        expect(c.instanceOf('MetaObject')).toBe(true);
-        expect(c.instanceOf('MetaElement')).toBe(true);
-        expect(c.instanceOf('ComplexElement')).toBe(true);
-        expect(c.instanceOf('ComplexElementSub')).toBe(true);
-        // false
-        expect(c.instanceOf('Array')).toBe(false);
-        expect(c.instanceOf('String')).toBe(false);
-    });
-    it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-        const c = new ComplexElementSub();
+//         expect(c.instanceOf('IObject')).toBe(true);
+//         expect(c.instanceOf('IMarshal')).toBe(true);
+//         expect(c.instanceOf('IPropertyCollection')).toBe(true);
+//         expect(c.instanceOf('Object')).toBe(true);
+//         expect(c.instanceOf('MetaObject')).toBe(true);
+//         expect(c.instanceOf('MetaElement')).toBe(true);
+//         expect(c.instanceOf('ComplexElement')).toBe(true);
+//         expect(c.instanceOf('ComplexElementSub')).toBe(true);
+//         // false
+//         expect(c.instanceOf('Array')).toBe(false);
+//         expect(c.instanceOf('String')).toBe(false);
+//     });
+//     it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
+//         const c = new ComplexElementSub();
 
-        expect(c.instanceOf(IObject)).toBe(true);
-        expect(c.instanceOf(IMarshal)).toBe(true);
-        expect(c.instanceOf(IPropertyCollection)).toBe(true);
-        expect(c.instanceOf(Object)).toBe(true);
-        expect(c.instanceOf(MetaObject)).toBe(true);
-        expect(c.instanceOf(MetaElement)).toBe(true);
-        expect(c.instanceOf(ComplexElement)).toBe(true);
-        expect(c.instanceOf(ComplexElementSub)).toBe(true);
-        // false
-        expect(c.instanceOf(Array)).toBe(false);
-        expect(c.instanceOf(String)).toBe(false);
-    });
-});
+//         expect(c.instanceOf(IObject)).toBe(true);
+//         expect(c.instanceOf(IMarshal)).toBe(true);
+//         expect(c.instanceOf(IPropertyCollection)).toBe(true);
+//         expect(c.instanceOf(Object)).toBe(true);
+//         expect(c.instanceOf(MetaObject)).toBe(true);
+//         expect(c.instanceOf(MetaElement)).toBe(true);
+//         expect(c.instanceOf(ComplexElement)).toBe(true);
+//         expect(c.instanceOf(ComplexElementSub)).toBe(true);
+//         // false
+//         expect(c.instanceOf(Array)).toBe(false);
+//         expect(c.instanceOf(String)).toBe(false);
+//     });
+// });

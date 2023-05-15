@@ -20,15 +20,15 @@
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
-        Util                = require('./util');
-        MetaEntity              = require('./meta-entity');
-        PropertyCollection  = require('./collection-property');
-        MetaTableColumnCollection = require('./meta-column').MetaTableColumnCollection;
+        Util                        = require('./util');
+        MetaEntity                  = require('./meta-entity');
+        PropertyCollection          = require('./collection-property');
+        MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
     } else {    
-        Util                = _global._L.Common.Util;
-        MetaEntity              = _global._L.Meta.Entity.MetaEntity;
-        PropertyCollection  = _global._L.Collection.PropertyCollection;
-        MetaTableColumnCollection = _global._L.Meta.Entity.MetaTableColumnCollection;
+        Util                        = _global._L.Common.Util;
+        MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
+        PropertyCollection          = _global._L.Collection.PropertyCollection;
+        MetaTableColumnCollection   = _global._L.Meta.Entity.MetaTableColumnCollection;
     }
 
     //==============================================================
@@ -50,7 +50,7 @@
         function MetaTable(p_name) {
             _super.call(this, p_name);
 
-            this.items = new MetaTableColumnCollection(this);
+            this.columns = new MetaTableColumnCollection(this);
         }
         Util.inherits(MetaTable, _super);
 
@@ -73,9 +73,9 @@
         MetaTable.prototype.clone  = function() {
             var clone = new MetaTable(this.name);
             
-            // items 복제본 추가
-            for(var i = 0; i < this.items.count; i++) {
-                clone.items.add(this.items[i].clone());
+            // columns 복제본 추가
+            for(var i = 0; i < this.columns.count; i++) {
+                clone.columns.add(this.columns[i].clone());
             }
             
             // rows 복제본 추가
@@ -84,6 +84,16 @@
             }
             
             return clone;
+        };
+
+        MetaTable.prototype.acceptChanges  = function() {
+            console.log('구현해야함');  // COVER:
+        };
+        MetaTable.prototype.rejectChanges  = function() {
+            console.log('구현해야함');  // COVER:
+        };
+        MetaTable.prototype.getChanges  = function() {
+            console.log('구현해야함');  // COVER:
         };
 
         return MetaTable;

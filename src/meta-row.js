@@ -58,11 +58,11 @@
             if (p_entity && p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity')) {
                 __entity    = p_entity;
 
-                for (var i = 0; i < __entity.items.count; i++) {
+                for (var i = 0; i < __entity.columns.count; i++) {
                     
                     // 별칭 가져오기로 수정함
-                    // itemName = __entity.items[i].name;   
-                    itemName = __entity.items[i].alias;
+                    // itemName = __entity.columns[i].name;   
+                    itemName = __entity.columns[i].alias;
                     _super.prototype.add.call(this, itemName, null);
                 }
             }
@@ -105,14 +105,21 @@
             var clone = new MetaRow(this.entity);
             var itemName;
 
-            for (var i = 0; i < this.entity.items.count; i++) {
-                itemName = this.entity.items[i].name;
+            for (var i = 0; i < this.entity.columns.count; i++) {
+                itemName = this.entity.columns[i].name;
                 clone[itemName] = this[itemName];
             }
 
             return clone;
         };
         
+        MetaRow.prototype.acceptChanges  = function() {
+            console.log('구현해야함');  // COVER:
+        };
+        MetaRow.prototype.rejectChanges  = function() {
+            console.log('구현해야함');  // COVER:
+        };
+
         return MetaRow;
     
     }(PropertyCollection));

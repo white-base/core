@@ -77,7 +77,7 @@
             // MetaEntity 등록 & order(순서) 값 계산
             if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
                 __entity    = p_entity;
-                __order     = __entity.items.count === 0 ? __order : __entity.items[__entity.items.count - 1].order + __increase;
+                __order     = __entity.columns.count === 0 ? __order : __entity.columns[__entity.columns.count - 1].order + __increase;
             }
 
             /** @private */
@@ -634,30 +634,30 @@
          * @abstract
          * @param {*} p_owner 소유자 
          */
-        function MetaColumnCollection(p_owner, p_itemType) {
+        function MetaColumnCollection(p_owner, p_columnType) {
             _super.call(this, p_owner);
             
-            var _itemType;
+            var _columnType;
 
             /**
              * 아이템의 타입
-             * @member {Function} _L.Meta.Entity.MetaColumnCollection#itemType
+             * @member {Function} _L.Meta.Entity.MetaColumnCollection#columnType
              */
-            Object.defineProperty(this, 'itemType', 
+            Object.defineProperty(this, 'columnType', 
             {
                 get: function() { 
-                    return _itemType; 
+                    return _columnType; 
                 },
                 set: function(newValue) { 
-                    if (typeof p_itemType === 'function')  throw new Error('It is not a function type.');
+                    if (typeof p_columnType === 'function')  throw new Error('It is not a function type.');
                     if (!(new newValue() instanceof MetaColumn)) throw new Error('MetaColumn is not a subfunction.');
-                    _itemType = newValue; 
+                    _columnType = newValue; 
                 },
                 enumerable: true,
                 configurable: false,
             });
 
-            this.itemType = p_itemType || MetaColumn;
+            this.columnType = p_columnType || MetaColumn;
 
             
         }
@@ -693,7 +693,7 @@
             
             property = { value: p_value };
 
-            item = new this.itemType(p_name, this._owner, property);
+            item = new this.columnType(p_name, this._owner, property);
 
             return this.add(item);
         };
@@ -740,8 +740,8 @@
 
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
-                i_value = new this.itemType(i_name, this._owner);
-            } else if (p_object instanceof this.itemType) {
+                i_value = new this.columnType(i_name, this._owner);
+            } else if (p_object instanceof this.columnType) {
                 // MetaTable 직접만 적용(참조형 아이템 소유 못함)
                 i_name  = p_object.name;
                 i_value = p_object.clone();
@@ -811,12 +811,12 @@
                 i_value = p_object;
             } else if (typeof p_object === 'string') {
                 i_name = p_object;
-                i_value = new this.itemType(i_name, this._owner);
+                i_value = new this.columnType(i_name, this._owner);
 // POINT::
             // } else if (p_object instanceof MetaElement && p_object.instanceOf('MetaEntity')) {
             //     // 아아템 가져오기
-            //     for (var i = 0; p_object.items.count > i; i++) {
-            //         this.add(p_object.items[i]);
+            //     for (var i = 0; p_object.columns.count > i; i++) {
+            //         this.add(p_object.columns[i]);
             //     }
             } else {
                 throw new Error('p_object string | MetaColumn instance param request fail...');   // COVER:
@@ -860,8 +860,8 @@
                 throw new Error('Only [p_entity] type "MetaEntity" can be added');  // COVER:
             }
 
-            for (var i = 0; p_entity.items.count > i; i++) {
-                this.add(p_entity.items[i]);
+            for (var i = 0; p_entity.columns.count > i; i++) {
+                this.add(p_entity.columns[i]);
             }
         };
         

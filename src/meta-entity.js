@@ -23,21 +23,21 @@
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
-        Util                    = require('./util');
-        MetaElement             = require('./meta-element');
-        IGroupControl           = require('./i-control-group');
-        IAllControl             = require('./i-control-all');
+        Util                        = require('./util');
+        MetaElement                 = require('./meta-element');
+        IGroupControl               = require('./i-control-group');
+        IAllControl                 = require('./i-control-all');
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
         MetaRow                     = require('./meta-row').MetaRow;
-        MetaColumnCollection          = require('./meta-column').MetaColumnCollection;
+        MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
     } else {    // COVER:
         Util                    = _global._L.Common.Util;
         MetaElement             = _global._L.Meta.MetaElement;
         IGroupControl           = _global._L.Interface.IGroupControl;
         IAllControl             = _global._L.Interface.IAllControl;
-        MetaRowCollection           = _global._L.Meta.Entity.MetaRowCollection;
-        MetaRow                     = _global._L.Meta.Entity.MetaRow;
-        MetaColumnCollection          = _global._L.Meta.Entity.MetaColumnCollection;
+        MetaRowCollection       = _global._L.Meta.Entity.MetaRowCollection;
+        MetaRow                 = _global._L.Meta.Entity.MetaRow;
+        MetaColumnCollection    = _global._L.Meta.Entity.MetaColumnCollection;
     }
 
     //==============================================================
@@ -65,19 +65,19 @@
         function MetaEntity(p_name) {
             _super.call(this, p_name);
 
-            var __items = null;     // 상속해서 생성해야함
+            var __columns = null;     // 상속해서 생성해야함
             var __rows  = new MetaRowCollection(this);
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
-             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#items
+             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#columns
              */
-            Object.defineProperty(this, 'items', 
+            Object.defineProperty(this, 'columns', 
             {
-                get: function() { return __items; },
+                get: function() { return __columns; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [items] type "MetaColumnCollection" can be added');
-                    __items = newValue;
+                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
+                    __columns = newValue;
                 },
                 configurable: true,
                 enumerable: true
@@ -111,11 +111,11 @@
          */
         MetaEntity.prototype.__addItem  = function(p_name, p_property) {
             
-            if(!this.items.contains(this.items[p_name])) this.items.add(p_name);
+            if(!this.columns.contains(this.columns[p_name])) this.columns.add(p_name);
             
             if (typeof p_property === 'object' ) {
                 for(var prop in p_property) {
-                    this.items[p_name][prop] = p_property[prop];
+                    this.columns[p_name][prop] = p_property[prop];
                 }
             }
         };
@@ -128,8 +128,8 @@
             var itemName;
             
             for (var i = 0 ; i < this.rows.count; i++) {
-                for (var ii = 0; ii < p_target.items.count; ii++) {
-                    itemName = p_target.items[ii].name;
+                for (var ii = 0; ii < p_target.columns.count; ii++) {
+                    itemName = p_target.columns[ii].name;
                     if (typeof this.rows[i][itemName] === 'undefined') {
                         this.rows[i].add(itemName, '');
                     }
@@ -158,18 +158,18 @@
             
 
             // 1.itmes, rows 배열로 구조 변경
-            if (!Array.isArray(entity.items)) entity.items = [entity.items];
+            if (!Array.isArray(entity.columns)) entity.columns = [entity.columns];
             if (!Array.isArray(entity.rows)) entity.rows = [entity.rows];
 
             // 2.병합
             if (p_option === 1) {
                 // MetaColumn 기준으로 아이템 가져오기
-                if (entity.items && entity.items[0]) {
-                    for(var i = 0; entity.items.length > i; i++) {
+                if (entity.columns && entity.columns[0]) {
+                    for(var i = 0; entity.columns.length > i; i++) {
                         // MetaColumn 가져오기
-                        for (var prop in entity.items[i]) {
-                            if (entity.items[i].hasOwnProperty(prop)) {
-                                this.__addItem(prop, entity.items[i][prop]);
+                        for (var prop in entity.columns[i]) {
+                            if (entity.columns[i].hasOwnProperty(prop)) {
+                                this.__addItem(prop, entity.columns[i][prop]);
                             }
                         }
                     }
@@ -186,7 +186,7 @@
             }
             
             // 3.MetaRow 데이터 가져오기
-            if (this.items.count > 0 && entity.rows && entity.rows[0]) {
+            if (this.columns.count > 0 && entity.rows && entity.rows[0]) {
                 for(var i = 0; entity.rows.length > i; i++) {
                     
                     row = this.newRow();
@@ -201,8 +201,8 @@
             
             // 4.빈 MetaRow 채우기
             for (var i = 0 ; i < this.rows.count; i++) {
-                for (var ii = 0; ii < this.items.count; ii++) {
-                    itemName = this.items[ii].name;
+                for (var ii = 0; ii < this.columns.count; ii++) {
+                    itemName = this.columns[ii].name;
                     if (typeof this.rows[i][itemName] === 'undefined') {
                         this.rows[i].add(itemName, '');
                     }
@@ -226,9 +226,9 @@
             // 1.병합
             if (p_option === 1) {
                 // MetaColumn 기준으로 아이템 가져오기
-                for(var i = 0; entity.items.count > i; i++) {
-                    itemName = entity.items[i].name;
-                    if (typeof this.items[itemName] === 'undefined') this.items.add(entity.items[i]);
+                for(var i = 0; entity.columns.count > i; i++) {
+                    itemName = entity.columns[i].name;
+                    if (typeof this.columns[itemName] === 'undefined') this.columns.add(entity.columns[i]);
                 }
             }
             
@@ -237,8 +237,8 @@
                 
                 row = this.newRow();
 
-                for (var ii = 0; ii < this.items.count; ii++) {
-                    itemName = this.items[ii].name;
+                for (var ii = 0; ii < this.columns.count; ii++) {
+                    itemName = this.columns[ii].name;
                     
                     // row[itemName] = typeof entity.rows[i][itemName] !== 'undefined' ? entity.rows[i][itemName] : '';
                     // 이해하기 쉽게 코드 변경
@@ -283,11 +283,11 @@
 
             if (!(p_row instanceof MetaRow)) throw new Error('Only [p_row] type "Row" can be added');
 
-            for(var i = 0; this.items.count > i; i++) {
+            for(var i = 0; this.columns.count > i; i++) {
                 
-                // this.items[i].value = p_row[i];
-                _name = this.items[i].alias;        // 별칭이 없을시 기본이름
-                this.items[i].value = p_row[_name];
+                // this.columns[i].value = p_row[i];
+                _name = this.columns[i].alias;        // 별칭이 없을시 기본이름
+                this.columns[i].value = p_row[_name];
             }
         };
 
@@ -298,8 +298,8 @@
         MetaEntity.prototype.getValue  = function() {
             var row = this.newRow();
             
-            for(var i = 0; this.items.count > i; i++) {
-                 row[i] = this.items[i].value;
+            for(var i = 0; this.columns.count > i; i++) {
+                 row[i] = this.columns[i].value;
             }
             return row;
         };
@@ -335,8 +335,8 @@
                 var row = entity.newRow();
                 var i_name;
 
-                for (var i = 0; entity.items.count > i ; i++) {
-                    i_name = entity.items[i].name;
+                for (var i = 0; entity.columns.count > i ; i++) {
+                    i_name = entity.columns[i].name;
                     if (typeof row[i_name] !== 'undefined' && typeof orgEntity.rows[rowIdx][i_name] !== 'undefined') {
                         row[i_name] = orgEntity.rows[rowIdx][i_name];
                     }
@@ -349,17 +349,17 @@
                 if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
                 else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
             } 
-            for (var i = 0; this.items.count > i; i++) {
-                if (excepts.indexOf(this.items[i].name) < 0)  {
+            for (var i = 0; this.columns.count > i; i++) {
+                if (excepts.indexOf(this.columns[i].name) < 0)  {
                     
                     // 임시함수에 객체 생성방식
                     f = function() {};
-                    f.prototype = this.items[i];
+                    f.prototype = this.columns[i];
                     var obj = new f();
                     
                     // 필터 설정(등록)
-                    if (p_filter && p_filter[this.items[i].name]) {
-                        filterItem = p_filter[this.items[i].name];    
+                    if (p_filter && p_filter[this.columns[i].name]) {
+                        filterItem = p_filter[this.columns[i].name];    
                         for(var prop in filterItem) {
                             obj[prop] = filterItem[prop];
                         }
@@ -373,7 +373,7 @@
 
             // 3.리턴 MetaEntity 의 MetaColumn 구성 : 참조형
             for(var i = 0; i < list.length; i++) {
-                entity.items.add(list[i]);
+                entity.columns.add(list[i]);
             }
             
             // 4.리턴 MetaEntity 의 MetaRow 구성 : 참조형
@@ -415,8 +415,8 @@
          * @desc
          * 병합 : 컬렉션 순서에 따라 병한다.
          * MetaColumn MetaRow 가 있는 경우
-         * - 1 items, rows 병합 (기존유지) *기본값
-         * - 2 items, rows 병합 (덮어쓰기)  
+         * - 1 columns, rows 병합 (기존유지) *기본값
+         * - 2 columns, rows 병합 (덮어쓰기)  
          * - 3 row 안가져오기    (기존유지)
          */
         MetaEntity.prototype.merge  = function(p_target, p_option) {
@@ -429,17 +429,17 @@
             if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
 
             // 2.병합 : MetaColumn 기준으로 아이템 가져오기
-            for(var i = 0; p_target.items.count > i; i++) {
-                itemName = p_target.items[i].name;
+            for(var i = 0; p_target.columns.count > i; i++) {
+                itemName = p_target.columns[i].name;
                 
                 // 없으면 생성
-                if (typeof this.items[itemName] === 'undefined') {
-                    this.items.add(p_target.items[i]);
+                if (typeof this.columns[itemName] === 'undefined') {
+                    this.columns.add(p_target.columns[i]);
                 }
                 
                 // option = 2: 기존 item 덮어쓰기
-                if (p_option === 2 && typeof this.items[itemName] !== 'undefined') {
-                    this.items[itemName] = p_target.items[itemName];
+                if (p_option === 2 && typeof this.columns[itemName] !== 'undefined') {
+                    this.columns[itemName] = p_target.columns[itemName];
                 }
             }
             
@@ -449,8 +449,8 @@
                     // this.rows 있는 경우
                     if (typeof this.rows[i] !== 'undefined') {  
                         row = this.rows[i];
-                        for (var ii = 0; ii < p_target.items.count; ii++) {
-                            itemName = p_target.items[ii].name;
+                        for (var ii = 0; ii < p_target.columns.count; ii++) {
+                            itemName = p_target.columns[ii].name;
                             if (typeof this.rows[i][itemName] === 'undefined') {    // 이름이 없는 경우
                                 row.add(itemName, p_target.rows[i][itemName]);
                             } else if (p_option === 2 && typeof this.rows[i][itemName] !== 'undefined') {   // 덮어쓰기
@@ -460,8 +460,8 @@
                     // this.rows 없는 경우
                     } else {                                    
                         row = this.newRow();
-                        for (var ii = 0; ii < p_target.items.count; ii++) {
-                            itemName = p_target.items[ii].name;
+                        for (var ii = 0; ii < p_target.columns.count; ii++) {
+                            itemName = p_target.columns[ii].name;
                             // 덮어쓰기
                             if (p_option === 2) row[itemName] = p_target.rows[i][itemName];
                         }
@@ -491,17 +491,20 @@
             }
         };
         
+        /** @abstract */
+        MetaEntity.prototype.clone  = function() {
+            throw new Error('[ clone() ] Abstract method definition, fail...');
+        };
+
         /** 
          * 아이템과 로우를 초기화 한다.
          */
         MetaEntity.prototype.clear  = function() {
-            this.items.clear();
+            this.columns.clear();
             this.rows.clear();
         };
-
-        /** @abstract */
-        MetaEntity.prototype.clone  = function() {
-            throw new Error('[ clone() ] Abstract method definition, fail...'); // COVER:
+        MetaEntity.prototype.reset  = function() {
+            console.log('구현해야함');  // COVER:
         };
 
         return MetaEntity;

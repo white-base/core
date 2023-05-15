@@ -51,12 +51,12 @@ describe('index 타입 검사', () => {
     it('- _L.Meta.* ', () => {
         expect(typeof index.MetaObject).toBe('function');
         expect(typeof index.MetaElement).toBe('function');
-        expect(typeof index.ComplexElement).toBe('function');
+        // expect(typeof index.ComplexElement).toBe('function');
         // namespace
         expect(typeof index.Meta).toBe('object');
         expect(typeof index.Meta.MetaObject).toBe('function');
         expect(typeof index.Meta.MetaElement).toBe('function');
-        expect(typeof index.Meta.ComplexElement).toBe('function');
+        // expect(typeof index.Meta.ComplexElement).toBe('function');
     });
     it('- _L.Meta.Entity.* ', () => {
         expect(typeof index.MetaEntity).toBe('function');
@@ -86,7 +86,7 @@ describe('index 타입 검사', () => {
         expect(typeof index.IObject).toBe('function');
         expect(typeof index.IMarshal).toBe('function');
         expect(typeof index.ICollection).toBe('function');
-        expect(typeof index.IControlCollection).toBe('function');
+        // expect(typeof index.IControlCollection).toBe('function');
         expect(typeof index.IPropertyCollection).toBe('function');
         expect(typeof index.IAllControl).toBe('function');
         expect(typeof index.IExportControl).toBe('function');
@@ -99,7 +99,7 @@ describe('index 타입 검사', () => {
         expect(typeof index.Interface.IObject).toBe('function');
         expect(typeof index.Interface.IMarshal).toBe('function');
         expect(typeof index.Interface.ICollection).toBe('function');
-        expect(typeof index.Interface.IControlCollection).toBe('function');
+        // expect(typeof index.Interface.IControlCollection).toBe('function');
         expect(typeof index.Interface.IPropertyCollection).toBe('function');
         expect(typeof index.Interface.IAllControl).toBe('function');
         expect(typeof index.Interface.IExportControl).toBe('function');

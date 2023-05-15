@@ -23,99 +23,99 @@ describe("[ this.elementType 전체 타입을 설정할 경우 : 클래스타입
             constructor(type) { this.type = type }
         }
         School = class {
-            items = new ArrayCollection(this);
-            constructor() { this.items.elementType = Student }
+            columns = new ArrayCollection(this);
+            constructor() { this.columns.elementType = Student }
         }
         Corp = class {
-            items = new ArrayCollection(this);
-            constructor() { this.items.elementType = [Member, Student] }
+            columns = new ArrayCollection(this);
+            constructor() { this.columns.elementType = [Member, Student] }
         }
         House = class {
-            items = new ArrayCollection(this);
-            constructor() { this.items.elementType = null }
+            columns = new ArrayCollection(this);
+            constructor() { this.columns.elementType = null }
         }
         Space = class {
-            items = new ArrayCollection(this);
+            columns = new ArrayCollection(this);
         }
 
     });
-    it("- 단일 타입 : items.add(name, obj) ", () => {
+    it("- 단일 타입 : columns.add(name, obj) ", () => {
         const elem = new School();
         const c1 = new Student(1);
-        const result = elem.items.add(c1);
+        const result = elem.columns.add(c1);
         
-        expect(() => elem.items.add(null)).toThrow(/instance/);
-        expect(() => elem.items.add('str')).toThrow(/instance/);
+        expect(() => elem.columns.add(null)).toThrow(/instance/);
+        expect(() => elem.columns.add('str')).toThrow(/instance/);
         expect(result).toBeTruthy();
     });
-    it("- 단일 타입 : items.요소명 = obj ", () => {
+    it("- 단일 타입 : columns.요소명 = obj ", () => {
         const elem = new School();
         const c1 = new Student(1);
         const c2 = new Student(2);
-        const result = elem.items.add(c1);
-        elem.items[0] = c2;
+        const result = elem.columns.add(c1);
+        elem.columns[0] = c2;
 
-        expect(() => elem.items[0] = 10 ).toThrow(/instance/);
-        expect(elem.items[0].level).toBe(2);                   // 교체된 객체
-        expect(elem.items[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
+        expect(() => elem.columns[0] = 10 ).toThrow(/instance/);
+        expect(elem.columns[0].level).toBe(2);                   // 교체된 객체
+        expect(elem.columns[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
         expect(result).toBeTruthy();
     });
-    it("- null 타입 : items.add(name, obj) ", () => {
+    it("- null 타입 : columns.add(name, obj) ", () => {
         const elem = new House();
         const c1 = new Student(1);
-        const result1 = elem.items.add( c1);
-        const result2 = elem.items.add('str');
+        const result1 = elem.columns.add( c1);
+        const result2 = elem.columns.add('str');
         
-        expect(() => elem.items.add()).toThrow(/없습니다./);
-        expect(elem.items[0].level).toBe(1);
-        elem.items[0] = 'OVER';
-        expect(elem.items[0]).toBe('OVER');
+        expect(() => elem.columns.add()).toThrow(/없습니다./);
+        expect(elem.columns[0].level).toBe(1);
+        elem.columns[0] = 'OVER';
+        expect(elem.columns[0]).toBe('OVER');
         expect(result1).toBeTruthy();
         expect(result2).toBeTruthy();
     });
-    it("- undefined 타입 : items.add(name, obj) ", () => {
+    it("- undefined 타입 : columns.add(name, obj) ", () => {
         const elem = new Space();
         const c1 = new Student(1);
-        const result1 = elem.items.add(c1);
-        const result2 = elem.items.add('str');
-        const result3 = elem.items.add();
+        const result1 = elem.columns.add(c1);
+        const result2 = elem.columns.add('str');
+        const result3 = elem.columns.add();
 
-        expect(elem.items[0].level).toBe(1);
-        expect(elem.items[1]).toBe('str');
-        expect(elem.items[2]).toBeUndefined();
-        elem.items[2] = 'OVER';    // 수정
-        expect(elem.items[2]).toBe('OVER');
+        expect(elem.columns[0].level).toBe(1);
+        expect(elem.columns[1]).toBe('str');
+        expect(elem.columns[2]).toBeUndefined();
+        elem.columns[2] = 'OVER';    // 수정
+        expect(elem.columns[2]).toBe('OVER');
         expect(result1).toBeTruthy();
         expect(result2).toBeTruthy();
         expect(result3).toBeTruthy();
     });
-    it("- 복합 타입 : items.add(name, obj) ", () => {
+    it("- 복합 타입 : columns.add(name, obj) ", () => {
         const elem = new Corp();
         const c1 = new Student(1);
         const m1 = new Member(1);
-        const result1 = elem.items.add(c1);
-        const result2 = elem.items.add(m1);
+        const result1 = elem.columns.add(c1);
+        const result2 = elem.columns.add(m1);
         
-        expect(() => elem.items.add(null)).toThrow(/instance/);
-        expect(() => elem.items.add('str')).toThrow(/instance/);
+        expect(() => elem.columns.add(null)).toThrow(/instance/);
+        expect(() => elem.columns.add('str')).toThrow(/instance/);
         expect(result1).toBeTruthy();
         expect(result2).toBeTruthy();
     });
-    it("- 복합 타입 : items.요소명 = obj ", () => {
+    it("- 복합 타입 : columns.요소명 = obj ", () => {
         const elem = new Corp();
         const c1 = new Student(1);
         const c2 = new Student(2);
         const m1 = new Member(1);
-        const result1 = elem.items.add(c1);
-        const result2 = elem.items.add(m1);
-        elem.items[0] = c2;
-        elem.items[1] = c2;
+        const result1 = elem.columns.add(c1);
+        const result2 = elem.columns.add(m1);
+        elem.columns[0] = c2;
+        elem.columns[1] = c2;
 
-        expect(() => elem.items[0] = 'str' ).toThrow(/instance/);
-        expect(elem.items[0].level).toBe(2);                   // 교체된 객체
-        expect(elem.items[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
-        expect(elem.items[1].level).toBe(2);                   // 교체된 객체
-        expect(elem.items[1] instanceof Student).toBeTruthy(); // 인스턴스 검사
+        expect(() => elem.columns[0] = 'str' ).toThrow(/instance/);
+        expect(elem.columns[0].level).toBe(2);                   // 교체된 객체
+        expect(elem.columns[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
+        expect(elem.columns[1].level).toBe(2);                   // 교체된 객체
+        expect(elem.columns[1] instanceof Student).toBeTruthy(); // 인스턴스 검사
         expect(result1).toBeTruthy();
         expect(result2).toBeTruthy();
     });
@@ -125,54 +125,54 @@ describe("[ this.elementType 전체 타입을 설정할 경우 : 원시타입  ]
         jest.resetModules();
         // 클래스 정의
         School = class {
-            items = new ArrayCollection(this);
-            constructor() { this.items.elementType = String }
+            columns = new ArrayCollection(this);
+            constructor() { this.columns.elementType = String }
         }
         Corp = class {
-            items = new ArrayCollection(this);
-            constructor() { this.items.elementType = [String, Boolean] }
+            columns = new ArrayCollection(this);
+            constructor() { this.columns.elementType = [String, Boolean] }
         }
     });
-    it("- 단일 타입 : items.add(name, obj) ", () => {
+    it("- 단일 타입 : columns.add(name, obj) ", () => {
         const i = new School();
-        const result1 = i.items.add('A1');
-        const result2 = i.items.add('');
-        i.items[0] = 'AA1';
-        i.items[1] = 'AA2';
+        const result1 = i.columns.add('A1');
+        const result2 = i.columns.add('');
+        i.columns[0] = 'AA1';
+        i.columns[1] = 'AA2';
 
-        expect(() => i.items.add(null)).toThrow(/string/);     // 공백 예외
-        expect(() => i.items.add(10)).toThrow(/string/); // 타입 예외
-        expect(() => i.items[0] = 10).toThrow(/string/);
+        expect(() => i.columns.add(null)).toThrow(/string/);     // 공백 예외
+        expect(() => i.columns.add(10)).toThrow(/string/); // 타입 예외
+        expect(() => i.columns[0] = 10).toThrow(/string/);
         expect(result1).toBeTruthy();
         expect(result2).toBeTruthy();
     });
-    it("- 복합 타입 : items.add(name, obj)  [String, Boolean] ", () => {
+    it("- 복합 타입 : columns.add(name, obj)  [String, Boolean] ", () => {
         const i = new Corp();
-        const result1 = i.items.add('A1');
-        const result2 = i.items.add(true);
+        const result1 = i.columns.add('A1');
+        const result2 = i.columns.add(true);
         
-        expect(() => i.items.add(undefined)).toThrow(/(boolean)|(string)/);  // 값이 없음
-        expect(() => i.items.add(null)).toThrow(/(boolean)|(string)/);    // 공백 예외
-        expect(() => i.items.add(10)).toThrow(/(boolean)|(string)/);// 타입 예외
-        expect(() => i.items.add({})).toThrow(/(boolean)|(string)/);
-        expect(() => i.items[0] = 10).toThrow(/(boolean)|(string)/);
+        expect(() => i.columns.add(undefined)).toThrow(/(boolean)|(string)/);  // 값이 없음
+        expect(() => i.columns.add(null)).toThrow(/(boolean)|(string)/);    // 공백 예외
+        expect(() => i.columns.add(10)).toThrow(/(boolean)|(string)/);// 타입 예외
+        expect(() => i.columns.add({})).toThrow(/(boolean)|(string)/);
+        expect(() => i.columns[0] = 10).toThrow(/(boolean)|(string)/);
         expect(result1).toBeTruthy();
         expect(result2).toBeTruthy();
     });
     it("- 유무 검사 : exist(key) ", () => {
         const i = new Corp();
-        const result1 = i.items.add('A1');
-        const result2 = i.items.add(true);
+        const result1 = i.columns.add('A1');
+        const result2 = i.columns.add(true);
         
         expect(result1).toBeTruthy();
         expect(result2).toBeTruthy();
-        expect(i.items.exist(0)).toBe(true);
-        expect(i.items.exist(1)).toBe(true);
-        expect(i.items.exist(2)).toBe(false);
-        expect(i.items.exist('0')).toBe(true);
-        expect(i.items.exist('1')).toBe(true);
-        expect(i.items.exist('2')).toBe(false);
-        expect(()=> i.items.exist(true)).toThrow(/key.*number.*string/);
+        expect(i.columns.exist(0)).toBe(true);
+        expect(i.columns.exist(1)).toBe(true);
+        expect(i.columns.exist(2)).toBe(false);
+        expect(i.columns.exist('0')).toBe(true);
+        expect(i.columns.exist('1')).toBe(true);
+        expect(i.columns.exist('2')).toBe(false);
+        expect(()=> i.columns.exist(true)).toThrow(/key.*number.*string/);
     });
 });
 describe("< ArrayCollection >", () => {
@@ -180,7 +180,7 @@ describe("< ArrayCollection >", () => {
         jest.resetModules();
         // 클래스 정의
         Student = class {
-            items = new ArrayCollection(this);
+            columns = new ArrayCollection(this);
         }
     });
     describe("< this.add(value?, desc?) >", () => {
@@ -188,18 +188,18 @@ describe("< ArrayCollection >", () => {
         });
         it("- add() : undefined", () => {
             let s = new Student();
-            const result = s.items.add();
+            const result = s.columns.add();
     
-            expect(s.items[0]).toBeUndefined();
-            expect(s.items.count).toBe(1);
+            expect(s.columns[0]).toBeUndefined();
+            expect(s.columns.count).toBe(1);
             expect(result).toBeTruthy();
         });
         it("- add(value) ", () => {
             let s = new Student();
-            const result = s.items.add('A1');
+            const result = s.columns.add('A1');
     
-            expect(s.items[0]).toBe('A1');
-            expect(s.items.count).toBe(1);
+            expect(s.columns[0]).toBe('A1');
+            expect(s.columns.count).toBe(1);
             expect(result).toBeTruthy();
         });
         it("- add(value, desc) : 읽기 전용", () => {
@@ -208,12 +208,12 @@ describe("< ArrayCollection >", () => {
                 value: 'A1',
                 writable: false
             };
-            const result = s.items.add(null, desc);
+            const result = s.columns.add(null, desc);
 
-            expect(() => s.items[0] = 1).toThrow(/0/);
-            expect(s.items[0]).toBe('A1');
-            expect(s.items['0']).toBe('A1');
-            expect(s.items.count).toBe(1);
+            expect(() => s.columns[0] = 1).toThrow(/0/);
+            expect(s.columns[0]).toBe('A1');
+            expect(s.columns['0']).toBe('A1');
+            expect(s.columns.count).toBe(1);
             expect(result).toBeTruthy();
         });
         it("- add(name, value, desc) : set/get (제약조건 추가) ", () => {
@@ -230,13 +230,13 @@ describe("< ArrayCollection >", () => {
                 enumerable: true,
                 configurable: true,
             }
-            const result = s.items.add(null, desc);
-            s.items[0] = 'A1';
+            const result = s.columns.add(null, desc);
+            s.columns[0] = 'A1';
 
-            expect(() => s.items[0] = 1).toThrow(/string/);
-            expect(s.items[0]).toBe('A1');
-            expect(s.items['0']).toBe('A1');
-            expect(s.items.count).toBe(1);
+            expect(() => s.columns[0] = 1).toThrow(/string/);
+            expect(s.columns[0]).toBe('A1');
+            expect(s.columns['0']).toBe('A1');
+            expect(s.columns.count).toBe(1);
             expect(result).toBeTruthy();
         });
     });
@@ -246,44 +246,44 @@ describe("< ArrayCollection >", () => {
         // });
         it("- remove(elem) : string ", () => {
             let s = new Student();
-            s.items.add('A1');
-            const result = s.items.remove('A1');
+            s.columns.add('A1');
+            const result = s.columns.remove('A1');
 
-            expect(s.items[0]).toBeUndefined();
-            expect(s.items['0']).toBeUndefined();
-            expect(s.items.count).toBe(0);
-            expect(s.items.list.length).toBe(0);
+            expect(s.columns[0]).toBeUndefined();
+            expect(s.columns['0']).toBeUndefined();
+            expect(s.columns.count).toBe(0);
+            expect(s.columns.list.length).toBe(0);
             expect(result).toBeTruthy();
         });
         it("- remove(elem) : number ", () => {
             let s = new Student();
-            s.items.add(100);
-            s.items.remove(100);
+            s.columns.add(100);
+            s.columns.remove(100);
 
-            expect(s.items[0]).toBeUndefined();
-            expect(s.items['0']).toBeUndefined();
-            expect(s.items.count).toBe(0);
-            expect(s.items.list.length).toBe(0);
+            expect(s.columns[0]).toBeUndefined();
+            expect(s.columns['0']).toBeUndefined();
+            expect(s.columns.count).toBe(0);
+            expect(s.columns.list.length).toBe(0);
         });
         it("- remove(elem) : object ", () => {
             let s = new Student();
             const a1 = { name: 'O1' };
-            s.items.add(a1);
-            s.items.remove(a1);
+            s.columns.add(a1);
+            s.columns.remove(a1);
 
-            expect(s.items[0]).toBeUndefined();
-            expect(s.items['0']).toBeUndefined();
-            expect(s.items.count).toBe(0);
-            expect(s.items.list.length).toBe(0);
+            expect(s.columns[0]).toBeUndefined();
+            expect(s.columns['0']).toBeUndefined();
+            expect(s.columns.count).toBe(0);
+            expect(s.columns.list.length).toBe(0);
         });
         it("- remove(elem) : string (없을 경우)", () => {
             let s = new Student();
-            s.items.add('A1');
-            const result = s.items.remove('A2');
+            s.columns.add('A1');
+            const result = s.columns.remove('A2');
 
-            expect(s.items[0]).not.toBeUndefined();
-            expect(s.items.count).toBe(1);
-            expect(s.items.list.length).toBe(1);
+            expect(s.columns[0]).not.toBeUndefined();
+            expect(s.columns.count).toBe(1);
+            expect(s.columns.list.length).toBe(1);
             expect(result).not.toBeTruthy();
         });
     });
@@ -302,117 +302,117 @@ describe("< ArrayCollection >", () => {
         // });
         it("- removeAt(idx) ", () => {
             let s = new Student();
-            s.items.add('A1');
-            const idx = s.items.indexOf('A1');
-            const result = s.items.removeAt(idx);
+            s.columns.add('A1');
+            const idx = s.columns.indexOf('A1');
+            const result = s.columns.removeAt(idx);
 
-            expect(s.items[0]).toBeUndefined();
-            expect(s.items.count).toBe(0);
-            expect(s.items.list.length).toBe(0);
+            expect(s.columns[0]).toBeUndefined();
+            expect(s.columns.count).toBe(0);
+            expect(s.columns.list.length).toBe(0);
             expect(result).toBeTruthy();
         });
         it("- removeAt(idx) : 없을 경우", () => {
             let s = new Student();
-            s.items.add('A1');
-            const idx = s.items.indexOf('A1');
-            const result = s.items.removeAt(idx + 1);
+            s.columns.add('A1');
+            const idx = s.columns.indexOf('A1');
+            const result = s.columns.removeAt(idx + 1);
 
-            expect(s.items[0]).toBeTruthy();
-            expect(s.items.count).toBe(1);
-            expect(s.items.list.length).toBe(1);
+            expect(s.columns[0]).toBeTruthy();
+            expect(s.columns.count).toBe(1);
+            expect(s.columns.list.length).toBe(1);
             expect(result).not.toBeTruthy();
         });
         it("- removeAt(idx) : 첫째 요소 삭제", () => {
             let s = new Student();
-            s.items.add('A1');
-            s.items.add('A2');
-            s.items.add('A3');
-            const result = s.items.removeAt(0);
+            s.columns.add('A1');
+            s.columns.add('A2');
+            s.columns.add('A3');
+            const result = s.columns.removeAt(0);
 
-            expect(s.items[0]).toBeDefined();
-            expect(s.items[1]).toBeDefined();
-            expect(s.items[2]).not.toBeDefined();
-            expect(s.items.indexOf('A2')).toBe(0);  // 바뀐 idx 확인
-            expect(s.items.indexOf('A3')).toBe(1);  // 바뀐 idx 확인
-            expect(s.items.count).toBe(2);
-            expect(s.items.list.length).toBe(2);
+            expect(s.columns[0]).toBeDefined();
+            expect(s.columns[1]).toBeDefined();
+            expect(s.columns[2]).not.toBeDefined();
+            expect(s.columns.indexOf('A2')).toBe(0);  // 바뀐 idx 확인
+            expect(s.columns.indexOf('A3')).toBe(1);  // 바뀐 idx 확인
+            expect(s.columns.count).toBe(2);
+            expect(s.columns.list.length).toBe(2);
             expect(result).toBeTruthy();
         });
         it("- removeAt(idx) : 중간 요소 삭제", () => {
             let s = new Student();
-            s.items.add('A1');
-            s.items.add('A2');
-            s.items.add('A3');
-            const result = s.items.removeAt(1);
+            s.columns.add('A1');
+            s.columns.add('A2');
+            s.columns.add('A3');
+            const result = s.columns.removeAt(1);
 
-            expect(s.items['0']).toBeDefined();
-            expect(s.items['1']).toBeDefined();
-            expect(s.items['2']).not.toBeDefined();
-            expect(s.items.indexOf('A1')).toBe(0);  
-            expect(s.items.indexOf('A3')).toBe(1);  // 바뀐 idx 확인
-            expect(s.items.count).toBe(2);
-            expect(s.items.list.length).toBe(2);
+            expect(s.columns['0']).toBeDefined();
+            expect(s.columns['1']).toBeDefined();
+            expect(s.columns['2']).not.toBeDefined();
+            expect(s.columns.indexOf('A1')).toBe(0);  
+            expect(s.columns.indexOf('A3')).toBe(1);  // 바뀐 idx 확인
+            expect(s.columns.count).toBe(2);
+            expect(s.columns.list.length).toBe(2);
             expect(result).toBeTruthy();
         });
         it("- removeAt(idx) : 마지막 요소 삭제 후 추가", () => {
             let s = new Student();
-            s.items.add('A1');
-            s.items.add('A2');
-            s.items.add('A3');
-            const result = s.items.removeAt(2);
-            s.items.add('A4');
+            s.columns.add('A1');
+            s.columns.add('A2');
+            s.columns.add('A3');
+            const result = s.columns.removeAt(2);
+            s.columns.add('A4');
 
-            expect(s.items[0]).toBeDefined();
-            expect(s.items[1]).toBeDefined();
-            expect(s.items[2]).toBeDefined();
-            expect(s.items[3]).not.toBeDefined();
-            expect(s.items.indexOf('A1')).toBe(0);  
-            expect(s.items.indexOf('A2')).toBe(1);
-            expect(s.items.indexOf('A4')).toBe(2);
-            expect(s.items.count).toBe(3);
-            expect(s.items.list.length).toBe(3);
+            expect(s.columns[0]).toBeDefined();
+            expect(s.columns[1]).toBeDefined();
+            expect(s.columns[2]).toBeDefined();
+            expect(s.columns[3]).not.toBeDefined();
+            expect(s.columns.indexOf('A1')).toBe(0);  
+            expect(s.columns.indexOf('A2')).toBe(1);
+            expect(s.columns.indexOf('A4')).toBe(2);
+            expect(s.columns.count).toBe(3);
+            expect(s.columns.list.length).toBe(3);
             expect(result).toBeTruthy();
         });
         it("- removeAt(str) : 예외 ", () => {
             let s = new Student();
 
-            expect(()=> s.items.removeAt('1')).toThrow(/idx.*number/);
+            expect(()=> s.columns.removeAt('1')).toThrow(/idx.*number/);
         });
     });
     it("- clear() ", () => {
         let s = new Student();
-        s.items.add('A1');
-        s.items.add('A2');
-        s.items.add('A3');
-        s.items.clear();
+        s.columns.add('A1');
+        s.columns.add('A2');
+        s.columns.add('A3');
+        s.columns.clear();
 
-        expect(s.items.count).toBe(0);
-        expect(s.items.list.length).toBe(0);
+        expect(s.columns.count).toBe(0);
+        expect(s.columns.list.length).toBe(0);
     });
     it("- contains(elem) : 존재하는지 확인, {특정요소를 찾을경우 : name}", () => {
         let s = new Student();
         const a2 = { style: 1};
-        s.items.add('A1');
-        s.items.add(a2);
-        s.items.add(10);
+        s.columns.add('A1');
+        s.columns.add(a2);
+        s.columns.add(10);
 
-        expect(s.items.contains('A1')).toBeTruthy();
-        expect(s.items.contains(a2)).toBeTruthy();
-        expect(s.items.contains(10)).toBeTruthy();
-        expect(s.items.count).toBe(3);
+        expect(s.columns.contains('A1')).toBeTruthy();
+        expect(s.columns.contains(a2)).toBeTruthy();
+        expect(s.columns.contains(10)).toBeTruthy();
+        expect(s.columns.count).toBe(3);
     });
     it("- indexOf() : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
         let s = new Student();
         const a2 = { style: 1};
-        s.items.add('A1');
-        s.items.add(a2);
-        s.items.add(10);
-        s.items.add(10);
+        s.columns.add('A1');
+        s.columns.add(a2);
+        s.columns.add(10);
+        s.columns.add(10);
 
-        expect(s.items.indexOf('A1')).toBe(0);
-        expect(s.items.indexOf(a2)).toBe(1);
-        expect(s.items.indexOf(10)).toBe(2);    // 원시타입 사용시 값으로 조회해서 a4는 조회 못함
-        expect(s.items.count).toBe(4);
+        expect(s.columns.indexOf('A1')).toBe(0);
+        expect(s.columns.indexOf(a2)).toBe(1);
+        expect(s.columns.indexOf(10)).toBe(2);    // 원시타입 사용시 값으로 조회해서 a4는 조회 못함
+        expect(s.columns.count).toBe(4);
     });
 });
 

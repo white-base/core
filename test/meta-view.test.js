@@ -23,54 +23,54 @@ describe("< MetaTable >", () => {
     });
     it("- new MetaView(name, baseEntity) ", () => {
         var view1 = new MetaView('T1');        // 일반 뷰
-        view1.items.add('i1');
-        view1.items.add('i2');
-        view1.items['i2'].caption = 'C1';
+        view1.columns.add('i1');
+        view1.columns.add('i2');
+        view1.columns['i2'].caption = 'C1';
         var row = view1.newRow();
         row['i1'] = 'R1';
         row['i2'] = 'R2';
         view1.rows.add(row);
         var view3 = new MetaView('T3');
-        view3.items.addValue('i5','V5');
+        view3.columns.addValue('i5','V5');
         var view2 = new MetaView('T2', view1); // 참조 뷰
-        view2.items.add(view1.items['i1']);
-        view2.items.add('i2');                  // 기존에 있는 속성명
-        view2.items.add('i3');                  // 신규 속성명
-        view2.items.addValue('i4', 'V4');       // 신규 속성명 + value
-        view2.items.add('i5', view3.items);     // 참조로 등록
-        view2.items['i2'].caption = 'C2';
-        view2.items['i3'].caption = 'C3';
+        view2.columns.add(view1.columns['i1']);
+        view2.columns.add('i2');                  // 기존에 있는 속성명
+        view2.columns.add('i3');                  // 신규 속성명
+        view2.columns.addValue('i4', 'V4');       // 신규 속성명 + value
+        view2.columns.add('i5', view3.columns);     // 참조로 등록
+        view2.columns['i2'].caption = 'C2';
+        view2.columns['i3'].caption = 'C3';
 
         // view1
         expect(view1.name).toBe('T1');
-        expect(view1.items.count).toBe(4);
+        expect(view1.columns.count).toBe(4);
         expect(view1.rows.count).toBe(1);
-        expect(view1.items['i2'].caption).toBe('C2');
-        expect(view1.items['i3'].caption).toBe('C3');
-        expect(view1.items['i4'].value).toBe('V4');
-        expect(view1.items._baseCollection).toBe(undefined);
-        expect(view1.items['i1'].entity.name).toBe('T1');
-        expect(view1.items['i2'].entity.name).toBe('T1');
+        expect(view1.columns['i2'].caption).toBe('C2');
+        expect(view1.columns['i3'].caption).toBe('C3');
+        expect(view1.columns['i4'].value).toBe('V4');
+        expect(view1.columns._baseCollection).toBe(undefined);
+        expect(view1.columns['i1'].entity.name).toBe('T1');
+        expect(view1.columns['i2'].entity.name).toBe('T1');
         expect(view1.rows[0]['i1']).toBe('R1');
         expect(view1.rows[0]['i2']).toBe('R2');
         // view2
         expect(view2._refEntities[0].name).toBe('T1');
         expect(view2._refEntities[1].name).toBe('T3');
-        expect(view2.items['i2'].caption).toBe('C2');
-        expect(view2.items['i3'].caption).toBe('C3');
-        expect(view2.items['i4'].value).toBe('V4');
-        expect(view2.items._baseCollection._owner.name).toBe('T1');
+        expect(view2.columns['i2'].caption).toBe('C2');
+        expect(view2.columns['i3'].caption).toBe('C3');
+        expect(view2.columns['i4'].value).toBe('V4');
+        expect(view2.columns._baseCollection._owner.name).toBe('T1');
         expect(view2.name).toBe('T2');
-        expect(view2.items.count).toBe(5);
+        expect(view2.columns.count).toBe(5);
         expect(view2.rows.count).toBe(0);
-        expect(view2.items['i1'].entity.name).toBe('T1');
-        expect(view2.items['i2'].entity.name).toBe('T1');
+        expect(view2.columns['i1'].entity.name).toBe('T1');
+        expect(view2.columns['i2'].entity.name).toBe('T1');
     });
     it("- clone() : 복제, 일반 뷰 ", () => {
         var view1 = new MetaView('T1');
-        view1.items.add('i1');
-        view1.items.add('i2');
-        view1.items['i2'].caption = 'C1';
+        view1.columns.add('i1');
+        view1.columns.add('i2');
+        view1.columns['i2'].caption = 'C1';
         var row = view1.newRow();
         row['i1'] = 'R1';
         row['i2'] = 'R2';
@@ -79,23 +79,23 @@ describe("< MetaTable >", () => {
 
         // view1
         expect(view1.name).toBe('T1');
-        expect(view1.items.count).toBe(2);
+        expect(view1.columns.count).toBe(2);
         expect(view1.rows.count).toBe(1);
-        expect(view1.items['i2'].caption).toBe('C1');
+        expect(view1.columns['i2'].caption).toBe('C1');
         expect(view1.rows[0]['i1']).toBe('R1');
         expect(view1.rows[0]['i2']).toBe('R2');
         // view2
         expect(view2.name).toBe('T1');
-        expect(view2.items.count).toBe(2);
+        expect(view2.columns.count).toBe(2);
         expect(view2.rows.count).toBe(1);
-        expect(view2.items['i2'].caption).toBe('C1');
+        expect(view2.columns['i2'].caption).toBe('C1');
         expect(view2.rows[0]['i1']).toBe('R1');
         expect(view2.rows[0]['i2']).toBe('R2');
         // 비교
         expect(view1 === view2).toBe(false);
-        expect(view1.items === view2.items).toBe(false);
-        expect(view1.items['i1'] === view2.items['i1']).toBe(false);
-        expect(view1.items['i2'] === view2.items['i2']).toBe(false);
+        expect(view1.columns === view2.columns).toBe(false);
+        expect(view1.columns['i1'] === view2.columns['i1']).toBe(false);
+        expect(view1.columns['i2'] === view2.columns['i2']).toBe(false);
         expect(view1.rows[0] === view2.rows[0]).toBe(false);
     });
     it("- getTypes() : array<function> ", () => {
@@ -155,5 +155,5 @@ describe("< MetaTable >", () => {
     // });
 });
 /**
- * 테스트가 허술해 보임
+ * REVIEW: 테스트가 허술해 보임
  */
