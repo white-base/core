@@ -1,6 +1,6 @@
 /**
- * namespace _L.Meta.Entity.EntityView
- * namespace _L.Meta.Entity.EntityViewCollection
+ * namespace _L.Meta.Entity.MetaView
+ * namespace _L.Meta.Entity.MetaViewCollection
  */
 (function(_global) {
     'use strict';
@@ -8,8 +8,8 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var MetaObject;
-    var Entity;
-    var ItemViewCollection;
+    var MetaEntity;
+    var MetaViewColumnCollection;
     var PropertyCollection;
 
     //==============================================================
@@ -23,14 +23,14 @@
     if (isNode) {     
         Util                = require('./util');
         MetaObject          = require('./meta-object');
-        Entity              = require('./entity-base');
-        ItemViewCollection  = require('./entity-item').ItemViewCollection;
+        MetaEntity              = require('./meta-entity');
+        MetaViewColumnCollection  = require('./meta-column').MetaViewColumnCollection;
         PropertyCollection  = require('./collection-property');
     } else {    // COVER:
         Util                = _global._L.Common.Util;
         MetaObject          = _global._L.Meta.MetaObject;
-        Entity              = _global._L.Meta.Entity.Entity;
-        ItemViewCollection  = _global._L.Meta.Entity.ItemViewCollection;
+        MetaEntity              = _global._L.Meta.Entity.MetaEntity;
+        MetaViewColumnCollection  = _global._L.Meta.Entity.MetaViewColumnCollection;
         PropertyCollection  = _global._L.Collection.PropertyCollection;
     }
 
@@ -38,26 +38,26 @@
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    if (typeof Entity === 'undefined') throw new Error('[Entity] module load fail...');
-    if (typeof ItemViewCollection === 'undefined') throw new Error('[ItemViewCollection] module load fail...');
+    if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
+    if (typeof MetaViewColumnCollection === 'undefined') throw new Error('[MetaViewColumnCollection] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
-    var EntityView  = (function (_super) {
+    var MetaView  = (function (_super) {
         /**
          * 뷰 엔티티
-         * @constructs _L.Meta.Entity.EntityView
-         * @extends _L.Meta.Entity.Entity
+         * @constructs _L.Meta.Entity.MetaView
+         * @extends _L.Meta.Entity.MetaEntity
          * @param {*} p_name 
          * @param {*} p_baseEntity 
          */
-        function EntityView(p_name, p_baseEntity) {
+        function MetaView(p_name, p_baseEntity) {
             _super.call(this, p_name);
 
             var refCollection;
 
-            if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('Entity')) {
+            if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
                 refCollection = p_baseEntity.items;
             }
             
@@ -65,28 +65,28 @@
             
             this._refEntities = [];
 
-            this.items = new ItemViewCollection(this, refCollection);
+            this.items = new MetaViewColumnCollection(this, refCollection);
         }
-        Util.inherits(EntityView, _super);
+        Util.inherits(MetaView, _super);
 
         /**
          * 뷰 엔티티에 참조를 등록한다.
-         * @param {Entity} p_entity 
+         * @param {MetaEntity} p_entity 
          */
-        EntityView.prototype._regRefer  = function(p_entity) {
-            if (!(p_entity instanceof Entity)) throw new Error('Only [p_entity] type "Entity" can be added');
+        MetaView.prototype._regRefer  = function(p_entity) {
+            if (!(p_entity instanceof MetaEntity)) throw new Error('Only [p_entity] type "MetaEntity" can be added');
             if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
         };
         
         // /** @override **/
-        // EntityView.prototype.getTypes  = function() {
-        //     var type = ['EntityView'];
+        // MetaView.prototype.getTypes  = function() {
+        //     var type = ['MetaView'];
             
         //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
         // };
         
         // /** @override */
-        // EntityView.prototype.getObject = function() {
+        // MetaView.prototype.getObject = function() {
         //     // TODO::
         // };
 
@@ -94,8 +94,8 @@
          * 뷰 엔티티를 복제한다.
          * @returns {*}
          */
-        EntityView.prototype.clone  = function() {
-            var clone = new EntityView(this.name);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
+        MetaView.prototype.clone  = function() {
+            var clone = new MetaView(this.name);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
 
             // 참조 복제 REVIEW::  필요성 검토 필요
             // for(var i = 0; i < this._refEntities.length; i++) {
@@ -113,50 +113,50 @@
             return clone;
         };        
         
-        return EntityView;
+        return MetaView;
     
-    }(Entity));
+    }(MetaEntity));
     
     //---------------------------------------
-    var EntityViewCollection  = (function (_super) {
+    var MetaViewCollection  = (function (_super) {
         /**
          * 뷰 엔티티 컬렉션
-         * @constructs _L.Meta.Entity.EntityViewCollection
+         * @constructs _L.Meta.Entity.MetaViewCollection
          * @extends _L.Meta.Entity.PropertyCollection
          * @param {*} p_owner 소유자 
          */
-        function EntityViewCollection(p_owner) {    // COVER:
+        function MetaViewCollection(p_owner) {    // COVER:
             _super.call(this, p_owner);
 
-            this.elementType = EntityView;   // 컬렉션타입 설정
+            this.elementType = MetaView;   // 컬렉션타입 설정
         }
-        Util.inherits(EntityViewCollection, _super);
+        Util.inherits(MetaViewCollection, _super);
 
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.
-         * @param {string | EntityView} p_object 
-         * @param {?ItemCollection} p_baseEntity
-         * @returns {EntityView} 등록한 아이템
+         * @param {string | MetaView} p_object 
+         * @param {?MetaColumnCollection} p_baseEntity
+         * @returns {MetaView} 등록한 아이템
          * @example
          *  - string                    : 생성후   string      이름으로 등록 
          *  - string, colltion          : 생성후   string      이름으로  등록 (collection보냄)
          *  - entityView                :         entityView  이름으로 등록
          *  - entityView, collection    :         entityView  이름으로 등록 (collection보냄) => 오류발생
          */
-        EntityViewCollection.prototype.add  = function(p_object, p_baseEntity) {    // COVER:
+        MetaViewCollection.prototype.add  = function(p_object, p_baseEntity) {    // COVER:
 
             var i_value;
             var i_name;
 
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
-                i_value = new EntityView(i_name, p_baseEntity);
-            } else if (p_object instanceof EntityView) {
-                if (p_baseEntity) throw new Error(' EntityView객체와 refEntity객체를 동시에 입력할 수 없습니다. !!');
+                i_value = new MetaView(i_name, p_baseEntity);
+            } else if (p_object instanceof MetaView) {
+                if (p_baseEntity) throw new Error(' MetaView 객체와 refEntity객체를 동시에 입력할 수 없습니다. !!');
                 i_name  = p_object.name;
                 i_value = p_object;
             } else {
-                throw new Error('string | EntityView object [p_object].');
+                throw new Error('string | MetaView object [p_object].');
             }
 
             if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
@@ -164,21 +164,21 @@
             return _super.prototype.add.call(this, i_name, i_value);
         };
 
-        return EntityViewCollection;
+        return MetaViewCollection;
     
     }(PropertyCollection));
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.EntityView = EntityView;
-        module.exports.EntityViewCollection = EntityViewCollection;
+        module.exports.MetaView = MetaView;
+        module.exports.MetaViewCollection = MetaViewCollection;
     } else {    // COVER:
-        _global._L.EntityView = EntityView;
-        _global._L.EntityViewCollection = EntityViewCollection;
+        _global._L.MetaView = MetaView;
+        _global._L.MetaViewCollection = MetaViewCollection;
         // namespace
-        _global._L.Meta.Entity.EntityView = EntityView;
-        _global._L.Meta.Entity.EntityViewCollection = EntityViewCollection;
+        _global._L.Meta.Entity.MetaView = MetaView;
+        _global._L.Meta.Entity.MetaViewCollection = MetaViewCollection;
     }
 
 }(typeof window !== 'undefined' ? window : global));

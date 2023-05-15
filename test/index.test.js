@@ -59,28 +59,28 @@ describe('index 타입 검사', () => {
         expect(typeof index.Meta.ComplexElement).toBe('function');
     });
     it('- _L.Meta.Entity.* ', () => {
-        expect(typeof index.Entity).toBe('function');
-        expect(typeof index.EntityViewCollection).toBe('function');
-        expect(typeof index.EntityTable).toBe('function');
-        expect(typeof index.EntityTableCollection).toBe('function');
-        expect(typeof index.Item).toBe('function');
-        expect(typeof index.ItemCollection).toBe('function');
-        expect(typeof index.ItemViewCollection).toBe('function');
-        expect(typeof index.ItemTableCollection).toBe('function');
-        expect(typeof index.Row).toBe('function');
-        expect(typeof index.RowCollection).toBe('function');
+        expect(typeof index.MetaEntity).toBe('function');
+        expect(typeof index.MetaViewCollection).toBe('function');
+        expect(typeof index.MetaTable).toBe('function');
+        expect(typeof index.MetaTableCollection).toBe('function');
+        expect(typeof index.MetaColumn).toBe('function');
+        expect(typeof index.MetaColumnCollection).toBe('function');
+        expect(typeof index.MetaViewColumnCollection).toBe('function');
+        expect(typeof index.MetaTableColumnCollection).toBe('function');
+        expect(typeof index.MetaRow).toBe('function');
+        expect(typeof index.MetaRowCollection).toBe('function');
         // namespace
         expect(typeof index.Meta.Entity).toBe('object');
-        expect(typeof index.Meta.Entity.Entity).toBe('function');
-        expect(typeof index.Meta.Entity.EntityViewCollection).toBe('function');
-        expect(typeof index.Meta.Entity.EntityTable).toBe('function');
-        expect(typeof index.Meta.Entity.EntityTableCollection).toBe('function');
-        expect(typeof index.Meta.Entity.Item).toBe('function');
-        expect(typeof index.Meta.Entity.ItemCollection).toBe('function');
-        expect(typeof index.Meta.Entity.ItemViewCollection).toBe('function');
-        expect(typeof index.Meta.Entity.ItemTableCollection).toBe('function');
-        expect(typeof index.Meta.Entity.Row).toBe('function');
-        expect(typeof index.Meta.Entity.RowCollection).toBe('function');
+        expect(typeof index.Meta.Entity.MetaEntity).toBe('function');
+        expect(typeof index.Meta.Entity.MetaViewCollection).toBe('function');
+        expect(typeof index.Meta.Entity.MetaTable).toBe('function');
+        expect(typeof index.Meta.Entity.MetaTableCollection).toBe('function');
+        expect(typeof index.Meta.Entity.MetaColumn).toBe('function');
+        expect(typeof index.Meta.Entity.MetaColumnCollection).toBe('function');
+        expect(typeof index.Meta.Entity.MetaViewColumnCollection).toBe('function');
+        expect(typeof index.Meta.Entity.MetaTableColumnCollection).toBe('function');
+        expect(typeof index.Meta.Entity.MetaRow).toBe('function');
+        expect(typeof index.Meta.Entity.MetaRowCollection).toBe('function');
     });
     it('- _L.Interface.* ', () => {
         expect(typeof index.IObject).toBe('function');

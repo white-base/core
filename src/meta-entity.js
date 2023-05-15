@@ -10,9 +10,9 @@
     var IPropertyCollection;
     var IGroupControl;
     var IAllControl;
-    var RowCollection;
-    var Row;
-    var ItemCollection;
+    var MetaRowCollection;
+    var MetaRow;
+    var MetaColumnCollection;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
@@ -27,17 +27,17 @@
         MetaElement             = require('./meta-element');
         IGroupControl           = require('./i-control-group');
         IAllControl             = require('./i-control-all');
-        RowCollection           = require('./entity-row').RowCollection;
-        Row                     = require('./entity-row').Row;
-        ItemCollection          = require('./entity-item').ItemCollection;
+        MetaRowCollection           = require('./meta-row').MetaRowCollection;
+        MetaRow                     = require('./meta-row').MetaRow;
+        MetaColumnCollection          = require('./meta-column').MetaColumnCollection;
     } else {    // COVER:
         Util                    = _global._L.Common.Util;
         MetaElement             = _global._L.Meta.MetaElement;
         IGroupControl           = _global._L.Interface.IGroupControl;
         IAllControl             = _global._L.Interface.IAllControl;
-        RowCollection           = _global._L.Meta.Entity.RowCollection;
-        Row                     = _global._L.Meta.Entity.Row;
-        ItemCollection          = _global._L.Meta.Entity.ItemCollection;
+        MetaRowCollection           = _global._L.Meta.Entity.MetaRowCollection;
+        MetaRow                     = _global._L.Meta.Entity.MetaRow;
+        MetaColumnCollection          = _global._L.Meta.Entity.MetaColumnCollection;
     }
 
     //==============================================================
@@ -46,37 +46,37 @@
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
-    if (typeof RowCollection === 'undefined') throw new Error('[RowCollection] module load fail...');
-    if (typeof Row === 'undefined') throw new Error('[Row] module load fail...');
-    if (typeof ItemCollection === 'undefined') throw new Error('[ItemCollection] module load fail...');
+    if (typeof MetaRowCollection === 'undefined') throw new Error('[MetaRowCollection] module load fail...');
+    if (typeof MetaRow === 'undefined') throw new Error('[MetaRow] module load fail...');
+    if (typeof MetaColumnCollection === 'undefined') throw new Error('[MetaColumnCollection] module load fail...');
 
 
     //==============================================================
     // 4. 모듈 구현    
-    var Entity  = (function (_super) {
+    var MetaEntity  = (function (_super) {
         /**
          * 엔티티
-         * @constructs _L.Meta.Entity.Entity
+         * @constructs _L.Meta.Entity.MetaEntity
          * @extends _L.Meta.MetaElement
          * @implements {_L.Interface.IGroupControl}
          * @implements {_L.Interface.IAllControl}
          * @param {*} p_name 
          */
-        function Entity(p_name) {
+        function MetaEntity(p_name) {
             _super.call(this, p_name);
 
             var __items = null;     // 상속해서 생성해야함
-            var __rows  = new RowCollection(this);
+            var __rows  = new MetaRowCollection(this);
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
-             * @member {ItemCollection} _L.Meta.Entity.Entity#items
+             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#items
              */
             Object.defineProperty(this, 'items', 
             {
                 get: function() { return __items; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof ItemCollection)) throw new Error('Only [items] type "ItemCollection" can be added');
+                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [items] type "MetaColumnCollection" can be added');
                     __items = newValue;
                 },
                 configurable: true,
@@ -85,13 +85,13 @@
             
             /**
              * 엔티티의 데이터(로우) 컬렉션
-             * @member {RowCollection} _L.Meta.Entity.Entity#rows
+             * @member {MetaRowCollection} _L.Meta.Entity.MetaEntity#rows
              */
             Object.defineProperty(this, 'rows', 
             {
                 get: function() { return __rows; },
                 set: function(newValue) { // COVER:
-                    if (!(newValue instanceof RowCollection)) throw new Error('Only [rows] type "RowCollection" can be added'); 
+                    if (!(newValue instanceof MetaRowCollection)) throw new Error('Only [rows] type "MetaRowCollection" can be added'); 
                     __rows = newValue;
                 },
                 configurable: true,
@@ -101,7 +101,7 @@
             // this._implements(IGroupControl, IAllControl);
             Util.implements(this, IGroupControl, IAllControl);
         }
-        Util.inherits(Entity, _super);
+        Util.inherits(MetaEntity, _super);
 
         /**
          * 아이템 추가한다. (내부)
@@ -109,7 +109,7 @@
          * @param {*} p_name 
          * @param {*} p_property 
          */
-        Entity.prototype.__addItem  = function(p_name, p_property) {
+        MetaEntity.prototype.__addItem  = function(p_name, p_property) {
             
             if(!this.items.contains(this.items[p_name])) this.items.add(p_name);
             
@@ -124,7 +124,7 @@
          * 빈 row 채운다.
          * @param {*} p_target 
          */
-        Entity.prototype.__fillRow  = function(p_target) {
+        MetaEntity.prototype.__fillRow  = function(p_target) {
             var itemName;
             
             for (var i = 0 ; i < this.rows.count; i++) {
@@ -143,7 +143,7 @@
          * @param {*} p_object 로딩할 객체
          * @param {*} p_option 로딩옵션
          */
-        Entity.prototype.__loadJSON  = function(p_object, p_option) {
+        MetaEntity.prototype.__loadJSON  = function(p_object, p_option) {
             p_option = p_option || 1;   // 기본값 덮어쓰기
             
             var entity;
@@ -163,10 +163,10 @@
 
             // 2.병합
             if (p_option === 1) {
-                // Item 기준으로 아이템 가져오기
+                // MetaColumn 기준으로 아이템 가져오기
                 if (entity.items && entity.items[0]) {
                     for(var i = 0; entity.items.length > i; i++) {
-                        // Item 가져오기
+                        // MetaColumn 가져오기
                         for (var prop in entity.items[i]) {
                             if (entity.items[i].hasOwnProperty(prop)) {
                                 this.__addItem(prop, entity.items[i][prop]);
@@ -175,7 +175,7 @@
                     }
                 }
 
-                // Row 기준으로 아이템 가져오기 (첫번째 Row 기준)
+                // MetaRow 기준으로 아이템 가져오기 (첫번째 MetaRow 기준)
                 if (entity.rows && entity.rows[0]) {
                     for (var prop in entity.rows[0]) {
                         if (entity.rows[0].hasOwnProperty(prop)) {
@@ -185,7 +185,7 @@
                 }
             }
             
-            // 3.Row 데이터 가져오기
+            // 3.MetaRow 데이터 가져오기
             if (this.items.count > 0 && entity.rows && entity.rows[0]) {
                 for(var i = 0; entity.rows.length > i; i++) {
                     
@@ -199,7 +199,7 @@
                 }
             } 
             
-            // 4.빈 Row 채우기
+            // 4.빈 MetaRow 채우기
             for (var i = 0 ; i < this.rows.count; i++) {
                 for (var ii = 0; ii < this.items.count; ii++) {
                     itemName = this.items[ii].name;
@@ -211,12 +211,12 @@
         };
 
         /**
-         * Entity를 불러(로드)온다.
+         * MetaEntity 를 불러(로드)온다.
          * @private
          * @param {*} p_object 대상 엔티티
          * @param {*} p_option 옵션
          */
-        Entity.prototype.__loadEntity  = function(p_object, p_option) {
+        MetaEntity.prototype.__loadEntity  = function(p_object, p_option) {
             p_option = p_option || 1;   // 기본값 덮어쓰기
 
             var entity = p_object;
@@ -225,7 +225,7 @@
 
             // 1.병합
             if (p_option === 1) {
-                // Item 기준으로 아이템 가져오기
+                // MetaColumn 기준으로 아이템 가져오기
                 for(var i = 0; entity.items.count > i; i++) {
                     itemName = entity.items[i].name;
                     if (typeof this.items[itemName] === 'undefined') this.items.add(entity.items[i]);
@@ -257,7 +257,7 @@
 
         /** @override **/
         // Entity.prototype.getTypes = function() {
-        //     var type = ['Entity'];
+        //     var type = ['MetaEntity'];
             
         //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
         // };
@@ -268,20 +268,20 @@
         // };
 
         /**
-         * 새로운 Row를 추가한다.
+         * 새로운 MetaRow 를 추가한다.
          */
-        Entity.prototype.newRow  = function() {
-            return new Row(this);
+        MetaEntity.prototype.newRow  = function() {
+            return new MetaRow(this);
         };
 
         /**
-         * Row의 값을 아이템의 value에 설정한다.
+         * MetaRow 의 값을 아이템의 value에 설정한다.
          * @param {*} p_row 
          */
-        Entity.prototype.setValue  = function(p_row) {
+        MetaEntity.prototype.setValue  = function(p_row) {
             var _name = '';
 
-            if (!(p_row instanceof Row)) throw new Error('Only [p_row] type "Row" can be added');
+            if (!(p_row instanceof MetaRow)) throw new Error('Only [p_row] type "Row" can be added');
 
             for(var i = 0; this.items.count > i; i++) {
                 
@@ -292,10 +292,10 @@
         };
 
         /**
-         * 아아템의 value을 Row형식으로 얻는다.
-         * @returns {Row}
+         * 아아템의 value을 MetaRow 형식으로 얻는다.
+         * @returns {MetaRow}
          */
-        Entity.prototype.getValue  = function() {
+        MetaEntity.prototype.getValue  = function() {
             var row = this.newRow();
             
             for(var i = 0; this.items.count > i; i++) {
@@ -309,7 +309,7 @@
          * @param {Object} p_filter 필터객체
          * @param {?(Number | Array<Number>)} p_index 인덱스 시작번호 또는 목록
          * @param {?Number} p_end 인덱스 종료번호
-         * @return {Entity}
+         * @return {MetaEntity}
          * @example
          * // 상속기법을 이용함
          * filter = {
@@ -318,7 +318,7 @@
          *  아이템명: { order: 100 }        // 속성 오버라이딩
          * }
          */
-        Entity.prototype.select  = function(p_filter, p_index, p_end) {
+        MetaEntity.prototype.select  = function(p_filter, p_index, p_end) {
             var EXECEPT = '__except';
             var list = [];
             var excepts = [];
@@ -371,12 +371,12 @@
             // 2.정렬
             list.sort(function(a, b) { return a.order - b.order; });
 
-            // 3.리턴 Entity 의 Item 구성 : 참조형
+            // 3.리턴 MetaEntity 의 MetaColumn 구성 : 참조형
             for(var i = 0; i < list.length; i++) {
                 entity.items.add(list[i]);
             }
             
-            // 4.리턴 Entity 의 Row 구성 : 참조형
+            // 4.리턴 MetaEntity 의 MetaRow 구성 : 참조형
             if (typeof p_index === 'number') {
                 for(var i = p_index; i < this.rows.count; i++) {
                     // entity.rows.add(this.rows[idx]);
@@ -402,7 +402,7 @@
          * @param {*} p_index 
          * @param {*} p_end 
          */
-        Entity.prototype.copy  = function(p_filter, p_index, p_end) {
+        MetaEntity.prototype.copy  = function(p_filter, p_index, p_end) {
             var entity = this.select(p_filter, p_index, p_end);
 
             return entity.clone();
@@ -410,25 +410,25 @@
 
         /**
          * 엔티티를 병합한다. (구조를 구성하는게 주용도임)
-         * @param {*} p_target 병합할 Entity (대상)
+         * @param {*} p_target 병합할 MetaEntity (대상)
          * @param {*} p_option {item: 1, row:2}
          * @desc
          * 병합 : 컬렉션 순서에 따라 병한다.
-         * Item과 Row가 있는 경우
+         * MetaColumn MetaRow 가 있는 경우
          * - 1 items, rows 병합 (기존유지) *기본값
          * - 2 items, rows 병합 (덮어쓰기)  
          * - 3 row 안가져오기    (기존유지)
          */
-        Entity.prototype.merge  = function(p_target, p_option) {
+        MetaEntity.prototype.merge  = function(p_target, p_option) {
             p_option = p_option || 1;    // 기본값
 
             var row;
             var itemName;
 
             // 1.유효성 검사
-            if (!(p_target instanceof Entity)) throw new Error('Only [p_target] type "Entity" can be added');
+            if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
 
-            // 2.병합 : Item 기준으로 아이템 가져오기
+            // 2.병합 : MetaColumn 기준으로 아이템 가져오기
             for(var i = 0; p_target.items.count > i; i++) {
                 itemName = p_target.items[i].name;
                 
@@ -443,7 +443,7 @@
                 }
             }
             
-            // 3.Row 데이터 가져오기
+            // 3.MetaRow 데이터 가져오기
             if (p_option !== 3) {
                 for(var i = 0; p_target.rows.count > i; i++) {
                     // this.rows 있는 경우
@@ -478,13 +478,13 @@
          * '데이터를 가져오는게 주용도임'
          * 불러오기/가져오기 (!! 병합용도가 아님)
          * 기존에 row 가 존재하면 newRow 부터 가져오고, 기존item 은 공백이 들어감
-         * @param {*} p_object Entity 는 item과 row 는 쌍으로 존재함, JSON 은 row만 존재할 수 있음
+         * @param {*} p_object MetaEntity 는 item과 row 는 쌍으로 존재함, JSON 은 row만 존재할 수 있음
          * @param {Number} p_option 
          * @param {Number} p_option.1 row 기준으로 가져옴, 없을시 item 생성, item 중복시 기존유지  <*기본값> 
          * @param {Number} p_option.2 존재하는 item 데이터만 가져오기
          */
-        Entity.prototype.load  = function(p_object, p_option) {
-            if (p_object instanceof Entity) {
+        MetaEntity.prototype.load  = function(p_object, p_option) {
+            if (p_object instanceof MetaEntity) {
                 this.__loadEntity(p_object, p_option);
             } else {
                 this.__loadJSON(p_object, p_option);
@@ -494,17 +494,17 @@
         /** 
          * 아이템과 로우를 초기화 한다.
          */
-        Entity.prototype.clear  = function() {
+        MetaEntity.prototype.clear  = function() {
             this.items.clear();
             this.rows.clear();
         };
 
         /** @abstract */
-        Entity.prototype.clone  = function() {
+        MetaEntity.prototype.clone  = function() {
             throw new Error('[ clone() ] Abstract method definition, fail...'); // COVER:
         };
 
-        return Entity;
+        return MetaEntity;
     
     }(MetaElement));
 
@@ -512,10 +512,10 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = Entity;
+        module.exports = MetaEntity;
     } else {    // COVER:
-        _global._L.Entity = Entity;
-        _global._L.Meta.Entity.Entity = Entity;     // namespace
+        _global._L.Entity = MetaEntity;
+        _global._L.Meta.Entity.MetaEntity = MetaEntity;     // namespace
     }
 
 }(typeof window !== 'undefined' ? window : global));

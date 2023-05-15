@@ -11,18 +11,17 @@ var PropertyCollection          = require("./src/collection-property");
 var MetaObject                  = require("./src/meta-object");
 var MetaElement                 = require("./src/meta-element");
 var ComplexElement              = require("./src/meta-element-complex");
-var Entity                      = require('./src/entity-base');
-var EntityView                  = require('./src/entity-view').EntityView;
-var EntityViewCollection        = require('./src/entity-view').EntityViewCollection;
-var EntityTable                 = require('./src/entity-table').EntityTable;
-var EntityTableCollection       = require('./src/entity-table').EntityTableCollection;
-var Item                        = require('./src/entity-item').Item;
-var ItemCollection              = require('./src/entity-item').ItemCollection;
-var ItemViewCollection          = require('./src/entity-item').ItemViewCollection;
-var ItemTableCollection         = require('./src/entity-item').ItemTableCollection;
-var Row                         = require('./src/entity-row').Row;
-var RowCollection               = require('./src/entity-row').RowCollection;
-var RowCollection               = require('./src/entity-row').RowCollection;
+var MetaEntity                      = require('./src/meta-entity');
+var MetaView                  = require('./src/meta-view').MetaView;
+var MetaViewCollection        = require('./src/meta-view').MetaViewCollection;
+var MetaTable                 = require('./src/meta-table').MetaTable;
+var MetaTableCollection       = require('./src/meta-table').MetaTableCollection;
+var MetaColumn                        = require('./src/meta-column').MetaColumn;
+var MetaColumnCollection              = require('./src/meta-column').MetaColumnCollection;
+var MetaViewColumnCollection          = require('./src/meta-column').MetaViewColumnCollection;
+var MetaTableColumnCollection         = require('./src/meta-column').MetaTableColumnCollection;
+var MetaRow                         = require('./src/meta-row').MetaRow;
+var MetaRowCollection               = require('./src/meta-row').MetaRowCollection;
 var IObject                     = require('./src/i-object');
 var IMarshal                    = require('./src/i-marshal');
 var ICollection                 = require('./src/i-collection');
@@ -46,17 +45,17 @@ module.exports = {
     MetaObject: MetaObject,
     MetaElement: MetaElement,
     ComplexElement: ComplexElement,
-    Entity: Entity,
-    EntityView: EntityView,
-    EntityViewCollection: EntityViewCollection,
-    EntityTable: EntityTable,
-    EntityTableCollection: EntityTableCollection,
-    Item: Item,
-    ItemCollection: ItemCollection,
-    ItemViewCollection: ItemViewCollection,
-    ItemTableCollection: ItemTableCollection,
-    Row: Row,
-    RowCollection: RowCollection,
+    MetaEntity: MetaEntity,
+    MetaView: MetaView,
+    MetaViewCollection: MetaViewCollection,
+    MetaTable: MetaTable,
+    MetaTableCollection: MetaTableCollection,
+    MetaColumn: MetaColumn,
+    MetaColumnCollection: MetaColumnCollection,
+    MetaViewColumnCollection: MetaViewColumnCollection,
+    MetaTableColumnCollection: MetaTableColumnCollection,
+    MetaRow: MetaRow,
+    MetaRowCollection: MetaRowCollection,
     IObject: IObject,
     IMarshal: IMarshal,
     ICollection: ICollection,
@@ -84,17 +83,17 @@ module.exports = {
         MetaElement: MetaElement,
         ComplexElement: ComplexElement,
         Entity: {
-            Entity: Entity,
-            EntityView: EntityView,
-            EntityViewCollection: EntityViewCollection,
-            EntityTable: EntityTable,
-            EntityTableCollection: EntityTableCollection,
-            Item: Item,
-            ItemCollection: ItemCollection,
-            ItemViewCollection: ItemViewCollection,
-            ItemTableCollection: ItemTableCollection,
-            Row: Row,
-            RowCollection: RowCollection,
+            MetaEntity: MetaEntity,
+            MetaView: MetaView,
+            MetaViewCollection: MetaViewCollection,
+            MetaTable: MetaTable,
+            MetaTableCollection: MetaTableCollection,
+            MetaColumn: MetaColumn,
+            MetaColumnCollection: MetaColumnCollection,
+            MetaViewColumnCollection: MetaViewColumnCollection,
+            MetaTableColumnCollection: MetaTableColumnCollection,
+            MetaRow: MetaRow,
+            MetaRowCollection: MetaRowCollection,
         }
     },
     Interface: {

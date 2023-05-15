@@ -8,7 +8,7 @@
 const Util                  = require('../src/util');
 const MetaObject            = require('../src/meta-object');
 const MetaElement           = require('../src/meta-element');
-const Entity                = require('../src/entity-base');
+const MetaEntity                = require('../src/meta-entity');
 const IObject               = require('../src/i-object');
 const IMarshal              = require('../src/i-marshal');
 // const IControlCollection    = require('../src/i-collection-control');
@@ -23,7 +23,7 @@ const IPartControl          = require('../src/i-control-part');
 
 //==============================================================
 // test
-describe("< EntityTable >", () => {
+describe("< MetaTable >", () => {
     beforeAll(() => {
         // jest.resetModules();
     });

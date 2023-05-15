@@ -6,35 +6,35 @@
 'use strict';
 const MetaObject            = require('../src/meta-object');
 const MetaElement           = require('../src/meta-element');
-const Entity                = require('../src/entity-base');
+const MetaEntity                = require('../src/meta-entity');
 const IObject               = require('../src/i-object');
 const IMarshal              = require('../src/i-marshal');
 const Util                  = require('../src/util');
-const { EntityTable }       = require('../src/entity-table');
-const { EntityView }        = require('../src/entity-view');
-const { Row }               = require('../src/entity-row');
-const { Item }              = require('../src/entity-item');
+const { MetaTable }       = require('../src/meta-table');
+const { MetaView }        = require('../src/meta-view');
+const { MetaRow }               = require('../src/meta-row');
+const { MetaColumn }              = require('../src/meta-column');
 
 //==============================================================
 // test
-describe("< EntityTable >", () => {
+describe("< MetaTable >", () => {
     beforeAll(() => {
         // jest.resetModules();
     });
-    describe("< ItemTableCollection >", () => {
+    describe("< MetaTableColumnCollection >", () => {
         it("- add(name) : 아이템명으로 추가 ", () => {
-            var table1 = new EntityTable('T1');
+            var table1 = new MetaTable('T1');
             table1.items.add('i1');
             table1.items.add('i2');
 
             expect(table1.items.count).toBe(2);
         });
         it("- add(item) : 아이템 객체로 추가 ", () => {
-                var table1 = new EntityTable('T1');
-            table1.items.add(new Item('i1'));
+                var table1 = new MetaTable('T1');
+            table1.items.add(new MetaColumn('i1'));
             table1.items.add('i2');
             table1.items['i2'].caption = 'C1';
-            var table2 = new EntityTable('T2');
+            var table2 = new MetaTable('T2');
             table2.items.add(table1.items['i2']);
             table1.items['i2'].caption = 'C2';
 
@@ -48,7 +48,7 @@ describe("< EntityTable >", () => {
             expect(table2.items['i2'].entity.name).toBe('T2');
         });
         it("- addValue(value, value) : 아이템명 + 값 ", () => {
-            var table1 = new EntityTable('T1');
+            var table1 = new MetaTable('T1');
             table1.items.addValue('i1', 'V1');
             table1.items.addValue('i2', 'V2');
     
@@ -57,13 +57,13 @@ describe("< EntityTable >", () => {
             expect(table1.items['i2'].value).toBe('V2');
         });
     });
-    describe("< ItemViewCollection >", () => {
+    describe("< MetaViewColumnCollection >", () => {
         it("- add(name, baseCollection) : 독립형 생성 ", () => {
-            var view1 = new EntityView('T1');        // 독립형 생성
+            var view1 = new MetaView('T1');        // 독립형 생성
             view1.items.add('i1');                   // 아이템 추가
             view1.items.add('i2');
             view1.items['i2'].caption = 'C1';
-            var view2 = new EntityView('T2');       // 독립형 생성
+            var view2 = new MetaView('T2');       // 독립형 생성
             view2.items.add(view1.items['i1']);      // 참조 아이템 추가
             view2.items.add('i2');                  
             view2.items.add('i3', view1.items);      // 컬렉션 지정 추가
@@ -85,9 +85,9 @@ describe("< EntityTable >", () => {
             expect(view2.items['i3'].caption).toBe('C3');
         });
         it("- addValue(name, value) : 아이템명 + 값 ", () => {
-            var view1 = new EntityView('T1');        // 독립형 생성
-            var view2 = new EntityView('T2', view1);    // 참조형 생성
-            var view3 = new EntityView('T3');      // 독립형 생성
+            var view1 = new MetaView('T1');        // 독립형 생성
+            var view2 = new MetaView('T2', view1);    // 참조형 생성
+            var view3 = new MetaView('T3');      // 독립형 생성
             view1.items.add('i1');                   // 아이템 추가
             view1.items.add('i2');
             view1.items.addValue('i3', 'V3');
@@ -131,8 +131,8 @@ describe("< EntityTable >", () => {
             expect(view3.items['i4']).toEqual(view2.items['i4']);
         });
         it("- addEntity(entity) : 엔티티의 컬렉션 모두 추가 ", () => {
-            var view1 = new EntityView('T1');
-            var view2 = new EntityView('T2');
+            var view1 = new MetaView('T1');
+            var view2 = new MetaView('T2');
             view1.items.addValue('i1', 'V1');
             view1.items.addValue('i2', 'V2');
             view2.items.addEntity(view1);
@@ -153,7 +153,7 @@ describe("< EntityTable >", () => {
             expect(view1.items).not.toEqual(view2.items);
         });
         it("- initValue(entity) : 컬렉션 전체값 초기화 ", () => {
-            var view1 = new EntityView('T1');
+            var view1 = new MetaView('T1');
             view1.items.addValue('i1', 'V1');
             view1.items.addValue('i2', 'V2');
             view1.items.initValue();

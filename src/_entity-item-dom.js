@@ -20,7 +20,7 @@
 
     if (isNode) {     
         util                    = require('./util');
-        Item                    = require('./entity-item').Item;
+        Item                    = require('./meta-column').Item;
     } else {
         util                    = global._L.Common.Util;
         Item                    = global._L.Meta.Entity.Item;

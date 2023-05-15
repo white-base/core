@@ -1,6 +1,6 @@
 /**
- * namespace _L.Meta.Entity.Row
- * namespace _L.Meta.Entity.RowCollection
+ * namespace _L.Meta.Entity.MetaRow
+ * namespace _L.Meta.Entity.MetaRowCollection
  */
 // var $local = {};
 
@@ -42,20 +42,20 @@
 
     //==============================================================
     // 4. 모듈 구현    
-    var Row  = (function (_super) {
+    var MetaRow  = (function (_super) {
         /**
          * 로우
-         * @constructs _L.Meta.Entity.Row
+         * @constructs _L.Meta.Entity.MetaRow
          * @extends _L.Collection.PropertyCollection
          */
-        function Row(p_entity) {
+        function MetaRow(p_entity) {
             _super.call(this, p_entity);
             
             var __entity        = null;
             var itemName;
 
-            // Entity 등록 & order(순서) 값 계산
-            if (p_entity && p_entity instanceof MetaObject && p_entity.instanceOf('Entity')) {
+            // MetaEntity 등록 & order(순서) 값 계산
+            if (p_entity && p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity')) {
                 __entity    = p_entity;
 
                 for (var i = 0; i < __entity.items.count; i++) {
@@ -69,7 +69,7 @@
 
             /**
              * 로우의 소유 엔티티
-             * @member {Entity} _L.Meta.Entity.Row#entity
+             * @member {MetaEntity} _L.Meta.Entity.MetaRow#entity
              */
             Object.defineProperty(this, 'entity', 
             {
@@ -78,11 +78,11 @@
                 enumerable: true
             });            
         }
-        Util.inherits(Row, _super);
+        Util.inherits(MetaRow, _super);
 
         // /** @override **/
-        // Row.prototype.getTypes  = function() {
-        //     var type = ['Row'];
+        // MetaRow.prototype.getTypes  = function() {
+        //     var type = ['MetaRow'];
             
         //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
         // };
@@ -91,18 +91,18 @@
          * 로우를 복사한다. (생성 후 복제)
          * @param {Object} p_filter 필터객체
          */
-        Row.prototype.copy = function(p_filter) {   // COVER:
-            var clone = new Row(this.entity);
+        MetaRow.prototype.copy = function(p_filter) {   // COVER:
+            var clone = new MetaRow(this.entity);
             
             if (this.value) clone['value'] = this.value;
         };
         
         /**
          * 로우를 복제한다.
-         * @returns {Row}
+         * @returns {MetaRow}
          */
-        Row.prototype.clone  = function() {
-            var clone = new Row(this.entity);
+        MetaRow.prototype.clone  = function() {
+            var clone = new MetaRow(this.entity);
             var itemName;
 
             for (var i = 0; i < this.entity.items.count; i++) {
@@ -113,59 +113,59 @@
             return clone;
         };
         
-        return Row;
+        return MetaRow;
     
     }(PropertyCollection));
     
     //---------------------------------------
-    var RowCollection  = (function (_super) {
+    var MetaRowCollection  = (function (_super) {
         /**
          * 로우 컬렉션
-         * @constructs _L.Meta.Entity.RowCollection
+         * @constructs _L.Meta.Entity.MetaRowCollection
          * @extends _L.Collection.ArrayCollection
          * @param {*} p_owner 소유자 
          */
-        function RowCollection(p_owner) {
+        function MetaRowCollection(p_owner) {
             _super.call(this, p_owner);
 
-            this.elementType = Row;   // 컬렉션타입 설정
+            this.elementType = MetaRow;   // 컬렉션타입 설정
         }
-        Util.inherits(RowCollection, _super);
+        Util.inherits(MetaRowCollection, _super);
 
         /**
          * 로우컬렉션에 로우를 추가한다.
-         * @param {String | Item} p_row 
-         * @returns {Row} 등록한 로우
+         * @param {String | MetaColumn} p_row 
+         * @returns {MetaRow} 등록한 로우
          */
-        RowCollection.prototype.add  = function(p_row) {
+        MetaRowCollection.prototype.add  = function(p_row) {
             var i_value;
 
             if (typeof p_row === 'undefined') {      
-                i_value = new Row(this._owner);
-            } else if (p_row instanceof Row) {
+                i_value = new MetaRow(this._owner);
+            } else if (p_row instanceof MetaRow) {
                 i_value = p_row;
             } else {
-                throw new Error('Row | Row object [p_row].');   // COVER:
+                throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
             }
 
             return _super.prototype.add.call(this, i_value);
         };
 
-        return RowCollection;
+        return MetaRowCollection;
         
     }(ArrayCollection));
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.Row = Row;
-        module.exports.RowCollection = RowCollection;
+        module.exports.MetaRow = MetaRow;
+        module.exports.MetaRowCollection = MetaRowCollection;
     } else {
-        _global._L.Row = Row;
-        _global._L.RowCollection = RowCollection;
+        _global._L.MetaRow = MetaRow;
+        _global._L.MetaRowCollection = MetaRowCollection;
         // namespace
-        _global._L.Meta.Entity.Row = Row;
-        _global._L.Meta.Entity.RowCollection = RowCollection;
+        _global._L.Meta.Entity.MetaRow = MetaRow;
+        _global._L.Meta.Entity.MetaRowCollection = MetaRowCollection;
     }
 
 }(typeof window !== 'undefined' ? window : global));

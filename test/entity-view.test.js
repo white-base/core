@@ -6,23 +6,23 @@
 'use strict';
 const MetaObject            = require('../src/meta-object');
 const MetaElement           = require('../src/meta-element');
-const Entity                = require('../src/entity-base');
+const MetaEntity                = require('../src/meta-entity');
 const IObject               = require('../src/i-object');
 const IMarshal              = require('../src/i-marshal');
 const Util                  = require('../src/util');
-const { EntityTable }       = require('../src/entity-table');
-const { EntityView }        = require('../src/entity-view');
-const { Row }               = require('../src/entity-row');
-const { Item }              = require('../src/entity-item');
+const { MetaTable }       = require('../src/meta-table');
+const { MetaView }        = require('../src/meta-view');
+const { MetaRow }               = require('../src/meta-row');
+const { MetaColumn }              = require('../src/meta-column');
 
 //==============================================================
 // test
-describe("< EntityTable >", () => {
+describe("< MetaTable >", () => {
     beforeAll(() => {
         // jest.resetModules();
     });
-    it("- new EntityView(name, baseEntity) ", () => {
-        var view1 = new EntityView('T1');        // 일반 뷰
+    it("- new MetaView(name, baseEntity) ", () => {
+        var view1 = new MetaView('T1');        // 일반 뷰
         view1.items.add('i1');
         view1.items.add('i2');
         view1.items['i2'].caption = 'C1';
@@ -30,9 +30,9 @@ describe("< EntityTable >", () => {
         row['i1'] = 'R1';
         row['i2'] = 'R2';
         view1.rows.add(row);
-        var view3 = new EntityView('T3');
+        var view3 = new MetaView('T3');
         view3.items.addValue('i5','V5');
-        var view2 = new EntityView('T2', view1); // 참조 뷰
+        var view2 = new MetaView('T2', view1); // 참조 뷰
         view2.items.add(view1.items['i1']);
         view2.items.add('i2');                  // 기존에 있는 속성명
         view2.items.add('i3');                  // 신규 속성명
@@ -67,7 +67,7 @@ describe("< EntityTable >", () => {
         expect(view2.items['i2'].entity.name).toBe('T1');
     });
     it("- clone() : 복제, 일반 뷰 ", () => {
-        var view1 = new EntityView('T1');
+        var view1 = new MetaView('T1');
         view1.items.add('i1');
         view1.items.add('i2');
         view1.items['i2'].caption = 'C1';
@@ -99,51 +99,51 @@ describe("< EntityTable >", () => {
         expect(view1.rows[0] === view2.rows[0]).toBe(false);
     });
     it("- getTypes() : array<function> ", () => {
-        const c = new EntityView();
+        const c = new MetaView();
         const types = c.getTypes();
 
-        expect(types[0]).toBe(EntityView);
-        expect(types[1]).toBe(Entity);
+        expect(types[0]).toBe(MetaView);
+        expect(types[1]).toBe(MetaEntity);
         expect(types[2]).toBe(MetaElement);
         expect(types[3]).toBe(MetaObject);
         expect(types[4]).toBe(Object);
         expect(types.length).toBe(5);
     });
     // it("- getTypeNames() : array<string> ", () => {
-    //     const c = new EntityView();
+    //     const c = new MetaView();
     //     const typeNames = c.getTypeNames();
 
     //     expect(typeNames[0]).toBe('Object');
     //     expect(typeNames[1]).toBe('MetaObject');
     //     expect(typeNames[2]).toBe('MetaElement');
-    //     expect(typeNames[3]).toBe('Entity');
-    //     expect(typeNames[4]).toBe('EntityView');
+    //     expect(typeNames[3]).toBe('MetaEntity');
+    //     expect(typeNames[4]).toBe('MetaView');
     //     expect(typeNames.length).toBe(5);
     // });
     it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-        const c = new EntityView();
+        const c = new MetaView();
 
         expect(c.instanceOf('IObject')).toBe(true);
         expect(c.instanceOf('IMarshal')).toBe(true);
         expect(c.instanceOf('Object')).toBe(true);
         expect(c.instanceOf('MetaObject')).toBe(true);
         expect(c.instanceOf('MetaElement')).toBe(true);
-        expect(c.instanceOf('Entity')).toBe(true);
-        expect(c.instanceOf('EntityView')).toBe(true);
+        expect(c.instanceOf('MetaEntity')).toBe(true);
+        expect(c.instanceOf('MetaView')).toBe(true);
         // false
         expect(c.instanceOf('Array')).toBe(false);
         expect(c.instanceOf('String')).toBe(false);
     });
     it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-        const c = new EntityView();
+        const c = new MetaView();
 
         expect(c.instanceOf(IObject)).toBe(true);
         expect(c.instanceOf(IMarshal)).toBe(true);
         expect(c.instanceOf(Object)).toBe(true);
         expect(c.instanceOf(MetaObject)).toBe(true);
         expect(c.instanceOf(MetaElement)).toBe(true);
-        expect(c.instanceOf(Entity)).toBe(true);
-        expect(c.instanceOf(EntityView)).toBe(true);
+        expect(c.instanceOf(MetaEntity)).toBe(true);
+        expect(c.instanceOf(MetaView)).toBe(true);
         // false
         expect(c.instanceOf(Array)).toBe(false);
         expect(c.instanceOf(String)).toBe(false);

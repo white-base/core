@@ -144,7 +144,7 @@
              * this.command = {
              *   create:         {
              *     onExecute: function(p_bindCommand) { 
-             *        _this.bindModel.items['cmd'].value = 'CREATE'; 
+             *        _this.bindModel.columns['cmd'].value = 'CREATE'; 
              *     },
              *     cbEnd: function(p_entity) {
              *         if (p_entity['return'] < 0) return alert('등록 처리가 실패 하였습니다. Code : ' + p_entity['return']);
