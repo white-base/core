@@ -57,22 +57,38 @@
         function MetaView(p_name, p_baseEntity) {
             _super.call(this, p_name);
 
+            var columns;
             var refCollection;
 
             if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
                 refCollection = p_baseEntity.columns;
             }
             
-            this._refEntity = p_baseEntity;
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#columns
+             */
+            Object.defineProperty(this, 'columns', 
+            {
+                get: function() { return columns; },
+                // set: function(newValue) { 
+                //     if (!(newValue instanceof MetaViewColumnCollection)) throw new Error('Only [columns] type "MetaViewColumnCollection" can be added');
+                //     columns = newValue;
+                // },
+                configurable: false,
+                enumerable: true
+            });
+           
+            this._refEntity = p_baseEntity;     // REVIEW: 필요 유무 검토
             
             this._refEntities = [];
 
-            this.columns = new MetaViewColumnCollection(this, refCollection);
+            columns = new MetaViewColumnCollection(this, refCollection);
         }
         Util.inherits(MetaView, _super);
 
         /**
-         * 뷰 엔티티에 참조를 등록한다.
+         * 뷰 엔티티에 참조를 등록한다. (중복 제거후)
          * @param {MetaEntity} p_entity 
          */
         MetaView.prototype._regRefer  = function(p_entity) {
@@ -137,7 +153,7 @@
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.
          * @param {string | MetaView} p_object 
-         * @param {?MetaColumnCollection} p_baseEntity
+         * @param {MetaColumnCollection?} p_baseEntity
          * @returns {MetaView} 등록한 아이템
          * @example
          *  - string                    : 생성후   string      이름으로 등록 
@@ -153,10 +169,12 @@
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
                 i_value = new MetaView(i_name, p_baseEntity);
+                i_value.metaSet = this._owner;
             } else if (p_object instanceof MetaView) {
                 if (p_baseEntity) throw new Error(' MetaView 객체와 refEntity객체를 동시에 입력할 수 없습니다. !!');
                 i_name  = p_object.name;
                 i_value = p_object;
+                p_object.metaSet = this._owner;
             } else {
                 throw new Error('string | MetaView object [p_object].');
             }

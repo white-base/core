@@ -49,10 +49,26 @@
          * @extends _L.Meta.Entity.MetaEntity
          * @param {*} p_name 
          */
-        function MetaTable(p_name) {
+        function MetaTable(p_name, p_metaSet) {
             _super.call(this, p_name);
 
-            this.columns = new MetaTableColumnCollection(this);
+            var columns = new MetaTableColumnCollection(this);
+            
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {MetaTableColumnCollection} _L.Meta.Entity.MetaTable#columns
+             */
+            Object.defineProperty(this, 'columns', 
+            {
+                get: function() { return columns; },
+                // set: function(newValue) { 
+                //     if (!(newValue instanceof MetaTableColumnCollection)) throw new Error('Only [columns] type "MetaTableColumnCollection" can be added');
+                //     columns = newValue;
+                // },
+                configurable: false,
+                enumerable: true
+            });
+            
         }
         Util.inherits(MetaTable, _super);
 
@@ -130,9 +146,11 @@
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
                 i_value = new MetaTable(i_name);
+                i_value.metaSet = this._owner;
             } else if (p_object instanceof MetaTable) {
                 i_name  = p_object.name;
                 i_value = p_object;
+                p_object.metaSet = this._owner;
             } else {
                 throw new Error('string | MetaTable object [p_object].');
             }

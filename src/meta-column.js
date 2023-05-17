@@ -27,7 +27,7 @@
         MetaElement         = require('./meta-element');
         PropertyCollection  = require('./collection-property');
         Observer            = require('./observer');
-    } else {    // COVER:
+    } else {
         Util                = _global._L.Common.Util;
         CustomError         = _global._L.Common.CustomError;
         MetaElement         = _global._L.Meta.MetaElement;
@@ -57,31 +57,32 @@
         function MetaColumn(p_name, p_entity, p_property) {
             _super.call(this, p_name);
 
-            var __entity        = null;
-            var __type          = 'string';
-            var __size          = 0;
-            var __default       = null;
-            var __caption       = '';
-            var __isNotNull     = false;
-            var __isNullPass    = false;
-            var __callback      = null;
-            var __constraints   = [];
-            var __codeType      = null;
-            var __order         = 100;
-            var __increase      = 100;      // order 의 자동 추가수
-            var __getter        = null;
-            var __setter        = null;
-            var __value         = null;
-            var __alias         = null;
+            var __value       = null;
+            var _event        = new Observer(this);
+            var entity;
+            var type          = 'string';
+            var size          = 0;
+            var defaultValue  = null;
+            var caption       = '';
+            var isNotNull     = false;
+            var isNullPass    = false;
+            var callback      = null;
+            var constraints   = [];
+            var codeType      = null;
+            var order         = 100;
+            var increase      = 100;      // order 의 자동 추가수
+            var getter        = null;
+            var setter        = null;
+            var alias         = null;
 
             // MetaEntity 등록 & order(순서) 값 계산
             if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
-                __entity    = p_entity;
-                __order     = __entity.columns.count === 0 ? __order : __entity.columns[__entity.columns.count - 1].order + __increase;
+                entity    = p_entity;
+                order     = entity.columns.count === 0 ? order : entity.columns[entity.columns.count - 1].order + increase;
             }
 
             /** @private */
-            this._event    = new Observer(this, this);
+            // this._event    = new Observer(this, this);
 
             /**
              * value 내부값 (필터 및 getter/setter 무시)
@@ -100,19 +101,32 @@
                 enumerable: true
             });
 
+            /** 
+             * 이벤트 객체
+             * @protected 
+             * @member {Object} _L.Meta.Entity.MetaColumn#_event  
+             */
+            Object.defineProperty(this, '_event', {
+                enumerable: false,
+                configurable: false,
+                get: function() { 
+                    return _event;
+                }
+            });            
+
             /**
              * 아이템 소유 엔티티
              * @member {MetaEntity} _L.Meta.Entity.MetaColumn#entity
              */
             Object.defineProperty(this, 'entity', 
             {
-                get: function() { return __entity; },
+                get: function() { return entity; },
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
                     if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
                         throw new Error('Only [entity] type "MetaEntity" can be added');    // COVER:
                     }
-                    __entity = newValue;
+                    entity = newValue;
                 },
                 configurable: true,
                 enumerable: true
@@ -124,11 +138,11 @@
              */
             Object.defineProperty(this, 'type', 
             {
-                get: function() { return __type; },
+                get: function() { return type; },
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
                     if(typeof newValue !== 'string') throw new Error('Only [type] type "string" can be added');
-                    __type = newValue;
+                    type = newValue;
                 },
                 configurable: true,
                 enumerable: true
@@ -140,10 +154,10 @@
              */
             Object.defineProperty(this, 'size', 
             {
-                get: function() { return __size; },
+                get: function() { return size; },
                 set: function(newValue) { 
                     if(typeof newValue !== 'number') throw new Error('Only [size] type "number can be added');
-                    __size = newValue; 
+                    size = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -155,10 +169,10 @@
              */
             Object.defineProperty(this, 'default', 
             {
-                get: function() { return __default; },
+                get: function() { return defaultValue; },
                 set: function(newValue) { 
                     if(typeof newValue !== 'undefined' && newValue !== null &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) throw new Error('Only [default] type "string | boolea | number" can be added');
-                    __default = newValue; 
+                    defaultValue = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -170,10 +184,10 @@
              */
             Object.defineProperty(this, 'caption', 
             {
-                get: function() { return __caption; },
+                get: function() { return caption; },
                 set: function(newValue) { 
                     if(typeof newValue !== 'string') throw new Error('Only [caption] type "string" can be added');
-                    __caption = newValue; 
+                    caption = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -187,13 +201,13 @@
             {
                 // get: function() { 
                 //     var isReturn;
-                //     isReturn = __constraints.length > 0 ? true : __isNotNull;
+                //     isReturn = constraints.length > 0 ? true : isNotNull;
                 //     return isReturn; 
                 // },
-                get: function() { return __isNotNull },
+                get: function() { return isNotNull },
                 set: function(newValue) { 
                     if(typeof newValue !== 'boolean') throw new Error('Only [isNotNull] type "boolean" can be added');
-                    __isNotNull = newValue; 
+                    isNotNull = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -205,10 +219,10 @@
              */
             Object.defineProperty(this, 'isNullPass', 
             {
-                get: function() { return __isNullPass },
+                get: function() { return isNullPass },
                 set: function(newValue) { 
                     if(typeof newValue !== 'boolean') throw new Error('Only [isNullPass] type "boolean" can be added');
-                    __isNullPass = newValue; 
+                    isNullPass = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -221,10 +235,10 @@
              */
             Object.defineProperty(this, 'callback', 
             {
-                get: function() { return __callback; },
+                get: function() { return callback; },
                 set: function(newValue) { // COVER:
                     if(newValue !== null && typeof newValue !== 'function') throw new Error('Only [callback] type "function" can be added');
-                    __callback = newValue; 
+                    callback = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -242,7 +256,7 @@
              */
             Object.defineProperty(this, 'constraints', 
             {
-                get: function() { return __constraints; },
+                get: function() { return constraints; },
                 set: function(newValue) { 
                     var list = [];
                     
@@ -256,7 +270,7 @@
                             throw new Error('Only [constraints] type "function OR {regex:object, msg:string, ?code:number}" can be added'); // COVER:
                          }
                     }
-                    __constraints = list;
+                    constraints = list;
                 },
                 configurable: true,
                 enumerable: true
@@ -268,8 +282,8 @@
              */
             Object.defineProperty(this, 'codeType', 
             {
-                get: function() { return __codeType; },
-                set: function(newValue) { __codeType = newValue; }, // COVER:
+                get: function() { return codeType; },
+                set: function(newValue) { codeType = newValue; }, // COVER:
                 configurable: true,
                 enumerable: true
             });
@@ -280,10 +294,10 @@
              */
             Object.defineProperty(this, 'order', 
             {
-                get: function() { return __order; },
+                get: function() { return order; },
                 set: function(newValue) { 
                     if(typeof newValue !== 'number') throw new CustomError('Only [order] type "number" can be added', newValue);
-                    __order = newValue; 
+                    order = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -295,10 +309,10 @@
              */
             Object.defineProperty(this, 'increase', 
             {
-                get: function() { return __increase; },
+                get: function() { return increase; },
                 set: function(newValue) { 
                     if(typeof newValue !== 'number') throw new CustomError('Only [increase] type "number" can be added', newValue);
-                    __increase = newValue; 
+                    increase = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -314,9 +328,9 @@
                     var __val;
                     
                     // 우선순위 : 1
-                    if (typeof __getter === 'function' ) {
+                    if (typeof getter === 'function' ) {
                         
-                        __val = __getter.call(this);
+                        __val = getter.call(this);
                         
                         // 검사 및 이벤트 발생
                         if (this.__value !== null && this.__value !== __val) {
@@ -343,7 +357,7 @@
                 set:  function(val) { 
                     var __val, _val;
                     var _oldVal = this.__value;
-                    if (typeof __setter === 'function' ) _val = __setter.call(this, val);
+                    if (typeof setter === 'function' ) _val = setter.call(this, val);
                     
                     // settter 의 리턴이 여부
                     if (typeof _val !== 'undefined') __val = _val;
@@ -367,10 +381,10 @@
              */
             Object.defineProperty(this, 'getter', 
             {
-                get: function() { return __getter; },
+                get: function() { return getter; },
                 set: function(val) { 
                     if(val !== null && typeof val !== 'function') throw new Error('Only [getter] type "function" can be added');
-                    __getter = val;
+                    getter = val;
                 },
                 configurable: true,
                 enumerable: true
@@ -382,10 +396,10 @@
              */
             Object.defineProperty(this, 'setter', 
             {
-                get: function() { return __setter; },
+                get: function() { return setter; },
                 set: function(val) { 
                     if(val !== null && typeof val !== 'function') throw new Error('Only [setter] type "function" can be added');
-                    __setter = val;
+                    setter = val;
                 },
                 configurable: true,
                 enumerable: true
@@ -402,10 +416,10 @@
              */
              Object.defineProperty(this, 'alias', 
              {
-                 get: function() { return typeof __alias === 'string' ? __alias : this.name; },
+                 get: function() { return typeof alias === 'string' ? alias : this.name; },
                  set: function(newValue) { 
                     if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
-                     __alias = newValue; 
+                     alias = newValue; 
                  },
                  configurable: true,
                  enumerable: true
@@ -426,22 +440,24 @@
 
             //---------------------------------------------------
             // 아이템 옵션속성 추가
-            if (typeof p_property === 'object' ) {
-                for(var prop in p_property) {
-                    if (p_property.hasOwnProperty(prop) &&
-                    [   'entity', 'type', 'size', 'default', 'caption', 
-                        'isNotNull', 'isNullPass', 'callback', 'constraints', 
-                        'codeType', 'order', 'increase', 'value', 'getter', 'setter', 'alias', 'onChanged' 
-                    ].indexOf(prop) > -1) {
-                        this[prop] = p_property[prop];
-                    }
-                }
-            } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
-                this['value'] = p_property; // COVER:
-            }
+            // if (typeof p_property === 'object' ) {
+            //     for(var prop in p_property) {
+            //         if (p_property.hasOwnProperty(prop) &&
+            //         [   'entity', 'type', 'size', 'default', 'caption', 
+            //             'isNotNull', 'isNullPass', 'callback', 'constraints', 
+            //             'codeType', 'order', 'increase', 'value', 'getter', 'setter', 'alias', 'onChanged' 
+            //         ].indexOf(prop) > -1) {
+            //             this[prop] = p_property[prop];
+            //         }
+            //     }
+            // } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
+            //     this['value'] = p_property; // COVER:
+            // }
+            if (p_property) this._load(p_property);
 
         }
         Util.inherits(MetaColumn, _super);
+
 
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
@@ -458,7 +474,27 @@
             
         //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
         // };
-        
+
+        /**
+         * 프로퍼티 속성으로 로드한다.
+         * @param {object} p_property 
+         */
+        MetaColumn.prototype._load = function(p_property) {
+            if (typeof p_property === 'object' ) {
+                for(var prop in p_property) {
+                    if (p_property.hasOwnProperty(prop) &&
+                    [   'entity', 'type', 'size', 'default', 'caption', 
+                        'isNotNull', 'isNullPass', 'callback', 'constraints', 
+                        'codeType', 'order', 'increase', 'value', 'getter', 'setter', 'alias', 'onChanged' 
+                    ].indexOf(prop) > -1) {
+                        this[prop] = p_property[prop];
+                    }
+                }
+            } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
+                this['value'] = p_property; // COVER:
+            }
+        };
+
         /** 
          * 아이템을 복제한다. 
          * @returns {MetaColumn}
@@ -637,7 +673,7 @@
         function MetaColumnCollection(p_owner, p_columnType) {
             _super.call(this, p_owner);
             
-            var _columnType;
+            var columnType;
 
             /**
              * 아이템의 타입
@@ -646,18 +682,18 @@
             Object.defineProperty(this, 'columnType', 
             {
                 get: function() { 
-                    return _columnType; 
+                    return columnType; 
                 },
                 set: function(newValue) { 
                     if (typeof p_columnType === 'function')  throw new Error('It is not a function type.');
                     if (!(new newValue() instanceof MetaColumn)) throw new Error('MetaColumn is not a subfunction.');
-                    _columnType = newValue; 
+                    columnType = newValue; 
                 },
                 enumerable: true,
                 configurable: false,
             });
 
-            this.columnType = p_columnType || MetaColumn;
+            this.columnType = columnType || MetaColumn;
 
             
         }
@@ -766,17 +802,35 @@
          * @constructs _L.Meta.Entity.MetaViewColumnCollection
          * @extends _L.Meta.Entity.MetaColumnCollection
          * @param {*} p_owner 소유자
-         * @param {?MetaColumnCollection} p_baseCollection 참조기본 컬렉션
+         * @param {MetaColumnCollection?} p_baseCollection 참조기본 컬렉션
          */
         function MetaViewColumnCollection(p_owner, p_baseCollection) {
             _super.call(this, p_owner);
 
-            if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) {
-                throw new Error('Error!! MetaColumnCollection object [p_baseCollection].');   // COVER:
-            }
-            
+            var _baseCollection;
+
+            // if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) {
+            //     throw new Error('Error!! MetaColumnCollection object [p_baseCollection].');   // COVER:
+            // }
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {MetaColumnCollection} _L.Meta.Entity.MetaViewColumnCollection#_baseCollection
+             */
+            Object.defineProperty(this, '_baseCollection', 
+            {
+                get: function() { return _baseCollection; },
+                set: function(newValue) { 
+                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
+                    _baseCollection = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
+
+            if (p_baseCollection) this._baseCollection = p_baseCollection;
+
             /** @protected */
-            this._baseCollection = p_baseCollection;
+            // this._baseCollection = p_baseCollection;
         }
         Util.inherits(MetaViewColumnCollection, _super);
 
@@ -878,7 +932,7 @@
         module.exports.MetaViewColumnCollection           = MetaViewColumnCollection;
         module.exports.MetaTableColumnCollection          = MetaTableColumnCollection;
 
-    } else {    // COVER:
+    } else {
         _global._L.MetaColumn                              = MetaColumn;
         _global._L.MetaColumnCollection                    = MetaColumnCollection;
         _global._L.MetaViewColumnCollection                = MetaViewColumnCollection;

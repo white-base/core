@@ -24,23 +24,23 @@
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
-        Util                = require('./util');
-        MetaObject          = require('./meta-object');
-        PropertyCollection  = require('./collection-property');
-        ArrayCollection     = require('./collection-array');
+        Util                        = require('./util');
+        MetaObject                  = require('./meta-object');
+        PropertyCollection          = require('./collection-property');
+        ArrayCollection             = require('./collection-array');
     } else {    // COVER:
-        Util                = _global._L.Common.Util;
-        MetaObject          = _global._L.Meta.MetaObject;
-        PropertyCollection  = _global._L.Collection.PropertyCollection;
-        ArrayCollection     = _global._L.Collection.ArrayCollection;
+        Util                        = _global._L.Common.Util;
+        MetaObject                  = _global._L.Meta.MetaObject;
+        PropertyCollection          = _global._L.Collection.PropertyCollection;
+        ArrayCollection             = _global._L.Collection.ArrayCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
+    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -48,23 +48,22 @@
         /**
          * 로우
          * @constructs _L.Meta.Entity.MetaRow
-         * @extends _L.Collection.PropertyCollection
+         * @extends _L.Collection.PropertyCollection     // REVIEW: 상속위치를 바꿔야함
          */
         function MetaRow(p_entity) {
             _super.call(this, p_entity);
             
-            var __entity        = null;
+            var entity;
             var itemName;
 
             // MetaEntity 등록 & order(순서) 값 계산
             if (p_entity && p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity')) {
-                __entity    = p_entity;
-
-                for (var i = 0; i < __entity.columns.count; i++) {
+                entity    = p_entity;
+                for (var i = 0; i < entity.columns.count; i++) {
                     
                     // 별칭 가져오기로 수정함
-                    // itemName = __entity.columns[i].name;   
-                    itemName = __entity.columns[i].alias;
+                    // itemName = entity.columns[i].name;   
+                    itemName = entity.columns[i].alias;
                     _super.prototype.add.call(this, itemName, null);
                 }
             }
@@ -75,10 +74,18 @@
              */
             Object.defineProperty(this, 'entity', 
             {
-                get: function() { return __entity; },
-                configurable: true,
+                get: function() { return entity; },
+                set: function(newValue) { 
+                    // TODO:: 자료종류를 검사해야함
+                    if (newValue && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
+                        throw new Error('Only [entity] type "MetaEntity" can be added');    // COVER:
+                    }
+                    entity = newValue;
+                },
+                configurable: false,
                 enumerable: true
-            });            
+            });
+
         }
         Util.inherits(MetaRow, _super);
 
@@ -93,7 +100,7 @@
          * 로우를 복사한다. (생성 후 복제)
          * @param {Object} p_filter 필터객체
          */
-        MetaRow.prototype.copy = function(p_filter) {   // COVER:
+        MetaRow.prototype.copy = function(p_filter) {   // COVER:  >> 불필요 할듯
             var clone = new MetaRow(this.entity);
             
             if (this.value) clone['value'] = this.value;

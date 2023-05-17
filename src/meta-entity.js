@@ -63,27 +63,48 @@
          * @implements {_L.Interface.IGroupControl}
          * @implements {_L.Interface.IAllControl}
          * @param {*} p_name 
+         * @param {*} p_metaSet 
          */
         function MetaEntity(p_name) {
             _super.call(this, p_name);
 
-            var __columns = null;     // 상속해서 생성해야함
-            var __rows  = new MetaRowCollection(this);
+            var metaSet = null;
+            // var columns = null;     
+            var rows  = new MetaRowCollection(this);
+
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#metaSet
+             */
+            Object.defineProperty(this, 'metaSet', 
+            {
+                get: function() { return metaSet; },
+                set: function(newValue) { 
+                    if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaSet'))) {
+                        throw new Error('Only [metaSet] type "MetaSet" can be added');
+                    }
+                    metaSet = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
              * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#columns
              */
-            Object.defineProperty(this, 'columns', 
-            {
-                get: function() { return __columns; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
-                    __columns = newValue;
-                },
-                configurable: true,
-                enumerable: true
-            });
+            this.columns = null;
+            
+            // Object.defineProperty(this, 'columns', 
+            // {
+            //     get: function() { return columns; },
+            //     set: function(newValue) { 
+            //         if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
+            //         columns = newValue;
+            //     },
+            //     configurable: true,
+            //     enumerable: true
+            // });
             
             /**
              * 엔티티의 데이터(로우) 컬렉션
@@ -91,16 +112,15 @@
              */
             Object.defineProperty(this, 'rows', 
             {
-                get: function() { return __rows; },
-                set: function(newValue) { // COVER:
-                    if (!(newValue instanceof MetaRowCollection)) throw new Error('Only [rows] type "MetaRowCollection" can be added'); 
-                    __rows = newValue;
-                },
-                configurable: true,
+                get: function() { return rows; },
+                // set: function(newValue) { // COVER:
+                //     if (!(newValue instanceof MetaRowCollection)) throw new Error('Only [rows] type "MetaRowCollection" can be added'); 
+                //     rows = newValue;
+                // },
+                configurable: false,
                 enumerable: true
             });
 
-            // this._implements(IGroupControl, IAllControl);
             Util.implements(this, IGroupControl, IAllControl);
         }
         Util.inherits(MetaEntity, _super);

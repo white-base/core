@@ -61,8 +61,8 @@
         function MetaSet(p_name) {
             _super.call(this, p_name);
 
-            var __tables = new MetaTableCollection(this);
-            var __views  = new MetaViewCollection(this);
+            var tables = new MetaTableCollection(this);
+            var views  = new MetaViewCollection(this);
 
             /**
              * 메타 테이블 컬렉션
@@ -70,12 +70,12 @@
              */
             Object.defineProperty(this, 'tables', 
             {
-                get: function() { return __tables; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof MetaTableCollection)) throw new Error('Only [tables] type "MetaTableCollection" can be added');
-                    __tables = newValue;
-                },
-                configurable: true,
+                get: function() { return tables; },
+                // set: function(newValue) { 
+                //     if (!(newValue instanceof MetaTableCollection)) throw new Error('Only [tables] type "MetaTableCollection" can be added');
+                //     tables = newValue;
+                // },
+                configurable: false,
                 enumerable: true
             });
             
@@ -85,12 +85,12 @@
              */
             Object.defineProperty(this, 'views', 
             {
-                get: function() { return __views; },
-                set: function(newValue) {
-                    if (!(newValue instanceof MetaViewCollection)) throw new Error('Only [views] type "MetaViewCollection" can be added'); 
-                    __views = newValue;
-                },
-                configurable: true,
+                get: function() { return views; },
+                // set: function(newValue) {
+                //     if (!(newValue instanceof MetaViewCollection)) throw new Error('Only [views] type "MetaViewCollection" can be added'); 
+                //     views = newValue;
+                // },
+                configurable: false,
                 enumerable: true
             });
 
@@ -124,10 +124,12 @@
             console.log('구현해야함');  // COVER:
         };
         MetaSet.prototype.clear  = function() {
-            console.log('구현해야함');  // COVER:
+            for(var i = 0; i < this.tables.count; i++) this.tables[i].clear();
+            for(var i = 0; i < this.views.count; i++) this.views[i].clear();
         };
         MetaSet.prototype.reset  = function() {
-            console.log('구현해야함');  // COVER:
+            this.tables.clear();
+            this.views.clear();
         };
 
         return MetaSet;
