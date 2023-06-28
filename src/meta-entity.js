@@ -277,6 +277,11 @@
             if (p_option === 1) this.__fillRow(entity);
         };
 
+        /** @abstract */
+        MetaEntity.prototype.clone = function() {
+            throw new Error('[ clone() ] Abstract method definition, fail...');
+        };
+
         /** @override **/
         // Entity.prototype.getTypes = function() {
         //     var type = ['MetaEntity'];
@@ -496,6 +501,8 @@
             this.__fillRow(p_target);
         };
         
+
+
         /**
          * '데이터를 가져오는게 주용도임'
          * 불러오기/가져오기 (!! 병합용도가 아님)
@@ -513,21 +520,23 @@
             }
         };
         
-        /** @abstract */
-        MetaEntity.prototype.clone  = function() {
-            throw new Error('[ clone() ] Abstract method definition, fail...');
-        };
 
         /** 
          * 아이템과 로우를 초기화 한다.
          */
-        MetaEntity.prototype.clear  = function() {
+        MetaEntity.prototype.clear = function() {
             // this.columns.clear();
             this.rows.clear();
         };
-        MetaEntity.prototype.reset  = function() {
-            this.columns.clear();
+
+        MetaEntity.prototype.reset = function() {
             this.rows.clear();
+            this.columns.clear();
+        };
+
+        MetaEntity.prototype.reset = function() {
+            this.rows.clear();
+            this.columns.clear();
         };
 
         return MetaEntity;
