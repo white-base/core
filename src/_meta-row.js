@@ -10,7 +10,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var MetaObject;
-    // var MetaElement;
+    var PropertyCollection;
     var ArrayCollection;
 
     //==============================================================
@@ -26,21 +26,21 @@
     if (isNode) {     
         Util                        = require('./util');
         MetaObject                  = require('./meta-object');
-        // MetaElement                 = require('./meta-element');
+        PropertyCollection          = require('./collection-property');
         ArrayCollection             = require('./collection-array');
     } else {    // COVER:
         Util                        = _global._L.Common.Util;
         MetaObject                  = _global._L.Meta.MetaObject;
-        // MetaElement                 = _global._L.Collection.MetaElement;
+        PropertyCollection          = _global._L.Collection.PropertyCollection;
         ArrayCollection             = _global._L.Collection.ArrayCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
+    if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
+    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -48,19 +48,25 @@
         /**
          * 로우
          * @constructs _L.Meta.Entity.MetaRow
-         * @extends _L.Collection.MetaElement     // REVIEW: 상속위치를 바꿔야함
+         * @extends _L.Collection.PropertyCollection     // REVIEW: 상속위치를 바꿔야함
          */
         function MetaRow(p_entity) {
             _super.call(this, p_entity);
-
-            var entity = p_entity;
-            var element = [];
-
+            
+            var entity;
+            var itemName;
 
             // MetaEntity 등록 & order(순서) 값 계산
-            // if (!(entity && entity instanceof MetaObject && entity.instanceOf('MetaEntity'))) {
-            //     throw new Error('Only [p_entity] type "MetaEntity" can be added');
-            // }
+            if (p_entity && p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity')) {
+                entity    = p_entity;
+                for (var i = 0; i < entity.columns.count; i++) {
+                    
+                    // 별칭 가져오기로 수정함
+                    // itemName = entity.columns[i].name;   
+                    itemName = entity.columns[i].alias;
+                    _super.prototype.add.call(this, itemName, null);
+                }
+            }
 
             /**
              * 로우의 소유 엔티티
@@ -79,39 +85,7 @@
                 configurable: false,
                 enumerable: true
             });
-            
-            /**
-             * 컬랙션 갯수 
-             * @member {Number} _L.Collection.BaseCollection#count 
-             */
-            Object.defineProperty(this, 'count', {
-                get: function() {
-                    return element.length;
-                },
-                configurable: false,
-                enumerable: false
-            });
 
-            // 설정
-            if (p_entity) {
-                this.entity = p_entity;
-
-                for (var i = 0; i < entity.columns.count; i++) {
-                    var idx = element.length;
-                    element.push(entity.columns[i].default);  // 기본값 등록
-                    Object.defineProperty(this, [i], getPropDescriptor(idx));
-                    Object.defineProperty(this, entity.columns[i].alias, getPropDescriptor(idx));
-                }
-            }
-
-            function getPropDescriptor(p_idx) {
-                return {
-                    get: function() { return element[p_idx]; },
-                    set: function(newValue) { element[p_idx] = newValue; },
-                    enumerable: false,
-                    configurable: false
-                };
-            }
         }
         Util.inherits(MetaRow, _super);
 
@@ -131,31 +105,34 @@
             
         //     if (this.value) clone['value'] = this.value;
         // };
-
+        
         /**
          * 로우를 복제한다.
          * @returns {MetaRow}
          */
         MetaRow.prototype.clone  = function() {
             var clone = new MetaRow(this.entity);
+            var itemName;
 
-            for (var i = 0; i < this.count; i++) {
-                clone[i] = this[i];
+            for (var i = 0; i < this.entity.columns.count; i++) {
+                itemName = this.entity.columns[i].name;
+                clone[itemName] = this[itemName];
             }
+
             return clone;
         };
         
         MetaRow.prototype.acceptChanges  = function() {
             console.log('구현해야함');  // COVER:
         };
-
+        
         MetaRow.prototype.rejectChanges  = function() {
             console.log('구현해야함');  // COVER:
         };
 
         return MetaRow;
     
-    }(MetaObject));
+    }(PropertyCollection));
     
     //---------------------------------------
     var MetaRowCollection  = (function (_super) {

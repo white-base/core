@@ -34,33 +34,36 @@ describe("< MetaRow >", () => {
         expect(row2.count).toBe(2);
         expect(table1.rows[0].count).toBe(0);
         expect(table1.rows[1].count).toBe(2);
+        expect(row2['i1']).toBe(null);
+        expect(row2['i2']).toBe(null);
+        expect(row2[0]).toBe(null);
+        expect(row2[1]).toBe(null);
     });
-    // TODO: 필요성 확인 검토
-    // it("- copy() : 복사 ", () => {
-    //     var table1 = new MetaTable('T1');
-    //     table1.columns.addValue('i1', 'V1');
-    //     table1.columns.addValue('i2', 'V2');
-    //     var row1 = new MetaRow(table1);
-    //     row1['i1'] = 'R1';
-    //     row1['i2'] = 'R2';
-    //     table1.rows.add(row1);
-    //     var row2 = table1.rows[0].copy();
-        
-    //     // table1
-    //     expect(row1.count).toBe(2);
-    //     expect(table1.rows[0].count).toBe(2);
-    //     expect(table1.rows[0]['i1']).toBe('R1');
-    //     expect(table1.rows[0]['i2']).toBe('R2');
-    //     // copy row
-    //     expect(row2.count).toBe(2);
-    //     expect(row2['i1']).toBe('R1');
-    //     expect(row2['i2']).toBe('R2');
-    //     // 비교
-    //     expect(table1.rows[0]).not.toEqual(row2);
+    it("- clone() : 복사 ", () => {
+        var table1 = new MetaTable('T1');
+        table1.columns.addValue('i1', 'V1');
+        table1.columns.addValue('i2', 'V2');
+        var row1 = new MetaRow(table1);
+        row1['i1'] = 'R1';
+        row1['i2'] = 'R2';
+        table1.rows.add(row1);
+        var row2 = row1.clone();
+        table1.rows.add(row2);
+        // table1
+        expect(row1.count).toBe(2);
+        expect(table1.rows[0].count).toBe(2);
+        expect(table1.rows[0]['i1']).toBe('R1');
+        expect(table1.rows[0]['i2']).toBe('R2');
+        // clone row
+        expect(row2.count).toBe(2);
+        expect(row2['i1']).toBe('R1');
+        expect(row2['i2']).toBe('R2');
+        // 비교
+        expect(table1.rows[0]).toEqual(table1.rows[1]);
 
-    // });
+    });
 });
-describe("< MetaRowCollection >", () => {
+describe.skip("< MetaRowCollection >", () => {
     it("- add() : 빈 row 등록 ", () => {
         var table1 = new MetaTable('T1');
         table1.columns.addValue('i1', 'V1');

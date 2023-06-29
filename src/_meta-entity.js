@@ -315,29 +315,7 @@
             }
         };
         
-        /**
-         * 불러오기/가져오기 (!! 병합용도가 아님)
-         * 오류조건 : 컬럼 중복 발생시 오류   
-         * @param {object | MetaEntity} p_target 로드 대상
-         * @param {Number} p_option 
-         * @param {Number} p_option.1 컬럼(구조)만 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다.
-         * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
-         * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
-         */
-        MetaEntity.prototype.load  = function(p_target, p_option) {
-            var opt = p_option || 3;
-
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
-            
-            if (p_target instanceof MetaEntity) {
-                // this.__loadEntity(p_target, p_option);
-            } else if (typeof p_target === 'object') {
-                this.read(p_target, opt);
-            } else {
-                throw new Error('[p_target] 처리할 수 없는 타입입니다. ');
-            }
-        };
-
+        
 
 
         /** 
@@ -547,25 +525,12 @@
             }
         };
 
-        /**
-         * object 로 로딩하기   
-         * JSON 스키마 규칙   
-         * { table: { columns: {}, rows: {} }}   
-         * { columns: {}, rows: {} }
-         * @param {*} p_json 
-         * @param {*} p_opt 
-         */
-        MetaEntity.prototype.read  = function(p_json, p_opt) {
-            var entity = null;
-            var opt = p_option || 3;
-            
-            if (typeof p_json !== 'object') throw new Error('Only [p_json] type "object" can be added');
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+        MetaEntity.prototype._read  = function(p_json) {
+            console.log('구현해야함');  // COVER:
+        };
 
-            entity = p_json['entity']  || p_json['table'] || p_json;
-
-            if (opt % 2 === 1) this.readSchema(p_json);
-
+        MetaEntity.prototype.read  = function(p_json) {
+            console.log('구현해야함');  // COVER:
         };
 
         MetaEntity.prototype.write  = function() {
@@ -573,21 +538,7 @@
         };
 
         MetaEntity.prototype.readSchema  = function(p_json) {
-            var entity = p_json;
-            var columns;
-
-            if (typeof entity !== 'object') throw new Error('Only [p_json] type "object" can be added');
-
-            columns = entity['columns'];
-            if (columns) {
-                for (const key in columns) {
-                    if (Object.hasOwnProperty.call(columns, key)) {
-                        var column = columns[key];
-                        // WORKING::
-                    }
-                }
-            }
-
+            console.log('구현해야함');  // COVER:
         };
 
         MetaEntity.prototype.writeSchema  = function() {

@@ -129,7 +129,19 @@
             }
             
             return clone;
-        };        
+        };
+        
+        /**
+         * 엔티티를 복사한다. (조회 후 복제)
+         * @param {*} p_filter 
+         * @param {*} p_index 
+         * @param {*} p_end 
+         */
+        MetaView.prototype.copy  = function(p_filter, p_index, p_end) {
+            var entity = this.select(p_filter, p_index, p_end);
+
+            return entity.clone();
+        };
         
         return MetaView;
     

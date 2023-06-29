@@ -19,6 +19,7 @@ const IExportControl        = require('../src/i-control-export');
 const IGroupControl         = require('../src/i-control-group');
 const IImportControl        = require('../src/i-control-import');
 const ILookupControl        = require('../src/i-control-lookup');
+const ISchemaControl        = require('../src/i-control-schema');
 const IPartControl          = require('../src/i-control-part');
 
 //==============================================================
@@ -137,6 +138,22 @@ describe("< MetaTable >", () => {
             expect(()=> i.clone()).toThrow(/Abstract/);
             expect(()=> i.load()).toThrow(/Abstract/);
             expect(()=> i.clear()).toThrow(/Abstract/);
+        });
+        it("- ISchemaControl() : 생성 및 상속 ", () => {
+            class SubClass extends ISchemaControl {}
+            const s = new SubClass();
+            const i = new ISchemaControl();
+
+            // extends
+            expect(()=> s.read()).toThrow(/Abstract/);
+            expect(()=> s.write()).toThrow(/Abstract/);
+            expect(()=> s.readSchema()).toThrow(/Abstract/);
+            expect(()=> s.writeSchema()).toThrow(/Abstract/);
+            // create
+            expect(()=> i.read()).toThrow(/Abstract/);
+            expect(()=> i.write()).toThrow(/Abstract/);
+            expect(()=> i.readSchema()).toThrow(/Abstract/);
+            expect(()=> i.writeSchema()).toThrow(/Abstract/);
         });
     });
     describe("< collection >", () => {

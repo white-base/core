@@ -388,21 +388,34 @@ describe("< MetaSet >", () => {
     it("- 예외 : Util 로딩이 안 된 경우", () => {
         expect(() => require('../src/meta-set')).toThrow(/Util.*load/);
     });
-    it("- 예외 : IGroupControl 로딩이 안 된 경우", () => {
+    it("- 예외 : ISchemaControl 로딩이 안 된 경우", () => {
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-all');
-        require('../src/i-control-part');
+        // require('../src/i-control-all');
+        // require('../src/i-control-part');
 
-        expect(() => require('../src/meta-set')).toThrow(/IGroupControl.*load/);
+        expect(() => require('../src/meta-set')).toThrow(/ISchemaControl.*load/);
     });
     it("- 예외 : IAllControl 로딩이 안 된 경우", () => {
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-group');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
+        require('../src/i-control-schema');
 
         expect(() => require('../src/meta-set')).toThrow(/IAllControl.*load/);
     });
+    it("- 예외 : ITransaction 로딩이 안 된 경우", () => {
+        require('../src/util-type');
+        require('../src/util');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
+        require('../src/i-control-schema');
+        require('../src/i-control-all');
+
+        expect(() => require('../src/meta-set')).toThrow(/ITransaction.*load/);
+    });
+
     it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
         require('../src/util-type');
         require('../src/util');
@@ -410,12 +423,11 @@ describe("< MetaSet >", () => {
         require('../src/error-custom');
         require('../src/i-object');
         require('../src/i-marshal');
-        require('../src/i-control-group');
         require('../src/i-control-all');
-        require('../src/i-control-part');
-        require('../src/i-control-lookup');
-        require('../src/i-collection');
-        require('../src/i-collection-property');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
+        require('../src/i-control-schema');
+        require('../src/i-transaction');
         require('../src/meta-object');
 
         expect(() => require('../src/meta-set')).toThrow(/MetaElement.*load/);
@@ -429,6 +441,10 @@ describe("< MetaSet >", () => {
         require('../src/i-marshal');
         require('../src/i-control-group');
         require('../src/i-control-all');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
+        require('../src/i-control-schema');
+        require('../src/i-transaction');
         require('../src/i-control-part');
         require('../src/i-control-lookup');
         require('../src/i-collection');
@@ -454,6 +470,10 @@ describe("< MetaSet >", () => {
         require('../src/i-marshal');
         require('../src/i-control-group');
         require('../src/i-control-all');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
+        require('../src/i-control-schema');
+        require('../src/i-transaction');
         require('../src/i-control-part');
         require('../src/i-control-lookup');
         require('../src/i-collection');
@@ -479,6 +499,10 @@ describe("< MetaSet >", () => {
         require('../src/i-marshal');
         require('../src/i-control-group');
         require('../src/i-control-all');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
+        require('../src/i-control-schema');
+        require('../src/i-transaction');
         require('../src/i-control-part');
         require('../src/i-control-lookup');
         require('../src/i-collection');
@@ -495,7 +519,7 @@ describe("< MetaSet >", () => {
         require('../src/meta-view');
         require('../src/meta-set');
 
-        expect(global._L.MetaSet).toBeDefined();
+        expect(global._L.MetaSet).toBeDefined();  
         expect(global._L.Meta.Entity.MetaSet).toBeDefined();
     });
 });
