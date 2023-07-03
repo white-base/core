@@ -276,6 +276,41 @@
             if (p_option === 1) this.__fillRow(entity);
         };
 
+        MetaEntity.prototype._loadEntity = function(p_entity, p_option) {
+            var opt = typeof p_option === 'undefined' ? 3 : p_option;
+            var _this = this;
+
+            if (!(p_entity instanceof MetaEntity)) throw new Error('Only [p_entity] type "MetaEntity" can be added');
+            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+
+            if (opt % 2 === 1) loadColumn(); // opt: 1, 3
+            if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
+
+            function loadColumn() {
+                if (_this.rows.count > 0 ) throw new Error('rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                
+                for (let i = 0; i < p_entity.columns.count; i++) {
+                    var column = p_entity.columns[i].clone();
+                    var key = p_entity.columns.keyOf(i);
+                    if (_this.columns.exist(key))  throw new Error('기존에 key 가 존재합니다.');
+                    _this.columns.add(column);
+                }
+            }
+            // 컬럼 기준으로 로우를 가져온다.
+            function loadRow() {
+                for (let i = 0; i < p_entity.rows.count; i++) {
+                    // var row = p_entity.rows[i].clone();
+                    // _this.columns.add(column);
+                    var row = _this.newRow(this);
+                    for (let ii = 0; ii < _this.columns.count; ii++) {
+                        var key = _this.columns.keyOf(ii);
+                        row[key] = p_entity.rows[i][key];
+                    }
+                    _this.rows.add(row);
+                }
+            }
+        };
+
         /** @abstract */
         MetaEntity.prototype.clone = function() {
             throw new Error('[ clone() ] Abstract method definition, fail...');
@@ -325,12 +360,12 @@
          * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
          */
         MetaEntity.prototype.load  = function(p_target, p_option) {
-            var opt = p_option || 3;
+            var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
             
             if (p_target instanceof MetaEntity) {
-                // this.__loadEntity(p_target, p_option);
+                this._loadEntity(p_target, opt);
             } else if (typeof p_target === 'object') {
                 this.read(p_target, opt);
             } else {
@@ -553,11 +588,11 @@
          * { table: { columns: {}, rows: {} }}   
          * { columns: {...}, rows: {} }
          * @param {*} p_json 
-         * @param {*} p_opt 
+         * @param {*} p_opt 1: 스키마, 2: 데이터, 3: 스키마/데이터 <*기본값*>
          */
         MetaEntity.prototype.read  = function(p_json, p_option) {
             var entity = null;
-            var opt = p_option || 3;
+            var opt = typeof p_option === 'undefined' ? 3 : p_option;
             
             if (typeof p_json !== 'object') throw new Error('Only [p_json] type "object" can be added');
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
@@ -565,7 +600,7 @@
             entity = p_json['entity']  || p_json['table'] || p_json;
 
             if (opt % 2 === 1) this.readSchema(p_json); // opt: 1, 3
-
+            if (Math.floor(opt / 2) >= 1) this.readData(p_json); // opt: 2, 3
         };
 
         MetaEntity.prototype.write  = function() {
@@ -604,12 +639,12 @@
             
             entity = p_json['entity'] || p_json['table'] || p_json;
             rows = entity['rows'];
-            if (Array.isArray(rows)) {
-                for (let i = 0; i < rows.length; i++) {
+            if (Array.isArray(rows) && this.columns.count > 0) {
+                for (var i = 0; i < rows.length; i++) {
                     var row = this.newRow(this);
-                    for (const key in row) {
+                    for (var key in rows[i]) {
                         if (Object.hasOwnProperty.call(row, key)) {
-                            if (rows[i][key]) row[key] = rows[i][key];
+                            row[key] = rows[i][key];
                         }
                     }
                     this.rows.add(row);
