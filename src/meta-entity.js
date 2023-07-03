@@ -342,13 +342,13 @@
          * @param {Number} p_option.1 row 기준으로 가져옴, 없을시 item 생성, item 중복시 기존유지  <*기본값> 
          * @param {Number} p_option.2 존재하는 item 데이터만 가져오기
          */
-        MetaEntity.prototype.load  = function(p_object, p_option) {
-            if (p_object instanceof MetaEntity) {
-                this.__loadEntity(p_object, p_option);
-            } else {
-                this.__loadJSON(p_object, p_option);
-            }
-        };
+        // MetaEntity.prototype.load  = function(p_object, p_option) {
+        //     if (p_object instanceof MetaEntity) {
+        //         this.__loadEntity(p_object, p_option);
+        //     } else {
+        //         this.__loadJSON(p_object, p_option);
+        //     }
+        // };
         
         /**
          * 불러오기/가져오기 (!! 병합용도가 아님)
@@ -372,8 +372,6 @@
                 throw new Error('[p_target] 처리할 수 없는 타입입니다. ');
             }
         };
-
-
 
         /** 
          * 아이템과 로우를 초기화 한다.
@@ -599,7 +597,7 @@
 
             entity = p_json['entity']  || p_json['table'] || p_json;
 
-            if (opt % 2 === 1) this.readSchema(p_json); // opt: 1, 3
+            if (opt % 2 === 1) this.readSchema(p_json, opt === 3 ? true : false); // opt: 1, 3
             if (Math.floor(opt / 2) >= 1) this.readData(p_json); // opt: 2, 3
         };
 
@@ -607,9 +605,15 @@
             console.log('구현해야함');  // COVER:
         };
 
-        MetaEntity.prototype.readSchema  = function(p_json) {
+        /**
+         * 없으면 빈 컬럼을 생성해야 하는지?
+         * 이경우에 대해서 명료하게 처리햐야함 !!
+         * @param {*} p_json 
+         * @param {*} p_isReadRow
+         */
+        MetaEntity.prototype.readSchema  = function(p_json, p_isReadRow) {
             var entity = null;
-            var columns;
+            var columns, rows;
             var Column = this.columns.columnType;
 
             if (typeof entity !== 'object') throw new Error('Only [p_json] type "object" can be added');
@@ -619,9 +623,24 @@
             if (columns) {
                 for (const key in columns) {
                     if (Object.hasOwnProperty.call(columns, key)) {
+                        if (this.rows.count > 0 ) throw new Error('rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                         var prop = columns[key];
                         var column = new Column(key, this, prop);
+                        if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
                         this.columns.add(column);
+                    }
+                }
+            }
+            if (p_isReadRow === true) {
+                rows = entity['rows'];
+                if (Array.isArray(rows) && rows.length > 0)
+                for (const key in rows[0]) {    // rows[0] 기준
+                    if (Object.hasOwnProperty.call(rows[0], key)) {
+                        var prop = rows[0][key];
+                        if (!this.columns.exist(key)) {
+                            var column = new Column(key, this);
+                            this.columns.add(column);
+                        }
                     }
                 }
             }
@@ -631,6 +650,10 @@
             console.log('구현해야함');  // COVER:
         };
 
+        /**
+         * 존재하는 로우만 가져온다.
+         * @param {*} p_json 
+         */
         MetaEntity.prototype.readData  = function(p_json) {
             var entity = null;
             var rows;
