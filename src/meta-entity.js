@@ -551,11 +551,11 @@
          * object 로 로딩하기   
          * JSON 스키마 규칙   
          * { table: { columns: {}, rows: {} }}   
-         * { columns: {}, rows: {} }
+         * { columns: {...}, rows: {} }
          * @param {*} p_json 
          * @param {*} p_opt 
          */
-        MetaEntity.prototype.read  = function(p_json, p_opt) {
+        MetaEntity.prototype.read  = function(p_json, p_option) {
             var entity = null;
             var opt = p_option || 3;
             
@@ -564,7 +564,7 @@
 
             entity = p_json['entity']  || p_json['table'] || p_json;
 
-            if (opt % 2 === 1) this.readSchema(p_json);
+            if (opt % 2 === 1) this.readSchema(p_json); // opt: 1, 3
 
         };
 
@@ -573,27 +573,53 @@
         };
 
         MetaEntity.prototype.readSchema  = function(p_json) {
-            var entity = p_json;
+            var entity = null;
             var columns;
+            var Column = this.columns.columnType;
 
             if (typeof entity !== 'object') throw new Error('Only [p_json] type "object" can be added');
-
+            
+            entity = p_json['entity'] || p_json['table'] || p_json;
             columns = entity['columns'];
             if (columns) {
                 for (const key in columns) {
                     if (Object.hasOwnProperty.call(columns, key)) {
-                        var column = columns[key];
-                        // WORKING::
+                        var prop = columns[key];
+                        var column = new Column(key, this, prop);
+                        this.columns.add(column);
                     }
                 }
             }
-
         };
 
         MetaEntity.prototype.writeSchema  = function() {
             console.log('구현해야함');  // COVER:
         };
 
+        MetaEntity.prototype.readData  = function(p_json) {
+            var entity = null;
+            var rows;
+
+            if (typeof entity !== 'object') throw new Error('Only [p_json] type "object" can be added');
+            
+            entity = p_json['entity'] || p_json['table'] || p_json;
+            rows = entity['rows'];
+            if (Array.isArray(rows)) {
+                for (let i = 0; i < rows.length; i++) {
+                    var row = this.newRow(this);
+                    for (const key in row) {
+                        if (Object.hasOwnProperty.call(row, key)) {
+                            if (rows[i][key]) row[key] = rows[i][key];
+                        }
+                    }
+                    this.rows.add(row);
+                }
+            }
+        };
+
+        MetaEntity.prototype.writeData  = function() {
+            console.log('구현해야함');  // COVER:
+        };
 
         return MetaEntity;
     
