@@ -359,7 +359,7 @@
          * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
          * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
          */
-        MetaEntity.prototype.load  = function(p_target, p_option) {
+        MetaEntity.prototype.load = function(p_target, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
@@ -464,15 +464,14 @@
          * @param {*} p_row 
          */
         MetaEntity.prototype.setValue  = function(p_row) {
-            var _name = '';
+            var alias = '';
 
             if (!(p_row instanceof MetaRow)) throw new Error('Only [p_row] type "Row" can be added');
 
             for(var i = 0; this.columns.count > i; i++) {
-                
                 // this.columns[i].value = p_row[i];
-                _name = this.columns[i].alias;        // 별칭이 없을시 기본이름
-                this.columns[i].value = p_row[_name];
+                alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
+                this.columns[i].value = p_row[alias];
             }
         };
 

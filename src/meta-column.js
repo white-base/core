@@ -418,8 +418,14 @@
              {
                  get: function() { return typeof alias === 'string' ? alias : this.name; },
                  set: function(newValue) { 
+                    var entity = this.entity;
                     if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
-                     alias = newValue; 
+                    if (entity && entity instanceof MetaElement && entity.instanceOf('MetaEntity')) {
+                        if (entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
+                        alias = newValue;
+                    } else {
+                        alias = newValue;
+                    }
                  },
                  configurable: true,
                  enumerable: true
@@ -504,7 +510,7 @@
             var constraints = [];
 
             if (this.entity) clone['entity']            = this.entity;  // 참조값
-            if (this.alias) clone['alias']              = this.alias;
+            if (this.alias !== this.name) clone['alias'] = this.alias;
             if (this.type) clone['type']                = this.type;
             if (this.size) clone['size']                = this.size;
             if (this.default) clone['default']          = this.default;
@@ -740,9 +746,22 @@
          * @param {String | Number | Boolean} p_value 
          * @returns {MetaColumn}
          */
-         MetaColumnCollection.prototype.initValue  = function() {
+        MetaColumnCollection.prototype.initValue  = function() {
             for (var i = 0; this.count > i; i++) {
                 this[i].value = this[i].default;
+            }
+        };
+
+        MetaColumnCollection.prototype.existAlias  = function(p_key) {
+            for (var i = 0; this.count > i; i++) {
+                if (this[i].alias === p_key) return true;
+            }
+            return false;
+        };
+
+        MetaColumnCollection.prototype.alias  = function(p_key) {
+            for (var i = 0; this.count > i; i++) {
+                if (this[i].alias === p_key) return this[i];
             }
         };
 

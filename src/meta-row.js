@@ -49,18 +49,18 @@
          * 로우
          * @constructs _L.Meta.Entity.MetaRow
          * @extends _L.Collection.MetaElement     // REVIEW: 상속위치를 바꿔야함
+         * @param {MetaEntity} p_entity 메타엔티티
          */
         function MetaRow(p_entity) {
-            _super.call(this, p_entity);
+            _super.call(this);
 
-            var entity = p_entity;
+            var entity = null;
             var element = [];
 
-
             // MetaEntity 등록 & order(순서) 값 계산
-            // if (!(entity && entity instanceof MetaObject && entity.instanceOf('MetaEntity'))) {
-            //     throw new Error('Only [p_entity] type "MetaEntity" can be added');
-            // }
+            if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
+                throw new Error('Only [p_entity] type "MetaEntity" can be added');
+            }
 
             /**
              * 로우의 소유 엔티티
@@ -177,18 +177,44 @@
          * @param {String | MetaColumn} p_row 
          * @returns {MetaRow} 등록한 로우
          */
-        MetaRowCollection.prototype.add  = function(p_row) {
-            var i_value;
+        // MetaRowCollection.prototype.add  = function(p_row) {
+        //     var i_value;
 
-            if (typeof p_row === 'undefined') {      
-                i_value = new MetaRow(this._owner);
-            } else if (p_row instanceof MetaRow) {
-                i_value = p_row;
-            } else {
-                throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
+        //     if (typeof p_row === 'undefined') {      // REVIEW: 필요한가?
+        //         i_value = new MetaRow(this._owner);
+        //     } else if (p_row instanceof MetaRow) {
+        //         i_value = p_row;
+        //     } else {
+        //         throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
+        //     }
+
+        //     return _super.prototype.add.call(this, i_value);
+        // };
+
+        /**
+         * MetaRow 추가 idx 를 기준으로 검사한다.
+         * @param {MetaRow} p_row 
+         * @param {object} p_checkValid true: 검사 진행, false <*>: 검사 안함
+         * @returns 
+         */
+        MetaRowCollection.prototype.add  = function(p_row, p_checkValid) {
+            var checkValid = p_checkValid || false;
+            var r_result = {};
+            var entity = p_row.entity;
+
+            if (!(p_row instanceof MetaRow )) throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
+            if (entity !== this._owner) throw new Error('[p_row] MetaRow 의 entity 가 다릅니다.');   // COVER:            
+            
+            // valid 검사
+            if (checkValid === true) {
+                for (let i = 0; i < p_row.count; i++) {
+                    if(entity.columns[i].valid(p_row[i], r_result) !== true) {
+                        throw new Error('[p_row] valid check Error.' + r_result.msg);
+                    }
+                }
             }
-
-            return _super.prototype.add.call(this, i_value);
+            
+            return _super.prototype.add.call(this, p_row);
         };
 
         return MetaRowCollection;

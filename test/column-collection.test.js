@@ -30,7 +30,7 @@ describe("< MetaTable >", () => {
             expect(table1.columns.count).toBe(2);
         });
         it("- add(item) : 아이템 객체로 추가 ", () => {
-                var table1 = new MetaTable('T1');
+            var table1 = new MetaTable('T1');
             table1.columns.add(new MetaColumn('i1'));
             table1.columns.add('i2');
             table1.columns['i2'].caption = 'C1';
@@ -164,8 +164,71 @@ describe("< MetaTable >", () => {
             expect(view1.columns['i1'].value).toBe('');
             expect(view1.columns['i2'].value).toBe('');   // REVIEW: default 값을 기준으로 초기화?
         });
+        
+
+
+    });
+    describe("< existAlias(row) >", () => {
+        it("- existAlias(key) : 기본값 ", () => {
+            var view1 = new MetaView('T1');
+            view1.columns.addValue('i1', 'V1');
+            view1.columns.addValue('i2', 'V2');
+    
+            expect(view1.columns.count).toBe(2);
+            expect(view1.columns['i1'].alias).toBe('i1');
+            expect(view1.columns['i2'].alias).toBe('i2');
+            expect(view1.columns.existAlias('i1')).toBe(true);
+            expect(view1.columns.existAlias('i2')).toBe(true);
+            expect(view1.columns.existAlias('i3')).toBe(false);
+        });
+        it("- existAlias(key) : 변경 ", () => {
+            var view1 = new MetaView('T1');
+            view1.columns.addValue('i1', 'V1');
+            view1.columns.addValue('i2', 'V2');
+            view1.columns['i2'].alias = 'i3';
+
+            expect(view1.columns.count).toBe(2);
+            expect(view1.columns['i1'].alias).toBe('i1');
+            expect(view1.columns['i2'].alias).toBe('i3');
+            expect(view1.columns.existAlias('i1')).toBe(true);
+            expect(view1.columns.existAlias('i2')).toBe(false);
+            expect(view1.columns.existAlias('i3')).toBe(true);
+        });
+        it("- existAlias(key) : 스위칭 ", () => {
+            var view1 = new MetaView('T1');
+            view1.columns.addValue('i1', 'V1');
+            view1.columns.addValue('i2', 'V2');
+            view1.columns['i1'].alias = 'i';  // 임시 이름 변경
+            view1.columns['i2'].alias = 'i1';
+            view1.columns['i1'].alias = 'i2';
+
+            expect(view1.columns.count).toBe(2);
+            expect(view1.columns['i1'].alias).toBe('i2');
+            expect(view1.columns['i2'].alias).toBe('i1');
+            expect(view1.columns.existAlias('i1')).toBe(true);
+            expect(view1.columns.existAlias('i2')).toBe(true);
+            expect(view1.columns.existAlias('i3')).toBe(false);
+        });
+    });
+    it("- alias(key) : 별칭으로 조회 하기 ", () => {
+        var view1 = new MetaView('T1');
+        view1.columns.addValue('i1', 'V1');
+        view1.columns.addValue('i2', 'V2');
+        view1.columns['i1'].alias = 'a1';
+        view1.columns['i2'].alias = 'a2';
+
+        expect(view1.columns.count).toBe(2);
+        expect(view1.columns['i1'].alias).toBe('a1');
+        expect(view1.columns['i2'].alias).toBe('a2');
+        expect(view1.columns.existAlias('a1')).toBe(true);
+        expect(view1.columns.existAlias('a2')).toBe(true);
+        expect(view1.columns.existAlias('a3')).toBe(false);
+        
+        expect(view1.columns['i1'] === view1.columns.alias('a1')).toBe(true);
+        expect(view1.columns['i2'] === view1.columns.alias('a2')).toBe(true);
     });
 });
+
 // describe("< setValue(row) >", () => {
 //     it("-  ", () => {
         
