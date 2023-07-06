@@ -420,6 +420,7 @@
                  set: function(newValue) { 
                     var entity = this.entity;
                     if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
+                    // if (newValue === alias) return;
                     if (entity && entity instanceof MetaElement && entity.instanceOf('MetaEntity')) {
                         if (entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
                         alias = newValue;
@@ -509,7 +510,6 @@
             var clone = new MetaColumn(this.name);
             var constraints = [];
 
-            if (this.entity) clone['entity']            = this.entity;  // 참조값
             if (this.alias !== this.name) clone['alias'] = this.alias;
             if (this.type) clone['type']                = this.type;
             if (this.size) clone['size']                = this.size;
@@ -536,6 +536,7 @@
                     clone['onChanged'] = this._event.__subscribers.onChanged[i];
                 }
             }
+            if (this.entity) clone['entity']            = this.entity;  // 참조값
             
             return clone;
         };

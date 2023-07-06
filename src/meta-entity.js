@@ -464,7 +464,7 @@
         MetaEntity.prototype.merge  = function(p_target, p_option) {
             var opt = p_option || 0;
             var key, newRow, tarRow, oriRow, tarRows, tarColumns;
-            var tempRows = [];
+            var tempRows = [], clone;
 
             // 1.유효성 검사
             if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
@@ -489,7 +489,8 @@
                 tarRows = p_target.rows;
                 // 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
-                    key = tarColumns.keyOf(i);
+                    // key = tarColumns.keyOf(i);
+                    key = tarColumns[i].alias;
                     if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
                 }
                 // 로우 임시 저장 및 초기화 
@@ -499,7 +500,9 @@
                 this.rows.clear();
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
-                    this.columns.add(tarColumns[i].clone());
+                    clone = tarColumns[i].clone();
+                    clone.name = tarColumns[i].alias;
+                    this.columns.add(clone);
                 }
                 // 로우 추가 (기준:idx)
                 for (var i = 0; i < tempRows.length; i++) {
@@ -527,8 +530,13 @@
                 this.rows.clear();
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
-                    key = tarColumns.keyOf(i);
-                    if (!this.columns.exist(key)) this.columns.add(tarColumns[i].clone());
+                    // key = tarColumns.keyOf(i);
+                    key = tarColumns[i].alias;
+                    if (!this.columns.exist(key)) {
+                        clone = tarColumns[i].clone();
+                        clone.name = key;
+                        this.columns.add(clone);
+                    }
                 }
                 // 로우 추가 : 원본
                 for (var i = 0; i < tempRows.length; i++) {
@@ -555,7 +563,8 @@
                 tarRows = p_target.rows;
                 // 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
-                    key = tarColumns.keyOf(i);
+                    // key = tarColumns.keyOf(i);
+                    key = tarColumns[i].alias;
                     if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
                 }
                 // 로우 임시 저장 및 초기화 
@@ -565,7 +574,10 @@
                 this.rows.clear();
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
-                    this.columns.add(tarColumns[i].clone());
+                    // this.columns.add(tarColumns[i].clone());
+                    clone = tarColumns[i].clone();
+                    clone.name = tarColumns[i].alias;
+                    this.columns.add(clone);
                 }
                 // 로우 추가 (idx)
                 for (var i = 0; i < tempRows.length; i++) {
