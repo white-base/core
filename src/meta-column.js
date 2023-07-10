@@ -53,6 +53,7 @@
          * @extends _L.Meta.MetaElement
          * @param {String} p_name 아이템명
          * @param {MetaEntity} p_entity 소유 MetaEntity
+         * @param {Object} p_property 속성 객체
          */
         function MetaColumn(p_name, p_entity, p_property) {
             _super.call(this, p_name);
@@ -502,14 +503,21 @@
             }
         };
 
-        /** 
+       /**
          * 아이템을 복제한다. 
-         * @returns {MetaColumn}
+         * @param {MetaEntity?} p_entity 지정한 엔티티로 복제한다.
+         * @returns 
          */
-        MetaColumn.prototype.clone = function() {
+        MetaColumn.prototype.clone = function(p_entity) {
             var clone = new MetaColumn(this.name);
             var constraints = [];
+            var entity = this.entity;
 
+            if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
+                entity    = p_entity;
+            }
+
+            if (this.entity) clone['entity']            = entity;
             if (this.alias !== this.name) clone['alias'] = this.alias;
             if (this.type) clone['type']                = this.type;
             if (this.size) clone['size']                = this.size;
@@ -536,7 +544,6 @@
                     clone['onChanged'] = this._event.__subscribers.onChanged[i];
                 }
             }
-            if (this.entity) clone['entity']            = this.entity;  // 참조값
             
             return clone;
         };

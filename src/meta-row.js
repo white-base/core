@@ -132,12 +132,14 @@
         //     if (this.value) clone['value'] = this.value;
         // };
 
-        /**
+       /**
          * 로우를 복제한다.
-         * @returns {MetaRow}
+         * @param {MetaEntity?} p_entity 대상의 엔티티
+         * @returns 
          */
-        MetaRow.prototype.clone  = function() {
-            var clone = new MetaRow(this.entity);
+        MetaRow.prototype.clone  = function(p_entity) {
+            var entity = p_entity || this.entity;
+            var clone = new MetaRow(entity);
 
             for (var i = 0; i < this.count; i++) {
                 clone[i] = this[i];

@@ -93,12 +93,12 @@
             
             // columns 복제본 추가
             for(var i = 0; i < this.columns.count; i++) {
-                clone.columns.add(this.columns[i].clone());
+                clone.columns.add(this.columns[i].clone(clone));
             }
             
             // rows 복제본 추가
             for(var i = 0; i < this.rows.count; i++) {
-                clone.rows.add(this.rows[i].clone());
+                clone.rows.add(this.rows[i].clone(clone));
             }
             
             return clone;

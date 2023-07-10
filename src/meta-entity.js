@@ -460,47 +460,73 @@
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨
          * @param {object} p_option.2 로우(idx) 기준 병합, 초과 컬럼은 채워짐
          * @param {object} p_option.3 컬럼(key) 기준 병합, 초과 컬럼은 채워짐 
+         * @param {boolean} p_checkValid 로우 유효성 검사 유무 (기본:false)
          */
-        MetaEntity.prototype.merge  = function(p_target, p_option) {
+        MetaEntity.prototype.merge  = function(p_target, p_option, p_checkValid) {
             var opt = p_option || 0;
-            var key, newRow, tarRow, oriRow, tarRows, tarColumns;
+            var key, alias, newRow, tarRow, oriRows, tarRows, tarColumns;
             var tempRows = [], clone;
+            var target;
 
             // 1.유효성 검사
             if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
             if (typeof p_option !== 'number') throw new Error('Only [p_option] type "Number" can be added');
 
+            // 타겟 복제본 만들기
+            target = p_target.clone();
+
             // opt = 0
             if (opt === 0) {
-                tarRows = p_target.rows;
+                // 로우 임시 저장 및 초기화 
+                for (var i = 0; i < this.rows.count; i++) {
+                    tempRows.push(this.rows[i].clone());
+                }
+                this.rows.clear();
+
+                // 원본 row 추가
+                for (var i = 0; i < tempRows.length; i++) {
+                    newRow = this.newRow();
+                    for (var ii = 0; ii < this.columns.count; ii++) {
+                        alias = this.columns[ii].alias;
+                        // key = this.columns.keyOf(ii);
+                        if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
+                    }
+                    this.rows.add(newRow, p_checkValid);
+                }
+                // 타겟 row 추가
+                tarRows = target.rows;
                 for (var i = 0; i < tarRows.count; i++) {
                     newRow = this.newRow();
                     tarRow = tarRows[i];
                     for (var ii = 0; ii < this.columns.count; ii++) {
-                        key = this.columns.keyOf(ii);
-                        if (tarRow[key]) newRow[key] = tarRow[key];
+                        alias = this.columns[ii].alias;
+                        if (tarRow[alias]) newRow[alias] = tarRow[alias];
                     }
-                    this.rows.add(newRow);
+                    this.rows.add(newRow, p_checkValid);
                 }
             }
             // opt = 1
             if (opt === 1) {
-                tarColumns = p_target.columns;
-                tarRows = p_target.rows;
+                tarColumns = target.columns;
+                tarRows = target.rows;
                 // 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
-                    // key = tarColumns.keyOf(i);
-                    key = tarColumns[i].alias;
-                    if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
+                    alias = tarColumns[i].alias;
+                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
+                    if (this.columns.exist(alias)) throw new Error('column.name 중복 발생 '+ key);
                 }
                 // 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
-                    tempRows.push(this.rows[i])
+                    tempRows.push(this.rows[i].clone());
                 }
+                // for (var i = 0; i < this.rows.count; i++) {
+                //     tempRows.push(this.rows[i]);
+                // }
+
                 this.rows.clear();
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
-                    clone = tarColumns[i].clone();
+                    clone = tarColumns[i].clone(this);
                     clone.name = tarColumns[i].alias;
                     this.columns.add(clone);
                 }
@@ -508,105 +534,132 @@
                 for (var i = 0; i < tempRows.length; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
-                        key = this.columns.keyOf(ii);
-                        if (tempRows[i][key]) {                         // 원본 로우
-                            newRow[key] = tempRows[i][key];
+                        alias = this.columns[ii].alias;
+                        if (tempRows[i][alias]) {                         // 원본 로우
+                            newRow[alias] = tempRows[i][alias];
                             continue;
                         }
-                        if (tarRows[i][key]) newRow[key] = tarRows[i][key]; // 타겟 로우
-                        // else  throw new Error(' 존재하지 않습니다. '+ key);
+                        if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
                     }
-                    this.rows.add(newRow);
+                    this.rows.add(newRow, p_checkValid);
                 }                                
             }
             // opt = 2
             if (opt === 2) {
-                tarColumns = p_target.columns;
-                tarRows = p_target.rows;
+                tarColumns = target.columns;
+                tarRows = target.rows;
                 // 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
-                    tempRows.push(this.rows[i])
+                    tempRows.push(this.rows[i].clone());
                 }
+                // for (var i = 0; i < this.rows.count; i++) {
+                //     tempRows.push(this.rows[i])
+                // }
                 this.rows.clear();
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
                     // key = tarColumns.keyOf(i);
-                    key = tarColumns[i].alias;
-                    if (!this.columns.exist(key)) {
-                        clone = tarColumns[i].clone();
-                        clone.name = key;
+                    alias = tarColumns[i].alias;
+                    if (!this.columns.exist(alias)) {
+                        clone = tarColumns[i].clone(this);
+                        clone.name = alias;
                         this.columns.add(clone);
                     }
                 }
+                // for (var i = 0; i < tarColumns.count; i++) {
+                //     clone = tarColumns[i].clone(this);
+                //     clone.name = tarColumns[i].alias;
+                //     this.columns.add(clone);
+                // }
+                
                 // 로우 추가 : 원본
                 for (var i = 0; i < tempRows.length; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
-                        key = this.columns.keyOf(ii);
-                        if (tempRows[i][key]) newRow[key] = tempRows[i][key];
+                        alias = this.columns[ii].alias;
+                        // key = this.columns.keyOf(ii);
+                        if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
                     }
-                    this.rows.add(newRow);
+                    this.rows.add(newRow, p_checkValid);
                 }
                 // 로우 추가 : 타겟
                 for (var i = 0; i < tarRows.count; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
-                        key = this.columns.keyOf(ii);
-                        if (tarRows[i][key]) newRow[key] = tarRows[i][key];
+                        alias = this.columns[ii].alias;
+                        // key = this.columns.keyOf(ii);
+                        if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
                     }
-                    this.rows.add(newRow);
+                    this.rows.add(newRow, p_checkValid);
                 }
             }
             // opt = 3
             if (opt === 3) {
-                tarColumns = p_target.columns;
-                tarRows = p_target.rows;
+                tarColumns = target.columns;
+                tarRows = target.rows;
                 // 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
                     // key = tarColumns.keyOf(i);
-                    key = tarColumns[i].alias;
-                    if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
+                    alias = tarColumns[i].alias;
+                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
+                    if (this.columns.exist(alias)) throw new Error('column.name 중복 발생 '+ key);
+                    // key = tarColumns[i].alias;
+                    // if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
                 }
                 // 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
-                    tempRows.push(this.rows[i])
+                    tempRows.push(this.rows[i].clone());
                 }
+                // for (var i = 0; i < this.rows.count; i++) {
+                //     tempRows.push(this.rows[i])
+                // }
                 this.rows.clear();
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
-                    // this.columns.add(tarColumns[i].clone());
-                    clone = tarColumns[i].clone();
+                    clone = tarColumns[i].clone(this);
                     clone.name = tarColumns[i].alias;
                     this.columns.add(clone);
                 }
+                // for (var i = 0; i < tarColumns.count; i++) {
+                //     // this.columns.add(tarColumns[i].clone());
+                //     clone = tarColumns[i].clone();
+                //     clone.name = tarColumns[i].alias;
+                //     this.columns.add(clone);
+                // }
                 // 로우 추가 (idx)
                 for (var i = 0; i < tempRows.length; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
-                        key = this.columns.keyOf(ii);
-                        if (tempRows[i][key]) {                         // 원본 로우
-                            newRow[key] = tempRows[i][key];
+                        alias = this.columns[ii].alias;
+                        if (tempRows[i][alias]) {                         // 원본 로우
+                            newRow[alias] = tempRows[i][alias];
                             continue;
                         }
-                        if (tarRows[i][key]) newRow[key] = tarRows[i][key]; // 타겟 로우
-                        // else  throw new Error(' 존재하지 않습니다. '+ key);
+                        if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
+
+                        // key = this.columns.keyOf(ii);
+                        // if (tempRows[i][key]) {                         // 원본 로우
+                        //     newRow[key] = tempRows[i][key];
+                        //     continue;
+                        // }
+                        // if (tarRows[i][key]) newRow[key] = tarRows[i][key]; // 타겟 로우
                     }
-                    this.rows.add(newRow);
+                    this.rows.add(newRow, p_checkValid);
                 }     
                 // 타겟 로우가 클 경우 로우 추가
                 if (tempRows.length < tarRows.count) {
                     for (var i = tempRows.length; i < tarRows.count; i++) {
                         newRow = this.newRow();
                         for (var ii = 0; ii < this.columns.count; ii++) {
-                            key = this.columns.keyOf(ii);
-                            if (tarRows[i][key]) newRow[key] = tarRows[i][key];
+                            alias = this.columns[ii].alias;
+                            if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
+                            // key = this.columns.keyOf(ii);
+                            // if (tarRows[i][key]) newRow[key] = tarRows[i][key];
                         }
-                        this.rows.add(newRow);
+                        this.rows.add(newRow, p_checkValid);
                     }
                 }
             }
-
-            
         };
 
 
