@@ -317,7 +317,7 @@ describe("< MetaTable >", () => {
         expect(table2.rows[1]['i2']).toBe('R200');
     });
     describe("< MetaTable.merge(entity, opt) >", () => {
-        it("- merge(entity, opt = 1) : 엔티티 병합, 기존 item 유지 + 원본 row > 타겟 row  ", () => {    // REVIEW:
+        it.skip("- merge(entity, opt = 1) : 엔티티 병합, 기존 item 유지 + 원본 row > 타겟 row  ", () => {    // REVIEW:
             var table1 = new MetaTable('T1');
             table1.columns.add('i1');
             table1.columns.add('i2');
@@ -356,7 +356,7 @@ describe("< MetaTable >", () => {
             expect(table1.rows[1]['i2']).toBe('R20');
             expect(table1.rows[1]['i3']).toBe('');    
         });
-        it("- merge(entity, opt = 2) : 엔티티 병합, 기존 item 덮어쓰기, 원본 row < 타겟 row ", () => {  // REVIEW:
+        it.skip("- merge(entity, opt = 2) : 엔티티 병합, 기존 item 덮어쓰기, 원본 row < 타겟 row ", () => {  // REVIEW:
             var table1 = new MetaTable('T1');
             table1.columns.add('i1');
             table1.columns.add('i2');
@@ -395,7 +395,7 @@ describe("< MetaTable >", () => {
             expect(table1.rows[1]['i2']).toBe('R20');
             expect(table1.rows[1]['i3']).toBe('R30');
         });
-        it("- merge(entity, opt = 3) : 엔티티 병합, 엔티티 병합, row 안가져옴 ", () => {
+        it.skip("- merge(entity, opt = 3) : 엔티티 병합, 엔티티 병합, row 안가져옴 ", () => {
             var table1 = new MetaTable('T1');
             table1.columns.add('i1');
             table1.columns.add('i2');
@@ -426,7 +426,7 @@ describe("< MetaTable >", () => {
             expect(table1.rows[0]['i3']).toBe('');
         });
     });
-    describe.only("< MetaTable.load(entity | JSON, opt) >", () => {
+    describe("< MetaTable.load(entity | JSON, opt) >", () => {
         it("- load(JSON) : 가져오기, opt = 3 ", () => {
             var table1 = new MetaTable('T1');
             var table2 = new MetaTable('T2');
@@ -551,7 +551,7 @@ describe("< MetaTable >", () => {
          *  + 내보내기, 가져오기
          */
     });
-    describe.only("< MetaTable.read(JSON, opt), readSchema(), readData() >", () => {
+    describe("< MetaTable.read(JSON, opt), readSchema(), readData() >", () => {
         it("- readSchema(JSON) : column 가져오기(스키마) ", () => {
             var table1 = new MetaTable('T1');
             var table2 = new MetaTable('T2');
@@ -747,7 +747,7 @@ describe("< MetaTable >", () => {
     });
 
 
-    describe("< MetaTable.load(entity | JSON, opt) >", () => {
+    describe.skip("< MetaTable.load(entity | JSON, opt) >", () => {
         it("- load(entity, opt = 1) : 가져오기, row기준, 채워진 entity ", () => {
             var table1 = new MetaTable('T1');
             table1.columns.add('i1');
@@ -1045,7 +1045,7 @@ describe("< MetaTable >", () => {
         // expect(table1.rows[0]['i2']).toBe('R2');
         // expect(table1.rows[0]['i3']).toBe(undefined);
     });
-    describe.only("< MetaTable.merge(entity, opt) >", () => {
+    describe("< MetaTable.merge(entity, opt) >", () => {
         it("- merge() : opt = 0 (같은 구조) ", () => {
             var table1 = new MetaTable('T1');
             var table2 = new MetaTable('T2');
@@ -1235,16 +1235,131 @@ describe("< MetaTable >", () => {
             expect(table1.columns['i2'].caption).toBe('C2');
             expect(table1.columns['i3'].caption).toBe('C3');
             expect(table1.columns['i4'].caption).toBe('C4');
-            expect(table1.rows[0]['ii1']).toBe('R1');
+            expect(table1.rows[0]['ii1']).toBe('R1');   // 별칭 접근
             expect(table1.rows[0]['i2']).toBe('R2');
             expect(table1.rows[0]['i3']).toBe('R3');
             expect(table1.rows[0]['i4']).toBe('R4');
-            expect(table1.rows[1]['ii1']).toBe('R10');
+            expect(table1.rows[1]['ii1']).toBe('R10');  // 별칭 접근
             expect(table1.rows[1]['i2']).toBe('R20');
             expect(table1.rows[1]['i3']).toBe('R30');
             expect(table1.rows[1]['i4']).toBe('R40');
         });
+        it("- merge() : opt = 1 (예외 : 컬럼 중복 1) ", () => {
+            var table1 = new MetaTable('T1');
+            var table2 = new MetaTable('T2');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 'R1', i2: 'R2' },
+                    { i1: 'R10', i2: 'R20' },
+                ]
+            };
+            var json2 = { 
+                columns: {
+                    i1: { caption: 'C3'},
+                    i4: { caption: 'C4'},
+                },
+                rows: [
+                    { i1: 'R3', i4: 'R4' },
+                    { i1: 'R30', i4: 'R40' },
+                ]
+            };
+            table1.load(json1, 3);
+            table2.load(json2, 3);
 
+            expect(() => table1.merge(table2, 1)).toThrow(/name 중복/);
+        });
+        it("- merge() : opt = 1 (예외 : 컬럼 중복 2) ", () => {
+            var table1 = new MetaTable('T1');
+            var table2 = new MetaTable('T2');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 'R1', i2: 'R2' },
+                    { i1: 'R10', i2: 'R20' },
+                ]
+            };
+            var json2 = { 
+                columns: {
+                    i3: { caption: 'C3'},
+                    i4: { caption: 'C4'},
+                },
+                rows: [
+                    { i3: 'R3', i4: 'R4' },
+                    { i3: 'R30', i4: 'R40' },
+                ]
+            };
+            table1.load(json1, 3);
+            table2.load(json2, 3);
+            table2.columns['i3'].alias = 'i1'; // 별칭 처리
+
+            expect(() => table1.merge(table2, 1)).toThrow(/name 중복/);
+        });
+        it("- merge() : opt = 1 (예외 : 별칭 중복 1) ", () => {
+            var table1 = new MetaTable('T1');
+            var table2 = new MetaTable('T2');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 'R1', i2: 'R2' },
+                    { i1: 'R10', i2: 'R20' },
+                ]
+            };
+            var json2 = { 
+                columns: {
+                    ii1: { caption: 'C3'},
+                    i4: { caption: 'C4'},
+                },
+                rows: [
+                    { ii1: 'R3', i4: 'R4' },
+                    { ii1: 'R30', i4: 'R40' },
+                ]
+            };
+            table1.load(json1, 3);
+            table2.load(json2, 3);
+            table1.columns['i1'].alias = 'ii1';
+
+            expect(() => table1.merge(table2, 1)).toThrow(/alias 중복/);
+        });
+        it("- merge() : opt = 1 (예외 : 컬럼 중복 2) ", () => {
+            var table1 = new MetaTable('T1');
+            var table2 = new MetaTable('T2');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 'R1', i2: 'R2' },
+                    { i1: 'R10', i2: 'R20' },
+                ]
+            };
+            var json2 = { 
+                columns: {
+                    i3: { caption: 'C3'},
+                    i4: { caption: 'C4'},
+                },
+                rows: [
+                    { i3: 'R3', i4: 'R4' },
+                    { i3: 'R30', i4: 'R40' },
+                ]
+            };
+            table1.load(json1, 3);
+            table2.load(json2, 3);
+            table1.columns['i1'].alias = 'ii1';
+            table2.columns['i3'].alias = 'ii1';
+
+            expect(() => table1.merge(table2, 1)).toThrow(/alias 중복/);
+        });
         it("- merge() : opt = 2 (다른 구조) ", () => {
             var table1 = new MetaTable('T1');
             var table2 = new MetaTable('T2');

@@ -130,33 +130,33 @@
          * @param {*} p_name 
          * @param {*} p_property 
          */
-        MetaEntity.prototype.__addItem  = function(p_name, p_property) {
+        // MetaEntity.prototype.__addItem  = function(p_name, p_property) {
             
-            if(!this.columns.contains(this.columns[p_name])) this.columns.add(p_name);
+        //     if(!this.columns.contains(this.columns[p_name])) this.columns.add(p_name);
             
-            if (typeof p_property === 'object' ) {
-                for(var prop in p_property) {
-                    this.columns[p_name][prop] = p_property[prop];
-                }
-            }
-        };
+        //     if (typeof p_property === 'object' ) {
+        //         for(var prop in p_property) {
+        //             this.columns[p_name][prop] = p_property[prop];
+        //         }
+        //     }
+        // };
 
         /**
          * 빈 row 채운다.
          * @param {*} p_target 
          */
-        MetaEntity.prototype.__fillRow  = function(p_target) {
-            var itemName;
+        // MetaEntity.prototype.__fillRow  = function(p_target) {
+        //     var itemName;
             
-            for (var i = 0 ; i < this.rows.count; i++) {
-                for (var ii = 0; ii < p_target.columns.count; ii++) {
-                    itemName = p_target.columns[ii].name;
-                    if (typeof this.rows[i][itemName] === 'undefined') {
-                        this.rows[i].add(itemName, '');
-                    }
-                }
-            }            
-        };
+        //     for (var i = 0 ; i < this.rows.count; i++) {
+        //         for (var ii = 0; ii < p_target.columns.count; ii++) {
+        //             itemName = p_target.columns[ii].name;
+        //             if (typeof this.rows[i][itemName] === 'undefined') {
+        //                 this.rows[i].add(itemName, '');
+        //             }
+        //         }
+        //     }            
+        // };
 
         /**
          * 객체(JSON)를 불러온다.
@@ -164,72 +164,72 @@
          * @param {*} p_object 로딩할 객체
          * @param {*} p_option 로딩옵션
          */
-        MetaEntity.prototype.__loadJSON  = function(p_object, p_option) {
-            p_option = p_option || 1;   // 기본값 덮어쓰기
+        // MetaEntity.prototype.__loadJSON  = function(p_object, p_option) {
+        //     p_option = p_option || 1;   // 기본값 덮어쓰기
             
-            var entity;
-            var row;
-            var itemName;
+        //     var entity;
+        //     var row;
+        //     var itemName;
 
-            if (typeof p_object === 'undefined') throw new Error('Only [p_object] type "object" can be added');
+        //     if (typeof p_object === 'undefined') throw new Error('Only [p_object] type "object" can be added');
             
-            entity = p_object['entity']  || p_object['table'] || undefined;
+        //     entity = p_object['entity']  || p_object['table'] || undefined;
             
-            if (typeof entity === 'undefined') throw new Error('Only [p_object] type "entity | table" can be added');
+        //     if (typeof entity === 'undefined') throw new Error('Only [p_object] type "entity | table" can be added');
             
 
-            // 1.itmes, rows 배열로 구조 변경
-            if (!Array.isArray(entity.columns)) entity.columns = [entity.columns];
-            if (!Array.isArray(entity.rows)) entity.rows = [entity.rows];
+        //     // 1.itmes, rows 배열로 구조 변경
+        //     if (!Array.isArray(entity.columns)) entity.columns = [entity.columns];
+        //     if (!Array.isArray(entity.rows)) entity.rows = [entity.rows];
 
-            // 2.병합
-            if (p_option === 1) {
-                // MetaColumn 기준으로 아이템 가져오기
-                if (entity.columns && entity.columns[0]) {
-                    for(var i = 0; entity.columns.length > i; i++) {
-                        // MetaColumn 가져오기
-                        for (var prop in entity.columns[i]) {
-                            if (entity.columns[i].hasOwnProperty(prop)) {
-                                this.__addItem(prop, entity.columns[i][prop]);
-                            }
-                        }
-                    }
-                }
+        //     // 2.병합
+        //     if (p_option === 1) {
+        //         // MetaColumn 기준으로 아이템 가져오기
+        //         if (entity.columns && entity.columns[0]) {
+        //             for(var i = 0; entity.columns.length > i; i++) {
+        //                 // MetaColumn 가져오기
+        //                 for (var prop in entity.columns[i]) {
+        //                     if (entity.columns[i].hasOwnProperty(prop)) {
+        //                         this.__addItem(prop, entity.columns[i][prop]);
+        //                     }
+        //                 }
+        //             }
+        //         }
 
-                // MetaRow 기준으로 아이템 가져오기 (첫번째 MetaRow 기준)
-                if (entity.rows && entity.rows[0]) {
-                    for (var prop in entity.rows[0]) {
-                        if (entity.rows[0].hasOwnProperty(prop)) {
-                            this.__addItem(prop, '');
-                        }
-                    }
-                }
-            }
+        //         // MetaRow 기준으로 아이템 가져오기 (첫번째 MetaRow 기준)
+        //         if (entity.rows && entity.rows[0]) {
+        //             for (var prop in entity.rows[0]) {
+        //                 if (entity.rows[0].hasOwnProperty(prop)) {
+        //                     this.__addItem(prop, '');
+        //                 }
+        //             }
+        //         }
+        //     }
             
-            // 3.MetaRow 데이터 가져오기
-            if (this.columns.count > 0 && entity.rows && entity.rows[0]) {
-                for(var i = 0; entity.rows.length > i; i++) {
+        //     // 3.MetaRow 데이터 가져오기
+        //     if (this.columns.count > 0 && entity.rows && entity.rows[0]) {
+        //         for(var i = 0; entity.rows.length > i; i++) {
                     
-                    row = this.newRow();
-                    for (var prop in entity.rows[i]) {
-                        if (entity.rows[i].hasOwnProperty(prop) && typeof row[prop] !== 'undefined') {
-                            row[prop] = entity.rows[i][prop];
-                        }
-                    }
-                    if (row.count) this.rows.add(row);
-                }
-            } 
+        //             row = this.newRow();
+        //             for (var prop in entity.rows[i]) {
+        //                 if (entity.rows[i].hasOwnProperty(prop) && typeof row[prop] !== 'undefined') {
+        //                     row[prop] = entity.rows[i][prop];
+        //                 }
+        //             }
+        //             if (row.count) this.rows.add(row);
+        //         }
+        //     } 
             
-            // 4.빈 MetaRow 채우기
-            for (var i = 0 ; i < this.rows.count; i++) {
-                for (var ii = 0; ii < this.columns.count; ii++) {
-                    itemName = this.columns[ii].name;
-                    if (typeof this.rows[i][itemName] === 'undefined') {
-                        this.rows[i].add(itemName, '');
-                    }
-                }
-            }   
-        };
+        //     // 4.빈 MetaRow 채우기
+        //     for (var i = 0 ; i < this.rows.count; i++) {
+        //         for (var ii = 0; ii < this.columns.count; ii++) {
+        //             itemName = this.columns[ii].name;
+        //             if (typeof this.rows[i][itemName] === 'undefined') {
+        //                 this.rows[i].add(itemName, '');
+        //             }
+        //         }
+        //     }   
+        // };
 
         /**
          * MetaEntity 를 불러(로드)온다.
@@ -237,44 +237,44 @@
          * @param {*} p_object 대상 엔티티
          * @param {*} p_option 옵션
          */
-        MetaEntity.prototype.__loadEntity  = function(p_object, p_option) {
-            p_option = p_option || 1;   // 기본값 덮어쓰기
+        // MetaEntity.prototype.__loadEntity  = function(p_object, p_option) {
+        //     p_option = p_option || 1;   // 기본값 덮어쓰기
 
-            var entity = p_object;
-            var row;
-            var itemName;
+        //     var entity = p_object;
+        //     var row;
+        //     var itemName;
 
-            // 1.병합
-            if (p_option === 1) {
-                // MetaColumn 기준으로 아이템 가져오기
-                for(var i = 0; entity.columns.count > i; i++) {
-                    itemName = entity.columns[i].name;
-                    if (typeof this.columns[itemName] === 'undefined') this.columns.add(entity.columns[i]);
-                }
-            }
+        //     // 1.병합
+        //     if (p_option === 1) {
+        //         // MetaColumn 기준으로 아이템 가져오기
+        //         for(var i = 0; entity.columns.count > i; i++) {
+        //             itemName = entity.columns[i].name;
+        //             if (typeof this.columns[itemName] === 'undefined') this.columns.add(entity.columns[i]);
+        //         }
+        //     }
             
-            // 2.Row 데이터 가져오기
-            for(var i = 0; entity.rows.count > i; i++) {
+        //     // 2.Row 데이터 가져오기
+        //     for(var i = 0; entity.rows.count > i; i++) {
                 
-                row = this.newRow();
+        //         row = this.newRow();
 
-                for (var ii = 0; ii < this.columns.count; ii++) {
-                    itemName = this.columns[ii].name;
+        //         for (var ii = 0; ii < this.columns.count; ii++) {
+        //             itemName = this.columns[ii].name;
                     
-                    // row[itemName] = typeof entity.rows[i][itemName] !== 'undefined' ? entity.rows[i][itemName] : '';
-                    // 이해하기 쉽게 코드 변경
-                    if (typeof entity.rows[i][itemName] !== 'undefined') {
-                        row[itemName] = entity.rows[i][itemName];    
-                    } else {
-                        row[itemName] = ''; // COVER:
-                    }
-                }
-                this.rows.add(row);
-            }
+        //             // row[itemName] = typeof entity.rows[i][itemName] !== 'undefined' ? entity.rows[i][itemName] : '';
+        //             // 이해하기 쉽게 코드 변경
+        //             if (typeof entity.rows[i][itemName] !== 'undefined') {
+        //                 row[itemName] = entity.rows[i][itemName];    
+        //             } else {
+        //                 row[itemName] = ''; // COVER:
+        //             }
+        //         }
+        //         this.rows.add(row);
+        //     }
 
-            // 4.빈 Row 채우기
-            if (p_option === 1) this.__fillRow(entity);
-        };
+        //     // 4.빈 Row 채우기
+        //     if (p_option === 1) this.__fillRow(entity);
+        // };
 
         MetaEntity.prototype._loadEntity = function(p_entity, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
@@ -397,60 +397,60 @@
          * - 2 columns, rows 병합 (덮어쓰기)  
          * - 3 row 안가져오기    (기존유지)
          */
-        MetaEntity.prototype.merge  = function(p_target, p_option) {
-            p_option = p_option || 1;    // 기본값
+        // MetaEntity.prototype.merge  = function(p_target, p_option) {
+        //     p_option = p_option || 1;    // 기본값
 
-            var row;
-            var itemName;
+        //     var row;
+        //     var itemName;
 
-            // 1.유효성 검사
-            if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
+        //     // 1.유효성 검사
+        //     if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
 
-            // 2.병합 : MetaColumn 기준으로 아이템 가져오기
-            for(var i = 0; p_target.columns.count > i; i++) {
-                itemName = p_target.columns[i].name;
+        //     // 2.병합 : MetaColumn 기준으로 아이템 가져오기
+        //     for(var i = 0; p_target.columns.count > i; i++) {
+        //         itemName = p_target.columns[i].name;
                 
-                // 없으면 생성
-                if (typeof this.columns[itemName] === 'undefined') {
-                    this.columns.add(p_target.columns[i]);
-                }
+        //         // 없으면 생성
+        //         if (typeof this.columns[itemName] === 'undefined') {
+        //             this.columns.add(p_target.columns[i]);
+        //         }
                 
-                // option = 2: 기존 item 덮어쓰기
-                if (p_option === 2 && typeof this.columns[itemName] !== 'undefined') {
-                    this.columns[itemName] = p_target.columns[itemName];
-                }
-            }
+        //         // option = 2: 기존 item 덮어쓰기
+        //         if (p_option === 2 && typeof this.columns[itemName] !== 'undefined') {
+        //             this.columns[itemName] = p_target.columns[itemName];
+        //         }
+        //     }
             
-            // 3.MetaRow 데이터 가져오기
-            if (p_option !== 3) {
-                for(var i = 0; p_target.rows.count > i; i++) {
-                    // this.rows 있는 경우
-                    if (typeof this.rows[i] !== 'undefined') {  
-                        row = this.rows[i];
-                        for (var ii = 0; ii < p_target.columns.count; ii++) {
-                            itemName = p_target.columns[ii].name;
-                            if (typeof this.rows[i][itemName] === 'undefined') {    // 이름이 없는 경우
-                                row.add(itemName, p_target.rows[i][itemName]);
-                            } else if (p_option === 2 && typeof this.rows[i][itemName] !== 'undefined') {   // 덮어쓰기
-                                row[itemName] = p_target.rows[i][itemName];     
-                            }
-                        }
-                    // this.rows 없는 경우
-                    } else {                                    
-                        row = this.newRow();
-                        for (var ii = 0; ii < p_target.columns.count; ii++) {
-                            itemName = p_target.columns[ii].name;
-                            // 덮어쓰기
-                            if (p_option === 2) row[itemName] = p_target.rows[i][itemName];
-                        }
-                        this.rows.add(row);
-                    }
-                }
-            }
+        //     // 3.MetaRow 데이터 가져오기
+        //     if (p_option !== 3) {
+        //         for(var i = 0; p_target.rows.count > i; i++) {
+        //             // this.rows 있는 경우
+        //             if (typeof this.rows[i] !== 'undefined') {  
+        //                 row = this.rows[i];
+        //                 for (var ii = 0; ii < p_target.columns.count; ii++) {
+        //                     itemName = p_target.columns[ii].name;
+        //                     if (typeof this.rows[i][itemName] === 'undefined') {    // 이름이 없는 경우
+        //                         row.add(itemName, p_target.rows[i][itemName]);
+        //                     } else if (p_option === 2 && typeof this.rows[i][itemName] !== 'undefined') {   // 덮어쓰기
+        //                         row[itemName] = p_target.rows[i][itemName];     
+        //                     }
+        //                 }
+        //             // this.rows 없는 경우
+        //             } else {                                    
+        //                 row = this.newRow();
+        //                 for (var ii = 0; ii < p_target.columns.count; ii++) {
+        //                     itemName = p_target.columns[ii].name;
+        //                     // 덮어쓰기
+        //                     if (p_option === 2) row[itemName] = p_target.rows[i][itemName];
+        //                 }
+        //                 this.rows.add(row);
+        //             }
+        //         }
+        //     }
 
-            // 4.공백 채우기
-            this.__fillRow(p_target);
-        };
+        //     // 4.공백 채우기
+        //     this.__fillRow(p_target);
+        // };
         
         /**
          * 병합
@@ -512,8 +512,8 @@
                 // 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
                     alias = tarColumns[i].alias;
-                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
                     if (this.columns.exist(alias)) throw new Error('column.name 중복 발생 '+ key);
+                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
                 }
                 // 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
@@ -601,8 +601,8 @@
                 for (var i = 0; i < tarColumns.count; i++) {
                     // key = tarColumns.keyOf(i);
                     alias = tarColumns[i].alias;
-                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
                     if (this.columns.exist(alias)) throw new Error('column.name 중복 발생 '+ key);
+                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
                     // key = tarColumns[i].alias;
                     // if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
                 }
@@ -728,7 +728,7 @@
             if (p_filter && p_filter[EXECEPT]) {
                 if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
                 else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
-            } 
+            }
             for (var i = 0; this.columns.count > i; i++) {
                 if (excepts.indexOf(this.columns[i].name) < 0)  {
                     
