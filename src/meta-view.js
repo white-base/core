@@ -121,16 +121,79 @@
             // }
            
             for(var i = 0; i < this.columns.count; i++) {
-                clone.columns.add(this.columns[i].clone());
+                clone.columns.add(this.columns[i].clone(clone));
             }
 
             for(var i = 0; i < this.rows.count; i++) {
-                clone.rows.add(this.rows[i].clone());
+                clone.rows.add(this.rows[i].clone(clone));
             }
-            
             return clone;
         };
         
+        /**
+         * 엔티티를 조회한다.
+         * filter(row, idx, entity) : 콜백
+         * @param {function | array<string> | string} p_filter 필터 콜백
+         * @param {array<string>| string} p_args 
+         * @return {MetaView} 
+         */
+        MetaView.prototype.select  = function(p_filter, p_args) {
+            var args = Array.prototype.slice.call(arguments);
+            var items = [];
+            var callback = null;
+            var columnName;
+            var view = new MetaView('select', this);
+            var orignal = this.clone();
+
+            // 매개변수 구성
+            if (typeof p_filter === 'function') {
+                callback = p_filter;
+                if (Array.isArray(p_args)) items = p_args;
+                else if (args.length > 1) items = args.splice(1);
+            } else if (typeof p_filter === 'string') {
+                items = args;
+            } else if (Array.isArray(p_filter)) {
+                items = p_filter;
+            }
+
+            // view 컬럼 구성
+            if (items.length === 0) {
+                for (var i = 0; i < this.columns.count; i++) {
+                    columnName = this.columns[i].name;
+                    view.columns.add(columnName);  // 참조로 등록
+                }
+            } else {
+                for (var i = 0; i < items.length; i++) {
+                    columnName = items[i];
+                    if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
+                    if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
+                    view.columns.add(columnName);  // 참조로 등록
+                }
+            }
+
+            // row 등록
+            for (var i = 0; i < orignal.rows.count; i++) {
+                if (!callback || (typeof callback === 'function' && callback.call(this, orignal.rows[i], i, view))) {
+                    view.rows.add(craateRow(orignal.rows[i]));
+                } 
+            }
+
+            return view;
+
+            // row 등록
+            function craateRow(p_row) {
+                var alias, newRow;
+
+                newRow = view.newRow();
+                for (var ii = 0; ii < view.columns.count; ii++) {
+                    alias = view.columns[ii].alias;
+                    if (items.length > 0 && items.indexOf(alias) < 0) continue;
+                    newRow[alias] = p_row[alias];
+                }
+                return newRow;
+            }
+        }
+
         /**
          * 엔티티를 복사한다. (조회 후 복제)
          * @param {*} p_filter 

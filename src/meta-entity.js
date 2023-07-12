@@ -790,6 +790,12 @@
             }
         };
 
+        
+        // MetaEntity.prototype.select  = function(p_filter, p_arg) {
+            
+        // };
+
+
         /**
          * object 로 로딩하기   
          * JSON 스키마 규칙   

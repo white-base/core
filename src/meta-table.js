@@ -100,7 +100,6 @@
             for(var i = 0; i < this.rows.count; i++) {
                 clone.rows.add(this.rows[i].clone(clone));
             }
-            
             return clone;
         };
 

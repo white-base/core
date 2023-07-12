@@ -149,8 +149,78 @@ describe("< MetaTable >", () => {
         expect(c.instanceOf(Array)).toBe(false);
         expect(c.instanceOf(String)).toBe(false);
     });
+    describe("< select(filter, args) >", () => {
+        it("- select() : 기본값 조회 ", () => {
+            var view1 = new MetaView('V1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            view1.load(json1, 3);
+            var view2 = view1.select();
+
+            expect(view2.columns.count).toBe(2);
+            expect(view2.rows.count).toBe(2);
+            expect(view2.columns['i1'].caption).toBe('C1');
+            expect(view2.columns['i2'].caption).toBe('C2');
+            expect(view2.rows[0]['i1']).toBe(1);
+            expect(view2.rows[0]['i2']).toBe(2);
+            expect(view2.rows[1]['i1']).toBe(10);
+            expect(view2.rows[1]['i2']).toBe(20);
+        });
+        it("- select(filter) : 필터 설정 ", () => {
+            var view1 = new MetaView('V1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            view1.load(json1, 3);
+            var view2 = view1.select(row => row['i1'] < 10);
+
+            expect(view2.columns.count).toBe(2);
+            expect(view2.rows.count).toBe(1);
+            expect(view2.columns['i1'].caption).toBe('C1');
+            expect(view2.columns['i2'].caption).toBe('C2');
+            expect(view2.rows[0]['i1']).toBe(1);
+            expect(view2.rows[0]['i2']).toBe(2);
+        });
+        it("- select(itmms) : 아이템 설정", () => {
+            var view1 = new MetaView('V1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            view1.load(json1, 3);
+            var view2 = view1.select('i1');
+
+            expect(view2.columns.count).toBe(1);
+            expect(view2.rows.count).toBe(2);
+            expect(view2.columns['i1'].caption).toBe('C1');
+            expect(view2.rows[0]['i1']).toBe(1);
+            expect(view2.rows[1]['i1']).toBe(10);
+        });
+    });
+
     // describe("< setValue(row) >", () => {
-    //     it("- setValue(row) : row 설정(단일) ", () => {
+    //     it("- setValue(row) : row 설정(단일) ", () => {select
             
     //     });
     // });
