@@ -23,10 +23,10 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        CustomError         = require('./error-custom');
-        MetaElement         = require('./meta-element');
-        PropertyCollection  = require('./collection-property');
-        Observer            = require('./observer');
+        CustomError         = require('./error-custom').CustomError;
+        MetaElement         = require('./meta-element').MetaElement;
+        PropertyCollection  = require('./collection-property').PropertyCollection;
+        Observer            = require('./observer').Observer;
     } else {
         Util                = _global._L.Common.Util;
         CustomError         = _global._L.Common.CustomError;
@@ -954,10 +954,10 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.MetaColumn                         = MetaColumn;
-        module.exports.MetaColumnCollection               = MetaColumnCollection;
-        module.exports.MetaViewColumnCollection           = MetaViewColumnCollection;
-        module.exports.MetaTableColumnCollection          = MetaTableColumnCollection;
+        exports.MetaColumn                         = MetaColumn;
+        exports.MetaColumnCollection               = MetaColumnCollection;
+        exports.MetaViewColumnCollection           = MetaViewColumnCollection;
+        exports.MetaTableColumnCollection          = MetaTableColumnCollection;
 
     } else {
         _global._L.MetaColumn                              = MetaColumn;

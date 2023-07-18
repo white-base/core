@@ -12,6 +12,7 @@
     var MetaRowCollection;
     var MetaRow;
     var MetaColumnCollection;
+    // var MetaView;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
@@ -25,12 +26,13 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                        = require('./util');
-        IGroupControl               = require('./i-control-group');
-        IAllControl                 = require('./i-control-all');
-        MetaElement                 = require('./meta-element');
+        IGroupControl               = require('./i-control-group').IGroupControl;
+        IAllControl                 = require('./i-control-all').IAllControl;
+        MetaElement                 = require('./meta-element').MetaElement;
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
         MetaRow                     = require('./meta-row').MetaRow;
         MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
+        // MetaView                    = require('./meta-view').MetaView;
     } else {
         Util                    = _global._L.Common.Util;
         IGroupControl           = _global._L.Interface.IGroupControl;
@@ -310,6 +312,49 @@
                 }
             }
         };
+
+        MetaEntity.prototype._select = function(view, p_callback, p_items) {
+            var orignal = this.clone();
+            var columnName;
+
+            // view 컬럼 구성
+            if (p_items.length === 0) {
+                for (var i = 0; i < this.columns.count; i++) {
+                    columnName = this.columns[i].name;
+                    view.columns.add(columnName);  // 참조로 등록
+                }
+            } else {
+                for (var i = 0; i < p_items.length; i++) {
+                    columnName = p_items[i];
+                    if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
+                    if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
+                    view.columns.add(columnName);  // 참조로 등록
+                }
+            }
+
+            // row 등록
+            for (var i = 0; i < orignal.rows.count; i++) {
+                if (!p_callback || (typeof p_callback === 'function' && p_callback.call(this, orignal.rows[i], i, view))) {
+                    view.rows.add(createRow(orignal.rows[i]));
+                } 
+            }
+
+            return view;
+
+            // row 등록
+            function createRow(p_row) {
+                var alias, newRow;
+
+                newRow = view.newRow();
+                for (var ii = 0; ii < view.columns.count; ii++) {
+                    alias = view.columns[ii].alias;
+                    if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
+                    newRow[alias] = p_row[alias];
+                }
+                return newRow;
+            }
+        };
+
 
         /** @abstract */
         MetaEntity.prototype.clone = function() {
@@ -903,7 +948,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = MetaEntity;
+        exports.MetaEntity = MetaEntity;
     } else {
         _global._L.MetaEntity = MetaEntity;
         _global._L.Meta.Entity.MetaEntity = MetaEntity;     // namespace

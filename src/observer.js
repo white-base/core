@@ -160,7 +160,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = Observer;
+        exports.Observer = Observer;
     } else {
         _global._L.Observer = Observer;
         // namespace

@@ -23,8 +23,8 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                        = require('./util');
-        PropertyCollection          = require('./collection-property');
-        MetaEntity                  = require('./meta-entity');
+        PropertyCollection          = require('./collection-property').PropertyCollection;
+        MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
     } else {    
         Util                        = _global._L.Common.Util;
@@ -103,6 +103,28 @@
             return clone;
         };
 
+        // MetaView.prototype.select  = function(p_filter, p_args) {
+        //     var args = Array.prototype.slice.call(arguments);
+        //     var items = [];
+        //     var callback = null;
+        //     var columnName;
+        //     var view = new MetaView('select', this);
+        //     var orignal = this.clone();
+
+        //     // 매개변수 구성
+        //     if (typeof p_filter === 'function') {
+        //         callback = p_filter;
+        //         if (Array.isArray(p_args)) items = p_args;
+        //         else if (args.length > 1) items = args.splice(1);
+        //     } else if (typeof p_filter === 'string') {
+        //         items = args;
+        //     } else if (Array.isArray(p_filter)) {
+        //         items = p_filter;
+        //     }
+
+        //     return this._select(view, callback, items);
+        // };
+
         /**
          * 엔티티를 복사한다. (조회 후 복제)
          * @param {*} p_filter 
@@ -114,6 +136,8 @@
 
             return entity.clone();
         };
+
+
 
         MetaTable.prototype.acceptChanges  = function() {
             console.log('구현해야함');  // COVER:
@@ -180,8 +204,8 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.MetaTable = MetaTable;
-        module.exports.MetaTableCollection = MetaTableCollection;
+        exports.MetaTable = MetaTable;
+        exports.MetaTableCollection = MetaTableCollection;
     } else {
         _global._L.MetaTable = MetaTable;
         _global._L.MetaTableCollection = MetaTableCollection;

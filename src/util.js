@@ -178,15 +178,15 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.inherits = inherits;
-        module.exports.getArrayDepth = getArrayDepth;
-        module.exports.createGuid = createGuid;
-        module.exports.implements = implement;
-        module.exports.getAllProperties = getAllProperties;
-        module.exports.checkType = checkType;
-        module.exports.checkUnionType = checkUnionType;
-        module.exports.validType = validType;
-        module.exports.validUnionType = validUnionType;
+        exports.inherits = inherits;
+        exports.getArrayDepth = getArrayDepth;
+        exports.createGuid = createGuid;
+        exports.implements = implement;
+        exports.getAllProperties = getAllProperties;
+        exports.checkType = checkType;
+        exports.checkUnionType = checkUnionType;
+        exports.validType = validType;
+        exports.validUnionType = validUnionType;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         // module.exports.equalType = equalType;
     } else {    

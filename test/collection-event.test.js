@@ -5,8 +5,8 @@
 // gobal defined
 'use strict';
 
-const PropertyCollection            = require('../src/collection-property');
-const ArrayCollection               = require('../src/collection-array');
+const {PropertyCollection}            = require('../src/collection-property');
+const {ArrayCollection}               = require('../src/collection-array');
 let School;
 let arrResult = [];
 

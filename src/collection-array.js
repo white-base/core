@@ -18,7 +18,7 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        BaseCollection      = require('./collection-base');
+        BaseCollection      = require('./collection-base').BaseCollection;
     } else {    
         Util                = _global._L.Common.Util;
         BaseCollection      = _global._L.Collection.BaseCollection;
@@ -113,7 +113,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = ArrayCollection;
+        exports.ArrayCollection = ArrayCollection;
     } else {    
         _global._L.ArrayCollection = ArrayCollection;
         _global._L.Collection.ArrayCollection = ArrayCollection;    // namespace

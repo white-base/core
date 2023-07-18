@@ -19,8 +19,8 @@
     // 2. 모듈 가져오기 (node | window)
     
     if (isNode) {     
-        IPartControl        = require('./i-control-part');
-        ILookupControl      = require('./i-control-lookup');
+        IPartControl        = require('./i-control-part').IPartControl;
+        ILookupControl      = require('./i-control-lookup').ILookupControl;
         Util                = require('./util');
     } else {
         IPartControl        = _global._L.Interface.IPartControl;
@@ -129,7 +129,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = ICollection;
+        exports.ICollection = ICollection;
     } else {
         _global._L.ICollection = ICollection;
         _global._L.Interface.ICollection = ICollection;     // namespace

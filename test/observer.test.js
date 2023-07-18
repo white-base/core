@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const Observer          = require('../src/observer');
+const {Observer}          = require('../src/observer');
 let EventClass;
 
 //==============================================================

@@ -20,8 +20,8 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        IPropertyCollection = require('./i-collection-property');
-        BaseCollection      = require('./collection-base');
+        IPropertyCollection = require('./i-collection-property').IPropertyCollection;
+        BaseCollection      = require('./collection-base').BaseCollection;
     } else {
         Util                = _global._L.Common.Util;
         IPropertyCollection = _global._L.Interface.IPropertyCollection;
@@ -231,7 +231,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = PropertyCollection;
+        exports.PropertyCollection = PropertyCollection;
     } else {
         _global._L.PropertyCollection = PropertyCollection;
         _global._L.Collection.PropertyCollection = PropertyCollection;      // namespace

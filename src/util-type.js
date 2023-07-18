@@ -391,12 +391,12 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.getAllProperties = getAllProperties;
-        module.exports.getTypeMap = getTypeMap;
-        module.exports.checkType = checkType;
-        module.exports.checkUnionType = checkUnionType;
-        module.exports.validType = validType;
-        module.exports.validUnionType = validUnionType;
+        exports.getAllProperties = getAllProperties;
+        exports.getTypeMap = getTypeMap;
+        exports.checkType = checkType;
+        exports.checkUnionType = checkUnionType;
+        exports.validType = validType;
+        exports.validUnionType = validUnionType;
     } else {
         _global._L.Common.Util.getAllProperties = getAllProperties;
         _global._L.Common.Util.getTypeMap = getTypeMap;

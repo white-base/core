@@ -19,7 +19,7 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        IObject             = require('./i-object');
+        IObject             = require('./i-object').IObject;
     } else {
         Util                = _global._L.Common.Util;
         IObject             = _global._L.Interface.IObject;
@@ -76,7 +76,7 @@
     //     _global._L.Interface.IMarshal = IMarshal;
     // }
     if (isNode) {     
-        module.exports = IMarshal;
+        exports.IMarshal = IMarshal;
     } else {
         _global._L.IMarshal = IMarshal;
         _global._L.Interface.IMarshal = IMarshal;   // namespace

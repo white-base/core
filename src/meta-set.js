@@ -25,10 +25,10 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                    = require('./util');
-        ISchemaControl          = require('./i-control-schema');
-        IAllControl             = require('./i-control-all');
-        ITransaction            = require('./i-transaction');
-        MetaElement             = require('./meta-element');
+        ISchemaControl          = require('./i-control-schema').ISchemaControl;
+        IAllControl             = require('./i-control-all').IAllControl;
+        ITransaction            = require('./i-transaction').ITransaction;
+        MetaElement             = require('./meta-element').MetaElement;
         MetaTableCollection     = require('./meta-table').MetaTableCollection;
         MetaViewCollection      = require('./meta-view').MetaViewCollection;
     } else {
@@ -166,7 +166,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = MetaSet;
+        exports.MetaSet = MetaSet;
     } else {
         _global._L.MetaSet = MetaSet;
         _global._L.Meta.Entity.MetaSet = MetaSet;     // namespace

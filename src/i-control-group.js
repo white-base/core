@@ -50,7 +50,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = IGroupControl;
+        exports.IGroupControl = IGroupControl;
     } else {
         _global._L.IGroupControl = IGroupControl;
         _global._L.Interface.IGroupControl = IGroupControl;     // namespace

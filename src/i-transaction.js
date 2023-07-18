@@ -50,7 +50,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = ITransaction;
+        exports.ITransaction = ITransaction;
     } else {
         _global._L.ITransaction = ITransaction;
         _global._L.Interface.ITransaction = ITransaction;     // namespace

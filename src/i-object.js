@@ -51,7 +51,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = IObject;
+        exports.IObject = IObject;
     } else {
         _global._L.IObject = IObject;
         _global._L.Interface.IObject = IObject;     // namespace

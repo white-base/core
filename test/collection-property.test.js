@@ -5,7 +5,7 @@
 // gobal defined
 'use strict';
 
-const PropertyCollection          = require('../src/collection-property');
+const {PropertyCollection}          = require('../src/collection-property');
 let Student, School, Member, Corp, House, Space;
 
 //==============================================================

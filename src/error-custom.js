@@ -84,7 +84,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = CustomError;
+        exports.CustomError = CustomError;
     } else {    // COVER:
         _global._LCustomError = CustomError;
         _global._L.Common.CustomError = CustomError;    // namespace

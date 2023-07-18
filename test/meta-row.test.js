@@ -4,11 +4,11 @@
 //==============================================================
 // gobal defined
 'use strict';
-const MetaObject            = require('../src/meta-object');
-const MetaElement           = require('../src/meta-element');
-const MetaEntity                = require('../src/meta-entity');
-const IObject               = require('../src/i-object');
-const IMarshal              = require('../src/i-marshal');
+const {MetaObject}            = require('../src/meta-object');
+const {MetaElement}           = require('../src/meta-element');
+const {MetaEntity}                = require('../src/meta-entity');
+const {IObject}               = require('../src/i-object');
+const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
 const { MetaTable }       = require('../src/meta-table');
 const { MetaView }        = require('../src/meta-view');

@@ -5,16 +5,16 @@
 // gobal defined
 'use strict';
 const Util                  = require('../src/util');
-const IObject               = require('../src/i-object');
-const IMarshal              = require('../src/i-marshal');
-const MetaObject            = require('../src/meta-object');
-const MetaElement           = require('../src/meta-element');
-const MetaEntity                            = require('../src/meta-entity');
+const {IObject}               = require('../src/i-object');
+const {IMarshal}              = require('../src/i-marshal');
+const {MetaObject}            = require('../src/meta-object');
+const {MetaElement}           = require('../src/meta-element');
+const {MetaEntity}                            = require('../src/meta-entity');
 const { MetaTable, MetaTableCollection }    = require('../src/meta-table');
 const { MetaView, MetaViewCollection }      = require('../src/meta-view');
 const { MetaRow }           = require('../src/meta-row');
 const { MetaColumn }        = require('../src/meta-column');
-const  MeatSet              = require('../src/meta-set');
+const  {MetaSet}              = require('../src/meta-set');
 
 //==============================================================
 // test
@@ -23,21 +23,21 @@ describe("< MetaSet >", () => {
         // jest.resetModules();
     });
     it("- tables.add() ", () => {
-        const set1 = new MeatSet('S1');
+        const set1 = new MetaSet('S1');
         const table1 = new MetaTable('T1');
         set1.tables.add(table1);
         
         expect(set1.tables.count).toBe(1);
     });
     it("- views.add() ", () => {
-        const set1 = new MeatSet('S1');
+        const set1 = new MetaSet('S1');
         const veiw1 = new MetaView('V1');
         set1.views.add(veiw1);
         
         expect(set1.views.count).toBe(1);
     });
     it("- clear() : rows 초기화 ", () => {
-        const set1 = new MeatSet('S1');
+        const set1 = new MetaSet('S1');
         const table1 = new MetaTable('T1');
         const veiw1 = new MetaView('V1');
         var row;
@@ -73,7 +73,7 @@ describe("< MetaSet >", () => {
         expect(set1.views[0].rows.count).toBe(0);
     });
     it("- reset() : rows, columns 초기화 ", () => {
-        const set1 = new MeatSet('S1');
+        const set1 = new MetaSet('S1');
         const table1 = new MetaTable('T1');
         const veiw1 = new MetaView('V1');
         var row;

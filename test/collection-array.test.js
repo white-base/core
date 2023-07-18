@@ -5,7 +5,7 @@
 // gobal defined
 'use strict';
 
-const ArrayCollection          = require('../src/collection-array');
+const {ArrayCollection}          = require('../src/collection-array');
 let Student, School, Corp, Member, House, Space;
 
 //==============================================================

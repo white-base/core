@@ -20,7 +20,7 @@
     if (isNode) {     
         // require('./_object-implement'); // _implements() : 폴리필
         Util                = require('./util');
-        IObject             = require('./i-object');
+        IObject             = require('./i-object').IObject;
     } else {
         Util                = _global._L.Common.Util
         IObject             = _global._L.Interface.IObject;
@@ -139,7 +139,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = MetaObject;
+        exports.MetaObject = MetaObject;
     } else {    // COVER:
         _global._L.MetaObject = MetaObject;
         _global._L.Meta.MetaObject = MetaObject;    // namespace

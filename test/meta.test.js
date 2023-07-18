@@ -5,12 +5,12 @@
 // gobal defined
 'use strict';
 const Util                  = require('../src/util');
-const MetaObject            = require('../src/meta-object');
-const MetaElement           = require('../src/meta-element');
+const {MetaObject}            = require('../src/meta-object');
+const {MetaElement}           = require('../src/meta-element');
 // const ComplexElement        = require('../src/meta-element-complex');
-const IObject               = require('../src/i-object');
-const IMarshal              = require('../src/i-marshal');
-const IPropertyCollection   = require('../src/i-collection-property');
+const {IObject}               = require('../src/i-object');
+const {IMarshal}              = require('../src/i-marshal');
+const {IPropertyCollection}   = require('../src/i-collection-property');
 
 let MetaObjectSub, MetaElementSub, ComplexElementSub, EmpytClass;
 

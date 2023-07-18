@@ -25,9 +25,9 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                        = require('./util');
-        MetaObject                  = require('./meta-object');
+        MetaObject                  = require('./meta-object').MetaObject;
         // MetaElement                 = require('./meta-element');
-        ArrayCollection             = require('./collection-array');
+        ArrayCollection             = require('./collection-array').ArrayCollection;
     } else {    // COVER:
         Util                        = _global._L.Common.Util;
         MetaObject                  = _global._L.Meta.MetaObject;
@@ -226,8 +226,8 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.MetaRow = MetaRow;
-        module.exports.MetaRowCollection = MetaRowCollection;
+        exports.MetaRow = MetaRow;
+        exports.MetaRowCollection = MetaRowCollection;
     } else {
         _global._L.MetaRow = MetaRow;
         _global._L.MetaRowCollection = MetaRowCollection;

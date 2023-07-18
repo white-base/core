@@ -24,9 +24,9 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                        = require('./util');
-        PropertyCollection          = require('./collection-property');
-        MetaObject                  = require('./meta-object');
-        MetaEntity                  = require('./meta-entity');
+        PropertyCollection          = require('./collection-property').PropertyCollection;
+        MetaObject                  = require('./meta-object').MetaObject;
+        MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
     } else {
         Util                        = _global._L.Common.Util;
@@ -156,43 +156,45 @@
                 items = p_filter;
             }
 
-            // view 컬럼 구성
-            if (items.length === 0) {
-                for (var i = 0; i < this.columns.count; i++) {
-                    columnName = this.columns[i].name;
-                    view.columns.add(columnName);  // 참조로 등록
-                }
-            } else {
-                for (var i = 0; i < items.length; i++) {
-                    columnName = items[i];
-                    if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
-                    if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
-                    view.columns.add(columnName);  // 참조로 등록
-                }
-            }
+            return this._select(view, callback, items);
 
-            // row 등록
-            for (var i = 0; i < orignal.rows.count; i++) {
-                if (!callback || (typeof callback === 'function' && callback.call(this, orignal.rows[i], i, view))) {
-                    view.rows.add(craateRow(orignal.rows[i]));
-                } 
-            }
+            // // view 컬럼 구성
+            // if (items.length === 0) {
+            //     for (var i = 0; i < this.columns.count; i++) {
+            //         columnName = this.columns[i].name;
+            //         view.columns.add(columnName);  // 참조로 등록
+            //     }
+            // } else {
+            //     for (var i = 0; i < items.length; i++) {
+            //         columnName = items[i];
+            //         if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
+            //         if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
+            //         view.columns.add(columnName);  // 참조로 등록
+            //     }
+            // }
 
-            return view;
+            // // row 등록
+            // for (var i = 0; i < orignal.rows.count; i++) {
+            //     if (!callback || (typeof callback === 'function' && callback.call(this, orignal.rows[i], i, view))) {
+            //         view.rows.add(createRow(orignal.rows[i]));
+            //     } 
+            // }
 
-            // row 등록
-            function craateRow(p_row) {
-                var alias, newRow;
+            // return view;
 
-                newRow = view.newRow();
-                for (var ii = 0; ii < view.columns.count; ii++) {
-                    alias = view.columns[ii].alias;
-                    if (items.length > 0 && items.indexOf(alias) < 0) continue;
-                    newRow[alias] = p_row[alias];
-                }
-                return newRow;
-            }
-        }
+            // // row 등록
+            // function createRow(p_row) {
+            //     var alias, newRow;
+
+            //     newRow = view.newRow();
+            //     for (var ii = 0; ii < view.columns.count; ii++) {
+            //         alias = view.columns[ii].alias;
+            //         if (items.length > 0 && items.indexOf(alias) < 0) continue;
+            //         newRow[alias] = p_row[alias];
+            //     }
+            //     return newRow;
+            // }
+        };
 
         /**
          * 엔티티를 복사한다. (조회 후 복제)
@@ -266,8 +268,8 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports.MetaView = MetaView;
-        module.exports.MetaViewCollection = MetaViewCollection;
+        exports.MetaView = MetaView;
+        exports.MetaViewCollection = MetaViewCollection;
     } else {
         _global._L.MetaView = MetaView;
         _global._L.MetaViewCollection = MetaViewCollection;

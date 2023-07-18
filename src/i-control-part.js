@@ -50,7 +50,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = IPartControl;
+        exports.IPartControl = IPartControl;
     } else {
         _global._L.IPartControl = IPartControl;
         _global._L.Interface.IPartControl = IPartControl;       // namespace

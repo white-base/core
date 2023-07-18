@@ -42,7 +42,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = IImportControl;
+        exports.IImportControl = IImportControl;
     } else {
         _global._L.IImportControl = IImportControl;
         _global._L.Interface.IImportControl = IImportControl;   // namespace

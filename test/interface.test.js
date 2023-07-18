@@ -6,21 +6,21 @@
 'use strict';
 
 const Util                  = require('../src/util');
-const MetaObject            = require('../src/meta-object');
-const MetaElement           = require('../src/meta-element');
-const MetaEntity                = require('../src/meta-entity');
-const IObject               = require('../src/i-object');
-const IMarshal              = require('../src/i-marshal');
+const {MetaObject}            = require('../src/meta-object');
+const {MetaElement}           = require('../src/meta-element');
+const {MetaEntity}                = require('../src/meta-entity');
+const {IObject}               = require('../src/i-object');
+const {IMarshal}              = require('../src/i-marshal');
 // const IControlCollection    = require('../src/i-collection-control');
-const IPropertyCollection   = require('../src/i-collection-property');
-const ICollection           = require('../src/i-collection');
-const IAllControl           = require('../src/i-control-all');
-const IExportControl        = require('../src/i-control-export');
-const IGroupControl         = require('../src/i-control-group');
-const IImportControl        = require('../src/i-control-import');
-const ILookupControl        = require('../src/i-control-lookup');
-const ISchemaControl        = require('../src/i-control-schema');
-const IPartControl          = require('../src/i-control-part');
+const {IPropertyCollection}   = require('../src/i-collection-property');
+const {ICollection}           = require('../src/i-collection');
+const {IAllControl}           = require('../src/i-control-all');
+const {IExportControl}        = require('../src/i-control-export');
+const {IGroupControl}         = require('../src/i-control-group');
+const {IImportControl}        = require('../src/i-control-import');
+const {ILookupControl}        = require('../src/i-control-lookup');
+const {ISchemaControl}        = require('../src/i-control-schema');
+const {IPartControl}          = require('../src/i-control-part');
 
 //==============================================================
 // test

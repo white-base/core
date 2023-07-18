@@ -20,8 +20,8 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        IMarshal            = require('./i-marshal');
-        MetaObject          = require('./meta-object');
+        IMarshal            = require('./i-marshal').IMarshal;
+        MetaObject          = require('./meta-object').MetaObject;
     } else {
         Util                = _global._L.Common.Util;
         MetaObject          = _global._L.Meta.MetaObject;
@@ -135,7 +135,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = MetaElement;
+        exports.MetaElement = MetaElement;
     } else {
         _global._L.MetaElement = MetaElement;
         _global._L.Meta.MetaElement = MetaElement;  // namespace

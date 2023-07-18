@@ -19,8 +19,8 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
-        IImportControl      = require('./i-control-import');
-        IExportControl      = require('./i-control-export');
+        IImportControl      = require('./i-control-import').IImportControl;
+        IExportControl      = require('./i-control-export').IExportControl;
     } else {
         Util                = _global._L.Common.Util;
         IImportControl      = _global._L.Interface.IImportControl;
@@ -88,7 +88,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = ISchemaControl;
+        exports.ISchemaControl = ISchemaControl;
     } else {
         _global._L.ISchemaControl = ISchemaControl;
         _global._L.Interface.ISchemaControl = ISchemaControl; // namespace

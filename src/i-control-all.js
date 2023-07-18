@@ -58,7 +58,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = IAllControl;
+        exports.IAllControl = IAllControl;
     } else {
         _global._L.IAllControl = IAllControl;
         _global._L.Interface.IAllControl = IAllControl;     // namespace

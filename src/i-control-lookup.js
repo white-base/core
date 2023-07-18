@@ -42,7 +42,7 @@
     //==============================================================
     // 5. 모듈 내보내기 (node | web)
     if (isNode) {     
-        module.exports = ILookupControl;
+        exports.ILookupControl = ILookupControl;
     } else {
         _global._L.ILookupControl = ILookupControl;
         _global._L.Interface.ILookupControl = ILookupControl;   // namespace
