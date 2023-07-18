@@ -1,14 +1,23 @@
-// b.js
-console.log('b.js 시작');
+(function(_global) {
 
-const a = require('./a');
+    // b.js
+    console.log('b.js 시작');
 
-// module.exports = {
-//   call: () => {
-//     console.log('b.js의 call에서의 a: ', a);
-//   }
-// };
+    const a = require('./a');
 
-exports.call = () => {
-  console.log('b.js의 call에서의 a: ', a);
-};
+    // module.exports = {
+    //   call: () => {
+    //     console.log('b.js의 call에서의 a: ', a);
+    //   }
+    // };
+
+    console.log(typeof a);
+    // console.log('a='+ a);
+
+    const ff = () => {
+        console.log('b.js의 call에서의 a: ', a);
+    };
+
+    exports.func = ff;
+
+}(typeof window !== 'undefined' ? window : global));

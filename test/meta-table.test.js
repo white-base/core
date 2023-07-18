@@ -10,6 +10,7 @@ const {MetaEntity}                = require('../src/meta-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const { MetaTable }       = require('../src/meta-table');
+const { MetaView }              = require('../src/meta-view');
 const Util                  = require('../src/util');
 const { MetaRow }               = require('../src/meta-row');
 const { MetaColumn }              = require('../src/meta-column');
@@ -134,7 +135,7 @@ describe("< MetaTable >", () => {
         });
     });
     
-    describe("< select(filter, list? | start?, end?) : entity >", () => {
+    describe.skip("< select(filter, list? | start?, end?) : entity >", () => {
         it("- select(filter) : 엔티티 조회(참조값), 필터 ", () => {
             var table1 = new MetaTable('T1');
             table1.columns.add('i1');
@@ -275,7 +276,155 @@ describe("< MetaTable >", () => {
         });
     });
 
-    it("- copy(filter, start) : 엔티티 복사 ", () => {
+    describe("< select(filter, args) >", () => {
+        it("- select() : 기본값 조회 ", () => {
+            var table1 = new MetaTable('T1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            table1.load(json1, 3);
+            var table2 = table1.select();
+
+            expect(table2.columns.count).toBe(2);
+            expect(table2.rows.count).toBe(2);
+            expect(table2.columns['i1'].caption).toBe('C1');
+            expect(table2.columns['i2'].caption).toBe('C2');
+            expect(table2.rows[0]['i1']).toBe(1);
+            expect(table2.rows[0]['i2']).toBe(2);
+            expect(table2.rows[1]['i1']).toBe(10);
+            expect(table2.rows[1]['i2']).toBe(20);
+            // 참조 검사
+            expect(table2.columns['i1'] === table1.columns['i1']).toBe(true);
+            expect(table2.columns['i2'] === table1.columns['i2']).toBe(true);
+            expect(table2.instanceOf(MetaView)).toBe(true);
+        });
+        it("- select(filter) : 필터 설정 ", () => {
+            var table1 = new MetaTable('T1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            table1.load(json1, 3);
+            var table2 = table1.select(row => row['i1'] < 10);
+
+            expect(table2.columns.count).toBe(2);
+            expect(table2.rows.count).toBe(1);
+            expect(table2.columns['i1'].caption).toBe('C1');
+            expect(table2.columns['i2'].caption).toBe('C2');
+            expect(table2.rows[0]['i1']).toBe(1);
+            expect(table2.rows[0]['i2']).toBe(2);
+        });
+        it("- select(itmms) : 아이템 설정", () => {
+            var table1 = new MetaTable('T1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            table1.load(json1, 3);
+            var table2 = table1.select('i1');
+
+            expect(table2.columns.count).toBe(1);
+            expect(table2.rows.count).toBe(2);
+            expect(table2.columns['i1'].caption).toBe('C1');
+            expect(table2.rows[0]['i1']).toBe(1);
+            expect(table2.rows[1]['i1']).toBe(10);
+        });
+    });
+    describe("< copy(filter, args) >", () => {
+        it("- copy() : 기본값 조회 ", () => {
+            var table1 = new MetaTable('T1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            table1.load(json1, 3);
+            var table2 = table1.copy();
+
+            expect(table2.columns.count).toBe(2);
+            expect(table2.rows.count).toBe(2);
+            expect(table2.columns['i1'].caption).toBe('C1');
+            expect(table2.columns['i2'].caption).toBe('C2');
+            expect(table2.rows[0]['i1']).toBe(1);
+            expect(table2.rows[0]['i2']).toBe(2);
+            expect(table2.rows[1]['i1']).toBe(10);
+            expect(table2.rows[1]['i2']).toBe(20);
+            // 참조 검사
+            expect(table2 === table1).toBe(false);
+            expect(table2.columns['i1'] === table1.columns['i1']).toBe(false);
+            expect(table2.columns['i2'] === table1.columns['i2']).toBe(false);
+            expect(table2.instanceOf(MetaTable)).toBe(true);
+        });
+        it("- copy(filter) : 필터 설정 ", () => {
+            var table1 = new MetaTable('T1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            table1.load(json1, 3);
+            var table2 = table1.copy(row => row['i1'] < 10);
+
+            expect(table2.columns.count).toBe(2);
+            expect(table2.rows.count).toBe(1);
+            expect(table2.columns['i1'].caption).toBe('C1');
+            expect(table2.columns['i2'].caption).toBe('C2');
+            expect(table2.rows[0]['i1']).toBe(1);
+            expect(table2.rows[0]['i2']).toBe(2);
+        });
+        it("- copy(itmms) : 아이템 설정", () => {
+            var table1 = new MetaTable('T1');
+            var json1 = { 
+                columns: {
+                    i1: { caption: 'C1'},
+                    i2: { caption: 'C2'},
+                },
+                rows: [
+                    { i1: 1, i2: 2 },
+                    { i1: 10, i2: 20 },
+                ]
+            };
+            table1.load(json1, 3);
+            var table2 = table1.copy('i1');
+
+            expect(table2.columns.count).toBe(1);
+            expect(table2.rows.count).toBe(2);
+            expect(table2.columns['i1'].caption).toBe('C1');
+            expect(table2.rows[0]['i1']).toBe(1);
+            expect(table2.rows[1]['i1']).toBe(10);
+        });
+    });
+
+    it.skip("- copy(filter, start) : 엔티티 복사 ", () => {
         var table1 = new MetaTable('T1');
         var filter = {
             __except: ['i1'],                   // 제외

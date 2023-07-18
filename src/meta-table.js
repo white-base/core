@@ -131,10 +131,35 @@
          * @param {*} p_index 
          * @param {*} p_end 
          */
-        MetaTable.prototype.copy  = function(p_filter, p_index, p_end) {
-            var entity = this.select(p_filter, p_index, p_end);
+        // MetaTable.prototype.copy  = function(p_filter, p_index, p_end) {
+        //     var entity = this.select(p_filter, p_index, p_end);
 
-            return entity.clone();
+        //     return entity.clone();
+        // };
+
+        MetaTable.prototype.copy  = function(p_filter, p_args) {
+            var args = Array.prototype.slice.call(arguments);
+            var _this = this;
+            // var MetaView                    = require('./meta-view').MetaView;
+            var items = [];
+            var callback = null;
+            var columnName;
+            var table = new MetaTable(this.name, this);
+            var orignal = this.clone();
+
+            // 매개변수 구성
+            if (typeof p_filter === 'function') {
+                callback = p_filter;
+                if (Array.isArray(p_args)) items = p_args;
+                else if (args.length > 1) items = args.splice(1);
+            } else if (typeof p_filter === 'string') {
+                items = args;
+            } else if (Array.isArray(p_filter)) {
+                items = p_filter;
+            }
+
+            // return this._buildEntity(table, callback, items);
+            return this._buildEntity(table, callback, items).clone();
         };
 
 

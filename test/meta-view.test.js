@@ -4,21 +4,20 @@
 //==============================================================
 // gobal defined
 'use strict';
-const {MetaObject}            = require('../src/meta-object');
-const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}                = require('../src/meta-entity');
-const {IObject}               = require('../src/i-object');
-const {IMarshal}              = require('../src/i-marshal');
-const Util                  = require('../src/util');
-const { MetaTable }       = require('../src/meta-table');
-const { MetaView }        = require('../src/meta-view');
+const {MetaObject}              = require('../src/meta-object');
+const {MetaElement}             = require('../src/meta-element');
+const {MetaEntity}              = require('../src/meta-entity');
+const {IObject}                 = require('../src/i-object');
+const {IMarshal}                = require('../src/i-marshal');
+const Util                      = require('../src/util');
+const { MetaTable }             = require('../src/meta-table');
+const { MetaView }              = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
-const { MetaColumn }              = require('../src/meta-column');
+const { MetaColumn }            = require('../src/meta-column');  
 
 //==============================================================
 // test
-describe("< MetaTable >", () => {
-    beforeAll(() => {
+describe("< MetaTable >", () => {   beforeAll(() => {
         // jest.resetModules();
     });
     it("- new MetaView(name, baseEntity) ", () => {

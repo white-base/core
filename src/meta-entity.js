@@ -12,7 +12,7 @@
     var MetaRowCollection;
     var MetaRow;
     var MetaColumnCollection;
-    // var MetaView;
+    var MetaView;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
@@ -57,6 +57,9 @@
     //==============================================================
     // 4. 모듈 구현    
     var MetaEntity  = (function (_super) {
+        
+        // MetaView                    = require('./meta-view').MetaView;
+
         /**
          * 엔티티
          * @constructs _L.Meta.Entity.MetaEntity
@@ -313,41 +316,46 @@
             }
         };
 
-        MetaEntity.prototype._select = function(view, p_callback, p_items) {
+        MetaEntity.prototype._buildEntity = function(entity, p_callback, p_items) {
             var orignal = this.clone();
             var columnName;
 
-            // view 컬럼 구성
+            // var MetaView                    = require('./meta-view').MetaView;
+            
+            // entity 컬럼 구성
             if (p_items.length === 0) {
                 for (var i = 0; i < this.columns.count; i++) {
-                    columnName = this.columns[i].name;
-                    view.columns.add(columnName);  // 참조로 등록
+                    // columnName = this.columns[i].name;
+                    // entity.columns.add(columnName);  // 참조로 등록
+                    entity.columns.add(this.columns[i]);
                 }
             } else {
                 for (var i = 0; i < p_items.length; i++) {
                     columnName = p_items[i];
                     if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
-                    if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
-                    view.columns.add(columnName);  // 참조로 등록
+                    // if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
+                    // entity.columns.add(columnName);  // 참조로 등록
+                    if (!this.columns.exist(columnName)) throw new Error('items 의 column 이 없습니다.');
+                    entity.columns.add(this.columns[i]);
                 }
             }
 
             // row 등록
             for (var i = 0; i < orignal.rows.count; i++) {
-                if (!p_callback || (typeof p_callback === 'function' && p_callback.call(this, orignal.rows[i], i, view))) {
-                    view.rows.add(createRow(orignal.rows[i]));
+                if (!p_callback || (typeof p_callback === 'function' && p_callback.call(this, orignal.rows[i], i, entity))) {
+                    entity.rows.add(createRow(orignal.rows[i]));
                 } 
             }
 
-            return view;
+            return entity;
 
             // row 등록
             function createRow(p_row) {
                 var alias, newRow;
 
-                newRow = view.newRow();
-                for (var ii = 0; ii < view.columns.count; ii++) {
-                    alias = view.columns[ii].alias;
+                newRow = entity.newRow();
+                for (var ii = 0; ii < entity.columns.count; ii++) {
+                    alias = entity.columns[ii].alias;
                     if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
                     newRow[alias] = p_row[alias];
                 }
@@ -429,6 +437,8 @@
         MetaEntity.prototype.reset = function() {
             this.rows.clear();
             this.columns.clear();
+
+            // MetaView                    = require('./meta-view').MetaView;
         };
 
         /**
@@ -758,83 +768,152 @@
          *  아이템명: { order: 100 }        // 속성 오버라이딩
          * }
          */
-        MetaEntity.prototype.select  = function(p_filter, p_index, p_end) {
-            var EXECEPT = '__except';
-            var list = [];
-            var excepts = [];
-            var obj, f;
-            var filterItem;
+        // MetaEntity.prototype.select  = function(p_filter, p_index, p_end) {
+        //     var EXECEPT = '__except';
+        //     var list = [];
+        //     var excepts = [];
+        //     var obj, f;
+        //     var filterItem;
             
-            // REVIEW:: 이후에 복제로 변경 검토, 자신의 생성자로 생성
-            var entity = new this.constructor(this.name);   
-            var idx;
+        //     // REVIEW:: 이후에 복제로 변경 검토, 자신의 생성자로 생성
+        //     var entity = new this.constructor(this.name);   
+        //     var idx;
 
-            // 1.제외 아이템 조회
-            if (p_filter && p_filter[EXECEPT]) {
-                if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
-                else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
-            }
-            for (var i = 0; this.columns.count > i; i++) {
-                if (excepts.indexOf(this.columns[i].name) < 0)  {
+
+        //     // var MetaView                    = require('./meta-view').MetaView;
+
+        //     // 1.제외 아이템 조회
+        //     if (p_filter && p_filter[EXECEPT]) {
+        //         if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
+        //         else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
+        //     }
+        //     for (var i = 0; this.columns.count > i; i++) {
+        //         if (excepts.indexOf(this.columns[i].name) < 0)  {
                     
-                    // 임시함수에 객체 생성방식
-                    f = function() {};
-                    f.prototype = this.columns[i];
-                    var obj = new f();
+        //             // 임시함수에 객체 생성방식
+        //             f = function() {};
+        //             f.prototype = this.columns[i];
+        //             var obj = new f();
                     
-                    // 필터 설정(등록)
-                    if (p_filter && p_filter[this.columns[i].name]) {
-                        filterItem = p_filter[this.columns[i].name];    
-                        for(var prop in filterItem) {
-                            obj[prop] = filterItem[prop];
-                        }
-                    }
-                    if (obj[EXECEPT] !== true) list.push(obj);
-                }
-            }
+        //             // 필터 설정(등록)
+        //             if (p_filter && p_filter[this.columns[i].name]) {
+        //                 filterItem = p_filter[this.columns[i].name];    
+        //                 for(var prop in filterItem) {
+        //                     obj[prop] = filterItem[prop];
+        //                 }
+        //             }
+        //             if (obj[EXECEPT] !== true) list.push(obj);
+        //         }
+        //     }
 
-            // 2.정렬
-            list.sort(function(a, b) { return a.order - b.order; });
+        //     // 2.정렬
+        //     list.sort(function(a, b) { return a.order - b.order; });
 
-            // 3.리턴 MetaEntity 의 MetaColumn 구성 : 참조형
-            for(var i = 0; i < list.length; i++) {
-                entity.columns.add(list[i]);
-            }
+        //     // 3.리턴 MetaEntity 의 MetaColumn 구성 : 참조형
+        //     for(var i = 0; i < list.length; i++) {
+        //         entity.columns.add(list[i]);
+        //     }
             
-            // 4.리턴 MetaEntity 의 MetaRow 구성 : 참조형
-            if (typeof p_index === 'number') {
-                for(var i = p_index; i < this.rows.count; i++) {
-                    // entity.rows.add(this.rows[idx]);
-                    entity.rows.add(createRow(i, this));
-                    if (typeof p_end === 'number' && i === p_end) break;
-                }
-            } else if (Array.isArray(p_index)) {
-                for(var i = 0; i < p_index.length; i++) {
-                    idx = p_index[i];
-                    if (typeof idx === 'number' && typeof this.rows[idx] !== 'undefined') {
-                        // entity.rows.add(this.rows[idx]);
-                        entity.rows.add(createRow(idx, this));
-                    }
-                }
-            }
+        //     // 4.리턴 MetaEntity 의 MetaRow 구성 : 참조형
+        //     if (typeof p_index === 'number') {
+        //         for(var i = p_index; i < this.rows.count; i++) {
+        //             // entity.rows.add(this.rows[idx]);
+        //             entity.rows.add(createRow(i, this));
+        //             if (typeof p_end === 'number' && i === p_end) break;
+        //         }
+        //     } else if (Array.isArray(p_index)) {
+        //         for(var i = 0; i < p_index.length; i++) {
+        //             idx = p_index[i];
+        //             if (typeof idx === 'number' && typeof this.rows[idx] !== 'undefined') {
+        //                 // entity.rows.add(this.rows[idx]);
+        //                 entity.rows.add(createRow(idx, this));
+        //             }
+        //         }
+        //     }
             
-            return entity;
+        //     return entity;
 
-            /** @inner row 항목을 재구성하여 생성 (내부 함수) */
-            function createRow(rowIdx, orgEntity) {
-                var row = entity.newRow();
-                var i_name;
+        //     /** @inner row 항목을 재구성하여 생성 (내부 함수) */
+        //     function createRow(rowIdx, orgEntity) {
+        //         var row = entity.newRow();
+        //         var i_name;
 
-                for (var i = 0; entity.columns.count > i ; i++) {
-                    i_name = entity.columns[i].name;
-                    if (typeof row[i_name] !== 'undefined' && typeof orgEntity.rows[rowIdx][i_name] !== 'undefined') {
-                        row[i_name] = orgEntity.rows[rowIdx][i_name];
-                    }
-                }
-                return row;
+        //         for (var i = 0; entity.columns.count > i ; i++) {
+        //             i_name = entity.columns[i].name;
+        //             if (typeof row[i_name] !== 'undefined' && typeof orgEntity.rows[rowIdx][i_name] !== 'undefined') {
+        //                 row[i_name] = orgEntity.rows[rowIdx][i_name];
+        //             }
+        //         }
+        //         return row;
+        //     }
+        // };
+
+        MetaEntity.prototype.select  = function(p_filter, p_args) {
+            var args = Array.prototype.slice.call(arguments);
+            var _this = this;
+            var MetaView                    = require('./meta-view').MetaView;
+            var view = new MetaView('select', this);
+            var items = [];
+            var callback = null;
+            var columnName;
+            var orignal = this.clone();
+
+            // 매개변수 구성
+            if (typeof p_filter === 'function') {
+                callback = p_filter;
+                if (Array.isArray(p_args)) items = p_args;
+                else if (args.length > 1) items = args.splice(1);
+            } else if (typeof p_filter === 'string') {
+                items = args;
+            } else if (Array.isArray(p_filter)) {
+                items = p_filter;
             }
+
+            return this._buildEntity(view, callback, items);
+
+            // function createView(view, p_callback, p_items) {
+            //     var orignal = _this.clone();
+            //     var columnName;
+
+            //     // var MetaView                    = require('./meta-view').MetaView;
+                
+            //     // view 컬럼 구성
+            //     if (p_items.length === 0) {
+            //         for (var i = 0; i < _this.columns.count; i++) {
+            //             columnName = _this.columns[i].name;
+            //             view.columns.add(columnName);  // 참조로 등록
+            //         }
+            //     } else {
+            //         for (var i = 0; i < p_items.length; i++) {
+            //             columnName = p_items[i];
+            //             if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
+            //             if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
+            //             view.columns.add(columnName);  // 참조로 등록
+            //         }
+            //     }
+
+            //     // row 등록
+            //     for (var i = 0; i < orignal.rows.count; i++) {
+            //         if (!p_callback || (typeof p_callback === 'function' && p_callback.call(_this, orignal.rows[i], i, view))) {
+            //             view.rows.add(createRow(orignal.rows[i]));
+            //         } 
+            //     }
+
+            //     return view;
+
+            //     function createRow(p_row) {
+            //         var alias, newRow;
+    
+            //         newRow = view.newRow();
+            //         for (var ii = 0; ii < view.columns.count; ii++) {
+            //             alias = view.columns[ii].alias;
+            //             if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
+            //             newRow[alias] = p_row[alias];
+            //         }
+            //         return newRow;
+            //     }    
+            // }
         };
-
         
         // MetaEntity.prototype.select  = function(p_filter, p_arg) {
             

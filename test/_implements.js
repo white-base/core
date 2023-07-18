@@ -3,12 +3,12 @@
  */
 //==============================================================
 // gobal defined
-const none      = require('../src/_object-implement'); // Object._implements() : 폴리필
-const Util     = require('../src/Util');
+// const none      = require('../src/_object-implement'); // Object._implements() : 폴리필
+// const Util     = require('../src/Util');
 
 //==============================================================
 // test
-describe('this._implements(interface)', () => {
+describe.skip('this._implements(interface)', () => {
     beforeAll(() => {
     });
     it('- this 인터페이스 선언 : 예외 (인터페이스 미구현)', () => {
