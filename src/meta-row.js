@@ -146,6 +146,14 @@
             }
             return clone;
         };
+        // MetaRow.prototype.clone  = function() {
+        //     var clone = new MetaRow(this.entity);
+
+        //     for (var i = 0; i < this.count; i++) {
+        //         clone[i] = this[i];
+        //     }
+        //     return clone;
+        // };
         
         MetaRow.prototype.acceptChanges  = function() {
             console.log('구현해야함');  // COVER:

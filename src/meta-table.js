@@ -49,7 +49,7 @@
          * @extends _L.Meta.Entity.MetaEntity
          * @param {*} p_name 
          */
-        function MetaTable(p_name, p_metaSet) {
+        function MetaTable(p_name) {
             _super.call(this, p_name);
 
             var columns = new MetaTableColumnCollection(this);
@@ -68,7 +68,8 @@
                 configurable: false,
                 enumerable: true
             });
-            
+
+            // if (p_metaSet) this.metaSet = p_metaSet;
         }
         Util.inherits(MetaTable, _super);
 

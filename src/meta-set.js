@@ -105,7 +105,16 @@
         Util.inherits(MetaSet, _super);
 
         MetaSet.prototype.clone  = function() {
-            console.log('구현해야함');  // COVER:
+            var clone = new MetaSet(this.name);
+            
+            for(var i = 0; i < this.tables.count; i++) {
+                clone.tables.add(this.tables[i].clone());
+            }
+
+            for(var i = 0; i < this.views.count; i++) {
+                clone.views.add(this.views[i].clone());
+            }
+            return clone;
         };
 
         MetaSet.prototype.load  = function() {
