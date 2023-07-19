@@ -24,11 +24,11 @@ const {IPartControl}          = require('../src/i-control-part');
 
 //==============================================================
 // test
-describe("< MetaTable >", () => {
+describe("[target: i-* ]", () => {
     beforeAll(() => {
         // jest.resetModules();
     });
-    describe("< meta >", () => {
+    describe("IObject :: 인터페이스", () => {
         it("- IObject() : 생성 및 상속 ", () => {
             class SubClass extends IObject {}
             const s = new SubClass();
@@ -41,6 +41,9 @@ describe("< MetaTable >", () => {
             expect(()=> i.getTypes()).toThrow(/Abstract/);
             expect(()=> i.instanceOf()).toThrow(/Abstract/);
         });
+
+    });
+    describe("IMarshal :: 인터페이스", () => {
         it("- IMarshal() : 생성 및 상속 ", () => {
             class SubClass extends IMarshal {}
             const s = new SubClass();
@@ -58,21 +61,7 @@ describe("< MetaTable >", () => {
             expect(()=> i.getGuid()).toThrow(/Abstract/);
         });
     });
-    describe("< control >", () => {
-        it("- IAllControl() : 생성 및 상속 ", () => {
-            class SubClass extends IAllControl {}
-            const s = new SubClass();
-            const i = new IAllControl();
-
-            // extends
-            expect(()=> s.clone()).toThrow(/Abstract/);
-            expect(()=> s.load()).toThrow(/Abstract/);
-            expect(()=> s.clear()).toThrow(/Abstract/);
-            // create
-            expect(()=> i.clone()).toThrow(/Abstract/);
-            expect(()=> i.load()).toThrow(/Abstract/);
-            expect(()=> i.clear()).toThrow(/Abstract/);
-        });
+    describe("IExportControl :: 인터페이스", () => {
         it("- IExportControl() : 생성 및 상속 ", () => {
             class SubClass extends IExportControl {}
             const s = new SubClass();
@@ -83,6 +72,8 @@ describe("< MetaTable >", () => {
             // create
             expect(()=> i.write()).toThrow(/Abstract/);
         });
+    });
+    describe("IGroupControl :: 인터페이스", () => {
         it("- IGroupControl() : 생성 및 상속 ", () => {
             class SubClass extends IGroupControl {}
             const s = new SubClass();
@@ -93,6 +84,8 @@ describe("< MetaTable >", () => {
             // create
             expect(()=> i.copy()).toThrow(/Abstract/);
         });
+    });
+    describe("IImportControl :: 인터페이스", () => {
         it("- IImportControl() : 생성 및 상속 ", () => {
             class SubClass extends IImportControl {}
             const s = new SubClass();
@@ -103,6 +96,8 @@ describe("< MetaTable >", () => {
             // create
             expect(()=> i.read()).toThrow(/Abstract/);
         });
+    });
+    describe("ILookupControl :: 인터페이스", () => {
         it("- ILookupControl() : 생성 및 상속 ", () => {
             class SubClass extends ILookupControl {}
             const s = new SubClass();
@@ -113,6 +108,8 @@ describe("< MetaTable >", () => {
             // create
             expect(()=> i.contains()).toThrow(/Abstract/);
         });
+    });
+    describe("IPartControl :: 인터페이스", () => {
         it("- IPartControl() : 생성 및 상속 ", () => {
             class SubClass extends IPartControl {}
             const s = new SubClass();
@@ -125,6 +122,8 @@ describe("< MetaTable >", () => {
             expect(()=> i.add()).toThrow(/Abstract/);
             expect(()=> i.remove()).toThrow(/Abstract/);
         });
+    });
+    describe("IAllControl :: 인터페이스", () => {
         it("- IAllControl() : 생성 및 상속 ", () => {
             class SubClass extends IAllControl {}
             const s = new SubClass();
@@ -139,6 +138,8 @@ describe("< MetaTable >", () => {
             expect(()=> i.load()).toThrow(/Abstract/);
             expect(()=> i.clear()).toThrow(/Abstract/);
         });
+    });
+    describe("ISchemaControl :: 인터페이스", () => {
         it("- ISchemaControl() : 생성 및 상속 ", () => {
             class SubClass extends ISchemaControl {}
             const s = new SubClass();
@@ -156,7 +157,9 @@ describe("< MetaTable >", () => {
             expect(()=> i.writeSchema()).toThrow(/Abstract/);
         });
     });
-    describe("< collection >", () => {
+
+    // describe("< collection >", () => {
+    describe("ICollection :: 인터페이스", () => {
         it("- ICollection() : 생성 및 상속 ", () => {
             class SubClass extends ICollection {}
             const s = new SubClass();
@@ -179,6 +182,8 @@ describe("< MetaTable >", () => {
             expect(()=> i.indexOf()).toThrow(/Abstract/);
             expect(()=> i.exist()).toThrow(/Abstract/);
         });
+    });
+    describe("IPropertyCollection :: 인터페이스", () => {
         it("- IPropertyCollection() : 생성 및 상속 ", () => {
             class SubClass extends IPropertyCollection {}
             const s = new SubClass();
@@ -208,6 +213,7 @@ describe("< MetaTable >", () => {
             // expect(()=> i.indexOfProp()).toThrow(/Abstract/);
         });
     });
+    // });
     
     // describe("< setValue(row) >", () => {
     //     it("-  ", () => {

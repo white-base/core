@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("< MetaObject >", () => {
+describe("load: meta-object.js <MetaObject>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -34,7 +34,7 @@ describe("< MetaObject >", () => {
     });
     
 });
-describe("< MetaElement >", () => {
+describe("load: meta-element.js <MetaElement>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;

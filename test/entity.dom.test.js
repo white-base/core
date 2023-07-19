@@ -7,11 +7,12 @@
 
 //==============================================================
 // test
-describe("< MetaEntity >", () => {
+
+describe("load: meta-entity.js <MetaEntity>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
-     });
+        });
     it("- 예외 : 전체 로딩 안할 때", () => {
         expect(() => require('../src/meta-entity')).toThrow(/module load/);
     });
@@ -152,12 +153,11 @@ describe("< MetaEntity >", () => {
     });
     
 });
-
-describe("< MetaTable >", () => {
+describe("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
-     });
+        });
     it("- 예외 : 전체 로딩 안할 때", () => {
         expect(() => require('../src/meta-table')).toThrow(/module load/);
     });
@@ -254,13 +254,11 @@ describe("< MetaTable >", () => {
         expect(global._L.Meta.Entity.MetaTable).toBeDefined();
     });
 });
-
-
-describe("< MetaView >", () => {
+describe("load: meta-view.js <MetaView, MetaViewCollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
-     });
+        });
     it("- 예외 : 전체 로딩 안할 때", () => {
         expect(() => require('../src/meta-view')).toThrow(/module load/);
     });
@@ -377,11 +375,11 @@ describe("< MetaView >", () => {
         expect(global._L.Meta.Entity.MetaView).toBeDefined();
     });
 });
-describe("< MetaSet >", () => {
+describe("load: meta-set.js <MetaSet>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
-     });
+        });
     it("- 예외 : 전체 로딩 안할 때", () => {
         expect(() => require('../src/meta-set')).toThrow(/module load/);
     });
@@ -523,3 +521,5 @@ describe("< MetaSet >", () => {
         expect(global._L.Meta.Entity.MetaSet).toBeDefined();
     });
 });
+
+

@@ -12,51 +12,7 @@
 
 //==============================================================
 // test
-describe("< Util.type >", () => {
-    beforeEach(() => {
-        jest.resetModules();
-        global._L = null;
-     });
-    it("- namespace : util-type.js ", () => {
-        require('../src/util-type');
-        
-        expect(global._L.Common.Util.getAllProperties).toBeDefined();
-        expect(global._L.Common.Util.checkType).toBeDefined();
-        expect(global._L.Common.Util.checkUnionType).toBeDefined();
-        expect(global._L.Common.Util.validType).toBeDefined();
-        expect(global._L.Common.Util.validUnionType).toBeDefined();
-        expect(global._L.Common.Util.getTypeMap).toBeDefined();
-    });
-});
-
-describe("< util.js >", () => {
-    beforeEach(() => {
-        jest.resetModules();
-        global._L = null;
-     });
-    it("- namespace : util.js ", () => {
-        require('../src/util-type');
-        require('../src/util');
-        
-        // util-type.js
-        expect(global._L.Common.Util.getAllProperties).toBeDefined();
-        expect(global._L.Common.Util.checkType).toBeDefined();
-        expect(global._L.Common.Util.checkUnionType).toBeDefined();
-        expect(global._L.Common.Util.validType).toBeDefined();
-        expect(global._L.Common.Util.validUnionType).toBeDefined();
-        expect(global._L.Common.Util.getTypeMap).toBeDefined();
-        /// util.js
-        expect(global._L.Common.Util.inherits).toBeDefined();
-        expect(global._L.Common.Util.getArrayDepth).toBeDefined();
-        expect(global._L.Common.Util.createGuid).toBeDefined();
-        expect(global._L.Common.Util.implements).toBeDefined();
-    });
-    it("- 예외 : util-type.js 로딩이 인된경우", () => {
-        expect(() => require('../src/util')).toThrow(/module load fail/);
-    });
-});
-
-describe("< IObject >", () => {
+describe("load: i-object.js <IObject >", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -69,7 +25,7 @@ describe("< IObject >", () => {
     });
 });
 
-describe("< IMarshal >", () => {
+describe("load: i-marshal.js <IMarshal>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -92,7 +48,7 @@ describe("< IMarshal >", () => {
         expect(() => require('../src/i-marshal')).toThrow(/IObject/);
     });
 });
-describe("< IPartControl >", () => {
+describe("load: i-control-part.js <IPartControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -104,7 +60,7 @@ describe("< IPartControl >", () => {
         expect(global._L.Interface.IPartControl).toBeDefined();
     });
 });
-describe("< ILookupControl >", () => {
+describe("load: i-control-lookup.js <ILookupControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -116,7 +72,7 @@ describe("< ILookupControl >", () => {
         expect(global._L.Interface.ILookupControl).toBeDefined();
     });
 });
-describe("< IImportControl >", () => {
+describe("load: i-control-import.js <IImportControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -128,7 +84,7 @@ describe("< IImportControl >", () => {
         expect(global._L.Interface.IImportControl).toBeDefined();
     });
 });
-describe("< IGroupControl >", () => {
+describe("load: i-control-group.js <IGroupControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -140,7 +96,7 @@ describe("< IGroupControl >", () => {
         expect(global._L.Interface.IGroupControl).toBeDefined();
     });
 });
-describe("< IExportControl >", () => {
+describe("load: i-control-export.js <IExportControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -152,7 +108,7 @@ describe("< IExportControl >", () => {
         expect(global._L.Interface.IExportControl).toBeDefined();
     });
 });
-describe("< IAllControl >", () => {
+describe("load: i-control-all.js <IAllControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -164,7 +120,7 @@ describe("< IAllControl >", () => {
         expect(global._L.Interface.IAllControl).toBeDefined();
     });
 });
-describe("< ICollection >", () => {
+describe("load: i-collection.js <ICollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -201,7 +157,7 @@ describe("< ICollection >", () => {
     });
 });
 
-describe("< IPropertyCollection >", () => {
+describe("load: i-collection-property.js <IPropertyCollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;

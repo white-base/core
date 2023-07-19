@@ -134,26 +134,9 @@ describe("< MetaSet >", () => {
         expect(set2.views['V1'].columns['i1']).toBeDefined();
         expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
         expect(set2 === set1).toBe(false);
-        // // table1
-        // expect(table1.name).toBe('T1');
-        // expect(table1.columns.count).toBe(2);
-        // expect(table1.rows.count).toBe(1);
-        // expect(table1.columns['i2'].caption).toBe('C1');
-        // expect(table1.rows[0]['i1']).toBe('R1');
-        // expect(table1.rows[0]['i2']).toBe('R2');
-        // // table2
-        // expect(table2.name).toBe('T1');
-        // expect(table2.columns.count).toBe(2);
-        // expect(table2.rows.count).toBe(1);
-        // expect(table2.columns['i2'].caption).toBe('C1');
-        // expect(table2.rows[0]['i1']).toBe('R1');
-        // expect(table2.rows[0]['i2']).toBe('R2');
-        // // 비교
-        // expect(table1 === table2).toBe(false);
-        // expect(table1.columns === table2.columns).toBe(false);
-        // expect(table1.columns['i1'] === table2.columns['i1']).toBe(false);
-        // expect(table1.columns['i2'] === table2.columns['i2']).toBe(false);
-        // expect(table1.rows[0] === table2.rows[0]).toBe(false);
+        // 비교
+        expect(set1.tables['T1'] == set2.tables['T1']).toBe(false);
+        expect(set1.views['V1'] == set2.tables['V1']).toBe(false);
     });
 });
 

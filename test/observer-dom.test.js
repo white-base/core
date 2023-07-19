@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("< Util.type >", () => {
+describe("load: observer.js <Observer>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;

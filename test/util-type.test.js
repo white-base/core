@@ -8,7 +8,7 @@ const { checkUnionType, validType, validUnionType }     = require('../src/util-t
 
 //==============================================================
 // test
-describe('< util-type.* >', () => {
+describe("[target: util-type.js.js]", () => {
     beforeAll(() => {
         // 경고 모킹 = 숨감
         // global.console.warn = jest.fn();
@@ -425,7 +425,7 @@ describe('< util-type.* >', () => {
     
     
 
-    describe('< checkType() : or 조건 >', () => {
+    describe('checkType() <or 조건>', () => {
         it('- 객체 타입 ', () => {
             var Func1 = function() { this.aa = String };
             var Func2 = function() { this.bb = Number };
@@ -491,7 +491,7 @@ describe('< util-type.* >', () => {
         });
         
     });
-    describe('< checkUnionType() : and 조건 >', () => {
+    describe('checkUnionType() <and 조건>', () => {
         it('- 객체 타입 ', () => {
             var Func1 = function() { this.aa = String };
             var Func2 = function() { this.bb = Number };

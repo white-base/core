@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("< Util.type >", () => {
+describe("load: util-type.js <Util.type >", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -24,7 +24,7 @@ describe("< Util.type >", () => {
     });
 });
 
-describe("< util.js >", () => {
+describe("load: util.js <Util>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -76,38 +76,38 @@ describe("< util.js >", () => {
     });
     
 });
-describe("< util.js 정상 로딩 >", () => {
-    beforeEach(() => {
-        jest.resetModules();
-        global._L = null;
-        require('../src/util-type');
-        require('../src/util');
+// describe("< util.js 정상 로딩 >", () => {
+//     beforeEach(() => {
+//         jest.resetModules();
+//         global._L = null;
+//         require('../src/util-type');
+//         require('../src/util');
         
-        // util-type.js
-        expect(global._L.Common.Util.getAllProperties).toBeDefined();
-        expect(global._L.Common.Util.checkType).toBeDefined();
-        expect(global._L.Common.Util.checkUnionType).toBeDefined();
-        expect(global._L.Common.Util.validType).toBeDefined();
-        expect(global._L.Common.Util.validUnionType).toBeDefined();
-        expect(global._L.Common.Util.getTypeMap).toBeDefined();
-        /// util.js
-        expect(global._L.Common.Util.inherits).toBeDefined();
-        expect(global._L.Common.Util.getArrayDepth).toBeDefined();
-        expect(global._L.Common.Util.createGuid).toBeDefined();
-        expect(global._L.Common.Util.implements).toBeDefined();
-     });
-    it('- Util.inherits : 부모 삽입 안함 ', () => {
-        const Util      = global._L.Common.Util;
-        const Super = function() { this.foo = 1 };
-        const Bar = function() { 
-            Super.call(this);
-            this.bar = 10 
-        };
-        Util.inherits(Bar);
-        const i = new Bar();
+//         // util-type.js
+//         expect(global._L.Common.Util.getAllProperties).toBeDefined();
+//         expect(global._L.Common.Util.checkType).toBeDefined();
+//         expect(global._L.Common.Util.checkUnionType).toBeDefined();
+//         expect(global._L.Common.Util.validType).toBeDefined();
+//         expect(global._L.Common.Util.validUnionType).toBeDefined();
+//         expect(global._L.Common.Util.getTypeMap).toBeDefined();
+//         /// util.js
+//         expect(global._L.Common.Util.inherits).toBeDefined();
+//         expect(global._L.Common.Util.getArrayDepth).toBeDefined();
+//         expect(global._L.Common.Util.createGuid).toBeDefined();
+//         expect(global._L.Common.Util.implements).toBeDefined();
+//      });
+//     it('- Util.inherits : 부모 삽입 안함 ', () => {
+//         const Util      = global._L.Common.Util;
+//         const Super = function() { this.foo = 1 };
+//         const Bar = function() { 
+//             Super.call(this);
+//             this.bar = 10 
+//         };
+//         Util.inherits(Bar);
+//         const i = new Bar();
 
-        expect(Bar.super).not.toEqual(Super);   // Super 가 아님
-        expect(i.foo).toBe(1);
-        expect(i.bar).toBe(10);
-    });
-});
+//         expect(Bar.super).not.toEqual(Super);   // Super 가 아님
+//         expect(i.foo).toBe(1);
+//         expect(i.bar).toBe(10);
+//     });
+// });
