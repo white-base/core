@@ -389,8 +389,8 @@ describe("load: meta-set.js <MetaSet>", () => {
     it("- 예외 : ISchemaControl 로딩이 안 된 경우", () => {
         require('../src/util-type');
         require('../src/util');
-        // require('../src/i-control-all');
-        // require('../src/i-control-part');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
 
         expect(() => require('../src/meta-set')).toThrow(/ISchemaControl.*load/);
     });
@@ -429,6 +429,23 @@ describe("load: meta-set.js <MetaSet>", () => {
         require('../src/meta-object');
 
         expect(() => require('../src/meta-set')).toThrow(/MetaElement.*load/);
+    });
+    it("- 예외 : MetaEntity 로딩이 안 된 경우", () => {
+        require('../src/util-type');
+        require('../src/util');
+        require('../src/observer');
+        require('../src/error-custom');
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-control-all');
+        require('../src/i-control-import');
+        require('../src/i-control-export');
+        require('../src/i-control-schema');
+        require('../src/i-transaction');
+        require('../src/meta-object');
+        require('../src/meta-element');
+
+        expect(() => require('../src/meta-set')).toThrow(/MetaEntity.*load/);
     });
     it("- 예외 : MetaTableCollection 로딩이 안 된 경우", () => {
         require('../src/util-type');

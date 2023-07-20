@@ -129,24 +129,152 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views['V1'] == set2.tables['V1']).toBe(false);
             });
         });
-        describe.skip("this.merge() <병합>", () => {
-            it("- TODO: ", () => {
-            });
-        });
-        describe.skip("this.read() <가져오기>", () => {
-            it("- TODO: ", () => {
+        // describe.skip("this.merge() <병합>", () => {
+        //     it("- TODO: ", () => {
+        //     });
+        // });
+        describe("this.read(json, opt) <가져오기>", () => {
+            it("- JSON 가져오기 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+
+                // table
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
+                // view
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.views['V1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
             });
         });
         describe.skip("this.write() <내보내기>", () => {
             it("- TODO: ", () => {
             });
         });
-        describe.skip("this.readSchema() <스키마 가져오기>", () => {
+        describe("this.readSchema() <스키마 가져오기>", () => {
+            it("- readSchema() : 기본 로딩 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.readSchema(json1);
+
+                // table
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.tables['T1'].rows.count).toBe(0);
+                // view
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.views['V1'].rows.count).toBe(0);
+            });
+            it("- 예외 : 기존에 중복 테이블/뷰가 존재할 경우 ", () => {
+                // TODO:
+            });
+        });
+        describe.skip("this.writeSchema() <스키마 내보내기>", () => {
             it("- TODO: ", () => {
             });
         });
-        describe.skip("this.readSchema() <스키마 내보내기>", () => {
-            it("- TODO: ", () => {
+        describe("this.readData() <데이터 가져오기>", () => {
+            it("- readData() : 기본 로딩", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.readSchema(json1);
+                set1.readData(json1);
+
+                // table
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
+                // view
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.views['V1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+            });
+            it("- 테이블이 존재하지 않을 때", () => {
+                // TODO:
             });
         });
         describe.skip("this.acceptChanges() <커밋>", () => {

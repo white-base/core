@@ -53,7 +53,7 @@
             _super.call(this, p_name);
 
             var columns = new MetaTableColumnCollection(this);
-            
+            var tableName = p_name;
             /**
              * 엔티티의 아이템(속성) 컬렉션
              * @member {MetaTableColumnCollection} _L.Meta.Entity.MetaTable#columns
@@ -65,6 +65,20 @@
                 //     if (!(newValue instanceof MetaTableColumnCollection)) throw new Error('Only [columns] type "MetaTableColumnCollection" can be added');
                 //     columns = newValue;
                 // },
+                configurable: false,
+                enumerable: true
+            });
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {string} _L.Meta.Entity.MetaTable#tableName
+             */
+            Object.defineProperty(this, 'tableName', 
+            {
+                get: function() { return tableName; },
+                set: function(newValue) { 
+                    if (typeof newValue !== 'string') throw new Error('Only [tableName] type "string" can be added');
+                    tableName = newValue;
+                },
                 configurable: false,
                 enumerable: true
             });

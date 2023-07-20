@@ -1,7 +1,7 @@
 
 // 부울
 expect(n).toBeNull();               // null
-expect(n).toBeDefined();            // undefined
+expect(n).toBeDefined();            // undefined 의 반대
 expect(n).not.toBeUndefined();      // toBeDefined의 반대이다
 expect(n).not.toBeTruthy();         // 참으로 취급하는 모든 항목과 일치합니다.
 expect(n).toBeFalsy();              // 거짓으로 취급하는 모든 것과 일치합니다

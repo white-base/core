@@ -1339,6 +1339,25 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.rows[2]['i4']).toBe('R400');
             });
         });
+        describe("this.writeSchema(): obj <내보내기>", () => {
+            it("- 스키마 내보내기 (columns) ", () => {
+                var table1 = new MetaTable('T1');
+                var json1 = { 
+                    columns: {
+                        i1: { caption: 'C1'},
+                        i2: { caption: 'C2'},
+                    },
+                    rows: [
+                        { i1: 'R1', i2: 'R2' },
+                        { i1: 'R10', i2: 'R20' },
+                    ]
+                };
+                table1.load(json1, 3);
+                const obj = table1.writeSchema();
+
+                expect(obj.tableName).toBe('T1');
+            });
+        });
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- getTypes() : array<function> ", () => {
                 const c = new MetaTable();

@@ -960,8 +960,10 @@
             
             entity = p_json['entity'] || p_json['table'] || p_json;
             columns = entity['columns'];
+            
+            if (entity['tableName']) this.tableName = entity['tableName'];
             if (columns) {
-                for (const key in columns) {
+                for (var key in columns) {
                     if (Object.hasOwnProperty.call(columns, key)) {
                         if (this.rows.count > 0 ) throw new Error('rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                         var prop = columns[key];
@@ -974,7 +976,7 @@
             if (p_isReadRow === true) {
                 rows = entity['rows'];
                 if (Array.isArray(rows) && rows.length > 0)
-                for (const key in rows[0]) {    // rows[0] 기준
+                for (var key in rows[0]) {    // rows[0] 기준
                     if (Object.hasOwnProperty.call(rows[0], key)) {
                         var prop = rows[0][key];
                         if (!this.columns.exist(key)) {
@@ -987,7 +989,18 @@
         };
 
         MetaEntity.prototype.writeSchema  = function() {
-            console.log('구현해야함');  // COVER:
+            var obj = {
+                columns: {}
+            };
+
+            if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
+            if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
+
+            for(var i = 0; i < this.columns.count; i++) {
+                var key = this.columns.keyOf(i);
+                obj.columns[key] = this.columns[i].getObject();
+            }
+            return obj;
         };
 
         /**
