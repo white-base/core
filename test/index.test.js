@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const index   = require('../');
+const index   = require('..');
 
 //==============================================================
 // test
@@ -107,7 +107,8 @@ describe("[target: index.js]", () => {
     describe(`MetaEntity, 
     MetaView, MetaViewCollection, 
     MetaTable, MetaTableCollection,
-    MetaColumn, MetaColumnCollection, MetaViewColumnCollection, MetaTableColumnCollection,
+    MetaColumn, MetaColumnCollection, 
+    MetaViewColumnCollection, MetaTableColumnCollection,
     MetaRow, MetaRowCollection`, () => {
         it('- _L.* ', () => {
             expect(typeof index.MetaEntity).toBe('function');
