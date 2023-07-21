@@ -52,24 +52,11 @@
         function MetaTable(p_name) {
             _super.call(this, p_name);
 
+            var tableName;
             var columns = new MetaTableColumnCollection(this);
-            var tableName = p_name;
+
             /**
-             * 엔티티의 아이템(속성) 컬렉션
-             * @member {MetaTableColumnCollection} _L.Meta.Entity.MetaTable#columns
-             */
-            Object.defineProperty(this, 'columns', 
-            {
-                get: function() { return columns; },
-                // set: function(newValue) { 
-                //     if (!(newValue instanceof MetaTableColumnCollection)) throw new Error('Only [columns] type "MetaTableColumnCollection" can be added');
-                //     columns = newValue;
-                // },
-                configurable: false,
-                enumerable: true
-            });
-            /**
-             * 엔티티의 아이템(속성) 컬렉션
+             * 테이블 이름
              * @member {string} _L.Meta.Entity.MetaTable#tableName
              */
             Object.defineProperty(this, 'tableName', 
@@ -83,7 +70,22 @@
                 enumerable: true
             });
 
-            // if (p_metaSet) this.metaSet = p_metaSet;
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {MetaTableColumnCollection} _L.Meta.Entity.MetaTable#columns
+             */
+            Object.defineProperty(this, 'columns', 
+            {
+                get: function() { return columns; },
+                // set: function(newValue) { 
+                //     if (!(newValue instanceof MetaTableColumnCollection)) throw new Error('Only [columns] type "MetaTableColumnCollection" can be added');
+                //     columns = newValue;
+                // },
+                configurable: false,
+                enumerable: true
+            });            
+
+            this.tableName  = p_name || '';
         }
         Util.inherits(MetaTable, _super);
 

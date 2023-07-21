@@ -57,6 +57,7 @@
         function MetaView(p_name, p_baseEntity) {
             _super.call(this, p_name);
 
+            var viewName;
             var columns;
             var refCollection;
 
@@ -64,6 +65,21 @@
                 refCollection = p_baseEntity.columns;
             }
             
+            /**
+             * 테이블 이름
+             * @member {string} _L.Meta.Entity.MetaView#viewName
+             */
+            Object.defineProperty(this, 'viewName', 
+            {
+                get: function() { return viewName; },
+                set: function(newValue) { 
+                    if (typeof newValue !== 'string') throw new Error('Only [viewName] type "string" can be added');
+                    viewName = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
+
             /**
              * 엔티티의 아이템(속성) 컬렉션
              * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#columns
@@ -79,10 +95,9 @@
                 enumerable: true
             });
            
-            this._refEntity = p_baseEntity;     // REVIEW: 필요 유무 검토
-            
-            this._refEntities = [];
-
+            this.tableName      = p_name || '';
+            this._refEntity     = p_baseEntity;     // REVIEW: 필요 유무 검토
+            this._refEntities   = [];
             columns = new MetaViewColumnCollection(this, refCollection);
         }
         Util.inherits(MetaView, _super);

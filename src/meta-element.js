@@ -51,16 +51,19 @@
         function MetaElement(p_name) {
             _super.call(this);
             
+            var name;   // TODO:  metaName 로 변경
             var __guid;
-            var _name;
 
-            /** @member {Array} _L.Meta.MetaElement#name 속성들값 */
-            Object.defineProperty(this, 'name', 
+            /**
+             * 메타 이름
+             * @member {string} _L.Meta.MetaElement#name
+             */
+            Object.defineProperty(this, 'name',
             {
-                get: function() { return _name; },
+                get: function() { return name; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'string')  throw new Error('Only [name] type "string" can be added');   // COVER: 2
-                    _name = newValue;
+                    name = newValue;
                 },
                 configurable: false,
                 enumerable: true

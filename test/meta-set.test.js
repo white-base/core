@@ -228,6 +228,9 @@ describe("[target: meta-set.js]", () => {
         describe.skip("this.writeSchema() <스키마 내보내기>", () => {
             it("- TODO: ", () => {
             });
+            it("- 뷰 출력의 경우, 참조가 외부에 있는 경우, 복제 ", () => {
+                // TODO:
+            });
         });
         describe("this.readData() <데이터 가져오기>", () => {
             it("- readData() : 기본 로딩", () => {

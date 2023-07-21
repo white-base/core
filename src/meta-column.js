@@ -60,6 +60,7 @@
 
             var __value       = null;
             var _event        = new Observer(this);
+            var columnName;
             var entity;
             var type          = 'string';
             var size          = 0;
@@ -84,6 +85,21 @@
 
             /** @private */
             // this._event    = new Observer(this, this);
+
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {string} _L.Meta.Entity.MetaColumn#columnName
+             */
+            Object.defineProperty(this, 'columnName', 
+            {
+                get: function() { return columnName; },
+                set: function(newValue) { 
+                    if (typeof newValue !== 'string') throw new Error('Only [columnName] type "string" can be added');
+                    columnName = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
 
             /**
              * value 내부값 (필터 및 getter/setter 무시)
@@ -461,6 +477,8 @@
             // } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
             //     this['value'] = p_property; // COVER:
             // }
+
+            this.columnName  = p_name || '';            
             if (p_property) this._load(p_property);
 
         }

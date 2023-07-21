@@ -70,8 +70,24 @@
         function MetaSet(p_name) {
             _super.call(this, p_name);
 
+            var setName;
             var tables = new MetaTableCollection(this);
             var views  = new MetaViewCollection(this);
+
+            /**
+             * 테이블 이름
+             * @member {string} _L.Meta.Entity.MetaSet#setName
+             */
+            Object.defineProperty(this, 'setName', 
+            {
+                get: function() { return setName; },
+                set: function(newValue) { 
+                    if (typeof newValue !== 'string') throw new Error('Only [setName] type "string" can be added');
+                    setName = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
 
             /**
              * 메타 테이블 컬렉션
@@ -103,6 +119,8 @@
                 enumerable: true
             });
 
+            this.setName  = p_name || '';
+            
             // this._implements(ISchemaControl, IAllControl);
             Util.implements(this, ISchemaControl, IAllControl, ITransaction);
         }
@@ -133,7 +151,7 @@
 
         MetaSet.prototype.clone  = function() {
             var clone = new MetaSet(this.name);
-            
+
             for(var i = 0; i < this.tables.count; i++) {
                 clone.tables.add(this.tables[i].clone());
             }
