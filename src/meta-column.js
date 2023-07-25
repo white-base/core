@@ -433,7 +433,7 @@
              */
              Object.defineProperty(this, 'alias', 
              {
-                 get: function() { return typeof alias === 'string' ? alias : this.name; },
+                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
                  set: function(newValue) { 
                     var entity = this.entity;
                     if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
@@ -536,7 +536,8 @@
             }
 
             if (this.entity) clone['entity']            = entity;
-            if (this.alias !== this.name) clone['alias'] = this.alias;
+            if (this.alias !== this.columnName) clone['alias'] = this.alias;
+            if (this.columnName) clone['columnName']    = this.columnName;
             if (this.type) clone['type']                = this.type;
             if (this.size) clone['size']                = this.size;
             if (this.default) clone['default']          = this.default;
@@ -738,7 +739,7 @@
          */
         MetaColumnCollection.prototype.contains = function(p_elem) {
             if (p_elem instanceof MetaColumn) {
-                return this.indexOf(p_elem.name, 1) > -1;
+                return this.indexOf(p_elem.columnName, 1) > -1;
             } else {
                 return _super.prototype.contains.call(this, p_elem);
             }
@@ -824,7 +825,7 @@
                 i_value = new this.columnType(i_name, this._owner);
             } else if (p_object instanceof this.columnType) {
                 // MetaTable 직접만 적용(참조형 아이템 소유 못함)
-                i_name  = p_object.name;
+                i_name  = p_object.columnName;
                 i_value = p_object.clone();
                 i_value.entity = this._owner;
             } else {
@@ -906,7 +907,7 @@
             if (p_object instanceof MetaColumn) {
                 // 아이템 소유자 설정
                 if (p_object.entity === null) p_object.entity = this._owner;
-                i_name = p_object.name;
+                i_name = p_object.columnName;
                 i_value = p_object;
             } else if (typeof p_object === 'string') {
                 i_name = p_object;

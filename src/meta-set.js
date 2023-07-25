@@ -150,7 +150,7 @@
         };
 
         MetaSet.prototype.clone  = function() {
-            var clone = new MetaSet(this.name);
+            var clone = new MetaSet(this.setName);
 
             for(var i = 0; i < this.tables.count; i++) {
                 clone.tables.add(this.tables[i].clone());

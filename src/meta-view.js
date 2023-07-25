@@ -95,7 +95,7 @@
                 enumerable: true
             });
            
-            this.tableName      = p_name || '';
+            this.viewName      = p_name || '';
             this._refEntity     = p_baseEntity;     // REVIEW: 필요 유무 검토
             this._refEntities   = [];
             columns = new MetaViewColumnCollection(this, refCollection);
@@ -128,7 +128,7 @@
          * @returns {*}
          */
         MetaView.prototype.clone  = function() {
-            var clone = new MetaView(this.name);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
+            var clone = new MetaView(this.viewName);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
 
             // 참조 복제 REVIEW::  필요성 검토 필요
             // for(var i = 0; i < this._refEntities.length; i++) {
@@ -193,7 +193,7 @@
             var items = [];
             var callback = null;
             var columnName;
-            var table = new MetaView(this.name, this);
+            var entity = new MetaView(this.ViewName, this);
             var orignal = this.clone();
 
             // 매개변수 구성
@@ -208,7 +208,7 @@
             }
 
             // return this._buildEntity(table, callback, items);
-            return this._buildEntity(table, callback, items).clone();
+            return this._buildEntity(entity, callback, items).clone();
         };
 
         
@@ -253,7 +253,7 @@
                 i_value.metaSet = this._owner;
             } else if (p_object instanceof MetaView) {
                 if (p_baseEntity) throw new Error(' MetaView 객체와 refEntity객체를 동시에 입력할 수 없습니다. !!');
-                i_name  = p_object.name;
+                i_name  = p_object.viewName;
                 i_value = p_object;
                 p_object.metaSet = this._owner;
             } else {

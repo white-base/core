@@ -582,7 +582,7 @@
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
                     clone = tarColumns[i].clone(this);
-                    clone.name = tarColumns[i].alias;
+                    clone.columnName = tarColumns[i].alias;
                     this.columns.add(clone);
                 }
                 // 로우 추가 (기준:idx)
@@ -937,8 +937,8 @@
 
             entity = p_json['entity']  || p_json['table'] || p_json;
 
-            if (opt % 2 === 1) this.readSchema(p_json, opt === 3 ? true : false); // opt: 1, 3
-            if (Math.floor(opt / 2) >= 1) this.readData(p_json); // opt: 2, 3
+            if (opt % 2 === 1) this.readSchema(entity, opt === 3 ? true : false); // opt: 1, 3
+            if (Math.floor(opt / 2) >= 1) this.readData(entity); // opt: 2, 3
         };
 
         MetaEntity.prototype.write  = function() {
@@ -955,13 +955,17 @@
             var entity = null;
             var columns, rows;
             var Column = this.columns.columnType;
+            var entityName;
 
             if (typeof entity !== 'object') throw new Error('Only [p_json] type "object" can be added');
             
             entity = p_json['entity'] || p_json['table'] || p_json;
             columns = entity['columns'];
             
-            if (entity['tableName']) this.tableName = entity['tableName'];
+            // table <-> view 서로 호환됨
+            if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
+            if (this.instanceOf('MetaTable') && entity['tableName']) this['tableName'] = entity['tableName'];
+
             if (columns) {
                 for (var key in columns) {
                     if (Object.hasOwnProperty.call(columns, key)) {

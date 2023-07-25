@@ -51,19 +51,19 @@
         function MetaElement(p_name) {
             _super.call(this);
             
-            var name;   // TODO:  metaName 로 변경
+            var metaName;
             var __guid;
 
             /**
              * 메타 이름
-             * @member {string} _L.Meta.MetaElement#name
+             * @member {string} _L.Meta.MetaElement#metaName
              */
-            Object.defineProperty(this, 'name',
+            Object.defineProperty(this, 'metaName',
             {
-                get: function() { return name; },
+                get: function() { return metaName; },
                 set: function(newValue) { 
-                    if (typeof newValue !== 'string')  throw new Error('Only [name] type "string" can be added');   // COVER: 2
-                    name = newValue;
+                    if (typeof newValue !== 'string')  throw new Error('Only [metaName] type "string" can be added');   // COVER: 2
+                    metaName = newValue;
                 },
                 configurable: false,
                 enumerable: true
@@ -73,7 +73,7 @@
             Object.defineProperty(this, '__guid', 
             {
                 get: function() { return __guid; },
-                set: function(newValue) { 
+                set: function(newValue) {
                     if (typeof newValue !== 'string')  throw new Error('Only [__guid] type "string" can be added'); // COVER: 2
                     __guid = newValue;
                 },
@@ -82,7 +82,7 @@
             });
 
                         
-            this.name = p_name || '';
+            this.metaName = p_name || '';
             
             /** @implements {_L.Interface.IMarshal} */
             Util.implements(this, IMarshal);

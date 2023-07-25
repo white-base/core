@@ -30,7 +30,7 @@ describe("[target: meta-column.js]", () => {
                 view1.columns.initValue();
         
                 // view1
-                expect(view1.name).toBe('T1');
+                expect(view1.viewName).toBe('T1');
                 expect(view1.columns.count).toBe(2);
                 expect(view1.columns['i1'].value).toBe('');
                 expect(view1.columns['i2'].value).toBe('');   // REVIEW: default 값을 기준으로 초기화?
@@ -42,7 +42,12 @@ describe("[target: meta-column.js]", () => {
                 var view1 = new MetaView('T1');
                 view1.columns.addValue('i1', 'V1');
                 view1.columns.addValue('i2', 'V2');
-        
+                
+                // view1.columns.existAlias('a1');
+                // view1.existAlias('a1');
+                // set1.existTableName(key);
+                // set1.tables.existTableName(key);
+
                 expect(view1.columns.count).toBe(2);
                 expect(view1.columns['i1'].alias).toBe('i1');
                 expect(view1.columns['i2'].alias).toBe('i2');
@@ -132,11 +137,11 @@ describe("[target: meta-column.js]", () => {
                 // table1
                 expect(table1.columns.count).toBe(2);
                 expect(table1.columns['i2'].caption).toBe('C2');
-                expect(table1.columns['i2'].entity.name).toBe('T1');
+                expect(table1.columns['i2'].entity.tableName).toBe('T1');
                 // table2
                 expect(table2.columns.count).toBe(1);
                 expect(table2.columns['i2'].caption).toBe('C1');
-                expect(table2.columns['i2'].entity.name).toBe('T2');
+                expect(table2.columns['i2'].entity.tableName).toBe('T2');
             });
         });
 
@@ -160,21 +165,21 @@ describe("[target: meta-column.js]", () => {
                 view2.columns['i4'].caption = 'C4';
     
                 // view1
-                expect(view1.name).toBe('T1');
+                expect(view1.viewName).toBe('T1');
                 expect(view1.columns.count).toBe(3);
                 expect(view1.columns['i1'].caption).toBe('C1');
                 expect(view1.columns['i2'].caption).toBe('C2');
                 expect(view1.columns['i3'].caption).toBe('C3');
                 expect(view1.columns['i3'].value).toBe('V3');
                 // view2
-                expect(view2.name).toBe('T2');
+                expect(view2.viewName).toBe('T2');
                 expect(view2.columns.count).toBe(4);
                 expect(view2.columns['i1'].caption).toBe('C1');
                 expect(view2.columns['i2'].caption).toBe('C2');
                 expect(view2.columns['i3'].caption).toBe('C3');
                 expect(view1.columns['i3'].value).toBe('V3');
                 // view3
-                expect(view3.name).toBe('T3');
+                expect(view3.viewName).toBe('T3');
                 expect(view3.columns.count).toBe(1);
                 expect(view3.columns['i4'].caption).toBe('C4');
                 // view1 기준 비교
@@ -205,13 +210,13 @@ describe("[target: meta-column.js]", () => {
                 view2.columns['i3'].caption = 'C3';
     
                 // view1
-                expect(view1.name).toBe('T1');
+                expect(view1.viewName).toBe('T1');
                 expect(view1.columns.count).toBe(3);
                 expect(view1.columns['i1'].value).toBe('V1');
                 expect(view1.columns['i2'].caption).toBe('C1');
                 expect(view1.columns['i3'].caption).toBe('C3');
                 // view2
-                expect(view2.name).toBe('T2');
+                expect(view2.viewName).toBe('T2');
                 expect(view2.columns.count).toBe(3);
                 expect(view2.columns['i1'].value).toBe('V1');
                 expect(view2.columns['i2'].caption).toBe('C2');
@@ -228,12 +233,12 @@ describe("[target: meta-column.js]", () => {
                 view2.columns.addEntity(view1);
         
                 // view1
-                expect(view1.name).toBe('T1');
+                expect(view1.viewName).toBe('T1');
                 expect(view1.columns.count).toBe(2);
                 expect(view1.columns['i1'].value).toBe('V1');
                 expect(view1.columns['i2'].value).toBe('V2');
                 // view2
-                expect(view2.name).toBe('T2');
+                expect(view2.viewName).toBe('T2');
                 expect(view2.columns.count).toBe(2);
                 expect(view2.columns['i1'].value).toBe('V1');
                 expect(view2.columns['i2'].value).toBe('V2');

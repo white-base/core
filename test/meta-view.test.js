@@ -44,29 +44,29 @@ describe("[target: meta-view.js]", () => {
                 view2.columns['i3'].caption = 'C3';
         
                 // view1
-                expect(view1.name).toBe('T1');
+                expect(view1.viewName).toBe('T1');
                 expect(view1.columns.count).toBe(4);
                 expect(view1.rows.count).toBe(1);
                 expect(view1.columns['i2'].caption).toBe('C2');
                 expect(view1.columns['i3'].caption).toBe('C3');
                 expect(view1.columns['i4'].value).toBe('V4');
                 expect(view1.columns._baseCollection).toBe(undefined);
-                expect(view1.columns['i1'].entity.name).toBe('T1');
-                expect(view1.columns['i2'].entity.name).toBe('T1');
+                expect(view1.columns['i1'].entity.metaName).toBe('T1');
+                expect(view1.columns['i2'].entity.metaName).toBe('T1');
                 expect(view1.rows[0]['i1']).toBe('R1');
                 expect(view1.rows[0]['i2']).toBe('R2');
                 // view2
-                expect(view2._refEntities[0].name).toBe('T1');
-                expect(view2._refEntities[1].name).toBe('T3');
+                expect(view2._refEntities[0].metaName).toBe('T1');
+                expect(view2._refEntities[1].metaName).toBe('T3');
                 expect(view2.columns['i2'].caption).toBe('C2');
                 expect(view2.columns['i3'].caption).toBe('C3');
                 expect(view2.columns['i4'].value).toBe('V4');
-                expect(view2.columns._baseCollection._owner.name).toBe('T1');
-                expect(view2.name).toBe('T2');
+                expect(view2.columns._baseCollection._owner.metaName).toBe('T1');
+                expect(view2.viewName).toBe('T2');
                 expect(view2.columns.count).toBe(5);
                 expect(view2.rows.count).toBe(0);
-                expect(view2.columns['i1'].entity.name).toBe('T1');
-                expect(view2.columns['i2'].entity.name).toBe('T1');
+                expect(view2.columns['i1'].entity.metaName).toBe('T1');
+                expect(view2.columns['i2'].entity.metaName).toBe('T1');
             });
         });
 
@@ -83,14 +83,14 @@ describe("[target: meta-view.js]", () => {
             var view2 = view1.clone();
     
             // view1
-            expect(view1.name).toBe('T1');
+            expect(view1.viewName).toBe('T1');
             expect(view1.columns.count).toBe(2);
             expect(view1.rows.count).toBe(1);
             expect(view1.columns['i2'].caption).toBe('C1');
             expect(view1.rows[0]['i1']).toBe('R1');
             expect(view1.rows[0]['i2']).toBe('R2');
             // view2
-            expect(view2.name).toBe('T1');
+            expect(view2.viewName).toBe('T1');
             expect(view2.columns.count).toBe(2);
             expect(view2.rows.count).toBe(1);
             expect(view2.columns['i2'].caption).toBe('C1');

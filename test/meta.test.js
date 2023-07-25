@@ -217,7 +217,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const c = new Foo('foo');
                 const obj = c.getObject();
         
-                expect(obj).toEqual({ str: 'STR', name: 'foo', prop: 10 });
+                expect(obj).toEqual({ str: 'STR', metaName: 'foo', prop: 10 });
             });
             it("- getObject() : class 타입 ", () => {
                 class Foo extends MetaElement {
@@ -234,7 +234,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const c = new Foo('foo');
                 const obj = c.getObject();
         
-                expect(obj).toEqual({ str: 'STR', name: 'foo', prop: 10 });
+                expect(obj).toEqual({ str: 'STR', metaName: 'foo', prop: 10 });
             });
             it("- getObject() : Meta 속성 ", () => {
                 class Bar extends MetaElement {
@@ -250,14 +250,14 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const c = new Foo('foo');
                 const obj = c.getObject();
         
-                expect(obj).toEqual({ str: 'STR', name: 'foo', bar: { name: '', sub: true } });
+                expect(obj).toEqual({ str: 'STR', metaName: 'foo', bar: { metaName: '', sub: true } });
             });
         });
         describe("예외", () => {
             it("- 예외 : name, __guid ", () => {
-                const i = new MetaElement('name');
+                const i = new MetaElement('metaName');
         
-                expect(()=> i.name = 10).toThrow(/name.*string/);
+                expect(()=> i.metaName = 10).toThrow(/metaName.*string/);
                 expect(()=> i.__guid = 10).toThrow(/__guid.*string/); // 직접 설정할 경우는 없음
             });
         });

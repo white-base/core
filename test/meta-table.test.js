@@ -36,15 +36,15 @@ describe("[target: meta-table.js]", () => {
                 // table1
                 expect(table1.columns['i1'].value).toBe('R1');
                 expect(table1.columns['i2'].value).toBe('R2');
-                expect(table1.name).toBe('T1');
-                expect(table1.columns['i1'].entity.name).toBe('T1');
-                expect(table1.columns['i2'].entity.name).toBe('T1');
+                expect(table1.tableName).toBe('T1');
+                expect(table1.columns['i1'].entity.tableName).toBe('T1');
+                expect(table1.columns['i2'].entity.tableName).toBe('T1');
                 // table2
                 expect(table2.columns['i1'].value).toBe(null);
                 expect(table2.columns['i2'].value).toBe('R2');
-                expect(table2.name).toBe('T2');
-                expect(table2.columns['i1'].entity.name).toBe('T2');
-                expect(table2.columns['i2'].entity.name).toBe('T2');
+                expect(table2.tableName).toBe('T2');
+                expect(table2.columns['i1'].entity.tableName).toBe('T2');
+                expect(table2.columns['i2'].entity.tableName).toBe('T2');
             });
         });
         describe("MetaEntity.newRow(): Row <MetaRow 생성>", () => {
@@ -270,6 +270,7 @@ describe("[target: meta-table.js]", () => {
             it("- copy(itmms) : 아이템 설정", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
+                    viewName: 'V1',
                     columns: {
                         i1: { caption: 'C1'},
                         i2: { caption: 'C2'},
@@ -282,6 +283,7 @@ describe("[target: meta-table.js]", () => {
                 table1.load(json1, 3);
                 var table2 = table1.copy('i1');
     
+                expect(table2.tableName).toBe('T1');
                 expect(table2.columns.count).toBe(1);
                 expect(table2.rows.count).toBe(2);
                 expect(table2.columns['i1'].caption).toBe('C1');
@@ -340,6 +342,7 @@ describe("[target: meta-table.js]", () => {
                 var table2 = new MetaTable('T2');
                 var table3 = new MetaTable('T3');
                 var json1 = { 
+                    tableName: 'TT1',
                     columns: {
                         i1: { caption: 'C1'},
                         i2: { caption: 'C2'},
@@ -354,11 +357,13 @@ describe("[target: meta-table.js]", () => {
                 table2.load(json1);    // opt = 3
         
                 // table1
+                expect(table1.tableName).toBe('TT1');
                 expect(table1.columns.count).toBe(2);
                 expect(table1.columns['i1'].caption).toBe('C1');
                 expect(table1.columns['i2'].caption).toBe('C2');
                 expect(table1.rows.count).toBe(3);
                 // table2
+                expect(table2.tableName).toBe('TT1');
                 expect(table2.columns.count).toBe(2);
                 expect(table2.columns['i1'].caption).toBe('C1');
                 expect(table2.columns['i2'].caption).toBe('C2');
@@ -1425,14 +1430,14 @@ describe("[target: meta-table.js]", () => {
                 var table2 = table1.clone();
         
                 // table1
-                expect(table1.name).toBe('T1');
+                expect(table1.tableName).toBe('T1');
                 expect(table1.columns.count).toBe(2);
                 expect(table1.rows.count).toBe(1);
                 expect(table1.columns['i2'].caption).toBe('C1');
                 expect(table1.rows[0]['i1']).toBe('R1');
                 expect(table1.rows[0]['i2']).toBe('R2');
                 // table2
-                expect(table2.name).toBe('T1');
+                expect(table2.tableName).toBe('T1');
                 expect(table2.columns.count).toBe(2);
                 expect(table2.rows.count).toBe(1);
                 expect(table2.columns['i2'].caption).toBe('C1');
@@ -1577,13 +1582,13 @@ describe.skip("< select(filter, list? | start?, end?) : entity >", () => {
         var table2 = table1.select(filter);
 
         // table1
-        expect(table1.name).toBe('T1');
+        expect(table1.tableName).toBe('T1');
         expect(table1.columns.count).toBe(5);
         expect(table1.columns['i4'].value).toBe('R4');
         expect(table1.columns['i5'].value).toBe('R5');
         expect(table1.columns['i3'].order).toBe(200);
         // table2
-        expect(table2.name).toBe('T1');
+        expect(table2.tableName).toBe('T1');
         expect(table2.columns.count).toBe(3);
         expect(table2.columns['i3'].caption).toBe('C3');
         expect(table2.columns['i3'].value).toBe('R3');

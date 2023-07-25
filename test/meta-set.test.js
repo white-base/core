@@ -114,7 +114,7 @@ describe("[target: meta-set.js]", () => {
                 set1.views.add(veiw1);
                 const set2 = set1.clone();
         
-                expect(set2.name).toMatch('S1');
+                expect(set2.setName).toMatch('S1');
                 expect(set2.tables['T1'].columns.count).toBe(2);
                 expect(set2.tables['T1'].columns['i1']).toBeDefined();
                 expect(set2.tables['T1'].columns['i2']).toBeDefined();

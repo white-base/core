@@ -106,7 +106,7 @@
          * @returns {*}
          */
         MetaTable.prototype.clone  = function() {
-            var clone = new MetaTable(this.name);
+            var clone = new MetaTable(this.tableName);
             
             // columns 복제본 추가
             for(var i = 0; i < this.columns.count; i++) {
@@ -161,7 +161,7 @@
             var items = [];
             var callback = null;
             var columnName;
-            var table = new MetaTable(this.name, this);
+            var entity = new MetaTable(this.tableName, this);
             var orignal = this.clone();
 
             // 매개변수 구성
@@ -176,7 +176,7 @@
             }
 
             // return this._buildEntity(table, callback, items);
-            return this._buildEntity(table, callback, items).clone();
+            return this._buildEntity(entity, callback, items).clone();
         };
 
 
@@ -225,7 +225,7 @@
                 i_value = new MetaTable(i_name);
                 i_value.metaSet = this._owner;
             } else if (p_object instanceof MetaTable) {
-                i_name  = p_object.name;
+                i_name  = p_object.tableName;
                 i_value = p_object;
                 p_object.metaSet = this._owner;
             } else {
