@@ -64,6 +64,7 @@
                 get: function() { return tableName; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'string') throw new Error('Only [tableName] type "string" can be added');
+                    if (this.metaSet && this.metaSet.tables.existTableName(newValue)) throw new Error('tableName 중복 발생!!');
                     tableName = newValue;
                 },
                 configurable: false,
@@ -233,10 +234,18 @@
             }
 
             if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
+            if (this.existTableName(i_name)) throw new Error('tableName 중복 발생!!');
 
             _super.prototype.add.call(this, i_name, i_value);
 
             return this[i_name];
+        };
+
+        MetaTableCollection.prototype.existTableName  = function(p_key) {
+            for (var i = 0; this.count > i; i++) {
+                if (this[i].tableName === p_key) return true;
+            }
+            return false;
         };
         
         return MetaTableCollection;

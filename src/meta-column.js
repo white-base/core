@@ -87,21 +87,6 @@
             // this._event    = new Observer(this, this);
 
             /**
-             * 엔티티의 아이템(속성) 컬렉션
-             * @member {string} _L.Meta.Entity.MetaColumn#columnName
-             */
-            Object.defineProperty(this, 'columnName', 
-            {
-                get: function() { return columnName; },
-                set: function(newValue) { 
-                    if (typeof newValue !== 'string') throw new Error('Only [columnName] type "string" can be added');
-                    columnName = newValue;
-                },
-                configurable: false,
-                enumerable: true
-            });
-
-            /**
              * value 내부값 (필터 및 getter/setter 무시)
              * @private
              * @member {*} _L.Meta.Entity.MetaColumn#__value
@@ -129,7 +114,49 @@
                 get: function() { 
                     return _event;
                 }
-            });            
+            });        
+            
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {string} _L.Meta.Entity.MetaColumn#columnName
+             */
+            Object.defineProperty(this, 'columnName', 
+            {
+                get: function() { return columnName; },
+                set: function(newValue) { 
+                    if (typeof newValue !== 'string') throw new Error('Only [columnName] type "string" can be added');
+                    if (entity && entity.columns.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
+                    if (entity && entity.columns.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!'); 
+                    
+                    columnName = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
+
+            /**
+             * 아이템 별칭 (bind전송시, 데이터 수신후 설정시 활용함)
+             * 사용처 
+             * - Bind-command-ajax._execBind() : 데이터 전송시
+             * - BaseBind.setValue(row) : 로우값 을 엔티티에 설정시
+             * - getValue() : row 에 활용함
+             * 기본값 = name 값
+             * @member {String} _L.Meta.Entity.MetaColumn#alias
+             */
+            Object.defineProperty(this, 'alias', 
+            {
+                get: function() { return typeof alias === 'string' ? alias : this.columnName; },
+                set: function(newValue) { 
+                   var entity = this.entity;
+                   if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
+                   if (entity && entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
+                   alias = newValue;
+                },
+                configurable: true,
+                enumerable: true
+            });
+
+                
 
             /**
              * 아이템 소유 엔티티
@@ -422,33 +449,7 @@
                 enumerable: true
             });
 
-            /**
-             * 아이템 별칭 (bind전송시, 데이터 수신후 설정시 활용함)
-             * 사용처 
-             * - Bind-command-ajax._execBind() : 데이터 전송시
-             * - BaseBind.setValue(row) : 로우값 을 엔티티에 설정시
-             * - getValue() : row 에 활용함
-             * 기본값 = name 값
-             * @member {String} _L.Meta.Entity.MetaColumn#alias
-             */
-             Object.defineProperty(this, 'alias', 
-             {
-                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
-                 set: function(newValue) { 
-                    var entity = this.entity;
-                    if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
-                    // if (newValue === alias) return;
-                    if (entity && entity instanceof MetaElement && entity.instanceOf('MetaEntity')) {
-                        if (entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
-                        alias = newValue;
-                    } else {
-                        alias = newValue;
-                    }
-                 },
-                 configurable: true,
-                 enumerable: true
-             });
-
+            
             /**
              * 변경 이벤트 
              * @event _L.Meta.Entity.MetaColumn#onChanged 
@@ -745,6 +746,14 @@
             }
         };
 
+        MetaColumnCollection.prototype.add = function(p_name, p_value) {
+            
+            if (this.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
+            if (this.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!');
+            
+            return _super.prototype.add.call(this, p_name, p_value);
+        };
+
         /**
          *  이름과 값으로 아이템 생성하여 컬렉션에 추가한다.
          * @param {*} p_name 아이템명
@@ -782,6 +791,13 @@
         MetaColumnCollection.prototype.existAlias  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
                 if (this[i].alias === p_key) return true;
+            }
+            return false;
+        };
+
+        MetaColumnCollection.prototype.existColumnName  = function(p_key) {
+            for (var i = 0; this.count > i; i++) {
+                if (this[i].columnName === p_key) return true;
             }
             return false;
         };

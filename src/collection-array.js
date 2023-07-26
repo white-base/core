@@ -57,7 +57,7 @@
             if (p_idx < count) {
                 // 참조 변경(이동)
                 for (var i = p_idx; i < count; i++) {
-                    Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                    Object.defineProperty(this, [i], this._getPropDescriptor(i));   // REVIEW: 기존에 desc 복사해야함!
                 }
                 delete this[count];                      // 마지막 idx 삭제
             } else {
@@ -92,6 +92,41 @@
             return true;
         };
 
+                /**
+         * 지정 위치에 삽입
+         * @param {*} p_pos 
+         * @param {*} p_value 
+         * @param {*} p_desc 
+         * @returns 
+         */
+        ArrayCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
+            var index   = this._element.length;
+            
+            if (typeof p_pos !== 'number') throw new Error('Only [p_idx] type "number" can be added');
+            if (index < p_pos) throw new Error('[o_pos] size 를 초과하였습니다.');
+            if (p_pos < 0) throw new Error('[o_pos] 0 보다 작을 수 없습니다.');
+            if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
+            // before event
+            this._onChanging();
+            this._onAdd(p_pos, p_value);
+            // process
+            this._element.splice(p_pos, 0, p_value);            
+
+            if (typeof p_desc === 'object') {
+                Object.defineProperty(this, [p_pos], p_desc);
+            } else {
+                Object.defineProperty(this, [p_pos], this._getPropDescriptor(p_pos));
+            }
+            // index 재정렬
+            for (var i = p_pos; i <= index; i++) {
+                Object.defineProperty(this, [i], this._getPropDescriptor(i));
+            }
+
+            // after event
+            this._onChanged();
+            return true;
+        };
+
         /**
          * 배열속성 컬렉션을 전체삭제한다. [구현]
          */
@@ -105,6 +140,8 @@
             this._onClear();
             this._onChanged();
         };
+
+
 
         return ArrayCollection;
 

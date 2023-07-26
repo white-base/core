@@ -510,7 +510,7 @@ describe("[target: meta-table.js]", () => {
                 };
                 table1.columns.addValue('i1', '');
     
-                expect(() => table1.readSchema(json1)).toThrow('key');
+                expect(() => table1.readSchema(json1)).toThrow('columnName');
             });
             it("- readSchema(JSON) : 예외(row 존재) ", () => {
                 var table1 = new MetaTable('T1');

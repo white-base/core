@@ -142,6 +142,49 @@
             return true;
         };
 
+        PropertyCollection.prototype.insertAt = function(p_pos, p_name, p_value, p_desc) {
+            var index   = this._element.length;;
+            
+            if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
+            if (typeof p_pos !== 'number') throw new Error('Only [p_idx] type "number" can be added');
+            if (index < p_pos) throw new Error('[o_pos] size 를 초과하였습니다.');
+            if (p_pos < 0) throw new Error('[o_pos] 0 보다 작을 수 없습니다.');
+            if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
+            // 예약어 검사
+            if (this._symbol.indexOf(p_name) > -1) {
+                throw new Error(' [' + p_name + '] is a Symbol word');   
+            }
+            if (this.exist(p_name)) {
+                console.warn('Warning:: 프로퍼티 이름 중복 !!');
+                return false;
+            }
+            // before event
+            this._onChanging();
+            this._onAdd(index, p_value);
+            // process
+            // this._element.push(p_value);
+            // this._keys.push(p_name);            
+            this._element.splice(p_pos, 0, p_value);
+            this._keys.splice(p_pos, 0, p_name);
+
+            if (typeof p_desc === 'object') {
+                Object.defineProperty(this, [index], p_desc);
+                Object.defineProperty(this, p_name, p_desc);
+            } else {
+                Object.defineProperty(this, [index], this._getPropDescriptor(index));
+                Object.defineProperty(this, p_name, this._getPropDescriptor(index));
+            }
+            // index 재정렬
+            for (var i = p_pos; i <= index; i++) {
+                var propName = this.keyOf(i);
+                Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                Object.defineProperty(this, propName, this._getPropDescriptor(i));
+            }
+            
+            // after event
+            this._onChanged();
+            return true;
+        };
         
         /**
          * 속성컬렉션을 전체 삭제한다. [구현]

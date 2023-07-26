@@ -165,6 +165,86 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(result).toBeTruthy();
             });
         });
+        describe("this.insertAt(num, name): bool <idx 위치에 추가>", () => {
+            // beforeAll(() => {
+            //     let s = new Student();
+            // });
+            it("- insertAt(idx) : 첫째 요소 삭제", () => {
+                let s = new Student();
+                s.columns.add('a2', 'A2');
+                s.columns.add('a3', 'A3');
+                const result = s.columns.insertAt(0, 'a1', 'A1');
+    
+                expect(s.columns['a1']).toBeDefined();
+                expect(s.columns['a2']).toBeDefined();
+                expect(s.columns['a3']).toBeDefined();
+                expect(s.columns[0] === s.columns['a1']).toBe(true);
+                expect(s.columns[1] === s.columns['a2']).toBe(true);
+                expect(s.columns[2] === s.columns['a3']).toBe(true);
+                expect(s.columns.indexOf('a1', 1)).toBe(0);  // 바뀐 idx 확인
+                expect(s.columns.indexOf('a2', 1)).toBe(1);  // 바뀐 idx 확인
+                expect(s.columns.indexOf('a3', 1)).toBe(2);  // 바뀐 idx 확인
+                expect(s.columns.count).toBe(3);
+                expect(s.columns.list.length).toBe(3);
+                expect(result).toBeTruthy();
+            });
+            it("- insertAt(idx) : 중간 요소 추가", () => {
+                let s = new Student();
+                s.columns.add('a1', 'A1');
+                s.columns.add('a3', 'A3');
+                const result = s.columns.insertAt(1, 'a2', 'A2');
+    
+                expect(s.columns['a1']).toBeDefined();
+                expect(s.columns['a2']).toBeDefined();
+                expect(s.columns['a3']).toBeDefined();
+                expect(s.columns[0] === s.columns['a1']).toBe(true);
+                expect(s.columns[1] === s.columns['a2']).toBe(true);
+                expect(s.columns[2] === s.columns['a3']).toBe(true);
+                expect(s.columns.indexOf('a1', 1)).toBe(0);  // 바뀐 idx 확인
+                expect(s.columns.indexOf('a2', 1)).toBe(1);  // 바뀐 idx 확인
+                expect(s.columns.indexOf('a3', 1)).toBe(2);  // 바뀐 idx 확인
+                expect(s.columns.count).toBe(3);
+                expect(s.columns.list.length).toBe(3);
+                expect(result).toBeTruthy();
+            });
+            it("- insertAt(idx) : 마지막 요소 추가 후 add()", () => {
+                let s = new Student();
+                s.columns.add('a1', 'A1');
+                s.columns.add('a2', 'A2');
+                const result = s.columns.insertAt(2, 'a3', 'A3');
+                s.columns.add('a4', 'A4');
+    
+                expect(s.columns['a1']).toBeDefined();
+                expect(s.columns['a2']).toBeDefined();
+                expect(s.columns['a3']).toBeDefined();
+                expect(s.columns['a4']).toBeDefined();
+                expect(s.columns[0] === s.columns['a1']).toBe(true);
+                expect(s.columns[1] === s.columns['a2']).toBe(true);
+                expect(s.columns[2] === s.columns['a3']).toBe(true);
+                expect(s.columns[3] === s.columns['a4']).toBe(true);
+                expect(s.columns.indexOf('a1', 1)).toBe(0);  
+                expect(s.columns.indexOf('a2', 1)).toBe(1);
+                expect(s.columns.indexOf('a3', 1)).toBe(2);
+                expect(s.columns.indexOf('a4', 1)).toBe(3);
+                expect(s.columns.count).toBe(4);
+                expect(s.columns.list.length).toBe(4);
+                expect(result).toBeTruthy();
+            });
+            it("- insertAt(pos) : 예외 : 사이즈 초과", () => {
+                let s = new Student();
+                s.columns.add('a0', 'A0');
+                s.columns.add('a1', 'A1');
+
+                expect(()=> s.columns.insertAt(3, 'a2', 'A2')).toThrow(/pos.*size/);
+            });
+            it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
+                let s = new Student();
+                s.columns.add('a0', 'A0');
+                s.columns.add('a1', 'A1');
+
+                expect(()=> s.columns.insertAt(-1, 'a2', 'A2')).toThrow(/pos.*0/);
+            });
+        });
         describe("BaseCollection.removeAt(this.indexOf(name, 1)): bool <이름으로 삭제> ", () => {
             // beforeAll(() => {
             //     let s = new Student();

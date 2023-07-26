@@ -74,6 +74,7 @@
                 get: function() { return viewName; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'string') throw new Error('Only [viewName] type "string" can be added');
+                    if (this.metaSet && this.metaSet.views.existViewName(newValue)) throw new Error('tableName 중복 발생!!');
                     viewName = newValue;
                 },
                 configurable: false,
@@ -261,8 +262,16 @@
             }
 
             if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
+            if (this.existViewName(i_name)) throw new Error('viewName 중복 발생!!');
 
             return _super.prototype.add.call(this, i_name, i_value);
+        };
+
+        MetaViewCollection.prototype.existViewName  = function(p_key) {
+            for (var i = 0; this.count > i; i++) {
+                if (this[i].viewName === p_key) return true;
+            }
+            return false;
         };
 
         return MetaViewCollection;
