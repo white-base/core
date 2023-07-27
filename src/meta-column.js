@@ -746,13 +746,22 @@
             }
         };
 
-        MetaColumnCollection.prototype.add = function(p_name, p_value) {
+        // MetaColumnCollection.prototype.add = function(p_name, p_value) {
+            
+        //     if (this.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
+        //     if (this.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!');
+            
+        //     return _super.prototype.add.call(this, p_name, p_value);
+        // };
+        
+        MetaColumnCollection.prototype.insertAt = function(p_pos, p_name, p_value) {
             
             if (this.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
             if (this.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!');
             
-            return _super.prototype.add.call(this, p_name, p_value);
+            return _super.prototype.insertAt.call(this, p_pos, p_name, p_value);
         };
+
 
         /**
          *  이름과 값으로 아이템 생성하여 컬렉션에 추가한다.
@@ -833,6 +842,29 @@
          * @returns {MetaColumn} 등록한 아이템
          */
         MetaTableColumnCollection.prototype.add  = function(p_object) {
+            // var i_value;
+            // var i_name;
+
+            // if (typeof p_object === 'string') {      
+            //     i_name  = p_object;
+            //     i_value = new this.columnType(i_name, this._owner);
+            // } else if (p_object instanceof this.columnType) {
+            //     // MetaTable 직접만 적용(참조형 아이템 소유 못함)
+            //     i_name  = p_object.columnName;
+            //     i_value = p_object.clone();
+            //     i_value.entity = this._owner;
+            // } else {
+            //     throw new Error('string | MetaColumn object [p_object].');    // COVER:
+            // }
+
+            // if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
+
+            // return _super.prototype.add.call(this, i_name, i_value);
+
+            return this.insertAt(this._element.length, p_object);
+        };
+
+        MetaTableColumnCollection.prototype.insertAt  = function(p_pos, p_object) {
             var i_value;
             var i_name;
 
@@ -850,8 +882,9 @@
 
             if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
 
-            return _super.prototype.add.call(this, i_name, i_value);
+            return _super.prototype.insertAt.call(this, p_pos, i_name, i_value);
         };
+
 
         return MetaTableColumnCollection;
     
@@ -916,6 +949,59 @@
          *  TODO:: 객체 비교는 string 이 아니고 값과 타입을 비교해야함 (그래야 참조를 사용)
          */
         MetaViewColumnCollection.prototype.add  = function(p_object, p_baseCollection) {
+//             var collection;
+//             var i_name;
+//             var i_value;
+
+//             if (p_object instanceof MetaColumn) {
+//                 // 아이템 소유자 설정
+//                 if (p_object.entity === null) p_object.entity = this._owner;
+//                 i_name = p_object.columnName;
+//                 i_value = p_object;
+//             } else if (typeof p_object === 'string') {
+//                 i_name = p_object;
+//                 i_value = new this.columnType(i_name, this._owner);
+// // POINT::
+//             // } else if (p_object instanceof MetaElement && p_object.instanceOf('MetaEntity')) {
+//             //     // 아아템 가져오기
+//             //     for (var i = 0; p_object.columns.count > i; i++) {
+//             //         this.add(p_object.columns[i]);
+//             //     }
+//             } else {
+//                 throw new Error('p_object string | MetaColumn instance param request fail...');   // COVER:
+//             }
+
+//             // TODO:: 이름 충돌검사
+
+//             if (p_baseCollection instanceof MetaColumnCollection) {            // 전달값으로 기본컬렉션 지정시
+//                 collection = p_baseCollection;
+//             } else if (this._baseCollection instanceof MetaColumnCollection) { // 기본컬렉션 존재시
+//                 collection = this._baseCollection;
+//             }
+            
+//             // 기본참조 컬렉션 또는 전달참조 컬렉션인 경우
+//             if (collection) {
+//                 if (collection.contains(collection[i_name])) {
+//                     i_value = collection[i_name];                      // 참조 가져옴
+//                 } else {
+//                     collection.add(p_object);                          // 컬렉션에 등록
+//                     i_value = collection[i_name];
+
+//                 }
+                
+//                 // REVIEW:: 의존성을 낮추기 위해서 검사후 등록
+//                 // 소유객체에 참조 등록 (중복제거됨)
+//                 if (this._owner._regRefer) {
+//                     this._owner._regRefer(collection._owner);
+//                 }
+//             }
+            
+//             return _super.prototype.add.call(this, i_name, i_value);
+            return this.insertAt(this._element.length, p_object, p_baseCollection);
+
+        };
+
+        MetaViewColumnCollection.prototype.insertAt  = function(p_pos, p_object, p_baseCollection) {
             var collection;
             var i_name;
             var i_value;
@@ -963,7 +1049,7 @@
                 }
             }
             
-            return _super.prototype.add.call(this, i_name, i_value);
+            return _super.prototype.insertAt.call(this, p_pos, i_name, i_value);
         };
 
         /**

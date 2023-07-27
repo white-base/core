@@ -244,7 +244,30 @@
          *  - entityView, collection    :         entityView  이름으로 등록 (collection보냄) => 오류발생
          */
         MetaViewCollection.prototype.add  = function(p_object, p_baseEntity) {    // COVER:
+            // var i_value;
+            // var i_name;
 
+            // if (typeof p_object === 'string') {      
+            //     i_name  = p_object;
+            //     i_value = new MetaView(i_name, p_baseEntity);
+            //     i_value.metaSet = this._owner;
+            // } else if (p_object instanceof MetaView) {
+            //     if (p_baseEntity) throw new Error(' MetaView 객체와 refEntity객체를 동시에 입력할 수 없습니다. !!');
+            //     i_name  = p_object.viewName;
+            //     i_value = p_object;
+            //     p_object.metaSet = this._owner;
+            // } else {
+            //     throw new Error('string | MetaView object [p_object].');
+            // }
+
+            // if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
+            // if (this.existViewName(i_name)) throw new Error('viewName 중복 발생!!');
+
+            // return _super.prototype.add.call(this, i_name, i_value);
+            return this.insertAt(this._element.length, p_object, p_baseEntity);
+        };
+
+        MetaViewCollection.prototype.insertAt  = function(p_pos, p_object, p_baseEntity) {    // COVER:
             var i_value;
             var i_name;
 
@@ -264,7 +287,7 @@
             if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
             if (this.existViewName(i_name)) throw new Error('viewName 중복 발생!!');
 
-            return _super.prototype.add.call(this, i_name, i_value);
+            return _super.prototype.insertAt.call(this, p_pos, i_name, i_value);
         };
 
         MetaViewCollection.prototype.existViewName  = function(p_key) {

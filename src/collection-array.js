@@ -71,25 +71,27 @@
          * @returns {boolean} 처리결과
          */
         ArrayCollection.prototype.add = function(p_value, p_desc) {
-            // var typeName;
-            var index   = this._element.length;
+            // // var typeName;
+            // var index   = this._element.length;
             
-            // if (typeof p_value === 'undefined') throw new Error('p_value param request fail...');
-            if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
-            // index = this._element.length;
-            // before event
-            this._onChanging();
-            this._onAdd(index, p_value);
-            // process
-            this._element.push(p_value);
-            if (typeof p_desc === 'object') {
-                Object.defineProperty(this, [index], p_desc);
-            } else {
-                Object.defineProperty(this, [index], this._getPropDescriptor(index));
-            }
-            // after event
-            this._onChanged();
-            return true;
+            // // if (typeof p_value === 'undefined') throw new Error('p_value param request fail...');
+            // if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
+            // // index = this._element.length;
+            // // before event
+            // this._onChanging();
+            // this._onAdd(index, p_value);
+            // // process
+            // this._element.push(p_value);
+            // if (typeof p_desc === 'object') {
+            //     Object.defineProperty(this, [index], p_desc);
+            // } else {
+            //     Object.defineProperty(this, [index], this._getPropDescriptor(index));
+            // }
+            // // after event
+            // this._onChanged();
+            // return true;
+
+            return this.insertAt(this._element.length, p_value, p_desc);
         };
 
                 /**
@@ -118,7 +120,7 @@
                 Object.defineProperty(this, [p_pos], this._getPropDescriptor(p_pos));
             }
             // index 재정렬
-            for (var i = p_pos; i <= index; i++) {
+            for (var i = p_pos + 1; i < this._element.length; i++) {
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
             }
 

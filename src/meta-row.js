@@ -11,7 +11,7 @@
     var Util;
     var MetaObject;
     // var MetaElement;
-    var ArrayCollection;
+    var TransactionCollection;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
@@ -27,12 +27,12 @@
         Util                        = require('./util');
         MetaObject                  = require('./meta-object').MetaObject;
         // MetaElement                 = require('./meta-element');
-        ArrayCollection             = require('./collection-array').ArrayCollection;
+        TransactionCollection             = require('./collection-trans').TransactionCollection;
     } else {    // COVER:
         Util                        = _global._L.Common.Util;
         MetaObject                  = _global._L.Meta.MetaObject;
         // MetaElement                 = _global._L.Collection.MetaElement;
-        ArrayCollection             = _global._L.Collection.ArrayCollection;
+        TransactionCollection             = _global._L.Collection.TransactionCollection;
     }
 
     //==============================================================
@@ -40,7 +40,7 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
-    if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
+    if (typeof TransactionCollection === 'undefined') throw new Error('[TransactionCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -172,7 +172,7 @@
         /**
          * 로우 컬렉션
          * @constructs _L.Meta.Entity.MetaRowCollection
-         * @extends _L.Collection.ArrayCollection
+         * @extends _L.Collection.TransactionCollection
          * @param {*} p_owner 소유자 
          */
         function MetaRowCollection(p_owner) {
@@ -208,6 +208,28 @@
          * @returns 
          */
         MetaRowCollection.prototype.add  = function(p_row, p_checkValid) {
+            // var checkValid = p_checkValid || false;
+            // var r_result = {};
+            // var entity = p_row.entity;
+
+            // if (!(p_row instanceof MetaRow )) throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
+            // if (entity !== this._owner) throw new Error('[p_row] MetaRow 의 entity 가 다릅니다.');   // COVER:            
+            
+            // // valid 검사
+            // if (checkValid === true) {
+            //     for (let i = 0; i < p_row.count; i++) {
+            //         if(entity.columns[i].valid(p_row[i], r_result) !== true) {
+            //             throw new Error('[p_row] valid check Error.' + r_result.msg);
+            //         }
+            //     }
+            // }
+            
+            // return _super.prototype.add.call(this, p_row);
+            return this.insertAt(this._element.length, p_row, p_checkValid);
+
+        };
+
+        MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_checkValid) {
             var checkValid = p_checkValid || false;
             var r_result = {};
             var entity = p_row.entity;
@@ -222,14 +244,13 @@
                         throw new Error('[p_row] valid check Error.' + r_result.msg);
                     }
                 }
-            }
-            
-            return _super.prototype.add.call(this, p_row);
+            }            
+            return _super.prototype.insertAt.call(this, p_pos, p_row);
         };
 
         return MetaRowCollection;
         
-    }(ArrayCollection));
+    }(TransactionCollection));
 
     //==============================================================
     // 5. 모듈 내보내기 (node | web)

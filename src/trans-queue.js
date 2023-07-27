@@ -18,8 +18,8 @@
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};    
     _global._L.Collection    = _global._L.Collection || {};
-    _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    // _global._L.Meta          = _global._L.Meta || {};
+    // _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
@@ -40,7 +40,7 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     // if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
-    if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
+    if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -56,11 +56,6 @@
 
             var queue = [];
             var collection;
-
-            // MetaEntity 등록 & order(순서) 값 계산
-            if (!(p_entity instanceof ArrayCollection)) {
-                throw new Error('Only [p_collection] type "ArrayCollection" can be added');
-            }
 
             /**
              * 로우의 소유 엔티티
@@ -97,7 +92,7 @@
         }
 
         TransactionQueue.prototype.init  = function() {
-            this.queue = [];
+            this.queue.length = 0;
         };
 
         TransactionQueue.prototype.commit  = function() {
@@ -105,21 +100,22 @@
         };
 
         TransactionQueue.prototype.rollback  = function() {
-            var idx, obj;
+            var pos, obj;
             
             for (var i = this.queue.length - 1; i >= 0; i--) {
                 obj = this.queue[i];
-                if(obj.cmd = 'I') {
-                    idx = this.collection.indexOf(obj.ori);
-                    this.collection.removeAt(idx);
-                }
-                if(obj.cmd = 'D') {
-                    idx = obj.pos;
-                    this.collection.insertAt(idx, obj.clone);
-                }
-                if(obj.cmd = 'U') {
-                    idx = this.collection.indexOf(obj.ori);
-                    this.collection.removeAt(idx);
+                if(obj.cmd === 'I') {
+                    // pos = this.collection.indexOf(obj.ori);
+                    pos = obj.pos;
+                    this.collection.removeAt(pos);
+                } else if(obj.cmd === 'D') {
+                    pos = obj.pos;
+                    this.collection.insertAt(pos, obj.clone);
+                } else if(obj.cmd === 'U') {
+                    // pos = this.collection.indexOf(obj.ori);
+                    pos = obj.pos;
+                    this.collection.removeAt(pos);
+                    this.collection.insertAt(pos, obj.clone);
                 }
             }
         };
@@ -168,7 +164,7 @@
     } else {
         _global._L.TransactionQueue = TransactionQueue;
         // namespace
-        _global._L.Meta.Entity.TransactionQueue = TransactionQueue;
+        _global._L.Collection.TransactionQueue = TransactionQueue;
     }
 
 }(typeof window !== 'undefined' ? window : global));
