@@ -17,14 +17,14 @@ expect('Christoph').toMatch(/stop/);
 expect(shoppingList).toContain('milk'); // 배열항목중 milk
 
 // 예외
-expect(() => 예외문()).toThrow(/reg/);
+expect(() => 예외문 ).toThrow(/reg/);
 
 
 
 // 블럭
 describe("< setValue(row) >", () => {
-    it("- setValue(row) : row 설정(단일) ", () => {select
-        
+    it("- setValue(row) : row 설정(단일) ", () => {
+        // TODO:
     });
 });
 

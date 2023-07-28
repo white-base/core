@@ -89,6 +89,7 @@ describe("load: meta-entity.js <MetaEntity>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -116,6 +117,7 @@ describe("load: meta-entity.js <MetaEntity>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -143,6 +145,7 @@ describe("load: meta-entity.js <MetaEntity>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -183,6 +186,7 @@ describe("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
 
@@ -201,6 +205,7 @@ describe("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -220,6 +225,7 @@ describe("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -248,6 +254,7 @@ describe("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -288,6 +295,7 @@ describe("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
 
@@ -306,6 +314,7 @@ describe("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -325,6 +334,7 @@ describe("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -345,6 +355,7 @@ describe("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -373,6 +384,7 @@ describe("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -478,6 +490,7 @@ describe("load: meta-set.js <MetaSet>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
         require('../src/collection-property');
@@ -509,9 +522,9 @@ describe("load: meta-set.js <MetaSet>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-trans');
         require('../src/collection-property');
         require('../src/trans-queue');
         require('../src/collection-trans');
@@ -541,9 +554,9 @@ describe("load: meta-set.js <MetaSet>", () => {
         require('../src/i-control-lookup');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-trans');
         require('../src/collection-property');
         require('../src/trans-queue');
         require('../src/collection-trans');

@@ -12,6 +12,7 @@
     var MetaObject;
     // var MetaElement;
     var TransactionCollection;
+    var Observer;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
@@ -25,11 +26,13 @@
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                        = require('./util');
+        Observer            = require('./observer').Observer;
         MetaObject                  = require('./meta-object').MetaObject;
         // MetaElement                 = require('./meta-element');
         TransactionCollection             = require('./collection-trans').TransactionCollection;
     } else {    // COVER:
         Util                        = _global._L.Common.Util;
+        Observer            = _global._L.Common.Observer;
         MetaObject                  = _global._L.Meta.MetaObject;
         // MetaElement                 = _global._L.Collection.MetaElement;
         TransactionCollection             = _global._L.Collection.TransactionCollection;
@@ -38,6 +41,7 @@
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof TransactionCollection === 'undefined') throw new Error('[TransactionCollection] module load fail...');
@@ -49,18 +53,31 @@
          * 로우
          * @constructs _L.Meta.Entity.MetaRow
          * @extends _L.Collection.MetaElement     // REVIEW: 상속위치를 바꿔야함
-         * @param {MetaEntity} p_entity 메타엔티티
+         * @param {MetaEntity?} p_entity 메타엔티티
          */
         function MetaRow(p_entity) {
             _super.call(this);
-
-            var entity = null;
-            var element = [];
+            
+            var __element = [];
+            var _this   = this;
+            var _event  = new Observer(this);
+            var entity  = null;
 
             // MetaEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
                 throw new Error('Only [p_entity] type "MetaEntity" can be added');
             }
+
+            /** 
+             * 이벤트 객체
+             * @protected 
+             * @member {Object} _L.Meta.Entity.MetaRow#_event  
+             */
+            Object.defineProperty(this, '_event', {
+                get: function() { return _event; },
+                enumerable: false,
+                configurable: false,
+            });        
 
             /**
              * 로우의 소유 엔티티
@@ -86,19 +103,44 @@
              */
             Object.defineProperty(this, 'count', {
                 get: function() {
-                    return element.length;
+                    return __element.length;
                 },
                 configurable: false,
                 enumerable: false
             });
+
+            /**
+             * 변경전 이벤트 
+             * @event _L.Meta.Entity.MetaRow#onChanged 
+             */
+            Object.defineProperty(this, 'onChanging', {
+                set: function(p_fn) {
+                    this._event.subscribe(p_fn, 'onChanging');
+                },
+                enumerable: true,
+                configurable: true,
+            });
+            
+            /**
+             * 변경후 이벤트 
+             * @event _L.Meta.Entity.MetaRow#onChanged 
+             */
+            Object.defineProperty(this, 'onChanged', {
+                set: function(p_fn) {
+                    this._event.subscribe(p_fn, 'onChanged');
+                },
+                enumerable: true,
+                configurable: true,
+            });
+            
 
             // 설정
             if (p_entity) {
                 this.entity = p_entity;
 
                 for (var i = 0; i < entity.columns.count; i++) {
-                    var idx = element.length;
-                    element.push(entity.columns[i].default);  // 기본값 등록
+                    var idx = __element.length;
+                    __element.push(entity.columns[i].default);  // 기본값 등록
                     Object.defineProperty(this, [i], getPropDescriptor(idx));
                     Object.defineProperty(this, entity.columns[i].alias, getPropDescriptor(idx));
                 }
@@ -106,14 +148,33 @@
 
             function getPropDescriptor(p_idx) {
                 return {
-                    get: function() { return element[p_idx]; },
-                    set: function(newValue) { element[p_idx] = newValue; },
+                    get: function() { return __element[p_idx]; },
+                    set: function(newValue) { 
+                        var oldValue = __element[p_idx];
+                        _this._onChanging(p_idx, newValue, oldValue);
+                        __element[p_idx] = newValue;
+                        _this._onChanged(p_idx, newValue, oldValue);
+                    },
                     enumerable: false,
                     configurable: false
                 };
             }
         }
         Util.inherits(MetaRow, _super);
+
+        /**
+         * @listens _L.Meta.Entity.MetaColumn#_onChanged
+         */
+        MetaRow.prototype._onChanging = function(p_idx, p_nValue, p_oValue) {
+            this._event.publish('onChanging', p_idx, p_nValue, p_oValue);
+        };
+
+        /**
+         * @listens _L.Meta.Entity.MetaColumn#_onChanged
+         */
+        MetaRow.prototype._onChanged = function(p_idx, p_nValue, p_oValue) {
+            this._event.publish('onChanged', p_idx, p_nValue, p_oValue);
+        };
 
         // /** @override **/
         // MetaRow.prototype.getTypes  = function() {
@@ -179,8 +240,30 @@
             _super.call(this, p_owner);
 
             this.elementType = MetaRow;   // 컬렉션타입 설정
+            this.autoChanges = true;    // 트랜젝션 기본 해제 해제입니다.
         }
         Util.inherits(MetaRowCollection, _super);
+
+        /**
+         * 프로퍼티 기술자 설정
+         * @override
+         * @protected
+         * @param {Number} p_idx 인덱스
+         */
+        MetaRowCollection.prototype._getPropDescriptor = function(p_idx) {
+            return {
+                get: function() { return this._element[p_idx]; },
+                set: function(newValue) {
+                    var typeName;
+                    if (this.elementType.length > 0) Util.validType(newValue, this.elementType);
+                    if (newValue.entity !== this._owner) throw new Error('entity 가 서로 다릅니다.');
+                    this._transQueue.update(p_idx, newValue, this._element[p_idx]); 
+                    this._element[p_idx] = newValue;
+                },
+                enumerable: true,
+                configurable: true
+            };
+        };
 
         /**
          * 로우컬렉션에 로우를 추가한다.
@@ -200,6 +283,7 @@
 
         //     return _super.prototype.add.call(this, i_value);
         // };
+
 
         /**
          * MetaRow 추가 idx 를 기준으로 검사한다.
@@ -230,9 +314,11 @@
         };
 
         MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_checkValid) {
+            var _this = this;
             var checkValid = p_checkValid || false;
             var r_result = {};
             var entity = p_row.entity;
+
 
             if (!(p_row instanceof MetaRow )) throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
             if (entity !== this._owner) throw new Error('[p_row] MetaRow 의 entity 가 다릅니다.');   // COVER:            
@@ -244,9 +330,26 @@
                         throw new Error('[p_row] valid check Error.' + r_result.msg);
                     }
                 }
-            }            
+            }
+            // 이벤트 등록
+            var clone;
+            p_row.onChanging = function(p_idx, p_nValue, p_oValue) {
+                if(!_this.autoChanges) { clone = _this[p_pos].clone(); }
+            };
+            // 이벤트 등록
+            p_row.onChanged = function(p_idx, p_nValue, p_oValue) {
+                var etc = 'idx:'+ p_idx +', new:' + p_nValue + ', old:'+ p_oValue;
+                if(!_this.autoChanges) {
+                    _this._transQueue.update(p_pos, _this[p_pos], clone, etc);
+                }
+            };
+
             return _super.prototype.insertAt.call(this, p_pos, p_row);
         };
+
+        // MetaRowCollection.prototype.getChanges  = function() {
+        //     return this._transQueue.select();
+        // };
 
         return MetaRowCollection;
         

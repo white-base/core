@@ -90,6 +90,24 @@
             });
 
             /**
+             * 트랜젝션 사용 유무 (기본값: 사용 false)
+             * @member {boolean}  _L.Meta.Entity.MetaSet#autoChanges
+             */
+            Object.defineProperty(this, 'autoChanges', {
+                set: function(newValue) { 
+                    if (typeof newValue !== 'boolean') {
+                        throw new Error('Only [autoChanges] type "boolean" can be added');
+                    }
+                    for (var i = 0; i < this.tables.count; i++) {
+                        this.tables[i].rows.autoChanges = newValue;
+                    }
+                },
+                configurable: false,
+                enumerable: true
+            });
+
+            
+            /**
              * 메타 테이블 컬렉션
              * @member {MetaTableCollection} _L.Meta.Entity.MetaSet#tables
              */
@@ -253,19 +271,35 @@
         };
 
         MetaSet.prototype.acceptChanges  = function() {
-            console.log('구현해야함');  // COVER:
+            for (let i = 0; i < this.tables.length; i++) {
+                this.tables[i].acceptChanges();                
+            }
         };
         
         MetaSet.prototype.rejectChanges  = function() {
-            console.log('구현해야함');  // COVER:
+            for (let i = 0; i < this.tables.length; i++) {
+                this.tables[i].rejectChanges();                
+            }
         };
         
         MetaSet.prototype.getChanges  = function() {
-            console.log('구현해야함');  // COVER:
+            var arr = {tables: null};
+
+            for (let i = 0; i < this.tables.length; i++) {
+                var table = this.tables[i];
+                if (table.getChanges().length > 0) {
+                    arr.tables[this.tableName] = table.getChanges();
+                }
+            }
+            return arr;
         };
         
         MetaSet.prototype.hasChanges  = function() {
-            console.log('구현해야함');  // COVER:
+            for (let i = 0; i < this.tables.length; i++) {
+                var table = this.tables[i];
+                if (table.getChanges().length > 0) return true;
+            }
+            return false;
         };
 
         return MetaSet;

@@ -46,7 +46,7 @@
             _super.call(this, p_owner);
 
             var _transQueue = new TransactionQueue(this);
-            var autoChange = false;
+            var autoChanges = false;
 
             /**
              * 트렌젝션 큐
@@ -60,16 +60,16 @@
             });
 
             /**
-             * 컬랙션 갯수 
-             * @member {boolean} _L.Collection.TransactionQueue#autoChange
+             * 트랜젝션 사용 유무 (기본값: 사용 false)
+             * @member {boolean} _L.Collection.TransactionQueue#autoChanges
              */
             Object.defineProperty(this, 'autoChanges', {
-                get: function() { return autoChange; },
+                get: function() { return autoChanges; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'boolean') {
                         throw new Error('Only [p_collection] type "ArrayCollection" can be added');
                     }
-                    autoChange = newValue;
+                    autoChanges = newValue;
                 },
                 configurable: false,
                 enumerable: true
@@ -102,7 +102,7 @@
         };
 
         TransactionCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
-            if (!this.autoChanges) this._transQueue.insert(p_value, p_pos);
+            if (!this.autoChanges) this._transQueue.insert(p_pos, p_value);
             return _super.prototype.insertAt.call(this, p_pos, p_value, p_desc);
         };
 

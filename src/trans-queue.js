@@ -105,14 +105,14 @@
             for (var i = this.queue.length - 1; i >= 0; i--) {
                 obj = this.queue[i];
                 if(obj.cmd === 'I') {
-                    // pos = this.collection.indexOf(obj.ori);
+                    // pos = this.collection.indexOf(obj.ref);
                     pos = obj.pos;
                     this.collection.removeAt(pos);
                 } else if(obj.cmd === 'D') {
                     pos = obj.pos;
                     this.collection.insertAt(pos, obj.clone);
                 } else if(obj.cmd === 'U') {
-                    // pos = this.collection.indexOf(obj.ori);
+                    // pos = this.collection.indexOf(obj.ref);
                     pos = obj.pos;
                     this.collection.removeAt(pos);
                     this.collection.insertAt(pos, obj.clone);
@@ -120,35 +120,38 @@
             }
         };
         
-        TransactionQueue.prototype.insert  = function(p_target, p_pos) {
+        TransactionQueue.prototype.insert  = function(p_pos, p_target, p_etc) {
             this.queue.push({
                 cmd: 'I',
                 pos: p_pos,
-                ori: p_target,
-                clone: null
+                ref: p_target,
+                clone: null,
+                etc: p_etc || ''
             });
         };
 
-        TransactionQueue.prototype.delete  = function(p_pos) {
+        TransactionQueue.prototype.delete  = function(p_pos, p_etc) {
             this.queue.push({
                 cmd: 'D',
                 pos: p_pos,
-                ori: null,
-                clone: this.collection[p_pos]
+                ref: null,
+                clone: this.collection[p_pos],
+                etc: p_etc || ''
             });
         };
 
-        TransactionQueue.prototype.update  = function(p_target, p_pos) {
+        TransactionQueue.prototype.update  = function(p_pos, p_target, p_clone, p_etc) {
             this.queue.push({
-                cmd: 'D',
+                cmd: 'U',
                 pos: p_pos,
-                ori: p_target,
-                clone: this.collection[p_pos]
+                ref: p_target,
+                clone: p_clone,
+                etc: p_etc || ''
             });
         };
         
         TransactionQueue.prototype.select  = function() {
-            console.log('구현해야함');  // COVER:
+            return this.queue;
         };
 
         return TransactionQueue;

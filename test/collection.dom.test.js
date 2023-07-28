@@ -49,9 +49,18 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
         it("- 예외 : Util 로딩이 인된경우", () => {
             expect(() => require('../src/collection-array')).toThrow(/Util/);
         });
-        it("- 예외 : BaseCollection 로딩이 인된경우", () => {
+        it("- 예외 : IArrayCollection 로딩이 인된 경우", () => {
             require('../src/util-type');            // ref
             require('../src/util');
+            expect(() => require('../src/collection-array')).toThrow(/IArrayCollection/);
+        });
+        it("- 예외 : BaseCollection 로딩이 인된 경우", () => {
+            require('../src/util-type');            // ref
+            require('../src/util');
+            require('../src/i-control-lookup');     // ref
+            require('../src/i-control-part');       // ref
+            require('../src/i-collection');         // ref
+            require('../src/i-collection-array');         // ref
             expect(() => require('../src/collection-array')).toThrow(/BaseCollection/);
         });
         it("- 로딩 성공 ", () => {
@@ -60,6 +69,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/i-control-lookup');     // ref
             require('../src/i-control-part');       // ref
             require('../src/i-collection');         // ref
+            require('../src/i-collection-array');         // ref
             require('../src/observer');             // ref
             require('../src/collection-base');
             require('../src/collection-array');

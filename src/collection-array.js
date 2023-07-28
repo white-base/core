@@ -7,26 +7,31 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var BaseCollection;
+    var IArrayCollection;
 
     //==============================================================
     // 1. 모듈 네임스페이스 선언
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};
+    _global._L.Interface     = _global._L.Interface || {};
     _global._L.Collection    = _global._L.Collection || {};
 
     //==============================================================
     // 2. 모듈 가져오기 (node | window)
     if (isNode) {     
         Util                = require('./util');
+        IArrayCollection = require('./i-collection-array').IArrayCollection;
         BaseCollection      = require('./collection-base').BaseCollection;
     } else {    
         Util                = _global._L.Common.Util;
+        IArrayCollection = _global._L.Interface.IArrayCollection;
         BaseCollection      = _global._L.Collection.BaseCollection;
     }
 
     //==============================================================
     // 3. 모듈 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    if (typeof IArrayCollection === 'undefined') throw new Error('[IArrayCollection] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
 
     //==============================================================
@@ -35,12 +40,14 @@
         /**
          * 배열타입 컬렉션 클래스
          * @constructs _L.Collection.ArrayCollection
+         * @implements {_L.Interface.IArrayCollection}
          * @extends _L.Collection.BaseCollection
          * @param {Object} p_owner 소유객체
          */
         function ArrayCollection(p_owner) {
             _super.call(this, p_owner);
 
+            Util.implements(this, IArrayCollection);
         }
         Util.inherits(ArrayCollection, _super);
 

@@ -1387,6 +1387,91 @@ describe("[target: meta-table.js]", () => {
             //     expect(typeNames.length).toBe(5);
             // });
         });
+        describe("this.acceptChanges() <변경 허락 : 커밋>", () => {
+            it("- isChanges : 변경 유무", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+    
+                // 초기
+                expect(table1.rows.isChanges).toBe(false);
+                // 변경후
+                var row = table1.newRow();
+                row[0] = 'R1';
+                table1.rows.add(row);
+                expect(table1.rows.isChanges).toBe(true);
+                // 커밋 후
+                table1.acceptChanges();
+                expect(table1.rows.isChanges).toBe(false);
+            });
+        });
+        describe("this.rejectChanges() <변경 거부>", () => {
+            it("- add() : 추가 후 롤백", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+    
+                // 초기                
+                var row = table1.newRow();
+                row[0] = 'R1';
+                table1.rows.add(row);
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+                // 롤백 후
+                table1.rejectChanges();
+                expect(table1.rows.count).toBe(0);
+            });
+        });
+
+        describe("this.getChanges() <변경 내역 조회>", () => {
+            it("- add(), remove() : 등록 -> 삭제 -> 조회 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+                
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+                var row3 = table1.newRow();
+                row3[0] = 'R3';
+    
+                table1.rows.add(row1);
+                table1.rows.add(row2);
+                table1.rows.add(row3);
+                table1.rows.remove(row2);
+
+                // 등록 확인
+                expect(table1.rows[0][0]).toBe('R1');
+                expect(table1.rows[1][0]).toBe('R3');
+                // 변경 내역 조회
+                var changes2 = [
+                    {cmd: 'I', pos: 0, ref: row1, clone: null },
+                    {cmd: 'I', pos: 1, ref: row2, clone: null },
+                    {cmd: 'I', pos: 2, ref: row3, clone: null },
+                    {cmd: 'D', pos: 1, ref: null, clone: row2 },
+                ];
+                var changes = table1.getChanges();
+
+                expect(changes[0].cmd === changes2[0].cmd 
+                    && changes[0].pos === changes2[0].pos 
+                    && changes[0].ref === changes2[0].ref 
+                    && changes[0].clone === changes2[0].clone).toBe(true);
+                expect(changes[1].cmd === changes2[1].cmd 
+                    && changes[1].pos === changes2[1].pos 
+                    && changes[1].ref === changes2[1].ref 
+                    && changes[1].clone === changes2[1].clone).toBe(true);
+                expect(changes[2].cmd === changes2[2].cmd 
+                    && changes[2].pos === changes2[2].pos 
+                    && changes[2].ref === changes2[2].ref 
+                    && changes[2].clone === changes2[2].clone).toBe(true);
+                expect(changes[3].cmd === changes2[3].cmd 
+                    && changes[3].pos === changes2[3].pos 
+                    && changes[3].ref === changes2[3].ref 
+                    && changes[3].clone === changes2[3].clone).toBe(true);
+            });
+        });
+
         describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
                 const c = new MetaTable();

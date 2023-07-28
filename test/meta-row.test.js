@@ -145,8 +145,336 @@ describe("[target: meta-row.js]", () => {
             });
         });
 
+        describe("this.commit() <커밋>", () => {
+            it("- isChanges : 변경 유무", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
     
+                // 초기
+                expect(table1.rows.isChanges).toBe(false);
+                // 변경후
+                var row = table1.newRow();
+                row[0] = 'R1';
+                table1.rows.add(row);
+                expect(table1.rows.isChanges).toBe(true);
+                // 커밋 후
+                table1.rows.commit();
+                expect(table1.rows.isChanges).toBe(false);
+            });
+        });
+    
+        describe("this.rollback() <롤백>", () => {
+            it("- add() : 추가 후 롤백", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+    
+                // 초기                
+                var row = table1.newRow();
+                row[0] = 'R1';
+                table1.rows.add(row);
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+                // 롤백 후
+                table1.rows.rollback();
+                expect(table1.rows.count).toBe(0);
+            });
+            it("- remove() : 추가 커밋 -> 삭제 -> 롤백", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+                
+                // 추가 커밋 
+                var row = table1.newRow();
+                row[0] = 'R1';
+                table1.rows.add(row);
+                table1.rows.commit();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+                // 삭제
+                table1.rows.remove(row);
+                expect(table1.rows.count).toBe(0);
+                // 롤백
+                table1.rows.rollback();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+            });
+            it("- add(), remove() : 추가 커밋 -> 삭제 -> 커밋 -> 추가 -> 롤백 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1')
+                
+                // 추가 커밋 
+                var row = table1.newRow();
+                row[0] = 'R1';
+                table1.rows.add(row);
+                table1.rows.commit();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+                // 삭제 
+                table1.rows.remove(row);
+                expect(table1.rows.count).toBe(0);
+                // 커밋
+                table1.rows.commit();
+                expect(table1.rows.count).toBe(0);
+                // 추가
+                var row = table1.newRow();
+                row[0] = 'R2';
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row[0] = 'R3';
+                table1.rows.add(row);
+                expect(table1.rows.count).toBe(2);
+                expect(table1.rows[0][0]).toBe('R2');
+                expect(table1.rows[1][0]).toBe('R3');
+                // 롤백
+                table1.rows.rollback();
+                expect(table1.rows.count).toBe(0);
+            });
+            it("- add(), insertAt() remove() : 중복 추가 삭제시 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1')
+                
+                // 추가 커밋 
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                table1.rows.add(row1);
+                table1.rows.commit();
+                expect(table1.rows.count).toBe(1);
+                // 삭제 및 추가 삭제
+                table1.rows.remove(row1);
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+                table1.rows.add(row2);
+                var row3 = table1.newRow();
+                row3[0] = 'R3';
+                table1.rows.add(row3);
+                table1.rows.insertAt(0, row1);
+                expect(table1.rows.count).toBe(3);
+                expect(table1.rows[0][0]).toBe('R1');
+                expect(table1.rows[1][0]).toBe('R2');
+                expect(table1.rows[2][0]).toBe('R3');
+                // 롤백
+                table1.rows.rollback();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+            });
+            it("- rows 수정 후 롤백 (단일)", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+    
+                var row = table1.newRow();
+                row[0] = 'R1';
+                
+                // 추가 및 커밋                
+                table1.rows.add(row);
+                table1.rows.commit();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+    
+                // 변경
+                table1.rows[0][0] = 'RR1';
+                expect(table1.rows[0][0]).toBe('RR1');
+    
+                // 롤백 후
+                table1.rows.rollback();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+            });
+            it("- rows 수정 후 롤백 (단일)", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+    
+                var row = table1.newRow();
+                row[0] = 'R1';
+                
+                // 추가 및 커밋                
+                table1.rows.add(row);
+                table1.rows.commit();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+    
+                // 변경
+                table1.rows[0][0] = 'RR1';
+                expect(table1.rows[0][0]).toBe('RR1');
+                var etc = table1.rows._transQueue.queue[0].etc;
+
+                // 롤백 후
+                table1.rows.rollback();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+                expect(etc).toMatch(/idx:0.*new:RR1.*old:R1/);  // etc 로그 확인
+            });
+            it("- rows[0] = row : row 설정 롤백", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+    
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+    
+                // 추가 및 커밋                
+                table1.rows.add(row1);
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+                expect(table1.rows[0]['i1']).toBe('R1');
+                table1.rows.commit();
+    
+                // 변경
+                table1.rows[0] = row2;
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R2');
+                expect(table1.rows[0]['i1']).toBe('R2');
+    
+                // 롤백 후
+                table1.rows.rollback();
+                expect(table1.rows.count).toBe(1);
+                expect(table1.rows[0][0]).toBe('R1');
+                expect(table1.rows[0]['i1']).toBe('R1');
+            });
+    
+        });
+    
+
+        describe("this[0] = row <컬렉션 설정>", () => {
+            it("- rows[0] = row : row 설정 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.rows.autoChanges = false;
+                table1.columns.add('i1');
+                var table2 = new MetaTable('T2');
+                table2.rows.autoChanges = false;
+                table2.columns.add('ii1');
+                
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+                var row3 = table2.newRow();
+                row3[0] = 'R3';
+    
+                table1.rows.add(row1);
+                expect(table1.rows[0][0]).toBe('R1');
+                table1.rows[0] = row2;
+                expect(table1.rows[0][0]).toBe('R2');
+                expect(() => table1.rows[0] = row3).toThrow(/entity/);
+            });
+        });
+    
+        describe("this.insertAt(pos, row, chkValid): bool <지정 위치에 삽입> ", () => {
+            it("- insertAt(idx, value) : 첫째 요소 추가", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1')
+                var row0 = table1.newRow();
+                row0[0] = 'R0';
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+    
+                table1.rows.add(row1);
+                table1.rows.add(row2);
+                table1.rows.insertAt(0, row0);
+    
+                expect(table1.rows[0]).toBeDefined();
+                expect(table1.rows[1]).toBeDefined();
+                expect(table1.rows[2]).toBeDefined();
+                expect(table1.rows.indexOf(row0)).toBe(0);  // 바뀐 idx 확인
+                expect(table1.rows.indexOf(row1)).toBe(1);  // 바뀐 idx 확인
+                expect(table1.rows.indexOf(row2)).toBe(2);  // 바뀐 idx 확인
+                expect(table1.rows.count).toBe(3);
+                expect(table1.rows.list.length).toBe(3);
+            });
+            it("- insertAt(idx, value) : 중간 요소 추가", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1')
+                var row0 = table1.newRow();
+                row0[0] = 'R0';
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+    
+                table1.rows.add(row0);
+                table1.rows.add(row2);
+                table1.rows.insertAt(1, row1);
+    
+                expect(table1.rows[0]).toBeDefined();
+                expect(table1.rows[1]).toBeDefined();
+                expect(table1.rows[2]).toBeDefined();
+                expect(table1.rows.indexOf(row0)).toBe(0);  // 바뀐 idx 확인
+                expect(table1.rows.indexOf(row1)).toBe(1);  // 바뀐 idx 확인
+                expect(table1.rows.indexOf(row2)).toBe(2);  // 바뀐 idx 확인
+                expect(table1.rows.count).toBe(3);
+                expect(table1.rows.list.length).toBe(3);
+            });
+            it("- insertAt(idx, value) : 마지막 요소 추가 후 add()", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1')
+                var row0 = table1.newRow();
+                row0[0] = 'R0';
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+                var row3 = table1.newRow();
+                row3[0] = 'R3';
+    
+                table1.rows.add(row0);
+                table1.rows.add(row1);
+                table1.rows.insertAt(2, row2);
+                table1.rows.add(row3);
+    
+                expect(table1.rows[0]).toBeDefined();
+                expect(table1.rows[1]).toBeDefined();
+                expect(table1.rows[2]).toBeDefined();
+                expect(table1.rows[3]).toBeDefined();
+                expect(table1.rows.indexOf(row0)).toBe(0);  // 바뀐 idx 확인
+                expect(table1.rows.indexOf(row1)).toBe(1);  // 바뀐 idx 확인
+                expect(table1.rows.indexOf(row2)).toBe(2);  // 바뀐 idx 확인
+                expect(table1.rows.indexOf(row3)).toBe(3);  // 바뀐 idx 확인
+                expect(table1.rows.count).toBe(4);
+                expect(table1.rows.list.length).toBe(4);
+            });
+            it("- insertAt(pos) : 예외 : 사이즈 초과", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1')
+                var row0 = table1.newRow();
+                row0[0] = 'R0';
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+    
+                table1.rows.add(row0);
+                table1.rows.add(row1);
+    
+                expect(()=> table1.rows.insertAt(3, row2)).toThrow(/pos.*size/);
+            });
+            it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1')
+                var row0 = table1.newRow();
+                row0[0] = 'R0';
+                var row1 = table1.newRow();
+                row1[0] = 'R1';
+                var row2 = table1.newRow();
+                row2[0] = 'R2';
+    
+                table1.rows.add(row0);
+                table1.rows.add(row1);
+    
+                expect(()=> table1.rows.insertAt(-1, row2)).toThrow(/pos.*0/);
+            });
+        });
     });
+
+    
 });
 
 // describe("< setValue(row) >", () => {

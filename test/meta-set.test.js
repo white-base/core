@@ -280,8 +280,29 @@ describe("[target: meta-set.js]", () => {
                 // TODO:
             });
         });
-        describe.skip("this.acceptChanges() <커밋>", () => {
-            it("- TODO: ", () => {
+        describe("this.acceptChanges() <커밋>", () => {
+            it("- autoChanges : 전체 트랜젝션 모드 변경후 커밋", () => {
+                var set1 = new MetaSet('S1');
+                set1.tables.add('T1');
+                set1.tables.add('T2');
+                set1.tables['T1'].columns.add('c1');
+                set1.tables['T2'].columns.add('cc1');
+
+                // 전체 트랜젝션 모드
+                set1.autoChanges = false;
+                expect(set1.tables['T1'].rows.isChanges).toBe(false);
+                expect(set1.tables['T2'].rows.isChanges).toBe(false);
+                // 변경후
+                var row1 = set1.tables['T1'].newRow();
+                row1[0] = 'R1';
+                set1.tables['T1'].rows.add(row1);
+                var row2 = set1.tables['T2'].newRow();
+                row2[0] = 'RR1';
+                set1.tables['T2'].rows.add(row2);
+                // expect(set1.hasChanges()).toBe(true);        // POINT:
+                // 커밋 후
+                set1.acceptChanges();
+                expect(set1.hasChanges()).toBe(false);
             });
         });
         describe.skip("this.rejectChanges() <롤백>", () => {
@@ -299,6 +320,8 @@ describe("[target: meta-set.js]", () => {
 
     });
     
+
+    // REVIEW: 위치 테이블 쪽으로 이동하는게 적합할듯!
     describe("MetaTableCollection :: 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();

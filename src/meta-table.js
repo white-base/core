@@ -183,13 +183,13 @@
 
 
         MetaTable.prototype.acceptChanges  = function() {
-            console.log('구현해야함');  // COVER:
+            this.rows.commit();
         };
         MetaTable.prototype.rejectChanges  = function() {
-            console.log('구현해야함');  // COVER:
+            this.rows.rollback();
         };
         MetaTable.prototype.getChanges  = function() {
-            console.log('구현해야함');  // COVER:
+            return this.rows._transQueue.select();
         };
 
         return MetaTable;
@@ -218,31 +218,6 @@
          * @returns {MetaColumn} 등록한 아이템
          */
         MetaTableCollection.prototype.add  = function(p_object) { // COVER:
-            // var i_value;
-            // var i_name;
-
-            // if (typeof p_object === 'string') {      
-            //     i_name  = p_object;
-            //     i_value = new MetaTable(i_name);
-            //     i_value.metaSet = this._owner;
-            // } else if (p_object instanceof MetaTable) {
-            //     i_name  = p_object.tableName;
-            //     i_value = p_object;
-            //     p_object.metaSet = this._owner;
-            // } else {
-            //     throw new Error('string | MetaTable object [p_object].');
-            // }
-
-            // if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
-            // if (this.existTableName(i_name)) throw new Error('tableName 중복 발생!!');
-
-            // _super.prototype.add.call(this, i_name, i_value);
-
-            // return this[i_name];
-            return this.insertAt(this._element.length, p_object);
-        };
-
-        MetaTableCollection.prototype.insertAt  = function(p_pos, p_object) {
             var i_value;
             var i_name;
 
@@ -261,10 +236,10 @@
             if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
             if (this.existTableName(i_name)) throw new Error('tableName 중복 발생!!');
 
-            _super.prototype.insertAt.call(this, p_pos, i_name, i_value);
+            _super.prototype.add.call(this, i_name, i_value);
+
             return this[i_name];
         };
-
 
         MetaTableCollection.prototype.existTableName  = function(p_key) {
             for (var i = 0; this.count > i; i++) {

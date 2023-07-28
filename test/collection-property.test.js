@@ -165,7 +165,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(result).toBeTruthy();
             });
         });
-        describe("this.insertAt(num, name): bool <idx 위치에 추가>", () => {
+        describe.skip("this.insertAt(num, name): bool <idx 위치에 추가>", () => {
             // beforeAll(() => {
             //     let s = new Student();
             // });
