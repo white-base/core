@@ -23,7 +23,7 @@
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         Util                    = require('./util');
         ISchemaControl          = require('./i-control-schema').ISchemaControl;
@@ -308,7 +308,7 @@
     
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.MetaSet = MetaSet;
     } else {

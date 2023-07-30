@@ -10,13 +10,13 @@
     var Util;
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};    
     _global._L.Interface     = _global._L.Interface || {};    
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     
     if (isNode) {     
         IPartControl        = require('./i-control-part').IPartControl;
@@ -29,13 +29,13 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof IPartControl === 'undefined') throw new Error('[IPartControl] module load fail...');
     if (typeof ILookupControl === 'undefined') throw new Error('[ILookupControl] module load fail...');
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation
     var ICollection  = (function () {
         /**
          * 컬렉션 최상위
@@ -127,7 +127,7 @@
     }());
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.ICollection = ICollection;
     } else {

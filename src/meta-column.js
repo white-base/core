@@ -14,13 +14,13 @@
     var Observer;
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         Util                = require('./util');
         CustomError         = require('./error-custom').CustomError;
@@ -988,7 +988,7 @@
 
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.MetaColumn                         = MetaColumn;
         exports.MetaColumnCollection               = MetaColumnCollection;

@@ -9,14 +9,14 @@
     var Util;
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Common        = _global._L.Common || {};
     _global._L.Interface     = _global._L.Interface || {};    
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         // require('./_object-implement'); // _implements() : 폴리필
         Util                = require('./util');
@@ -27,7 +27,7 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
 
@@ -137,7 +137,7 @@
     }());
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.MetaObject = MetaObject;
     } else {    // COVER:

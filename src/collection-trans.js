@@ -10,13 +10,13 @@
     var TransactionQueue;
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};
     _global._L.Collection    = _global._L.Collection || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         Util                = require('./util');
         ArrayCollection      = require('./collection-array').ArrayCollection;
@@ -28,7 +28,7 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
     if (typeof TransactionQueue === 'undefined') throw new Error('[TransactionQueue] module load fail...');
@@ -129,7 +129,7 @@
     }(ArrayCollection));
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.TransactionCollection = TransactionCollection;
     } else {    

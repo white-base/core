@@ -8,7 +8,7 @@
     //var util;
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         // util = require('util');
     } else {
@@ -28,7 +28,7 @@
     
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     // if (isNode) {     
     //     module.exports = namespace;
     // } else {

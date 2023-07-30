@@ -18,7 +18,7 @@
     _global._L.Common.Util   = _global._L.Common.Util || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {
         getAllProperties    = require('./util-type').getAllProperties;
         checkType           = require('./util-type').checkType;
@@ -176,7 +176,7 @@
     }
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.inherits = inherits;
         exports.getArrayDepth = getArrayDepth;

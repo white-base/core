@@ -7,12 +7,12 @@
     'use strict';
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     global._L               = global._L || {};
     global._L.Collection    = global._L.Collection || {};
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     var Util;
     var PropertyCollection;
 
@@ -25,7 +25,7 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     
@@ -66,7 +66,7 @@
     
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         module.exports = PropertyFunctionCollection;
     } else {

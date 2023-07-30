@@ -6,13 +6,13 @@
     'use strict';
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     global._L               = global._L || {};
     global._L.Meta          = global._L.Meta || {};
     global._L.Meta.Entity   = global._L.Meta.Entity || {};
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     var util;
     var Item;
     var jquery;
@@ -28,7 +28,7 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof util === 'undefined') throw new Error('[util] module load fail...');
     if (typeof Item === 'undefined') throw new Error('[Item] module load fail...');
     if (typeof jquery === 'undefined' && typeof module !== 'object') throw new Error('[jquery] module load fail...');
@@ -439,7 +439,7 @@
     }(Item));
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         module.exports = ItemDOM;
     } else {

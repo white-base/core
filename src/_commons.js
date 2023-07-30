@@ -3,7 +3,7 @@
     'use strict';
     
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     require('./extends');   // 폴리필
 
     global._L               = global._L || {};
@@ -15,7 +15,7 @@
     var util;
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         util                = require('./util');
         Observer            = require('./observer');
@@ -25,13 +25,13 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof util === 'undefined') throw new Error('[util] module load fail...');
     if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
 
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         module.exports.util             = util;
         module.exports.Observer         = Observer;

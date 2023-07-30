@@ -14,7 +14,7 @@
     var ArrayCollection;
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};    
     _global._L.Collection    = _global._L.Collection || {};
@@ -22,7 +22,7 @@
     // _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         Util                        = require('./util');
         // MetaObject                  = require('./meta-object').MetaObject;
@@ -36,7 +36,7 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     // if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
@@ -161,7 +161,7 @@
     
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.TransactionQueue = TransactionQueue;
     } else {

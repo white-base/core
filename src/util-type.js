@@ -13,7 +13,7 @@
     _global._L.Common.Util   = _global._L.Common.Util || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
 
     //==============================================================
     // 3. 의존성 검사
@@ -389,7 +389,7 @@
 
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.getAllProperties = getAllProperties;
         exports.getTypeMap = getTypeMap;

@@ -10,13 +10,13 @@
     var IMarshal;
     
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};
     _global._L.Interface     = _global._L.Interface || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         Util                = require('./util');
         IObject             = require('./i-object').IObject;
@@ -66,7 +66,7 @@
     }(IObject));
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     // if (isNode) {
     //     module.exports = IMarshal;
     // }

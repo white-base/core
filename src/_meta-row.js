@@ -14,7 +14,7 @@
     var ArrayCollection;
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};    
     _global._L.Collection    = _global._L.Collection || {};
@@ -22,7 +22,7 @@
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
     if (isNode) {     
         Util                        = require('./util');
         MetaObject                  = require('./meta-object');
@@ -36,7 +36,7 @@
     }
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
@@ -173,7 +173,7 @@
     }(ArrayCollection));
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         module.exports.MetaRow = MetaRow;
         module.exports.MetaRowCollection = MetaRowCollection;

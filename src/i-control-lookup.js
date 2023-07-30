@@ -7,15 +7,15 @@
     var isNode = typeof window !== 'undefined' ? false : true;
 
     //==============================================================
-    // 1. 모듈 네임스페이스 선언
+    // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Interface     = _global._L.Interface || {};    
     
     //==============================================================
-    // 2. 모듈 가져오기 (node | window)
+    // 2. import module
 
     //==============================================================
-    // 3. 모듈 의존성 검사
+    // 3. module dependency check
 
     //==============================================================
     // 4. 모듈 구현    
@@ -40,7 +40,7 @@
     }());
 
     //==============================================================
-    // 5. 모듈 내보내기 (node | web)
+    // 5. module export
     if (isNode) {     
         exports.ILookupControl = ILookupControl;
     } else {
