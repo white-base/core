@@ -488,11 +488,12 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             expect(result2).toBeTruthy();
             expect(i.rows.exist(0)).toBe(true);
             expect(i.rows.exist(1)).toBe(true);
-            expect(i.rows.exist(2)).toBe(false);
+            expect(i.rows.exist(2)).toBe(false);    // 실패 조건
             expect(i.rows.exist('0')).toBe(true);
             expect(i.rows.exist('1')).toBe(true);
-            expect(i.rows.exist('2')).toBe(false);
-            expect(()=> i.rows.exist(true)).toThrow(/key.*number.*string/);
+            expect(i.rows.exist('2')).toBe(false);  // 실패 조건
+            // 예외 조건
+            expect(()=> i.rows.exist(true)).toThrow(/key.*number.*string/);     
         });
     });
 });
