@@ -16,6 +16,7 @@ https://jcon.tistory.com/185
 
 수정
 
+home
 
 
 맥에서 재부팅시 자동 ssh-add 추가 확인중
