@@ -22,5 +22,9 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "stringify-parse": "github:bonjs/stringify-parse",
+    "telejson": "^7.1.0"
   }
 }
