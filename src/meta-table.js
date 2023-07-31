@@ -84,7 +84,8 @@
                 // },
                 configurable: false,
                 enumerable: true
-            });            
+            });
+            
 
             this.tableName  = p_name || '';
         }

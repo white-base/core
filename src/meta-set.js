@@ -271,31 +271,31 @@
         };
 
         MetaSet.prototype.acceptChanges  = function() {
-            for (let i = 0; i < this.tables.length; i++) {
+            for (let i = 0; i < this.tables.count; i++) {
                 this.tables[i].acceptChanges();                
             }
         };
         
         MetaSet.prototype.rejectChanges  = function() {
-            for (let i = 0; i < this.tables.length; i++) {
+            for (let i = 0; i < this.tables.count; i++) {
                 this.tables[i].rejectChanges();                
             }
         };
         
-        MetaSet.prototype.getChanges  = function() {
-            var arr = {tables: null};
+        // MetaSet.prototype.getChanges  = function() {
+        //     var arr = {tables: {}};
 
-            for (let i = 0; i < this.tables.length; i++) {
-                var table = this.tables[i];
-                if (table.getChanges().length > 0) {
-                    arr.tables[this.tableName] = table.getChanges();
-                }
-            }
-            return arr;
-        };
+        //     for (let i = 0; i < this.tables.count; i++) {
+        //         var table = this.tables[i];
+        //         if (table.getChanges().length > 0) {
+        //             arr.tables[table.tableName] = table.getChanges();
+        //         }
+        //     }
+        //     return arr;
+        // };
         
         MetaSet.prototype.hasChanges  = function() {
-            for (let i = 0; i < this.tables.length; i++) {
+            for (let i = 0; i < this.tables.count; i++) {
                 var table = this.tables[i];
                 if (table.getChanges().length > 0) return true;
             }

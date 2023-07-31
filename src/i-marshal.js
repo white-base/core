@@ -41,6 +41,12 @@
          */
         function IMarshal() {
             _super.call(this);
+
+            /**
+             * 메타 이름
+             * @member {string} _L.Interface.IMarshal#guid
+             */
+            this.guid = '';
         }
         Util.inherits(IMarshal, _super);
 

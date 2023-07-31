@@ -118,8 +118,9 @@
                     this.collection.insertAt(pos, obj.clone);
                 }
             }
+            this.init();
         };
-        
+
         TransactionQueue.prototype.insert  = function(p_pos, p_target, p_etc) {
             this.queue.push({
                 cmd: 'I',

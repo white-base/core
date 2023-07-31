@@ -70,17 +70,27 @@
             });
 
             /** @member {Array} _L.Meta.MetaElement#__guid 속성들값 */
-            Object.defineProperty(this, '__guid', 
+            // Object.defineProperty(this, '__guid', 
+            // {
+            //     get: function() { return __guid; },
+            //     set: function(newValue) {
+            //         if (typeof newValue !== 'string')  throw new Error('Only [__guid] type "string" can be added'); // COVER: 2
+            //         __guid = newValue;
+            //     },
+            //     configurable: false,
+            //     enumerable: true
+            // });
+
+            /** @member {Array} _L.Meta.MetaElement#guid 속성들값 */
+            Object.defineProperty(this, 'guid', 
             {
-                get: function() { return __guid; },
-                set: function(newValue) {
-                    if (typeof newValue !== 'string')  throw new Error('Only [__guid] type "string" can be added'); // COVER: 2
-                    __guid = newValue;
+                get: function() { 
+                    if (!__guid) __guid = Util.createGuid();
+                    return __guid;
                 },
                 configurable: false,
                 enumerable: true
             });
-
                         
             this.metaName = p_name || '';
             
@@ -94,9 +104,9 @@
          * @private
          * @returns {String}
          */
-        function __newGuid() {
-            return Util.createGuid();
-        };
+        // function __newGuid() {
+        //     return Util.createGuid();
+        // };
 
         /**
          * 객체를 얻는다

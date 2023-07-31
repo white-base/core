@@ -181,13 +181,13 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        describe("this.getGuid(): str <GUID 얻기>", () => {
-            it("- getGuid() ", () => {
+        describe("this.guid: str <GUID 얻기>", () => {
+            it("- this.guid ", () => {
                 const c1 = new MetaElementSub();
                 const c2 = new MetaElementSub();
-                const guid1 = c1.getGuid();
-                const guid2 = c1.getGuid();
-                const guid3 = c2.getGuid();
+                const guid1 = c1.guid;
+                const guid2 = c1.guid;
+                const guid3 = c2.guid;
         
                 expect(guid1.length).toBe(36);
                 expect(guid2.length).toBe(36); // guid 길이
@@ -216,8 +216,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 Foo.prototype.getStr  = function() {};  // 제외
                 const c = new Foo('foo');
                 const obj = c.getObject();
+                const comp = { guid: obj.guid, str: 'STR', metaName: 'foo', prop: 10 }
         
-                expect(obj).toEqual({ str: 'STR', metaName: 'foo', prop: 10 });
+                expect(obj).toEqual(comp);
             });
             it("- getObject() : class 타입 ", () => {
                 class Foo extends MetaElement {
@@ -233,8 +234,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 }
                 const c = new Foo('foo');
                 const obj = c.getObject();
-        
-                expect(obj).toEqual({ str: 'STR', metaName: 'foo', prop: 10 });
+                const comp = { guid: obj.guid, str: 'STR', metaName: 'foo', prop: 10 }
+
+                expect(obj).toEqual(comp);
             });
             it("- getObject() : Meta 속성 ", () => {
                 class Bar extends MetaElement {
@@ -249,16 +251,19 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 }
                 const c = new Foo('foo');
                 const obj = c.getObject();
+                const comp = { guid: obj.guid, str: 'STR', metaName: 'foo', bar: { 
+                    guid: obj.bar.guid, metaName: '', sub: true 
+                } };
         
-                expect(obj).toEqual({ str: 'STR', metaName: 'foo', bar: { metaName: '', sub: true } });
+                expect(obj).toEqual(comp);
             });
         });
         describe("예외", () => {
-            it("- 예외 : name, __guid ", () => {
+            it("- 예외 : metaName, guid ", () => {
                 const i = new MetaElement('metaName');
         
                 expect(()=> i.metaName = 10).toThrow(/metaName.*string/);
-                expect(()=> i.__guid = 10).toThrow(/__guid.*string/); // 직접 설정할 경우는 없음
+                expect(()=> i.guid = 10).toThrow(/only.*getter/); // 직접 설정할 경우는 없음
             });
         });
         

@@ -287,37 +287,138 @@ describe("[target: meta-set.js]", () => {
                 set1.tables.add('T2');
                 set1.tables['T1'].columns.add('c1');
                 set1.tables['T2'].columns.add('cc1');
+                var row1 = set1.tables['T1'].newRow();
+                row1[0] = 'R1';
+                var row2 = set1.tables['T2'].newRow();
+                row2[0] = 'RR1';
 
                 // 전체 트랜젝션 모드
                 set1.autoChanges = false;
                 expect(set1.tables['T1'].rows.isChanges).toBe(false);
                 expect(set1.tables['T2'].rows.isChanges).toBe(false);
                 // 변경후
-                var row1 = set1.tables['T1'].newRow();
-                row1[0] = 'R1';
                 set1.tables['T1'].rows.add(row1);
-                var row2 = set1.tables['T2'].newRow();
-                row2[0] = 'RR1';
                 set1.tables['T2'].rows.add(row2);
-                // expect(set1.hasChanges()).toBe(true);        // POINT:
+                expect(set1.hasChanges()).toBe(true);
                 // 커밋 후
                 set1.acceptChanges();
                 expect(set1.hasChanges()).toBe(false);
             });
         });
-        describe.skip("this.rejectChanges() <롤백>", () => {
-            it("- TODO: ", () => {
-            });
-        });
-        describe.skip("this.getChanges() <변경 내역 얻기>", () => {
-            it("- TODO: ", () => {
-            });
-        });
-        describe.skip("this.hasChanges() <변경 유무>", () => {
-            it("- TODO: ", () => {
-            });
-        });
+        describe("this.rejectChanges() <롤백>", () => {
+            it("- add() -> remove() -> 롤백 ", () => {
+                var set1 = new MetaSet('S1');
+                set1.tables.add('T1');
+                set1.tables.add('T2');
+                set1.tables['T1'].columns.add('c1');
+                set1.tables['T2'].columns.add('cc1');
+                var row1 = set1.tables['T1'].newRow();
+                row1[0] = 'R1';
+                var row2 = set1.tables['T2'].newRow();
+                row2[0] = 'RR1';
 
+                // 전체 트랜젝션 모드
+                set1.autoChanges = false;
+                expect(set1.tables['T1'].rows.isChanges).toBe(false);
+                expect(set1.tables['T2'].rows.isChanges).toBe(false);
+                // add()
+                set1.tables['T1'].rows.add(row1);
+                set1.tables['T2'].rows.add(row2);
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T2'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['c1']).toBe('R1');
+                expect(set1.tables['T2'].rows[0]['cc1']).toBe('RR1');
+                expect(set1.hasChanges()).toBe(true);
+                // remove()
+                set1.tables['T1'].rows.remove(row1);
+                expect(set1.tables['T1'].rows.count).toBe(0);
+                expect(set1.tables['T2'].rows.count).toBe(1);
+                expect(set1.tables['T2'].rows[0]['cc1']).toBe('RR1');
+                expect(set1.hasChanges()).toBe(true);
+                // rejectChanges()
+                set1.rejectChanges();
+                expect(set1.hasChanges()).toBe(false);
+
+            });
+        });
+        
+        // REVIEW: 삭제 대기
+        describe.skip("this.getChanges() <변경 내역 얻기>", () => {
+            it("- add() -> remove() -> getChanages() ", () => {
+                var set1 = new MetaSet('S1');
+                set1.tables.add('T1');
+                set1.tables.add('T2');
+                set1.tables['T1'].columns.add('c1');
+                set1.tables['T2'].columns.add('cc1');
+                var row1 = set1.tables['T1'].newRow();
+                row1[0] = 'R1';
+                var row2 = set1.tables['T2'].newRow();
+                row2[0] = 'RR1';
+                var changes = [];
+
+                // 전체 트랜젝션 모드
+                set1.autoChanges = false;
+                expect(set1.tables['T1'].rows.isChanges).toBe(false);
+                expect(set1.tables['T2'].rows.isChanges).toBe(false);
+                // add()
+                set1.tables['T1'].rows.add(row1);
+                set1.tables['T2'].rows.add(row2);
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T2'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['c1']).toBe('R1');
+                expect(set1.tables['T2'].rows[0]['cc1']).toBe('RR1');
+                expect(set1.hasChanges()).toBe(true);
+                // remove()
+                set1.tables['T1'].rows.remove(row1);
+                expect(set1.tables['T1'].rows.count).toBe(0);
+                expect(set1.tables['T2'].rows.count).toBe(1);
+                expect(set1.tables['T2'].rows[0]['cc1']).toBe('RR1');
+                expect(set1.hasChanges()).toBe(true);
+                // getChanage()
+                // var set1Changes = set1.getChanges();
+            });
+        });
+        describe("this.hasChanges() <변경 유무>", () => {
+            it("- 등록 후 검사, 삭제 후 검사 ", () => {
+                var set1 = new MetaSet('S1');
+                set1.tables.add('T1');
+                var row1 = set1.tables['T1'].newRow();
+                row1[0] = 'R1';
+
+                // 전체 트랜젝션 모드
+                set1.autoChanges = false;
+                // 등록 후 검사
+                set1.tables['T1'].rows.add(row1);
+                expect(set1.hasChanges()).toBe(true);
+                // 커밋 (초기화)
+                set1.acceptChanges();
+                expect(set1.hasChanges()).toBe(false);
+                // 삭제 후 검사
+                set1.tables['T1'].rows.remove(row1);
+                expect(set1.hasChanges()).toBe(true);
+                set1.acceptChanges();
+                expect(set1.hasChanges()).toBe(false);
+            });
+        });
+        describe("this.autoChanges <자동 변경 유무 설정>", () => {
+            it("- 설정 전, 설정 후 ", () => {
+                var set1 = new MetaSet('S1');
+                set1.tables.add('T1');
+                set1.tables.add('T2');
+
+                // 설정전
+                expect(set1.tables['T1'].rows.autoChanges).toBe(true);
+                expect(set1.tables['T2'].rows.autoChanges).toBe(true);
+                // 설정후
+                set1.autoChanges = false;
+                expect(set1.tables['T1'].rows.autoChanges).toBe(false);
+                expect(set1.tables['T2'].rows.autoChanges).toBe(false);
+                // 초기화
+                set1.autoChanges = true;
+                expect(set1.tables['T1'].rows.autoChanges).toBe(true);
+                expect(set1.tables['T2'].rows.autoChanges).toBe(true);
+            });
+        });
     });
     
 
