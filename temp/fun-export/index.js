@@ -23,7 +23,9 @@ var strFn2 = JSON.stringify(o);
 
 var fn = stringifyParse.parse(strFn);
 var fn2 = stringifyParse.parse(strFn2);
-// var fn3 = JSON.parse(strFn);
+// 오류 : 함수가 들어 있음
+// var fn3 = JSON.parse(strFn);   
+
 var fn4 = JSON.parse(strFn2);
 
 var date = new Date(fn.date)
