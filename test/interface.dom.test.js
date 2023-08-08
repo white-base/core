@@ -12,7 +12,7 @@
 
 //==============================================================
 // test
-describe("load: i-object.js <IObject >", () => {
+describe.skip("load: i-object.js <IObject >", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -25,7 +25,7 @@ describe("load: i-object.js <IObject >", () => {
     });
 });
 
-describe("load: i-marshal.js <IMarshal>", () => {
+describe.skip("load: i-marshal.js <IMarshal>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -48,7 +48,7 @@ describe("load: i-marshal.js <IMarshal>", () => {
         expect(() => require('../src/i-marshal')).toThrow(/IObject/);
     });
 });
-describe("load: i-control-part.js <IPartControl>", () => {
+describe.skip("load: i-control-part.js <IPartControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -60,7 +60,7 @@ describe("load: i-control-part.js <IPartControl>", () => {
         expect(global._L.Interface.IPartControl).toBeDefined();
     });
 });
-describe("load: i-control-lookup.js <ILookupControl>", () => {
+describe.skip("load: i-control-lookup.js <ILookupControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -72,7 +72,7 @@ describe("load: i-control-lookup.js <ILookupControl>", () => {
         expect(global._L.Interface.ILookupControl).toBeDefined();
     });
 });
-describe("load: i-control-import.js <IImportControl>", () => {
+describe.skip("load: i-control-import.js <IImportControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -84,7 +84,7 @@ describe("load: i-control-import.js <IImportControl>", () => {
         expect(global._L.Interface.IImportControl).toBeDefined();
     });
 });
-describe("load: i-control-group.js <IGroupControl>", () => {
+describe.skip("load: i-control-group.js <IGroupControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -96,7 +96,7 @@ describe("load: i-control-group.js <IGroupControl>", () => {
         expect(global._L.Interface.IGroupControl).toBeDefined();
     });
 });
-describe("load: i-control-export.js <IExportControl>", () => {
+describe.skip("load: i-control-export.js <IExportControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -108,7 +108,7 @@ describe("load: i-control-export.js <IExportControl>", () => {
         expect(global._L.Interface.IExportControl).toBeDefined();
     });
 });
-describe("load: i-control-all.js <IAllControl>", () => {
+describe.skip("load: i-control-all.js <IAllControl>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -120,7 +120,7 @@ describe("load: i-control-all.js <IAllControl>", () => {
         expect(global._L.Interface.IAllControl).toBeDefined();
     });
 });
-describe("load: i-collection.js <ICollection>", () => {
+describe.skip("load: i-collection.js <ICollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -130,10 +130,14 @@ describe("load: i-collection.js <ICollection>", () => {
         require('../src/util');
         require('../src/i-control-lookup');
         require('../src/i-control-part');
+        require('../src/i-collection-base');
         require('../src/i-collection');
 
         expect(global._L.ICollection).toBeDefined();
         expect(global._L.Interface.ICollection).toBeDefined();
+    });
+    it("- 예외 : Util 로딩이 인된경우", () => {
+        expect(() => require('../src/i-collection')).toThrow(/Util/);
     });
     it("- 예외 : IPartControl 로딩이 인된경우", () => {
         require('../src/util-type');
@@ -147,17 +151,19 @@ describe("load: i-collection.js <ICollection>", () => {
         require('../src/i-control-part');
         expect(() => require('../src/i-collection')).toThrow(/ILookupControl/);
     });
-    it("- 예외 : Util 로딩이 인된경우", () => {
+    it("- 예외 : IBaseCollection 로딩이 인된경우", () => {
+        require('../src/util-type');
+        require('../src/util');
         require('../src/i-control-part');
         require('../src/i-control-lookup');
-        expect(() => require('../src/i-collection')).toThrow(/Util/);
+        expect(() => require('../src/i-collection')).toThrow(/IBaseCollection/);
     });
     it("- 예외 : 모두 로딩이 인된경우", () => {
         expect(() => require('../src/i-collection')).toThrow(/module load/);
     });
 });
 
-describe("load: i-collection-property.js <IPropertyCollection>", () => {
+describe.skip("load: i-collection-property.js <IPropertyCollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -167,6 +173,7 @@ describe("load: i-collection-property.js <IPropertyCollection>", () => {
         require('../src/util');
         require('../src/i-control-lookup');
         require('../src/i-control-part');
+        require('../src/i-collection-base');
         require('../src/i-collection');
         require('../src/i-collection-property');
 

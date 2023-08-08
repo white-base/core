@@ -9,15 +9,16 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
-    var MetaObject;
+    // var MetaObject;
     // var MetaElement;
-    var ArrayCollection;
+    var IBaseCollection;
 
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Common        = _global._L.Common || {};    
-    _global._L.Collection    = _global._L.Collection || {};
+    // _global._L.Collection    = _global._L.Collection || {};
+    _global._L.Interface     = _global._L.Interface || {};    
     // _global._L.Meta          = _global._L.Meta || {};
     // _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
@@ -27,12 +28,12 @@
         Util                        = require('./util');
         // MetaObject                  = require('./meta-object').MetaObject;
         // MetaElement                 = require('./meta-element');
-        ArrayCollection             = require('./collection-array').ArrayCollection;
+        IBaseCollection             = require('./i-collection-base').IBaseCollection;
     } else {    // COVER:
         Util                        = _global._L.Common.Util;
         // MetaObject                  = _global._L.Meta.MetaObject;
         // MetaElement                 = _global._L.Collection.MetaElement;
-        ArrayCollection             = _global._L.Collection.ArrayCollection;
+        IBaseCollection             = _global._L.Interface.IBaseCollection;
     }
 
     //==============================================================
@@ -40,7 +41,7 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     // if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
-    if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
+    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -78,8 +79,9 @@
                 },
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
-                    if (!(newValue instanceof ArrayCollection)) {
-                        throw new Error('Only [p_collection] type "ArrayCollection" can be added');
+                    
+                    if (!(newValue.isImplementOf(IBaseCollection))) {
+                        throw new Error('IBaseCollection 인터페이스를 구현한 컬렉션이 아닙니다.');
                     }
                     collection = newValue;
                 },

@@ -5,9 +5,10 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var ICollection;
     var Observer;    
     var Util;
+    var ICollection;
+    var IBaseCollection;
     
     //==============================================================
     // 1. namespace declaration
@@ -22,10 +23,12 @@
         Util                = require('./util');
         Observer            = require('./observer').Observer;
         ICollection         = require('./i-collection').ICollection;
+        IBaseCollection         = require('./i-collection-base').IBaseCollection;
     } else {
         Util                = _global._L.Common.Util;
         Observer            = _global._L.Common.Observer;
         ICollection         = _global._L.Interface.ICollection;
+        IBaseCollection         = _global._L.Interface.IBaseCollection;
     }
 
     //==============================================================
@@ -33,6 +36,7 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
     if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
+    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현 
@@ -223,7 +227,7 @@
 
             /** implements ICollection 인터페이스 구현 */
             //  this._implements(ICollection);
-             Util.implements(this, ICollection);
+            Util.implements(this, ICollection, IBaseCollection);
         }
     
         /**

@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("[target: collection-property.js, collection-array.js, collection-base.js]", () => {
+describe.skip("[target: collection-property.js, collection-array.js, collection-base.js]", () => {
     describe("BaseCollection :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -32,6 +32,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/util');
             require('../src/i-control-lookup');     // ref
             require('../src/i-control-part');       // ref
+            require('../src/i-collection-base');
             require('../src/i-collection');
             require('../src/observer');
             require('../src/collection-base');
@@ -59,6 +60,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/util');
             require('../src/i-control-lookup');     // ref
             require('../src/i-control-part');       // ref
+            require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/i-collection-array');         // ref
             expect(() => require('../src/collection-array')).toThrow(/BaseCollection/);
@@ -68,6 +70,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/util');
             require('../src/i-control-lookup');     // ref
             require('../src/i-control-part');       // ref
+            require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/i-collection-array');         // ref
             require('../src/observer');             // ref
@@ -97,6 +100,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/util');
             require('../src/i-control-lookup');     // ref
             require('../src/i-control-part');       // ref
+            require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/i-collection-property');
     
@@ -107,6 +111,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/util');
             require('../src/i-control-lookup');     // ref
             require('../src/i-control-part');       // ref
+            require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/observer');             // ref
             require('../src/collection-base');

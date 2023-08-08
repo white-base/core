@@ -9,10 +9,12 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
+    var Observer;
     var MetaObject;
     // var MetaElement;
     var TransactionCollection;
-    var Observer;
+    // var TransactionQueue;
+    var IBaseCollection;
 
     //==============================================================
     // 1. namespace declaration
@@ -21,6 +23,7 @@
     _global._L.Collection    = _global._L.Collection || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    _global._L.Interface     = _global._L.Interface || {};  
 
     //==============================================================
     // 2. import module
@@ -30,12 +33,16 @@
         MetaObject                  = require('./meta-object').MetaObject;
         // MetaElement                 = require('./meta-element');
         TransactionCollection             = require('./collection-trans').TransactionCollection;
+        // TransactionQueue      = require('./trans-queue').TransactionQueue;
+        IBaseCollection         = require('./i-collection-base').IBaseCollection;
     } else {    // COVER:
         Util                        = _global._L.Common.Util;
         Observer            = _global._L.Common.Observer;
         MetaObject                  = _global._L.Meta.MetaObject;
         // MetaElement                 = _global._L.Collection.MetaElement;
         TransactionCollection             = _global._L.Collection.TransactionCollection;
+        // TransactionQueue      = _global._L.Collection.TransactionQueue;
+        IBaseCollection         = _global._L.Interface.IBaseCollection;
     }
 
     //==============================================================
@@ -45,6 +52,8 @@
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof TransactionCollection === 'undefined') throw new Error('[TransactionCollection] module load fail...');
+    // if (typeof TransactionQueue === 'undefined') throw new Error('[TransactionQueue] module load fail...');
+    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -62,6 +71,7 @@
             var _this   = this;
             var _event  = new Observer(this);
             var entity  = null;
+            // var _transQueue = new TransactionQueue(this);
 
             // MetaEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
@@ -99,7 +109,7 @@
             
             /**
              * 컬랙션 갯수 
-             * @member {Number} _L.Collection.BaseCollection#count 
+             * @member {Number} _L.Entity.MetaRow#count 
              */
             Object.defineProperty(this, 'count', {
                 get: function() {
@@ -107,6 +117,18 @@
                 },
                 configurable: false,
                 enumerable: false
+            });
+
+            /**
+             * 컬렉션 목록 
+             * @member {Array}  _L.Entity.MetaRow#list  
+             */
+            Object.defineProperty(this, 'list', {
+                enumerable: false,
+                configurable: true,
+                get: function() {
+                    return __element;
+                }
             });
 
             /**
@@ -159,6 +181,8 @@
                     configurable: false
                 };
             }
+
+            Util.implements(this, IBaseCollection);
         }
         Util.inherits(MetaRow, _super);
 

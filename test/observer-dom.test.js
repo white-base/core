@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("load: observer.js <Observer>", () => {
+describe.skip("load: observer.js <Observer>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;

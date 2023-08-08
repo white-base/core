@@ -7,6 +7,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var IPartControl;
     var ILookupControl;
+    var IBaseCollection;
     var Util;
 
     //==============================================================
@@ -21,26 +22,30 @@
     if (isNode) {     
         IPartControl        = require('./i-control-part').IPartControl;
         ILookupControl      = require('./i-control-lookup').ILookupControl;
+        IBaseCollection         = require('./i-collection-base').IBaseCollection;
         Util                = require('./util');
     } else {
         IPartControl        = _global._L.Interface.IPartControl;
         ILookupControl      = _global._L.Interface.ILookupControl;
+        IBaseCollection         = _global._L.Interface.IBaseCollection;
         Util                = _global._L.Common.Util
     }
 
     //==============================================================
     // 3. module dependency check
+    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IPartControl === 'undefined') throw new Error('[IPartControl] module load fail...');
     if (typeof ILookupControl === 'undefined') throw new Error('[ILookupControl] module load fail...');
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
 
     //==============================================================
     // 4. module implementation
-    var ICollection  = (function () {
+    var ICollection  = (function (_super) {
         /**
          * 컬렉션 최상위
          * @classdesc 컬렉션 최상위 컬렉션 인터페이스
          * @constructs _L.Interface.ICollection
+         * @extends  _L.Interface.IBaseCollection
          * @interface
          * @implements {_L.Interface.IPartControl}
          * @implements {_L.Interface.ILookupControl}
@@ -50,19 +55,20 @@
              * 컬렉션 갯수
              * @member
              */
-            this.count = 0;
+            // this.count = 0;
 
             /**
              * 컬렉션 배열 반환
              * @member
              */
-            this.list = [];
+            // this.list = [];
 
             /** implements IPartControl 인터페이스 구현 */
             /** implements ILookupControl 인터페이스 구현 */
             // this._implements(IPartControl, ILookupControl);            
             Util.implements(this, IPartControl, ILookupControl);
         }
+        Util.inherits(IBaseCollection, _super);
     
         /**
          * 등록 : insert
