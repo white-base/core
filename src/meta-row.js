@@ -173,9 +173,17 @@
                     get: function() { return __element[p_idx]; },
                     set: function(newValue) { 
                         var oldValue = __element[p_idx];
+                        // 트렌젹션 처리 => 함수로 추출 검토
+                        if (this.entity && !this.entity.rows.autoChanges) {
+                            var clone  = this.clone();
+                            var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
+                            this.entity.rows._transQueue.update(p_pos, _this[p_pos], clone, etc);  // 변경시점에 큐를 추가함
+                        }
+                        // 이벤트 및 처리
                         _this._onChanging(p_idx, newValue, oldValue);
                         __element[p_idx] = newValue;
                         _this._onChanged(p_idx, newValue, oldValue);
+
                     },
                     enumerable: false,
                     configurable: false
@@ -356,17 +364,17 @@
                 }
             }
             // 이벤트 등록
-            var clone;
-            p_row.onChanging = function(p_idx, p_nValue, p_oValue) {
-                if(!_this.autoChanges) { clone = _this[p_pos].clone(); }
-            };
-            // 이벤트 등록
-            p_row.onChanged = function(p_idx, p_nValue, p_oValue) {
-                var etc = 'idx:'+ p_idx +', new:' + p_nValue + ', old:'+ p_oValue;
-                if(!_this.autoChanges) {
-                    _this._transQueue.update(p_pos, _this[p_pos], clone, etc);
-                }
-            };
+            // var clone;
+            // p_row.onChanging = function(p_idx, p_nValue, p_oValue) {
+            //     if(!_this.autoChanges) { clone = _this[p_pos].clone(); }
+            // };
+            // // 이벤트 등록
+            // p_row.onChanged = function(p_idx, p_nValue, p_oValue) {
+            //     var etc = 'idx:'+ p_idx +', new:' + p_nValue + ', old:'+ p_oValue;
+            //     if(!_this.autoChanges) {
+            //         _this._transQueue.update(p_pos, _this[p_pos], clone, etc);  // 변경시점에 큐를 추가함
+            //     }
+            // };
 
             return _super.prototype.insertAt.call(this, p_pos, p_row);
         };
