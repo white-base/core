@@ -112,8 +112,8 @@
             var index   = this._element.length;
             
             if (typeof p_pos !== 'number') throw new Error('Only [p_idx] type "number" can be added');
-            if (index < p_pos) throw new Error('[o_pos] size 를 초과하였습니다.');
-            if (p_pos < 0) throw new Error('[o_pos] 0 보다 작을 수 없습니다.');
+            if (index < p_pos) throw new Error('[p_pos] size 를 초과하였습니다.');
+            if (p_pos < 0) throw new Error('[p_pos] 0 보다 작을 수 없습니다.');
             if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
             // before event
             this._onChanging();

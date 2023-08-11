@@ -175,9 +175,11 @@
                         var oldValue = __element[p_idx];
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (this.entity && !this.entity.rows.autoChanges) {
-                            var clone  = this.clone();
                             var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
-                            this.entity.rows._transQueue.update(p_pos, _this[p_pos], clone, etc);  // 변경시점에 큐를 추가함
+                            var pos = this.entity.rows.indexOf(this);
+                            if (pos > -1) { // 컬력션에 포힘됬을때만
+                                this.entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
+                            }
                         }
                         // 이벤트 및 처리
                         _this._onChanging(p_idx, newValue, oldValue);
@@ -235,7 +237,7 @@
             var clone = new MetaRow(entity);
 
             for (var i = 0; i < this.count; i++) {
-                clone[i] = this[i];
+                clone.list[i] = this.list[i];   // 내부 복사
             }
             return clone;
         };

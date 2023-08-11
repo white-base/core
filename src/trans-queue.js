@@ -79,7 +79,7 @@
                 },
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
-                    
+                    // TODO: ArrayCollection 으로 변경 요망! -> 원래대로..
                     if (!(newValue.isImplementOf(IBaseCollection))) {
                         throw new Error('IBaseCollection 인터페이스를 구현한 컬렉션이 아닙니다.');
                     }
@@ -133,12 +133,13 @@
             });
         };
 
-        TransactionQueue.prototype.delete  = function(p_pos, p_etc) {
+        // TODO: p_target 을 파라메터로 받아야 적합할듯
+        TransactionQueue.prototype.delete  = function(p_pos, p_clone, p_etc) {
             this.queue.push({
                 cmd: 'D',
                 pos: p_pos,
                 ref: null,
-                clone: this.collection[p_pos],
+                clone: p_clone,
                 etc: p_etc || ''
             });
         };

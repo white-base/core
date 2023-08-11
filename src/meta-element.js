@@ -114,7 +114,7 @@
          * @returns {Object}
          */
         MetaElement.prototype.getObject  = function(p_context) {
-            var obj     = {};
+            var obj = {};
             var arr = Util.getAllProperties(this);
             
             for (var i = 0; i < arr.length; i++) {

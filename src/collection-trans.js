@@ -112,7 +112,7 @@
         // };
 
         TransactionCollection.prototype.removeAt = function(p_pos) {
-            if (!this.autoChanges) this._transQueue.delete(p_pos);
+            if (!this.autoChanges) this._transQueue.delete(p_pos, this[p_pos]);
             return _super.prototype.removeAt.call(this, p_pos);
         };
 
