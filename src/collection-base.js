@@ -89,6 +89,7 @@
 
             /** 
              * 컬랙선 내부값 
+             * TODO: setter 는 빠지는게 적합흘듯
              * @protected 
              * @member {Array} _L.Collection.BaseCollection#_element  
              */
@@ -121,6 +122,7 @@
 
             /**
              * 컬렉션 목록 
+             * TODO: 제거되어야 맞을듯, _element 와 중복되며, 공개의 의미가 아님, 직접 접근 제한함
              * @member {Array}  _L.Collection.BaseCollection#list  
              */
             Object.defineProperty(this, 'list', {
