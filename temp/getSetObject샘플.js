@@ -16,18 +16,23 @@ class MetaObject{
         this.#guid = this.#guid !== '' ? this.#guid : createGuid();
         return this.#guid;
     }
+    get _type() { return 'MetaObject' };
     constructor() {
         MetaReistry.register(this);
+        console.log('register()=>'+ this._type);
+
     }
     getObject() {
-        return { _guid: this._guid, _type: 'MetaObject' };
+        return { _guid: this._guid, _type: this._type };
     }
     setObject(obj) {
         this.#guid = obj._guid;
+        // console.log('setObject()=>'+ this._type);
     }
 }
 class MetaElemet extends MetaObject {
     name = '';
+    get _type() { return 'MetaElemet' };
     constructor(name) { 
         super(); 
         this.name = name;
@@ -42,9 +47,39 @@ class MetaElemet extends MetaObject {
         this.name = obj.name;
     }
 }
+
+class MetaColumn extends MetaElemet {
+    _entity = null;
+    caption = '';
+    value = '';
+    get _type() { return 'MetaColumn' };
+    constructor(name) {
+        super(name);
+        this.caption = name + ':캡션';
+    }
+    getObject() {
+        let obj = super.getObject();
+        // obj._type = 'MetaColumn';
+        // obj._entity = {$ref: this._entity._guid }
+        obj._entity = MetaReistry.createObjectGuid(this._entity);
+        obj.caption = this.caption;
+        obj.value = this.value instanceof MetaObject ? this.value.getObject() : this.value;
+        return obj;
+    }
+    setObject(obj, isRef = false) {
+        super.setObject(obj);
+        // this.name = obj.name;
+        this._entity = MetaReistry.find(obj._entity);
+        this.caption = obj.caption;
+        // this.value = obj.value instanceof MetaObject ? this.value.setObject() : this.value;
+        this.value = obj.value;
+        // if ()
+    }
+}
 class PropertyCollection extends MetaObject {
     _elem = [];
     _owner = null;
+    get _type() { return 'PropertyCollection' };
     constructor(owner) { 
         super(); 
         this._owner = owner;
@@ -57,7 +92,6 @@ class PropertyCollection extends MetaObject {
     }
     getObject() {
         let obj = super.getObject();
-        obj._type = 'PropertyCollection';
         obj._elem = [];        
         const _this = this;
         this._elem.forEach(v => {
@@ -91,11 +125,11 @@ class PropertyCollection extends MetaObject {
 class MetaView extends MetaElemet {
     columns = new PropertyCollection(this);
     _master = null;
+    get _type() { return 'MetaView' };
     constructor(name) { super(name); }
     getObject() {
         let obj = super.getObject();
         // obj.name = this.name;
-        obj._type = 'MetaView';
         obj._master = MetaReistry.createObjectGuid(this._master);
         obj.columns = this.columns.getObject()
         return obj;
@@ -139,31 +173,7 @@ class MetaView extends MetaElemet {
 
     }
 }
-class MetaColumn extends MetaElemet {
-    _entity = null;
-    caption = '';
-    value = '';
-    constructor(name) {
-        super(name);
-        this.caption = name + ':캡션';
-    }
-    getObject() {
-        let obj = super.getObject();
-        obj._type = 'MetaColumn';
-        // obj._entity = {$ref: this._entity._guid }
-        obj._entity = MetaReistry.createObjectGuid(this._entity);
-        obj.caption = this.caption;
-        obj.value = this.value instanceof MetaObject ? this.value.getObject() : this.value;
-        return obj;
-    }
-    setObject(obj, isRef = false) {
-        super.setObject(obj);
-        // this.name = obj.name;
-        this._entity = MetaReistry.find(obj._entity);
-        this.caption = obj.caption;
-        this.value = obj.value;
-    }
-}
+
 class MetaReistry {
     static #list = [];
     static get count() { return this.#list.length };
@@ -213,6 +223,8 @@ t1._master = t1.columns['c1'];
 const obj = t1.getObject();
 const str = JSON.stringify(obj, null, '\t');
 // 초기화 및 복구
+console.log('----');
+
 MetaReistry.init();
 const par = JSON.parse(str);
 let t2 = new MetaView();
@@ -224,7 +236,7 @@ const str2 = JSON.stringify(obj2, null, '\t');
 console.log('str => ', str);
 // console.log('obj2 => ', obj2);
 console.log('str2 => ', str2);
-console.log('list2 => ', MetaReistry.list);
+// console.log('list2 => ', MetaReistry.list);
 //--------------------------------------------
 console.log(0);
 
