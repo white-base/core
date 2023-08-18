@@ -110,11 +110,14 @@ class PropertyCollection extends MetaObject {
     }
     getObject() {
         let obj = super.getObject();
+
         obj._elem = [];        
+        obj._key = [];        
         const _this = this;
         this._elem.forEach(v => {
             let obj2 = _this[v].getObject();
-            obj2.$key = v;
+            // obj2.$key = v;
+            obj._key.push(v);
             obj._elem.push(obj2);
         });
         return obj;
@@ -122,11 +125,17 @@ class PropertyCollection extends MetaObject {
     setObject(obj) {
         super.setObject(obj);
         // 일반적인 등록 방식
-        obj._elem.forEach(val => {
-            let key = val.$key;
+        // obj._elem.forEach(val => {
+        //     let key = val.$key;
+        //     this.add(key);
+        //     this[key].setObject(val);
+        // });
+        for(var i = 0; i < obj._elem.length; i++) {
+            let key = obj._key[i];
             this.add(key);
-            this[key].setObject(val);
-        });
+            this[key].setObject(obj._elem[i]);
+        }
+
         // 객체 복사 방식
         // obj._elem.forEach(val => {
         //     let key = val.$key;
@@ -190,7 +199,9 @@ class MetaView extends MetaElemet {
      * @param {*} obj 
      */
     load(obj) {
-        // POINT:
+
+        if (typeof obj !== 'object') throw new Error('object 가 아닙니다.');
+
         let tObj = MetaReistry.transformRefer(obj);
         this.setObject(tObj);
         
@@ -264,58 +275,116 @@ class MetaReistry {
     }
     /**
      * 매타객체 검사
+     * - $ref 참조 여부
+     * - _elem, _key 의 쌍 여부
      * @param {*} obj
      * @return {boolean} 
      */
-    static validMetaObject(obj) {
-    }
-    static setReference() {
+    static validMetaObject(mObj) {
+        var arrObj = this.__extractListObject(mObj);
+        // return validReference(mObj, arrObj);
+        if (validReference(mObj, arrObj) === false) return false;
+        if (validCollection(mObj, arrObj) === false) return false;
+        return true;
+        // inner function
+        function validReference(mobj, arr) {
+            for(let prop in mobj) {
+                if (typeof mobj[prop] === 'object') {
+                    if (mobj[prop]['$ref']) {
+                        if (typeof findGuid(mobj[prop]['$ref'], arr) !== 'object') return false;
+                    } else {
+                        if (validReference(mobj[prop], arr) === false) return false;
+                    }
+                } else if (Array.isArray(mobj[prop])){
+                  for(var i = 0; i < mobj[prop].length; i++) {
+                    if (typeof mobj[prop][i] === 'object') {
+                        if (validReference(mobj[prop][i], arr) === false) return false;
+                    }
+                  }  
+                }
+            }
+            return true;
+        }
+        function validCollection(mobj, arr) {
+            for(let prop in mobj) {
+                if (typeof mobj[prop] === 'object') {
+                    if (Array.isArray(mobj[prop]['_elem']) && Array.isArray(mobj[prop]['_key'])) {
+                        if (mobj[prop]['_elem'].length !== mobj[prop]['_key'].length) return false;
+                    } else {
+                        if (validCollection(mobj[prop], arr) === false) return false;
+                    }
+                } else if (Array.isArray(mobj[prop])){
+                  for(var i = 0; i < mobj[prop].length; i++) {
+                    if (typeof mobj[prop][i] === 'object') {
+                        if (validCollection(mobj[prop][i], arr) === false) return false;
+                    }
+                  }  
+                }
+            }
+            return true;
+        }
+        function findGuid(guid, arr) {
+            for(var i = 0; i < arr.length; i++) {
+                if (arr[i]['_guid'] === guid) return arr[i];
+            }
+        }
     }
     /**
      * 메타객체의 참조 변환
      * @param {*} mObj 
      */
     static transformRefer(mObj) {
-        var idList = [];
-        // 객체 검사 => TODO: 전처리 검사 수행
-        // if (typeof obj !== 'object') throw new Error('object 가 아닙니다.');
-        extractObject(mObj);
-        linkReference(mObj);
+        var arrObj = this.__extractListObject(mObj);
+        var clone = JSON.parse(JSON.stringify(mObj));
+        linkReference(clone, arrObj);
         
-        return mObj;
+        return clone;
 
-        // 객체 추출
-        function extractObject(obj) {
-            if (obj['_guid'] && typeof obj['_guid'] === 'string') idList.push(obj);
-            for(let prop in obj) {
-                if (typeof obj[prop] === 'object') extractObject(obj[prop]);
-                else if (Array.isArray(obj[prop])){
-                  for(var i = 0; i < obj[prop].length; i++) {
-                    if (typeof obj[prop][i] === 'object') extractObject(obj[prop][i]);
+        function linkReference(mobj, arr) {
+            // inner function
+            for(let prop in mobj) {
+                if (typeof mobj[prop] === 'object') {
+                    if (mobj[prop]['$ref']) {
+                        mobj[prop] = findGuid(mobj[prop]['$ref'], arr);
+                        if (typeof mobj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + mobj['$ref']);
+                    } else linkReference(mobj[prop], arr);
+                } else if (Array.isArray(mobj[prop])){
+                  for(var i = 0; i < mobj[prop].length; i++) {
+                    if (typeof mobj[prop][i] === 'object') linkReference(mobj[prop][i], arr);
                   }  
                 } 
             }
         }
-        function linkReference(obj) {
-            for(let prop in obj) {
-                if (typeof obj[prop] === 'object') {
-                    if (obj[prop]['$ref']) {
-                        obj[prop] = findGuid(obj[prop]['$ref']);
-                        if (typeof obj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + obj['$ref']);
-                    } else linkReference(obj[prop]);
-                } else if (Array.isArray(obj[prop])){
-                  for(var i = 0; i < obj[prop].length; i++) {
-                    if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i]);
-                  }  
-                } 
-            }
-        }
-        function findGuid(guid) {
-            for(var i = 0; i < idList.length; i++) {
-                if (idList[i]['_guid'] === guid) return idList[i];
+        function findGuid(guid, arr) {
+            for(var i = 0; i < arr.length; i++) {
+                if (arr[i]['_guid'] === guid) return arr[i];
             }
         }
     }
+
+    /**
+     * 객체 목록 추출
+     * @param {*} mobj 
+     * @param {*} arr 
+     * @returns 
+     */
+    static __extractListObject(mobj, arr) {
+        arr = arr || [];
+
+        if (mobj['_guid'] && typeof mobj['_guid'] === 'string') arr.push(mobj);
+        for(let prop in mobj) {
+            if (typeof mobj[prop] === 'object') this.__extractListObject(mobj[prop], arr);
+            else if (Array.isArray(mobj[prop])){
+              for(var i = 0; i < mobj[prop].length; i++) {
+                if (typeof mobj[prop][i] === 'object') this.__extractListObject(mobj[prop][i], arr);
+              }  
+            }
+        }
+        return arr;
+    }
+
+
+    
 }
 
 
@@ -348,6 +417,11 @@ console.log('str => ', str);
 console.log('str2 => ', str2);
 // console.log('str3 => ', str3);
 // console.log('list2 => ', MetaReistry.list);
+
+console.log(MetaReistry.validMetaObject(obj));
+obj._master.$ref = '실패'
+console.log(MetaReistry.validMetaObject(obj));
+
 //--------------------------------------------
 console.log(0);
 
