@@ -47,7 +47,7 @@ describe("load: util.js <Util>", () => {
         expect(global._L.Common.Util.implements).toBeDefined();
     });
     it("- 예외 : util-type.js 로딩이 인된경우", () => {
-        expect(() => require('../src/util')).toThrow(/module load fail/);
+        expect(() => require('../src/util')).toThrow(/Cannot read properties/);
     });
     it("- 예외 : util-type.js : getAllProperties 제거", () => {
         require('../src/util-type');

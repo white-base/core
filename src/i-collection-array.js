@@ -11,7 +11,6 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
     _global._L.Interface     = _global._L.Interface || {};
 
     //==============================================================
@@ -20,8 +19,8 @@
         Util                = require('./util');
         ICollection         = require('./i-collection').ICollection;
     } else {
-        Util                = _global._L.Common.Util;
-        ICollection         = _global._L.Interface.ICollection;
+        Util                = _global._L.Util;
+        ICollection         = _global._L.ICollection;
     }
 
     //==============================================================

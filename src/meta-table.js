@@ -15,8 +15,6 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Collection    = _global._L.Collection || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
     
@@ -27,13 +25,13 @@
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
-        MetaRegistry             = require('./meta-registry').MetaRegistry;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
-        Util                        = _global._L.Common.Util;
-        PropertyCollection          = _global._L.Collection.PropertyCollection;
-        MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
-        MetaTableColumnCollection   = _global._L.Meta.Entity.MetaTableColumnCollection;
-        MetaRegistry             = _global._L.Meta.MetaRegistry;
+        Util                        = _global._L.Util;
+        PropertyCollection          = _global._L.PropertyCollection;
+        MetaEntity                  = _global._L.MetaEntity;
+        MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -130,10 +128,10 @@
         MetaTable.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            obj.metaSet = mObj.metaSet;
-            obj.columns = mObj.columns;
-            obj.rows = mObj.rows;
-            obj.tableName = mObj.tableName;
+            this.metaSet = mObj.metaSet;
+            this.columns = mObj.columns;
+            this.rows = mObj.rows;
+            this.tableName = mObj.tableName;
         };
 
         /**

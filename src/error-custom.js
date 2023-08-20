@@ -17,7 +17,7 @@
     if (isNode) {     
         Util                        = require('./util');
     } else {    // COVER:
-        Util                        = _global._L.Common.Util;
+        Util                        = _global._L.Util;
     }
 
     //==============================================================Á

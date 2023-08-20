@@ -13,25 +13,20 @@
     // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Interface     = _global._L.Interface || {};    
    
     //==============================================================
     // 2. import module
     if (isNode) {     
         Util                = require('./util');
-        // IMarshal            = require('./i-marshal').IMarshal;
         MetaObject          = require('./meta-object').MetaObject;
     } else {
-        Util                = _global._L.Common.Util;
-        MetaObject          = _global._L.Meta.MetaObject;
-        // IMarshal            = _global._L.Interface.IMarshal;
+        Util                = _global._L.Util;
+        MetaObject          = _global._L.MetaObject;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    // if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
 
     //==============================================================

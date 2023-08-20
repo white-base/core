@@ -23,25 +23,25 @@
     // 2. import module
     if (isNode) {     
         Util                = require('./util');
+        Observer            = require('./observer').Observer;
         CustomError         = require('./error-custom').CustomError;
         MetaElement         = require('./meta-element').MetaElement;
         PropertyCollection  = require('./collection-property').PropertyCollection;
-        Observer            = require('./observer').Observer;
     } else {
-        Util                = _global._L.Common.Util;
-        CustomError         = _global._L.Common.CustomError;
-        MetaElement         = _global._L.Meta.MetaElement;
-        PropertyCollection  = _global._L.Collection.PropertyCollection;
-        Observer            = _global._L.Common.Observer;
+        Util                = _global._L.Util;
+        Observer            = _global._L.Observer;
+        CustomError         = _global._L.CustomError;
+        MetaElement         = _global._L.MetaElement;
+        PropertyCollection  = _global._L.PropertyCollection;
     }
 
     //==============================================================
     // 3. 의존성 검사
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
     if (typeof CustomError === 'undefined') throw new Error('[CustomError] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
-    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    

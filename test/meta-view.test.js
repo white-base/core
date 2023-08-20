@@ -105,7 +105,7 @@ describe("[target: meta-view.js]", () => {
         });
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- getTypes() : array<function> ", () => {
-                const c = new MetaView();
+                const c = new MetaView('V1');
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaView);
@@ -129,7 +129,7 @@ describe("[target: meta-view.js]", () => {
         });
         describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaView();
+                const c = new MetaView('V1');
         
                 expect(c.instanceOf('IObject')).toBe(true);
                 expect(c.instanceOf('IMarshal')).toBe(true);
@@ -143,7 +143,7 @@ describe("[target: meta-view.js]", () => {
                 expect(c.instanceOf('String')).toBe(false);
             });
             it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaView();
+                const c = new MetaView('V1');
         
                 expect(c.instanceOf(IObject)).toBe(true);
                 expect(c.instanceOf(IMarshal)).toBe(true);

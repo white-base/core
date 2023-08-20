@@ -13,8 +13,6 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Interface     = _global._L.Interface || {};  
     _global._L.Collection    = _global._L.Collection || {};
     
     //==============================================================
@@ -25,10 +23,10 @@
         BaseCollection      = require('./collection-base').BaseCollection;
         MetaObject          = require('./meta-object').MetaObject;
     } else {
-        Util                = _global._L.Common.Util;
-        IPropertyCollection = _global._L.Interface.IPropertyCollection;
-        BaseCollection      = _global._L.Collection.BaseCollection;
-        MetaObject          = _global._L.Meta.MetaObject;
+        Util                = _global._L.Util;
+        IPropertyCollection = _global._L.IPropertyCollection;
+        BaseCollection      = _global._L.BaseCollection;
+        MetaObject          = _global._L.MetaObject;
     }
 
     //==============================================================

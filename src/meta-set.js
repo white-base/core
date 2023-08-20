@@ -17,8 +17,6 @@
     //==============================================================
     // 1. 의존 모듈 선언
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Interface     = _global._L.Interface || {};    
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
@@ -35,13 +33,13 @@
         MetaViewCollection      = require('./meta-view').MetaViewCollection;
     } else {
         Util                    = _global._L.Common.Util;
-        ISchemaControl           = _global._L.Interface.ISchemaControl;
-        IAllControl             = _global._L.Interface.IAllControl;
-        ITransaction            = _global._L.Interface.ITransaction;
-        MetaElement             = _global._L.Meta.MetaElement;
-        MetaEntity              = _global._L.Meta.Entity.MetaEntity;
-        MetaTableCollection     = _global._L.Meta.Entity.MetaTableCollection;
-        MetaViewCollection      = _global._L.Meta.Entity.MetaViewCollection;
+        ISchemaControl          = _global._L.ISchemaControl;
+        IAllControl             = _global._L.IAllControl;
+        ITransaction            = _global._L.ITransaction;
+        MetaElement             = _global._L.MetaElement;
+        MetaEntity              = _global._L.MetaEntity;
+        MetaTableCollection     = _global._L.MetaTableCollection;
+        MetaViewCollection      = _global._L.MetaViewCollection;
     }
 
     //==============================================================
@@ -166,6 +164,34 @@
                 }
             }
         };
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaSet.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj.setName = this.setName;
+            obj.tables = this.tables.getObject();
+            obj.views = this.views.getObject();
+            return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaSet.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            this.setName = mObj.setName;
+            this.tables = mObj.columns;
+            this.views = mObj.rows;
+        };
+
 
         MetaSet.prototype.clone  = function() {
             var clone = new MetaSet(this.setName);

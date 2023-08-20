@@ -13,22 +13,21 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};    
     _global._L.Interface     = _global._L.Interface || {};    
     
     //==============================================================
     // 2. import module
     
     if (isNode) {     
+        Util                = require('./util');
         IPartControl        = require('./i-control-part').IPartControl;
         ILookupControl      = require('./i-control-lookup').ILookupControl;
-        IBaseCollection         = require('./i-collection-base').IBaseCollection;
-        Util                = require('./util');
+        IBaseCollection     = require('./i-collection-base').IBaseCollection;
     } else {
-        IPartControl        = _global._L.Interface.IPartControl;
-        ILookupControl      = _global._L.Interface.ILookupControl;
-        IBaseCollection         = _global._L.Interface.IBaseCollection;
-        Util                = _global._L.Common.Util
+        Util                = _global._L.Util
+        IPartControl        = _global._L.IPartControl;
+        ILookupControl      = _global._L.ILookupControl;
+        IBaseCollection     = _global._L.IBaseCollection;
     }
 
     //==============================================================

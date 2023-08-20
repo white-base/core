@@ -12,7 +12,6 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
     _global._L.Interface     = _global._L.Interface || {};
 
     //==============================================================
@@ -22,9 +21,9 @@
         IImportControl      = require('./i-control-import').IImportControl;
         IExportControl      = require('./i-control-export').IExportControl;
     } else {
-        Util                = _global._L.Common.Util;
-        IImportControl      = _global._L.Interface.IImportControl;
-        IExportControl      = _global._L.Interface.IExportControl;
+        Util                = _global._L.Util;
+        IImportControl      = _global._L.IImportControl;
+        IExportControl      = _global._L.IExportControl;
     }
 
     //==============================================================

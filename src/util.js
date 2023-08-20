@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var getAllProperties;
+    var getTypeMap;
     var checkType;
     var checkUnionType;
     var validType;
@@ -21,21 +22,24 @@
     // 2. import module
     if (isNode) {
         getAllProperties    = require('./util-type').getAllProperties;
+        getTypeMap          = require('./util-type').getTypeMap;
         checkType           = require('./util-type').checkType;
         checkUnionType      = require('./util-type').checkUnionType;
         validType           = require('./util-type').validType;
         validUnionType      = require('./util-type').validUnionType;
     } else {    
-        getAllProperties    = _global._L.Common.Util.getAllProperties
-        checkType           = _global._L.Common.Util.checkType
-        checkUnionType      = _global._L.Common.Util.checkUnionType
-        validType           = _global._L.Common.Util.validType
-        validUnionType      = _global._L.Common.Util.validUnionType
+        getAllProperties    = _global._L.Util.getAllProperties
+        getTypeMap          = _global._L.Util.getTypeMap
+        checkType           = _global._L.Util.checkType
+        checkUnionType      = _global._L.Util.checkUnionType
+        validType           = _global._L.Util.validType
+        validUnionType      = _global._L.Util.validUnionType
     }
 
     //==============================================================
     // 3. 의존성 검사
     if (typeof getAllProperties === 'undefined') throw new Error('[getAllProperties] module load fail...');
+    if (typeof getTypeMap === 'undefined') throw new Error('[getTypeMap] module load fail...');
     if (typeof checkType === 'undefined') throw new Error('[checkType] module load fail...');
     if (typeof checkUnionType === 'undefined') throw new Error('[checkUnionType] module load fail...');
     if (typeof validType === 'undefined') throw new Error('[validType] module load fail...');
@@ -183,22 +187,48 @@
         exports.createGuid = createGuid;
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
+        exports.getTypeMap = getTypeMap;
         exports.checkType = checkType;
         exports.checkUnionType = checkUnionType;
         exports.validType = validType;
         exports.validUnionType = validUnionType;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         // module.exports.equalType = equalType;
-    } else {    
-        _global._L.Common.Util.inherits = inherits;
-        _global._L.Common.Util.getArrayDepth = getArrayDepth;
-        _global._L.Common.Util.createGuid = createGuid;
-        _global._L.Common.Util.implements = implement;
-        _global._L.Common.Util.getAllProperties = getAllProperties;
-        _global._L.Common.Util.checkType = checkType;
-        _global._L.Common.Util.checkUnionType = checkUnionType;
-        _global._L.Common.Util.validType = validType;
-        _global._L.Common.Util.validUnionType = validUnionType;
+    } else {
+        var ns = {
+            inherits: inherits,
+            getArrayDepth: getArrayDepth,
+            createGuid: createGuid,
+            implements: implement,
+            getAllProperties: getAllProperties,
+            getTypeMap: getTypeMap,
+            checkType: checkType,
+            checkUnionType: checkUnionType,
+            validType: validType,
+            validUnionType: validUnionType
+        };
+        _global._L.Util = ns;
+        _global._L.Common.Util = ns;
+
+        // _global._L.Util.inherits = inherits;
+        // _global._L.Util.getArrayDepth = getArrayDepth;
+        // _global._L.Util.createGuid = createGuid;
+        // _global._L.Util.implements = implement;
+        // _global._L.Util.getAllProperties = getAllProperties;
+        // _global._L.Util.checkType = checkType;
+        // _global._L.Util.checkUnionType = checkUnionType;
+        // _global._L.Util.validType = validType;
+        // _global._L.Util.validUnionType = validUnionType;
+
+        // _global._L.Common.Util.inherits = inherits;
+        // _global._L.Common.Util.getArrayDepth = getArrayDepth;
+        // _global._L.Common.Util.createGuid = createGuid;
+        // _global._L.Common.Util.implements = implement;
+        // _global._L.Common.Util.getAllProperties = getAllProperties;
+        // _global._L.Common.Util.checkType = checkType;
+        // _global._L.Common.Util.checkUnionType = checkUnionType;
+        // _global._L.Common.Util.validType = validType;
+        // _global._L.Common.Util.validUnionType = validUnionType;
         // _global._L.Common.Util.equalType = equalType;
         // _global._L.Common.Util.validSelector = validSelector;
     }

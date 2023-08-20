@@ -17,8 +17,6 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Interface     = _global._L.Interface || {};    
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
 
@@ -32,15 +30,14 @@
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
         MetaRow                     = require('./meta-row').MetaRow;
         MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
-        // MetaView                    = require('./meta-view').MetaView;
     } else {
-        Util                    = _global._L.Common.Util;
-        IGroupControl           = _global._L.Interface.IGroupControl;
-        IAllControl             = _global._L.Interface.IAllControl;
-        MetaElement             = _global._L.Meta.MetaElement;
-        MetaRowCollection       = _global._L.Meta.Entity.MetaRowCollection;
-        MetaRow                 = _global._L.Meta.Entity.MetaRow;
-        MetaColumnCollection    = _global._L.Meta.Entity.MetaColumnCollection;
+        Util                        = _global._L.Util;
+        IGroupControl               = _global._L.IGroupControl;
+        IAllControl                 = _global._L.IAllControl;
+        MetaElement                 = _global._L.MetaElement;
+        MetaRowCollection           = _global._L.MetaRowCollection;
+        MetaRow                     = _global._L.MetaRow;
+        MetaColumnCollection        = _global._L.MetaColumnCollection;
     }
 
     //==============================================================

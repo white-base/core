@@ -12,20 +12,18 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Interface     = _global._L.Interface || {};
     _global._L.Collection    = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
         Util                = require('./util');
-        IArrayCollection = require('./i-collection-array').IArrayCollection;
+        IArrayCollection    = require('./i-collection-array').IArrayCollection;
         BaseCollection      = require('./collection-base').BaseCollection;
     } else {    
-        Util                = _global._L.Common.Util;
-        IArrayCollection = _global._L.Interface.IArrayCollection;
-        BaseCollection      = _global._L.Collection.BaseCollection;
+        Util                = _global._L.Util;
+        IArrayCollection    = _global._L.IArrayCollection;
+        BaseCollection      = _global._L.BaseCollection;
     }
 
     //==============================================================

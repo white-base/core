@@ -16,8 +16,6 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Collection    = _global._L.Collection || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
     
@@ -29,14 +27,14 @@
         MetaObject                  = require('./meta-object').MetaObject;
         MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
-        MetaRegistry             = require('./meta-registry').MetaRegistry;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
-        Util                        = _global._L.Common.Util;
-        PropertyCollection          = _global._L.Collection.PropertyCollection;
-        MetaObject                  = _global._L.Meta.MetaObject;
-        MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
-        MetaViewColumnCollection    = _global._L.Meta.Entity.MetaViewColumnCollection;
-        MetaRegistry             = _global._L.Meta.MetaRegistry;
+        Util                        = _global._L.Util;
+        PropertyCollection          = _global._L.PropertyCollection;
+        MetaObject                  = _global._L.MetaObject;
+        MetaEntity                  = _global._L.MetaEntity;
+        MetaViewColumnCollection    = _global._L.MetaViewColumnCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -165,7 +163,7 @@
          * @virtual
          * @returns {object}
          */
-        MetaTable.prototype.getObject  = function() {
+        MetaView.prototype.getObject  = function() {
             var obj = _super.prototype.getObject.call(this);
 
             obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
@@ -186,14 +184,14 @@
          * @virtual
          * @returns {object}
          */
-        MetaTable.prototype.setObject  = function(mObj) {
+        MetaView.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            obj.metaSet = mObj.metaSet;
-            obj.columns = mObj.columns;
-            obj.rows = mObj.rows;
-            obj.ViewName = mObj.ViewName;
-            obj._refEntity = mObj._refEntity;
+            this.metaSet = mObj.metaSet;
+            this.columns = mObj.columns;
+            this.rows = mObj.rows;
+            this.viewName = mObj.viewName;
+            this.__SET_refEntity(mObj._refEntity, this);
         };
 
         /**
@@ -266,7 +264,7 @@
             var items = [];
             var callback = null;
             var columnName;
-            var entity = new MetaView(this.ViewName, this);
+            var entity = new MetaView(this.viewName, this);
             var orignal = this.clone();
 
             // 매개변수 구성

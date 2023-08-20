@@ -13,8 +13,6 @@
     // 1. namespace declaration
     _global._L               = _global._L || {};
     _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Interface     = _global._L.Interface || {};    
 
     //==============================================================
     // 2. import module
@@ -24,9 +22,9 @@
         IObject             = require('./i-object').IObject;
         IMarshal            = require('./i-marshal').IMarshal;
     } else {
-        Util                = _global._L.Common.Util
-        IObject             = _global._L.Interface.IObject;
-        IMarshal            = _global._L.Interface.IMarshal;
+        Util                = _global._L.Util
+        IObject             = _global._L.IObject;
+        IMarshal            = _global._L.IMarshal;
     }
 
     //==============================================================

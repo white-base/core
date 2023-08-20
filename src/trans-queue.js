@@ -1,6 +1,5 @@
 /**
- * namespace _L.Meta.Entity.TransactionQueue
- * namespace _L.Meta.Entity.TransactionQueueCollection
+ * namespace _L.Collection.TransactionQueue
  */
 // var $local = {};
 
@@ -9,38 +8,26 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
-    // var MetaObject;
-    // var MetaElement;
     var IBaseCollection;
 
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};    
-    // _global._L.Collection    = _global._L.Collection || {};
-    _global._L.Interface     = _global._L.Interface || {};    
-    // _global._L.Meta          = _global._L.Meta || {};
-    // _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    _global._L.Collection    = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
         Util                        = require('./util');
-        // MetaObject                  = require('./meta-object').MetaObject;
-        // MetaElement                 = require('./meta-element');
         IBaseCollection             = require('./i-collection-base').IBaseCollection;
     } else {    // COVER:
-        Util                        = _global._L.Common.Util;
-        // MetaObject                  = _global._L.Meta.MetaObject;
-        // MetaElement                 = _global._L.Collection.MetaElement;
-        IBaseCollection             = _global._L.Interface.IBaseCollection;
+        Util                        = _global._L.Util;
+        IBaseCollection             = _global._L.IBaseCollection;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    // if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
 
     //==============================================================

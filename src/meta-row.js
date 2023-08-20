@@ -20,32 +20,25 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};    
-    _global._L.Collection    = _global._L.Collection || {};
     _global._L.Meta          = _global._L.Meta || {};
     _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
-    _global._L.Interface     = _global._L.Interface || {};  
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                        = require('./util');
-        Observer            = require('./observer').Observer;
+        Util                    = require('./util');
+        Observer                = require('./observer').Observer;
         IBaseCollection         = require('./i-collection-base').IBaseCollection;
-        MetaObject                  = require('./meta-object').MetaObject;
-        // MetaElement                 = require('./meta-element');
-        TransactionCollection             = require('./collection-trans').TransactionCollection;
-        // TransactionQueue      = require('./trans-queue').TransactionQueue;
-        MetaRegistry             = require('./meta-registry').MetaRegistry;
+        MetaObject              = require('./meta-object').MetaObject;
+        TransactionCollection   = require('./collection-trans').TransactionCollection;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {    // COVER:
-        Util                        = _global._L.Common.Util;
-        Observer            = _global._L.Common.Observer;
-        MetaObject                  = _global._L.Meta.MetaObject;
-        // MetaElement                 = _global._L.Collection.MetaElement;
-        IBaseCollection         = _global._L.Interface.IBaseCollection;
-        TransactionCollection             = _global._L.Collection.TransactionCollection;
-        MetaRegistry             = _global._L.Meta.MetaRegistry;
-        // TransactionQueue      = _global._L.Collection.TransactionQueue;
+        Util                    = _global._L.Util;
+        Observer                = _global._L.Observer;
+        MetaObject              = _global._L.MetaObject;
+        IBaseCollection         = _global._L.IBaseCollection;
+        TransactionCollection   = _global._L.TransactionCollection;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================

@@ -12,7 +12,6 @@
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    // _global._L.Common        = _global._L.Common || {};
     _global._L.Interface     = _global._L.Interface || {};
 
     //==============================================================
