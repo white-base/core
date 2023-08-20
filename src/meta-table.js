@@ -10,6 +10,7 @@
     var MetaEntity;
     var PropertyCollection;
     var MetaTableColumnCollection;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -26,11 +27,13 @@
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
+        MetaRegistry             = require('./meta-registry').MetaRegistry;
     } else {    
         Util                        = _global._L.Common.Util;
         PropertyCollection          = _global._L.Collection.PropertyCollection;
         MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
         MetaTableColumnCollection   = _global._L.Meta.Entity.MetaTableColumnCollection;
+        MetaRegistry             = _global._L.Meta.MetaRegistry;
     }
 
     //==============================================================
@@ -39,6 +42,7 @@
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof MetaTableColumnCollection === 'undefined') throw new Error('[MetaTableColumnCollection] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -102,6 +106,35 @@
         // MetaTable.prototype.getObject = function() {
         //     // TODO::
         // };
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaTable.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
+            obj.columns = this.columns.getObject();
+            obj.rows = this.rows.getObject();
+            obj.tableName = this.tableName;
+            return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaTable.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            obj.metaSet = mObj.metaSet;
+            obj.columns = mObj.columns;
+            obj.rows = mObj.rows;
+            obj.tableName = mObj.tableName;
+        };
 
         /**
          * 테이블 엔티티를 복제한다.

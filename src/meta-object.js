@@ -5,8 +5,9 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var IObject;
     var Util;
+    var IObject;
+    var IMarshal;
 
     //==============================================================
     // 1. namespace declaration
@@ -21,15 +22,18 @@
         // require('./_object-implement'); // _implements() : 폴리필
         Util                = require('./util');
         IObject             = require('./i-object').IObject;
+        IMarshal            = require('./i-marshal').IMarshal;
     } else {
         Util                = _global._L.Common.Util
         IObject             = _global._L.Interface.IObject;
+        IMarshal            = _global._L.Interface.IMarshal;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
+    if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -39,11 +43,53 @@
          * @constructs _L.Meta.MetaObject
          * @abstract
          * @implements {_L.Interface.IObject}
+         * @implements {_L.Interface.IMarshal}
          */
         function MetaObject() {
+            var _guid;
 
-            /** @implements {_L.Interface.IObject} */
-            Util.implements(this, IObject);
+            /**
+             * _guid
+             * @member {Array} _L.Meta.MetaElement#_guid 
+             */
+            Object.defineProperty(this, '_guid', 
+            {
+                get: function() { 
+                    if (!_guid) _guid = Util.createGuid();
+                    return _guid;
+                },
+                // set: function(val) {
+                //     if (typeof val !== 'string') throw new Error('Only [_guid] type "string" can be added');
+                //     _guid = val;
+                // },
+                configurable: false,
+                enumerable: true
+            });    
+            /**
+             * _guid
+             * @member {Array} _L.Meta.MetaElement#_guid 
+             */
+            Object.defineProperty(this, '_type', 
+            {
+                get: function() { 
+                    var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
+
+                    return proto.constructor;
+                },
+                // set: function(val) {
+                //     if (typeof val !== 'string') throw new Error('Only [_guid] type "string" can be added');
+                //     _guid = val;
+                // },
+                configurable: false,
+                enumerable: true
+            });           
+
+            // inner variable access
+            this.__SET_guid = function(val, call) {
+                if (call instanceof MetaObject) _guid = val;
+            }
+
+            Util.implements(this, IObject, IMarshal);
         }
         
         /**
@@ -83,11 +129,11 @@
          * 검토: 중복은 피하지만, 성능의 이슈
          * @returns {array<function>}
          */
-        MetaObject.prototype.getType = function() {
-            
-            var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
-            return proto.constructor;
-        };
+        // MetaObject.prototype.getType = function() {
+        //     var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
+
+        //     return proto.constructor;
+        // };
 
         /**
          * 상위 클래스 또는 인터페이스 구현 여부 검사
@@ -130,6 +176,29 @@
             if (typeof p_func === 'string') return findFunctionName(p_func);
             if (typeof p_func === 'function') return findFunction(p_func);
             return false;
+        };
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaObject.prototype.getObject  = function() {
+            var obj = {};
+            
+            obj._guid = this._guid;
+            obj._type = this._type.name;
+            return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaObject.prototype.setObject  = function(mObj) {
+            if (typeof mObj !== 'object') throw new Error('Only [mObj] type "object" can be added');
+            this.__SET_guid(mObj._guid, this);
         };
 
         return MetaObject;

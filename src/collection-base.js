@@ -9,6 +9,7 @@
     var Util;
     var ICollection;
     var IBaseCollection;
+    var MetaObject;
     
     //==============================================================
     // 1. namespace declaration
@@ -24,11 +25,13 @@
         Observer            = require('./observer').Observer;
         ICollection         = require('./i-collection').ICollection;
         IBaseCollection         = require('./i-collection-base').IBaseCollection;
+        MetaObject          = require('./meta-object').MetaObject;
     } else {
         Util                = _global._L.Common.Util;
         Observer            = _global._L.Common.Observer;
         ICollection         = _global._L.Interface.ICollection;
-        IBaseCollection         = _global._L.Interface.IBaseCollection;
+        IBaseCollection     = _global._L.Interface.IBaseCollection;
+        MetaObject          = _global._L.Meta.MetaObject;
     }
 
     //==============================================================
@@ -37,11 +40,12 @@
     if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
     if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
     if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
+    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현 
     
-    var BaseCollection  = (function () {
+    var BaseCollection  = (function (_super) {
 
         /**
         * 컬렉션 최상위 클래스 (추상클래스)
@@ -383,7 +387,7 @@
         };
 
         return BaseCollection;
-    }());
+    }(MetaObject));
     
 
     //==============================================================

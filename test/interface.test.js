@@ -50,15 +50,15 @@ describe("[target: i-* ]", () => {
             const i = new IMarshal();
             
             // extends
-            expect(()=> s.getTypes()).toThrow(/Abstract/);
-            expect(()=> s.instanceOf()).toThrow(/Abstract/);
+            // expect(()=> s.getTypes()).toThrow(/Abstract/);
+            // expect(()=> s.instanceOf()).toThrow(/Abstract/);
             expect(()=> s.getObject()).toThrow(/Abstract/);
-            expect(()=> s.getGuid()).toThrow(/Abstract/);
+            expect(()=> s.setObject()).toThrow(/Abstract/);
             // create
-            expect(()=> i.getTypes()).toThrow(/Abstract/);
-            expect(()=> i.instanceOf()).toThrow(/Abstract/);
+            // expect(()=> i.getTypes()).toThrow(/Abstract/);
+            // expect(()=> i.instanceOf()).toThrow(/Abstract/);
             expect(()=> i.getObject()).toThrow(/Abstract/);
-            expect(()=> i.getGuid()).toThrow(/Abstract/);
+            expect(()=> i.setObject()).toThrow(/Abstract/);
         });
     });
     describe("IExportControl :: 인터페이스", () => {

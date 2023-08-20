@@ -5,50 +5,50 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Util;
-    var IObject;
-    var IMarshal;
+    // var Util;
+    // var IObject;
+    // var IMarshal;
     
     //==============================================================
     // 1. namespace declaration
     _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
+    // _global._L.Common        = _global._L.Common || {};
     _global._L.Interface     = _global._L.Interface || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        IObject             = require('./i-object').IObject;
+        // Util                = require('./util');
+        // IObject             = require('./i-object').IObject;
     } else {
-        Util                = _global._L.Common.Util;
-        IObject             = _global._L.Interface.IObject;
+        // Util                = _global._L.Common.Util;
+        // IObject             = _global._L.Interface.IObject;
     }
 
     //==============================================================
     // 3. 모듈의존성 검사
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
+    // if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    // if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
-    var IMarshal  = (function (_super) {
+    var IMarshal  = (function () {
         /**
          * 최상위 객체
          * @constructs _L.Interface.IMarshal
          * @interface
-         * @extends Interface.IObject
          */
         function IMarshal() {
-            _super.call(this);
+            // _super.call(this);
 
             /**
              * 메타 이름
              * @member {string} _L.Interface.IMarshal#guid
              */
-            this.guid = '';
+            this._guid = '';
+            this._type = Function;
         }
-        Util.inherits(IMarshal, _super);
+        // Util.inherits(IMarshal, _super);
 
         /**
          * 객체 얻기
@@ -63,13 +63,13 @@
          * @abstract
          * @returns {Stirng}
          */
-        IMarshal.prototype.getGuid  = function() {
-            throw new Error('[ getGuid() : string ] Abstract method definition, fail...');
+        IMarshal.prototype.setObject  = function() {
+            throw new Error('[ setObject(mObj) ] Abstract method definition, fail...');
         };
 
         return IMarshal;
         
-    }(IObject));
+    }());
 
     //==============================================================
     // 5. module export

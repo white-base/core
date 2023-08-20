@@ -36,16 +36,16 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         //     expect(typeNames.length).toBe(3);
         // });
         describe("this.getTypes() : arr<func> <타입 조회>", () => {
-            it("- getType() : function ", () => {
+            it("- _type : function ", () => {
                 const c = new MetaObjectSub();
-                const type = c.getType();
+                const type = c._type;
         
                 expect(type).toBe(MetaObjectSub);
             });
-            // it("- getType() : 강제 예외 ", () => {
+            // it("- _type : 강제 예외 ", () => {
             //     const c = new MetaObjectSub();
             //     const temp = c.__proto__;
-            //     const type = c.getType();
+            //     const type = c._type;
             //     c.__proto__ = temp; // 복구
             //     expect(type).toBe(MetaObjectSub);
             // });
@@ -116,6 +116,17 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             expect(c.getTypes).not.toBeDefined();
             expect(c.instanceOf).not.toBeDefined();
         });
+
+        describe("기타", () => {
+            it("- this.__SET_guid : 내부 setter ", () => {
+                const i = new MetaObject();
+                i.__SET_guid(10, i);    // 
+                // i.__SET_guid(10);
+
+                expect(i._guid).toBe(10);
+            });
+        });
+
     });
     describe("MetaElement :: 클래스", () => {
         beforeAll(() => {
@@ -136,9 +147,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         //     expect(typeNames.length).toBe(4);
         // });
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
-            it("- getType() : function ", () => {
+            it("- _type : function ", () => {
                 const c = new MetaElementSub();
-                const type = c.getType();
+                const type = c._type;
         
                 expect(type).toBe(MetaElementSub);
             });
@@ -185,9 +196,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             it("- this.guid ", () => {
                 const c1 = new MetaElementSub();
                 const c2 = new MetaElementSub();
-                const guid1 = c1.guid;
-                const guid2 = c1.guid;
-                const guid3 = c2.guid;
+                const guid1 = c1._guid;
+                const guid2 = c1._guid;
+                const guid3 = c2._guid;
         
                 expect(guid1.length).toBe(36);
                 expect(guid2.length).toBe(36); // guid 길이
@@ -214,13 +225,19 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 }
                 Util.inherits(Foo, MetaElement);
                 Foo.prototype.getStr  = function() {};  // 제외
+                Foo.prototype.getObject  = function() {
+                    var obj = MetaElement.prototype.getObject.call(this);
+                    obj.str = this.str;
+                    obj.prop = this.prop;
+                    return obj;
+                };
                 const c = new Foo('foo');
                 const obj = c.getObject();
-                const comp = { guid: obj.guid, str: 'STR', metaName: 'foo', prop: 10 }
+                const comp = { _guid: obj._guid, _type: Foo.name, str: 'STR', name: 'foo', prop: 10 }
         
                 expect(obj).toEqual(comp);
             });
-            it("- getObject() : class 타입 ", () => {
+            it("- getObject() : class 타입, getObjct() 오버라이딩 안함 ", () => {
                 class Foo extends MetaElement {
                     // 포함
                     str = 'STR';
@@ -234,7 +251,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 }
                 const c = new Foo('foo');
                 const obj = c.getObject();
-                const comp = { guid: obj.guid, str: 'STR', metaName: 'foo', prop: 10 }
+                const comp = { _guid: obj._guid, _type: Foo.name, name: 'foo' }
 
                 expect(obj).toEqual(comp);
             });
@@ -248,11 +265,17 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                     bar = new Bar();
                     constructor(name) { super(name) }
                     getStr() {}
+                    getObject() {
+                        let obj = super.getObject();
+                        obj.str = this.str;
+                        obj.bar = this.bar.getObject();
+                        return obj;
+                    }
                 }
                 const c = new Foo('foo');
                 const obj = c.getObject();
-                const comp = { guid: obj.guid, str: 'STR', metaName: 'foo', bar: { 
-                    guid: obj.bar.guid, metaName: '', sub: true 
+                const comp = { _guid: obj._guid, _type: Foo.name, str: 'STR', name: 'foo', bar: { 
+                    _guid: obj.bar._guid, _type: Bar.name, name: ''
                 } };
         
                 expect(obj).toEqual(comp);
@@ -263,10 +286,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const i = new MetaElement('metaName');
         
                 expect(()=> i.metaName = 10).toThrow(/metaName.*string/);
-                expect(()=> i.guid = 10).toThrow(/only.*getter/); // 직접 설정할 경우는 없음
+                expect(()=> i._guid = 10).toThrow(/set.*_guid/); // 직접 설정할 경우는 없음
             });
         });
-        
     });
 });
 
@@ -289,9 +311,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
 //     //     expect(typeNames[4]).toBe('ComplexElementSub');
 //     //     expect(typeNames.length).toBe(5);
 //     // });
-//     // it("- getType() : function ", () => {
+//     // it("- _type : function ", () => {
 //     //     const c = new ComplexElementSub();
-//     //     const type = c.getType();
+//     //     const type = c._type;
 
 //     //     expect(type).toBe(ComplexElementSub);
 //     // });

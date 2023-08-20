@@ -52,6 +52,48 @@
         Util.inherits(ArrayCollection, _super);
 
         /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        ArrayCollection.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj.elementType = this.elementType;
+            obj._elem = [];
+            for (var i = 0; i < this._element.length; i++) {
+                var elem = this._element[i];
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
+                else obj._elem.push(elem);
+            }
+            return obj;                        
+        };
+
+        /**
+         * TODO: setObject 시점에 초기화 해야함
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        ArrayCollection.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            this.clear();
+            for(var i = 0; i < mObj._elem.length; i++) {
+                var elem = mObj._elem[i];
+                if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
+                    this.add(elem);
+                    this[i].setObject(elem);
+                } else {
+                    this.add(elem);
+                }
+            }
+            // TODO: add(desc) 이것도 별도로 저장해둬야 함
+            // obj.metaName = mObj.name;
+        };
+
+
+        /**
          * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]
          * @protected
          * @param {*} p_idx 인덱스 번호

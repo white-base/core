@@ -363,7 +363,6 @@
             }
         };
 
-
         /** @abstract */
         MetaEntity.prototype.clone = function() {
             throw new Error('[ clone() ] Abstract method definition, fail...');

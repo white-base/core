@@ -11,6 +11,7 @@
     var MetaEntity;
     var MetaViewColumnCollection;
     var PropertyCollection;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -28,12 +29,14 @@
         MetaObject                  = require('./meta-object').MetaObject;
         MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
+        MetaRegistry             = require('./meta-registry').MetaRegistry;
     } else {
         Util                        = _global._L.Common.Util;
         PropertyCollection          = _global._L.Collection.PropertyCollection;
         MetaObject                  = _global._L.Meta.MetaObject;
         MetaEntity                  = _global._L.Meta.Entity.MetaEntity;
         MetaViewColumnCollection    = _global._L.Meta.Entity.MetaViewColumnCollection;
+        MetaRegistry             = _global._L.Meta.MetaRegistry;
     }
 
     //==============================================================
@@ -43,6 +46,7 @@
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof MetaViewColumnCollection === 'undefined') throw new Error('[MetaViewColumnCollection] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -57,6 +61,8 @@
         function MetaView(p_name, p_baseEntity) {
             _super.call(this, p_name);
 
+            var _refEntity = p_baseEntity;
+            var _refEntities = [];
             var viewName;
             var columns;
             var refCollection;
@@ -65,6 +71,30 @@
                 refCollection = p_baseEntity.columns;
             }
             
+            /**
+             * 기본 참조 컬렉션
+             * // REVIEW: 필요 유무 검토 => 직렬화에 필요할 듯
+             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#_refEntity
+             */
+            Object.defineProperty(this, '_refEntity', 
+            {
+                get: function() { return _refEntity; },
+                configurable: false,
+                enumerable: true
+            });
+
+            /**
+             * add() 통해서 추가된 외부 엔티티 목록
+             * // REVIEW: 필요 유무 검토 => 직렬화에 필요할 듯
+             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#_refEntities
+             */
+            Object.defineProperty(this, '_refEntities', 
+            {
+                get: function() { return _refEntities; },
+                configurable: false,
+                enumerable: true
+            });
+
             /**
              * 테이블 이름
              * @member {string} _L.Meta.Entity.MetaView#viewName
@@ -96,10 +126,16 @@
                 enumerable: true
             });
            
-            this.viewName      = p_name || '';
-            this._refEntity     = p_baseEntity;     // REVIEW: 필요 유무 검토
-            this._refEntities   = [];
+            // this.viewName      = p_name || '';
+            this.viewName = p_name;
+            
+            // this._refEntities   = [];
             columns = new MetaViewColumnCollection(this, refCollection);
+
+            // inner variable access
+            this.__SET_refEntity = function(val, call) {
+                if (call instanceof MetaView) _refEntity = val;
+            }
         }
         Util.inherits(MetaView, _super);
 
@@ -123,6 +159,42 @@
         // MetaView.prototype.getObject = function() {
         //     // TODO::
         // };
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaTable.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
+            obj.columns = this.columns.getObject();
+            obj.rows = this.rows.getObject();
+            obj.ViewName = this.ViewName;
+            obj._refEntity = MetaRegistry.createReferObject(this.metaSet);
+            
+            /**
+             * REVIEW:
+             * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
+             */
+            return obj;                  
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaTable.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            obj.metaSet = mObj.metaSet;
+            obj.columns = mObj.columns;
+            obj.rows = mObj.rows;
+            obj.ViewName = mObj.ViewName;
+            obj._refEntity = mObj._refEntity;
+        };
 
         /**
          * 뷰 엔티티를 복제한다.

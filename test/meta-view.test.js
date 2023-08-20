@@ -51,8 +51,8 @@ describe("[target: meta-view.js]", () => {
                 expect(view1.columns['i3'].caption).toBe('C3');
                 expect(view1.columns['i4'].value).toBe('V4');
                 expect(view1.columns._baseCollection).toBe(undefined);
-                expect(view1.columns['i1'].entity.metaName).toBe('T1');
-                expect(view1.columns['i2'].entity.metaName).toBe('T1');
+                expect(view1.columns['i1']._entity.metaName).toBe('T1');
+                expect(view1.columns['i2']._entity.metaName).toBe('T1');
                 expect(view1.rows[0]['i1']).toBe('R1');
                 expect(view1.rows[0]['i2']).toBe('R2');
                 // view2
@@ -65,8 +65,8 @@ describe("[target: meta-view.js]", () => {
                 expect(view2.viewName).toBe('T2');
                 expect(view2.columns.count).toBe(5);
                 expect(view2.rows.count).toBe(0);
-                expect(view2.columns['i1'].entity.metaName).toBe('T1');
-                expect(view2.columns['i2'].entity.metaName).toBe('T1');
+                expect(view2.columns['i1']._entity.metaName).toBe('T1');
+                expect(view2.columns['i2']._entity.metaName).toBe('T1');
             });
         });
 

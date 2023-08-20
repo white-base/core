@@ -37,14 +37,14 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.columns['i1'].value).toBe('R1');
                 expect(table1.columns['i2'].value).toBe('R2');
                 expect(table1.tableName).toBe('T1');
-                expect(table1.columns['i1'].entity.tableName).toBe('T1');
-                expect(table1.columns['i2'].entity.tableName).toBe('T1');
+                expect(table1.columns['i1']._entity.tableName).toBe('T1');
+                expect(table1.columns['i2']._entity.tableName).toBe('T1');
                 // table2
                 expect(table2.columns['i1'].value).toBe(null);
                 expect(table2.columns['i2'].value).toBe('R2');
                 expect(table2.tableName).toBe('T2');
-                expect(table2.columns['i1'].entity.tableName).toBe('T2');
-                expect(table2.columns['i2'].entity.tableName).toBe('T2');
+                expect(table2.columns['i1']._entity.tableName).toBe('T2');
+                expect(table2.columns['i2']._entity.tableName).toBe('T2');
             });
         });
         describe("MetaEntity.newRow(): Row <MetaRow 생성>", () => {

@@ -243,7 +243,7 @@ describe("[target: meta-column.js ]", () => {
                 var item2 = item1.clone();
         
                 // item1
-                expect(item1.entity.tableName).toBe('T1');
+                expect(item1._entity.tableName).toBe('T1');
                 expect(item1.type).toBe('text');
                 expect(item1.size).toBe(100);
                 expect(item1.default).toBe('D1');
@@ -254,7 +254,7 @@ describe("[target: meta-column.js ]", () => {
                 expect(item1.increase).toBe(10);
                 expect(item1.value).toBe('V1');
                 // item2
-                expect(item2.entity.tableName).toBe('T1');
+                expect(item2._entity.tableName).toBe('T1');
                 expect(item2.type).toBe('text');
                 expect(item2.size).toBe(100);
                 expect(item2.default).toBe('D1');

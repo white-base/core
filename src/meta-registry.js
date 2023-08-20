@@ -5,12 +5,12 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Util;
+    // var Util;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Meta        = _global._L.Meta || {};
+    _global._L              = _global._L || {};
+    _global._L.Meta         = _global._L.Meta || {};
 
     //==============================================================
     // 2. import module
@@ -29,32 +29,11 @@
     
     var MetaRegistry = (function () {
         /**
-         * 구독자 클래스 (이벤트에 활용)
-         * @constructs _L.Meta.MetaRegistry
-         * @param {String} p_message 사용자 메세지 내용
-         * @param {?String} p_target 대상(값)
-         * @param {?String} p_name 에러명
-         * 우선순위 : 메세지 > 타겟 > 에러명
+         * 메타 등록소
          */
         function MetaRegistry() { 
-            /**
-             * 에러 메세지
-             * @member {Object} 
-             */
-            this.message = p_message;    
-
-            /**
-             * 에러 구분자
-             * @member {Object} 
-             */
-            this.target = { value: p_target || ''};
-
-            /**
-             * 에러명
-             * @member {Object} 
-             */
-            this.name = p_name || 'MetaRegistry';
         }
+
         // var define
         var list = [];
         
@@ -77,22 +56,30 @@
             enumerable: false,
             configurable: false
         });
-        
-        MetaRegistry.__extractListObject = function(mobj, arr) {
+
+        // private method
+        function findGuid(guid, arr) {
+            for(var i = 0; i < arr.length; i++) {
+                if (arr[i]['_guid'] === guid) return arr[i];
+            }
+        }
+
+        function extractListObject(mobj, arr) {
             arr = arr || [];
 
             if (mobj['_guid'] && typeof mobj['_guid'] === 'string') arr.push(mobj);
             for(let prop in mobj) {
-                if (typeof mobj[prop] === 'object') this.__extractListObject(mobj[prop], arr);
+                if (typeof mobj[prop] === 'object') extractListObject(mobj[prop], arr);
                 else if (Array.isArray(mobj[prop])){
                 for(var i = 0; i < mobj[prop].length; i++) {
-                    if (typeof mobj[prop][i] === 'object') this.__extractListObject(mobj[prop][i], arr);
+                    if (typeof mobj[prop][i] === 'object') extractListObject(mobj[prop][i], arr);
                 }  
                 }
             }
             return arr;
-        };
+        }
 
+        // static method
         MetaRegistry.init = function() {
             list.length = 0;
         };
@@ -131,8 +118,8 @@
         };
         
         MetaRegistry.validMetaObject = function(mObj) {
-            var arrObj = this.__extractListObject(mObj);
-            // return validReference(mObj, arrObj);
+            var arrObj = extractListObject(mObj);
+
             if (validReference(mObj, arrObj) === false) return false;
             if (validCollection(mObj, arrObj) === false) return false;
             return true;
@@ -174,15 +161,10 @@
                 }
                 return true;
             }
-            function findGuid(guid, arr) {
-                for(var i = 0; i < arr.length; i++) {
-                    if (arr[i]['_guid'] === guid) return arr[i];
-                }
-            }
         };
 
         MetaRegistry.transformRefer = function(mObj) {
-            var arrObj = this.__extractListObject(mObj);
+            var arrObj = extractListObject(mObj);
             var clone = JSON.parse(JSON.stringify(mObj));
             linkReference(clone, arrObj);
             
@@ -204,16 +186,9 @@
                     } 
                 }
             }
-            function findGuid(guid, arr) {
-                for(var i = 0; i < arr.length; i++) {
-                    if (arr[i]['_guid'] === guid) return arr[i];
-                }
-            }
         };
 
-
         return MetaRegistry;
-        
     }());
 
     //==============================================================

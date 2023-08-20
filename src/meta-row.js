@@ -10,11 +10,12 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var Observer;
+    var IBaseCollection;
     var MetaObject;
     // var MetaElement;
     var TransactionCollection;
+    var MetaRegistry;
     // var TransactionQueue;
-    var IBaseCollection;
 
     //==============================================================
     // 1. namespace declaration
@@ -30,30 +31,33 @@
     if (isNode) {     
         Util                        = require('./util');
         Observer            = require('./observer').Observer;
+        IBaseCollection         = require('./i-collection-base').IBaseCollection;
         MetaObject                  = require('./meta-object').MetaObject;
         // MetaElement                 = require('./meta-element');
         TransactionCollection             = require('./collection-trans').TransactionCollection;
         // TransactionQueue      = require('./trans-queue').TransactionQueue;
-        IBaseCollection         = require('./i-collection-base').IBaseCollection;
+        MetaRegistry             = require('./meta-registry').MetaRegistry;
     } else {    // COVER:
         Util                        = _global._L.Common.Util;
         Observer            = _global._L.Common.Observer;
         MetaObject                  = _global._L.Meta.MetaObject;
         // MetaElement                 = _global._L.Collection.MetaElement;
-        TransactionCollection             = _global._L.Collection.TransactionCollection;
-        // TransactionQueue      = _global._L.Collection.TransactionQueue;
         IBaseCollection         = _global._L.Interface.IBaseCollection;
+        TransactionCollection             = _global._L.Collection.TransactionCollection;
+        MetaRegistry             = _global._L.Meta.MetaRegistry;
+        // TransactionQueue      = _global._L.Collection.TransactionQueue;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
+    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     // if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof TransactionCollection === 'undefined') throw new Error('[TransactionCollection] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
     // if (typeof TransactionQueue === 'undefined') throw new Error('[TransactionQueue] module load fail...');
-    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -70,7 +74,7 @@
             var __element = [];
             var _this   = this;
             var _event  = new Observer(this);
-            var entity  = null;
+            var _entity  = null;
             // var _transQueue = new TransactionQueue(this);
 
             // MetaEntity 등록 & order(순서) 값 계산
@@ -91,17 +95,17 @@
 
             /**
              * 로우의 소유 엔티티
-             * @member {MetaEntity} _L.Meta.Entity.MetaRow#entity
+             * @member {MetaEntity} _L.Meta.Entity.MetaRow#_entity
              */
-            Object.defineProperty(this, 'entity', 
+            Object.defineProperty(this, '_entity', 
             {
-                get: function() { return entity; },
+                get: function() { return _entity; },
                 set: function(newValue) {       // REVIEW: MetaRow 에서 entity는 존재할 경우 설정할 수 없다.
                     // TODO:: 자료종류를 검사해야함
                     if (newValue && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
-                        throw new Error('Only [entity] type "MetaEntity" can be added');    // COVER:
+                        throw new Error('Only [_entity] type "MetaEntity" can be added');    // COVER:
                     }
-                    entity = newValue;
+                    _entity = newValue;
                 },
                 configurable: false,
                 enumerable: true
@@ -158,13 +162,13 @@
 
             // 설정
             if (p_entity) {
-                this.entity = p_entity;
+                this._entity = p_entity;
 
-                for (var i = 0; i < entity.columns.count; i++) {
+                for (var i = 0; i < _entity.columns.count; i++) {
                     var idx = __element.length;
-                    __element.push(entity.columns[i].default);  // 기본값 등록
+                    __element.push(_entity.columns[i].default);  // 기본값 등록
                     Object.defineProperty(this, [i], getPropDescriptor(idx));
-                    Object.defineProperty(this, entity.columns[i].alias, getPropDescriptor(idx));
+                    Object.defineProperty(this, _entity.columns[i].alias, getPropDescriptor(idx));
                 }
             }
 
@@ -174,11 +178,11 @@
                     set: function(newValue) { 
                         var oldValue = __element[p_idx];
                         // 트렌젹션 처리 => 함수로 추출 검토
-                        if (this.entity && !this.entity.rows.autoChanges) {
+                        if (this._entity && !this._entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
-                            var pos = this.entity.rows.indexOf(this);
+                            var pos = this._entity.rows.indexOf(this);
                             if (pos > -1) { // 컬력션에 포힘됬을때만
-                                this.entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
+                                this._entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
                             }
                         }
                         // 이벤트 및 처리
@@ -227,13 +231,51 @@
         //     if (this.value) clone['value'] = this.value;
         // };
 
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaRow.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj._entity = MetaRegistry.createReferObject(this._entity);
+            obj._elem = [];
+            for (var i = 0; i < this.list.length; i++) {
+                var elem = this.list[i];
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
+                else obj._elem.push(elem);
+            }
+            return obj;                        
+        };
+
+        /**
+         * TODO: setObject 시점에 초기화 해야함
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaRow.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            this._entity = mObj._entity;
+            for(var i = 0; i < mObj._elem.length; i++) {
+                var elem = mObj._elem[i];
+                if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
+                    this.list[i].setObject(elem);
+                } else {
+                    this.list[i] = elem;
+                }
+            }
+        };
+
        /**
          * 로우를 복제한다.
          * @param {MetaEntity?} p_entity 대상의 엔티티
          * @returns 
          */
         MetaRow.prototype.clone  = function(p_entity) {
-            var entity = p_entity || this.entity;
+            var entity = p_entity || this._entity;
             var clone = new MetaRow(entity);
 
             for (var i = 0; i < this.count; i++) {
@@ -290,7 +332,7 @@
                 set: function(newValue) {
                     var typeName;
                     if (this.elementType.length > 0) Util.validType(newValue, this.elementType);
-                    if (newValue.entity !== this._owner) throw new Error('entity 가 서로 다릅니다.');
+                    if (newValue._entity !== this._owner) throw new Error('_entity 가 서로 다릅니다.');
                     this._transQueue.update(p_idx, newValue, this._element[p_idx]); 
                     this._element[p_idx] = newValue;
                 },
@@ -351,7 +393,7 @@
             var _this = this;
             var checkValid = p_checkValid || false;
             var r_result = {};
-            var entity = p_row.entity;
+            var entity = p_row._entity;
 
 
             if (!(p_row instanceof MetaRow )) throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:

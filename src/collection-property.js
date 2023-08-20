@@ -6,8 +6,9 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
-    var BaseCollection;
     var IPropertyCollection;
+    var BaseCollection;
+    var MetaObject;
 
     //==============================================================
     // 1. namespace declaration
@@ -22,10 +23,12 @@
         Util                = require('./util');
         IPropertyCollection = require('./i-collection-property').IPropertyCollection;
         BaseCollection      = require('./collection-base').BaseCollection;
+        MetaObject          = require('./meta-object').MetaObject;
     } else {
         Util                = _global._L.Common.Util;
         IPropertyCollection = _global._L.Interface.IPropertyCollection;
         BaseCollection      = _global._L.Collection.BaseCollection;
+        MetaObject          = _global._L.Meta.MetaObject;
     }
 
     //==============================================================
@@ -33,6 +36,7 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
+    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     
     //==============================================================
     // 4. 모듈 구현    
@@ -56,7 +60,10 @@
                 configurable: false,
                 enumerable: false,
                 get: function() { return _keys; },
-                set: function(newValue) { _keys = newValue; },
+                set: function(newValue) { 
+                    // TODO: string, len 체크
+                    _keys = newValue; 
+                },
             });
             /** @member {Array} _L.Collection.PropertyCollection#_keys 속성들값 */
 
@@ -73,6 +80,52 @@
             Util.implements(this, IPropertyCollection);
         }
         Util.inherits(PropertyCollection, _super);
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        PropertyCollection.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj._elem = [];
+            obj.elementType = this.elementType;
+            for (var i = 0; i < this._element.length; i++) {
+                var elem = this._element[i];
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
+                else obj._elem.push(elem);
+            }
+            obj._key = [];
+            for (var i = 0; i < this._keys.length; i++) {
+                var key = this._keys[i];
+                obj._key.push(key);
+            }
+            return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        PropertyCollection.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+
+            this.clear();
+            for(var i = 0; i < mObj._elem.length; i++) {
+                var elem = mObj._elem[i];
+                var key = mObj._key[i];
+                if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
+                    this.add(key);
+                    this[key].setObject(elem);
+                } else {
+                    this.add(key, elem);
+                } 
+            }
+            // TODO: add(desc) 이것도 별도로 저장해둬야 함
+            // obj.metaName = mObj.name;
+        };
 
         /**
          * 속성 컬렉션을 삭제한다. (내부처리) [구현]

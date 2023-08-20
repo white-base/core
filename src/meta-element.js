@@ -7,7 +7,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
     var MetaObject;
-    var IMarshal;
+    // var IMarshal;
 
     //==============================================================
     // 1. namespace declaration
@@ -20,18 +20,18 @@
     // 2. import module
     if (isNode) {     
         Util                = require('./util');
-        IMarshal            = require('./i-marshal').IMarshal;
+        // IMarshal            = require('./i-marshal').IMarshal;
         MetaObject          = require('./meta-object').MetaObject;
     } else {
         Util                = _global._L.Common.Util;
         MetaObject          = _global._L.Meta.MetaObject;
-        IMarshal            = _global._L.Interface.IMarshal;
+        // IMarshal            = _global._L.Interface.IMarshal;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
+    // if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
 
     //==============================================================
@@ -52,7 +52,21 @@
             _super.call(this);
             
             var metaName;
-            var __guid;
+            // var _guid;
+            
+            /**
+             * guid
+             * @member {Array} _L.Meta.MetaElement#_guid 
+             */
+            // Object.defineProperty(this, '_guid', 
+            // {
+            //     get: function() { 
+            //         if (!_guid) _guid = Util.createGuid();
+            //         return _guid;
+            //     },
+            //     configurable: true,
+            //     enumerable: true
+            // });
 
             /**
              * 메타 이름
@@ -69,33 +83,11 @@
                 enumerable: true
             });
 
-            /** @member {Array} _L.Meta.MetaElement#__guid 속성들값 */
-            // Object.defineProperty(this, '__guid', 
-            // {
-            //     get: function() { return __guid; },
-            //     set: function(newValue) {
-            //         if (typeof newValue !== 'string')  throw new Error('Only [__guid] type "string" can be added'); // COVER: 2
-            //         __guid = newValue;
-            //     },
-            //     configurable: false,
-            //     enumerable: true
-            // });
-
-            /** @member {Array} _L.Meta.MetaElement#guid 속성들값 */
-            Object.defineProperty(this, 'guid', 
-            {
-                get: function() { 
-                    if (!__guid) __guid = Util.createGuid();
-                    return __guid;
-                },
-                configurable: false,
-                enumerable: true
-            });
                         
             this.metaName = p_name || '';
             
-            /** @implements {_L.Interface.IMarshal} */
-            Util.implements(this, IMarshal);
+
+            // Util.implements(this, IMarshal);
         }
         Util.inherits(MetaElement, _super);
     
@@ -113,19 +105,40 @@
          * @virtual
          * @returns {Object}
          */
-        MetaElement.prototype.getObject  = function(p_context) {
-            var obj = {};
-            var arr = Util.getAllProperties(this);
+        // MetaElement.prototype.getObject  = function(p_context) {
+        //     var obj = {};
+        //     var arr = Util.getAllProperties(this);
             
-            for (var i = 0; i < arr.length; i++) {
-                var prop = arr[i];
-                if (this[prop] instanceof MetaElement) {
-                    obj[prop] = this[prop].getObject(p_context);
-                } else if (typeof this[prop] !== 'function' && prop.substr(0, 1) !== '_') {
-                    obj[prop] = this[prop];
-                }
-            }
+        //     for (var i = 0; i < arr.length; i++) {
+        //         var prop = arr[i];
+        //         if (this[prop] instanceof MetaElement) {
+        //             obj[prop] = this[prop].getObject(p_context);
+        //         } else if (typeof this[prop] !== 'function' && prop.substr(0, 1) !== '_') {
+        //             obj[prop] = this[prop];
+        //         }
+        //     }
+        //     return obj;                        
+        // };
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaElement.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+            obj.name = this.metaName;
             return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaElement.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            obj.metaName = mObj.name;
         };
 
         /**
@@ -133,12 +146,12 @@
          * Guid를 얻는다.
          * @returns {String}
          */
-        MetaElement.prototype.getGuid  = function() {
-            if (!this.__guid) {
-                this.__guid = __newGuid();
-            }
-            return this.__guid;
-        };
+        // MetaElement.prototype.getGuid  = function() {
+        //     if (!this._guid) {
+        //         this._guid = __newGuid();
+        //     }
+        //     return this._guid;
+        // };
 
         return MetaElement;
 

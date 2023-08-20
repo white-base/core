@@ -96,6 +96,30 @@
         //     return _super.prototype.add.call(this, p_value, p_desc);
         // };
 
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        TransactionCollection.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj.autoChanges = this.autoChanges;
+            return obj;                        
+        };
+
+        /**
+         * TODO: setObject 시점에 초기화 해야함
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        TransactionCollection.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            this.autoChanges = mObj.autoChanges;
+        };
+
         TransactionCollection.prototype.clear = function() {
             this._transQueue.init();
             return _super.prototype.clear.call(this);

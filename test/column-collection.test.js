@@ -137,11 +137,11 @@ describe("[target: meta-column.js]", () => {
                 // table1
                 expect(table1.columns.count).toBe(2);
                 expect(table1.columns['i2'].caption).toBe('C2');
-                expect(table1.columns['i2'].entity.tableName).toBe('T1');
+                expect(table1.columns['i2']._entity.tableName).toBe('T1');
                 // table2
                 expect(table2.columns.count).toBe(1);
                 expect(table2.columns['i2'].caption).toBe('C1');
-                expect(table2.columns['i2'].entity.tableName).toBe('T2');
+                expect(table2.columns['i2']._entity.tableName).toBe('T2');
             });
         });
 

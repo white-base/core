@@ -61,7 +61,7 @@
             var __value       = null;
             var _event        = new Observer(this);
             var columnName;
-            var entity;
+            var _entity;
             var type          = 'string';
             var size          = 0;
             var defaultValue  = null;
@@ -79,8 +79,8 @@
 
             // MetaEntity 등록 & order(순서) 값 계산
             if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
-                entity    = p_entity;
-                order     = entity.columns.count === 0 ? order : entity.columns[entity.columns.count - 1].order + increase;
+                _entity    = p_entity;
+                order     = _entity.columns.count === 0 ? order : _entity.columns[_entity.columns.count - 1].order + increase;
             }
 
             /** @private */
@@ -125,8 +125,8 @@
                 get: function() { return columnName; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'string') throw new Error('Only [columnName] type "string" can be added');
-                    if (entity && entity.columns.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
-                    if (entity && entity.columns.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!'); 
+                    if (_entity && _entity.columns.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
+                    if (_entity && _entity.columns.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!'); 
                     
                     columnName = newValue;
                 },
@@ -147,7 +147,7 @@
             {
                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
                 set: function(newValue) { 
-                   var entity = this.entity;
+                   var entity = this._entity;
                    if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
                    if (entity && entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
                    alias = newValue;
@@ -160,23 +160,24 @@
 
             /**
              * 아이템 소유 엔티티
-             * @member {MetaEntity} _L.Meta.Entity.MetaColumn#entity
+             * @member {MetaEntity} _L.Meta.Entity.MetaColumn#_entity
              */
-            Object.defineProperty(this, 'entity', 
+            Object.defineProperty(this, '_entity', 
             {
-                get: function() { return entity; },
+                get: function() { return _entity; },
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
                     if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
-                        throw new Error('Only [entity] type "MetaEntity" can be added');    // COVER:
+                        throw new Error('Only [_entity] type "MetaEntity" can be added');    // COVER:
                     }
-                    entity = newValue;
+                    _entity = newValue;
                 },
                 configurable: true,
                 enumerable: true
             });
 
             /**
+             * TODO: DbColumn 으로 이동해야할듯
              * 아이템 타입 (내부속성)
              * @member {String} _L.Meta.Entity.MetaColumn#type
              */
@@ -193,6 +194,7 @@
             });
 
             /**
+             * TODO: DbColumn 으로 이동해야할듯
              * 아이템 크기 (내부속성)
              * @member {Number} _L.Meta.Entity.MetaColumn#size
              */
@@ -322,6 +324,7 @@
 
             /**
              * 아이템 코드 타입
+             * TODO: DbColumn 으로 이동해야할듯
              * @member {Object} _L.Meta.Entity.MetaColumn#codeType
              */
             Object.defineProperty(this, 'codeType', 
@@ -334,6 +337,7 @@
 
             /**
              * 아이템 순서
+             * TODO: DbColumn 으로 이동해야할듯
              * @member {String} _L.Meta.Entity.MetaColumn#order
              */
             Object.defineProperty(this, 'order', 
@@ -348,6 +352,7 @@
             });
 
             /**
+             * TODO: DbColumn 으로 이동해야할듯
              * 아이템 순서 증가 수
              * @member {Number} _L.Meta.Entity.MetaColumn#increase
              */
@@ -510,7 +515,7 @@
             if (typeof p_property === 'object' ) {
                 for(var prop in p_property) {
                     if (p_property.hasOwnProperty(prop) &&
-                    [   'entity', 'type', 'size', 'default', 'caption', 
+                    [   '_entity', 'type', 'size', 'default', 'caption', 
                         'isNotNull', 'isNullPass', 'callback', 'constraints', 
                         'codeType', 'order', 'increase', 'value', 'getter', 'setter', 'alias', 'onChanged' 
                     ].indexOf(prop) > -1) {
@@ -530,13 +535,13 @@
         MetaColumn.prototype.clone = function(p_entity) {
             var clone = new MetaColumn(this.name);
             var constraints = [];
-            var entity = this.entity;
+            var entity = this._entity;
 
             if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
                 entity    = p_entity;
             }
 
-            if (this.entity) clone['entity']            = entity;
+            if (this._entity) clone['_entity']            = entity;
             if (this.alias !== this.columnName) clone['alias'] = this.alias;
             if (this.columnName) clone['columnName']    = this.columnName;
             if (this.type) clone['type']                = this.type;
@@ -843,7 +848,7 @@
                 // MetaTable 직접만 적용(참조형 아이템 소유 못함)
                 i_name  = p_object.columnName;
                 i_value = p_object.clone();
-                i_value.entity = this._owner;
+                i_value._entity = this._owner;
             } else {
                 throw new Error('string | MetaColumn object [p_object].');    // COVER:
             }
@@ -923,7 +928,7 @@
 
             if (p_object instanceof MetaColumn) {
                 // 아이템 소유자 설정
-                if (p_object.entity === null) p_object.entity = this._owner;
+                if (p_object._entity === null) p_object._entity = this._owner;
                 i_name = p_object.columnName;
                 i_value = p_object;
             } else if (typeof p_object === 'string') {
