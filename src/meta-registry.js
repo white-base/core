@@ -84,12 +84,13 @@
             list.length = 0;
         };
 
-        MetaRegistry.hasMetaClass = function(meta) {
+        MetaRegistry.hasMetaObject = function(meta) {
             for(let i = 0; i < list.length; i++) {
                 if (list[i]._guid === meta._guid) return true;
             }
             return false;
         };
+        
         MetaRegistry.hasReferObject = function(obj) {
             if (typeof obj !== 'object') throw new Error('object 타입이 아닙니다.');
 
@@ -117,7 +118,7 @@
         };        
 
         MetaRegistry.register = function(meta) {
-            if (this.hasMetaClass(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
+            if (this.hasMetaObject(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
             list.push(meta);
         };
 

@@ -17,7 +17,10 @@ class MetaObject{
         return this.#guid;
     }
     // set _guid(val) { this.#guid = val }
-    get _type() { return 'MetaObject' };
+    get _type() { 
+        var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
+        return proto.constructor;
+     };
     constructor() {
         MetaReistry.register(this);
         console.log('register()=>'+ this._type);
@@ -31,12 +34,15 @@ class MetaObject{
         // console.log('setObject()=>'+ this._type);
     }
 }
-class MetaElemet extends MetaObject {
+class MetaElement extends MetaObject {
     name = '';
-    get _type() { return 'MetaElemet' };
-    constructor(name) { 
+    // get _type() { return 'MetaElement' };
+    static params = ['name', 'test'];
+
+    constructor(name, test) { 
         super(); 
         this.name = name;
+        this.test = test;
     }
     getObject() {
         let obj = super.getObject();
@@ -47,13 +53,14 @@ class MetaElemet extends MetaObject {
         super.setObject(obj);
         this.name = obj.name;
     }
+
 }
 
-class MetaColumn extends MetaElemet {
+class MetaColumn extends MetaElement {
     _entity = null;
     caption = '';
     value = '';
-    get _type() { return 'MetaColumn' };
+    // get _type() { return 'MetaColumn' };
     constructor(name) {
         super(name);
         this.caption = name + ':캡션';
@@ -97,7 +104,7 @@ class MetaColumn extends MetaElemet {
 class PropertyCollection extends MetaObject {
     _elem = [];
     _owner = null;
-    get _type() { return 'PropertyCollection' };
+    // get _type() { return 'PropertyCollection' };
     constructor(owner) { 
         super(); 
         this._owner = owner;
@@ -145,14 +152,14 @@ class PropertyCollection extends MetaObject {
 
         // for(let prop in obj.columns) {
         //     this.columns.add(prop);
-        //     this.columns[prop].setObject(obj.columns[prop]);
+        //     this.columns[prop].setObject(obj.columns[prop]); 
         // }
     }
 }
-class MetaView extends MetaElemet {
+class MetaView extends MetaElement {
     columns = new PropertyCollection(this);
     _master = null;
-    get _type() { return 'MetaView' };
+    // get _type() { return 'MetaView' };
     constructor(name) { super(name); }
     getObject(getOpt) {
         let obj = super.getObject();
@@ -239,13 +246,19 @@ class MetaView extends MetaElemet {
 
 class MetaReistry {
     static #list = [];
+    static #funs = {};
     static get count() { return this.#list.length };
     static get list() { return this.#list };
+    static get funs() { return this.#funs };
     static init() {
         this.#list.length = 0;
     }
     static register(meta) {
-        if (this.hasMetaClass(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
+        const fName = meta._type.name;
+        if (this.hasMetaObject(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
+        // 클래스명 중복 검사
+        if (this.#funs[fName] && this.#funs[fName] !== meta._type) throw new Error('class 명 중복'); 
+        if (!this.#funs[fName]) this.#funs[fName] = meta._type;
         this.#list.push(meta);
     }
     static release(meta) {
@@ -257,10 +270,31 @@ class MetaReistry {
             }
         }
     }
+    static createObject(creator, className, prop) {
+        let classBody = this.#funs[className];
+        let params = classBody.params; // arr
+        let args = [];
+        for (let i = 0; i < params.length; i++) {
+            var argName = params[i];
+            args.push(prop[argName]);
+        }
+
+        // inner
+        function f(args) {
+
+        }
+
+        // return new classBody.apply(creator, args);
+    }
+
     static createReferObject(obj) {
         if (obj && obj._guid && obj._guid.length > 0 ) return { $ref: obj._guid };
     }
-    static hasMetaClass(meta) {
+    static hasMetaClass(fName) {
+
+    }
+
+    static hasMetaObject(meta) {
         for(let i = 0; i < this.#list.length; i++) {
             if (this.#list[i]._guid === meta._guid) return true;
         }
@@ -273,6 +307,8 @@ class MetaReistry {
         }
         // throw new Error('메타가 없습니다. _guid:' + meta._guid); 
     }
+
+    
     /**
      * 매타객체 검사
      * - $ref 참조 여부
@@ -391,7 +427,7 @@ class MetaReistry {
 // implement
 let t1 = new MetaView('T1');
 t1.columns.add('c1', 'C1');
-t1.columns.add('c2', new MetaElemet('C2'));
+t1.columns.add('c2', new MetaElement('C2'));
 t1.columns['c1']._entity = t1;
 t1._master = t1.columns['c1'];
 // 직렬화
@@ -421,6 +457,65 @@ console.log('str2 => ', str2);
 console.log(MetaReistry.validMetaObject(obj));
 obj._master.$ref = '실패'
 console.log(MetaReistry.validMetaObject(obj));
+
+var c1 = MetaReistry.createObject(this, 'MetaElement', {});
+var c2 = MetaReistry.createObject(this, 'MetaElement', {name: 'NAME'});
+var c3 = MetaReistry.createObject(this, 'MetaElement', {name: 'NAME', test: 'TEST'});
+var c4 = MetaReistry.createObject(this, 'MetaElement', {test: 'TEST'});
+
+
+
+// function sum(...theArgs) {
+//     this.total = 0;
+    
+    
+//     for (const arg of theArgs) {
+//       total += arg;
+//     }
+//     // return total;
+// }
+
+// console.log(sum(1,1));
+
+// console.log(new sum(1,1));
+
+
+// class Test {
+//     total = 0;
+//     constructor(...theArgs){
+//         for (const arg of theArgs) {
+//               this.total += arg;
+//             }
+//     }
+// }
+
+// console.log(new Test([1,1]));
+
+
+var r1 = (function () {
+    var name = "Barry";
+    return name;
+})();
+
+var r2 = new (function () {
+    var name = "Barry";
+    return name;
+})();
+
+var r3 = (function () {
+    var name = "Barry";
+    return name;
+})();
+
+var r4 = new MetaElement();
+
+function aaa() {
+
+}
+
+var r5 = aaa.call();
+var r6 = new aaa.call();
+
 
 //--------------------------------------------
 console.log(0);

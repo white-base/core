@@ -201,7 +201,6 @@
             // for(var i = 0; i < this._refEntities.length; i++) {
             //     clone._refEntities.push(this._refEntities[i]);
             // }
-           
             for(var i = 0; i < this.columns.count; i++) {
                 clone.columns.add(this.columns[i].clone(clone));
             }
