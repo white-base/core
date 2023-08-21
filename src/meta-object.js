@@ -71,7 +71,6 @@
             {
                 get: function() { 
                     var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
-
                     return proto.constructor;
                 },
                 // set: function(val) {

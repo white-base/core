@@ -145,17 +145,30 @@ describe("[target: meta-table.js]", () => {
         describe("MetaEntity.select(filter, args) <엔티티 조회>", () => {
             it("- select() : 기본값 조회 ", () => {
                 var table1 = new MetaTable('T1');
-                var json1 = { 
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
-                    },
-                    rows: [
-                        { i1: 1, i2: 2 },
-                        { i1: 10, i2: 20 },
-                    ]
-                };
-                table1.load(json1, 3);
+                // var json1 = { 
+                //     columns: {
+                //         i1: { caption: 'C1'},
+                //         i2: { caption: 'C2'},
+                //     },
+                //     rows: [
+                //         { i1: 1, i2: 2 },
+                //         { i1: 10, i2: 20 },
+                //     ]
+                // };
+                // table1.load(json1, 3);
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.columns['i1'].caption = 'C1';
+                table1.columns['i2'].caption = 'C2';
+                var row = table1.newRow();
+                row['i1'] = 1;
+                row['i2'] = 2;
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 10;
+                row['i2'] = 20;
+                table1.rows.add(row);
+
                 var table2 = table1.select();
     
                 expect(table2.columns.count).toBe(2);
@@ -173,19 +186,33 @@ describe("[target: meta-table.js]", () => {
             });
             it("- select(filter) : 필터 설정 ", () => {
                 var table1 = new MetaTable('T1');
-                var json1 = { 
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
-                    },
-                    rows: [
-                        { i1: 1, i2: 2 },
-                        { i1: 10, i2: 20 },
-                    ]
-                };
-                table1.load(json1, 3);
+                // var json1 = { 
+                //     columns: {
+                //         i1: { caption: 'C1'},
+                //         i2: { caption: 'C2'},
+                //     },
+                //     rows: [
+                //         { i1: 1, i2: 2 },
+                //         { i1: 10, i2: 20 },
+                //     ]
+                // };
+                // table1.load(json1, 3);
+                // setter 방식
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.columns['i1'].caption = 'C1';
+                table1.columns['i2'].caption = 'C2';
+                var row = table1.newRow();
+                row['i1'] = 1;
+                row['i2'] = 2;
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 10;
+                row['i2'] = 20;
+                table1.rows.add(row);
+
                 var table2 = table1.select(row => row['i1'] < 10);
-    
+                
                 expect(table2.columns.count).toBe(2);
                 expect(table2.rows.count).toBe(1);
                 expect(table2.columns['i1'].caption).toBe('C1');
@@ -195,17 +222,30 @@ describe("[target: meta-table.js]", () => {
             });
             it("- select(itmms) : 아이템 설정", () => {
                 var table1 = new MetaTable('T1');
-                var json1 = { 
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
-                    },
-                    rows: [
-                        { i1: 1, i2: 2 },
-                        { i1: 10, i2: 20 },
-                    ]
-                };
-                table1.load(json1, 3);
+                // var json1 = { 
+                //     columns: {
+                //         i1: { caption: 'C1'},
+                //         i2: { caption: 'C2'},
+                //     },
+                //     rows: [
+                //         { i1: 1, i2: 2 },
+                //         { i1: 10, i2: 20 },
+                //     ]
+                // };
+                // table1.load(json1, 3);
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.columns['i1'].caption = 'C1';
+                table1.columns['i2'].caption = 'C2';
+                var row = table1.newRow();
+                row['i1'] = 1;
+                row['i2'] = 2;
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 10;
+                row['i2'] = 20;
+                table1.rows.add(row);
+
                 var table2 = table1.select('i1');
     
                 expect(table2.columns.count).toBe(1);
@@ -218,17 +258,30 @@ describe("[target: meta-table.js]", () => {
         describe("this.copy(filter, args) <테이블 복사>", () => {
             it("- copy() : 기본값 조회 ", () => {
                 var table1 = new MetaTable('T1');
-                var json1 = { 
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
-                    },
-                    rows: [
-                        { i1: 1, i2: 2 },
-                        { i1: 10, i2: 20 },
-                    ]
-                };
-                table1.load(json1, 3);
+                // var json1 = { 
+                //     columns: {
+                //         i1: { caption: 'C1'},
+                //         i2: { caption: 'C2'},
+                //     },
+                //     rows: [
+                //         { i1: 1, i2: 2 },
+                //         { i1: 10, i2: 20 },
+                //     ]
+                // };
+                // table1.load(json1, 3);
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.columns['i1'].caption = 'C1';
+                table1.columns['i2'].caption = 'C2';
+                var row = table1.newRow();
+                row['i1'] = 1;
+                row['i2'] = 2;
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 10;
+                row['i2'] = 20;
+                table1.rows.add(row);
+
                 var table2 = table1.copy();
     
                 expect(table2.columns.count).toBe(2);
@@ -247,17 +300,30 @@ describe("[target: meta-table.js]", () => {
             });
             it("- copy(filter) : 필터 설정 ", () => {
                 var table1 = new MetaTable('T1');
-                var json1 = { 
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
-                    },
-                    rows: [
-                        { i1: 1, i2: 2 },
-                        { i1: 10, i2: 20 },
-                    ]
-                };
-                table1.load(json1, 3);
+                // var json1 = { 
+                //     columns: {
+                //         i1: { caption: 'C1'},
+                //         i2: { caption: 'C2'},
+                //     },
+                //     rows: [
+                //         { i1: 1, i2: 2 },
+                //         { i1: 10, i2: 20 },
+                //     ]
+                // };
+                // table1.load(json1, 3);
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.columns['i1'].caption = 'C1';
+                table1.columns['i2'].caption = 'C2';
+                var row = table1.newRow();
+                row['i1'] = 1;
+                row['i2'] = 2;
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 10;
+                row['i2'] = 20;
+                table1.rows.add(row);
+
                 var table2 = table1.copy(row => row['i1'] < 10);
     
                 expect(table2.columns.count).toBe(2);
@@ -269,18 +335,31 @@ describe("[target: meta-table.js]", () => {
             });
             it("- copy(itmms) : 아이템 설정", () => {
                 var table1 = new MetaTable('T1');
-                var json1 = { 
-                    viewName: 'V1',
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
-                    },
-                    rows: [
-                        { i1: 1, i2: 2 },
-                        { i1: 10, i2: 20 },
-                    ]
-                };
-                table1.load(json1, 3);
+                // var json1 = { 
+                //     viewName: 'V1',
+                //     columns: {
+                //         i1: { caption: 'C1'},
+                //         i2: { caption: 'C2'},
+                //     },
+                //     rows: [
+                //         { i1: 1, i2: 2 },
+                //         { i1: 10, i2: 20 },
+                //     ]
+                // };
+                // table1.load(json1, 3);
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.columns['i1'].caption = 'C1';
+                table1.columns['i2'].caption = 'C2';
+                var row = table1.newRow();
+                row['i1'] = 1;
+                row['i2'] = 2;
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 10;
+                row['i2'] = 20;
+                table1.rows.add(row);
+
                 var table2 = table1.copy('i1');
     
                 expect(table2.tableName).toBe('T1');
@@ -336,25 +415,40 @@ describe("[target: meta-table.js]", () => {
         });
     
         
-        describe("MetaEntity.load(entity | JSON, opt) <가져오기>", () => {
-            it("- load(JSON) : 가져오기, opt = 3 ", () => {
+        describe("MetaEntity.load(entity | rObj | mObj) <가져오기>", () => {
+            it.only("- load(rObj) : 가져오기 ", () => {
                 var table1 = new MetaTable('T1');
+                // var json1 = { 
+                //     tableName: 'TT1',
+                //     columns: {
+                //         i1: { caption: 'C1'},
+                //         i2: { caption: 'C2'},
+                //     },
+                //     rows: [
+                //         { i1: 'R1', i2: 'R2' },
+                //         { i1: 'R10', i2: 'R20' },
+                //         { i1: 'R100', i2: 'R200' },
+                //     ]
+                // };
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.columns['i1'].caption = 'C1';
+                table1.columns['i2'].caption = 'C2';
+                var row = table1.newRow();
+                row['i1'] = 'R1';
+                row['i2'] = 'R2';
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 'R10';
+                row['i2'] = 'R20';
+                table1.rows.add(row);
+                var row = table1.newRow();
+                row['i1'] = 'R100';
+                row['i2'] = 'R200';
+                table1.rows.add(row);
+                var rObj = table1.getObject();
                 var table2 = new MetaTable('T2');
-                var table3 = new MetaTable('T3');
-                var json1 = { 
-                    tableName: 'TT1',
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
-                    },
-                    rows: [
-                        { i1: 'R1', i2: 'R2' },
-                        { i1: 'R10', i2: 'R20' },
-                        { i1: 'R100', i2: 'R200' },
-                    ]
-                };
-                table1.read(json1);    // opt = 3
-                table2.load(json1);    // opt = 3
+                table2.load(rObj);
         
                 // table1
                 expect(table1.tableName).toBe('TT1');

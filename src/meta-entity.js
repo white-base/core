@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
+    var MetaObject;
     var MetaElement;
     var IGroupControl;
     var IAllControl;
@@ -13,6 +14,7 @@
     var MetaRow;
     var MetaColumnCollection;
     var MetaView;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -26,18 +28,22 @@
         Util                        = require('./util');
         IGroupControl               = require('./i-control-group').IGroupControl;
         IAllControl                 = require('./i-control-all').IAllControl;
+        MetaObject                  = require('./meta-object').MetaObject;
         MetaElement                 = require('./meta-element').MetaElement;
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
         MetaRow                     = require('./meta-row').MetaRow;
         MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Util                        = _global._L.Util;
         IGroupControl               = _global._L.IGroupControl;
         IAllControl                 = _global._L.IAllControl;
+        MetaObject                  = _global._L.MetaObject;
         MetaElement                 = _global._L.MetaElement;
         MetaRowCollection           = _global._L.MetaRowCollection;
         MetaRow                     = _global._L.MetaRow;
         MetaColumnCollection        = _global._L.MetaColumnCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -45,11 +51,12 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
+    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof MetaRowCollection === 'undefined') throw new Error('[MetaRowCollection] module load fail...');
     if (typeof MetaRow === 'undefined') throw new Error('[MetaRow] module load fail...');
     if (typeof MetaColumnCollection === 'undefined') throw new Error('[MetaColumnCollection] module load fail...');
-
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -360,6 +367,20 @@
             }
         };
 
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaEntity.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
+            obj.columns = this.columns.getObject();
+            obj.rows = this.rows.getObject();
+            return obj;                        
+        };
+
         /** @abstract */
         MetaEntity.prototype.clone = function() {
             throw new Error('[ clone() ] Abstract method definition, fail...');
@@ -399,28 +420,7 @@
         //     }
         // };
         
-        /**
-         * 불러오기/가져오기 (!! 병합용도가 아님)
-         * 오류조건 : 컬럼 중복 발생시 오류   
-         * @param {object | MetaEntity} p_target 로드 대상
-         * @param {Number} p_option 
-         * @param {Number} p_option.1 컬럼(구조)만 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다.
-         * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
-         * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
-         */
-        MetaEntity.prototype.load = function(p_target, p_option) {
-            var opt = typeof p_option === 'undefined' ? 3 : p_option;
-
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
-            
-            if (p_target instanceof MetaEntity) {
-                this._loadEntity(p_target, opt);
-            } else if (typeof p_target === 'object') {
-                this.read(p_target, opt);
-            } else {
-                throw new Error('[p_target] 처리할 수 없는 타입입니다. ');
-            }
-        };
+        
 
         /** 
          * 아이템과 로우를 초기화 한다.
@@ -915,57 +915,77 @@
             
         // };
 
+        /**
+         * 불러오기/가져오기 (!! 병합용도가 아님)
+         * 오류조건 : 컬럼 중복 발생시 오류   
+         * @param {object | MetaEntity} p_target 로드 대상
+         */
+        MetaEntity.prototype.load = function(p_obj) {
+            var mObj;
+            
+            if (p_obj instanceof MetaEntity) {
+                this._loadEntity(p_obj, 3);
+            } else if (typeof p_obj === 'object') {
+                mObj = MetaRegistry.hasReferObject(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
+                this.setObject(mObj);
+            } else {
+                throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
+            }
+        };
 
         /**
          * object 로 로딩하기   
          * JSON 스키마 규칙   
          * { table: { columns: {}, rows: {} }}   
          * { columns: {...}, rows: {} }
-         * @param {*} p_json 
-         * @param {*} p_opt 1: 스키마, 2: 데이터, 3: 스키마/데이터 <*기본값*>
+         * @param {object} p_obj mObject 또는 rObject
+         * @param {Number} p_option 
+         * @param {Number} p_option.1 컬럼(구조)만 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다.
+         * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
+         * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
          */
-        MetaEntity.prototype.read  = function(p_json, p_option) {
+        MetaEntity.prototype.read  = function(p_obj, p_option) {
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
-            
-            if (typeof p_json !== 'object') throw new Error('Only [p_json] type "object" can be added');
+
+            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+            if (p_obj instanceof MetaObject) throw new Error('[p_obj] MetaObject 인스턴스는 읽을 수 없습니다.');
+            // if (MetaRegistry.hasReferObject(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
 
-            entity = p_json['entity']  || p_json['table'] || p_json;
+            // TODO: 이름 통일 필요
+            if (p_obj.viewName) this.viewName = p_obj.viewName;
+            if (p_obj.tableName) this.tableName = p_obj.tableName;
 
-            if (opt % 2 === 1) this.readSchema(entity, opt === 3 ? true : false); // opt: 1, 3
-            if (Math.floor(opt / 2) >= 1) this.readData(entity); // opt: 2, 3
-        };
-
-        MetaEntity.prototype.write  = function() {
-            console.log('구현해야함');  // COVER:
+            if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
+            if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
         };
 
         /**
          * 없으면 빈 컬럼을 생성해야 하는지?
          * 이경우에 대해서 명료하게 처리햐야함 !!
-         * @param {*} p_json 
-         * @param {*} p_isReadRow
+         * @param {*} p_obj 
+         * @param {*} p_isCreateRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
-        MetaEntity.prototype.readSchema  = function(p_json, p_isReadRow) {
-            var entity = null;
-            var columns, rows;
+        MetaEntity.prototype.readSchema  = function(p_obj, p_isCreateRow) {
+            var columns;
+            var rows;
             var Column = this.columns.columnType;
-            var entityName;
 
-            if (typeof entity !== 'object') throw new Error('Only [p_json] type "object" can be added');
-            
-            entity = p_json['entity'] || p_json['table'] || p_json;
-            columns = entity['columns'];
+            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
+
+            if (MetaRegistry.hasReferObject(p_obj)) p_obj = MetaRegistry.transformRefer(p_obj);;
+
             
             // table <-> view 서로 호환됨
-            if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
-            if (this.instanceOf('MetaTable') && entity['tableName']) this['tableName'] = entity['tableName'];
-
+            // if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
+            // if (this.instanceOf('MetaTable') && entity['tableName']) this['tableName'] = entity['tableName'];
+            
+            columns = p_obj['columns'] || columns;
             if (columns) {
                 for (var key in columns) {
                     if (Object.hasOwnProperty.call(columns, key)) {
-                        if (this.rows.count > 0 ) throw new Error('rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                        if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                         var prop = columns[key];
                         var column = new Column(key, this, prop);
                         if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
@@ -973,8 +993,10 @@
                     }
                 }
             }
-            if (p_isReadRow === true) {
-                rows = entity['rows'];
+
+            // opt
+            if (p_isCreateRow === true) {
+                rows = p_obj['rows'];
                 if (Array.isArray(rows) && rows.length > 0)
                 for (var key in rows[0]) {    // rows[0] 기준
                     if (Object.hasOwnProperty.call(rows[0], key)) {
@@ -988,33 +1010,18 @@
             }
         };
 
-        MetaEntity.prototype.writeSchema  = function() {
-            var obj = {
-                columns: {}
-            };
-
-            if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
-            if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
-
-            for(var i = 0; i < this.columns.count; i++) {
-                var key = this.columns.keyOf(i);
-                obj.columns[key] = this.columns[i].getObject();
-            }
-            return obj;
-        };
-
         /**
          * 존재하는 로우만 가져온다.
-         * @param {*} p_json 
+         * @param {*} p_obj 
          */
-        MetaEntity.prototype.readData  = function(p_json) {
-            var entity = null;
+        MetaEntity.prototype.readData  = function(p_obj) {
             var rows;
 
-            if (typeof entity !== 'object') throw new Error('Only [p_json] type "object" can be added');
-            
-            entity = p_json['entity'] || p_json['table'] || p_json;
-            rows = entity['rows'];
+            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
+
+            if (MetaRegistry.hasReferObject(p_obj)) p_obj = MetaRegistry.transformRefer(p_obj);;
+
+            rows = p_obj['rows'] || p_obj;
             if (Array.isArray(rows) && this.columns.count > 0) {
                 for (var i = 0; i < rows.length; i++) {
                     var row = this.newRow(this);
@@ -1028,8 +1035,38 @@
             }
         };
 
+        MetaEntity.prototype.write  = function() {
+            return this.getObject();
+        };
+
+        // MetaEntity.prototype.writeSchema  = function() {
+        //     var obj = {
+        //         columns: {}
+        //     };
+
+        //     if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
+        //     if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
+
+        //     for(var i = 0; i < this.columns.count; i++) {
+        //         var key = this.columns.keyOf(i);
+        //         obj.columns[key] = this.columns[i].getObject();
+        //     }
+        //     return obj;
+        // };
+        MetaEntity.prototype.writeSchema  = function() {
+            return {
+                columns: this.columns.getObject()
+            };
+        };
+
+        // MetaEntity.prototype.writeData  = function() {
+        //     console.log('구현해야함');  // COVER:
+        // };
+
         MetaEntity.prototype.writeData  = function() {
-            console.log('구현해야함');  // COVER:
+            return {
+                rows: this.columns.getObject()
+            };
         };
 
         return MetaEntity;

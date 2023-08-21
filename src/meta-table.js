@@ -10,7 +10,7 @@
     var MetaEntity;
     var PropertyCollection;
     var MetaTableColumnCollection;
-    var MetaRegistry;
+    // var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -25,13 +25,13 @@
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        // MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
         Util                        = _global._L.Util;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaEntity                  = _global._L.MetaEntity;
         MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        // MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -40,7 +40,7 @@
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof MetaTableColumnCollection === 'undefined') throw new Error('[MetaTableColumnCollection] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    // if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현    
@@ -113,9 +113,6 @@
         MetaTable.prototype.getObject  = function() {
             var obj = _super.prototype.getObject.call(this);
 
-            obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
-            obj.columns = this.columns.getObject();
-            obj.rows = this.rows.getObject();
             obj.tableName = this.tableName;
             return obj;                        
         };
@@ -128,9 +125,9 @@
         MetaTable.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            this.metaSet = mObj.metaSet;
-            this.columns = mObj.columns;
-            this.rows = mObj.rows;
+            if(mObj.metaSet) this.metaSet = mObj.metaSet;
+            this.columns.setObject(mObj.columns);
+            this.rows.setObject(mObj.rows);
             this.tableName = mObj.tableName;
         };
 

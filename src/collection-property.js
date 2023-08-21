@@ -87,13 +87,6 @@
         PropertyCollection.prototype.getObject  = function() {
             var obj = _super.prototype.getObject.call(this);
 
-            obj._elem = [];
-            obj.elementType = this.elementType;
-            for (var i = 0; i < this._element.length; i++) {
-                var elem = this._element[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
-                else obj._elem.push(elem);
-            }
             obj._key = [];
             for (var i = 0; i < this._keys.length; i++) {
                 var key = this._keys[i];

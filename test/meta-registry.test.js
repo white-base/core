@@ -11,7 +11,7 @@ const {MetaObject}            = require('../src/meta-object');
 //==============================================================
 // test
 describe("[target: meta-registry.js]", () => {
-    describe("MetaReistry :: 클래스(static)", () => {
+    describe("MetaRegistry :: 클래스(static)", () => {
         beforeEach(() => {
             jest.resetModules();
             MetaRegistry.init();
@@ -30,14 +30,24 @@ describe("[target: meta-registry.js]", () => {
             // expect(MetaRegistry.count).toBe(0);
         });
         it("- init() : 초기화 ", () => {
-            // const aa = MetaRegistry;
             let i = new MetaObject();
             MetaRegistry.register(i);
+
             // 등록 조회
             expect(MetaRegistry.count).toBe(1);
             MetaRegistry.init();
             //초기화 후 조회
             expect(MetaRegistry.count).toBe(0);
+        });
+        it("- hasReferObject() : 참조객체 여부 ", () => {
+            let i = new MetaObject();
+            let obj1 = i.getObject();
+            let obj2 = i.getObject();
+            obj1.obj = MetaRegistry.createReferObject(obj2);    // 강제 참조 생성
+
+            // 등록 조회
+            expect(MetaRegistry.hasReferObject(obj1)).toBe(true);
+            expect(MetaRegistry.hasReferObject(obj2)).toBe(false);
         });
     });
     

@@ -10,6 +10,7 @@
     var ICollection;
     var IBaseCollection;
     var MetaObject;
+    var MetaRegistry;
     
     //==============================================================
     // 1. namespace declaration
@@ -19,17 +20,19 @@
     //==============================================================
     // 2. import module
     if (isNode) {
-        Util                = require('./util');
-        Observer            = require('./observer').Observer;
-        ICollection         = require('./i-collection').ICollection;
-        IBaseCollection     = require('./i-collection-base').IBaseCollection;
-        MetaObject          = require('./meta-object').MetaObject;
+        Util                    = require('./util');
+        Observer                = require('./observer').Observer;
+        ICollection             = require('./i-collection').ICollection;
+        IBaseCollection         = require('./i-collection-base').IBaseCollection;
+        MetaObject              = require('./meta-object').MetaObject;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
-        Util                = _global._L.Util;
-        Observer            = _global._L.Observer;
-        ICollection         = _global._L.ICollection;
-        IBaseCollection     = _global._L.IBaseCollection;
-        MetaObject          = _global._L.MetaObject;
+        Util                    = _global._L.Util;
+        Observer                = _global._L.Observer;
+        ICollection             = _global._L.ICollection;
+        IBaseCollection         = _global._L.IBaseCollection;
+        MetaObject              = _global._L.MetaObject;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -39,6 +42,7 @@
     if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
     if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. 모듈 구현 
@@ -52,6 +56,7 @@
         * @param {Object} p_owner 소유객체
         */
         function BaseCollection(p_owner) { 
+            _super.call(this);
             
             // private variable
             var _owner = p_owner || null;
@@ -233,7 +238,8 @@
             //  this._implements(ICollection);
             Util.implements(this, ICollection, IBaseCollection);
         }
-    
+        Util.inherits(BaseCollection, _super);
+
         /**
          * 프로퍼티 기술자 설정
          * @protected
@@ -295,6 +301,25 @@
          */        
         BaseCollection.prototype._onChanged = function() {
             this._event.publish('changed', this); 
+        };
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        BaseCollection.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj._owner = MetaRegistry.createReferObject(this._owner);
+            obj.elementType = this.elementType; // REVIEW: 타입은 전달 못함!
+            obj._elem = [];
+            for (var i = 0; i < this._element.length; i++) {
+                var elem = this._element[i];
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
+                else obj._elem.push(elem);
+            }
+            return obj;                        
         };
 
         /** 

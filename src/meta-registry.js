@@ -90,6 +90,31 @@
             }
             return false;
         };
+        MetaRegistry.hasReferObject = function(obj) {
+            if (typeof obj !== 'object') throw new Error('object 타입이 아닙니다.');
+
+            return hasRefer(obj);
+
+            // inner function
+            function hasRefer(obj) {
+                for(let prop in obj) {
+                    if (typeof obj[prop] === 'object') {
+                        if (obj[prop]['$ref'] && typeof obj[prop]['$ref'] === 'string') {
+                            return true;
+                        } else {
+                            if (hasRefer(obj[prop]) === true) return true;
+                        }
+                    } else if (Array.isArray(obj[prop])){
+                      for(var i = 0; i < obj[prop].length; i++) {
+                        if (typeof obj[prop][i] === 'object') {
+                            if (hasRefer(obj[prop]) === true) return true;
+                        }
+                      }  
+                    }
+                }
+                return false;
+            }
+        };        
 
         MetaRegistry.register = function(meta) {
             if (this.hasMetaClass(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
@@ -110,18 +135,18 @@
             if (obj && obj._guid && obj._guid.length > 0 ) return { $ref: obj._guid };
         };
 
-        MetaRegistry.find = function(meta) {
-            if (!(meta && meta._guid && meta._guid.length > 0)) return;
+        MetaRegistry.find = function(guid) {
+            if (typeof guid !== 'string') return;
             for(let i = 0; i < list.length; i++) {
-                if (list[i]._guid === meta._guid) return list[i];
+                if (list[i]._guid === guid) return list[i];
             }
         };
         
-        MetaRegistry.validMetaObject = function(mObj) {
-            var arrObj = extractListObject(mObj);
+        MetaRegistry.validMetaObject = function(rObj) {
+            var arrObj = extractListObject(rObj);
 
-            if (validReference(mObj, arrObj) === false) return false;
-            if (validCollection(mObj, arrObj) === false) return false;
+            if (validReference(rObj, arrObj) === false) return false;
+            if (validCollection(rObj, arrObj) === false) return false;
             return true;
 
             // inner function
@@ -163,25 +188,28 @@
             }
         };
 
-        MetaRegistry.transformRefer = function(mObj) {
-            var arrObj = extractListObject(mObj);
-            var clone = JSON.parse(JSON.stringify(mObj));
-            linkReference(clone, arrObj);
+        MetaRegistry.transformRefer = function(rObj) {
+            var arrObj = extractListObject(rObj);
+            // REVIEW: 객체를 복사해야 하는게 맞지 않을까?
+            // var clone = JSON.parse(JSON.stringify(rObj));
+            // linkReference(clone, arrObj);
+            // return clone;
+            linkReference(rObj, arrObj);
+            return rObj;
             
-            return clone;
 
             // inner function
-            function linkReference(mobj, arr) {
+            function linkReference(obj, arr) {
                 // inner function
-                for(let prop in mobj) {
-                    if (typeof mobj[prop] === 'object') {
-                        if (mobj[prop]['$ref']) {
-                            mobj[prop] = findGuid(mobj[prop]['$ref'], arr);
-                            if (typeof mobj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + mobj['$ref']);
-                        } else linkReference(mobj[prop], arr);
-                    } else if (Array.isArray(mobj[prop])){
-                    for(var i = 0; i < mobj[prop].length; i++) {
-                        if (typeof mobj[prop][i] === 'object') linkReference(mobj[prop][i], arr);
+                for(let prop in obj) {
+                    if (typeof obj[prop] === 'object') {
+                        if (obj[prop]['$ref']) {
+                            obj[prop] = findGuid(obj[prop]['$ref'], arr);
+                            if (typeof obj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + obj['$ref']);
+                        } else linkReference(obj[prop], arr);
+                    } else if (Array.isArray(obj[prop])){
+                    for(var i = 0; i < obj[prop].length; i++) {
+                        if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i], arr);
                     }  
                     } 
                 }

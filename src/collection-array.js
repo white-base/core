@@ -50,24 +50,6 @@
         Util.inherits(ArrayCollection, _super);
 
         /**
-         * 메타 객체를 얻는다
-         * @virtual
-         * @returns {object}
-         */
-        ArrayCollection.prototype.getObject  = function() {
-            var obj = _super.prototype.getObject.call(this);
-
-            obj.elementType = this.elementType;
-            obj._elem = [];
-            for (var i = 0; i < this._element.length; i++) {
-                var elem = this._element[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
-                else obj._elem.push(elem);
-            }
-            return obj;                        
-        };
-
-        /**
          * TODO: setObject 시점에 초기화 해야함
          * 메타 객체를 설정한다
          * @virtual

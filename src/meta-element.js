@@ -17,11 +17,11 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        MetaObject          = require('./meta-object').MetaObject;
+        Util                        = require('./util');
+        MetaObject                  = require('./meta-object').MetaObject;
     } else {
-        Util                = _global._L.Util;
-        MetaObject          = _global._L.MetaObject;
+        Util                        = _global._L.Util;
+        MetaObject                  = _global._L.MetaObject;
     }
 
     //==============================================================
@@ -133,7 +133,7 @@
          */
         MetaElement.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
-            obj.metaName = mObj.name;
+            this.metaName = mObj.name;
         };
 
         /**
