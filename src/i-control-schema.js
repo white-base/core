@@ -33,7 +33,7 @@
     if (typeof IExportControl === 'undefined') throw new Error('[IExportControl] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var ISchemaControl  = (function () {
         
         /**

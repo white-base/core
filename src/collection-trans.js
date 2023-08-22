@@ -33,7 +33,7 @@
     if (typeof TransactionQueue === 'undefined') throw new Error('[TransactionQueue] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var TransactionCollection  = (function (_super) {
         /**
          * 배열타입 컬렉션 클래스

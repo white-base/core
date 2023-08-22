@@ -21,11 +21,11 @@
     }
 
     //==============================================================Á
-    // 3. 의존성 검사
+    // 3. module dependency check
     // if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     
     var MetaRegistry = (function () {
         /**
@@ -39,7 +39,7 @@
         
         /**
          * 메타 이름
-         * @member {string} _L.Meta.MetaElement#metaName
+         * @member {string} _L.Meta.MetaRegistry#metaName
          */
         Object.defineProperty(MetaRegistry, "list", {
             get: function() { return list; },
@@ -49,7 +49,7 @@
 
         /**
          * 메타 이름
-         * @member {string} _L.Meta.MetaElement#metaName
+         * @member {string} _L.Meta.MetaRegistry#metaName
          */
         Object.defineProperty(MetaRegistry, "count", {
             get: function() { return list.length; },

@@ -53,7 +53,7 @@
     // if (typeof TransactionQueue === 'undefined') throw new Error('[TransactionQueue] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var MetaRow  = (function (_super) {
         /**
          * 로우

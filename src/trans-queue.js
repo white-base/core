@@ -31,7 +31,7 @@
     if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var TransactionQueue  = (function () {
         /**
          * 로우

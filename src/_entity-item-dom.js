@@ -34,7 +34,7 @@
     if (typeof jquery === 'undefined' && typeof module !== 'object') throw new Error('[jquery] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var ItemDOM  = (function (_super) {
         /**
          * @constructs _L.Meta.Entity.ItemDOM

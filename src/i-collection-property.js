@@ -29,7 +29,7 @@
     if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var IPropertyCollection  = (function (_super) {
         /**
          * @constructs _L.Interface.IPropertyCollection

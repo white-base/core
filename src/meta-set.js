@@ -43,7 +43,7 @@
     }
 
     //==============================================================
-    // 3. 의존성 검사
+    // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof ISchemaControl === 'undefined') throw new Error('[ISchemaControl] module load fail...');
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
@@ -54,7 +54,7 @@
     if (typeof MetaViewCollection === 'undefined') throw new Error('[MetaViewCollection] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var MetaSet  = (function (_super) {
         /**
          * 엔티티

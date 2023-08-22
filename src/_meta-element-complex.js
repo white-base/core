@@ -34,7 +34,7 @@
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var ComplexElement  = (function (_super) {
         /**
          * 복합요소

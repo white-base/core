@@ -19,12 +19,12 @@
     }
 
     //==============================================================
-    // 3. 의존성 검사
+    // 3. module dependency check
     // if (typeof util === 'undefined') throw new Error('[XXX] module  load fail...');
 
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     // util.inherits = (function () {
     // }());
     

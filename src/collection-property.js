@@ -37,7 +37,7 @@
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     // KeyCollection
     var PropertyCollection  = (function (_super) {
         

@@ -43,7 +43,7 @@
     // if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var MetaTable  = (function (_super) {
         /**
          * 테이블 엔티티

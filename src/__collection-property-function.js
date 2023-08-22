@@ -30,7 +30,7 @@
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
      //---------------------------------------
      var PropertyFunctionCollection  = (function (_super) {
         /**

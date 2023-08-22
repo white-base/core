@@ -36,7 +36,7 @@
     }
 
     //==============================================================
-    // 3. 의존성 검사
+    // 3. module dependency check
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
     if (typeof CustomError === 'undefined') throw new Error('[CustomError] module load fail...');
@@ -44,7 +44,7 @@
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     //---------------------------------------
     var MetaColumn  = (function (_super) {
         /**

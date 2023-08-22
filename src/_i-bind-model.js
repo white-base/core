@@ -17,7 +17,7 @@
     // 3. module dependency check
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var IBindModel  = (function () {
         /**
          * 바인드모델 인터페이스

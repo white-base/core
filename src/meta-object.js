@@ -34,7 +34,7 @@
     if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var MetaObject  = (function () {
         /**
          * 메타 최상위 클래스 (실체)

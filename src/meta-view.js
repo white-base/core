@@ -47,7 +47,7 @@
     if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var MetaView  = (function (_super) {
         /**
          * 뷰 엔티티

@@ -37,7 +37,7 @@
     }
 
     //==============================================================
-    // 3. 의존성 검사
+    // 3. module dependency check
     if (typeof getAllProperties === 'undefined') throw new Error('[getAllProperties] module load fail...');
     if (typeof getTypeMap === 'undefined') throw new Error('[getTypeMap] module load fail...');
     if (typeof checkType === 'undefined') throw new Error('[checkType] module load fail...');
@@ -46,7 +46,7 @@
     if (typeof validUnionType === 'undefined') throw new Error('[validUnionType] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
 
     // polyfill
     if (!Array.isArray) {

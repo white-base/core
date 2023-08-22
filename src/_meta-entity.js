@@ -53,7 +53,7 @@
 
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var MetaEntity  = (function (_super) {
         /**
          * 엔티티

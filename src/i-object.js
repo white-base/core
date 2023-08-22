@@ -19,7 +19,7 @@
     // 3. module dependency check
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var IObject  = (function () {
         /**
          * 최상위 객체 인터페이스

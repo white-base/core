@@ -273,17 +273,18 @@ class MetaReistry {
     static createObject(creator, className, prop) {
         let classBody = this.#funs[className];
         let params = classBody.params; // arr
-        let args = [];
+        // let args = [null];
+        // let args = [{K:10}];
+        let args = [creator];
+        
         for (let i = 0; i < params.length; i++) {
             var argName = params[i];
             args.push(prop[argName]);
         }
 
         // inner
-        function f(args) {
-
-        }
-
+        
+        return new (Function.prototype.bind.apply(classBody, args));
         // return new classBody.apply(creator, args);
     }
 
@@ -458,10 +459,15 @@ console.log(MetaReistry.validMetaObject(obj));
 obj._master.$ref = '실패'
 console.log(MetaReistry.validMetaObject(obj));
 
-var c1 = MetaReistry.createObject(this, 'MetaElement', {});
-var c2 = MetaReistry.createObject(this, 'MetaElement', {name: 'NAME'});
-var c3 = MetaReistry.createObject(this, 'MetaElement', {name: 'NAME', test: 'TEST'});
-var c4 = MetaReistry.createObject(this, 'MetaElement', {test: 'TEST'});
+
+var ctor = this;
+var ctor = {KK:10};
+
+
+var c1 = MetaReistry.createObject(ctor, 'MetaElement', {});
+var c2 = MetaReistry.createObject(ctor, 'MetaElement', {name: 'NAME'});
+var c3 = MetaReistry.createObject(ctor, 'MetaElement', {name: 'NAME', test: 'TEST'});
+var c4 = MetaReistry.createObject(ctor, 'MetaElement', {test: 'TEST'});
 
 
 
@@ -492,29 +498,29 @@ var c4 = MetaReistry.createObject(this, 'MetaElement', {test: 'TEST'});
 // console.log(new Test([1,1]));
 
 
-var r1 = (function () {
-    var name = "Barry";
-    return name;
-})();
+// var r1 = (function () {
+//     var name = "Barry";
+//     return name;
+// })();
 
-var r2 = new (function () {
-    var name = "Barry";
-    return name;
-})();
+// var r2 = new (function () {
+//     var name = "Barry";
+//     return name;
+// })();
 
-var r3 = (function () {
-    var name = "Barry";
-    return name;
-})();
+// var r3 = (function () {
+//     var name = "Barry";
+//     return name;
+// })();
 
-var r4 = new MetaElement();
+// var r4 = new MetaElement();
 
-function aaa() {
+// function aaa() {
 
-}
+// }
 
-var r5 = aaa.call();
-var r6 = new aaa.call();
+// var r5 = aaa.call();
+// var r6 = new aaa.call();
 
 
 //--------------------------------------------

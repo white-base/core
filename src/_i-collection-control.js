@@ -40,7 +40,7 @@
     if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var IControlCollection  = (function (_super) {
         /** 
          * 컨트롤 컬렉션 엔터페이스

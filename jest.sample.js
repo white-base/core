@@ -22,7 +22,7 @@ expect(() => 예외문 ).toThrow(/reg/);
 
 
 // 블럭
-describe("< setValue(row) >", () => {
+describe("this.setValue(row) <설정>", () => {
     it("- setValue(row) : row 설정(단일) ", () => {
         // TODO:
     });

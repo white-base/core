@@ -30,7 +30,7 @@
     // if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var IMarshal  = (function () {
         /**
          * 최상위 객체

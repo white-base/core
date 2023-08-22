@@ -33,7 +33,7 @@
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var ArrayCollection  = (function (_super) {
         /**
          * 배열타입 컬렉션 클래스

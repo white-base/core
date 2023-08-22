@@ -18,7 +18,7 @@
     // 3. module dependency check
 
     //==============================================================
-    // 4. 모듈 구현    
+    // 4. module implementation   
     var ILookupControl  = (function () {
         /**
          * @constructs _L.Interface.ILookupControl
