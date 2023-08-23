@@ -8,6 +8,7 @@
     var Util;
     var IObject;
     var IMarshal;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -18,13 +19,15 @@
     // 2. import module
     if (isNode) {     
         // require('./_object-implement'); // _implements() : 폴리필
-        Util                = require('./util');
-        IObject             = require('./i-object').IObject;
-        IMarshal            = require('./i-marshal').IMarshal;
+        Util                    = require('./util');
+        IObject                 = require('./i-object').IObject;
+        IMarshal                = require('./i-marshal').IMarshal;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
-        Util                = _global._L.Util
-        IObject             = _global._L.IObject;
-        IMarshal            = _global._L.IMarshal;
+        Util                    = _global._L.Util
+        IObject                 = _global._L.IObject;
+        IMarshal                = _global._L.IMarshal;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -32,6 +35,7 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
     if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. module implementation   
@@ -79,7 +83,10 @@
                 // },
                 configurable: false,
                 enumerable: true
-            });           
+            });
+
+            
+            MetaRegistry.register(this);
 
             // inner variable access
             this.__SET_guid = function(val, call) {

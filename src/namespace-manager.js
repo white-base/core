@@ -58,7 +58,8 @@
             return regex.test(p_name)
         }
         function __getArray(p_ns) {
-            var sections;
+            var sections = [];
+            if (p_ns === '') return sections;
             if (typeof p_ns === 'string') {
                 if (!__validNamespace(p_ns)) throw new Error('They have different [p_ns] conventions.'); 
                 sections = p_ns.split('.');
@@ -68,11 +69,17 @@
         }
 
         /**
-         * 초기화
+         * 네임스페이스 기본객체
          */
         NamespaceManager.prototype._getNsObject = function() {
             return { _type: 'NS' };
         };
+        /**
+         * 키 기본객체
+         */
+        // NamespaceManager.prototype._getKeyObject = function() {
+        //     return { _type: 'KEY' };
+        // };
 
         /**
          * 초기화
@@ -121,15 +128,20 @@
         /**
          * 네임스페이스에 요소 설정
          */
-        NamespaceManager.prototype.setElement = function(p_ns, p_key, p_elem) {
+        NamespaceManager.prototype.set = function(p_ns, p_key, p_elem) {
             var parent = this.namespace;
             var sections = __getArray(p_ns);
-            var oElem = {};
+            var oElem = this._getNsObject();
             
-            this.register(p_ns);
+            if (sections.length > 0) this.register(p_ns);
             if (!__validName(p_key)) throw new Error('They have different [p_key] conventions.'); 
             oElem[p_key] = p_elem;        
         
+            if (sections.length === 0) {    // 최상위 등록
+                parent[p_key] = p_elem;
+                return;
+            }
+
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
                 if (typeof parent[sName] === "undefined") parent[sName] = this._getNsObject();
@@ -142,7 +154,7 @@
          * 네임스페이스 요소 얻기
          * @returns {*}
          */
-        NamespaceManager.prototype.getElement = function(p_fullname) {
+        NamespaceManager.prototype.get = function(p_fullname) {
             var parent = this.namespace;
             var sections = __getArray(p_fullname);
         
@@ -156,23 +168,44 @@
 
         /**
          * 요소로 네임스페이스 조회
-         * @param {string | array} p_ns 
+         * @param {string} p_ns
+         * @param {boolean?} p_isFullName
+         * @returns {array} 네임스페이스 
          */
-        NamespaceManager.prototype.find = function(p_elem) {
+        NamespaceManager.prototype.find = function(p_elem, p_isFullName) {
+            var stack = [];
 
+            if (findElement(this.namespace)) return stack.join('.');
+            else return;
+            // return stack;
 
-            // function findElement(elem) {
-            //     for(var prop in this.namespace) {
-            //         if (prop['_type'] === 'ns')
-            //     }
-            // }
+            // inner function
+            function findElement(target) { 
+                for(var prop in target) {
+                    var obj = target[prop];
+                    if (obj === 'NS') continue;
+                    if (obj && obj['_type'] === 'NS') {
+                        stack.push(prop);
+                        if(findElement(obj)) return true;
+                    } else {
+                        if (obj === p_elem) {
+                            if (p_isFullName) stack.push(prop);
+                            return true;
+                        }
+                    }
+                }
+                stack.pop();
+                return false;
+            }
         };
 
         /**
          * 요소로 네임스페이스 여부
          * @param {string | array} p_ns 
          */
-        NamespaceManager.prototype.hasElement = function(p_elem) {
+        NamespaceManager.prototype.has = function(p_elem) {
+            if (typeof this.find(p_elem) === 'string') return true;
+            return false;
         };
 
         return NamespaceManager;

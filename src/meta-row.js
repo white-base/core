@@ -193,6 +193,9 @@
         }
         Util.inherits(MetaRow, _super);
 
+        // static property
+        MetaRow._PARAMS = ['_entity'];
+
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
@@ -251,7 +254,9 @@
         MetaRow.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            this._entity = mObj._entity;
+            // this._entity = mObj._entity;
+            this._entity = MetaRegistry.find(mObj._entity['_guid']);
+
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
@@ -390,7 +395,7 @@
 
 
             if (!(p_row instanceof MetaRow )) throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
-            if (entity !== this._owner) throw new Error('[p_row] MetaRow 의 entity 가 다릅니다.');   // COVER:            
+            if (entity._guid !== this._owner._guid) throw new Error('[p_row] MetaRow 의 entity 가 다릅니다.');   // COVER:            
             
             // valid 검사
             if (checkValid === true) {

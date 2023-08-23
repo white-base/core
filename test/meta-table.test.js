@@ -417,7 +417,7 @@ describe("[target: meta-table.js]", () => {
         
         describe("MetaEntity.load(entity | rObj | mObj) <가져오기>", () => {
             it.only("- load(rObj) : 가져오기 ", () => {
-                var table1 = new MetaTable('T1');
+                var table1 = new MetaTable('TT1');
                 // var json1 = { 
                 //     tableName: 'TT1',
                 //     columns: {

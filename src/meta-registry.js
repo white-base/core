@@ -5,7 +5,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    // var Util;
+    // var MetaObject;
+    var NamespaceManager;
 
     //==============================================================
     // 1. namespace declaration
@@ -15,14 +16,17 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        // Util                        = require('./util');
+        // MetaObject                  = require('./meta-object').MetaObject;
+        NamespaceManager            = require('./namespace-manager').NamespaceManager;
     } else {
-        // Util                        = _global._L.Meta.Util;
+        // MetaObject                  = _global._L.MetaObject;
+        NamespaceManager            = _global._L.NamespaceManager;
     }
 
     //==============================================================Á
     // 3. module dependency check
-    // if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    // if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
+    if (typeof NamespaceManager === 'undefined') throw new Error('[NamespaceManager] module load fail...');
 
     //==============================================================
     // 4. module implementation   
@@ -36,6 +40,7 @@
 
         // var define
         var list = [];
+        var ns = new NamespaceManager();
         
         /**
          * 메타 이름
@@ -43,6 +48,16 @@
          */
         Object.defineProperty(MetaRegistry, "list", {
             get: function() { return list; },
+            enumerable: false,
+            configurable: false
+        });
+
+        /**
+         * 메타 이름
+         * @member {string} _L.Meta.MetaRegistry#ns
+         */
+        Object.defineProperty(MetaRegistry, "ns", {
+            get: function() { return ns; },
             enumerable: false,
             configurable: false
         });
@@ -57,22 +72,23 @@
             configurable: false
         });
 
-        // private method
+        // local function
         function findGuid(guid, arr) {
             for(var i = 0; i < arr.length; i++) {
                 if (arr[i]['_guid'] === guid) return arr[i];
             }
         }
-
-        function extractListObject(mobj, arr) {
+        
+        // private method
+        function __extractListObject(mobj, arr) {
             arr = arr || [];
 
             if (mobj['_guid'] && typeof mobj['_guid'] === 'string') arr.push(mobj);
             for(let prop in mobj) {
-                if (typeof mobj[prop] === 'object') extractListObject(mobj[prop], arr);
+                if (typeof mobj[prop] === 'object') __extractListObject(mobj[prop], arr);
                 else if (Array.isArray(mobj[prop])){
                 for(var i = 0; i < mobj[prop].length; i++) {
-                    if (typeof mobj[prop][i] === 'object') extractListObject(mobj[prop][i], arr);
+                    if (typeof mobj[prop][i] === 'object') __extractListObject(mobj[prop][i], arr);
                 }  
                 }
             }
@@ -82,6 +98,7 @@
         // static method
         MetaRegistry.init = function() {
             list.length = 0;
+            ns = new NamespaceManager();
         };
 
         MetaRegistry.hasMetaObject = function(meta) {
@@ -118,8 +135,19 @@
         };        
 
         MetaRegistry.register = function(meta) {
-            if (this.hasMetaObject(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
-            list.push(meta);
+            var ns;
+            var key;
+            var type;
+
+            if (meta['_type'] && meta['_guid']) {
+                if (this.hasMetaObject(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
+                list.push(meta);
+                
+                ns = meta['_ns'] || '';
+                type = meta['_type'];
+                key = type.name;
+                this.ns.set(ns, key, type);
+            }
         };
 
         MetaRegistry.release = function(meta) {
@@ -136,6 +164,29 @@
             if (obj && obj._guid && obj._guid.length > 0 ) return { $ref: obj._guid };
         };
 
+        MetaRegistry.createObject = function(mObj) {
+            /**
+             * - ns 에서 대상 조회
+             * - params 를 기준으로 파리머터 구성
+             * - 생성 리턴
+             */
+            var args = [null];
+            var type = mObj._type;
+            var _ns = mObj._ns || '';
+            var fullName = _ns + type;
+            var coClass = this.ns.get(fullName);
+            var params = coClass._PARAMS || []; // arr
+
+            for (let i = 0; i < params.length; i++) {
+                var argName = params[i];
+                var prop = mObj[argName];
+                var obj = this.isGuidObject(prop) ? this.find(prop['_guid']) : prop;
+                if (mObj[argName]) args.push(obj);
+            }
+    
+            return new (Function.prototype.bind.apply(coClass, args));
+        };
+
         MetaRegistry.find = function(guid) {
             if (typeof guid !== 'string') return;
             for(let i = 0; i < list.length; i++) {
@@ -144,7 +195,7 @@
         };
         
         MetaRegistry.validMetaObject = function(rObj) {
-            var arrObj = extractListObject(rObj);
+            var arrObj = __extractListObject(rObj);
 
             if (validReference(rObj, arrObj) === false) return false;
             if (validCollection(rObj, arrObj) === false) return false;
@@ -190,7 +241,7 @@
         };
 
         MetaRegistry.transformRefer = function(rObj) {
-            var arrObj = extractListObject(rObj);
+            var arrObj = __extractListObject(rObj);
             // REVIEW: 객체를 복사해야 하는게 맞지 않을까?
             // var clone = JSON.parse(JSON.stringify(rObj));
             // linkReference(clone, arrObj);
@@ -215,6 +266,11 @@
                     } 
                 }
             }
+        };
+
+        MetaRegistry.isGuidObject = function(obj) {
+            if (obj && obj['_guid'] && obj['_type']) return true;
+            return false;
         };
 
         return MetaRegistry;

@@ -89,45 +89,93 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns.a1.b2).not.toBeDefined();
             });
         });
-        describe("this.setElement(ns, key, elem) <네임스페이스에 요소 설정>", () => {
-            it("- setElement() : Function 등록 ", () => {
+        describe("this.set(ns, key, elem) <네임스페이스에 요소 설정>", () => {
+            it("- set() : Function 등록 ", () => {
                 const app = new NamespaceManager();
                 const ns = app.namespace;
-                app.setElement('a1.b1', 'Fun', Function);
+                app.set('a1.b1', 'Fun', Function);
 
                 expect(ns.a1.b1).toBeDefined();
                 expect(ns.a1.b1.Fun).toBeDefined();
                 expect(typeof ns.a1.b1.Fun).toBe('function');
             });
-            it("- setElement() : [예외] key 이름 규칙 ", () => {
-                const app = new NamespaceManager();
-    
-                expect(() => app.setElement('a1.b1', '.Fun', Function)).toThrow(/p_key/);
-                expect(() => app.setElement('a1.b1', 'Fun%', Function)).toThrow(/p_key/);
-            });
-        });
-        describe("this.getElement(fullname) <네임스페이스에 요소 얻기>", () => {
-            it("- getElement() : Function 얻기 ", () => {
+            it("- set() : 최상위에 등록 ", () => {
                 const app = new NamespaceManager();
                 const ns = app.namespace;
-                app.setElement('a1.b1', 'Fun', Function);
-                const fun = app.getElement('a1.b1.Fun', Function);
+                app.set('', 'Fun', Function);
+
+                expect(ns.Fun).toBeDefined();
+                expect(typeof ns.Fun).toBe('function');
+            });
+            it("- set() : [예외] key 이름 규칙 ", () => {
+                const app = new NamespaceManager();
+    
+                expect(() => app.set('a1.b1', '.Fun', Function)).toThrow(/p_key/);
+                expect(() => app.set('a1.b1', 'Fun%', Function)).toThrow(/p_key/);
+            });
+        });
+        describe("this.get(fullname) <네임스페이스에 요소 얻기>", () => {
+            it("- get(fullName) : Function 얻기 ", () => {
+                const app = new NamespaceManager();
+                const ns = app.namespace;
+                app.set('a1.b1', 'Fun', Function);
+                const fun = app.get('a1.b1.Fun');
 
                 expect(fun).toBe(Function);
             });
         });
-        // describe("this.find(elem) <네임스페이스에 요소 얻기>", () => {
-        //     it("- find(elem) : Function 얻기 ", () => {
-        //         const app = new NamespaceManager();
-        //         const ns = app.namespace;
-        //         app.setElement('a1.b1', 'Fun', Function);
-        //         app.setElement('a1.b1', 'Arr', Array);
-        //         app.setElement('a1.b1', 'Str', String);
-        //         const fun = app.find('a1.b1.Fun', Function);
+        describe("this.find(elem) <네임스페이스 얻기>", () => {
+            it("- find(elem) : 네임스페이스 얻기", () => {
+                const app = new NamespaceManager();
+                const ns = app.namespace;
+                app.set('', 'Fun', Function);
+                app.set('a1.b1', 'Str', String);
+                app.set('a1.b1.c1', 'Arr', Array);
+                const str1 = app.find(Function);
+                const str2 = app.find(Array);
+                const str3 = app.find(String);
 
-        //         expect(ns.a1.b1.Fun).toBe(Function);
-        //     });
-        // });
+                expect(str1).toBe('');
+                expect(str2).toBe('a1.b1.c1');
+                expect(str3).toBe('a1.b1');
+            });
+            it("- find(elem, true) : 네임스페이스(전체) 얻기", () => {
+                const app = new NamespaceManager();
+                const ns = app.namespace;
+                app.set('', 'Fun', Function);
+                app.set('a1.b1', 'Str', String);
+                app.set('a1.b1.c1', 'Arr', Array);
+                const str1 = app.find(Function, true);
+                const str2 = app.find(Array, true);
+                const str3 = app.find(String, true);
+
+                expect(str1).toBe('Fun');
+                expect(str2).toBe('a1.b1.c1.Arr');
+                expect(str3).toBe('a1.b1.Str');
+            });
+            it("- find(elem) : 없는 경우 ", () => {
+                const app = new NamespaceManager();
+                const ns = app.namespace;
+                app.set('a1.b1', 'Fun', Function);
+                const str = app.find(Array);
+
+                expect(str).not.toBeDefined();
+            });
+        });
+        describe("this.has(elem): bool <네임스페이스에 요소 유무>", () => {
+            it("- has(elem) : 요소 얻기 <최하위> ", () => {
+                const app = new NamespaceManager();
+                const ns = app.namespace;
+                app.set('', 'Fun', Function);
+                app.set('a1.b1', 'Str', String);
+                app.set('a1.b1.c1', 'Arr', Array);
+
+                expect(app.has(Function)).toBe(true);
+                expect(app.has(String)).toBe(true);
+                expect(app.has(Array)).toBe(true);
+                expect(app.has(RegExp)).toBe(false);
+            });
+        });
     });
     
 });

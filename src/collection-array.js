@@ -8,6 +8,7 @@
     var Util;
     var BaseCollection;
     var IArrayCollection;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -17,13 +18,15 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        IArrayCollection    = require('./i-collection-array').IArrayCollection;
-        BaseCollection      = require('./collection-base').BaseCollection;
+        Util                    = require('./util');
+        IArrayCollection        = require('./i-collection-array').IArrayCollection;
+        BaseCollection          = require('./collection-base').BaseCollection;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {    
-        Util                = _global._L.Util;
-        IArrayCollection    = _global._L.IArrayCollection;
-        BaseCollection      = _global._L.BaseCollection;
+        Util                    = _global._L.Util;
+        IArrayCollection        = _global._L.IArrayCollection;
+        BaseCollection          = _global._L.BaseCollection;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -31,6 +34,7 @@
     if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
     if (typeof IArrayCollection === 'undefined') throw new Error('[IArrayCollection] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. module implementation   
@@ -62,7 +66,8 @@
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
-                    this.add(elem);
+                    var obj = MetaRegistry.createObject(elem);
+                    this.add(obj);
                     this[i].setObject(elem);
                 } else {
                     this.add(elem);

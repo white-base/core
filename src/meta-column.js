@@ -8,10 +8,11 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Util;
+    var Observer;
     var CustomError;
     var MetaElement;
     var PropertyCollection;
-    var Observer;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -22,17 +23,19 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        Observer            = require('./observer').Observer;
-        CustomError         = require('./error-custom').CustomError;
-        MetaElement         = require('./meta-element').MetaElement;
-        PropertyCollection  = require('./collection-property').PropertyCollection;
+        Util                    = require('./util');
+        Observer                = require('./observer').Observer;
+        CustomError             = require('./error-custom').CustomError;
+        MetaElement             = require('./meta-element').MetaElement;
+        PropertyCollection      = require('./collection-property').PropertyCollection;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
-        Util                = _global._L.Util;
-        Observer            = _global._L.Observer;
-        CustomError         = _global._L.CustomError;
-        MetaElement         = _global._L.MetaElement;
-        PropertyCollection  = _global._L.PropertyCollection;
+        Util                    = _global._L.Util;
+        Observer                = _global._L.Observer;
+        CustomError             = _global._L.CustomError;
+        MetaElement             = _global._L.MetaElement;
+        PropertyCollection      = _global._L.PropertyCollection;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -42,6 +45,7 @@
     if (typeof CustomError === 'undefined') throw new Error('[CustomError] module load fail...');
     if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. module implementation   
@@ -499,6 +503,35 @@
             this._event.publish('onChanged', p_nValue, p_oValue);
         };
 
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaColumn.prototype.getObject  = function() {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj._entity = MetaRegistry.createReferObject(this._entity);
+            obj.caption = this.caption;
+            // TODO: 나머지 속성도 처리해야 함
+            return obj;                        
+        };
+
+        /**
+         * TODO: setObject 시점에 초기화 해야함
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaColumn.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            // this._entity = mObj._entity;
+            this._entity = MetaRegistry.find(mObj._entity['_guid']);
+            this.caption = mObj.caption;
+        };
+
         // /** @override **/
         // MetaColumn.prototype.getTypes  = function() {
                     
@@ -737,6 +770,7 @@
             
         }
         Util.inherits(MetaColumnCollection, _super);
+        
         
         /**
          * 컬렉션에 아이템 유무를 검사한다.
