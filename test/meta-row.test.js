@@ -74,8 +74,8 @@ describe("[target: meta-row.js]", () => {
                 // REVIEW: new 일반 new 생성으로 guid 의 차이점가 있음
                 // table1.rows[0].setObject({_guid: 'ID'});
                 // table1.rows[1].setObject({_guid: 'ID'});
-                // const row0 = table1.rows[0].getObject();
-                // const row1 = table1.rows[1].getObject();
+                // const row0 = table1.rows[0].getObject(p_vOpt);
+                // const row1 = table1.rows[1].getObject(p_vOpt);
                 // table1.rows[0].__SET_guid('ID', table1.rows[0]);
                 // table1.rows[1].__SET_guid('ID', table1.rows[1]);
                 

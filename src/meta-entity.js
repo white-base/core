@@ -246,7 +246,7 @@
          * @param {*} p_object 대상 엔티티
          * @param {*} p_option 옵션
          */
-        // MetaEntity.prototype.__loadEntity  = function(p_object, p_option) {
+        // MetaEntity.prototype.__readEntity  = function(p_object, p_option) {
         //     p_option = p_option || 1;   // 기본값 덮어쓰기
 
         //     var entity = p_object;
@@ -285,7 +285,7 @@
         //     if (p_option === 1) this.__fillRow(entity);
         // };
 
-        MetaEntity.prototype._loadEntity = function(p_entity, p_option) {
+        MetaEntity.prototype._readEntity = function(p_entity, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;
 
@@ -372,12 +372,12 @@
          * @virtual
          * @returns {object}
          */
-        MetaEntity.prototype.getObject  = function() {
+        MetaEntity.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
-            obj.columns = this.columns.getObject();
-            obj.rows = this.rows.getObject();
+            obj.columns = this.columns.getObject(p_vOpt);
+            obj.rows = this.rows.getObject(p_vOpt);
             return obj;                        
         };
 
@@ -414,7 +414,7 @@
          */
         // MetaEntity.prototype.load  = function(p_object, p_option) {
         //     if (p_object instanceof MetaEntity) {
-        //         this.__loadEntity(p_object, p_option);
+        //         this.__readEntity(p_object, p_option);
         //     } else {
         //         this.__loadJSON(p_object, p_option);
         //     }
@@ -917,15 +917,23 @@
 
         /**
          * 불러오기/가져오기 (!! 병합용도가 아님)
-         * 오류조건 : 컬럼 중복 발생시 오류   
+         * 기존을 초기화 하고 불러오는 역활
          * @param {object | MetaEntity} p_target 로드 대상
          */
         MetaEntity.prototype.load = function(p_obj) {
             var mObj;
             
-            if (p_obj instanceof MetaEntity) {
-                this._loadEntity(p_obj, 3);
-            } else if (typeof p_obj === 'object') {
+            // if (p_obj instanceof MetaEntity) {
+            //     this._readEntity(p_obj, 3);
+            // } else if (typeof p_obj === 'object') {
+            //     mObj = MetaRegistry.hasReferObject(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
+            //     this.setObject(mObj);
+            // } else {
+            //     throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
+            // }
+            if (p_obj instanceof MetaEntity) throw new Error('[MetaEntity] 타입을 load() 할수 없습니다. read()로 읽으세요.');
+
+            if (MetaRegistry.isGuidObject(p_obj)) {
                 mObj = MetaRegistry.hasReferObject(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
                 this.setObject(mObj);
             } else {
@@ -938,7 +946,7 @@
          * JSON 스키마 규칙   
          * { table: { columns: {}, rows: {} }}   
          * { columns: {...}, rows: {} }
-         * @param {object} p_obj mObject 또는 rObject
+         * @param {object} p_obj mObject 또는 rObject 또는 entity
          * @param {Number} p_option 
          * @param {Number} p_option.1 컬럼(구조)만 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다.
          * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
@@ -950,57 +958,86 @@
 
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
-            if (p_obj instanceof MetaObject) throw new Error('[p_obj] MetaObject 인스턴스는 읽을 수 없습니다.');
+            
+            // if (p_obj instanceof MetaObject) throw new Error('[p_obj] MetaObject 인스턴스는 읽을 수 없습니다.');
             // if (MetaRegistry.hasReferObject(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
 
-            // TODO: 이름 통일 필요
-            if (p_obj.viewName) this.viewName = p_obj.viewName;
-            if (p_obj.tableName) this.tableName = p_obj.tableName;
-
-            if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
-            if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
+            if (p_obj instanceof MetaEntity) {
+                this._readEntity(p_obj, 3);
+            } else if (typeof p_obj === 'object') {
+                // TODO: 이름 통일 필요
+                if (p_obj.viewName) this.viewName = p_obj.viewName;
+                if (p_obj.tableName) this.tableName = p_obj.tableName;
+    
+                if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
+                if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
+            }
         };
 
         /**
          * 없으면 빈 컬럼을 생성해야 하는지?
          * 이경우에 대해서 명료하게 처리햐야함 !!
          * @param {*} p_obj 
-         * @param {*} p_isCreateRow true 이면, row[0] 기준으로 컬럼을 추가함
+         * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
-        MetaEntity.prototype.readSchema  = function(p_obj, p_isCreateRow) {
+        MetaEntity.prototype.readSchema  = function(p_obj, p_createRow) {
             var columns;
             var rows;
             var Column = this.columns.columnType;
 
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
 
-            if (MetaRegistry.hasReferObject(p_obj)) p_obj = MetaRegistry.transformRefer(p_obj);;
+            if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasReferObject(p_obj)) {
+                p_obj = MetaRegistry.transformRefer(p_obj);
+            }
 
             
             // table <-> view 서로 호환됨
             // if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
             // if (this.instanceOf('MetaTable') && entity['tableName']) this['tableName'] = entity['tableName'];
             
-            columns = p_obj['columns'] || columns;
+            columns = p_obj['columns'] || p_obj;
             if (columns) {
-                for (var key in columns) {
-                    if (Object.hasOwnProperty.call(columns, key)) {
-                        if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
-                        var prop = columns[key];
-                        var column = new Column(key, this, prop);
-                        if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
-                        this.columns.add(column);
-                    }
+                // for (var key in columns) {
+                //     if (Object.hasOwnProperty.call(columns, key)) {
+                //         if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                //         var prop = columns[key];
+                //         var column = new Column(key, this, prop);
+                //         if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                //         this.columns.add(column);
+                //     }
+                // }
+                for(var i = 0; i < columns._elem.length; i++) {
+                    var elem = columns._elem[i];
+                    var key = columns._key[i];  // 없을경우 $key 도 경우에 삽입 TODO:
+                    var column = new Column(key, this, elem);
+                    if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                    if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                    this.columns.add(column);
                 }
             }
 
             // opt
-            if (p_isCreateRow === true) {
-                rows = p_obj['rows'];
-                if (Array.isArray(rows) && rows.length > 0)
-                for (var key in rows[0]) {    // rows[0] 기준
-                    if (Object.hasOwnProperty.call(rows[0], key)) {
-                        var prop = rows[0][key];
+            // if (p_createRow === true) {
+            //     rows = p_obj['rows'];
+            //     if (Array.isArray(rows) && rows.length > 0)
+            //     for (var key in rows[0]) {    // rows[0] 기준
+            //         if (Object.hasOwnProperty.call(rows[0], key)) {
+            //             var prop = rows[0][key];
+            //             if (!this.columns.exist(key)) {
+            //                 var column = new Column(key, this);
+            //                 this.columns.add(column);
+            //             }
+            //         }
+            //     }
+            // }
+            rows = p_obj['rows'];
+            if (rows && p_createRow === true) {
+                if (Array.isArray(rows._elem) && rows._elem.length > 0)
+                var row = rows._elem[0];
+                if (Array.isArray(row['_key']) && row['key'].length > 0) {
+                    for (var i = 0; i < row.length; i++) {
+                        var key = row[i];
                         if (!this.columns.exist(key)) {
                             var column = new Column(key, this);
                             this.columns.add(column);
@@ -1008,7 +1045,26 @@
                     }
                 }
             }
+
+            // 샘플 JSON
+            var rows = {
+                _elem: [
+                    {
+                        _elem: [1, 2],
+                        _key: ['i1', 'i2']  // 선택적, 없으면 컬럼에 의존하면됨
+                    }
+                ]
+            }; // 규칙에 맞기는 하지만, 중복자료가 생김  ** 선택 **
+            var rows = {
+                _key: ['i1', 'i2'],
+                _elem: [
+                    {
+                        _elem: [1, 2],
+                    }
+                ]
+            };// 약식 자료임 
         };
+        
 
         /**
          * 존재하는 로우만 가져온다.
@@ -1019,7 +1075,9 @@
 
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
 
-            if (MetaRegistry.hasReferObject(p_obj)) p_obj = MetaRegistry.transformRefer(p_obj);;
+            if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasReferObject(p_obj)) {
+                p_obj = MetaRegistry.transformRefer(p_obj);
+            }
 
             rows = p_obj['rows'] || p_obj;
             if (Array.isArray(rows) && this.columns.count > 0) {
@@ -1036,7 +1094,7 @@
         };
 
         MetaEntity.prototype.write  = function() {
-            return this.getObject();
+            return this.getObject(p_vOpt);
         };
 
         // MetaEntity.prototype.writeSchema  = function() {
@@ -1049,13 +1107,13 @@
 
         //     for(var i = 0; i < this.columns.count; i++) {
         //         var key = this.columns.keyOf(i);
-        //         obj.columns[key] = this.columns[i].getObject();
+        //         obj.columns[key] = this.columns[i].getObject(p_vOpt);
         //     }
         //     return obj;
         // };
         MetaEntity.prototype.writeSchema  = function() {
             return {
-                columns: this.columns.getObject()
+                columns: this.columns.getObject(p_vOpt)
             };
         };
 
@@ -1065,7 +1123,7 @@
 
         MetaEntity.prototype.writeData  = function() {
             return {
-                rows: this.columns.getObject()
+                rows: this.columns.getObject(p_vOpt)
             };
         };
 

@@ -120,7 +120,7 @@
          * @virtual
          * @returns {object}
          */
-        MetaElement.prototype.getObject  = function() {
+        MetaElement.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
             obj.name = this.metaName;
             return obj;                        

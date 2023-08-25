@@ -187,7 +187,7 @@
          * @virtual
          * @returns {object}
          */
-        MetaObject.prototype.getObject  = function() {
+        MetaObject.prototype.getObject = function(p_vOpt) {
             var obj = {};
             
             obj._guid = this._guid;

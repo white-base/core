@@ -100,7 +100,7 @@
          * @virtual
          * @returns {object}
          */
-        TransactionCollection.prototype.getObject  = function() {
+        TransactionCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj.autoChanges = this.autoChanges;

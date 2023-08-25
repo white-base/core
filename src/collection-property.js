@@ -84,7 +84,7 @@
          * @virtual
          * @returns {object}
          */
-        PropertyCollection.prototype.getObject  = function() {
+        PropertyCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj._key = [];

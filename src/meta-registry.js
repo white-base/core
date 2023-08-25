@@ -268,8 +268,8 @@
             }
         };
 
-        MetaRegistry.isGuidObject = function(obj) {
-            if (obj && obj['_guid'] && obj['_type']) return true;
+        MetaRegistry.isGuidObject = function(p_obj) {
+            if (typeof p_obj === 'object' && p_obj['_guid'] && p_obj['_type']) return true;
             return false;
         };
 

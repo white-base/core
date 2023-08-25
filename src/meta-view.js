@@ -163,7 +163,7 @@
          * @virtual
          * @returns {object}
          */
-        MetaView.prototype.getObject  = function() {
+        MetaView.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj.viewName = this.viewName;

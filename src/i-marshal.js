@@ -53,7 +53,7 @@
          * 객체 얻기
          * @returns {Object}
          */
-        IMarshal.prototype.getObject  = function() {
+        IMarshal.prototype.getObject = function(p_vOpt) {
             throw new Error('[ getObject() : object ] Abstract method definition, fail...');
         };
 

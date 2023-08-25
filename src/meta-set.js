@@ -170,12 +170,12 @@
          * @virtual
          * @returns {object}
          */
-        MetaSet.prototype.getObject  = function() {
+        MetaSet.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj.setName = this.setName;
-            obj.tables = this.tables.getObject();
-            obj.views = this.views.getObject();
+            obj.tables = this.tables.getObject(p_vOpt);
+            obj.views = this.views.getObject(p_vOpt);
             return obj;                        
         };
 

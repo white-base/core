@@ -308,7 +308,7 @@
          * @virtual
          * @returns {object}
          */
-        BaseCollection.prototype.getObject  = function() {
+        BaseCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj._owner = MetaRegistry.createReferObject(this._owner);
@@ -316,7 +316,7 @@
             obj._elem = [];
             for (var i = 0; i < this._element.length; i++) {
                 var elem = this._element[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
                 else obj._elem.push(elem);
             }
             return obj;                        

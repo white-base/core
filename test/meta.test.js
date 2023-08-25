@@ -206,7 +206,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(guid1).not.toBe(guid3);
             });
         });
-        describe("this.getObject(): fun <객체 얻기>", () => {
+        describe("this.getObject(p_vOpt): fun <객체 얻기>", () => {
             it("- getObject(): fun ", () => {
                 function Foo(name) {
                     MetaElement.call(this, name);
@@ -225,7 +225,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 }
                 Util.inherits(Foo, MetaElement);
                 Foo.prototype.getStr  = function() {};  // 제외
-                Foo.prototype.getObject  = function() {
+                Foo.prototype.getObject = function(p_vOpt) {
                     var obj = MetaElement.prototype.getObject.call(this);
                     obj.str = this.str;
                     obj.prop = this.prop;

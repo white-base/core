@@ -1,5 +1,5 @@
 // 객체를 직렬화 기법
-var str = set1.getObject();
+var str = set1.getObject(p_vOpt);
 str = {
     type: 'MetaSet',
     guid: 'ID-1',

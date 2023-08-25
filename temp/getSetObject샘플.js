@@ -45,7 +45,7 @@ class MetaElement extends MetaObject {
         this.test = test;
     }
     getObject() {
-        let obj = super.getObject();
+        let obj = super.getObject(p_vOpt);
         obj.name = this.name;
         return obj;
     }
@@ -66,12 +66,12 @@ class MetaColumn extends MetaElement {
         this.caption = name + ':캡션';
     }
     getObject() {
-        let obj = super.getObject();
+        let obj = super.getObject(p_vOpt);
         // obj._type = 'MetaColumn';
         // obj._entity = {$ref: this._entity._guid }
         obj._entity = MetaReistry.createReferObject(this._entity);
         obj.caption = this.caption;
-        obj.value = this.value instanceof MetaObject ? this.value.getObject() : this.value;
+        obj.value = this.value instanceof MetaObject ? this.value.getObject(p_vOpt) : this.value;
         return obj;
     }
     setObject(obj, isRef = false) {
@@ -116,13 +116,13 @@ class PropertyCollection extends MetaObject {
         this[name].value = value;
     }
     getObject() {
-        let obj = super.getObject();
+        let obj = super.getObject(p_vOpt);
 
         obj._elem = [];        
         obj._key = [];        
         const _this = this;
         this._elem.forEach(v => {
-            let obj2 = _this[v].getObject();
+            let obj2 = _this[v].getObject(p_vOpt);
             // obj2.$key = v;
             obj._key.push(v);
             obj._elem.push(obj2);
@@ -162,10 +162,10 @@ class MetaView extends MetaElement {
     // get _type() { return 'MetaView' };
     constructor(name) { super(name); }
     getObject(getOpt) {
-        let obj = super.getObject();
+        let obj = super.getObject(p_vOpt);
         // obj.name = this.name;
         obj._master = MetaReistry.createReferObject(this._master);
-        obj.columns = this.columns.getObject()
+        obj.columns = this.columns.getObject(p_vOpt)
         return obj;
     }
     setObject(obj) {
@@ -432,7 +432,7 @@ t1.columns.add('c2', new MetaElement('C2'));
 t1.columns['c1']._entity = t1;
 t1._master = t1.columns['c1'];
 // 직렬화
-const obj = t1.getObject();
+const obj = t1.getObject(p_vOpt);
 const str = JSON.stringify(obj, null, '\t');
 // 초기화 및 복구
 console.log('----');
@@ -441,7 +441,7 @@ MetaReistry.init();
 const par = JSON.parse(str);
 let t2 = new MetaView();
 t2.load(par);
-const obj2 = t2.getObject();
+const obj2 = t2.getObject(p_vOpt);
 const obj3 = MetaReistry.transformRefer(obj);
 const str2 = JSON.stringify(obj2, null, '\t');
 // const str3 = JSON.stringify(obj3, null, '\t');

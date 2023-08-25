@@ -110,7 +110,7 @@
          * @virtual
          * @returns {object}
          */
-        MetaTable.prototype.getObject  = function() {
+        MetaTable.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj.tableName = this.tableName;

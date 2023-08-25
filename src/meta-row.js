@@ -159,9 +159,10 @@
 
                 for (var i = 0; i < _entity.columns.count; i++) {
                     var idx = __element.length;
+                    var alias = _entity.columns[i].alias;
                     __element.push(_entity.columns[i].default);  // 기본값 등록
                     Object.defineProperty(this, [i], getPropDescriptor(idx));
-                    Object.defineProperty(this, _entity.columns[i].alias, getPropDescriptor(idx));
+                    Object.defineProperty(this, alias, getPropDescriptor(idx));
                 }
             }
 
@@ -232,16 +233,21 @@
          * @virtual
          * @returns {object}
          */
-        MetaRow.prototype.getObject  = function() {
+        MetaRow.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj._entity = MetaRegistry.createReferObject(this._entity);
             obj._elem = [];
             for (var i = 0; i < this.list.length; i++) {
                 var elem = this.list[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject());
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
                 else obj._elem.push(elem);
             }
+            // obj._key = [];
+            // for (var i = 0; i < this._keys.length; i++) {
+            //     var key = this._keys[i];
+            //     obj._key.push(key);
+            // }
             return obj;                        
         };
 

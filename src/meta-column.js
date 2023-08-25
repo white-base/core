@@ -509,7 +509,7 @@
          * @virtual
          * @returns {object}
          */
-        MetaColumn.prototype.getObject  = function() {
+        MetaColumn.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
             obj._entity = MetaRegistry.createReferObject(this._entity);
