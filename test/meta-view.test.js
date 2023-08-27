@@ -171,7 +171,7 @@ describe("[target: meta-view.js]", () => {
                         { i1: 10, i2: 20 },
                     ]
                 };
-                view1.load(json1, 3);
+                view1.read(json1, 3);
                 var view2 = view1.select();
     
                 expect(view2.columns.count).toBe(2);
@@ -199,7 +199,7 @@ describe("[target: meta-view.js]", () => {
                         { i1: 10, i2: 20 },
                     ]
                 };
-                view1.load(json1, 3);
+                view1.read(json1, 3);
                 var view2 = view1.select(row => row['i1'] < 10);
     
                 expect(view2.columns.count).toBe(2);
@@ -221,7 +221,7 @@ describe("[target: meta-view.js]", () => {
                         { i1: 10, i2: 20 },
                     ]
                 };
-                view1.load(json1, 3);
+                view1.read(json1, 3);
                 var view2 = view1.select('i1');
     
                 expect(view2.columns.count).toBe(1);
@@ -244,7 +244,7 @@ describe("[target: meta-view.js]", () => {
                         { i1: 10, i2: 20 },
                     ]
                 };
-                view1.load(json1, 3);
+                view1.read(json1, 3);
                 var view2 = view1.copy();
     
                 expect(view2.columns.count).toBe(2);
@@ -273,7 +273,7 @@ describe("[target: meta-view.js]", () => {
                         { i1: 10, i2: 20 },
                     ]
                 };
-                view1.load(json1, 3);
+                view1.read(json1, 3);
                 var view2 = view1.copy(row => row['i1'] < 10);
     
                 expect(view2.columns.count).toBe(2);
@@ -295,7 +295,7 @@ describe("[target: meta-view.js]", () => {
                         { i1: 10, i2: 20 },
                     ]
                 };
-                view1.load(json1, 3);
+                view1.read(json1, 3);
                 var view2 = view1.copy('i1');
     
                 expect(view2.columns.count).toBe(1);

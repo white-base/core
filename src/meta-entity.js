@@ -133,6 +133,44 @@
         }
         Util.inherits(MetaEntity, _super);
 
+        // 3가지 타입 입력
+        MetaEntity.prototype.__transformObject  = function(mObj) {
+            var obj  = {
+                columns: null,
+                rows: null
+            };
+
+            if (mObj['columns'] || mObj['rows']) obj = mObj;
+            return transformEntity(obj);
+
+            // inner function
+            function transformEntity(mObj) {
+                var obj = {};
+                if (mObj['name']) obj['name'] = mObj['name'];
+                if (mObj['columns']) obj['columns'] = transformColumn(mObj['columns']);
+                if (mObj['rows']) obj['rows'] = transformRow(mObj['rows']);
+                return obj;
+            }
+            function transformColumn(mObj) {
+                var obj = {};
+                for (var i = 0; i < mObj['_elem'].length; i++) {
+                    var column = mObj['_elem'][i];
+                    var key = mObj['_key'][i] || column.name;
+                    obj[key] = column;
+                }
+                return obj;
+            }
+            function transformRow(mObj) {
+                var obj = [];
+                for (var i = 0; i < mObj['_elem'].length; i++) {
+                    var row = mObj['_elem'][i];
+                    var key = mObj['_key'][i];
+                    obj[key] = row;
+                }
+                return obj;
+            }
+        };
+
         /**
          * 아이템 추가한다. (내부)
          * @Private
@@ -920,7 +958,8 @@
          * 기존을 초기화 하고 불러오는 역활
          * @param {object | MetaEntity} p_target 로드 대상
          */
-        MetaEntity.prototype.load = function(p_obj) {
+        MetaEntity.prototype.load = function(p_obj, p_reviver) {
+            var obj = p_obj;
             var mObj;
             
             // if (p_obj instanceof MetaEntity) {
@@ -933,12 +972,20 @@
             // }
             if (p_obj instanceof MetaEntity) throw new Error('[MetaEntity] 타입을 load() 할수 없습니다. read()로 읽으세요.');
 
-            if (MetaRegistry.isGuidObject(p_obj)) {
-                mObj = MetaRegistry.hasReferObject(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
+            if (typeof obj === 'string') obj = JSON.parse(obj, p_reviver); 
+
+            if (MetaRegistry.isGuidObject(obj)) {
+                mObj = MetaRegistry.hasReferObject(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
                 this.setObject(mObj);
             } else {
                 throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
             }
+        };
+
+        
+        MetaEntity.prototype.output = function(p_vOpt, p_replacer) {
+            var str = JSON.stringify(this.getObject(p_vOpt), p_replacer);
+            return str;
         };
 
         /**
@@ -974,6 +1021,8 @@
             }
         };
 
+        
+        
         /**
          * 없으면 빈 컬럼을 생성해야 하는지?
          * 이경우에 대해서 명료하게 처리햐야함 !!
@@ -981,63 +1030,50 @@
          * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
         MetaEntity.prototype.readSchema  = function(p_obj, p_createRow) {
+            var obj = p_obj;;
             var columns;
             var rows;
             var Column = this.columns.columnType;
 
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
 
-            if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasReferObject(p_obj)) {
-                p_obj = MetaRegistry.transformRefer(p_obj);
+            if (MetaRegistry.isGuidObject(p_obj)) {
+                if (MetaRegistry.hasReferObject(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
+                obj = this.__transformObject(p_obj);
             }
 
-            
             // table <-> view 서로 호환됨
             // if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
             // if (this.instanceOf('MetaTable') && entity['tableName']) this['tableName'] = entity['tableName'];
             
-            columns = p_obj['columns'] || p_obj;
+            columns = obj['columns'];
             if (columns) {
-                // for (var key in columns) {
-                //     if (Object.hasOwnProperty.call(columns, key)) {
-                //         if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
-                //         var prop = columns[key];
-                //         var column = new Column(key, this, prop);
-                //         if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
-                //         this.columns.add(column);
-                //     }
-                // }
-                for(var i = 0; i < columns._elem.length; i++) {
-                    var elem = columns._elem[i];
-                    var key = columns._key[i];  // 없을경우 $key 도 경우에 삽입 TODO:
-                    var column = new Column(key, this, elem);
-                    if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
-                    if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
-                    this.columns.add(column);
+                for (var key in columns) {
+                    if (Object.hasOwnProperty.call(columns, key)) {
+                        if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                        var prop = columns[key];
+                        var column = new Column(key, this, prop);
+                        if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                        this.columns.add(column);
+                    }
                 }
+                // for(var i = 0; i < columns._elem.length; i++) {
+                //     var elem = columns._elem[i];
+                //     var key = columns._key[i];  // 없을경우 $key 도 경우에 삽입 TODO:
+                //     var column = new Column(key, this, elem);
+                //     if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                //     if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                //     this.columns.add(column);
+                // }
             }
 
             // opt
-            // if (p_createRow === true) {
-            //     rows = p_obj['rows'];
-            //     if (Array.isArray(rows) && rows.length > 0)
-            //     for (var key in rows[0]) {    // rows[0] 기준
-            //         if (Object.hasOwnProperty.call(rows[0], key)) {
-            //             var prop = rows[0][key];
-            //             if (!this.columns.exist(key)) {
-            //                 var column = new Column(key, this);
-            //                 this.columns.add(column);
-            //             }
-            //         }
-            //     }
-            // }
-            rows = p_obj['rows'];
-            if (rows && p_createRow === true) {
-                if (Array.isArray(rows._elem) && rows._elem.length > 0)
-                var row = rows._elem[0];
-                if (Array.isArray(row['_key']) && row['key'].length > 0) {
-                    for (var i = 0; i < row.length; i++) {
-                        var key = row[i];
+            if (p_createRow === true) {
+                rows = obj['rows'];
+                if (Array.isArray(rows) && rows.length > 0)
+                for (var key in rows[0]) {    // rows[0] 기준
+                    if (Object.hasOwnProperty.call(rows[0], key)) {
+                        var prop = rows[0][key];
                         if (!this.columns.exist(key)) {
                             var column = new Column(key, this);
                             this.columns.add(column);
@@ -1045,24 +1081,20 @@
                     }
                 }
             }
-
-            // 샘플 JSON
-            var rows = {
-                _elem: [
-                    {
-                        _elem: [1, 2],
-                        _key: ['i1', 'i2']  // 선택적, 없으면 컬럼에 의존하면됨
-                    }
-                ]
-            }; // 규칙에 맞기는 하지만, 중복자료가 생김  ** 선택 **
-            var rows = {
-                _key: ['i1', 'i2'],
-                _elem: [
-                    {
-                        _elem: [1, 2],
-                    }
-                ]
-            };// 약식 자료임 
+            // rows = p_obj['rows'];
+            // if (rows && p_createRow === true) {
+            //     if (Array.isArray(rows._elem) && rows._elem.length > 0)
+            //     var row = rows._elem[0];
+            //     if (Array.isArray(row['_key']) && row['key'].length > 0) {
+            //         for (var i = 0; i < row.length; i++) {
+            //             var key = row[i];
+            //             if (!this.columns.exist(key)) {
+            //                 var column = new Column(key, this);
+            //                 this.columns.add(column);
+            //             }
+            //         }
+            //     }
+            // }
         };
         
 
@@ -1071,15 +1103,21 @@
          * @param {*} p_obj 
          */
         MetaEntity.prototype.readData  = function(p_obj) {
+            var obj = p_obj;
             var rows;
 
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
 
-            if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasReferObject(p_obj)) {
-                p_obj = MetaRegistry.transformRefer(p_obj);
+            if (MetaRegistry.isGuidObject(p_obj)) {
+                if (MetaRegistry.hasReferObject(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
+                obj = this.__transformObject(p_obj);
             }
 
-            rows = p_obj['rows'] || p_obj;
+            // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasReferObject(p_obj)) {
+            //     p_obj = MetaRegistry.transformRefer(p_obj);
+            // }
+
+            rows = p_obj['rows'] || obj;
             if (Array.isArray(rows) && this.columns.count > 0) {
                 for (var i = 0; i < rows.length; i++) {
                     var row = this.newRow(this);
@@ -1094,7 +1132,10 @@
         };
 
         MetaEntity.prototype.write  = function() {
-            return this.getObject(p_vOpt);
+            var obj = this.writeSchema();
+            
+            obj.rows = this.writeData().rows;
+            return obj;
         };
 
         // MetaEntity.prototype.writeSchema  = function() {
@@ -1112,19 +1153,45 @@
         //     return obj;
         // };
         MetaEntity.prototype.writeSchema  = function() {
-            return {
-                columns: this.columns.getObject(p_vOpt)
-            };
+            var obj = { columns: {} };
+
+            if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
+            if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
+
+            for(var i = 0; i < this.columns.count; i++) {
+                var column = this.columns[i];
+                var key = this.columns.keyOf(i);
+                var cObj = {};
+                // TODO: 기본값과 같은경우, 없는경우 생략
+                cObj.cloumnName = column.columnName;
+                cObj.alias = column.alias;
+                cObj.caption = column.caption;
+                cObj.isNotNull = column.isNotNull;
+                cObj.isNullPass = column.isNullPass;
+                cObj.constraints = column.constraints;
+                cObj.value = column.value;
+                cObj.getter = column.getter;
+                cObj.setter = column.setter;
+
+                obj.columns[key] = cObj;
+            }
+            return obj;
         };
 
-        // MetaEntity.prototype.writeData  = function() {
-        //     console.log('구현해야함');  // COVER:
-        // };
-
         MetaEntity.prototype.writeData  = function() {
-            return {
-                rows: this.columns.getObject(p_vOpt)
-            };
+            var obj = { rows: [] };
+            
+            for(var i = 0; i < this.rows.count; i++) {
+                var row = this.columns[i];
+                for(var ii = 0; ii < row.list.length; ii++) {
+                    var rValue = row.list[i];
+                    var rKey = row.key[i];
+                    var rObj = {};
+                    rObj[rKey] = rValue;
+                }
+                obj.rows.push(row);
+            }
+            return obj;
         };
 
         return MetaEntity;

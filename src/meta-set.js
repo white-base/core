@@ -231,6 +231,9 @@
             }
         };
 
+        MetaSet.prototype.output = function(p_obj) {
+        };
+
         MetaSet.prototype.read  = function(p_json, p_opt) {
             var metaSet = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;

@@ -18,13 +18,13 @@
   "devDependencies": {
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
-    "jsdom": "^22.0.0"
+    "jsdom": "^22.0.0",
+    "telejson": "^7.2.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "stringify-parse": "github:bonjs/stringify-parse",
-    "telejson": "^7.1.0"
+    "stringify-parse": "github:bonjs/stringify-parse"
   }
 }

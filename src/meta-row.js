@@ -70,6 +70,15 @@
             var _entity  = null;
             // var _transQueue = new TransactionQueue(this);
 
+            var _keys = [];
+
+            Object.defineProperty(this, '_keys',
+            {
+                get: function() { return _keys; },
+                configurable: false,
+                enumerable: false,
+            });
+
             // MetaEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
                 throw new Error('Only [p_entity] type "MetaEntity" can be added');
@@ -161,6 +170,7 @@
                     var idx = __element.length;
                     var alias = _entity.columns[i].alias;
                     __element.push(_entity.columns[i].default);  // 기본값 등록
+                    _keys.push(alias);
                     Object.defineProperty(this, [i], getPropDescriptor(idx));
                     Object.defineProperty(this, alias, getPropDescriptor(idx));
                 }
@@ -243,11 +253,15 @@
                 if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
                 else obj._elem.push(elem);
             }
-            // obj._key = [];
-            // for (var i = 0; i < this._keys.length; i++) {
-            //     var key = this._keys[i];
-            //     obj._key.push(key);
-            // }
+            // obj._row = {};
+
+
+
+            obj._key = [];
+            for (var i = 0; i < this._keys.length; i++) {
+                var key = this._keys[i];
+                obj._key.push(key);
+            }
             return obj;                        
         };
 

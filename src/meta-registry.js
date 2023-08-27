@@ -110,6 +110,7 @@
         
         MetaRegistry.hasReferObject = function(obj) {
             if (typeof obj !== 'object') throw new Error('object 타입이 아닙니다.');
+            if (!this.isGuidObject(obj)) throw new Error('guid 타입이 아닙니다.');
 
             return hasRefer(obj);
 
