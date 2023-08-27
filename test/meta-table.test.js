@@ -472,7 +472,8 @@ describe("[target: meta-table.js]", () => {
                 var row = table1.newRow();                
                 var str = table1.output(0, stringify);
                 var table2 = new MetaTable('T2');
-                MetaRegistry.init();
+                // POINT:
+                // MetaRegistry.init();
                 table2.load(str, parse);
         
                 // table1
