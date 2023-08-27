@@ -459,7 +459,7 @@ describe("[target: meta-table.js]", () => {
                 expect(table2.rows[2]['i1']).toBe('R100');
                 expect(table2.rows[2]['i2']).toBe('R200');
             });
-            it.only("- load(rObj) : string 가져오기 ", () => {
+            it("- load(rObj) : string 가져오기 ", () => {
                 var table1 = new MetaTable('TT1');
                 table1.columns.add('i1');
                 table1.columns.add('i2');
@@ -470,10 +470,11 @@ describe("[target: meta-table.js]", () => {
                 row['i2'] = 'R2';
                 table1.rows.add(row);
                 var row = table1.newRow();                
-                var str = table1.output(0, stringify);
+                var str = table1.output(stringify, '\t');
+                // 강제로 초기화 후, ns에 대상 등록 후 생성
+                MetaRegistry.init();
+                MetaRegistry.ns.set('', 'MetaRow', MetaRow);
                 var table2 = new MetaTable('T2');
-                // POINT:
-                // MetaRegistry.init();
                 table2.load(str, parse);
         
                 // table1

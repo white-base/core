@@ -175,6 +175,7 @@
             var _ns = mObj._ns || '';
             var fullName = _ns + type;
             var coClass = this.ns.get(fullName);
+            if (typeof coClass !== 'function') throw new Error('생성클래스가 존재하지 않습니다.' + fullName); 
             var params = coClass._PARAMS || []; // arr
 
             for (let i = 0; i < params.length; i++) {

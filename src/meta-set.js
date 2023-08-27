@@ -232,6 +232,7 @@
         };
 
         MetaSet.prototype.output = function(p_obj) {
+            console.log('구현해야함');  // COVER:
         };
 
         MetaSet.prototype.read  = function(p_json, p_opt) {
@@ -247,9 +248,7 @@
             if (Math.floor(opt / 2) >= 1) this.readData(p_json); // opt: 2, 3
         };
 
-        MetaSet.prototype.write  = function() {
-            console.log('구현해야함');  // COVER:
-        };
+        
 
         MetaSet.prototype.readSchema  = function(p_json) {
             var metaSet = null;
@@ -269,10 +268,6 @@
                     }
                 }
             }
-        };
-
-        MetaSet.prototype.writeSchema  = function() {
-            console.log('구현해야함');  // COVER:
         };
 
         /**
@@ -298,6 +293,19 @@
                 }
             }
         };
+
+        MetaSet.prototype.write  = function() {
+            console.log('구현해야함');  // COVER:
+        };
+
+        MetaSet.prototype.writeSchema  = function() {
+            console.log('구현해야함');  // COVER:
+        };
+
+        MetaSet.prototype.writeData  = function() {
+            console.log('구현해야함');  // COVER:
+        };
+
 
         MetaSet.prototype.acceptChanges  = function() {
             for (let i = 0; i < this.tables.count; i++) {

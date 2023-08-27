@@ -992,11 +992,11 @@
         //     var str = JSON.stringify(rObj, p_replacer(), 2);
         //     return str;
         // };
-        MetaEntity.prototype.output = function(p_vOpt, p_stringify, p_space) {
+        MetaEntity.prototype.output = function(p_stringify, p_space, p_vOpt) {
             var rObj = this.getObject(p_vOpt);
             var str;
             
-            if (typeof p_stringify === 'function') str = p_stringify(rObj, p_space);
+            if (typeof p_stringify === 'function') str = p_stringify(rObj, {space: p_space} );
             else str = JSON.stringify(rObj, null, p_space);
             return str;
         };
