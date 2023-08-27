@@ -14,7 +14,8 @@ const { MetaView }              = require('../src/meta-view');
 const Util                  = require('../src/util');
 const { MetaRow }               = require('../src/meta-row');
 const { MetaColumn }              = require('../src/meta-column');
-const { replacer, reviver }              = require('telejson');
+const { replacer, reviver, stringify, parse }              = require('telejson');
+const {MetaRegistry}        = require('../src/meta-registry');
 
 //==============================================================
 // test
@@ -468,24 +469,24 @@ describe("[target: meta-table.js]", () => {
                 row['i1'] = 'R1';
                 row['i2'] = 'R2';
                 table1.rows.add(row);
-                var row = table1.newRow();
-                table1.rows.add(row);
-                var str = table1.output(0, replacer);
+                var row = table1.newRow();                
+                var str = table1.output(0, stringify);
                 var table2 = new MetaTable('T2');
-                table2.load(str, reviver);
+                MetaRegistry.init();
+                table2.load(str, parse);
         
                 // table1
                 expect(table1.tableName).toBe('TT1');
                 expect(table1.columns.count).toBe(2);
                 expect(table1.columns['i1'].caption).toBe('C1');
                 expect(table1.columns['i2'].caption).toBe('C2');
-                expect(table1.rows.count).toBe(3);
+                expect(table1.rows.count).toBe(1);
                 // table2
                 expect(table2.tableName).toBe('TT1');
                 expect(table2.columns.count).toBe(2);
                 expect(table2.columns['i1'].caption).toBe('C1');
                 expect(table2.columns['i2'].caption).toBe('C2');
-                expect(table2.rows.count).toBe(3);
+                expect(table2.rows.count).toBe(1);
                 expect(table2.rows[0]['i1']).toBe('R1');
                 expect(table2.rows[0]['i2']).toBe('R2');
             });

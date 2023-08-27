@@ -80,20 +80,19 @@
         }
         
         // private method
-        function __extractListObject(mobj, arr) {
+        MetaRegistry.__extractListObject = function(mObj, arr) {
             arr = arr || [];
-
-            if (mobj['_guid'] && typeof mobj['_guid'] === 'string') arr.push(mobj);
-            for(let prop in mobj) {
-                if (typeof mobj[prop] === 'object') __extractListObject(mobj[prop], arr);
-                else if (Array.isArray(mobj[prop])){
-                for(var i = 0; i < mobj[prop].length; i++) {
-                    if (typeof mobj[prop][i] === 'object') __extractListObject(mobj[prop][i], arr);
+            if (this.isGuidObject(mObj)) arr.push(mObj);
+            for(let prop in mObj) {
+                if (typeof mObj[prop] === 'object') this.__extractListObject(mObj[prop], arr);
+                else if (Array.isArray(mObj[prop])){
+                for(var i = 0; i < mObj[prop].length; i++) {
+                    if (typeof mObj[prop][i] === 'object') this.__extractListObject(mObj[prop][i], arr);
                 }  
                 }
             }
             return arr;
-        }
+        };
 
         // static method
         MetaRegistry.init = function() {
@@ -196,43 +195,43 @@
         };
         
         MetaRegistry.validMetaObject = function(rObj) {
-            var arrObj = __extractListObject(rObj);
+            var arrObj = this.__extractListObject(rObj);
 
             if (validReference(rObj, arrObj) === false) return false;
             if (validCollection(rObj, arrObj) === false) return false;
             return true;
 
             // inner function
-            function validReference(mobj, arr) {
-                for(let prop in mobj) {
-                    if (typeof mobj[prop] === 'object') {
-                        if (mobj[prop]['$ref']) {
-                            if (typeof findGuid(mobj[prop]['$ref'], arr) !== 'object') return false;
+            function validReference(mObj, arr) {
+                for(let prop in mObj) {
+                    if (typeof mObj[prop] === 'object') {
+                        if (mObj[prop]['$ref']) {
+                            if (typeof findGuid(mObj[prop]['$ref'], arr) !== 'object') return false;
                         } else {
-                            if (validReference(mobj[prop], arr) === false) return false;
+                            if (validReference(mObj[prop], arr) === false) return false;
                         }
-                    } else if (Array.isArray(mobj[prop])){
-                      for(var i = 0; i < mobj[prop].length; i++) {
-                        if (typeof mobj[prop][i] === 'object') {
-                            if (validReference(mobj[prop][i], arr) === false) return false;
+                    } else if (Array.isArray(mObj[prop])){
+                      for(var i = 0; i < mObj[prop].length; i++) {
+                        if (typeof mObj[prop][i] === 'object') {
+                            if (validReference(mObj[prop][i], arr) === false) return false;
                         }
                       }  
                     }
                 }
                 return true;
             }
-            function validCollection(mobj, arr) {
-                for(let prop in mobj) {
-                    if (typeof mobj[prop] === 'object') {
-                        if (Array.isArray(mobj[prop]['_elem']) && Array.isArray(mobj[prop]['_key'])) {
-                            if (mobj[prop]['_elem'].length !== mobj[prop]['_key'].length) return false;
+            function validCollection(mObj, arr) {
+                for(let prop in mObj) {
+                    if (typeof mObj[prop] === 'object') {
+                        if (Array.isArray(mObj[prop]['_elem']) && Array.isArray(mObj[prop]['_key'])) {
+                            if (mObj[prop]['_elem'].length !== mObj[prop]['_key'].length) return false;
                         } else {
-                            if (validCollection(mobj[prop], arr) === false) return false;
+                            if (validCollection(mObj[prop], arr) === false) return false;
                         }
-                    } else if (Array.isArray(mobj[prop])){
-                      for(var i = 0; i < mobj[prop].length; i++) {
-                        if (typeof mobj[prop][i] === 'object') {
-                            if (validCollection(mobj[prop][i], arr) === false) return false;
+                    } else if (Array.isArray(mObj[prop])){
+                      for(var i = 0; i < mObj[prop].length; i++) {
+                        if (typeof mObj[prop][i] === 'object') {
+                            if (validCollection(mObj[prop][i], arr) === false) return false;
                         }
                       }  
                     }
@@ -242,7 +241,7 @@
         };
 
         MetaRegistry.transformRefer = function(rObj) {
-            var arrObj = __extractListObject(rObj);
+            var arrObj = this.__extractListObject(rObj);
             // REVIEW: 객체를 복사해야 하는게 맞지 않을까?
             // var clone = JSON.parse(JSON.stringify(rObj));
             // linkReference(clone, arrObj);
@@ -255,22 +254,25 @@
             function linkReference(obj, arr) {
                 // inner function
                 for(let prop in obj) {
+                    if (obj[prop] === null) continue;
                     if (typeof obj[prop] === 'object') {
                         if (obj[prop]['$ref']) {
                             obj[prop] = findGuid(obj[prop]['$ref'], arr);
                             if (typeof obj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + obj['$ref']);
                         } else linkReference(obj[prop], arr);
                     } else if (Array.isArray(obj[prop])){
-                    for(var i = 0; i < obj[prop].length; i++) {
-                        if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i], arr);
-                    }  
+                        for(var i = 0; i < obj[prop].length; i++) {
+                            if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i], arr);
+                        }  
                     } 
                 }
             }
         };
 
         MetaRegistry.isGuidObject = function(p_obj) {
-            if (typeof p_obj === 'object' && p_obj['_guid'] && p_obj['_type']) return true;
+            if (p_obj === null || typeof p_obj !== 'object') return false;
+            if (p_obj['_guid'] && typeof p_obj['_guid'] === 'string'
+                && p_obj['_type'] && typeof p_obj['_type'] === 'string') return true;
             return false;
         };
 

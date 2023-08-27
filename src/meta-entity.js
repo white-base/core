@@ -958,7 +958,7 @@
          * 기존을 초기화 하고 불러오는 역활
          * @param {object | MetaEntity} p_target 로드 대상
          */
-        MetaEntity.prototype.load = function(p_obj, p_reviver) {
+        MetaEntity.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
             var mObj;
             
@@ -972,7 +972,11 @@
             // }
             if (p_obj instanceof MetaEntity) throw new Error('[MetaEntity] 타입을 load() 할수 없습니다. read()로 읽으세요.');
 
-            if (typeof obj === 'string') obj = JSON.parse(obj, p_reviver); 
+            // if (typeof obj === 'string') obj = JSON.parse(obj, p_reviver()); 
+            if (typeof obj === 'string') {
+                if (typeof p_parse === 'function') obj = p_parse(obj);
+                else obj = JSON.parse(obj, null);
+            }
 
             if (MetaRegistry.isGuidObject(obj)) {
                 mObj = MetaRegistry.hasReferObject(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
@@ -983,8 +987,17 @@
         };
 
         
-        MetaEntity.prototype.output = function(p_vOpt, p_replacer) {
-            var str = JSON.stringify(this.getObject(p_vOpt), p_replacer);
+        // MetaEntity.prototype.output = function(p_vOpt, p_replacer) {
+        //     var rObj = this.getObject(p_vOpt);
+        //     var str = JSON.stringify(rObj, p_replacer(), 2);
+        //     return str;
+        // };
+        MetaEntity.prototype.output = function(p_vOpt, p_stringify, p_space) {
+            var rObj = this.getObject(p_vOpt);
+            var str;
+            
+            if (typeof p_stringify === 'function') str = p_stringify(rObj, p_space);
+            else str = JSON.stringify(rObj, null, p_space);
             return str;
         };
 
