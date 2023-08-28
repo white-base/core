@@ -16,11 +16,10 @@ describe("[target: namespace-manager.js]", () => {
         });
         describe("this.register(ns) <네임스페이스 등록>", () => {
             it("- register() : 등록 ", () => {
-                const app = new NamespaceManager();
-                app.register('aa.bb');
-                let ns = app.getNamespace();
+                const ns = new NamespaceManager();
+                ns.register('aa.bb');
 
-                expect(ns).toBeDefined();
+                expect(ns.hasPath('aa.bb')).toBe(true);
             });
             it("- register() : 금지어 등록 ", () => {
                 const app = new NamespaceManager();

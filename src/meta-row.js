@@ -30,7 +30,7 @@
         Observer                = require('./observer').Observer;
         IBaseCollection         = require('./i-collection-base').IBaseCollection;
         MetaObject              = require('./meta-object').MetaObject;
-        TransactionCollection   = require('./collection-trans').TransactionCollection;
+        TransactionCollection   = require('./collection-transaction').TransactionCollection;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {    // COVER:
         Util                    = _global._L.Util;

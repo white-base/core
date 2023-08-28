@@ -5,7 +5,7 @@
 // gobal defined
 'use strict';
 
-const {TransactionCollection}          = require('../src/collection-trans');
+const {TransactionCollection}          = require('../src/collection-transaction');
 let Student, School, Corp, Member, House, Space;
 
 //==============================================================
