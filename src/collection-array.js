@@ -62,7 +62,7 @@
         ArrayCollection.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            this.clear();
+
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함

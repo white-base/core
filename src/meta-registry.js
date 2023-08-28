@@ -94,6 +94,7 @@
             return arr;
         };
 
+
         // static method
         MetaRegistry.init = function() {
             list.length = 0;
@@ -118,6 +119,8 @@
                 for(let prop in obj) {
                     if (typeof obj[prop] === 'object') {
                         if (obj[prop]['$ref'] && typeof obj[prop]['$ref'] === 'string') {
+                            return true;
+                        } else if (obj[prop]['$ns'] && typeof obj[prop]['$ns'] === 'string') {
                             return true;
                         } else {
                             if (hasRefer(obj[prop]) === true) return true;
@@ -164,6 +167,12 @@
             if (obj && obj._guid && obj._guid.length > 0 ) return { $ref: obj._guid };
         };
 
+// POINT:
+        MetaRegistry.createNsObject = function(fun) {
+            var fullName = this.ns.find(fun);
+            if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
+        };
+
         MetaRegistry.createObject = function(mObj) {
             /**
              * - ns 에서 대상 조회
@@ -196,6 +205,7 @@
         };
         
         MetaRegistry.validMetaObject = function(rObj) {
+            var _this = this;
             var arrObj = this.__extractListObject(rObj);
 
             if (validReference(rObj, arrObj) === false) return false;
@@ -208,6 +218,8 @@
                     if (typeof mObj[prop] === 'object') {
                         if (mObj[prop]['$ref']) {
                             if (typeof findGuid(mObj[prop]['$ref'], arr) !== 'object') return false;
+                        } else if (mObj[prop]['$ns']) {
+                            if (!_this.ns.get(mObj[prop]['$ns'])) return false;
                         } else {
                             if (validReference(mObj[prop], arr) === false) return false;
                         }
@@ -242,13 +254,16 @@
         };
 
         MetaRegistry.transformRefer = function(rObj) {
+            var _this = this;
             var arrObj = this.__extractListObject(rObj);
             // REVIEW: 객체를 복사해야 하는게 맞지 않을까?
             // var clone = JSON.parse(JSON.stringify(rObj));
             // linkReference(clone, arrObj);
             // return clone;
-            linkReference(rObj, arrObj);
-            return rObj;
+            var clone = deepCopy(rObj);
+            // var clone = rObj;
+            linkReference(clone, arrObj);
+            return clone;
             
 
             // inner function
@@ -260,6 +275,9 @@
                         if (obj[prop]['$ref']) {
                             obj[prop] = findGuid(obj[prop]['$ref'], arr);
                             if (typeof obj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + obj['$ref']);
+                        } else if (obj[prop]['$ns']) {
+                            obj[prop] = _this.ns.get(obj[prop]['$ns']);
+                            // console.log(1);
                         } else linkReference(obj[prop], arr);
                     } else if (Array.isArray(obj[prop])){
                         for(var i = 0; i < obj[prop].length; i++) {
@@ -268,6 +286,20 @@
                     } 
                 }
             }
+            function deepCopy(object) {
+                if (object === null || typeof object !== "object") {
+                  return object;
+                }
+                // 객체인지 배열인지 판단
+                const copy = Array.isArray(object) ? [] : {};
+               
+                for (let key of Object.keys(object)) {
+                  copy[key] = deepCopy(object[key]);
+                }
+               
+                return copy;
+              }
+    
         };
 
         MetaRegistry.isGuidObject = function(p_obj) {

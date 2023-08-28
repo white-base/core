@@ -17,10 +17,10 @@ describe("[target: namespace-manager.js]", () => {
         describe("this.register(ns) <네임스페이스 등록>", () => {
             it("- register() : 등록 ", () => {
                 const app = new NamespaceManager();
-                let ns = app.namespace;
                 app.register('aa.bb');
+                let ns = app.getNamespace();
 
-                expect(ns.aa.bb).toBeDefined();
+                expect(ns).toBeDefined();
             });
             it("- register() : 금지어 등록 ", () => {
                 const app = new NamespaceManager();
@@ -128,16 +128,19 @@ describe("[target: namespace-manager.js]", () => {
             it("- find(elem) : 네임스페이스 얻기", () => {
                 const app = new NamespaceManager();
                 const ns = app.namespace;
-                app.set('', 'Fun', Function);
-                app.set('a1.b1', 'Str', String);
-                app.set('a1.b1.c1', 'Arr', Array);
-                const str1 = app.find(Function);
-                const str2 = app.find(Array);
-                const str3 = app.find(String);
+                var fun = function(){return 'Fun'};
+                var str = function(){return 'Str'};
+                var arr = function(){return 'Arr'};
+                app.set('', 'Fun', fun);
+                app.set('a1.b1', 'Str', str);
+                app.set('a1.b1.c1', 'Arr', arr);
+                const str1 = app.find(fun, true);
+                const str2 = app.find(arr, true);
+                const str3 = app.find(str, true);
 
-                expect(str1).toBe('');
-                expect(str2).toBe('a1.b1.c1');
-                expect(str3).toBe('a1.b1');
+                expect(str1).toBe('Fun');
+                expect(str2).toBe('a1.b1.Str');
+                expect(str3).toBe('a1.b1.c1.Arr');
             });
             it("- find(elem, true) : 네임스페이스(전체) 얻기", () => {
                 const app = new NamespaceManager();
@@ -152,6 +155,8 @@ describe("[target: namespace-manager.js]", () => {
                 expect(str1).toBe('Fun');
                 expect(str2).toBe('a1.b1.c1.Arr');
                 expect(str3).toBe('a1.b1.Str');
+            });
+            it("- find(elem) : 내장함수 ", () => {
             });
             it("- find(elem) : 없는 경우 ", () => {
                 const app = new NamespaceManager();

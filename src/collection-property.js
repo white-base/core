@@ -103,7 +103,7 @@
         PropertyCollection.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
 
-            this.clear();
+            // this.clear();
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
                 var key = mObj._key[i];

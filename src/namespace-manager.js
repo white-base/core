@@ -27,23 +27,30 @@
          */
         function NamespaceManager() {
 
-            var namespace = this._getNsObject();
+            var __storage = this._getNsObject();
+            var __element = [];
 
             /**
-             * namespace
+             * __storage
              * @member {Array} _L.Common.NamespaceManager#namespace 
              */
-            Object.defineProperty(this, 'namespace',
+            Object.defineProperty(this, '__storage',
             {
-                get: function() { return namespace; },
+                get: function() { return __storage; },
+                set: function(val) { __storage = val; },
                 configurable: false,
                 enumerable: true
             });
-
-            // inner variable access
-            this.__SETnamespace = function(val, call) {
-                if (call instanceof NamespaceManager) namespace = val;
-            }
+            /**
+             * __element
+             * @member {Array} _L.Common.NamespaceManager#__element 
+             */
+            Object.defineProperty(this, '__element',
+            {
+                get: function() { return __element; },
+                configurable: false,
+                enumerable: true
+            });
 
             this.__symbol = ['namespace', 'ns', 'NS'];
         }
@@ -67,7 +74,16 @@
             else throw new Error('Only [p_ns] type "string, array" can be added'); 
             return sections;
         }
-
+        function _isBuiltFunction(obj) {
+            if (typeof obj === 'function' && (false 
+                || obj === Number || obj === String || obj === Boolean
+                || obj === Object || obj === Array
+                || obj === RegExp || obj === Date 
+                || obj === Symbol || obj === BigInt
+            )) return true;
+            return false;
+        }
+        
         /**
          * 네임스페이스 기본객체
          */
@@ -85,9 +101,15 @@
          * 초기화
          */
         NamespaceManager.prototype.init = function() {
-            this.__SETnamespace(this._getNsObject());
+            this.__storage = this._getNsObject();
         };
 
+        NamespaceManager.prototype.getPath = function(p_ns) {
+            // TODO:
+        };
+        NamespaceManager.prototype.hasPath = function(p_ns) {
+            // TODO:
+        };
 
         /**
          * 네임스페이스 등록
@@ -95,7 +117,7 @@
          * @param {string | array} p_ns 
          */
         NamespaceManager.prototype.register = function(p_ns) {
-            var parent = this.namespace;
+            var parent = this.__storage;
             var sections = __getArray(p_ns);
         
             // 에약어 제거
@@ -116,7 +138,7 @@
          * @param {string | array} p_ns 
          */
         NamespaceManager.prototype.release = function(p_ns) {
-            var parent = this.namespace;
+            var parent = this.__storage;
             var sections = __getArray(p_ns);
         
             for (var i = 0; i < sections.length; i+=1) {
@@ -128,11 +150,18 @@
 
         /**
          * 네임스페이스에 요소 설정
+         * 네임스피이스 
          */
         NamespaceManager.prototype.set = function(p_ns, p_key, p_elem) {
-            var parent = this.namespace;
-            var sections = __getArray(p_ns);
-            var oElem = this._getNsObject();
+            var parent = this.__storage;
+            var sections;
+            var oElem;
+
+            // 내장 함수 제외
+            if (_isBuiltFunction(p_elem)) return;
+
+            sections = __getArray(p_ns);
+            oElem = this._getNsObject();
             
             if (sections.length > 0) this.register(p_ns);
             if (!__validName(p_key)) throw new Error('They have different [p_key] conventions.'); 
@@ -146,19 +175,30 @@
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
                 if (typeof parent[sName] === "undefined") parent[sName] = this._getNsObject();
-                if (i === sections.length - 1) parent[sName] = oElem;
-                else parent = parent[sName];
+                if (i === sections.length - 1) { 
+                    parent[sName] = oElem;
+                    this.__element.push(oElem);
+                } else parent = parent[sName];
             }
         };
+
+        NamespaceManager.prototype.del = function(p_fullName) {
+            // TODO:
+        };
+
 
         /**
          * 네임스페이스 요소 얻기
          * @returns {*}
          */
-        NamespaceManager.prototype.get = function(p_fullname) {
-            var parent = this.namespace;
-            var sections = __getArray(p_fullname);
-        
+        NamespaceManager.prototype.get = function(p_fullName) {
+            var parent = this.__storage;
+            var sections;
+
+            // 내장함수 & 전역 함수
+            if (typeof _global[p_fullName] === 'function') return _global[p_fullName];
+
+            sections = __getArray(p_fullName);
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
                 if (i === sections.length - 1) return parent[sName];
@@ -174,11 +214,16 @@
          * @returns {array} 네임스페이스 
          */
         NamespaceManager.prototype.find = function(p_elem, p_isFullName) {
+            var namespace = this.__storage;
             var stack = [];
+            var ns;
+            // 내장 함수 제외
+            if (_isBuiltFunction(p_elem)) return p_elem.name;
 
-            if (findElement(this.namespace)) return stack.join('.');
-            else return;
-            // return stack;
+            if (findElement(namespace)) {
+                ns = p_isFullName === true ? stack.join('.') : stack.pop();
+                return ns;
+            } else return;
 
             // inner function
             function findElement(target) { 
@@ -190,7 +235,7 @@
                         if(findElement(obj)) return true;
                     } else {
                         if (obj === p_elem) {
-                            if (p_isFullName) stack.push(prop);
+                            stack.push(prop);
                             return true;
                         }
                     }
@@ -208,6 +253,10 @@
             if (typeof this.find(p_elem) === 'string') return true;
             return false;
         };
+
+        // NamespaceManager.prototype.getNamespace = function() {
+        //     this.__storage;
+        // };
 
         return NamespaceManager;
     }());

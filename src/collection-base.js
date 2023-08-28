@@ -310,9 +310,24 @@
          */
         BaseCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
+            var _elems = [];
 
             obj._owner = MetaRegistry.createReferObject(this._owner);
-            obj.elementType = this.elementType; // REVIEW: 타입은 전달 못함!
+            // obj.elementType = this.elementType;
+            
+            /**
+             * 함수타임은 : MetaRegistry.createNsObject()
+             * 기본자료형의 처리?
+             *  별도 저장할 필요 없음
+             * 
+             */
+            for (var i = 0; i < this.elementType.length; i++) {
+                var elem = this.elementType[i];
+                if (typeof elem === 'function') _elems.push(MetaRegistry.createNsObject(elem));
+                else _elems.push(elem);
+            }
+            obj.elementType = _elems;
+
             obj._elem = [];
             for (var i = 0; i < this._element.length; i++) {
                 var elem = this._element[i];
@@ -320,6 +335,27 @@
                 else obj._elem.push(elem);
             }
             return obj;                        
+        };
+
+        BaseCollection.prototype.setObject = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            this.clear();
+
+            this.elementType = mObj.elementType;
+            // this.elementType.length = 0;
+
+            // for(var i = 0; i < mObj.elementType.length; i++) {
+            //     var elem = mObj._elem[i];
+            //     if (typeof elem === 'function') {   // 함수 타입
+            //         this.elementType.push(MetaRegistry.find(elem));
+            //     } else if (MetaRegistry.isGuidObject(elem)) {   // metaObject 객체
+            //         this.elementType.push(MetaRegistry.find(elem));
+            //     } else {
+            //         this.elementType.push(elem);
+            //     }
+            // }
+            
         };
 
         /** 
