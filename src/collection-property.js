@@ -79,6 +79,9 @@
         }
         Util.inherits(PropertyCollection, _super);
 
+        PropertyCollection._ns = 'Collection';      // namespace
+        PropertyCollection._PARAMS = ['_owner'];    // creator parameter
+
         /**
          * 메타 객체를 얻는다
          * @virtual

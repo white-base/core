@@ -86,6 +86,9 @@
         }
         Util.inherits(MetaElement, _super);
     
+        MetaElement._ns = 'Meta';           // namespace
+        MetaElement._PARAMS = ['name'];     // creator parameter
+
         /**
          * Guid 생성한다.
          * @private

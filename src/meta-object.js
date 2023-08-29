@@ -52,7 +52,7 @@
 
             /**
              * _guid
-             * @member {Array} _L.Meta.MetaElement#_guid 
+             * @member {Array} _L.Meta.MetaObject#_guid 
              */
             Object.defineProperty(this, '_guid', 
             {
@@ -69,7 +69,7 @@
             });    
             /**
              * _guid
-             * @member {Array} _L.Meta.MetaElement#_guid 
+             * @member {Array} _L.Meta.MetaObject#_guid 
              */
             Object.defineProperty(this, '_type', 
             {
@@ -84,8 +84,8 @@
                 configurable: false,
                 enumerable: true
             });
-
             
+            if (this._type && this._type._ns) this._ns = this._type._ns;
             MetaRegistry.register(this);
 
             // inner variable access
@@ -96,6 +96,33 @@
             Util.implements(this, IObject, IMarshal);
         }
         
+        MetaObject._ns = 'Meta';          // namespace
+        MetaObject._PARAMS = [];         // creator parameter
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        MetaObject.prototype.getObject = function(p_vOpt) {
+            var obj = {};
+            
+            obj._guid = this._guid;
+            obj._type = this._type.name;
+            if(this._type._ns) obj._ns = this._type._ns;
+            return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        MetaObject.prototype.setObject  = function(mObj) {
+            if (typeof mObj !== 'object') throw new Error('Only [mObj] type "object" can be added');
+            this.__SET_guid(mObj._guid, this);
+        };
+
         /**
          * 객체 타입 이름 얻기
          * @returns {array<string>}
@@ -182,28 +209,7 @@
             return false;
         };
 
-        /**
-         * 메타 객체를 얻는다
-         * @virtual
-         * @returns {object}
-         */
-        MetaObject.prototype.getObject = function(p_vOpt) {
-            var obj = {};
-            
-            obj._guid = this._guid;
-            obj._type = this._type.name;
-            return obj;                        
-        };
 
-        /**
-         * 메타 객체를 설정한다
-         * @virtual
-         * @returns {object}
-         */
-        MetaObject.prototype.setObject  = function(mObj) {
-            if (typeof mObj !== 'object') throw new Error('Only [mObj] type "object" can be added');
-            this.__SET_guid(mObj._guid, this);
-        };
 
         return MetaObject;
         

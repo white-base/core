@@ -137,6 +137,9 @@
         }
         Util.inherits(MetaView, _super);
 
+        MetaView._ns = 'Meta.Entity';    // namespace
+        MetaView._PARAMS = ['name', '_baseEntity'];  // creator parameter
+
         /**
          * 뷰 엔티티에 참조를 등록한다. (중복 제거후)
          * @param {MetaEntity} p_entity 
@@ -296,6 +299,9 @@
             this.elementType = MetaView;   // 컬렉션타입 설정
         }
         Util.inherits(MetaViewCollection, _super);
+
+        MetaViewCollection._ns = 'Meta.Entity';    // namespace
+        MetaViewCollection._PARAMS = ['_owner'];  // creator parameter
 
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.

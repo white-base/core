@@ -53,6 +53,9 @@
         }
         Util.inherits(ArrayCollection, _super);
 
+        ArrayCollection._ns = 'Collection';     // namespace
+        ArrayCollection._PARAMS = ['_owner'];   // creator parameter
+
         /**
          * TODO: setObject 시점에 초기화 해야함
          * 메타 객체를 설정한다

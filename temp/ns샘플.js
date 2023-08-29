@@ -1,8 +1,14 @@
-/*
+const { NamespaceManager } = require("../src/namespace-manager");
+
+var ns = new NamespaceManager
+
+console.log(0);
+
+return;
+
 // 이름 등록 > 검사 > 얻기 > 해제
 ns.register('aa.bb');   
-ns.hasPath('aa.bb');    // bool
-ns.getPath('aa.bb');    // arr
+ns.path('aa.bb');    // arr
 ns.release('aa.bb');
 
 // 요소 등록 > 검사 > 조회 > 얻기 > 해제
@@ -12,7 +18,7 @@ ns.has(1);                      // bool
 ns.find(1);                     // str
 ns.get('aa.bb.Number');         // elem
 ns.del('aa.bb.Number');
-*/
+
 
 /**
  * 저장소 : 객체타입
@@ -55,7 +61,7 @@ var storage = {
             value: null
         }
     ],
-    aa: {
+    aa: {   // getObject 방식
         _type: 'ns',
         _elem: [
             {
@@ -64,25 +70,55 @@ var storage = {
                 value: null
             }
         ],
-        bb: {
+        _elem: {
+            _type: 'elem',
+            Fun: null,
+            Str: null
+        },
+        bb: {   // 키 방식
             _type: 'ns',
+            _key: {
+                Fun: null
+            }
+        },
+    }
+};
+
+var storage = { 
+    _type: 'ns',
+    _elem: [
+        {
+            _type: 'elem',
+            name: 'Fun',
+            value: null
         }
+    ],
+    Fun: null,
+    aa: {   // getObject 방식
+        _type: 'ns',
+        _elem: [
+            {
+                _type: 'elem',
+                name: 'Fun',
+                value: null
+            }
+        ],
+        _elem: {
+            _type: 'elem',
+            Fun: null,
+            Str: null
+        },
+        bb: {   // 키 방식
+            _type: 'ns',
+            _key: {
+                Fun: null
+            }
+        },
     }
 };
 
 var element = [
-
 ];
 
-element.push(storage._elem[0])
 
-console.log(element.length);
-
-storage._elem.pop();
-
-console.log(element.length);
-
-console.log(storage._elem.length);
-
-
-console.log('E');
+console.log(0);

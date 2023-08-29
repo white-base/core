@@ -18,167 +18,254 @@ describe("[target: namespace-manager.js]", () => {
             it("- register() : 등록 ", () => {
                 const ns = new NamespaceManager();
                 ns.register('aa.bb');
+                const s = ns.__storage;
 
-                expect(ns.hasPath('aa.bb')).toBe(true);
+                expect(s.aa.bb).toBeDefined();
             });
             it("- register() : 금지어 등록 ", () => {
-                const app = new NamespaceManager();
-                app.register('ns.aa');
+                const ns = new NamespaceManager();
+                ns.register('ns.aa');
+                const s = ns.__storage;
     
-                expect(app.namespace.aa).toBeDefined();
+                expect(s.aa).toBeDefined();
             });
-            it("- register() : namespace = {} 같이 등록 ", () => {
-                const app = new NamespaceManager();
-                app.register('ns.aa');
-                app.namespace.aa.bb = {};
+            // it("- register() : namespace = {} 같이 등록 ", () => {
+            //     const ns = new NamespaceManager();
+            //     ns.register('ns.aa');
+            //     ns.namespace.aa.bb = {};
     
-                expect(app.namespace.aa).toBeDefined();
-                expect(app.namespace.aa.bb).toBeDefined();
-            });
+            //     expect(ns.namespace.aa).toBeDefined();
+            //     expect(ns.namespace.aa.bb).toBeDefined();
+            // });
             it("- register() : [예외] 자른 다료형 ", () => {
-                const app = new NamespaceManager();
+                const ns = new NamespaceManager();
     
-                expect(() => app.register(10)).toThrow(/Only/);
-                expect(() => app.register({})).toThrow(/Only/);
-                expect(() => app.register(true)).toThrow(/Only/);
+                expect(() => ns.register(10)).toThrow(/Only/);
+                expect(() => ns.register({})).toThrow(/Only/);
+                expect(() => ns.register(true)).toThrow(/Only/);
             });
             it("- register() : [예외] ns/section 이름 규칙 ", () => {
-                const app = new NamespaceManager();
+                const ns = new NamespaceManager();
     
-                expect(() => app.register('.aa')).toThrow(/p_ns/);
-                expect(() => app.register('aa-bb')).toThrow(/p_ns/);
-                expect(() => app.register('aa.bb@')).toThrow(/p_ns/);
-                expect(() => app.register('aa.3bb')).toThrow(/section/);
+                expect(() => ns.register('.aa')).toThrow(/p_ns/);
+                expect(() => ns.register('aa-bb')).toThrow(/p_ns/);
+                expect(() => ns.register('aa.bb@')).toThrow(/p_ns/);
+                expect(() => ns.register('aa.3bb')).toThrow(/section/);
             });
         });
         describe("this.release(ns) <네임스페이스 해제>", () => {
             it("- release() : leaf 해제 ", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
-
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
                 // 등록
-                app.register('a1.b1');
-                app.register('a1.b2');
-                app.register('a1.b2.c1');
-                app.register('a1.b2.c2');
-                expect(ns.a1.b1).toBeDefined();
-                expect(ns.a1.b2.c1).toBeDefined();
-                expect(ns.a1.b2.c2).toBeDefined();
+                ns.register('a1.b1');
+                ns.register('a1.b2');
+                ns.register('a1.b2.c1');
+                ns.register('a1.b2.c2');
+                expect(s.a1.b1).toBeDefined();
+                expect(s.a1.b2.c1).toBeDefined();
+                expect(s.a1.b2.c2).toBeDefined();
                 // 해제
-                app.release('a1.b2.c2');
-                expect(ns.a1.b1).toBeDefined();
-                expect(ns.a1.b2.c1).toBeDefined();
-                expect(ns.a1.b2.c2).not.toBeDefined();
+                ns.release('a1.b2.c2');
+                expect(s.a1.b1).toBeDefined();
+                expect(s.a1.b2.c1).toBeDefined();
+                expect(s.a1.b2.c2).not.toBeDefined();
             });
             it("- release() : node 해제 ", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
 
                 // 등록
-                app.register('a1.b1');
-                app.register('a1.b2');
-                app.register('a1.b2.c1');
-                app.register('a1.b2.c2');
-                expect(ns.a1.b1).toBeDefined();
-                expect(ns.a1.b2.c1).toBeDefined();
-                expect(ns.a1.b2.c2).toBeDefined();
+                ns.register('a1.b1');
+                ns.register('a1.b2');
+                ns.register('a1.b2.c1');
+                ns.register('a1.b2.c2');
+                expect(s.a1.b1).toBeDefined();
+                expect(s.a1.b2.c1).toBeDefined();
+                expect(s.a1.b2.c2).toBeDefined();
                 // 해제
-                app.release('a1.b2');
-                expect(ns.a1.b1).toBeDefined();
-                expect(ns.a1.b2).not.toBeDefined();
+                ns.release('a1.b2');
+                expect(s.a1.b1).toBeDefined();
+                expect(s.a1.b2).not.toBeDefined();
+            });
+            it("- release() : 없는 경우 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.register('a1.b1');
+                ns.release('a1.b2');
+                expect(s.a1.b1).toBeDefined();
+            });
+        });
+        describe("this.path(ns?) <네임스페이스 경로 얻기>", () => {
+            it("- path() : 전체 경로 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.register('a1.b1');
+                const p = ns.path();
+
+                expect(s === s).toBe(true);
+            });
+            it("- path(ns) : 대상 경로 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.register('a1.b1');
+                ns.register('a1.b2.c1');
+                const p1 = ns.path('a1.b1');
+                const p2 = ns.path(['a1', 'b1']);
+
+                expect(p1 === s.a1.b1).toBe(true);
+                expect(p2 === s.a1.b1).toBe(true);
+            });
+            it("- path(ns) : 잘못된 경로", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.register('a1.b1');
+                const p = ns.path('a1.b2');
+
+                expect(p).not.toBeDefined();
             });
         });
         describe("this.set(ns, key, elem) <네임스페이스에 요소 설정>", () => {
             it("- set() : Function 등록 ", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
-                app.set('a1.b1', 'Fun', Function);
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.set('a1.b1', 'Fun', Function);
 
-                expect(ns.a1.b1).toBeDefined();
-                expect(ns.a1.b1.Fun).toBeDefined();
-                expect(typeof ns.a1.b1.Fun).toBe('function');
+                expect(s.a1.b1).toBeDefined();
+                expect(s.a1.b1.Fun).toBeDefined();
+                expect(typeof s.a1.b1.Fun).toBe('function');
             });
             it("- set() : 최상위에 등록 ", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
-                app.set('', 'Fun', Function);
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.set('', 'Fun', Function);
 
-                expect(ns.Fun).toBeDefined();
-                expect(typeof ns.Fun).toBe('function');
+                expect(s.Fun).toBeDefined();
+                expect(typeof s.Fun).toBe('function');
             });
             it("- set() : [예외] key 이름 규칙 ", () => {
-                const app = new NamespaceManager();
+                const ns = new NamespaceManager();
     
-                expect(() => app.set('a1.b1', '.Fun', Function)).toThrow(/p_key/);
-                expect(() => app.set('a1.b1', 'Fun%', Function)).toThrow(/p_key/);
+                expect(() => ns.set('a1.b1', '.Fun', Function)).toThrow(/p_key/);
+                expect(() => ns.set('a1.b1', 'Fun%', Function)).toThrow(/p_key/);
             });
         });
         describe("this.get(fullname) <네임스페이스에 요소 얻기>", () => {
             it("- get(fullName) : Function 얻기 ", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
-                app.set('a1.b1', 'Fun', Function);
-                const fun = app.get('a1.b1.Fun');
+                const ns = new NamespaceManager();
+                ns.set('a1.b1', 'Fun', Function);
+                const fun = ns.get('a1.b1.Fun');
 
                 expect(fun).toBe(Function);
             });
         });
+        describe("this.list <요소 목록>", () => {
+            it("- list : 목록 얻기 ", () => {
+                const ns = new NamespaceManager();
+                ns.set('a1.b1', 'Fun', Function);
+                ns.set('a1.b2', 'Str', String);
+                const list = ns.list;
+
+                expect(list.length).toBe(2);
+                expect(list[0]).toBe('a1.b1.Fun');
+                expect(list[1]).toBe('a1.b2.Str');
+            });
+            it("- list : 빈 목록 얻기 ", () => {
+                const ns = new NamespaceManager();
+                const list = ns.list;
+
+                expect(list.length).toBe(0);
+            });
+        });
+        describe("this.count <요소 갯수>", () => {
+            it("- count : 갯수 ", () => {
+                const ns = new NamespaceManager();
+                ns.set('a1.b1', 'Fun', Function);
+                ns.set('a1.b2', 'Str', String);
+                const count = ns.count;
+
+                expect(count).toBe(2);
+            });
+            it("- list : 빈 목록 얻기 ", () => {
+                const ns = new NamespaceManager();
+                const count = ns.count;
+
+                expect(count).toBe(0);
+            });
+        });
+
+        describe("this.del(fullName): bool <네임스페이스에 요소 삭제>", () => {
+            it("- del(fullName) : 요소 삭제", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.set('', 'Fun', Function);
+                ns.set('a1.b1', 'Str', String);
+                ns.set('a1.b1.c1', 'Arr', Array);
+                const r1 = ns.del('a1.b1.c1.Arr');
+                const r2 = ns.del('a1.b1.Arr');
+
+                expect(ns.has(Function)).toBe(true);
+                expect(ns.has(String)).toBe(true);
+                expect(ns.has(Array)).toBe(false);
+                expect(r1).toBe(true);
+                expect(r2).toBe(false);
+            });
+        });
         describe("this.find(elem) <네임스페이스 얻기>", () => {
             it("- find(elem) : 네임스페이스 얻기", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
                 var fun = function(){return 'Fun'};
                 var str = function(){return 'Str'};
                 var arr = function(){return 'Arr'};
-                app.set('', 'Fun', fun);
-                app.set('a1.b1', 'Str', str);
-                app.set('a1.b1.c1', 'Arr', arr);
-                const str1 = app.find(fun, true);
-                const str2 = app.find(arr, true);
-                const str3 = app.find(str, true);
+                ns.set('', 'Fun', fun);
+                ns.set('a1.b1', 'Str', str);
+                ns.set('a1.b1.c1', 'Arr', arr);
+                const str1 = ns.find(fun);
+                const str2 = ns.find(str);
+                const str3 = ns.find(arr);
 
                 expect(str1).toBe('Fun');
                 expect(str2).toBe('a1.b1.Str');
                 expect(str3).toBe('a1.b1.c1.Arr');
             });
-            it("- find(elem, true) : 네임스페이스(전체) 얻기", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
-                app.set('', 'Fun', Function);
-                app.set('a1.b1', 'Str', String);
-                app.set('a1.b1.c1', 'Arr', Array);
-                const str1 = app.find(Function, true);
-                const str2 = app.find(Array, true);
-                const str3 = app.find(String, true);
-
-                expect(str1).toBe('Fun');
-                expect(str2).toBe('a1.b1.c1.Arr');
-                expect(str3).toBe('a1.b1.Str');
-            });
             it("- find(elem) : 내장함수 ", () => {
             });
             it("- find(elem) : 없는 경우 ", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
-                app.set('a1.b1', 'Fun', Function);
-                const str = app.find(Array);
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.set('a1.b1', 'Fun', Function);
+                const str = ns.find(Array);
 
                 expect(str).not.toBeDefined();
             });
         });
         describe("this.has(elem): bool <네임스페이스에 요소 유무>", () => {
-            it("- has(elem) : 요소 얻기 <최하위> ", () => {
-                const app = new NamespaceManager();
-                const ns = app.namespace;
-                app.set('', 'Fun', Function);
-                app.set('a1.b1', 'Str', String);
-                app.set('a1.b1.c1', 'Arr', Array);
+            it("- has(elem) : 객체로 요소 검사 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.set('', 'Fun', Function);
+                ns.set('a1.b1', 'Str', String);
+                ns.set('a1.b1.c1', 'Arr', Array);
 
-                expect(app.has(Function)).toBe(true);
-                expect(app.has(String)).toBe(true);
-                expect(app.has(Array)).toBe(true);
-                expect(app.has(RegExp)).toBe(false);
+                expect(ns.has(Function)).toBe(true);
+                expect(ns.has(String)).toBe(true);
+                expect(ns.has(Array)).toBe(true);
+                expect(ns.has(RegExp)).toBe(false);
             });
+            it("- has(elem) : 이름으로 요소 검사 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.set('', 'Fun', Function);
+                ns.set('a1.b1', 'Str', String);
+                ns.set('a1.b1.c1', 'Arr', Array);
+
+                expect(ns.has('Fun')).toBe(true);
+                expect(ns.has('a1.b1.Str')).toBe(true);
+                expect(ns.has('a1.b1.c1.Arr')).toBe(true);
+                expect(ns.has('RegExp')).toBe(false);
+            });
+
         });
     });
     

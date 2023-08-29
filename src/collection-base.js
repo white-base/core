@@ -240,6 +240,9 @@
         }
         Util.inherits(BaseCollection, _super);
 
+        BaseCollection._ns = 'Collection';     // namespace
+        BaseCollection._PARAMS = ['_owner'];    // creator parameter
+
         /**
          * 프로퍼티 기술자 설정
          * @protected

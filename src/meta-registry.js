@@ -34,13 +34,14 @@
     var MetaRegistry = (function () {
         /**
          * 메타 등록소
-         */
-        function MetaRegistry() { 
+        */
+       function MetaRegistry() { 
         }
 
         // var define
         var list = [];
-        var ns = new NamespaceManager();
+        var namespace = new NamespaceManager();
+    
         
         /**
          * 메타 이름
@@ -57,7 +58,7 @@
          * @member {string} _L.Meta.MetaRegistry#ns
          */
         Object.defineProperty(MetaRegistry, "ns", {
-            get: function() { return ns; },
+            get: function() { return namespace; },
             enumerable: false,
             configurable: false
         });
@@ -78,7 +79,16 @@
                 if (arr[i]['_guid'] === guid) return arr[i];
             }
         }
-        
+        function _isBuiltFunction(obj) {
+            if (typeof obj === 'function' && (false 
+                || obj === Number || obj === String || obj === Boolean
+                || obj === Object || obj === Array
+                || obj === RegExp || obj === Date 
+                || obj === Symbol || obj === BigInt
+            )) return true;
+            return false;
+        }
+
         // private method
         MetaRegistry.__extractListObject = function(mObj, arr) {
             arr = arr || [];
@@ -95,10 +105,10 @@
         };
 
 
-        // static method
+
         MetaRegistry.init = function() {
             list.length = 0;
-            ns = new NamespaceManager();
+            this.ns.init();
         };
 
         MetaRegistry.hasMetaObject = function(meta) {
@@ -138,7 +148,7 @@
         };        
 
         MetaRegistry.register = function(meta) {
-            var ns;
+            var _ns;
             var key;
             var type;
 
@@ -146,10 +156,11 @@
                 if (this.hasMetaObject(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
                 list.push(meta);
                 
-                ns = meta['_ns'] || '';
+                _ns = meta['_ns'] || '';
                 type = meta['_type'];
                 key = type.name;
-                this.ns.set(ns, key, type);
+                // this.ns.set(ns, key, type);
+                this.registerClass(_ns, key, type);
             }
         };
 
@@ -167,10 +178,11 @@
             if (obj && obj._guid && obj._guid.length > 0 ) return { $ref: obj._guid };
         };
 
-// POINT:
         MetaRegistry.createNsObject = function(fun) {
-            var fullName = this.ns.find(fun);
+            // var fullName = this.ns.find(fun);
+            var fullName = this.findClass(fun);
             if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
+            else throw new Error('네임스페이스에 클래스가 존재하지 않습니다.' + fun.name); 
         };
 
         MetaRegistry.createObject = function(mObj) {
@@ -182,9 +194,10 @@
             var args = [null];
             var type = mObj._type;
             var _ns = mObj._ns || '';
-            var fullName = _ns + type;
-            var coClass = this.ns.get(fullName);
-            if (typeof coClass !== 'function') throw new Error('생성클래스가 존재하지 않습니다.' + fullName); 
+            var fullName = [_ns, type].join('.');
+            // var coClass = this.ns.get(fullName);
+            var coClass = this.getClass(fullName);
+            if (typeof coClass !== 'function') throw new Error('생성클래스가 존재하지 않습니다.  ' + fullName); 
             var params = coClass._PARAMS || []; // arr
 
             for (let i = 0; i < params.length; i++) {
@@ -219,7 +232,8 @@
                         if (mObj[prop]['$ref']) {
                             if (typeof findGuid(mObj[prop]['$ref'], arr) !== 'object') return false;
                         } else if (mObj[prop]['$ns']) {
-                            if (!_this.ns.get(mObj[prop]['$ns'])) return false;
+                            // if (!_this.ns.get(mObj[prop]['$ns'])) return false;
+                            if (!_this.getClass(mObj[prop]['$ns'])) return false;
                         } else {
                             if (validReference(mObj[prop], arr) === false) return false;
                         }
@@ -276,8 +290,8 @@
                             obj[prop] = findGuid(obj[prop]['$ref'], arr);
                             if (typeof obj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + obj['$ref']);
                         } else if (obj[prop]['$ns']) {
-                            obj[prop] = _this.ns.get(obj[prop]['$ns']);
-                            // console.log(1);
+                            // obj[prop] = _this.ns.get(obj[prop]['$ns']);
+                            obj[prop] = _this.getClass(obj[prop]['$ns']);
                         } else linkReference(obj[prop], arr);
                     } else if (Array.isArray(obj[prop])){
                         for(var i = 0; i < obj[prop].length; i++) {
@@ -307,6 +321,33 @@
             if (p_obj['_guid'] && typeof p_obj['_guid'] === 'string'
                 && p_obj['_type'] && typeof p_obj['_type'] === 'string') return true;
             return false;
+        };
+
+        MetaRegistry.registerClass = function(p_ns, key, fun) {
+            var fullName = p_ns.length > 0 ? p_ns+'.'+key : key;
+            // 내장함수 제외
+            if (_isBuiltFunction(fun)) return;
+            // 중복 검사 
+            if (!this.ns.get(fullName)) this.ns.set(p_ns, key, fun);
+        };
+        MetaRegistry.releaseClass = function(fullName) {
+            // 내장함수 & 전역 함수
+            if (typeof _global[fullName] === 'function') return true;
+
+            return this.ns.del(fullName);
+        };
+        MetaRegistry.findClass = function(fun) {
+            var fullName = fun.name;
+            // 내장함수 & 전역 함수
+            if (typeof _global[fullName] === 'function') return fullName;
+
+            return this.ns.find(fun);
+        };
+        MetaRegistry.getClass = function(fullName) {
+            // 내장함수 & 전역 함수
+            if (typeof _global[fullName] === 'function') return _global[fullName];
+
+            return this.ns.get(fullName);
         };
 
         return MetaRegistry;

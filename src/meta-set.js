@@ -142,6 +142,9 @@
         }
         Util.inherits(MetaSet, _super);
 
+        MetaSet._ns = 'Meta.Entity';    // namespace
+        MetaSet._PARAMS = ['name'];  // creator parameter
+
         MetaSet.prototype._loadMetaSet = function(p_metaSet, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;

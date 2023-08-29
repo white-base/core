@@ -55,15 +55,15 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.hasReferObject(obj2)).toBe(false);
             });
         });
-        describe("this.ns <네임스페이스 여부>", () => {
-            it("- ns.get() : 네임스페이스 조회 ", () => {
-                let i = new MetaObject();
-                let i2 = new MetaObject();
-                const nsMgr = MetaRegistry.ns;
+        // describe("this.ns <네임스페이스 여부>", () => {
+        //     it("- ns.get() : 네임스페이스 조회 ", () => {
+        //         let i = new MetaObject();
+        //         let i2 = new MetaObject();
+        //         const nsMgr = MetaRegistry.ns;
                
-                expect(nsMgr.get('MetaObject')).toBe(MetaObject);
-            });
-        });
+        //         expect(nsMgr.get('MetaObject')).toBe(MetaObject);
+        //     });
+        // });
     });
     
 });

@@ -204,8 +204,8 @@
         }
         Util.inherits(MetaRow, _super);
 
-        // static property
-        MetaRow._PARAMS = ['_entity'];
+        MetaRow._ns = 'Meta.Entity';    // namespace
+        MetaRow._PARAMS = ['_entity'];  // creator parameter
 
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
@@ -339,6 +339,9 @@
             this.autoChanges = true;    // 트랜젝션 기본 해제 해제입니다.
         }
         Util.inherits(MetaRowCollection, _super);
+
+        MetaRowCollection._ns = 'Meta.Entity';    // namespace
+        MetaRowCollection._PARAMS = ['_owner'];  // creator parameter
 
         /**
          * 프로퍼티 기술자 설정

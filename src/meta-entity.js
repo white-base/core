@@ -133,6 +133,9 @@
         }
         Util.inherits(MetaEntity, _super);
 
+        MetaEntity._ns = 'Meta.Entity';          // namespace
+        MetaEntity._PARAMS = ['name'];         // creator parameter
+
         // 3가지 타입 입력
         MetaEntity.prototype.__transformObject  = function(mObj) {
             var obj  = {

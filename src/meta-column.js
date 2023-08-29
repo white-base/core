@@ -495,6 +495,9 @@
         Util.inherits(MetaColumn, _super);
 
 
+        MetaColumn._ns = 'Meta.Entity';     // namespace
+        MetaColumn._PARAMS = ['_name', '_entity', '_property'];    // creator parameter
+
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
@@ -771,7 +774,10 @@
         }
         Util.inherits(MetaColumnCollection, _super);
         
-        
+        MetaColumnCollection._ns = 'Meta.Entity';          // namespace
+        MetaColumnCollection._PARAMS = ['_owner', '_columnType'];         // creator parameter
+
+
         /**
          * 컬렉션에 아이템 유무를 검사한다.
          * @param {*} p_elem 
@@ -866,6 +872,9 @@
         }
         Util.inherits(MetaTableColumnCollection, _super);
 
+        MetaTableColumnCollection._ns = 'Meta.Entity';          // namespace
+        MetaTableColumnCollection._PARAMS = ['_owner'];         // creator parameter
+
         /**
          * 테이블컬렉션에 아이템을 추가한다.
          * @param {string | MetaColumn} p_object 
@@ -935,6 +944,9 @@
             // this._baseCollection = p_baseCollection;
         }
         Util.inherits(MetaViewColumnCollection, _super);
+
+        MetaViewColumnCollection._ns = 'Meta.Entity';                       // namespace
+        MetaViewColumnCollection._PARAMS = ['_owner', '_baseCollection'];   // creator parameter
 
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.

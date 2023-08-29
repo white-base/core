@@ -88,6 +88,8 @@
         }
         Util.inherits(TransactionCollection, _super);
 
+        TransactionCollection._ns = 'Collection';      // namespace
+        TransactionCollection._PARAMS = ['_owner'];    // creator parameter
         
         // TransactionCollection.prototype.add = function(p_value, p_desc) {
         //     // if (!this.autoChanges) this._transQueue.insert(p_value, this._element.length);

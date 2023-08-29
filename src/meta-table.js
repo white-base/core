@@ -93,6 +93,9 @@
         }
         Util.inherits(MetaTable, _super);
 
+        MetaTable._ns = 'Meta.Entity';    // namespace
+        MetaTable._PARAMS = ['name'];  // creator parameter
+
         // /** @override **/
         // MetaTable.prototype.getTypes  = function() {
         //     var type = ['MetaTable'];
@@ -240,6 +243,9 @@
             this.elementType = MetaTable;   // 컬렉션타입 설정
         }
         Util.inherits(MetaTableCollection, _super);
+
+        MetaTableCollection._ns = 'Meta.Entity';    // namespace
+        MetaTableCollection._PARAMS = ['_owner'];  // creator parameter
 
         /**
          * 테이블 컬렉션에 엔티티 추가한다.
