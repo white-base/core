@@ -51,6 +51,8 @@
             // this._implements(IPartControl, ILookupControl);            
             // Util.implements(this, IPartControl, ILookupControl);
         }
+
+        IBaseCollection._ns = 'Interface';    // namespace
     
         return IBaseCollection;
         

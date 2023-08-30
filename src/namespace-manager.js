@@ -153,6 +153,8 @@
 
             this.__symbol = ['namespace', 'ns', 'NS', '_type'];
         }
+
+        NamespaceManager._ns = 'Common';    // namespace
         
         // private 메소드
         function __validNamespace(p_name) {

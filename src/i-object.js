@@ -29,6 +29,8 @@
         function IObject() {
         }
         
+        IObject._ns = 'Interface';    // namespace
+
         /**
          * 객체타입 얻기
          */

@@ -69,6 +69,8 @@
         }
         Util.inherits(IBaseCollection, _super);
     
+        ICollection._ns = 'Interface';    // namespace
+
         /**
          * 등록 : insert
          * @abstract

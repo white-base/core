@@ -38,6 +38,8 @@
        function MetaRegistry() { 
         }
 
+        MetaRegistry._ns = 'Meta';    // namespace
+
         // var define
         var list = [];
         var namespace = new NamespaceManager();

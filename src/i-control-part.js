@@ -27,6 +27,8 @@
         function IPartControl() {
         }
     
+        IPartControl._ns = 'Interface';    // namespace
+
         /**
          * 단일 등록
          * @abstract

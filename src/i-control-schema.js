@@ -52,6 +52,8 @@
             Util.implements(this, IImportControl, IExportControl);
         }
 
+        ISchemaControl._ns = 'Interface';    // namespace
+
         /**
          * 스키마 읽기
          */

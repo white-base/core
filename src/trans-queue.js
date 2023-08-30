@@ -80,6 +80,8 @@
             this.collection = p_collection;
         }
 
+        TransactionQueue._ns = 'Collection';    // namespace
+
         TransactionQueue.prototype.init  = function() {
             this.queue.length = 0;
         };

@@ -70,6 +70,8 @@
         }
         Util.inherits(CustomError, _super);
 
+        CustomError._ns = 'Util';    // namespace
+        
         /**
          * 내부처리
          */
@@ -86,7 +88,7 @@
     if (isNode) {     
         exports.CustomError = CustomError;
     } else {    // COVER:
-        _global._LCustomError = CustomError;
+        _global._L.CustomError = CustomError;
         _global._L.Common.CustomError = CustomError;    // namespace
     }
 

@@ -27,6 +27,7 @@
         function ITransaction() {
         }
     
+        ITransaction._ns = 'Interface';    // namespace
         /**
          * 병합 : 그룹
          * @abstract

@@ -49,6 +49,8 @@
         }
         // Util.inherits(IMarshal, _super);
 
+        IMarshal._ns = 'Interface';    // namespace
+        
         /**
          * 객체 얻기
          * @returns {Object}

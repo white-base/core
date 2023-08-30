@@ -27,6 +27,8 @@
         function IExportControl() {
         }
     
+        IExportControl._ns = 'Interface';    // namespace
+
         /**
          * 출력 : 전체
          * @abstract

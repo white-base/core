@@ -41,6 +41,8 @@
         }
         Util.inherits(IArrayCollection, _super);
 
+        IArrayCollection._ns = 'Interface';    // namespace
+
         /**
          * 조회 : 인덱스로 이름 조회
          */

@@ -26,7 +26,9 @@
          */
         function IGroupControl() {
         }
-    
+
+        IGroupControl._ns = 'Interface';    // namespace
+
         /**
          * 병합 : 그룹
          * @abstract
