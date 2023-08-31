@@ -13,6 +13,7 @@
     var MetaEntity;
     var MetaTableCollection;
     var MetaViewCollection;
+    var MetaRegistry;
 
     //==============================================================
     // 1. 의존 모듈 선언
@@ -31,6 +32,7 @@
         MetaEntity              = require('./meta-entity').MetaEntity;
         MetaTableCollection     = require('./meta-table').MetaTableCollection;
         MetaViewCollection      = require('./meta-view').MetaViewCollection;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Util                    = _global._L.Common.Util;
         ISchemaControl          = _global._L.ISchemaControl;
@@ -40,6 +42,7 @@
         MetaEntity              = _global._L.MetaEntity;
         MetaTableCollection     = _global._L.MetaTableCollection;
         MetaViewCollection      = _global._L.MetaViewCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -52,6 +55,7 @@
     if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof MetaTableCollection === 'undefined') throw new Error('[MetaTableCollection] module load fail...');
     if (typeof MetaViewCollection === 'undefined') throw new Error('[MetaViewCollection] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. module implementation   
@@ -137,6 +141,44 @@
         MetaSet._NS = 'Meta.Entity';    // namespace
         MetaSet._PARAMS = ['name'];  // creator parameter
 
+        // 3가지 타입 입력
+        MetaSet._transformObject  = function(mObj) {
+            var obj  = {
+                tables: null,
+                views: null
+            };
+
+            if (mObj['tables'] || mObj['views']) obj = mObj;
+            return transformSet(obj);
+
+            // inner function
+            function transformSet(mObj) {
+                var obj = {};
+                if (mObj['name']) obj['name'] = mObj['name'];
+                if (mObj['tables']) obj['tables'] = transformTable(mObj['tables']);
+                if (mObj['views']) obj['views'] = transformView(mObj['views']);
+                return obj;
+            }
+            function transformTable(mObj) {
+                var obj = {};
+                for (var i = 0; i < mObj['_elem'].length; i++) {
+                    var table = mObj['_elem'][i];
+                    var key = mObj['_key'][i] || table.name;
+                    obj[key] = MetaEntity._transformObject(table);
+                }
+                return obj;
+            }
+            function transformView(mObj) {
+                var obj = {};
+                for (var i = 0; i < mObj['_elem'].length; i++) {
+                    var view = mObj['_elem'][i];
+                    var key = mObj['_key'][i] || view.name;
+                    obj[key] = MetaEntity._transformObject(view);
+                }
+                return obj;
+            }
+        };
+        
         MetaSet.prototype._loadMetaSet = function(p_metaSet, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;
@@ -230,36 +272,68 @@
             console.log('구현해야함');  // COVER:
         };
 
-        MetaSet.prototype.read  = function(p_json, p_opt) {
+        
+        // MetaSet.prototype.read  = function(p_obj, p_opt) {
+        //     var metaSet = null;
+        //     var opt = typeof p_option === 'undefined' ? 3 : p_option;
+            
+        //     if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
+        //     if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+
+            
+        //     metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
+
+        //     if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
+        //     if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
+        // };
+
+        MetaSet.prototype.read  = function(p_obj, p_opt) {
             var metaSet = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             
-            if (typeof p_json !== 'object') throw new Error('Only [p_json] type "object" can be added');
+            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
 
-            metaSet = p_json['metaSet'] || p_json['dataSet'] || p_json;
-
-            if (opt % 2 === 1) this.readSchema(p_json, opt === 3 ? true : false); // opt: 1, 3
-            if (Math.floor(opt / 2) >= 1) this.readData(p_json); // opt: 2, 3
+            if (p_obj instanceof MetaEntity) {
+                if (p_obj.setName && p_obj.setName.length > 0) this.setName = p_obj.setName;
+                for (var i = 0; i < this.tables.count; i++) {
+                    this.tables[i]._readEntity(p_obj, p_opt);
+                }
+                for (var i = 0; i < this.views.count; i++) {
+                    this.views[i]._readEntity(p_obj, p_opt);
+                }
+            } else if (typeof p_obj === 'object') {
+                // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
+                if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
+                if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
+            }
+            
         };
 
         
 
-        MetaSet.prototype.readSchema  = function(p_json) {
+        MetaSet.prototype.readSchema  = function(p_obj, p_createRow) {
             var metaSet = null;
-            
-            metaSet = p_json['metaSet'] || p_json['dataSet'] || p_json;
+            var obj;
 
-            if (metaSet['tables']) createEntity(metaSet['tables'], this.tables);
-            if (metaSet['views']) createEntity(metaSet['views'], this.views);
+            metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
+
+            if (MetaRegistry.isGuidObject(metaSet)) {
+                if (MetaRegistry.hasReferObject(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
+                obj = MetaSet._transformObject(metaSet);
+            } else obj = metaSet;
+
+            if (obj['tables']) createEntity(obj['tables'], this.tables);
+            if (obj['views']) createEntity(obj['views'], this.views);
             return;
 
+            // inner funciton
             function createEntity(p_entity, p_collec) {
                 for (var key in p_entity) {
                     if (Object.hasOwnProperty.call(p_entity, key)) {
                         if (p_collec.exist(key)) throw new Error('"'+ key +'"가 존재하여, entity를 추가 할 수 없습니다.');
                         p_collec.add(key);
-                        p_collec[key].readSchema(p_entity[key], true);
+                        p_collec[key].readSchema(p_entity[key], p_createRow);
                     }
                 }
             }
@@ -267,18 +341,27 @@
 
         /**
          * row 들을 불러 온다
-         * @param {object} p_json object
+         * @param {object} p_obj object
          */
-        MetaSet.prototype.readData  = function(p_json) {
+        MetaSet.prototype.readData  = function(p_obj) {
             var metaSet = null;
+            var obj;
             var rows;
 
-            if (typeof metaSet !== 'object') throw new Error('Only [p_json] type "object" can be added');
+            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
             
-            metaSet = p_json['metaSet'] || p_json['dataSet'] || p_json;
+            metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
+
+
+            if (MetaRegistry.isGuidObject(metaSet)) {
+                if (MetaRegistry.hasReferObject(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
+                obj = MetaSet._transformObject(metaSet);
+            } else obj = metaSet;
+
+            // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             
-            if (metaSet['tables']) createRow(metaSet['tables'], this.tables);
-            if (metaSet['views']) createRow(metaSet['views'], this.views);
+            if (obj['tables']) createRow(obj['tables'], this.tables);
+            if (obj['views']) createRow(obj['views'], this.views);
 
             function createRow(p_entity, p_collec) {
                 for (var key in p_entity) {
@@ -292,9 +375,10 @@
         MetaSet.prototype.write  = function() {
             console.log('구현해야함');  // COVER:
         };
-
+        
         MetaSet.prototype.writeSchema  = function() {
             console.log('구현해야함');  // COVER:
+            // TODO: 참조 존재시 오류 또는 "경고"
         };
 
         MetaSet.prototype.writeData  = function() {

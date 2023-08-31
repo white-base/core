@@ -384,6 +384,26 @@
         };
 
         /**
+         * 프로퍼티 속성으로 로드한다.
+         * @param {object} p_property 
+         */
+        MetaColumn.prototype._load = function(p_property) {
+            if (typeof p_property === 'object' ) {
+                for(var prop in p_property) {
+                    if (p_property.hasOwnProperty(prop) &&
+                    [   '_entity', 'default', 'caption', 
+                        'isNotNull', 'isNullPass', 'constraints', 
+                        'value', 'getter', 'setter', 'alias', 'onChanged' 
+                    ].indexOf(prop) > -1) {
+                        this[prop] = p_property[prop];
+                    }
+                }
+            } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
+                this['value'] = p_property; // COVER:
+            }
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
@@ -409,26 +429,6 @@
             // this._entity = mObj._entity;
             this._entity = MetaRegistry.find(mObj._entity['_guid']);
             this.caption = mObj.caption;
-        };
-
-        /**
-         * 프로퍼티 속성으로 로드한다.
-         * @param {object} p_property 
-         */
-        MetaColumn.prototype._load = function(p_property) {
-            if (typeof p_property === 'object' ) {
-                for(var prop in p_property) {
-                    if (p_property.hasOwnProperty(prop) &&
-                    [   '_entity', 'default', 'caption', 
-                        'isNotNull', 'isNullPass', 'constraints', 
-                        'value', 'getter', 'setter', 'alias', 'onChanged' 
-                    ].indexOf(prop) > -1) {
-                        this[prop] = p_property[prop];
-                    }
-                }
-            } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
-                this['value'] = p_property; // COVER:
-            }
         };
 
         /**

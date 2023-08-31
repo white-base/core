@@ -128,7 +128,7 @@
         MetaEntity._PARAMS = ['name'];         // creator parameter
 
         // 3가지 타입 입력
-        MetaEntity.prototype.__transformObject  = function(mObj) {
+        MetaEntity._transformObject  = function(mObj) {
             var obj  = {
                 columns: null,
                 rows: null
@@ -155,13 +155,18 @@
                 return obj;
             }
             function transformRow(mObj) {
-                var obj = [];
+                var arr = [];
                 for (var i = 0; i < mObj['_elem'].length; i++) {
-                    var row = mObj['_elem'][i];
-                    var key = mObj['_key'][i];
-                    obj[key] = row;
+                    var rows = mObj['_elem'][i];
+                    var obj = {};
+                    for (var ii = 0; ii < rows['_elem'].length; ii++) {
+                        var row = rows['_elem'][ii];
+                        var key = rows['_key'][ii];
+                        obj[key] = row;
+                    }
+                    arr.push(obj);
                 }
-                return obj;
+                return arr;
             }
         };
 
@@ -1046,7 +1051,8 @@
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasReferObject(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = this.__transformObject(p_obj);
+                else obj = p_obj;
+                obj = MetaEntity._transformObject(obj);
             }
 
             // table <-> view 서로 호환됨
@@ -1059,6 +1065,9 @@
                     if (Object.hasOwnProperty.call(columns, key)) {
                         if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                         var prop = columns[key];
+                        if (prop['_entity'] && MetaRegistry.hasMetaObject(prop['_entity'])) {
+                            prop['_entity'] = MetaRegistry.find(prop['_entity']['_guid']);
+                        }
                         var column = new Column(key, this, prop);
                         if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
                         this.columns.add(column);
@@ -1117,14 +1126,14 @@
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasReferObject(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = this.__transformObject(p_obj);
+                obj = MetaEntity._transformObject(p_obj);
             }
 
             // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasReferObject(p_obj)) {
             //     p_obj = MetaRegistry.transformRefer(p_obj);
             // }
 
-            rows = p_obj['rows'] || obj;
+            rows = obj['rows'] || obj;
             if (Array.isArray(rows) && this.columns.count > 0) {
                 for (var i = 0; i < rows.length; i++) {
                     var row = this.newRow(this);

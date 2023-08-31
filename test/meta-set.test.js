@@ -134,7 +134,7 @@ describe("[target: meta-set.js]", () => {
         //     });
         // });
         describe("this.read(json, opt) <가져오기>", () => {
-            it("- JSON 가져오기 ", () => {
+            it("- read(obj) object 가져오기 ", () => {
                 var set1 = new MetaSet('S1');
                 var json1 = { 
                     tables: {
@@ -160,6 +160,51 @@ describe("[target: meta-set.js]", () => {
                     },
                 };
                 set1.read(json1);
+
+                // table
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
+                // view
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.views['V1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+            });
+            it("- read(rObj) object 가져오기 ", () => {
+                var set0 = new MetaSet('S0');
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set0.read(json1);
+                let rObj = set0.getObject();
+                set1.read(rObj);
 
                 // table
                 expect(set1.tables['T1']).toBeDefined();

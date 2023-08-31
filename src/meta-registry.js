@@ -212,8 +212,16 @@
          * @returns 
          */
         MetaRegistry.createNsObject = function(fun) {
-            var fullName = this.findClass(fun);
+            var fullName;
+            var ns, key;
 
+            if (!this.findClass(fun)) {
+                ns = fun._NS;
+                key = fun.name;
+                this.registerClass(ns, key, fun);
+            }
+
+            fullName = this.findClass(fun);
             if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
             else throw new Error('네임스페이스에 클래스가 존재하지 않습니다.' + fun.name); 
         };
