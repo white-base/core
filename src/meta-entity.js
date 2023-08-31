@@ -152,6 +152,7 @@
                     var key = mObj['_key'][i] || column.name;
                     obj[key] = column;
                 }
+                obj['_key'] = mObj['_key'];
                 return obj;
             }
             function transformRow(mObj) {
@@ -1042,7 +1043,8 @@
          * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
         MetaEntity.prototype.readSchema  = function(p_obj, p_createRow) {
-            var obj = p_obj;;
+            var _this = this;
+            var obj = p_obj;
             var columns;
             var rows;
             var Column = this.columns.columnType;
@@ -1062,17 +1064,40 @@
             columns = obj['columns'];
             if (columns) {
                 for (var key in columns) {
-                    if (Object.hasOwnProperty.call(columns, key)) {
-                        if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                    // if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
+                    //     if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                    //     var prop = columns[key];
+                    //     if (prop['_entity'] && MetaRegistry.hasMetaObject(prop['_entity'])) {
+                    //         prop['_entity'] = MetaRegistry.find(prop['_entity']['_guid']);
+                    //     }
+                    //     var column = new Column(key, this, prop);
+                    //     if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                    //     this.columns.add(column);
+                    // }
+                }
+                // 키 추출방식 2가지
+                if (columns['_key'] && Array.isArray(columns['_key'])) {
+                    for (var i = 0; i < columns['_key'].length; i++) {
+                        addColumn(columns['_key'][i], columns);
+                    }
+                } else {
+                    for (var key in columns) {
+                        addColumn(key, columns);
+                    }
+                }
+                function addColumn(key, columns) {
+                    if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
+                        if (_this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                         var prop = columns[key];
                         if (prop['_entity'] && MetaRegistry.hasMetaObject(prop['_entity'])) {
                             prop['_entity'] = MetaRegistry.find(prop['_entity']['_guid']);
                         }
-                        var column = new Column(key, this, prop);
-                        if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
-                        this.columns.add(column);
+                        var column = new Column(key, _this, prop);
+                        if (_this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                        _this.columns.add(column);
                     }
                 }
+
                 // for(var i = 0; i < columns._elem.length; i++) {
                 //     var elem = columns._elem[i];
                 //     var key = columns._key[i];  // 없을경우 $key 도 경우에 삽입 TODO:
@@ -1169,26 +1194,28 @@
         //     return obj;
         // };
         MetaEntity.prototype.writeSchema  = function() {
-            var obj = { columns: {} };
+            var obj = { columns: {}, rows: [] };
 
-            if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
-            if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
+            // if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
+            // if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
 
             for(var i = 0; i < this.columns.count; i++) {
                 var column = this.columns[i];
                 var key = this.columns.keyOf(i);
                 var cObj = {};
-                // TODO: 기본값과 같은경우, 없는경우 생략
-                cObj.cloumnName = column.columnName;
-                cObj.alias = column.alias;
-                cObj.caption = column.caption;
-                cObj.isNotNull = column.isNotNull;
-                cObj.isNullPass = column.isNullPass;
-                cObj.constraints = column.constraints;
-                cObj.value = column.value;
-                cObj.getter = column.getter;
-                cObj.setter = column.setter;
+                var rObj = column.getObject();
 
+                // TODO: 기본값과 같은경우, 없는경우 생략 getObject 를 기준으로 가져와야 맞을듯
+                if (rObj.cloumnName) cObj.cloumnName = column.columnName;
+                if (rObj.default) cObj.default = rObj.default;
+                if (rObj.caption) cObj.caption = rObj.caption;
+                if (rObj.isNotNull) cObj.isNotNull = rObj.isNotNull;
+                if (rObj.constraints) cObj.constraints = rObj.constraints;
+                if (rObj.getter) cObj.getter = rObj.getter;
+                if (rObj.setter) cObj.setter = rObj.setter;
+                if (rObj.alias) cObj.alias = rObj.alias;
+                if (rObj.value) cObj.alias = rObj.value;
+                
                 obj.columns[key] = cObj;
             }
             return obj;
@@ -1198,14 +1225,14 @@
             var obj = { rows: [] };
             
             for(var i = 0; i < this.rows.count; i++) {
-                var row = this.columns[i];
+                var row = this.rows[i];
+                var rObj = {};
                 for(var ii = 0; ii < row.list.length; ii++) {
-                    var rValue = row.list[i];
-                    var rKey = row.key[i];
-                    var rObj = {};
+                    var rValue = row.list[ii];
+                    var rKey = row['_keys'][ii];
                     rObj[rKey] = rValue;
                 }
-                obj.rows.push(row);
+                obj.rows.push(rObj);
             }
             return obj;
         };

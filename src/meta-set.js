@@ -373,16 +373,59 @@
         };
 
         MetaSet.prototype.write  = function() {
-            console.log('구현해야함');  // COVER:
+            var obj = { tables: {}, views: {} };
+
+            obj.setName = this.setName;
+            for(var i = 0; i < this.tables.count; i++) {
+                var table = this.tables[i];
+                var key = this.tables._keys[i];
+                var tObj = table.writeSchema();
+                tObj.rows = table.writeData().rows;
+                obj.tables[key] = tObj;
+            }
+            for(var i = 0; i < this.views.count; i++) {
+                var view = this.views[i];
+                var key = this.views._keys[i];
+                var vObj = view.writeSchema();
+                vObj.rows = view.writeData().rows;
+                obj.views[key] = vObj;
+            }
+            return obj;
         };
         
+        // TODO: 참조 존재시 오류 또는 "경고"
         MetaSet.prototype.writeSchema  = function() {
-            console.log('구현해야함');  // COVER:
-            // TODO: 참조 존재시 오류 또는 "경고"
+            var obj = { tables: {}, views: {} };
+
+            obj.setName = this.setName;
+            for(var i = 0; i < this.tables.count; i++) {
+                var table = this.tables[i];
+                var key = this.tables._keys[i];
+                obj.tables[key] = table.writeSchema();
+            }
+            for(var i = 0; i < this.views.count; i++) {
+                var view = this.views[i];
+                var key = this.views._keys[i];
+                obj.views[key] = view.writeSchema();
+            }
+            return obj;
         };
 
         MetaSet.prototype.writeData  = function() {
-            console.log('구현해야함');  // COVER:
+            var obj = { tables: {}, views: {} };
+
+            obj.setName = this.setName;
+            for(var i = 0; i < this.tables.count; i++) {
+                var table = this.tables[i];
+                var key = this.tables._keys[i];
+                obj.tables[key] = table.writeData();
+            }
+            for(var i = 0; i < this.views.count; i++) {
+                var view = this.views[i];
+                var key = this.views._keys[i];
+                obj.views[key] = view.writeData();
+            }
+            return obj;
         };
 
 

@@ -68,7 +68,7 @@
             var columnName;
             var _entity;
             var defaultValue  = null;
-            var caption       = '';
+            var caption       = null;
             var isNotNull     = false;
             var isNullPass    = false;
             var constraints   = [];
@@ -368,6 +368,11 @@
             
             this.columnName  = p_name || '';            
             if (p_property) this._load(p_property);
+
+            // inner variable access
+            this.__GET$alias = function(call) {
+                if (call instanceof MetaColumn) return alias;
+            }
         }
         Util.inherits(MetaColumn, _super);
 
@@ -411,9 +416,18 @@
         MetaColumn.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
-            obj._entity = MetaRegistry.createReferObject(this._entity);
-            obj.caption = this.caption;
-            // TODO: 나머지 속성도 처리해야 함
+            if (this.metaName !== this.columnName) obj.columnName = this.columnName;
+            if (this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
+            if (this.default !== null) obj.default = this.default;
+            if (this.caption !== null) obj.caption = this.caption;            
+            if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
+            if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;
+            if (this.constraints.length > 0) obj.constraints = this.constraints;    // REVIEW: 배열 검사 필요
+            if (this.getter !== null) obj.getter = this.getter;
+            if (this.setter !== null) obj.setter = this.setter;
+            if (this.__GET$alias(this) !== null) obj.alias = this.__GET$alias(this);
+            if (this.value !== null) obj.value = this.value;
+            
             return obj;                        
         };
 
@@ -426,9 +440,17 @@
         MetaColumn.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            // this._entity = mObj._entity;
-            this._entity = MetaRegistry.find(mObj._entity['_guid']);
-            this.caption = mObj.caption;
+            if (mObj.columnName) this.columnName = mObj.columnName;
+            if (mObj._entity['_guid']) this._entity = MetaRegistry.find(mObj._entity['_guid']);
+            if (mObj.default) this.default = mObj.default;
+            if (mObj.caption) this.caption = mObj.caption;
+            if (mObj.isNotNull) this.isNotNull = mObj.isNotNull;
+            if (mObj.isNullPass) this.isNullPass = mObj.isNullPass;
+            if (mObj.constraints) this.constraints = mObj.constraints;
+            if (mObj.getter) this.getter = mObj.getter;
+            if (mObj.setter) this.setter = mObj.setter;
+            if (mObj.alias) this.alias = mObj.alias;
+            if (mObj.value) this.value = mObj.value;
         };
 
         /**
