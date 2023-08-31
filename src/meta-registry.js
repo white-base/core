@@ -16,21 +16,17 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        // MetaObject                  = require('./meta-object').MetaObject;
         NamespaceManager            = require('./namespace-manager').NamespaceManager;
     } else {
-        // MetaObject                  = _global._L.MetaObject;
         NamespaceManager            = _global._L.NamespaceManager;
     }
 
     //==============================================================Á
     // 3. module dependency check
-    // if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
     if (typeof NamespaceManager === 'undefined') throw new Error('[NamespaceManager] module load fail...');
 
     //==============================================================
-    // 4. module implementation   
-    
+    // 4. module implementation       
     var MetaRegistry = (function () {
         /**
          * 메타 등록소
@@ -38,13 +34,12 @@
        function MetaRegistry() { 
         }
 
-        MetaRegistry._ns = 'Meta';    // namespace
+        MetaRegistry._NS = 'Meta';    // namespace
 
         // var define
         var list = [];
         var namespace = new NamespaceManager();
     
-        
         /**
          * 메타 이름
          * @member {string} _L.Meta.MetaRegistry#metaName
@@ -91,7 +86,12 @@
             return false;
         }
 
-        // private method
+        /**
+         * 객체배열 리턴
+         * @param {*} mObj 
+         * @param {*} arr 
+         * @returns 
+         */
         MetaRegistry.__extractListObject = function(mObj, arr) {
             arr = arr || [];
             if (this.isGuidObject(mObj)) arr.push(mObj);
@@ -107,12 +107,19 @@
         };
 
 
-
+        /**
+         * 초기화
+         */
         MetaRegistry.init = function() {
             list.length = 0;
             this.ns.init();
         };
 
+        /**
+         * 메타객체 여부 검사
+         * @param {*} meta 
+         * @returns 
+         */
         MetaRegistry.hasMetaObject = function(meta) {
             for(let i = 0; i < list.length; i++) {
                 if (list[i]._guid === meta._guid) return true;
@@ -120,6 +127,11 @@
             return false;
         };
         
+        /**
+         * 참조 객체 여부 검사
+         * @param {*} obj 
+         * @returns 
+         */
         MetaRegistry.hasReferObject = function(obj) {
             if (typeof obj !== 'object') throw new Error('object 타입이 아닙니다.');
             if (!this.isGuidObject(obj)) throw new Error('guid 타입이 아닙니다.');
@@ -149,6 +161,10 @@
             }
         };        
 
+        /**
+         * 메타객체 등록
+         * @param {*} meta 
+         */
         MetaRegistry.register = function(meta) {
             var _ns;
             var key;
@@ -166,6 +182,11 @@
             }
         };
 
+        /**
+         * 메타객체 해제
+         * @param {*} meta 
+         * @returns 
+         */
         MetaRegistry.release = function(meta) {
             if (!(meta && meta._guid && meta._guid.length > 0)) return;
             for(let i = 0; i < list.length; i++) {
@@ -176,17 +197,32 @@
             }
         };
         
+        /**
+         * 참조 객체 생성 : $ref
+         * @param {*} obj 
+         * @returns 
+         */
         MetaRegistry.createReferObject = function(obj) {
             if (obj && obj._guid && obj._guid.length > 0 ) return { $ref: obj._guid };
         };
 
+        /**
+         * 네임스페이스 객체 생성 : $ns
+         * @param {*} fun 
+         * @returns 
+         */
         MetaRegistry.createNsObject = function(fun) {
-            // var fullName = this.ns.find(fun);
             var fullName = this.findClass(fun);
+
             if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
             else throw new Error('네임스페이스에 클래스가 존재하지 않습니다.' + fun.name); 
         };
 
+        /**
+         * 메타 객체 생성
+         * @param {*} mObj 
+         * @returns 
+         */
         MetaRegistry.createObject = function(mObj) {
             /**
              * - ns 에서 대상 조회
@@ -196,7 +232,8 @@
             var args = [null];
             var type = mObj._type;
             var _ns = mObj._ns || '';
-            var fullName = [_ns, type].join('.');
+            var fullName =  _ns !== '' ? [_ns, type].join('.') : type;
+
             // var coClass = this.ns.get(fullName);
             var coClass = this.getClass(fullName);
             if (typeof coClass !== 'function') throw new Error('생성클래스가 존재하지 않습니다.  ' + fullName); 
@@ -212,6 +249,11 @@
             return new (Function.prototype.bind.apply(coClass, args));
         };
 
+        /**
+         * 메타 객체 조회
+         * @param {*} guid 
+         * @returns 
+         */
         MetaRegistry.find = function(guid) {
             if (typeof guid !== 'string') return;
             for(let i = 0; i < list.length; i++) {
@@ -219,6 +261,11 @@
             }
         };
         
+        /**
+         * 메타 객체 유효성 검사
+         * @param {*} rObj 
+         * @returns 
+         */
         MetaRegistry.validMetaObject = function(rObj) {
             var _this = this;
             var arrObj = this.__extractListObject(rObj);
@@ -269,19 +316,18 @@
             }
         };
 
+        /**
+         * 메타 객체 참조 변환 : $ref, $ns
+         * @param {*} rObj 
+         * @returns 
+         */
         MetaRegistry.transformRefer = function(rObj) {
             var _this = this;
             var arrObj = this.__extractListObject(rObj);
-            // REVIEW: 객체를 복사해야 하는게 맞지 않을까?
-            // var clone = JSON.parse(JSON.stringify(rObj));
-            // linkReference(clone, arrObj);
-            // return clone;
             var clone = deepCopy(rObj);
-            // var clone = rObj;
             linkReference(clone, arrObj);
-            return clone;
-            
 
+            return clone;
             // inner function
             function linkReference(obj, arr) {
                 // inner function
@@ -318,6 +364,11 @@
     
         };
 
+        /**
+         * guid 객체 여부 검사
+         * @param {*} p_obj 
+         * @returns 
+         */
         MetaRegistry.isGuidObject = function(p_obj) {
             if (p_obj === null || typeof p_obj !== 'object') return false;
             if (p_obj['_guid'] && typeof p_obj['_guid'] === 'string'
@@ -325,6 +376,13 @@
             return false;
         };
 
+        /**
+         * 클래스(함수) 등록
+         * @param {*} p_ns 
+         * @param {*} key 
+         * @param {*} fun 
+         * @returns 
+         */
         MetaRegistry.registerClass = function(p_ns, key, fun) {
             var fullName = p_ns.length > 0 ? p_ns+'.'+key : key;
             // 내장함수 제외
@@ -332,12 +390,24 @@
             // 중복 검사 
             if (!this.ns.get(fullName)) this.ns.set(p_ns, key, fun);
         };
+        
+        /**
+         * 클래스(함수) 해제
+         * @param {*} fullName 
+         * @returns 
+         */
         MetaRegistry.releaseClass = function(fullName) {
             // 내장함수 & 전역 함수
             if (typeof _global[fullName] === 'function') return true;
 
             return this.ns.del(fullName);
         };
+        
+        /**
+         * 클래스(함수) 조회
+         * @param {*} fun 
+         * @returns 
+         */
         MetaRegistry.findClass = function(fun) {
             var fullName = fun.name;
             // 내장함수 & 전역 함수
@@ -345,6 +415,12 @@
 
             return this.ns.find(fun);
         };
+        
+        /**
+         * 클래스(함수) 얻기
+         * @param {*} fullName 
+         * @returns 
+         */
         MetaRegistry.getClass = function(fullName) {
             // 내장함수 & 전역 함수
             if (typeof _global[fullName] === 'function') return _global[fullName];

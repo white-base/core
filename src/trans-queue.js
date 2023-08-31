@@ -1,8 +1,6 @@
 /**
  * namespace _L.Collection.TransactionQueue
  */
-// var $local = {};
-
 (function(_global) {
     'use strict';
 
@@ -35,19 +33,17 @@
     var TransactionQueue  = (function () {
         /**
          * 로우
-         * @constructs _L.Meta.Entity.TransactionQueue
-         * @extends _L.Collection.MetaElement     // REVIEW: 상속위치를 바꿔야함
+         * @constructs _L.Collection.TransactionQueue
          * @param {MetaEntity} p_entity 메타엔티티
          */
         function TransactionQueue(p_collection) {
-            // _super.call(this);
-
+            
             var queue = [];
             var collection;
 
             /**
              * 로우의 소유 엔티티
-             * @member {MetaEntity} _L.Meta.Entity.TransactionQueue#queue
+             * @member {MetaEntity} _L.Collection.TransactionQueue#queue
              */
             Object.defineProperty(this, 'queue', 
             {
@@ -58,7 +54,7 @@
             
             /**
              * 컬랙션 갯수 
-             * @member {Number} _L.Collection.BaseCollection#count 
+             * @member {Number} _L.Collection.TransactionQueue#count 
              */
             Object.defineProperty(this, 'collection', {
                 get: function() {
@@ -80,16 +76,25 @@
             this.collection = p_collection;
         }
 
-        TransactionQueue._ns = 'Collection';    // namespace
+        TransactionQueue._NS = 'Collection';    // namespace
 
+        /**
+         * 초기화
+         */
         TransactionQueue.prototype.init  = function() {
             this.queue.length = 0;
         };
 
+        /**
+         * 커밋
+         */
         TransactionQueue.prototype.commit  = function() {
             this.init();
         };
 
+        /**
+         * 롤백
+         */
         TransactionQueue.prototype.rollback  = function() {
             var pos, obj;
             
@@ -112,6 +117,12 @@
             this.init();
         };
 
+        /**
+         * 추가
+         * @param {*} p_pos 
+         * @param {*} p_target 
+         * @param {*} p_etc 
+         */
         TransactionQueue.prototype.insert  = function(p_pos, p_target, p_etc) {
             this.queue.push({
                 cmd: 'I',
@@ -123,6 +134,12 @@
         };
 
         // TODO: p_target 을 파라메터로 받아야 적합할듯
+        /**
+         * 삭제
+         * @param {*} p_pos 
+         * @param {*} p_clone 
+         * @param {*} p_etc 
+         */
         TransactionQueue.prototype.delete  = function(p_pos, p_clone, p_etc) {
             this.queue.push({
                 cmd: 'D',
@@ -133,6 +150,13 @@
             });
         };
 
+        /**
+         * 수정
+         * @param {*} p_pos 
+         * @param {*} p_target 
+         * @param {*} p_clone 
+         * @param {*} p_etc 
+         */
         TransactionQueue.prototype.update  = function(p_pos, p_target, p_clone, p_etc) {
             this.queue.push({
                 cmd: 'U',
@@ -143,6 +167,10 @@
             });
         };
         
+        /**
+         * 변경 내역 조회
+         * @returns 
+         */
         TransactionQueue.prototype.select  = function() {
             return this.queue;
         };
@@ -151,16 +179,13 @@
     
     }());
     
-    
-
     //==============================================================
     // 5. module export
     if (isNode) {     
         exports.TransactionQueue = TransactionQueue;
     } else {
         _global._L.TransactionQueue = TransactionQueue;
-        // namespace
-        _global._L.Collection.TransactionQueue = TransactionQueue;
+        _global._L.Collection.TransactionQueue = TransactionQueue;  // namespace
     }
 
 }(typeof window !== 'undefined' ? window : global));

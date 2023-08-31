@@ -26,7 +26,6 @@
 
     //==============================================================
     // 4. module implementation   
-    
     var CustomError = (function (_super) {
         /**
          * 구독자 클래스 (이벤트에 활용)
@@ -70,7 +69,7 @@
         }
         Util.inherits(CustomError, _super);
 
-        CustomError._ns = 'Util';    // namespace
+        CustomError._NS = 'Common';    // namespace
         
         /**
          * 내부처리

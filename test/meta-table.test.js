@@ -1590,254 +1590,254 @@ describe("[target: meta-table.js]", () => {
     });
 });
 ////================= SKIP 목록 
-describe.skip("< MetaTable.merge(entity, opt) >", () => {
-    it("- merge(entity, opt = 1) : 엔티티 병합, 기존 item 유지 + 원본 row > 타겟 row  ", () => {    // REVIEW:
-        var table1 = new MetaTable('T1');
-        table1.columns.add('i1');
-        table1.columns.add('i2');
-        table1.columns['i2'].caption = 'C1';
-        var row = table1.newRow();
-        row['i1'] = 'R1';
-        row['i2'] = 'R2';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R10';
-        row['i2'] = 'R20';
-        table1.rows.add(row);
-        var table2 = new MetaTable('T2');
-        table2.columns.add('i2');
-        table2.columns.add('i3');
-        table2.columns['i2'].caption = 'C2';
-        var row = table1.newRow();
-        row['i2'] = 'R22';
-        row['i3'] = 'R33';
-        table2.rows.add(row);
-        table1.merge(table2, 1);
+// describe.skip("< MetaTable.merge(entity, opt) >", () => {
+//     it("- merge(entity, opt = 1) : 엔티티 병합, 기존 item 유지 + 원본 row > 타겟 row  ", () => {    // REVIEW:
+//         var table1 = new MetaTable('T1');
+//         table1.columns.add('i1');
+//         table1.columns.add('i2');
+//         table1.columns['i2'].caption = 'C1';
+//         var row = table1.newRow();
+//         row['i1'] = 'R1';
+//         row['i2'] = 'R2';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R10';
+//         row['i2'] = 'R20';
+//         table1.rows.add(row);
+//         var table2 = new MetaTable('T2');
+//         table2.columns.add('i2');
+//         table2.columns.add('i3');
+//         table2.columns['i2'].caption = 'C2';
+//         var row = table1.newRow();
+//         row['i2'] = 'R22';
+//         row['i3'] = 'R33';
+//         table2.rows.add(row);
+//         table1.merge(table2, 1);
 
-        expect(table1.columns.count).toBe(3);
-        expect(table1.rows.count).toBe(2);
-        expect(table1.columns['i2'].caption).toBe('C1');  // 기존 유지
-        expect(table1.rows[0][0]).toBe('R1');
-        expect(table1.rows[0][1]).toBe('R2');
-        expect(table1.rows[0][2]).toBe('R33');
-        expect(table1.rows[1][0]).toBe('R10');
-        expect(table1.rows[1][1]).toBe('R20');
-        expect(table1.rows[1][2]).toBe('');
-        expect(table1.rows[0]['i1']).toBe('R1');
-        expect(table1.rows[0]['i2']).toBe('R2');
-        expect(table1.rows[0]['i3']).toBe('R33');
-        expect(table1.rows[1]['i1']).toBe('R10');
-        expect(table1.rows[1]['i2']).toBe('R20');
-        expect(table1.rows[1]['i3']).toBe('');    
-    });
-    it("- merge(entity, opt = 2) : 엔티티 병합, 기존 item 덮어쓰기, 원본 row < 타겟 row ", () => {  // REVIEW:
-        var table1 = new MetaTable('T1');
-        table1.columns.add('i1');
-        table1.columns.add('i2');
-        table1.columns['i2'].caption = 'C1';
-        var row = table1.newRow();
-        row['i1'] = 'R1';
-        row['i2'] = 'R2';
-        table1.rows.add(row);
-        var table2 = new MetaTable('T2');
-        table2.columns.add('i2');
-        table2.columns.add('i3');
-        table2.columns['i2'].caption = 'C2';
-        var row = table1.newRow();
-        row['i2'] = 'R22';
-        row['i3'] = 'R33';
-        table2.rows.add(row);
-        var row = table1.newRow();
-        row['i2'] = 'R20';
-        row['i3'] = 'R30';
-        table2.rows.add(row);
-        table1.merge(table2, 2);
+//         expect(table1.columns.count).toBe(3);
+//         expect(table1.rows.count).toBe(2);
+//         expect(table1.columns['i2'].caption).toBe('C1');  // 기존 유지
+//         expect(table1.rows[0][0]).toBe('R1');
+//         expect(table1.rows[0][1]).toBe('R2');
+//         expect(table1.rows[0][2]).toBe('R33');
+//         expect(table1.rows[1][0]).toBe('R10');
+//         expect(table1.rows[1][1]).toBe('R20');
+//         expect(table1.rows[1][2]).toBe('');
+//         expect(table1.rows[0]['i1']).toBe('R1');
+//         expect(table1.rows[0]['i2']).toBe('R2');
+//         expect(table1.rows[0]['i3']).toBe('R33');
+//         expect(table1.rows[1]['i1']).toBe('R10');
+//         expect(table1.rows[1]['i2']).toBe('R20');
+//         expect(table1.rows[1]['i3']).toBe('');    
+//     });
+//     it("- merge(entity, opt = 2) : 엔티티 병합, 기존 item 덮어쓰기, 원본 row < 타겟 row ", () => {  // REVIEW:
+//         var table1 = new MetaTable('T1');
+//         table1.columns.add('i1');
+//         table1.columns.add('i2');
+//         table1.columns['i2'].caption = 'C1';
+//         var row = table1.newRow();
+//         row['i1'] = 'R1';
+//         row['i2'] = 'R2';
+//         table1.rows.add(row);
+//         var table2 = new MetaTable('T2');
+//         table2.columns.add('i2');
+//         table2.columns.add('i3');
+//         table2.columns['i2'].caption = 'C2';
+//         var row = table1.newRow();
+//         row['i2'] = 'R22';
+//         row['i3'] = 'R33';
+//         table2.rows.add(row);
+//         var row = table1.newRow();
+//         row['i2'] = 'R20';
+//         row['i3'] = 'R30';
+//         table2.rows.add(row);
+//         table1.merge(table2, 2);
 
-        expect(table1.columns.count).toBe(3);
-        expect(table1.rows.count).toBe(2);
-        expect(table1.columns['i2'].caption).toBe('C2');  // 덮어쓰기
-        expect(table1.rows[0][0]).toBe('R1');
-        expect(table1.rows[0][1]).toBe('R22');
-        expect(table1.rows[0][2]).toBe('R33');
-        expect(table1.rows[1][0]).toBe(null);   // REVIEW: 원래 '' 으로 되어 있음
-        expect(table1.rows[1][1]).toBe('R20');
-        expect(table1.rows[1][2]).toBe('R30');
-        expect(table1.rows[0]['i1']).toBe('R1');
-        expect(table1.rows[0]['i2']).toBe('R22');
-        expect(table1.rows[0]['i3']).toBe('R33');
-        expect(table1.rows[1]['i1']).toBe(null);    // REVIEW: 원래 '' 으로 되어 있음
-        expect(table1.rows[1]['i2']).toBe('R20');
-        expect(table1.rows[1]['i3']).toBe('R30');
-    });
-    it("- merge(entity, opt = 3) : 엔티티 병합, 엔티티 병합, row 안가져옴 ", () => {
-        var table1 = new MetaTable('T1');
-        table1.columns.add('i1');
-        table1.columns.add('i2');
-        table1.columns['i2'].caption = 'C1';
-        var row = table1.newRow();
-        row['i1'] = 'R1';
-        row['i2'] = 'R2';
-        table1.rows.add(row);
-        var table2 = new MetaTable('T2');
-        table2.columns.add('i2');
-        table2.columns.add('i3');
-        table2.columns['i2'].caption = 'C2';
-        var row = table1.newRow();
-        row['i2'] = 'R22';
-        row['i3'] = 'R33';
-        table2.rows.add(row);
-        var row = table1.newRow();
-        row['i2'] = 'R20';
-        row['i3'] = 'R30';
-        table2.rows.add(row);
-        table1.merge(table2, 3);
+//         expect(table1.columns.count).toBe(3);
+//         expect(table1.rows.count).toBe(2);
+//         expect(table1.columns['i2'].caption).toBe('C2');  // 덮어쓰기
+//         expect(table1.rows[0][0]).toBe('R1');
+//         expect(table1.rows[0][1]).toBe('R22');
+//         expect(table1.rows[0][2]).toBe('R33');
+//         expect(table1.rows[1][0]).toBe(null);   // REVIEW: 원래 '' 으로 되어 있음
+//         expect(table1.rows[1][1]).toBe('R20');
+//         expect(table1.rows[1][2]).toBe('R30');
+//         expect(table1.rows[0]['i1']).toBe('R1');
+//         expect(table1.rows[0]['i2']).toBe('R22');
+//         expect(table1.rows[0]['i3']).toBe('R33');
+//         expect(table1.rows[1]['i1']).toBe(null);    // REVIEW: 원래 '' 으로 되어 있음
+//         expect(table1.rows[1]['i2']).toBe('R20');
+//         expect(table1.rows[1]['i3']).toBe('R30');
+//     });
+//     it("- merge(entity, opt = 3) : 엔티티 병합, 엔티티 병합, row 안가져옴 ", () => {
+//         var table1 = new MetaTable('T1');
+//         table1.columns.add('i1');
+//         table1.columns.add('i2');
+//         table1.columns['i2'].caption = 'C1';
+//         var row = table1.newRow();
+//         row['i1'] = 'R1';
+//         row['i2'] = 'R2';
+//         table1.rows.add(row);
+//         var table2 = new MetaTable('T2');
+//         table2.columns.add('i2');
+//         table2.columns.add('i3');
+//         table2.columns['i2'].caption = 'C2';
+//         var row = table1.newRow();
+//         row['i2'] = 'R22';
+//         row['i3'] = 'R33';
+//         table2.rows.add(row);
+//         var row = table1.newRow();
+//         row['i2'] = 'R20';
+//         row['i3'] = 'R30';
+//         table2.rows.add(row);
+//         table1.merge(table2, 3);
 
-        expect(table1.columns.count).toBe(3);
-        expect(table1.rows.count).toBe(1);
-        expect(table1.columns['i2'].caption).toBe('C1');
-        expect(table1.rows[0]['i1']).toBe('R1');
-        expect(table1.rows[0]['i2']).toBe('R2');
-        expect(table1.rows[0]['i3']).toBe('');
-    });
-});
+//         expect(table1.columns.count).toBe(3);
+//         expect(table1.rows.count).toBe(1);
+//         expect(table1.columns['i2'].caption).toBe('C1');
+//         expect(table1.rows[0]['i1']).toBe('R1');
+//         expect(table1.rows[0]['i2']).toBe('R2');
+//         expect(table1.rows[0]['i3']).toBe('');
+//     });
+// });
 
-describe.skip("< select(filter, list? | start?, end?) : entity >", () => {
-    it("- select(filter) : 엔티티 조회(참조값), 필터 ", () => {
-        var table1 = new MetaTable('T1');
-        table1.columns.add('i1');
-        table1.columns.add('i2');
-        table1.columns.add('i3');
-        table1.columns['i3'].order = 200;          // 참조값 체크
-        table1.columns.addValue('i4', 'R4');       // 등록시 값 삽입
-        table1.columns.addValue('i5', 'R5');       // 등록시 값 삽입
-        var filter = {
-            __except: ['i1'],                   // 제외
-            i2: { __except: true },             // 제외
-            i3: { caption: 'C3', value: 'R3' }  // 속성 오버라이딩(필터)
-        };
-        var table2 = table1.select(filter);
+// describe.skip("< select(filter, list? | start?, end?) : entity >", () => {
+//     it("- select(filter) : 엔티티 조회(참조값), 필터 ", () => {
+//         var table1 = new MetaTable('T1');
+//         table1.columns.add('i1');
+//         table1.columns.add('i2');
+//         table1.columns.add('i3');
+//         table1.columns['i3'].order = 200;          // 참조값 체크
+//         table1.columns.addValue('i4', 'R4');       // 등록시 값 삽입
+//         table1.columns.addValue('i5', 'R5');       // 등록시 값 삽입
+//         var filter = {
+//             __except: ['i1'],                   // 제외
+//             i2: { __except: true },             // 제외
+//             i3: { caption: 'C3', value: 'R3' }  // 속성 오버라이딩(필터)
+//         };
+//         var table2 = table1.select(filter);
 
-        // table1
-        expect(table1.tableName).toBe('T1');
-        expect(table1.columns.count).toBe(5);
-        expect(table1.columns['i4'].value).toBe('R4');
-        expect(table1.columns['i5'].value).toBe('R5');
-        expect(table1.columns['i3'].order).toBe(200);
-        // table2
-        expect(table2.tableName).toBe('T1');
-        expect(table2.columns.count).toBe(3);
-        expect(table2.columns['i3'].caption).toBe('C3');
-        expect(table2.columns['i3'].value).toBe('R3');
-        expect(table2.columns['i4'].value).toBe('R4');
-        expect(table2.columns['i5'].value).toBe('R5');
-    });
-    it("- select(filter, start) : 엔티티 조회(참조값), 필터 + 레코드범위 ", () => {
-        var table1 = new MetaTable('T1');
-        var filter = {
-            __except: ['i1'],                   // 제외
-            i2: { caption: 'C3' }  // 속성 오버라이딩(필터)
-        };
-        table1.columns.add('i1');
-        table1.columns.add('i2');
-        var row = table1.newRow();
-        row['i1'] = 'R1';
-        row['i2'] = 'R2';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R10';
-        row['i2'] = 'R20';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R100';
-        row['i2'] = 'R200';
-        table1.rows.add(row);
-        var table2 = table1.select(filter, 1);
+//         // table1
+//         expect(table1.tableName).toBe('T1');
+//         expect(table1.columns.count).toBe(5);
+//         expect(table1.columns['i4'].value).toBe('R4');
+//         expect(table1.columns['i5'].value).toBe('R5');
+//         expect(table1.columns['i3'].order).toBe(200);
+//         // table2
+//         expect(table2.tableName).toBe('T1');
+//         expect(table2.columns.count).toBe(3);
+//         expect(table2.columns['i3'].caption).toBe('C3');
+//         expect(table2.columns['i3'].value).toBe('R3');
+//         expect(table2.columns['i4'].value).toBe('R4');
+//         expect(table2.columns['i5'].value).toBe('R5');
+//     });
+//     it("- select(filter, start) : 엔티티 조회(참조값), 필터 + 레코드범위 ", () => {
+//         var table1 = new MetaTable('T1');
+//         var filter = {
+//             __except: ['i1'],                   // 제외
+//             i2: { caption: 'C3' }  // 속성 오버라이딩(필터)
+//         };
+//         table1.columns.add('i1');
+//         table1.columns.add('i2');
+//         var row = table1.newRow();
+//         row['i1'] = 'R1';
+//         row['i2'] = 'R2';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R10';
+//         row['i2'] = 'R20';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R100';
+//         row['i2'] = 'R200';
+//         table1.rows.add(row);
+//         var table2 = table1.select(filter, 1);
 
-        // table1
-        expect(table1.columns.count).toBe(2);
-        expect(table1.rows.count).toBe(3);
-        expect(table1.rows[0][0]).toBe('R1');
-        expect(table1.rows[0]['i1']).toBe('R1');
-        // table2
-        expect(table2.columns.count).toBe(1);
-        expect(table2.rows.count).toBe(2);
-        expect(table2.rows[0][0]).toBe('R20');
-        expect(table2.rows[1][0]).toBe('R200');
-        expect(table2.rows[0]['i2']).toBe('R20');
-        expect(table2.rows[1]['i2']).toBe('R200');
-    });
-    it("- select(null, start, end) : 엔티티 조회(참조값), 레코드 범위 ", () => {
-        var table1 = new MetaTable('T1');
-        table1.columns.add('i1');
-        table1.columns.add('i2');
-        var row = table1.newRow();
-        row['i1'] = 'R1';
-        row['i2'] = 'R2';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R10';
-        row['i2'] = 'R20';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R100';
-        row['i2'] = 'R200';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R1000';
-        row['i2'] = 'R2000';
-        table1.rows.add(row);
-        var table2 = table1.select(null, 1, 2);
+//         // table1
+//         expect(table1.columns.count).toBe(2);
+//         expect(table1.rows.count).toBe(3);
+//         expect(table1.rows[0][0]).toBe('R1');
+//         expect(table1.rows[0]['i1']).toBe('R1');
+//         // table2
+//         expect(table2.columns.count).toBe(1);
+//         expect(table2.rows.count).toBe(2);
+//         expect(table2.rows[0][0]).toBe('R20');
+//         expect(table2.rows[1][0]).toBe('R200');
+//         expect(table2.rows[0]['i2']).toBe('R20');
+//         expect(table2.rows[1]['i2']).toBe('R200');
+//     });
+//     it("- select(null, start, end) : 엔티티 조회(참조값), 레코드 범위 ", () => {
+//         var table1 = new MetaTable('T1');
+//         table1.columns.add('i1');
+//         table1.columns.add('i2');
+//         var row = table1.newRow();
+//         row['i1'] = 'R1';
+//         row['i2'] = 'R2';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R10';
+//         row['i2'] = 'R20';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R100';
+//         row['i2'] = 'R200';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R1000';
+//         row['i2'] = 'R2000';
+//         table1.rows.add(row);
+//         var table2 = table1.select(null, 1, 2);
 
-        // table1
-        expect(table1.columns.count).toBe(2);
-        expect(table1.rows.count).toBe(4);
-        // table2
-        expect(table2.columns.count).toBe(2);
-        expect(table2.rows.count).toBe(2);
-        expect(table2.rows[0][0]).toBe('R10');
-        expect(table2.rows[0][1]).toBe('R20');
-        expect(table2.rows[1][0]).toBe('R100');
-        expect(table2.rows[1][1]).toBe('R200');
-        expect(table2.rows[0]['i1']).toBe('R10');
-        expect(table2.rows[0]['i2']).toBe('R20');
-        expect(table2.rows[1]['i1']).toBe('R100');
-        expect(table2.rows[1]['i2']).toBe('R200');
-    });
-    it("- select(null, [list]) : 엔티티 조회(참조값), 레코드 지정 ", () => {
-        var table1 = new MetaTable('T1');
-        table1.columns.add('i1');
-        table1.columns.add('i2');
-        var row = table1.newRow();
-        row['i1'] = 'R1';
-        row['i2'] = 'R2';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R10';
-        row['i2'] = 'R20';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R100';
-        row['i2'] = 'R200';
-        table1.rows.add(row);
-        var row = table1.newRow();
-        row['i1'] = 'R1000';
-        row['i2'] = 'R2000';
-        table1.rows.add(row);
-        var table2 = table1.select(null, [0, 2]);
+//         // table1
+//         expect(table1.columns.count).toBe(2);
+//         expect(table1.rows.count).toBe(4);
+//         // table2
+//         expect(table2.columns.count).toBe(2);
+//         expect(table2.rows.count).toBe(2);
+//         expect(table2.rows[0][0]).toBe('R10');
+//         expect(table2.rows[0][1]).toBe('R20');
+//         expect(table2.rows[1][0]).toBe('R100');
+//         expect(table2.rows[1][1]).toBe('R200');
+//         expect(table2.rows[0]['i1']).toBe('R10');
+//         expect(table2.rows[0]['i2']).toBe('R20');
+//         expect(table2.rows[1]['i1']).toBe('R100');
+//         expect(table2.rows[1]['i2']).toBe('R200');
+//     });
+//     it("- select(null, [list]) : 엔티티 조회(참조값), 레코드 지정 ", () => {
+//         var table1 = new MetaTable('T1');
+//         table1.columns.add('i1');
+//         table1.columns.add('i2');
+//         var row = table1.newRow();
+//         row['i1'] = 'R1';
+//         row['i2'] = 'R2';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R10';
+//         row['i2'] = 'R20';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R100';
+//         row['i2'] = 'R200';
+//         table1.rows.add(row);
+//         var row = table1.newRow();
+//         row['i1'] = 'R1000';
+//         row['i2'] = 'R2000';
+//         table1.rows.add(row);
+//         var table2 = table1.select(null, [0, 2]);
 
-        // table1
-        expect(table1.columns.count).toBe(2);
-        expect(table1.rows.count).toBe(4);
-        // table2
-        expect(table2.columns.count).toBe(2);
-        expect(table2.rows.count).toBe(2);
-        expect(table2.rows[0][0]).toBe('R1');
-        expect(table2.rows[0][1]).toBe('R2');
-        expect(table2.rows[1][0]).toBe('R100');
-        expect(table2.rows[1][1]).toBe('R200');
-        expect(table2.rows[0]['i1']).toBe('R1');
-        expect(table2.rows[0]['i2']).toBe('R2');
-        expect(table2.rows[1]['i1']).toBe('R100');
-        expect(table2.rows[1]['i2']).toBe('R200');
-    });
-});
+//         // table1
+//         expect(table1.columns.count).toBe(2);
+//         expect(table1.rows.count).toBe(4);
+//         // table2
+//         expect(table2.columns.count).toBe(2);
+//         expect(table2.rows.count).toBe(2);
+//         expect(table2.rows[0][0]).toBe('R1');
+//         expect(table2.rows[0][1]).toBe('R2');
+//         expect(table2.rows[1][0]).toBe('R100');
+//         expect(table2.rows[1][1]).toBe('R200');
+//         expect(table2.rows[0]['i1']).toBe('R1');
+//         expect(table2.rows[0]['i2']).toBe('R2');
+//         expect(table2.rows[1]['i1']).toBe('R100');
+//         expect(table2.rows[1]['i2']).toBe('R200');
+//     });
+// });

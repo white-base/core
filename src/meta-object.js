@@ -60,10 +60,6 @@
                     if (!_guid) _guid = Util.createGuid();
                     return _guid;
                 },
-                // set: function(val) {
-                //     if (typeof val !== 'string') throw new Error('Only [_guid] type "string" can be added');
-                //     _guid = val;
-                // },
                 configurable: false,
                 enumerable: true
             });    
@@ -77,15 +73,11 @@
                     var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
                     return proto.constructor;
                 },
-                // set: function(val) {
-                //     if (typeof val !== 'string') throw new Error('Only [_guid] type "string" can be added');
-                //     _guid = val;
-                // },
                 configurable: false,
                 enumerable: true
             });
             
-            if (this._type && this._type._ns) this._ns = this._type._ns;
+            if (this._type && this._type._NS) this._ns = this._type._NS;
             MetaRegistry.register(this);
 
             // inner variable access
@@ -96,7 +88,7 @@
             Util.implements(this, IObject, IMarshal);
         }
         
-        MetaObject._ns = 'Meta';          // namespace
+        MetaObject._NS = 'Meta';          // namespace
         MetaObject._PARAMS = [];         // creator parameter
 
         /**
@@ -106,10 +98,10 @@
          */
         MetaObject.prototype.getObject = function(p_vOpt) {
             var obj = {};
-            
+
             obj._guid = this._guid;
-            obj._type = this._type.name;
-            if(this._type._ns) obj._ns = this._type._ns;
+            obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
+            // if(this._type._NS) obj._ns = this._type._NS;
             return obj;                        
         };
 
@@ -122,20 +114,6 @@
             if (typeof mObj !== 'object') throw new Error('Only [mObj] type "object" can be added');
             this.__SET_guid(mObj._guid, this);
         };
-
-        /**
-         * 객체 타입 이름 얻기
-         * @returns {array<string>}
-         */
-        // MetaObject.prototype.getTypeNames  = function() {
-        //     var types = this.getTypes();
-        //     var arr = [];
-            
-        //     for (var i = 0; i < types.length; i++) {
-        //         arr.push(types[i].name);
-        //     }
-        //     return arr;
-        // };
         
         /**
          * 객체 타입 이름 얻기
@@ -155,16 +133,6 @@
             }
             return parentFunction(this);
         };
-        /**
-         * 객체 타입 이름 얻기   
-         * 검토: 중복은 피하지만, 성능의 이슈
-         * @returns {array<function>}
-         */
-        // MetaObject.prototype.getType = function() {
-        //     var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
-
-        //     return proto.constructor;
-        // };
 
         /**
          * 상위 클래스 또는 인터페이스 구현 여부 검사
@@ -208,8 +176,6 @@
             if (typeof p_func === 'function') return findFunction(p_func);
             return false;
         };
-
-
 
         return MetaObject;
         

@@ -27,7 +27,7 @@
         function IImportControl() {
         }
     
-        IImportControl._ns = 'Interface';    // namespace
+        IImportControl._NS = 'Interface';    // namespace
 
         /**
          * 입력 : 전체

@@ -48,9 +48,7 @@
     if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
-    // 4. module implementation
-    //--------------------------------------------------------------
-    // implementation   
+    // 4. module implementation   
     var MetaColumn  = (function (_super) {
         /**
          * 아이템
@@ -67,11 +65,17 @@
             var _event        = new Observer(this);
             var columnName;
             var _entity;
+            // var type          = 'string';
+            // var size          = 0;
             var defaultValue  = null;
             var caption       = '';
             var isNotNull     = false;
             var isNullPass    = false;
+            // var callback      = null;
             var constraints   = [];
+            var codeType      = null;
+            var order         = 100;
+            var increase      = 100;      // order 의 자동 추가수
             var getter        = null;
             var setter        = null;
             var alias         = null;
@@ -79,6 +83,7 @@
             // MetaEntity 등록 & order(순서) 값 계산
             if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
                 _entity    = p_entity;
+                order     = _entity.columns.count === 0 ? order : _entity.columns[_entity.columns.count - 1].order + increase;
             }
 
             /**
@@ -149,7 +154,9 @@
                 },
                 configurable: true,
                 enumerable: true
-            }); 
+            });
+
+                
 
             /**
              * 아이템 소유 엔티티
@@ -168,6 +175,39 @@
                 configurable: true,
                 enumerable: true
             });
+
+            // /**
+            //  * TODO: DbColumn 으로 이동해야할듯
+            //  * 아이템 타입 (내부속성)
+            //  * @member {String} _L.Meta.Entity.MetaColumn#type
+            //  */
+            // Object.defineProperty(this, 'type', 
+            // {
+            //     get: function() { return type; },
+            //     set: function(newValue) { 
+            //         // TODO:: 자료종류를 검사해야함
+            //         if(typeof newValue !== 'string') throw new Error('Only [type] type "string" can be added');
+            //         type = newValue;
+            //     },
+            //     configurable: true,
+            //     enumerable: true
+            // });
+
+            // /**
+            //  * TODO: DbColumn 으로 이동해야할듯
+            //  * 아이템 크기 (내부속성)
+            //  * @member {Number} _L.Meta.Entity.MetaColumn#size
+            //  */
+            // Object.defineProperty(this, 'size', 
+            // {
+            //     get: function() { return size; },
+            //     set: function(newValue) { 
+            //         if(typeof newValue !== 'number') throw new Error('Only [size] type "number can be added');
+            //         size = newValue; 
+            //     },
+            //     configurable: true,
+            //     enumerable: true
+            // });
 
             /**
              * 아이템 기본값 (내부속성)
@@ -234,6 +274,22 @@
                 enumerable: true
             });
             
+            // /**
+            //  * 아이템 콜백 함수
+            //  * REVIEW: 필요성 검토 필요
+            //  * @member {String} _L.Meta.Entity.MetaColumn#callback
+            //  */
+            // Object.defineProperty(this, 'callback', 
+            // {
+            //     get: function() { return callback; },
+            //     set: function(newValue) { // COVER:
+            //         if(newValue !== null && typeof newValue !== 'function') throw new Error('Only [callback] type "function" can be added');
+            //         callback = newValue; 
+            //     },
+            //     configurable: true,
+            //     enumerable: true
+            // });
+
             /**
              * 아이템 제약 조건 
              * @member {Array<Object>} _L.Meta.Entity.MetaColumn#constraints
@@ -261,6 +317,51 @@
                          }
                     }
                     constraints = list;
+                },
+                configurable: true,
+                enumerable: true
+            });
+
+            /**
+             * 아이템 코드 타입
+             * TODO: DbColumn 으로 이동해야할듯
+             * @member {Object} _L.Meta.Entity.MetaColumn#codeType
+             */
+            Object.defineProperty(this, 'codeType', 
+            {
+                get: function() { return codeType; },
+                set: function(newValue) { codeType = newValue; }, // COVER:
+                configurable: true,
+                enumerable: true
+            });
+
+            /**
+             * 아이템 순서
+             * TODO: DbColumn 으로 이동해야할듯
+             * @member {String} _L.Meta.Entity.MetaColumn#order
+             */
+            Object.defineProperty(this, 'order', 
+            {
+                get: function() { return order; },
+                set: function(newValue) { 
+                    if(typeof newValue !== 'number') throw new CustomError('Only [order] type "number" can be added', newValue);
+                    order = newValue; 
+                },
+                configurable: true,
+                enumerable: true
+            });
+
+            /**
+             * TODO: DbColumn 으로 이동해야할듯
+             * 아이템 순서 증가 수
+             * @member {Number} _L.Meta.Entity.MetaColumn#increase
+             */
+            Object.defineProperty(this, 'increase', 
+            {
+                get: function() { return increase; },
+                set: function(newValue) { 
+                    if(typeof newValue !== 'number') throw new CustomError('Only [increase] type "number" can be added', newValue);
+                    increase = newValue; 
                 },
                 configurable: true,
                 enumerable: true
@@ -366,8 +467,26 @@
                 configurable: true,
             });
             
+
+            //---------------------------------------------------
+            // 아이템 옵션속성 추가
+            // if (typeof p_property === 'object' ) {
+            //     for(var prop in p_property) {
+            //         if (p_property.hasOwnProperty(prop) &&
+            //         [   'entity', 'type', 'size', 'default', 'caption', 
+            //             'isNotNull', 'isNullPass', 'callback', 'constraints', 
+            //             'codeType', 'order', 'increase', 'value', 'getter', 'setter', 'alias', 'onChanged' 
+            //         ].indexOf(prop) > -1) {
+            //             this[prop] = p_property[prop];
+            //         }
+            //     }
+            // } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
+            //     this['value'] = p_property; // COVER:
+            // }
+
             this.columnName  = p_name || '';            
             if (p_property) this._load(p_property);
+
         }
         Util.inherits(MetaColumn, _super);
 
@@ -382,6 +501,7 @@
             p_oValue = p_oValue || this.__value;
             this._event.publish('onChanged', p_nValue, p_oValue);
         };
+
 
         /**
          * 메타 객체를 얻는다
@@ -411,6 +531,14 @@
             this.caption = mObj.caption;
         };
 
+        // /** @override **/
+        // MetaColumn.prototype.getTypes  = function() {
+                    
+        //     var type = ['MetaColumn'];
+            
+        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
+        // };
+
         /**
          * 프로퍼티 속성으로 로드한다.
          * @param {object} p_property 
@@ -421,7 +549,7 @@
                     if (p_property.hasOwnProperty(prop) &&
                     [   '_entity', 'default', 'caption', 
                         'isNotNull', 'isNullPass', 'constraints', 
-                        'value', 'getter', 'setter', 'alias', 'onChanged' 
+                        'codeType', 'order', 'increase', 'value', 'getter', 'setter', 'alias', 'onChanged' 
                     ].indexOf(prop) > -1) {
                         this[prop] = p_property[prop];
                     }
@@ -431,7 +559,7 @@
             }
         };
 
-        /**
+       /**
          * 아이템을 복제한다. 
          * @param {MetaEntity?} p_entity 지정한 엔티티로 복제한다.
          * @returns 
@@ -449,14 +577,20 @@
             if (this.alias !== this.columnName) clone['alias'] = this.alias;
             if (this.columnName) clone['columnName']    = this.columnName;
             if (this.type) clone['type']                = this.type;
+            // if (this.size) clone['size']                = this.size;
             if (this.default) clone['default']          = this.default;
             if (this.caption) clone['caption']          = this.caption;
             if (this.isNotNull) clone['isNotNull']      = this.isNotNull;
             if (this.isNullPass) clone['isNullPass']     = this.isNullPass;
+            // if (this.callback) clone['callback']        = this.callback;
             for (var i = 0; this.constraints.length > i; i++) {
                 constraints.push(this.constraints[i]);
             }
             if (this.constraints) clone['constraints']  = constraints;
+            if (this.codeType) clone['codeType']        = this.codeType;  // 참조값
+            if (this.order) clone['order']              = this.order;
+            if (this.increase) clone['increase']        = this.increase;
+            // if (this.value) clone['value']              = this.value;    // 생성시 계산해서 개선한
             if (this.__value) clone['__value']          = this.__value;
             if (this.getter) clone['getter']            = this.getter;
             if (this.setter) clone['setter']            = this.setter;
@@ -470,6 +604,11 @@
             
             return clone;
         };
+
+        // /** @override */
+        // MetaColumn.prototype.getObject = function() {
+        //     // TODO::
+        // };
 
         /**
          * 제약조건을 추가한다.
@@ -494,6 +633,33 @@
             
             this.constraints.push(constraint);
         };
+
+// POINT:: 삭제 대기
+        /**
+         * method
+         */
+        // MetaColumn.prototype.defineValueProperty = function(p_getter, p_setter) {
+
+        //     // 타입검사 
+        //     if(typeof p_getter !== 'undefined' && typeof p_getter !== 'function') {
+        //         throw new Error('Only [p_getter] type 'function' can be added');
+        //     }
+        //     if(typeof p_setter !== 'undefined' && typeof p_setter !== 'function') {
+        //         throw new Error('Only [p_getter] type 'function' can be added');
+        //     }
+
+        //     // 기본값 설정
+        //     p_getter = p_getter || function() { return this.__value; };
+        //     p_setter = p_setter || function(val) { this.__value = val; };
+
+        //     /** @event */s
+        //     Object.defineProperty(this, 'value', {
+        //         enumerable: true,
+        //         configurable: true,
+        //         get: p_getter,
+        //         set: p_setter
+        //     });
+        // };
         
         /**
          * 아이템의 value에 유효성을 검사한다. (isNotnull, isNullPass, constraints 기준)
@@ -566,8 +732,7 @@
     
     }(MetaElement));
 
-    //--------------------------------------------------------------
-    // implementation
+    //---------------------------------------
     var MetaColumnCollection  = (function (_super) {
         /**
          * 아이템 컬렉션 (최상위)
@@ -600,11 +765,14 @@
             });
 
             this.columnType = columnType || MetaColumn;
+
+            
         }
         Util.inherits(MetaColumnCollection, _super);
         
         MetaColumnCollection._NS = 'Meta.Entity';          // namespace
         MetaColumnCollection._PARAMS = ['_owner', '_columnType'];         // creator parameter
+
 
         /**
          * 컬렉션에 아이템 유무를 검사한다.
@@ -661,11 +829,6 @@
             }
         };
 
-        /**
-         * 별칭이 존재하는지 검사
-         * @param {*} p_key 
-         * @returns 
-         */
         MetaColumnCollection.prototype.existAlias  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
                 if (this[i].alias === p_key) return true;
@@ -673,11 +836,6 @@
             return false;
         };
 
-        /**
-         * 컬럼명이 존재하는지 검사
-         * @param {*} p_key 
-         * @returns 
-         */
         MetaColumnCollection.prototype.existColumnName  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
                 if (this[i].columnName === p_key) return true;
@@ -685,11 +843,6 @@
             return false;
         };
 
-        /**
-         * 별칭에대한 컬럼 조회
-         * @param {*} p_key 
-         * @returns 
-         */
         MetaColumnCollection.prototype.alias  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
                 if (this[i].alias === p_key) return this[i];
@@ -700,15 +853,15 @@
     
     }(PropertyCollection));
 
-    //--------------------------------------------------------------
-    // implementation
+
+    //---------------------------------------
     var MetaTableColumnCollection  = (function (_super) {
         /**
          * 테이블 아이템 컬렉션
          * @constructs _L.Meta.Entity.MetaTableColumnCollection
          * @extends _L.Meta.Entity.MetaColumnCollection
          * @param {*} p_owner 소유자
-         * @param {MetaColumnCollection?} p_baseCollection 참조기본 컬렉션
+         * @param {?MetaColumnCollection} p_baseCollection 참조기본 컬렉션
          */
         function MetaTableColumnCollection(p_owner) {
             _super.call(this, p_owner);
@@ -744,13 +897,13 @@
             return _super.prototype.add.call(this, i_name, i_value);
         };
 
+
         return MetaTableColumnCollection;
     
     }(MetaColumnCollection));
 
 
-    //--------------------------------------------------------------
-    // implementation
+    //---------------------------------------
     var MetaViewColumnCollection  = (function (_super) {
         /**
          * @constructs _L.Meta.Entity.MetaViewColumnCollection
@@ -879,6 +1032,7 @@
         return MetaViewColumnCollection;
     
     }(MetaColumnCollection));
+
 
     //==============================================================
     // 5. module export

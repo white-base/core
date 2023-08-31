@@ -62,14 +62,11 @@
              */
             // this.list = [];
 
-            /** implements IPartControl 인터페이스 구현 */
-            /** implements ILookupControl 인터페이스 구현 */
-            // this._implements(IPartControl, ILookupControl);            
             Util.implements(this, IPartControl, ILookupControl);
         }
         Util.inherits(IBaseCollection, _super);
     
-        ICollection._ns = 'Interface';    // namespace
+        ICollection._NS = 'Interface';    // namespace
 
         /**
          * 등록 : insert
@@ -127,8 +124,6 @@
             throw new Error('[ exist() ] Abstract method definition, fail...');
         };
 
-        
-    
         return ICollection;
         
     }());

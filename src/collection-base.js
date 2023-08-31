@@ -46,7 +46,6 @@
 
     //==============================================================
     // 4. module implementation
-    
     var BaseCollection  = (function (_super) {
 
         /**
@@ -71,11 +70,11 @@
              * @member {Object} _L.Collection.BaseCollection#_event  
              */
             Object.defineProperty(this, '_event', {
-                enumerable: false,
-                configurable: false,
                 get: function() { 
                     return _event;
-                }
+                },
+                enumerable: false,
+                configurable: false
             });
 
              /** 
@@ -84,14 +83,14 @@
              * @member {Object} _L.Collection.BaseCollection#_owner  
              */
               Object.defineProperty(this, '_owner', {   
-                enumerable: true,
-                configurable: false,
-                get: function() {
-                    return _owner;
-                },
-                set: function(val) {
-                    _owner = val;
-                }
+                  get: function() {
+                      return _owner;
+                    },
+                    set: function(val) {
+                        _owner = val;
+                    },
+                    enumerable: true,
+                    configurable: false
             });
 
             /** 
@@ -101,14 +100,14 @@
              * @member {Array} _L.Collection.BaseCollection#_element  
              */
             Object.defineProperty(this, '_element', {
-                enumerable: true,
-                configurable: false,
                 get: function() {
                     return _element;
                 },
                 set: function(val) {
                     _element = val;
-                }
+                },
+                enumerable: true,
+                configurable: false
             });
 
             /** 
@@ -117,14 +116,14 @@
              * @member {Array}  _L.Collection.BaseCollection#_symbol  
              */
              Object.defineProperty(this, '_symbol', {
-                enumerable: false,
-                configurable: false,
                 get: function() { 
                     return _symbol;
                 },
                 set: function(p_val) {
                     _symbol = p_val;
-                }
+                },
+                enumerable: false,
+                configurable: false
             });
 
             /**
@@ -133,11 +132,11 @@
              * @member {Array}  _L.Collection.BaseCollection#list  
              */
             Object.defineProperty(this, 'list', {
-                enumerable: false,
-                configurable: true,
                 get: function() {
                     return this._element;
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
 
             /**
@@ -145,11 +144,11 @@
              * @member {Number} _L.Collection.BaseCollection#count 
              */
             Object.defineProperty(this, 'count', {
-                enumerable: false,
-                configurable: true,
                 get: function() {
                     return this._element.length;
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
 
             /** 
@@ -157,15 +156,15 @@
              * @member {Observer}  _L.Collection.BaseCollection#elementType  
              */
             Object.defineProperty(this, 'elementType', {
-                enumerable: true,
-                configurable: false,
                 get: function() {
                     return _elementType;
                 },
                 set: function(val) {
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
                     _elementType = arrType;
-                }
+                },
+                enumerable: true,
+                configurable: false
             });
 
             /** 
@@ -173,11 +172,11 @@
              * @event _L.Collection.BaseCollection#onAdd 
              */
             Object.defineProperty(this, 'onAdd', {
-                enumerable: false,
-                configurable: true,
                 set: function(p_fn) {
                     this._event.subscribe(p_fn, 'add');
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
 
             /** 
@@ -185,11 +184,11 @@
              * @event _L.Collection.BaseCollection#onRemove
              */
             Object.defineProperty(this, 'onRemove', {
-                enumerable: false,
-                configurable: true,
                 set: function(p_fn) {
                     this._event.subscribe(p_fn, 'remove');
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
 
             /** 
@@ -197,11 +196,11 @@
              * @event _L.Collection.BaseCollection#onClear
              */
             Object.defineProperty(this, 'onClear', {
-                enumerable: false,
-                configurable: true,
                 set: function(p_fn) {
                     this._event.subscribe(p_fn, 'clear');
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
 
             /** 
@@ -209,11 +208,11 @@
              * @event _L.Collection.BaseCollection#onChanging 
              */
             Object.defineProperty(this, 'onChanging', {
-                enumerable: false,
-                configurable: true,
                 set: function(p_fn) {
                     this._event.subscribe(p_fn, 'changing');
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
 
             /** 
@@ -221,11 +220,11 @@
              * @event _L.Collection.BaseCollection#onChanged 
              */
             Object.defineProperty(this, 'onChanged', {
-                enumerable: false,
-                configurable: true,
                 set: function(p_fn) {
                     this._event.subscribe(p_fn, 'changed');
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
 
             // 예약어 등록
@@ -234,13 +233,11 @@
             this._symbol = this._symbol.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
             this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
 
-            /** implements ICollection 인터페이스 구현 */
-            //  this._implements(ICollection);
             Util.implements(this, ICollection, IBaseCollection);
         }
         Util.inherits(BaseCollection, _super);
 
-        BaseCollection._ns = 'Collection';     // namespace
+        BaseCollection._NS = 'Collection';     // namespace
         BaseCollection._PARAMS = ['_owner'];    // creator parameter
 
         /**
@@ -254,11 +251,6 @@
                 set: function(newValue) {
                     var typeName;
                     if (this.elementType.length > 0) Util.validType(newValue, this.elementType);
-                    // if (this.elementType !== null && !(newValue instanceof this.elementType)) {
-                    //     // typeName = this.elementType.constructor.name; // REVIEW::
-                    //     typeName = this.elementType.name || this.elementType.constructor.name;
-                    //     throw new Error('Only [' + typeName + '] type instances can be added');
-                    // }
                     this._element[p_idx] = newValue; 
                 },
                 enumerable: true,
@@ -316,14 +308,6 @@
             var _elems = [];
 
             obj._owner = MetaRegistry.createReferObject(this._owner);
-            // obj.elementType = this.elementType;
-            
-            /**
-             * 함수타임은 : MetaRegistry.createNsObject()
-             * 기본자료형의 처리?
-             *  별도 저장할 필요 없음
-             * 
-             */
             for (var i = 0; i < this.elementType.length; i++) {
                 var elem = this.elementType[i];
                 if (typeof elem === 'function') _elems.push(MetaRegistry.createNsObject(elem));
@@ -344,21 +328,7 @@
             _super.prototype.setObject.call(this, mObj);
             
             this.clear();
-
             this.elementType = mObj.elementType;
-            // this.elementType.length = 0;
-
-            // for(var i = 0; i < mObj.elementType.length; i++) {
-            //     var elem = mObj._elem[i];
-            //     if (typeof elem === 'function') {   // 함수 타입
-            //         this.elementType.push(MetaRegistry.find(elem));
-            //     } else if (MetaRegistry.isGuidObject(elem)) {   // metaObject 객체
-            //         this.elementType.push(MetaRegistry.find(elem));
-            //     } else {
-            //         this.elementType.push(elem);
-            //     }
-            // }
-            
         };
 
         /** 
@@ -449,6 +419,7 @@
         };
 
         return BaseCollection;
+        
     }(MetaObject));
     
 

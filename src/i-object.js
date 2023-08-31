@@ -14,7 +14,6 @@
     //==============================================================
     // 2. import module
 
-
     //==============================================================
     // 3. module dependency check
 
@@ -29,7 +28,7 @@
         function IObject() {
         }
         
-        IObject._ns = 'Interface';    // namespace
+        IObject._NS = 'Interface';    // namespace
 
         /**
          * 객체타입 얻기

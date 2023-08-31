@@ -27,7 +27,7 @@
         function IAllControl() {
         }
     
-        IAllControl._ns = 'Interface';    // namespace
+        IAllControl._NS = 'Interface';    // namespace
 
         /**
          * 복제 : 전체

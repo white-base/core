@@ -13,14 +13,9 @@
     
     //==============================================================
     // 2. import module
-    
-    if (isNode) {     
-    } else {
-    }
 
     //==============================================================
     // 3. module dependency check
-
 
     //==============================================================
     // 4. module implementation
@@ -45,14 +40,9 @@
              * @member
              */
             this.list = Array;
-
-            /** implements IPartControl 인터페이스 구현 */
-            /** implements ILookupControl 인터페이스 구현 */
-            // this._implements(IPartControl, ILookupControl);            
-            // Util.implements(this, IPartControl, ILookupControl);
         }
 
-        IBaseCollection._ns = 'Interface';    // namespace
+        IBaseCollection._NS = 'Interface';    // namespace
     
         return IBaseCollection;
         

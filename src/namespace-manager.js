@@ -154,7 +154,7 @@
             this.__symbol = ['namespace', 'ns', 'NS', '_type'];
         }
 
-        NamespaceManager._ns = 'Common';    // namespace
+        NamespaceManager._NS = 'Common';    // namespace
         
         // private 메소드
         function __validNamespace(p_name) {
@@ -169,21 +169,12 @@
             var sections = [];
             if (p_ns === '') return sections;
             if (typeof p_ns === 'string') {
-                if (!__validNamespace(p_ns)) throw new Error('They have different [p_ns] conventions.'); 
+                if (!__validNamespace(p_ns)) throw new Error('They have different [p_ns] conventions. '+p_ns); 
                 sections = p_ns.split('.');
             } else if (Array.isArray(p_ns)) sections = p_ns;
             else throw new Error('Only [p_ns] type "string, array" can be added'); 
             return sections;
         }
-        // function _isBuiltFunction(obj) {
-        //     if (typeof obj === 'function' && (false 
-        //         || obj === Number || obj === String || obj === Boolean
-        //         || obj === Object || obj === Array
-        //         || obj === RegExp || obj === Date 
-        //         || obj === Symbol || obj === BigInt
-        //     )) return true;
-        //     return false;
-        // }
         
         /**
          * 네임스페이스 기본객체
@@ -191,12 +182,6 @@
         NamespaceManager.prototype.__createNsObject = function() {
             return { _type: 'ns' };
         };
-        /**
-         * 키 기본객체
-         */
-        // NamespaceManager.prototype.__createElemObject = function() {
-        //     return { _type: 'elem', name: '', value: null };
-        // };
 
         /**
          * 초기화
@@ -244,6 +229,11 @@
             }
         };
 
+        /**
+         * 네임스페이스 경로 얻기
+         * @param {*} p_ns 
+         * @returns 
+         */
         NamespaceManager.prototype.path = function(p_ns) {
             var parent = this.__storage;
             var sections;
@@ -267,17 +257,11 @@
         NamespaceManager.prototype.set = function(p_ns, p_key, p_elem) {
             var parent = this.__storage;
             var sections;
-            // var oElem;
-
-            // 내장함수 제외
-            // if (_isBuiltFunction(p_elem)) return;
 
             sections = __getArray(p_ns);
-            // oElem = this.__createNsObject();
             
             if (sections.length > 0) this.register(p_ns);
             if (!__validName(p_key)) throw new Error('They have different [p_key] conventions.'); 
-            // oElem[p_key] = p_elem;        
         
             if (sections.length === 0) {    // 최상위 등록
                 parent[p_key] = p_elem;
@@ -289,8 +273,6 @@
                 if (typeof parent[sName] === "undefined") parent[sName] = this.__createNsObject();
                 if (i === sections.length - 1) { 
                     parent[sName][p_key] = p_elem;
-                    // parent[sName] = oElem;
-                    // this.__element.push(oElem);
                 } else parent = parent[sName];
             }
         };
@@ -302,9 +284,6 @@
         NamespaceManager.prototype.get = function(p_fullName) {
             var parent = this.__storage;
             var sections;
-
-            // 내장함수 & 전역 함수
-            // if (typeof _global[p_fullName] === 'function') return _global[p_fullName];
 
             sections = __getArray(p_fullName);
             for (var i = 0; i < sections.length; i+=1) {
@@ -319,9 +298,6 @@
         NamespaceManager.prototype.del = function(p_fullName) {
             var parent = this.__storage;
             var sections;
-
-            // 내장함수 & 전역 함수
-            // if (typeof _global[p_fullName] === 'function') return _global[p_fullName];
 
             sections = __getArray(p_fullName);
             for (var i = 0; i < sections.length; i+=1) {
@@ -344,9 +320,6 @@
         NamespaceManager.prototype.find = function(p_elem) {
             var namespace = this.__storage;
             var stack = [];
-
-            // 내장 함수 제외
-            // if (_isBuiltFunction(p_elem)) return p_elem.name;
 
             if (findElement(namespace)) {
                 return stack.join('.');
@@ -372,55 +345,14 @@
             }
         };
 
-
-        // NamespaceManager.prototype.__getPath = function(p_obj) {
-        //     var namespace = this.__storage;
-        //     var stack = [];
-        //     var ns;
-
-        //     if (getPath(namespace)) {
-        //         ns = p_isFullName === true ? stack.join('.') : stack.pop();
-        //     }
-        //     return stack;
-
-        //     // inner function
-        //     function getPath(target) {
-        //         // if (target['_type'] === 'ns')
-        //         for(var prop in target) {
-        //             var obj = target[prop];
-                    
-                    
-        //             if (prop === '_type' || prop === '_type') continue;
-                    
-                    
-                    
-        //             if (typeof obj === 'object' && obj['_type'] === 'ns') {
-        //                 stack.push(prop);
-                        
-        //                 if(getPath(obj)) return true;
-        //             } else {
-        //                 if (obj === p_elem) {
-        //                     stack.push(prop);
-        //                     return true;
-        //                 }
-        //             }
-        //         }
-        //         stack.pop();
-        //         return false;
-        //     }
-        // };
-
         /**
          * 요소로 네임스페이스 여부
          * @param {string | array} p_ns 
          */
         NamespaceManager.prototype.has = function(p_obj) {
-            if (typeof p_obj === 'string') {
-                if (this.get(p_obj)) return true;
-            } else {
-                if (typeof this.find(p_obj) === 'string') return true;
-            }
-            
+            if (typeof p_obj === 'string' && this.get(p_obj)) return true;
+            else if (typeof this.find(p_obj) === 'string') return true;
+        
             return false;
         };
 

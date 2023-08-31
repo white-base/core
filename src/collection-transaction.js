@@ -33,7 +33,7 @@
     if (typeof TransactionQueue === 'undefined') throw new Error('[TransactionQueue] module load fail...');
 
     //==============================================================
-    // 4. module implementation   
+    // 4. module implementation
     var TransactionCollection  = (function (_super) {
         /**
          * 배열타입 컬렉션 클래스
@@ -88,15 +88,9 @@
         }
         Util.inherits(TransactionCollection, _super);
 
-        TransactionCollection._ns = 'Collection';      // namespace
+        TransactionCollection._NS = 'Collection';      // namespace
         TransactionCollection._PARAMS = ['_owner'];    // creator parameter
         
-        // TransactionCollection.prototype.add = function(p_value, p_desc) {
-        //     // if (!this.autoChanges) this._transQueue.insert(p_value, this._element.length);
-
-        //     return _super.prototype.add.call(this, p_value, p_desc);
-        // };
-
         /**
          * 메타 객체를 얻는다
          * @virtual
@@ -130,11 +124,6 @@
             if (!this.autoChanges) this._transQueue.insert(p_pos, p_value);
             return _super.prototype.insertAt.call(this, p_pos, p_value, p_desc);
         };
-
-        // TransactionCollection.prototype.remove = function(p_elem) {
-        //     // if (!this.autoChanges) this._transQueue.delete(this.indexOf(p_elem));
-        //     return _super.prototype.remove.call(this, p_elem);
-        // };
 
         TransactionCollection.prototype.removeAt = function(p_pos) {
             if (!this.autoChanges) this._transQueue.delete(p_pos, this[p_pos]);

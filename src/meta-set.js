@@ -112,10 +112,6 @@
             Object.defineProperty(this, 'tables', 
             {
                 get: function() { return tables; },
-                // set: function(newValue) { 
-                //     if (!(newValue instanceof MetaTableCollection)) throw new Error('Only [tables] type "MetaTableCollection" can be added');
-                //     tables = newValue;
-                // },
                 configurable: false,
                 enumerable: true
             });
@@ -127,10 +123,6 @@
             Object.defineProperty(this, 'views', 
             {
                 get: function() { return views; },
-                // set: function(newValue) {
-                //     if (!(newValue instanceof MetaViewCollection)) throw new Error('Only [views] type "MetaViewCollection" can be added'); 
-                //     views = newValue;
-                // },
                 configurable: false,
                 enumerable: true
             });
@@ -142,7 +134,7 @@
         }
         Util.inherits(MetaSet, _super);
 
-        MetaSet._ns = 'Meta.Entity';    // namespace
+        MetaSet._NS = 'Meta.Entity';    // namespace
         MetaSet._PARAMS = ['name'];  // creator parameter
 
         MetaSet.prototype._loadMetaSet = function(p_metaSet, p_option) {

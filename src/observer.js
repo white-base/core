@@ -19,8 +19,7 @@
 
     //==============================================================
     // 4. module implementation   
-    
-    var Observer = (function () {
+        var Observer = (function () {
         /**
          * 구독자 클래스 (이벤트에 활용)
          * @constructs _L.Common.Observer
@@ -90,7 +89,7 @@
             
         }
 
-        Observer._ns = 'Common';    // namespace
+        Observer._NS = 'Common';    // namespace
 
         /**
          * 구독 신청

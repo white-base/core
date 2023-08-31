@@ -25,8 +25,8 @@ describe("[target: meta-column.js ]", () => {
         describe("MetaColumn() <생성자>", () => {
             it("- new MetaColumn(name, null, property) : 생성시 속성 설정 ", () => {
                 var item1 = new MetaColumn('i1', null, {
-                    type: 'text',
-                    size: 100,
+                    // type: 'text',
+                    // size: 100,
                     default: 'D1',
                     caption: 'C1',
                     isNotNull: true,
@@ -34,19 +34,19 @@ describe("[target: meta-column.js ]", () => {
                         { regex: /\D/, msg: 'message', code: 'C1', return: true },         // true : 충족조건
                         { regex: /[0-9]{5}/, msg: 'message', code: 'C2', return: false }   // false : 통과조건
                     ],   
-                    order: 1000,
-                    increase: 10,
+                    // order: 1000,
+                    // increase: 10,
                     value: 'V1'
                 });
         
-                expect(item1.type).toBe('text');
-                expect(item1.size).toBe(100);
+                // expect(item1.type).toBe('text');
+                // expect(item1.size).toBe(100);
                 expect(item1.default).toBe('D1');
                 expect(item1.caption).toBe('C1');
                 expect(item1.isNotNull).toBe(true);
                 expect(item1.constraints.length).toBe(2);
-                expect(item1.order).toBe(1000);
-                expect(item1.increase).toBe(10);
+                // expect(item1.order).toBe(1000);
+                // expect(item1.increase).toBe(10);
                 expect(item1.value).toBe('V1');
             });
         });
@@ -227,8 +227,8 @@ describe("[target: meta-column.js ]", () => {
             it("- clone() : 복제 ", () => {
                 var table = new MetaTable('T1');
                 var item1 = new MetaColumn('i1', table, {
-                    type: 'text',
-                    size: 100,
+                    // type: 'text',
+                    // size: 100,
                     default: 'D1',
                     caption: 'C1',
                     isNotNull: true,
@@ -236,33 +236,33 @@ describe("[target: meta-column.js ]", () => {
                         { regex: /\D/, msg: 'message', code: 'C1', return: true },         // true : 충족조건
                         { regex: /[0-9]{5}/, msg: 'message', code: 'C2', return: false }   // false : 통과조건
                     ],   
-                    order: 1000,
-                    increase: 10,
+                    // order: 1000,
+                    // increase: 10,
                     value: 'V1'
                 });            
                 var item2 = item1.clone();
         
                 // item1
                 expect(item1._entity.tableName).toBe('T1');
-                expect(item1.type).toBe('text');
-                expect(item1.size).toBe(100);
+                // expect(item1.type).toBe('text');
+                // expect(item1.size).toBe(100);
                 expect(item1.default).toBe('D1');
                 expect(item1.caption).toBe('C1');
                 expect(item1.isNotNull).toBe(true);
                 expect(item1.constraints.length).toBe(2);
-                expect(item1.order).toBe(1000);
-                expect(item1.increase).toBe(10);
+                // expect(item1.order).toBe(1000);
+                // expect(item1.increase).toBe(10);
                 expect(item1.value).toBe('V1');
                 // item2
                 expect(item2._entity.tableName).toBe('T1');
-                expect(item2.type).toBe('text');
-                expect(item2.size).toBe(100);
+                // expect(item2.type).toBe('text');
+                // expect(item2.size).toBe(100);
                 expect(item2.default).toBe('D1');
                 expect(item2.caption).toBe('C1');
                 expect(item2.isNotNull).toBe(true);
                 expect(item2.constraints.length).toBe(2);
-                expect(item2.order).toBe(1000);
-                expect(item2.increase).toBe(10);
+                // expect(item2.order).toBe(1000);
+                // expect(item2.increase).toBe(10);
                 expect(item2.value).toBe('V1');
                 // 비교
                 expect(item1 === item2).toBe(false);

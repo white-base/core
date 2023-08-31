@@ -408,13 +408,6 @@
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;
-        
-        // _global._L.Common.Util.getAllProperties = getAllProperties;
-        // _global._L.Common.Util.getTypeMap = getTypeMap;
-        // _global._L.Common.Util.checkType = checkType;
-        // _global._L.Common.Util.checkUnionType = checkUnionType;
-        // _global._L.Common.Util.validType = validType;
-        // _global._L.Common.Util.validUnionType = validUnionType;
     }
 
 }(typeof window !== 'undefined' ? window : global));

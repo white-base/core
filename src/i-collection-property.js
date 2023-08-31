@@ -41,7 +41,7 @@
         }
         Util.inherits(IPropertyCollection, _super);
 
-        IPropertyCollection._ns = 'Interface';    // namespace
+        IPropertyCollection._NS = 'Interface';    // namespace
 
         /**
          * 조회 : 인덱스로 이름 조회
@@ -50,20 +50,6 @@
             throw new Error('[ keyOf(idx) : str ] Abstract method definition, fail...');
         };
 
-        // /**
-        //  * 키(이름)로 삭제
-        //  */
-        // IPropertyCollection.prototype.removeByProp  = function() {
-        //     throw new Error('[ keyOf() ] Abstract method definition, fail...');
-        // };
-
-        // /**
-        //  * 키(이름)로 인덱스 조회
-        //  */
-        // IPropertyCollection.prototype.indexOfProp  = function() {
-        //     throw new Error('[ keyOf() ] Abstract method definition, fail...');
-        // };
-    
         return IPropertyCollection;
         
     }(ICollection));

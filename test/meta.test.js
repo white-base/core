@@ -251,7 +251,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 }
                 const c = new Foo('foo');
                 const obj = c.getObject();
-                const comp = { _guid: obj._guid, _type: Foo.name, name: 'foo', _ns: 'Meta' }
+                const comp = { _guid: obj._guid, _type: 'Meta.Foo', name: 'foo' }
 
                 expect(obj).toEqual(comp);
             });
@@ -274,8 +274,8 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 }
                 const c = new Foo('foo');
                 const obj = c.getObject();
-                const comp = { _guid: obj._guid, _type: Foo.name, str: 'STR', _ns: 'Meta', name: 'foo', bar: { 
-                    _guid: obj.bar._guid, _type: Bar.name, name: '', _ns: 'Meta'
+                const comp = { _guid: obj._guid, _type: 'Meta.Foo', str: 'STR', name: 'foo', bar: { 
+                    _guid: obj.bar._guid, _type: 'Meta.Bar', name: ''
                 } };
         
                 expect(obj).toEqual(comp);

@@ -37,7 +37,7 @@
     if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
-    // 4. module implementation   
+    // 4. module implementation
     var ArrayCollection  = (function (_super) {
         /**
          * 배열타입 컬렉션 클래스
@@ -53,11 +53,10 @@
         }
         Util.inherits(ArrayCollection, _super);
 
-        ArrayCollection._ns = 'Collection';     // namespace
+        ArrayCollection._NS = 'Collection';     // namespace
         ArrayCollection._PARAMS = ['_owner'];   // creator parameter
 
         /**
-         * TODO: setObject 시점에 초기화 해야함
          * 메타 객체를 설정한다
          * @virtual
          * @returns {object}
@@ -68,7 +67,7 @@
 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
-                if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
+                if (elem['_guid'] && elem['_type']) {
                     var obj = MetaRegistry.createObject(elem);
                     this.add(obj);
                     this[i].setObject(elem);
@@ -79,7 +78,6 @@
             // TODO: add(desc) 이것도 별도로 저장해둬야 함
             // obj.metaName = mObj.name;
         };
-
 
         /**
          * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]
@@ -108,30 +106,10 @@
          * @returns {boolean} 처리결과
          */
         ArrayCollection.prototype.add = function(p_value, p_desc) {
-            // // var typeName;
-            // var index   = this._element.length;
-            
-            // // if (typeof p_value === 'undefined') throw new Error('p_value param request fail...');
-            // if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
-            // // index = this._element.length;
-            // // before event
-            // this._onChanging();
-            // this._onAdd(index, p_value);
-            // // process
-            // this._element.push(p_value);
-            // if (typeof p_desc === 'object') {
-            //     Object.defineProperty(this, [index], p_desc);
-            // } else {
-            //     Object.defineProperty(this, [index], this._getPropDescriptor(index));
-            // }
-            // // after event
-            // this._onChanged();
-            // return true;
-
             return this.insertAt(this._element.length, p_value, p_desc);
         };
 
-                /**
+        /**
          * 지정 위치에 삽입
          * @param {*} p_pos 
          * @param {*} p_value 
@@ -150,7 +128,6 @@
             this._onAdd(p_pos, p_value);
             // process
             this._element.splice(p_pos, 0, p_value);            
-
             if (typeof p_desc === 'object') {
                 Object.defineProperty(this, [p_pos], p_desc);
             } else {
@@ -160,7 +137,6 @@
             for (var i = p_pos + 1; i < this._element.length; i++) {
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
             }
-
             // after event
             this._onChanged();
             return true;
@@ -179,8 +155,6 @@
             this._onClear();
             this._onChanged();
         };
-
-
 
         return ArrayCollection;
 

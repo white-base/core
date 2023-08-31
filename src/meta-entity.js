@@ -61,9 +61,6 @@
     //==============================================================
     // 4. module implementation   
     var MetaEntity  = (function (_super) {
-        
-        // MetaView                    = require('./meta-view').MetaView;
-
         /**
          * 엔티티
          * @constructs _L.Meta.Entity.MetaEntity
@@ -77,7 +74,7 @@
             _super.call(this, p_name);
 
             var metaSet = null;
-            // var columns = null;     
+            var columns = null;     
             var rows  = new MetaRowCollection(this);
 
             /**
@@ -101,18 +98,16 @@
              * 엔티티의 아이템(속성) 컬렉션
              * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#columns
              */
-            this.columns = null;
-            
-            // Object.defineProperty(this, 'columns', 
-            // {
-            //     get: function() { return columns; },
-            //     set: function(newValue) { 
-            //         if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
-            //         columns = newValue;
-            //     },
-            //     configurable: true,
-            //     enumerable: true
-            // });
+            Object.defineProperty(this, 'columns', 
+            {
+                get: function() { return columns; },
+                set: function(newValue) { 
+                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
+                    columns = newValue;
+                },
+                configurable: true,
+                enumerable: true
+            });
             
             /**
              * 엔티티의 데이터(로우) 컬렉션
@@ -121,10 +116,6 @@
             Object.defineProperty(this, 'rows', 
             {
                 get: function() { return rows; },
-                // set: function(newValue) { // COVER:
-                //     if (!(newValue instanceof MetaRowCollection)) throw new Error('Only [rows] type "MetaRowCollection" can be added'); 
-                //     rows = newValue;
-                // },
                 configurable: false,
                 enumerable: true
             });
@@ -133,7 +124,7 @@
         }
         Util.inherits(MetaEntity, _super);
 
-        MetaEntity._ns = 'Meta.Entity';          // namespace
+        MetaEntity._NS = 'Meta.Entity';          // namespace
         MetaEntity._PARAMS = ['name'];         // creator parameter
 
         // 3가지 타입 입력

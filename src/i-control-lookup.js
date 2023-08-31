@@ -27,7 +27,7 @@
         function ILookupControl() {
         }
     
-        ILookupControl._ns = 'Interface';    // namespace
+        ILookupControl._NS = 'Interface';    // namespace
 
         /**
          * 존재 유무 검사

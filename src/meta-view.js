@@ -116,10 +116,6 @@
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { return columns; },
-                // set: function(newValue) { 
-                //     if (!(newValue instanceof MetaViewColumnCollection)) throw new Error('Only [columns] type "MetaViewColumnCollection" can be added');
-                //     columns = newValue;
-                // },
                 configurable: false,
                 enumerable: true
             });
@@ -137,7 +133,7 @@
         }
         Util.inherits(MetaView, _super);
 
-        MetaView._ns = 'Meta.Entity';    // namespace
+        MetaView._NS = 'Meta.Entity';    // namespace
         MetaView._PARAMS = ['name', '_baseEntity'];  // creator parameter
 
         /**
@@ -149,18 +145,6 @@
             if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
         };
         
-        // /** @override **/
-        // MetaView.prototype.getTypes  = function() {
-        //     var type = ['MetaView'];
-            
-        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        // };
-        
-        // /** @override */
-        // MetaView.prototype.getObject = function() {
-        //     // TODO::
-        // };
-
         /**
          * 메타 객체를 얻는다
          * @virtual
@@ -215,46 +199,11 @@
         };
         
         /**
-         * 엔티티를 조회한다.
-         * filter(row, idx, entity) : 콜백
-         * @param {function | array<string> | string} p_filter 필터 콜백
-         * @param {array<string>| string} p_args 
-         * @return {MetaView} 
-         */
-        // MetaView.prototype.select  = function(p_filter, p_args) {
-        //     var args = Array.prototype.slice.call(arguments);
-        //     var items = [];
-        //     var callback = null;
-        //     var columnName;
-        //     var view = new MetaView('select', this);
-        //     var orignal = this.clone();
-
-        //     // 매개변수 구성
-        //     if (typeof p_filter === 'function') {
-        //         callback = p_filter;
-        //         if (Array.isArray(p_args)) items = p_args;
-        //         else if (args.length > 1) items = args.splice(1);
-        //     } else if (typeof p_filter === 'string') {
-        //         items = args;
-        //     } else if (Array.isArray(p_filter)) {
-        //         items = p_filter;
-        //     }
-
-        //     return this._select(view, callback, items);
-        // };
-
-        /**
          * 엔티티를 복사한다. (조회 후 복제)
          * @param {*} p_filter 
          * @param {*} p_index 
          * @param {*} p_end 
          */
-        // MetaView.prototype.copy  = function(p_filter, p_index, p_end) {
-        //     var entity = this.select(p_filter, p_index, p_end);
-
-        //     return entity.clone();
-        // };
-
         MetaView.prototype.copy  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
             var _this = this;
@@ -276,7 +225,6 @@
                 items = p_filter;
             }
 
-            // return this._buildEntity(table, callback, items);
             return this._buildEntity(entity, callback, items).clone();
         };
 
@@ -285,7 +233,8 @@
     
     }(MetaEntity));
     
-    //---------------------------------------
+    //--------------------------------------------------------------
+    // implementation
     var MetaViewCollection  = (function (_super) {
         /**
          * 뷰 엔티티 컬렉션
@@ -300,7 +249,7 @@
         }
         Util.inherits(MetaViewCollection, _super);
 
-        MetaViewCollection._ns = 'Meta.Entity';    // namespace
+        MetaViewCollection._NS = 'Meta.Entity';    // namespace
         MetaViewCollection._PARAMS = ['_owner'];  // creator parameter
 
         /**

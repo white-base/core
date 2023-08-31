@@ -38,9 +38,7 @@
     
     //==============================================================
     // 4. module implementation   
-    // KeyCollection
     var PropertyCollection  = (function (_super) {
-        
         /**
          * 속성타입 컬렉션 클래스
          * @constructs _L.Collection.PropertyCollection
@@ -53,6 +51,10 @@
 
             var _keys = [];
 
+            /** 
+             * 속성들값
+             * @member {Array} _L.Collection.PropertyCollection#_keys 
+             */
             Object.defineProperty(this, '_keys',
             {
                 configurable: false,
@@ -63,23 +65,14 @@
                     _keys = newValue; 
                 },
             });
-            /** @member {Array} _L.Collection.PropertyCollection#_keys 속성들값 */
-
-            // Object.defineProperty(this, 'keys',
-            // {
-            //     configurable: false,
-            //     enumerable: false,
-            //     get: function() { return _keys; },
-            // });
 
             // 예약어 등록
             this._symbol = this._symbol.concat(['keys', '_keys', 'indexOf', 'keyOf']);
-            /** implements IPropertyCollection 인터페이스 구현 */
             Util.implements(this, IPropertyCollection);
         }
         Util.inherits(PropertyCollection, _super);
 
-        PropertyCollection._ns = 'Collection';      // namespace
+        PropertyCollection._NS = 'Collection';      // namespace
         PropertyCollection._PARAMS = ['_owner'];    // creator parameter
 
         /**
@@ -188,11 +181,11 @@
             this._onChanged();
             return true;
         };
-        
+
         /**
-         * 속성컬렉션을 전체 삭제한다. [구현]
-        */
-       PropertyCollection.prototype.clear = function() {
+         * 초기화
+         */
+        PropertyCollection.prototype.clear = function() {
            var propName
            
            // before event
@@ -209,21 +202,6 @@
             // after event
             this._onChanged();
         };
-        
-    //     /**
-    //      * 이름으로 index값 조회한다.
-    //      * @param {String} p_name 
-    //      * @returns {number}
-    //     */
-    //    PropertyCollection.prototype.indexOfProp = function(p_name) {
-    //        var idx = -1;
-           
-    //        if (typeof p_name !== 'string')  throw new Error('Only [p_name] type "string" can be added');
-    //        for (var i = 0; i < this._keys.length; i++) {
-    //            if (this._keys[i] === p_name) return i;
-    //         }
-    //         return idx;
-    //     };
     
         /**
          * 
@@ -257,18 +235,6 @@
             return this._keys[p_idx];
         };
 
-        // /**
-        //  * 요소 삭제
-        //  * @param {string} p_name 삭제핳 요소명
-        //  */
-        // PropertyCollection.prototype.removeByProp = function(p_name) {
-        //     var idx = this.indexOfProp(p_name);
-
-        //     if (typeof idx === 'number') return this.removeAt(idx);
-        //     return false;   
-        // };
-        // overriding
-        // overload
         return PropertyCollection;
 
     }(BaseCollection));

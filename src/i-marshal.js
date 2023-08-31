@@ -16,18 +16,9 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {     
-        // Util                = require('./util');
-        // IObject             = require('./i-object').IObject;
-    } else {
-        // Util                = _global._L.Common.Util;
-        // IObject             = _global._L.Interface.IObject;
-    }
 
     //==============================================================
-    // 3. 모듈의존성 검사
-    // if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    // if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
+    // 3. module dependency check
 
     //==============================================================
     // 4. module implementation   
@@ -38,8 +29,6 @@
          * @interface
          */
         function IMarshal() {
-            // _super.call(this);
-
             /**
              * 메타 이름
              * @member {string} _L.Interface.IMarshal#guid
@@ -47,9 +36,8 @@
             this._guid = '';
             this._type = Function;
         }
-        // Util.inherits(IMarshal, _super);
 
-        IMarshal._ns = 'Interface';    // namespace
+        IMarshal._NS = 'Interface';    // namespace
         
         /**
          * 객체 얻기
@@ -74,14 +62,6 @@
 
     //==============================================================
     // 5. module export
-    // if (isNode) {
-    //     module.exports = IMarshal;
-    // }
-    // if (useNamesapce) {
-    //     _global._L.IMarshal = IMarshal;
-    //     // namespace
-    //     _global._L.Interface.IMarshal = IMarshal;
-    // }
     if (isNode) {     
         exports.IMarshal = IMarshal;
     } else {

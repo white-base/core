@@ -41,7 +41,7 @@
         }
         Util.inherits(IArrayCollection, _super);
 
-        IArrayCollection._ns = 'Interface';    // namespace
+        IArrayCollection._NS = 'Interface';    // namespace
 
         /**
          * 조회 : 인덱스로 이름 조회
@@ -49,20 +49,6 @@
         IArrayCollection.prototype.insertAt  = function() {
             throw new Error('[ insertAt(pos, val, ...) : bool ] Abstract method definition, fail...');
         };
-
-        // /**
-        //  * 키(이름)로 삭제
-        //  */
-        // IArrayCollection.prototype.removeByProp  = function() {
-        //     throw new Error('[ keyOf() ] Abstract method definition, fail...');
-        // };
-
-        // /**
-        //  * 키(이름)로 인덱스 조회
-        //  */
-        // IArrayCollection.prototype.indexOfProp  = function() {
-        //     throw new Error('[ keyOf() ] Abstract method definition, fail...');
-        // };
     
         return IArrayCollection;
         

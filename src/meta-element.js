@@ -47,21 +47,6 @@
             _super.call(this);
             
             var metaName;
-            // var _guid;
-            
-            /**
-             * guid
-             * @member {Array} _L.Meta.MetaElement#_guid 
-             */
-            // Object.defineProperty(this, '_guid', 
-            // {
-            //     get: function() { 
-            //         if (!_guid) _guid = Util.createGuid();
-            //         return _guid;
-            //     },
-            //     configurable: true,
-            //     enumerable: true
-            // });
 
             /**
              * 메타 이름
@@ -77,46 +62,13 @@
                 configurable: false,
                 enumerable: true
             });
-
                         
             this.metaName = p_name || '';
-            
-
-            // Util.implements(this, IMarshal);
         }
         Util.inherits(MetaElement, _super);
     
-        MetaElement._ns = 'Meta';           // namespace
+        MetaElement._NS = 'Meta';           // namespace
         MetaElement._PARAMS = ['name'];     // creator parameter
-
-        /**
-         * Guid 생성한다.
-         * @private
-         * @returns {String}
-         */
-        // function __newGuid() {
-        //     return Util.createGuid();
-        // };
-
-        /**
-         * 객체를 얻는다
-         * @virtual
-         * @returns {Object}
-         */
-        // MetaElement.prototype.getObject  = function(p_context) {
-        //     var obj = {};
-        //     var arr = Util.getAllProperties(this);
-            
-        //     for (var i = 0; i < arr.length; i++) {
-        //         var prop = arr[i];
-        //         if (this[prop] instanceof MetaElement) {
-        //             obj[prop] = this[prop].getObject(p_context);
-        //         } else if (typeof this[prop] !== 'function' && prop.substr(0, 1) !== '_') {
-        //             obj[prop] = this[prop];
-        //         }
-        //     }
-        //     return obj;                        
-        // };
 
         /**
          * 메타 객체를 얻는다
@@ -138,18 +90,6 @@
             _super.prototype.setObject.call(this, mObj);
             this.metaName = mObj.name;
         };
-
-        /**
-         * 조건 : Guid는 한번만 생성해야 함
-         * Guid를 얻는다.
-         * @returns {String}
-         */
-        // MetaElement.prototype.getGuid  = function() {
-        //     if (!this._guid) {
-        //         this._guid = __newGuid();
-        //     }
-        //     return this._guid;
-        // };
 
         return MetaElement;
 
