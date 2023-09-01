@@ -78,6 +78,23 @@
             // TODO: add(desc) 이것도 별도로 저장해둬야 함
             // obj.metaName = mObj.name;
         };
+        // POINT:C
+        ArrayCollection.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+
+            for(var i = 0; i < mObj._elem.length; i++) {
+                Object.defineProperty(this, [i], this._getPropDescriptor(i));
+            }
+
+            for(var i = 0; i < mObj._elem.length; i++) {
+                var elem = mObj._elem[i];
+                if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
+                    var obj = MetaRegistry.createObject(elem);
+                    this._element.push(obj);
+                } else this._element.push(elem);
+            }
+
+        };
 
         /**
          * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]

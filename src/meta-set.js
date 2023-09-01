@@ -225,8 +225,8 @@
             _super.prototype.setObject.call(this, mObj);
             
             this.setName = mObj.setName;
-            this.tables = mObj.columns;
-            this.views = mObj.rows;
+            this.tables.setObject(mObj.tables);
+            this.views.setObject(mObj.views);
         };
 
 
@@ -254,25 +254,48 @@
             this.views.clear();
         };
         
-        MetaSet.prototype.load  = function(p_target, p_opt) {
-            var opt = typeof p_option === 'undefined' ? 3 : p_option;
+        // MetaSet.prototype.load  = function(p_target, p_opt) {
+        //     var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+        //     if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
             
-            if (p_target instanceof MetaSet) {
-                this._loadMetaSet(p_target, opt);
-            } else if (typeof p_target === 'object') {
-                this.read(p_target, opt);
+        //     if (p_target instanceof MetaSet) {
+        //         this._loadMetaSet(p_target, opt);
+        //     } else if (typeof p_target === 'object') {
+        //         this.read(p_target, opt);
+        //     } else {
+        //         throw new Error('[p_target] 처리할 수 없는 타입입니다. ');
+        //     }
+        // };
+
+        MetaSet.prototype.load = function(p_obj, p_parse) {
+            var obj = p_obj;
+            var mObj;
+
+            if (p_obj instanceof MetaSet) throw new Error('[MetaSet] 타입을 load() 할수 없습니다. read()로 읽으세요.');
+
+            if (typeof obj === 'string') {
+                if (typeof p_parse === 'function') obj = p_parse(obj);
+                else obj = JSON.parse(obj, null);
+            }
+
+            if (MetaRegistry.isGuidObject(obj)) {
+                mObj = MetaRegistry.hasReferObject(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
+                this.setObject(mObj);
             } else {
-                throw new Error('[p_target] 처리할 수 없는 타입입니다. ');
+                throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
             }
         };
 
-        MetaSet.prototype.output = function(p_obj) {
-            console.log('구현해야함');  // COVER:
+        MetaSet.prototype.output = function(p_stringify, p_space, p_vOpt) {
+            var rObj = this.getObject(p_vOpt);
+            var str;
+            
+            if (typeof p_stringify === 'function') str = p_stringify(rObj, {space: p_space} );
+            else str = JSON.stringify(rObj, null, p_space);
+            return str;
         };
 
-        
         // MetaSet.prototype.read  = function(p_obj, p_opt) {
         //     var metaSet = null;
         //     var opt = typeof p_option === 'undefined' ? 3 : p_option;

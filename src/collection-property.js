@@ -9,6 +9,7 @@
     var IPropertyCollection;
     var BaseCollection;
     var MetaObject;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -22,11 +23,13 @@
         IPropertyCollection = require('./i-collection-property').IPropertyCollection;
         BaseCollection      = require('./collection-base').BaseCollection;
         MetaObject          = require('./meta-object').MetaObject;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Util                = _global._L.Util;
         IPropertyCollection = _global._L.IPropertyCollection;
         BaseCollection      = _global._L.BaseCollection;
         MetaObject          = _global._L.MetaObject;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -35,6 +38,7 @@
     if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
     if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
     if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
     
     //==============================================================
     // 4. module implementation   
@@ -110,9 +114,34 @@
                     this.add(key, elem);
                 } 
             }
+
             // TODO: add(desc) 이것도 별도로 저장해둬야 함
             // obj.metaName = mObj.name;
         };
+        // POINT:C
+        PropertyCollection.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+
+            if (mObj._key.length !== mObj._elem.length) throw new Error('_key, _elem 의 길이가 다릅니다.');
+
+            this._keys.length = 0;
+            for(var i = 0; i < mObj._key.length; i++) {
+                var key = mObj._key[i];
+                this._keys.push(key);
+                Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                Object.defineProperty(this, key, this._getPropDescriptor(i));
+            }
+
+            for(var i = 0; i < mObj._elem.length; i++) {
+                var elem = mObj._elem[i];
+                if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
+                    var obj = MetaRegistry.createObject(elem);
+                    obj.setObject(elem);
+                    this._element.push(obj);
+                } else this._element.push(elem);
+            }
+        };
+
 
         /**
          * 속성 컬렉션을 삭제한다. (내부처리) [구현]

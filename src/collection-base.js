@@ -330,6 +330,21 @@
             this.clear();
             this.elementType = mObj.elementType;
         };
+        // POINT:C
+        BaseCollection.prototype.setObject = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+            
+            this.clear();
+            this.elementType = mObj.elementType;
+            // _element
+            // for(var i = 0; i < mObj._elem.length; i++) {
+            //     var elem = mObj._elem[i];
+            //     if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
+            //         var obj = MetaRegistry.createObject(elem);
+            //         this._element.push(obj);
+            //     } else this._element.push(elem);
+            // }
+        };
 
         /** 
          * 컬렉션을 삭제한다.

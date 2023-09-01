@@ -101,6 +101,7 @@
             {
                 get: function() { return viewName; },
                 set: function(newValue) { 
+                    if (newValue === this.viewName) return;
                     if (typeof newValue !== 'string') throw new Error('Only [viewName] type "string" can be added');
                     if (this.metaSet && this.metaSet.views.existViewName(newValue)) throw new Error('tableName 중복 발생!!');
                     viewName = newValue;
@@ -170,9 +171,10 @@
         MetaView.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            this.metaSet = mObj.metaSet;
-            this.columns = mObj.columns;
-            this.rows = mObj.rows;
+            // this.metaSet = mObj.metaSet;
+            this.metaSet = MetaRegistry.find(mObj.metaSet['_guid']);
+            this.columns.setObject(mObj.columns);
+            this.rows.setObject(mObj.rows);
             this.viewName = mObj.viewName;
             this.__SET_refEntity(mObj._refEntity, this);
         };

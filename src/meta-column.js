@@ -112,6 +112,24 @@
             });        
             
             /**
+             * 아이템 소유 엔티티
+             * @member {MetaEntity} _L.Meta.Entity.MetaColumn#_entity
+             */
+            Object.defineProperty(this, '_entity', 
+            {
+                get: function() { return _entity; },
+                set: function(newValue) { 
+                    // TODO:: 자료종류를 검사해야함
+                    if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
+                        throw new Error('Only [_entity] type "MetaEntity" can be added');    // COVER:
+                    }
+                    _entity = newValue;
+                },
+                configurable: true,
+                enumerable: true
+            });
+
+            /**
              * 엔티티의 아이템(속성) 컬렉션
              * @member {string} _L.Meta.Entity.MetaColumn#columnName
              */
@@ -119,10 +137,10 @@
             {
                 get: function() { return columnName; },
                 set: function(newValue) { 
+                    if (newValue === this.columnName) return;
                     if (typeof newValue !== 'string') throw new Error('Only [columnName] type "string" can be added');
-                    if (_entity && _entity.columns.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
-                    if (_entity && _entity.columns.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!'); 
-                    
+                    if (_entity && _entity.columns.existColumnName(newValue)) throw new Error('p_name columnName 과 중복 발생!! '+p_name);  
+                    if (_entity && _entity.columns.existAlias(newValue)) throw new Error('p_name alias 과 중복 발생!! '+p_name); 
                     columnName = newValue;
                 },
                 configurable: false,
@@ -151,23 +169,7 @@
                 enumerable: true
             }); 
 
-            /**
-             * 아이템 소유 엔티티
-             * @member {MetaEntity} _L.Meta.Entity.MetaColumn#_entity
-             */
-            Object.defineProperty(this, '_entity', 
-            {
-                get: function() { return _entity; },
-                set: function(newValue) { 
-                    // TODO:: 자료종류를 검사해야함
-                    if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
-                        throw new Error('Only [_entity] type "MetaEntity" can be added');    // COVER:
-                    }
-                    _entity = newValue;
-                },
-                configurable: true,
-                enumerable: true
-            });
+
 
             /**
              * 아이템 기본값 (내부속성)
@@ -378,7 +380,7 @@
 
 
         MetaColumn._NS = 'Meta.Entity';     // namespace
-        MetaColumn._PARAMS = ['_name', '_entity', '_property'];    // creator parameter
+        MetaColumn._PARAMS = ['columnName', '_entity', '_property'];    // creator parameter
 
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
@@ -416,7 +418,8 @@
         MetaColumn.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
 
-            if (this.metaName !== this.columnName) obj.columnName = this.columnName;
+            // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
+            obj.columnName = this.columnName;
             if (this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
             if (this.default !== null) obj.default = this.default;
             if (this.caption !== null) obj.caption = this.caption;            
@@ -490,6 +493,26 @@
                 }
             }
             
+            return clone;
+        };
+
+        // 변형 POINT:
+        MetaColumn.prototype.clone = function(p_entity) {
+            var clone = new MetaColumn(this.columnName);
+            var rObj = this.getObject();
+
+            if (rObj.columnName) clone.columnName = rObj.columnName;
+            clone._entity = p_entity ? p_entity : this._entity;
+            if (rObj.default) clone.default = rObj.default;
+            if (rObj.caption) clone.caption = rObj.caption;
+            if (rObj.isNotNull) clone.isNotNull = rObj.isNotNull;
+            if (rObj.isNullPass) clone.isNullPass = rObj.isNullPass;
+            if (rObj.constraints) clone.constraints = rObj.constraints;
+            if (rObj.getter) clone.getter = rObj.getter;
+            if (rObj.setter) clone.setter = rObj.setter;
+            if (rObj.alias) clone.alias = rObj.alias;
+            if (rObj.value) clone.value = rObj.value;
+
             return clone;
         };
 

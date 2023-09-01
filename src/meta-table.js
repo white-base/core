@@ -10,6 +10,7 @@
     var MetaEntity;
     var PropertyCollection;
     var MetaTableColumnCollection;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -24,10 +25,12 @@
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
         Util                        = _global._L.Util;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaEntity                  = _global._L.MetaEntity;
+        MetaRegistry                = _global._L.MetaRegistry;
         MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
     }
 
@@ -37,6 +40,7 @@
     if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
     if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
     if (typeof MetaTableColumnCollection === 'undefined') throw new Error('[MetaTableColumnCollection] module load fail...');
+    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
 
     //==============================================================
     // 4. module implementation   
@@ -63,6 +67,7 @@
             {
                 get: function() { return tableName; },
                 set: function(newValue) { 
+                    if (newValue === this.tableName) return;
                     if (typeof newValue !== 'string') throw new Error('Only [tableName] type "string" can be added');
                     if (this.metaSet && this.metaSet.tables.existTableName(newValue)) throw new Error('tableName 중복 발생!!');
                     tableName = newValue;
@@ -110,7 +115,7 @@
         MetaTable.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            if(mObj.metaSet) this.metaSet = mObj.metaSet;
+            if(mObj.metaSet) this.metaSet = MetaRegistry.find(mObj.metaSet['_guid']);
             this.columns.setObject(mObj.columns);
             this.rows.setObject(mObj.rows);
             this.tableName = mObj.tableName;

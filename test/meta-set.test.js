@@ -4,6 +4,7 @@
 //==============================================================
 // gobal defined
 'use strict';
+
 const Util                  = require('../src/util');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
@@ -15,10 +16,18 @@ const { MetaView, MetaViewCollection }      = require('../src/meta-view');
 const { MetaRow }           = require('../src/meta-row');
 const { MetaColumn }        = require('../src/meta-column');
 const  {MetaSet}              = require('../src/meta-set');
+const { replacer, reviver, stringify, parse }              = require('telejson');
+const { MetaRegistry } = require('../src/meta-registry');
+const { loadNamespace } = require('../src/load-namespace');
+
 
 //==============================================================
 // test
 describe("[target: meta-set.js]", () => {
+    beforeEach(() => {
+       jest.resetModules();
+       MetaRegistry.init();
+    });
     describe("MetaSet :: 클래스", () => {
         describe("this.clear() <rows 초기화>", () => {
             it("- clear() : rows 초기화 ", () => {
@@ -475,6 +484,193 @@ describe("[target: meta-set.js]", () => {
                 const obj = set1.write();
 
                 expect(obj).toEqual(json2); 
+            });
+        });
+        describe("this.output() 출력", () => {
+            it("- output() : new 객체 비교 ", () => {
+                const set1 = new MetaSet('S1');
+                const set2 = new MetaSet('S2');
+                // load() 전
+                expect(set1 === set2).toBe(false);
+                expect(set1._guid === set2._guid).toBe(false);
+                expect(set1.setName === set2.setName).toBe(false);
+                // load() 후
+                set2.load(set1.output());
+                expect(set1 === set2).toBe(false);
+                expect(set1._guid === set2._guid).toBe(true);
+                expect(set1.setName === set2.setName).toBe(true);
+            });
+            it("- output() : new 생성후 load() ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+                const beginCnt = MetaRegistry.count;
+                const str = set1.output(stringify, '\t');
+                MetaRegistry.init();
+                const initCnt = MetaRegistry.count;
+                loadNamespace();    // init() 초기화하여 불러와야함
+                const load_ns_Cnt = MetaRegistry.ns.count;
+                // 생성자를 통해 성성
+                var set2 = new MetaSet('S2');
+                set2.load(str, parse);
+
+                expect(beginCnt).toBe(18);
+                expect(initCnt).toBe(0);
+                expect(load_ns_Cnt).toBe(38);
+                expect(set2.tables['T1']).toBeDefined();
+                expect(set2.tables['T1'].columns.count).toBe(2);
+                expect(set2.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set2.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set2.views['V1']).toBeDefined();
+                expect(set2.views['V1'].columns.count).toBe(1);
+                expect(set2.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set2.tables['T1'].rows.count).toBe(1);
+                expect(set2.tables['T1'].rows[0].count).toBe(2);
+                expect(set2.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set2.tables['T1'].rows[0]['i2']).toBe('R2');
+                expect(set2.views['V1'].rows.count).toBe(1);
+                expect(set2.views['V1'].rows[0].count).toBe(1);
+                expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
+            });
+            it("- output() : createObject() 생성 후 load() ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+                const beginCnt = MetaRegistry.count;
+                const str = set1.output(stringify, '\t');
+                MetaRegistry.init();
+                const initCnt = MetaRegistry.count;
+                loadNamespace();    // init() 초기화하여 불러와야함
+                const load_ns_Cnt = MetaRegistry.ns.count;
+                // 등록소를 통해서 생성
+                const set2 = MetaRegistry.createObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
+                set2.load(str, parse);
+
+                expect(beginCnt).toBe(18);
+                expect(initCnt).toBe(0);
+                expect(load_ns_Cnt).toBe(38);
+                expect(set2.tables['T1']).toBeDefined();
+                expect(set2.tables['T1'].columns.count).toBe(2);
+                expect(set2.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set2.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set2.views['V1']).toBeDefined();
+                expect(set2.views['V1'].columns.count).toBe(1);
+                expect(set2.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set2.tables['T1'].rows.count).toBe(1);
+                expect(set2.tables['T1'].rows[0].count).toBe(2);
+                expect(set2.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set2.tables['T1'].rows[0]['i2']).toBe('R2');
+                expect(set2.views['V1'].rows.count).toBe(1);
+                expect(set2.views['V1'].rows[0].count).toBe(1);
+                expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
+            });
+            it.skip("- output() : 출력 후 MeTaRegistry", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                const json2 = { 
+                    setName: 'S1',
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+                const beginCnt = MetaRegistry.count;
+                const str = set1.output(stringify, '\t');
+                MetaRegistry.init();
+                const initCnt = MetaRegistry.count;
+                loadNamespace();
+                const load_ns_Cnt = MetaRegistry.ns.count;
+                // 등록소를 통해서 생성
+                const set2 = MetaRegistry.createObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
+                set2.load(str, parse);
+
+                expect(beginCnt).toBe(18);
+                expect(initCnt).toBe(0);
+                expect(load_ns_Cnt).toBe(38);
             });
         });
         describe("this.acceptChanges() <커밋>", () => {

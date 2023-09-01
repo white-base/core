@@ -1,3 +1,6 @@
+/**
+ * namespace _L.Common
+ */
 (function(_global) {
     'use strict';
 
@@ -44,6 +47,9 @@
 
     //==============================================================
     // 1. namespace declaration
+    _global._L                  = _global._L || {};
+    _global._L.Common           = _global._L.Common || {};
+    _global._L.Common.Util      = _global._L.Common.Util || {};
 
     //==============================================================
     // 2. import module
@@ -93,48 +99,50 @@
     // 3. module dependency check
     
     //==============================================================
-    // 4. module implementation   
-    MetaRegistry.registerClass(MetaRegistry._NS, MetaRegistry.name, MetaRegistry);
-    MetaRegistry.registerClass(MetaObject._NS, MetaObject.name, MetaObject);
-    MetaRegistry.registerClass(MetaElement._NS, MetaElement.name, MetaElement);
-    MetaRegistry.registerClass(ArrayCollection._NS, ArrayCollection.name, ArrayCollection);
-    MetaRegistry.registerClass(BaseCollection._NS, BaseCollection.name, BaseCollection);
-    MetaRegistry.registerClass(PropertyCollection._NS, PropertyCollection.name, PropertyCollection);
-    MetaRegistry.registerClass(TransactionCollection._NS, TransactionCollection.name, TransactionCollection);
-    MetaRegistry.registerClass(IArrayCollection._NS, IArrayCollection.name, IArrayCollection);
-    MetaRegistry.registerClass(IBaseCollection._NS, IBaseCollection.name, IBaseCollection);
-    MetaRegistry.registerClass(IPropertyCollection._NS, IPropertyCollection.name, IPropertyCollection);
-    MetaRegistry.registerClass(ICollection._NS, ICollection.name, ICollection);
-    MetaRegistry.registerClass(IAllControl._NS, IAllControl.name, IAllControl);
-    MetaRegistry.registerClass(IExportControl._NS, IExportControl.name, IExportControl);
-    MetaRegistry.registerClass(IGroupControl._NS, IGroupControl.name, IGroupControl);
-    MetaRegistry.registerClass(IImportControl._NS, IImportControl.name, IImportControl);
-    MetaRegistry.registerClass(ILookupControl._NS, ILookupControl.name, ILookupControl);
-    MetaRegistry.registerClass(IPartControl._NS, IPartControl.name, IPartControl);
-    MetaRegistry.registerClass(ISchemaControl._NS, ISchemaControl.name, ISchemaControl);
-    MetaRegistry.registerClass(IMarshal._NS, IMarshal.name, IMarshal);
-    MetaRegistry.registerClass(IObject._NS, IObject.name, IObject);
-    MetaRegistry.registerClass(ITransaction._NS, ITransaction.name, ITransaction);
-    MetaRegistry.registerClass(MetaColumn._NS, MetaColumn.name, MetaColumn);
-    MetaRegistry.registerClass(MetaColumnCollection._NS, MetaColumnCollection.name, MetaColumnCollection);
-    MetaRegistry.registerClass(MetaViewColumnCollection._NS, MetaViewColumnCollection.name, MetaViewColumnCollection);
-    MetaRegistry.registerClass(MetaTableColumnCollection._NS, MetaTableColumnCollection.name, MetaTableColumnCollection);
-    MetaRegistry.registerClass(MetaEntity._NS, MetaEntity.name, MetaEntity);
-    MetaRegistry.registerClass(MetaRow._NS, MetaRow.name, MetaRow);
-    MetaRegistry.registerClass(MetaRowCollection._NS, MetaRowCollection.name, MetaRowCollection);
-    MetaRegistry.registerClass(MetaSet._NS, MetaSet.name, MetaSet);
-    MetaRegistry.registerClass(MetaTable._NS, MetaTable.name, MetaTable);
-    MetaRegistry.registerClass(MetaTableCollection._NS, MetaTableCollection.name, MetaTableCollection);
-    MetaRegistry.registerClass(MetaView._NS, MetaView.name, MetaView);
-    MetaRegistry.registerClass(MetaViewCollection._NS, MetaViewCollection.name, MetaViewCollection);
-    MetaRegistry.registerClass(TransactionQueue._NS, TransactionQueue.name, TransactionQueue);
-    MetaRegistry.registerClass(Observer._NS, Observer.name, Observer);
-    MetaRegistry.registerClass(CustomError._NS, CustomError.name, CustomError);
-    MetaRegistry.registerClass(NamespaceManager._NS, NamespaceManager.name, NamespaceManager);
-    MetaRegistry.registerClass('Common', 'Util', Util);
+    // 4. module implementation
+    var loadNamespace = function() {
+        MetaRegistry.registerClass(MetaRegistry._NS, MetaRegistry.name, MetaRegistry);
+        MetaRegistry.registerClass(MetaObject._NS, MetaObject.name, MetaObject);
+        MetaRegistry.registerClass(MetaElement._NS, MetaElement.name, MetaElement);
+        MetaRegistry.registerClass(ArrayCollection._NS, ArrayCollection.name, ArrayCollection);
+        MetaRegistry.registerClass(BaseCollection._NS, BaseCollection.name, BaseCollection);
+        MetaRegistry.registerClass(PropertyCollection._NS, PropertyCollection.name, PropertyCollection);
+        MetaRegistry.registerClass(TransactionCollection._NS, TransactionCollection.name, TransactionCollection);
+        MetaRegistry.registerClass(IArrayCollection._NS, IArrayCollection.name, IArrayCollection);
+        MetaRegistry.registerClass(IBaseCollection._NS, IBaseCollection.name, IBaseCollection);
+        MetaRegistry.registerClass(IPropertyCollection._NS, IPropertyCollection.name, IPropertyCollection);
+        MetaRegistry.registerClass(ICollection._NS, ICollection.name, ICollection);
+        MetaRegistry.registerClass(IAllControl._NS, IAllControl.name, IAllControl);
+        MetaRegistry.registerClass(IExportControl._NS, IExportControl.name, IExportControl);
+        MetaRegistry.registerClass(IGroupControl._NS, IGroupControl.name, IGroupControl);
+        MetaRegistry.registerClass(IImportControl._NS, IImportControl.name, IImportControl);
+        MetaRegistry.registerClass(ILookupControl._NS, ILookupControl.name, ILookupControl);
+        MetaRegistry.registerClass(IPartControl._NS, IPartControl.name, IPartControl);
+        MetaRegistry.registerClass(ISchemaControl._NS, ISchemaControl.name, ISchemaControl);
+        MetaRegistry.registerClass(IMarshal._NS, IMarshal.name, IMarshal);
+        MetaRegistry.registerClass(IObject._NS, IObject.name, IObject);
+        MetaRegistry.registerClass(ITransaction._NS, ITransaction.name, ITransaction);
+        MetaRegistry.registerClass(MetaColumn._NS, MetaColumn.name, MetaColumn);
+        MetaRegistry.registerClass(MetaColumnCollection._NS, MetaColumnCollection.name, MetaColumnCollection);
+        MetaRegistry.registerClass(MetaViewColumnCollection._NS, MetaViewColumnCollection.name, MetaViewColumnCollection);
+        MetaRegistry.registerClass(MetaTableColumnCollection._NS, MetaTableColumnCollection.name, MetaTableColumnCollection);
+        MetaRegistry.registerClass(MetaEntity._NS, MetaEntity.name, MetaEntity);
+        MetaRegistry.registerClass(MetaRow._NS, MetaRow.name, MetaRow);
+        MetaRegistry.registerClass(MetaRowCollection._NS, MetaRowCollection.name, MetaRowCollection);
+        MetaRegistry.registerClass(MetaSet._NS, MetaSet.name, MetaSet);
+        MetaRegistry.registerClass(MetaTable._NS, MetaTable.name, MetaTable);
+        MetaRegistry.registerClass(MetaTableCollection._NS, MetaTableCollection.name, MetaTableCollection);
+        MetaRegistry.registerClass(MetaView._NS, MetaView.name, MetaView);
+        MetaRegistry.registerClass(MetaViewCollection._NS, MetaViewCollection.name, MetaViewCollection);
+        MetaRegistry.registerClass(TransactionQueue._NS, TransactionQueue.name, TransactionQueue);
+        MetaRegistry.registerClass(Observer._NS, Observer.name, Observer);
+        MetaRegistry.registerClass(CustomError._NS, CustomError.name, CustomError);
+        MetaRegistry.registerClass(NamespaceManager._NS, NamespaceManager.name, NamespaceManager);
+        MetaRegistry.registerClass('Common', 'Util', Util);
     
-    console.log(MetaRegistry.ns.list.join('\n'));
-    console.log(MetaRegistry.ns.count);
+    };
+    // console.log(MetaRegistry.ns.list.join('\n'));
+    // console.log(MetaRegistry.ns.count);
     
     /*
     Meta.MetaRegistry
@@ -177,16 +185,15 @@
     Common.Util
     */
 
-    console.log(0);
+    // console.log(0);
 
     //==============================================================
     // 5. module export
     if (isNode) {     
-        // exports.MetaRow = MetaRow;
+        exports.loadNamespace = loadNamespace;
     } else {
-        // _global._L.MetaRow = MetaRow;
-        // // namespace
-        // _global._L.Meta.Entity.MetaRow = MetaRow;
+        _global._L = loadNamespace;
+        _global._L.Common.Util.loadNamespace = loadNamespace;   // namespace
     }
 
 }(typeof window !== 'undefined' ? window : global));

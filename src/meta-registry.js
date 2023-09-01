@@ -343,11 +343,14 @@
                     if (obj[prop] === null) continue;
                     if (typeof obj[prop] === 'object') {
                         if (obj[prop]['$ref']) {
-                            obj[prop] = findGuid(obj[prop]['$ref'], arr);
-                            if (typeof obj[prop] !== 'object') throw new Error('참조 연결 실패 $ref:' + obj['$ref']);
+                            var ref = findGuid(obj[prop]['$ref'], arr);
+                            if (typeof ref !== 'object') throw new Error('참조 연결 실패 $ref:' + obj[prop]['$ref']);
+                            obj[prop] = ref;
                         } else if (obj[prop]['$ns']) {
                             // obj[prop] = _this.ns.get(obj[prop]['$ns']);
-                            obj[prop] = _this.getClass(obj[prop]['$ns']);
+                            var ns = _this.getClass(obj[prop]['$ns']);
+                            if (typeof ns !== 'function') throw new Error('참조 연결 실패 $ns:' + obj[prop]['$ns']);
+                            obj[prop] = ns;
                         } else linkReference(obj[prop], arr);
                     } else if (Array.isArray(obj[prop])){
                         for(var i = 0; i < obj[prop].length; i++) {
