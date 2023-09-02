@@ -357,6 +357,7 @@ describe("[target: meta-set.js]", () => {
                     tables: {
                         T1: {
                             columns: {
+                                _key: ['i1', 'i2'],
                                 i1: { caption: 'C1'},
                                 i2: { caption: 'C2'},
                             },
@@ -366,6 +367,7 @@ describe("[target: meta-set.js]", () => {
                     views: {
                         V1: {
                             columns: {
+                                _key: ['i1'],
                                 i1: { caption: 'C1'},
                             },
                             rows: []
@@ -461,6 +463,7 @@ describe("[target: meta-set.js]", () => {
                     tables: {
                         T1: {
                             columns: {
+                                _key: ['i1', 'i2'],
                                 i1: { caption: 'C1'},
                                 i2: { caption: 'C2'},
                             },
@@ -472,6 +475,7 @@ describe("[target: meta-set.js]", () => {
                     views: {
                         V1: {
                             columns: {
+                                _key: ['i1'],
                                 i1: { caption: 'C1'},
                             },
                             rows: [
@@ -608,7 +612,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set2.views['V1'].rows[0].count).toBe(1);
                 expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
             });
-            it.skip("- output() : 출력 후 MeTaRegistry", () => {
+            it("- output() : 출력 후 MeTaRegistry", () => {
                 var set1 = new MetaSet('S1');
                 var json1 = { 
                     tables: {
@@ -638,6 +642,7 @@ describe("[target: meta-set.js]", () => {
                     tables: {
                         T1: {
                             columns: {
+                                _key: ['i1', 'i2'],
                                 i1: { caption: 'C1'},
                                 i2: { caption: 'C2'},
                             },
@@ -649,6 +654,7 @@ describe("[target: meta-set.js]", () => {
                     views: {
                         V1: {
                             columns: {
+                                _key: ['i1'],
                                 i1: { caption: 'C1'},
                             },
                             rows: [
@@ -667,7 +673,9 @@ describe("[target: meta-set.js]", () => {
                 // 등록소를 통해서 생성
                 const set2 = MetaRegistry.createObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
                 set2.load(str, parse);
+                const json3 = set2.write();
 
+                expect(json3).toEqual(json2);
                 expect(beginCnt).toBe(18);
                 expect(initCnt).toBe(0);
                 expect(load_ns_Cnt).toBe(38);

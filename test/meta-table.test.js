@@ -16,6 +16,7 @@ const { MetaRow }               = require('../src/meta-row');
 const { MetaColumn }              = require('../src/meta-column');
 const { replacer, reviver, stringify, parse }              = require('telejson');
 const {MetaRegistry}        = require('../src/meta-registry');
+const { loadNamespace } = require('../src/load-namespace');
 
 //==============================================================
 // test
@@ -437,6 +438,9 @@ describe("[target: meta-table.js]", () => {
                 row['i2'] = 'R200';
                 table1.rows.add(row);
                 var rObj = table1.getObject();
+                MetaRegistry.init();
+                // MetaRegistry.registerClass('Meta.Entity', 'MetaRow', MetaRow);
+                loadNamespace();    // init() 초기화하여 불러와야함
                 var table2 = new MetaTable('T2');
                 table2.load(rObj);
         
@@ -1473,6 +1477,7 @@ describe("[target: meta-table.js]", () => {
                 };
                 const json2 = {
                     columns: {
+                        _key: ['i1', 'i2'],
                         i1: { caption: 'C1', alias: 'ii1'},
                         i2: { caption: 'C2'},
                     },

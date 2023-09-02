@@ -90,6 +90,7 @@
                 var elem = mObj._elem[i];
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
                     var obj = MetaRegistry.createObject(elem);
+                    obj.setObject(elem);
                     this._element.push(obj);
                 } else this._element.push(elem);
             }

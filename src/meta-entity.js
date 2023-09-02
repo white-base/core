@@ -1218,6 +1218,13 @@
                 
                 obj.columns[key] = cObj;
             }
+
+            // TODO: 요소이름에서 _key 제외해야 함
+            obj.columns['_key'] = [];
+            for (var i = 0; i < this.columns['_keys'].length; i++) {
+                var key = this.columns['_keys'][i];
+                obj.columns['_key'].push(key);
+            }
             return obj;
         };
 
