@@ -336,8 +336,10 @@
         
 
         MetaSet.prototype.readSchema  = function(p_obj, p_createRow) {
+            var _this = this;
             var metaSet = null;
             var obj;
+            var entity;
 
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
 
@@ -346,18 +348,57 @@
                 obj = MetaSet._transformObject(metaSet);
             } else obj = metaSet;
 
-            if (obj['tables']) createEntity(obj['tables'], this.tables);
-            if (obj['views']) createEntity(obj['views'], this.views);
+
+            if (obj['tables']) {
+                entity = obj['tables'];
+                if (entity['_key'] && Array.isArray(entity['_key'])) {
+                    for (var i = 0; i < entity['_key'].length; i++) {
+                        addEntity(entity['_key'][i], entity, this.tables);
+                    }
+                } else {
+                    for (var key in entity) {
+                        addEntity(key, entity, this.tables);
+                    }
+                }
+                // addEntity(obj['tables'], this.tables);
+            }
+            if (obj['views']) {
+                entity = obj['views'];
+                if (entity['_key'] && Array.isArray(entity['_key'])) {
+                    for (var i = 0; i < entity['_key'].length; i++) {
+                        addEntity(entity['_key'][i], entity, this.views);
+                    }
+                } else {
+                    for (var key in entity) {
+                        addEntity(key, entity, this.views);
+                    }
+                }
+                // addEntity(obj['views'], this.views);
+            }
             return;
 
             // inner funciton
-            function createEntity(p_entity, p_collec) {
-                for (var key in p_entity) {
-                    if (Object.hasOwnProperty.call(p_entity, key)) {
-                        if (p_collec.exist(key)) throw new Error('"'+ key +'"가 존재하여, entity를 추가 할 수 없습니다.');
-                        p_collec.add(key);
-                        p_collec[key].readSchema(p_entity[key], p_createRow);
+            // function addEntity(p_entity, p_collec) {
+            //     for (var key in p_entity) {
+            //         if (Object.hasOwnProperty.call(p_entity, key)) {
+            //             if (p_collec.exist(key)) throw new Error('"'+ key +'"가 존재하여, entity를 추가 할 수 없습니다.');
+            //             p_collec.add(key);
+            //             p_collec[key].readSchema(p_entity[key], p_createRow);
+            //         }
+            //     }
+            // }
+            function addEntity(key, p_collec, p_baseCollec) {
+                if (Object.hasOwnProperty.call(p_collec, key) && typeof p_collec[key] === 'object') {
+                    // if (_this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                    var prop = p_collec[key];
+                    if (prop['_metaSet'] && MetaRegistry.hasMetaObject(prop['_metaSet'])) {
+                        prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']['_guid']);
                     }
+                    // var entity = new p_baseCollec._baseType(key, _this, prop);      // TODO: register 로 변경 요망
+                    if (p_baseCollec.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                    p_baseCollec.add(key);
+                    p_baseCollec[key].readSchema(p_collec[key], p_createRow);
+                    
                 }
             }
         };
@@ -397,22 +438,42 @@
 
         MetaSet.prototype.write  = function() {
             var obj = { tables: {}, views: {} };
+            var schema;
+            var data;
 
             obj.setName = this.setName;
+            // for(var i = 0; i < this.tables.count; i++) {
+            //     var table = this.tables[i];
+            //     var key = this.tables._keys[i];
+            //     var tObj = table.writeSchema();
+            //     tObj.rows = table.writeData().rows;
+            //     obj.tables[key] = tObj;
+            // }
+            schema = this.writeSchema();
+            obj.tables = schema.tables;
+            obj.views = schema.views;
+
+            // obj.tables['_key'] = tObj['_key'];
+
+            // for(var i = 0; i < this.views.count; i++) {
+            //     var view = this.views[i];
+            //     var key = this.views._keys[i];
+            //     var vObj = view.writeSchema();
+            //     vObj.rows = view.writeData().rows;
+            //     obj.views[key] = vObj;
+            // }
+
             for(var i = 0; i < this.tables.count; i++) {
                 var table = this.tables[i];
                 var key = this.tables._keys[i];
-                var tObj = table.writeSchema();
-                tObj.rows = table.writeData().rows;
-                obj.tables[key] = tObj;
+                obj.tables[key].rows = table.writeData().rows;
             }
             for(var i = 0; i < this.views.count; i++) {
-                var view = this.views[i];
+                var views = this.views[i];
                 var key = this.views._keys[i];
-                var vObj = view.writeSchema();
-                vObj.rows = view.writeData().rows;
-                obj.views[key] = vObj;
+                obj.views[key].rows = views.writeData().rows;
             }
+
             return obj;
         };
         
@@ -426,10 +487,23 @@
                 var key = this.tables._keys[i];
                 obj.tables[key] = table.writeSchema();
             }
+            // TODO: 요소이름에서 _key 제외해야 함
+            obj.tables['_key'] = [];
+            for (var i = 0; i < this.tables['_keys'].length; i++) {
+                var key = this.tables['_keys'][i];
+                obj.tables['_key'].push(key);
+            }
+
             for(var i = 0; i < this.views.count; i++) {
                 var view = this.views[i];
                 var key = this.views._keys[i];
                 obj.views[key] = view.writeSchema();
+            }
+            // TODO: 요소이름에서 _key 제외해야 함
+            obj.views['_key'] = [];
+            for (var i = 0; i < this.views['_keys'].length; i++) {
+                var key = this.views['_keys'][i];
+                obj.views['_key'].push(key);
             }
             return obj;
         };

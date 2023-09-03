@@ -125,7 +125,7 @@ describe("[target: meta-column.js]", () => {
     
                 expect(table1.columns.count).toBe(2);
             });
-            it.only("- add(item) : 아이템 객체로 추가 ", () => {
+            it("- add(item) : 아이템 객체로 추가 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add(new MetaColumn('i1'));
                 table1.columns.add('i2');

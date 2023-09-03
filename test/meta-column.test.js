@@ -224,7 +224,7 @@ describe("[target: meta-column.js ]", () => {
             });
         });
         describe("this.clone() <복제>", () => {
-            it.only("- clone() : 복제 ", () => {
+            it("- clone() : 복제 ", () => {
                 var table = new MetaTable('T1');
                 var item1 = new MetaColumn('i1', table, {
                     // type: 'text',

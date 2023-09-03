@@ -355,6 +355,7 @@ describe("[target: meta-set.js]", () => {
                 const json2 = {
                     setName: 'S1',
                     tables: {
+                        _key: ['T1'],
                         T1: {
                             columns: {
                                 _key: ['i1', 'i2'],
@@ -365,6 +366,7 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                     views: {
+                        _key: ['V1'],
                         V1: {
                             columns: {
                                 _key: ['i1'],
@@ -461,6 +463,7 @@ describe("[target: meta-set.js]", () => {
                 const json2 = { 
                     setName: 'S1',
                     tables: {
+                        _key: ['T1'],
                         T1: {
                             columns: {
                                 _key: ['i1', 'i2'],
@@ -473,6 +476,7 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                     views: {
+                        _key: ['V1'],
                         V1: {
                             columns: {
                                 _key: ['i1'],
@@ -612,6 +616,51 @@ describe("[target: meta-set.js]", () => {
                 expect(set2.views['V1'].rows[0].count).toBe(1);
                 expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
             });
+            it("- output() : MetaRegistry.load() <같은객체를 가르킨>", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+                const str = set1.output(stringify, '\t');
+                const set2 = MetaRegistry.loading(str, parse);
+                
+                // expect(set2.tables['T1']).toBeDefined();
+                // expect(set2.tables['T1'].columns.count).toBe(2);
+                // expect(set2.tables['T1'].columns['i1'].caption).toBe('C1');
+                // expect(set2.tables['T1'].columns['i2'].caption).toBe('C2');
+                // expect(set2.views['V1']).toBeDefined();
+                // expect(set2.views['V1'].columns.count).toBe(1);
+                // expect(set2.views['V1'].columns['i1'].caption).toBe('C1');
+                // expect(set2.tables['T1'].rows.count).toBe(1);
+                // expect(set2.tables['T1'].rows[0].count).toBe(2);
+                // expect(set2.tables['T1'].rows[0]['i1']).toBe('R1');
+                // expect(set2.tables['T1'].rows[0]['i2']).toBe('R2');
+                // expect(set2.views['V1'].rows.count).toBe(1);
+                // expect(set2.views['V1'].rows[0].count).toBe(1);
+                // expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
+                expect(set1 === set2).toBe(true);
+            });
             it("- output() : 출력 후 MeTaRegistry", () => {
                 var set1 = new MetaSet('S1');
                 var json1 = { 
@@ -640,6 +689,7 @@ describe("[target: meta-set.js]", () => {
                 const json2 = { 
                     setName: 'S1',
                     tables: {
+                        _key: ['T1'],
                         T1: {
                             columns: {
                                 _key: ['i1', 'i2'],
@@ -652,6 +702,7 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                     views: {
+                        _key: ['V1'],
                         V1: {
                             columns: {
                                 _key: ['i1'],

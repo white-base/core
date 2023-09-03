@@ -439,6 +439,35 @@
             return this.ns.get(fullName);
         };
 
+        /**
+         * 로드
+         * @param {*} p_obj 
+         * @param {*} p_parse 
+         */
+        MetaRegistry.loading = function(p_obj, p_parse) {
+            var obj = p_obj;
+            var mObj;
+            var meta;
+
+            // TODO: metaObject 검사후 예외
+
+            if (typeof obj === 'string') {
+                if (typeof p_parse === 'function') obj = p_parse(obj);
+                else obj = JSON.parse(obj, null);
+            }
+
+            if (this.hasMetaObject(obj)) return this.find(obj['_guid']);
+
+            if (this.isGuidObject(obj)) {
+                mObj = this.hasReferObject(obj) ? this.transformRefer(obj) : p_obj;
+                
+                meta = this.createObject(mObj);
+                meta.setObject(mObj);
+            } else {
+                throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
+            }
+        };
+
         return MetaRegistry;
     }());
 

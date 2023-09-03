@@ -978,6 +978,9 @@
                 else obj = JSON.parse(obj, null);
             }
 
+            // 기존에 존재하면 기존 객체 리턴
+            if (MetaRegistry.hasMetaObject(obj)) return MetaRegistry.find(obj['_guid']);
+            
             if (MetaRegistry.isGuidObject(obj)) {
                 mObj = MetaRegistry.hasReferObject(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
                 this.setObject(mObj);

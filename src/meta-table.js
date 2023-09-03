@@ -208,7 +208,26 @@
         function MetaTableCollection(p_owner) {   // COVER:
             _super.call(this, p_owner);
 
+            var _baseType = MetaTable;
+            /**
+             * 기본 생성 타입
+             * @member {MetaColumnCollection} _L.Meta.Entity.MetaTableCollection#_baseType
+             */
+            Object.defineProperty(this, '_baseType', 
+            {
+                get: function() { return _baseType; },
+                set: function(newValue) { 
+                    if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
+                        throw new Error('Only [_baseType] type "MetaEntity" can be added');
+                    }
+                    _baseType = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
+
             this.elementType = MetaTable;   // 컬렉션타입 설정
+
         }
         Util.inherits(MetaTableCollection, _super);
 
