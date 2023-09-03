@@ -100,25 +100,24 @@
          * @virtual
          * @returns {object}
          */
-        PropertyCollection.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        // PropertyCollection.prototype.setObject  = function(mObj) {
+        //     _super.prototype.setObject.call(this, mObj);
 
-            // this.clear();
-            for(var i = 0; i < mObj._elem.length; i++) {
-                var elem = mObj._elem[i];
-                var key = mObj._key[i];
-                if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
-                    this.add(key);
-                    this[key].setObject(elem);
-                } else {
-                    this.add(key, elem);
-                } 
-            }
+        //     // this.clear();
+        //     for(var i = 0; i < mObj._elem.length; i++) {
+        //         var elem = mObj._elem[i];
+        //         var key = mObj._key[i];
+        //         if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
+        //             this.add(key);
+        //             this[key].setObject(elem);
+        //         } else {
+        //             this.add(key, elem);
+        //         } 
+        //     }
 
-            // TODO: add(desc) 이것도 별도로 저장해둬야 함
-            // obj.metaName = mObj.name;
-        };
-        // POINT:C
+        //     // TODO: add(desc) 이것도 별도로 저장해둬야 함
+        //     // obj.metaName = mObj.name;
+        // };
         PropertyCollection.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
 

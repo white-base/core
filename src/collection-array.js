@@ -61,23 +61,24 @@
          * @virtual
          * @returns {object}
          */
-        ArrayCollection.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        // ArrayCollection.prototype.setObject  = function(mObj) {
+        //     _super.prototype.setObject.call(this, mObj);
             
 
-            for(var i = 0; i < mObj._elem.length; i++) {
-                var elem = mObj._elem[i];
-                if (elem['_guid'] && elem['_type']) {
-                    var obj = MetaRegistry.createObject(elem);
-                    this.add(obj);
-                    this[i].setObject(elem);
-                } else {
-                    this.add(elem);
-                }
-            }
-            // TODO: add(desc) 이것도 별도로 저장해둬야 함
-            // obj.metaName = mObj.name;
-        };
+        //     for(var i = 0; i < mObj._elem.length; i++) {
+        //         var elem = mObj._elem[i];
+        //         if (elem['_guid'] && elem['_type']) {
+        //             var obj = MetaRegistry.createObject(elem);
+        //             obj.setObject(elem);
+        //             this.add(obj);
+        //             // this[i].setObject(elem);
+        //         } else {
+        //             this.add(elem);
+        //         }
+        //     }
+        //     // TODO: add(desc) 이것도 별도로 저장해둬야 함
+        //     // obj.metaName = mObj.name;
+        // };
         // POINT:C
         ArrayCollection.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);

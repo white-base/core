@@ -241,6 +241,7 @@
             var type = mObj._type;
             var _ns = mObj._ns || '';
             var fullName =  _ns !== '' ? [_ns, type].join('.') : type;
+            var instance;
 
             // var coClass = this.ns.get(fullName);
             var coClass = this.getClass(fullName);
@@ -254,7 +255,10 @@
                 if (mObj[argName]) args.push(obj);
             }
     
-            return new (Function.prototype.bind.apply(coClass, args));
+            instance = new (Function.prototype.bind.apply(coClass, args));
+            // instance.setObject(mObj);
+
+            return instance;
         };
 
         /**
@@ -463,6 +467,7 @@
                 
                 meta = this.createObject(mObj);
                 meta.setObject(mObj);
+                return meta;
             } else {
                 throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
             }

@@ -6,6 +6,7 @@
 'use strict';
 
 const { NamespaceManager }      = require('../src/namespace-manager');
+const { replacer, reviver, stringify, parse }              = require('telejson');
 
 //==============================================================
 // test
@@ -266,6 +267,63 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns.has('RegExp')).toBe(false);
             });
 
+        });
+        // describe("this.getPath(elem): str<ns> <네임스페이스 얻기>", () => {
+        //     it("- getPath(elem) : 객체로 얻기 ", () => {
+        //         const ns = new NamespaceManager();
+        //         const s = ns.__storage;
+        //         const fun1 = function(){ return 'fun1' };
+        //         const fun2 = function(){ return 'fun2' };
+        //         const fun3 = function(){ return 'fun3' };
+        //         ns.set('', 'fun1', fun1);
+        //         ns.set('a1.b1', 'fun2', fun2);
+        //         ns.set('a1.b1.c1', 'fun3', fun3);
+
+        //         expect(ns.getPath(fun1).ns).toBe('');
+        //         expect(ns.getPath(fun2).ns).toBe('a1.b1');
+        //         expect(ns.getPath(fun3).ns).toBe('a1.b1.c1');
+        //         expect(ns.findPath(String)).toBe(undefined);
+        //     });
+        // });
+        describe("this.output(stringify?, space?, vOpt?): str <네임스페이스에 출력>", () => {
+            it.only("- output(stringify) : 함수 출력 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                const fun1 = function(){ return 'fun1' };
+                const fun2 = function(){ return 'fun2' };
+                const fun3 = function(){ return 'fun3' };
+                ns.set('', 'fun1', fun1);
+                ns.set('a1.b1', 'fun2', fun2);
+                ns.set('a1.b1.c1', 'fun3', fun3);
+                ns.set('a1', 'NamespaceManager', NamespaceManager);
+                const str = ns.output(stringify, '\t');
+                
+                // 검사
+                expect(ns.has(fun1)).toBe(true);
+                expect(ns.has(fun2)).toBe(true);
+                expect(ns.has(fun3)).toBe(true);
+                // expect(ns.count).toBe(3);
+                // 초기화
+                
+                
+                // ns.init();
+                const ns2 = new NamespaceManager();
+                const s2 = ns2.__storage;
+
+                expect(ns2.count).toBe(0);
+                // 로드
+
+                ns2.load(str, parse);
+                // REVIEW: 타입이 달라지는 부분 확인 필요
+                expect(ns2.has('fun1')).toBe(true);
+                expect(ns2.has('a1.b1.fun2')).toBe(true);
+                expect(ns2.has('a1.b1.c1.fun3')).toBe(true);
+                // expect(ns.count).toBe(3);
+                var n = ns2.get('a1.NamespaceManager');
+                var nn = ns2.get2('a1.NamespaceManager');
+                var i = new n();
+                console.log(0);
+            });
         });
     });
     

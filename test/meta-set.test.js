@@ -494,6 +494,55 @@ describe("[target: meta-set.js]", () => {
                 expect(obj).toEqual(json2); 
             });
         });
+        describe("this.load(str | rObj) 출력", () => {
+            it("- load(str) :  ", () => {
+                const set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+                const str = set1.output(stringify, '\t');
+                MetaRegistry.init();
+                loadNamespace();
+                var set2 = new MetaSet('S2');
+                set2.load(str, parse);
+
+                expect(set2.tables['T1']).toBeDefined();
+                expect(set2.tables['T1'].columns.count).toBe(2);
+                expect(set2.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set2.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set2.views['V1']).toBeDefined();
+                expect(set2.views['V1'].columns.count).toBe(1);
+                expect(set2.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set2.tables['T1'].rows.count).toBe(1);
+                expect(set2.tables['T1'].rows[0].count).toBe(2);
+                expect(set2.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set2.tables['T1'].rows[0]['i2']).toBe('R2');
+                expect(set2.views['V1'].rows.count).toBe(1);
+                expect(set2.views['V1'].rows[0].count).toBe(1);
+                expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
+            });
+        });
         describe("this.output() 출력", () => {
             it("- output() : new 객체 비교 ", () => {
                 const set1 = new MetaSet('S1');
@@ -790,7 +839,6 @@ describe("[target: meta-set.js]", () => {
                 // rejectChanges()
                 set1.rejectChanges();
                 expect(set1.hasChanges()).toBe(false);
-
             });
         });
         

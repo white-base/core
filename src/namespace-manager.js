@@ -295,6 +295,30 @@
             }
         };
 
+        NamespaceManager.prototype.get2 = function(p_fullName) {
+            // var parent = this.__storage;
+            var sections;
+
+            sections = __getArray(p_fullName);
+            var o = getElem(this.__storage, sections);
+            return o;
+
+            // inner function
+            function getElem(elem, sec) {
+                // var section = sec.length === 0 ? sec.slice(0) : sec.slice(1);
+                var section = sec.slice(0, 1);
+                var n_section = sec.slice(1);
+                var obj;
+
+                if (elem[section[0]]) {
+                    if (elem[section[0]]['_type'] === 'ns') obj = getElem(elem[section[0]], sec.slice(1));
+                    else obj = elem[section[0]];
+                }
+                return obj;
+            }
+        };
+
+
         NamespaceManager.prototype.del = function(p_fullName) {
             var parent = this.__storage;
             var sections;
@@ -356,11 +380,61 @@
             return false;
         };
 
-        NamespaceManager.prototype.output = function() {
-            // TODO:
+        NamespaceManager.prototype._getPath = function(p_obj) {
+            var fullName;
+            var arr;
+            var key;
+            var nsPath;
+            var obj = {};
+
+            if (typeof p_obj === 'string') fullName = p_obj;
+            else fullName = this.find(p_obj); 
+
+            if (typeof fullName !== 'string') return;
+            arr = fullName.split('.');
+            key = arr.pop();
+            nsPath = arr.join('.');
+            obj['ns'] = nsPath;
+            obj['key'] = key;
+
+            return obj;
         };
-        NamespaceManager.prototype.load = function() {
-            // TODO:
+
+        NamespaceManager.prototype.output = function(p_stringify, p_space) {
+            var arr = [];
+            var obj;
+            var str;
+
+            for (var i = 0; i < this.list.length; i++) {
+                var fullName = this.list[i];
+                var fun = this.get(fullName);
+                var nObj = this._getPath(fullName);
+                obj = { ns: nObj.ns, key: nObj.key, f: fun};
+                arr.push(obj);
+            }
+
+            var temp ={ arr: arr};
+
+            if (typeof p_stringify === 'function') str = p_stringify(temp, {space: p_space} );
+            else str = JSON.stringify(temp, null, p_space);
+            return str;
+        };
+
+        NamespaceManager.prototype.load = function(p_obj, p_parse) {
+            var arr = p_obj;
+            
+            this.init();
+            if (typeof arr === 'string') {
+                if (typeof p_parse === 'function') arr = p_parse(p_obj, {lazyEval: false});
+                else arr = JSON.parse(p_obj, null);
+            }
+            if(Array.isArray(arr.arr)) {
+                for (var i = 0; i < arr.arr.length; i++) {
+                    var o = arr.arr[i];
+                    var fun = o.f;
+                    this.set(o.ns, o.key, fun);
+                }
+            }
         };
 
         return NamespaceManager;
