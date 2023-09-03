@@ -169,6 +169,7 @@
             var _ns;
             var key;
             var type;
+            var fullName;
 
             if (meta['_type'] && meta['_guid']) {
                 if (this.hasMetaObject(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
@@ -177,7 +178,9 @@
                 _ns = meta['_ns'] || '';
                 type = meta['_type'];
                 key = type.name;
+                fullName = meta['_ns'] && meta['_ns'].length > 0 ?  _ns +'.'+key : key;
                 // this.ns.set(ns, key, type);
+                // this.registerClass(_ns, key, type);
                 this.registerClass(_ns, key, type);
             }
         };
@@ -403,7 +406,8 @@
             // 내장함수 제외
             if (_isBuiltFunction(fun)) return;
             // 중복 검사 
-            if (!this.ns.get(fullName)) this.ns.set(p_ns, key, fun);
+            // if (!this.ns.get(fullName)) this.ns.set(p_ns, key, fun);
+            if (!this.ns.get(fullName)) this.ns.set(fullName, fun);
         };
         
         /**

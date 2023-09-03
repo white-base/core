@@ -126,11 +126,11 @@ describe("[target: namespace-manager.js]", () => {
                 expect(p).not.toBeDefined();
             });
         });
-        describe("this.set(ns, key, elem) <네임스페이스에 요소 설정>", () => {
+        describe("this.set(fullName, elem) <네임스페이스에 요소 설정>", () => {
             it("- set() : Function 등록 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
-                ns.set('a1.b1', 'Fun', Function);
+                ns.set('a1.b1.Fun', Function);
 
                 expect(s.a1.b1).toBeDefined();
                 expect(s.a1.b1.Fun).toBeDefined();
@@ -139,7 +139,7 @@ describe("[target: namespace-manager.js]", () => {
             it("- set() : 최상위에 등록 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
-                ns.set('', 'Fun', Function);
+                ns.set('Fun', Function);
 
                 expect(s.Fun).toBeDefined();
                 expect(typeof s.Fun).toBe('function');
@@ -147,14 +147,14 @@ describe("[target: namespace-manager.js]", () => {
             it("- set() : [예외] key 이름 규칙 ", () => {
                 const ns = new NamespaceManager();
     
-                expect(() => ns.set('a1.b1', '.Fun', Function)).toThrow(/p_key/);
-                expect(() => ns.set('a1.b1', 'Fun%', Function)).toThrow(/p_key/);
+                // expect(() => ns.set('a1.b1', '.Fun', Function)).toThrow(/p_key/);
+                expect(() => ns.set('a1.b1.Fun%', Function)).toThrow(/key/);
             });
         });
         describe("this.get(fullname) <네임스페이스에 요소 얻기>", () => {
             it("- get(fullName) : Function 얻기 ", () => {
                 const ns = new NamespaceManager();
-                ns.set('a1.b1', 'Fun', Function);
+                ns.set('a1.b1.Fun', Function);
                 const fun = ns.get('a1.b1.Fun');
 
                 expect(fun).toBe(Function);
@@ -163,8 +163,8 @@ describe("[target: namespace-manager.js]", () => {
         describe("this.list <요소 목록>", () => {
             it("- list : 목록 얻기 ", () => {
                 const ns = new NamespaceManager();
-                ns.set('a1.b1', 'Fun', Function);
-                ns.set('a1.b2', 'Str', String);
+                ns.set('a1.b1.Fun', Function);
+                ns.set('a1.b2.Str', String);
                 const list = ns.list;
 
                 expect(list.length).toBe(2);
@@ -199,9 +199,9 @@ describe("[target: namespace-manager.js]", () => {
             it("- del(fullName) : 요소 삭제", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
-                ns.set('', 'Fun', Function);
-                ns.set('a1.b1', 'Str', String);
-                ns.set('a1.b1.c1', 'Arr', Array);
+                ns.set('Fun', Function);
+                ns.set('a1.b1.Str', String);
+                ns.set('a1.b1.c1.Arr', Array);
                 const r1 = ns.del('a1.b1.c1.Arr');
                 const r2 = ns.del('a1.b1.Arr');
 
@@ -219,9 +219,9 @@ describe("[target: namespace-manager.js]", () => {
                 var fun = function(){return 'Fun'};
                 var str = function(){return 'Str'};
                 var arr = function(){return 'Arr'};
-                ns.set('', 'Fun', fun);
-                ns.set('a1.b1', 'Str', str);
-                ns.set('a1.b1.c1', 'Arr', arr);
+                ns.set('Fun', fun);
+                ns.set('a1.b1.Str', str);
+                ns.set('a1.b1.c1.Arr', arr);
                 const str1 = ns.find(fun);
                 const str2 = ns.find(str);
                 const str3 = ns.find(arr);
@@ -245,9 +245,9 @@ describe("[target: namespace-manager.js]", () => {
             it("- has(elem) : 객체로 요소 검사 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
-                ns.set('', 'Fun', Function);
-                ns.set('a1.b1', 'Str', String);
-                ns.set('a1.b1.c1', 'Arr', Array);
+                ns.set('Fun', Function);
+                ns.set('a1.b1.Str', String);
+                ns.set('a1.b1.c1.Arr', Array);
 
                 expect(ns.has(Function)).toBe(true);
                 expect(ns.has(String)).toBe(true);
@@ -257,9 +257,9 @@ describe("[target: namespace-manager.js]", () => {
             it("- has(elem) : 이름으로 요소 검사 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
-                ns.set('', 'Fun', Function);
-                ns.set('a1.b1', 'Str', String);
-                ns.set('a1.b1.c1', 'Arr', Array);
+                ns.set('Fun', Function);
+                ns.set('a1.b1.Str', String);
+                ns.set('a1.b1.c1.Arr', Array);
 
                 expect(ns.has('Fun')).toBe(true);
                 expect(ns.has('a1.b1.Str')).toBe(true);
@@ -268,34 +268,33 @@ describe("[target: namespace-manager.js]", () => {
             });
 
         });
-        // describe("this.getPath(elem): str<ns> <네임스페이스 얻기>", () => {
+        // describe("this.getPath(elem | str): str<ns> <네임스페이스 얻기>", () => {
         //     it("- getPath(elem) : 객체로 얻기 ", () => {
         //         const ns = new NamespaceManager();
         //         const s = ns.__storage;
         //         const fun1 = function(){ return 'fun1' };
         //         const fun2 = function(){ return 'fun2' };
         //         const fun3 = function(){ return 'fun3' };
-        //         ns.set('', 'fun1', fun1);
-        //         ns.set('a1.b1', 'fun2', fun2);
-        //         ns.set('a1.b1.c1', 'fun3', fun3);
+        //         ns.set('fun1', fun1);
+        //         ns.set('a1.b1.fun2', fun2);
+        //         ns.set('a1.b1.c1.fun3', fun3);
 
-        //         expect(ns.getPath(fun1).ns).toBe('');
-        //         expect(ns.getPath(fun2).ns).toBe('a1.b1');
-        //         expect(ns.getPath(fun3).ns).toBe('a1.b1.c1');
-        //         expect(ns.findPath(String)).toBe(undefined);
+        //         expect(ns._getPath(fun1).full).toBe('fun1');
+        //         expect(ns._getPath(fun2).full).toBe('a1.b1.fun2');
+        //         expect(ns._getPath(fun3).full).toBe('a1.b1.c1.fun3');
         //     });
         // });
         describe("this.output(stringify?, space?, vOpt?): str <네임스페이스에 출력>", () => {
-            it.only("- output(stringify) : 함수 출력 ", () => {
+            it("- output(stringify) : 함수 출력 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
                 const fun1 = function(){ return 'fun1' };
                 const fun2 = function(){ return 'fun2' };
                 const fun3 = function(){ return 'fun3' };
-                ns.set('', 'fun1', fun1);
-                ns.set('a1.b1', 'fun2', fun2);
-                ns.set('a1.b1.c1', 'fun3', fun3);
-                ns.set('a1', 'NamespaceManager', NamespaceManager);
+                ns.set('fun1', fun1);
+                ns.set('a1.b1.fun2', fun2);
+                ns.set('a1.b1.c1.fun3', fun3);
+                ns.set('a1.NamespaceManager', NamespaceManager);
                 const str = ns.output(stringify, '\t');
                 
                 // 검사
@@ -304,7 +303,6 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns.has(fun3)).toBe(true);
                 // expect(ns.count).toBe(3);
                 // 초기화
-                
                 
                 // ns.init();
                 const ns2 = new NamespaceManager();
@@ -320,9 +318,30 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns2.has('a1.b1.c1.fun3')).toBe(true);
                 // expect(ns.count).toBe(3);
                 var n = ns2.get('a1.NamespaceManager');
-                var nn = ns2.get2('a1.NamespaceManager');
-                var i = new n();
-                console.log(0);
+                // var nn = ns2.get2('a1.NamespaceManager');
+                var nm = ns2.path('a1');
+                var n2 = ns2.path();
+                // var i = new n();
+                // console.log(0);
+            });
+        });
+        describe("this.load(str, parse?) <네임스페이스 불러오기>", () => {
+            it("- getPath(elem) : 객체로 얻기 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                const fun1 = function(){ return 'fun1' };
+                const fun2 = function(){ return 'fun2' };
+                const fun3 = function(){ return 'fun3' };
+                ns.set('fun1', fun1);
+                ns.set('a1.b1.fun2', fun2);
+                ns.set('a1.b1.c1.fun3', fun3);
+                const str = ns.output(stringify, '\t');
+                const ns2 = new NamespaceManager();
+                ns2.load(str, parse);
+
+                expect(ns.find(fun1)).toBe('fun1');
+                expect(ns.find(fun2)).toBe('a1.b1.fun2');
+                expect(ns.find(fun3)).toBe('a1.b1.c1.fun3');
             });
         });
     });

@@ -1050,7 +1050,7 @@
             var obj = p_obj;
             var columns;
             var rows;
-            var Column = this.columns.columnType;
+            var Column = this.columns._baseType;
 
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
 

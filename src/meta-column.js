@@ -64,7 +64,7 @@
             _super.call(this, p_name);
 
             var __value       = null;
-            var _event        = new Observer(this);
+            var __event        = new Observer(this);
             var columnName;
             var _entity;
             var defaultValue  = null;
@@ -101,11 +101,11 @@
             /** 
              * 이벤트 객체
              * @protected 
-             * @member {Object} _L.Meta.Entity.MetaColumn#_event  
+             * @member {Object} _L.Meta.Entity.MetaColumn#__event  
              */
-            Object.defineProperty(this, '_event', {
+            Object.defineProperty(this, '__event', {
                 get: function() { 
-                    return _event;
+                    return __event;
                 },
                 enumerable: false,
                 configurable: false,
@@ -362,7 +362,7 @@
              */
             Object.defineProperty(this, 'onChanged', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'onChanged');
+                    this.__event.subscribe(p_fn, 'onChanged');
                 },
                 enumerable: true,
                 configurable: true,
@@ -387,7 +387,7 @@
          */
         MetaColumn.prototype._onChanged = function(p_nValue, p_oValue) {
             p_oValue = p_oValue || this.__value;
-            this._event.publish('onChanged', p_nValue, p_oValue);
+            this.__event.publish('onChanged', p_nValue, p_oValue);
         };
 
         /**
@@ -487,9 +487,9 @@
             if (this.setter) clone['setter']            = this.setter;
             
             // 이벤트 복사 (REVIEW:: 개선필요!!)
-            if (this._event.__subscribers.onChanged) {
-                for (var i = 0; this._event.__subscribers.onChanged.length > i; i++) {  // COVER:
-                    clone['onChanged'] = this._event.__subscribers.onChanged[i];
+            if (this.__event.__subscribers.onChanged) {
+                for (var i = 0; this.__event.__subscribers.onChanged.length > i; i++) {  // COVER:
+                    clone['onChanged'] = this.__event.__subscribers.onChanged[i];
                 }
             }
             
@@ -621,35 +621,35 @@
          * @abstract
          * @param {*} p_owner 소유자 
          */
-        function MetaColumnCollection(p_owner, p_columnType) {
+        function MetaColumnCollection(p_owner, p_baseType) {
             _super.call(this, p_owner);
             
-            var columnType;
+            var _baseType;
 
             /**
              * 아이템의 타입
-             * @member {Function} _L.Meta.Entity.MetaColumnCollection#columnType
+             * @member {Function} _L.Meta.Entity.MetaColumnCollection#_baseType
              */
-            Object.defineProperty(this, 'columnType', 
+            Object.defineProperty(this, '_baseType', 
             {
                 get: function() { 
-                    return columnType; 
+                    return _baseType; 
                 },
                 set: function(newValue) { 
-                    if (typeof p_columnType === 'function')  throw new Error('It is not a function type.');
+                    if (typeof p_baseType === 'function')  throw new Error('It is not a function type.');
                     if (!(new newValue() instanceof MetaColumn)) throw new Error('MetaColumn is not a subfunction.');
-                    columnType = newValue; 
+                    _baseType = newValue; 
                 },
                 enumerable: true,
                 configurable: false,
             });
 
-            this.columnType = columnType || MetaColumn;
+            this._baseType = p_baseType || MetaColumn;
         }
         Util.inherits(MetaColumnCollection, _super);
         
         MetaColumnCollection._NS = 'Meta.Entity';          // namespace
-        MetaColumnCollection._PARAMS = ['_owner', '_columnType'];         // creator parameter
+        MetaColumnCollection._PARAMS = ['_owner', '_baseType'];         // creator parameter
 
         /**
          * 컬렉션에 아이템 유무를 검사한다.
@@ -689,7 +689,7 @@
             
             property = { value: p_value };
 
-            item = new this.columnType(p_name, this._owner, property);
+            item = new this._baseType(p_name, this._owner, property);
 
             return this.add(item);
         };
@@ -774,8 +774,8 @@
 
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
-                i_value = new this.columnType(i_name, this._owner);
-            } else if (p_object instanceof this.columnType) {
+                i_value = new this._baseType(i_name, this._owner);
+            } else if (p_object instanceof this._baseType) {
                 // MetaTable 직접만 적용(참조형 아이템 소유 못함)
                 i_name  = p_object.columnName;
                 i_value = p_object.clone();
@@ -867,7 +867,7 @@
                 i_value = p_object;
             } else if (typeof p_object === 'string') {
                 i_name = p_object;
-                i_value = new this.columnType(i_name, this._owner);
+                i_value = new this._baseType(i_name, this._owner);
 // POINT::
             // } else if (p_object instanceof MetaElement && p_object.instanceOf('MetaEntity')) {
             //     // 아아템 가져오기

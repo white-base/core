@@ -62,7 +62,7 @@
             
             var __element = [];
             var _this   = this;
-            var _event  = new Observer(this);
+            var __event  = new Observer(this);
             var _entity  = null;
             // var _transQueue = new TransactionQueue(this);
 
@@ -83,10 +83,10 @@
             /** 
              * 이벤트 객체
              * @protected 
-             * @member {Object} _L.Meta.Entity.MetaRow#_event  
+             * @member {Object} _L.Meta.Entity.MetaRow#__event  
              */
-            Object.defineProperty(this, '_event', {
-                get: function() { return _event; },
+            Object.defineProperty(this, '__event', {
+                get: function() { return __event; },
                 enumerable: false,
                 configurable: false,
             });        
@@ -139,7 +139,7 @@
              */
             Object.defineProperty(this, 'onChanging', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'onChanging');
+                    this.__event.subscribe(p_fn, 'onChanging');
                 },
                 enumerable: true,
                 configurable: true,
@@ -151,7 +151,7 @@
              */
             Object.defineProperty(this, 'onChanged', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'onChanged');
+                    this.__event.subscribe(p_fn, 'onChanged');
                 },
                 enumerable: true,
                 configurable: true,
@@ -206,14 +206,14 @@
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
         MetaRow.prototype._onChanging = function(p_idx, p_nValue, p_oValue) {
-            this._event.publish('onChanging', p_idx, p_nValue, p_oValue);
+            this.__event.publish('onChanging', p_idx, p_nValue, p_oValue);
         };
 
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
         MetaRow.prototype._onChanged = function(p_idx, p_nValue, p_oValue) {
-            this._event.publish('onChanged', p_idx, p_nValue, p_oValue);
+            this.__event.publish('onChanged', p_idx, p_nValue, p_oValue);
         };
 
         /**

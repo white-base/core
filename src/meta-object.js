@@ -18,7 +18,6 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        // require('./_object-implement'); // _implements() : 폴리필
         Util                    = require('./util');
         IObject                 = require('./i-object').IObject;
         IMarshal                = require('./i-marshal').IMarshal;
@@ -48,6 +47,7 @@
          * @implements {_L.Interface.IMarshal}
          */
         function MetaObject() {
+
             var _guid;
 
             /**
@@ -65,7 +65,7 @@
             });    
             /**
              * _guid
-             * @member {Array} _L.Meta.MetaObject#_guid 
+             * @member {Array} _L.Meta.MetaObject#_type 
              */
             Object.defineProperty(this, '_type', 
             {
@@ -101,7 +101,6 @@
 
             obj._guid = this._guid;
             obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
-            // if(this._type._NS) obj._ns = this._type._NS;
             return obj;                        
         };
 
@@ -110,18 +109,21 @@
          * @virtual
          * @returns {object}
          */
-        MetaObject.prototype.setObject  = function(mObj) {
-            if (typeof mObj !== 'object') throw new Error('Only [mObj] type "object" can be added');
-            this.__SET_guid(mObj._guid, this);
+        MetaObject.prototype.setObject  = function(p_mObj) {
+            if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
+            this.__SET_guid(p_mObj._guid, this);
         };
         
         /**
-         * 객체 타입 이름 얻기
+         * 객체 타입 이름 얻기 (상속포함)
          * @returns {array<function>}
          */
         MetaObject.prototype.getTypes = function() {
             var arr = [];
             
+            return parentFunction(this);
+
+            // inner function
             function parentFunction(obj) {
                 var list = [];
                 var proto = obj.__proto__ || Object.getPrototypeOf(obj);
@@ -131,7 +133,6 @@
                 }
                 return list;
             }
-            return parentFunction(this);
         };
 
         /**
@@ -142,6 +143,11 @@
         MetaObject.prototype.instanceOf = function(p_func) {
             var _this = this;
             
+            if (typeof p_func === 'string') return findFunctionName(p_func);
+            if (typeof p_func === 'function') return findFunction(p_func);
+            return false;
+
+            // inner function
             function findFunction(fun) {
                 var types = _this.getTypes();
                 for (var i = 0; i < types.length; i++) {
@@ -159,11 +165,6 @@
                 for (var i = 0; i < types.length; i++) {
                     if (funName === types[i].name) return true;
                 }
-                
-                // var typeNames = _this.getTypeNames();
-                // for (var i = 0; i < typeNames.length; i++) {
-                //     if (funName === typeNames[i]) return true;
-                // }
                 if (_this._interface) {
                     for (var i = 0; i < _this._interface.length; i++) {
                         if (funName === _this._interface[i].name) return true;
@@ -171,10 +172,6 @@
                 }
                 return false;
             }
-
-            if (typeof p_func === 'string') return findFunctionName(p_func);
-            if (typeof p_func === 'function') return findFunction(p_func);
-            return false;
         };
 
         return MetaObject;

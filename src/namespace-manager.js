@@ -254,17 +254,20 @@
          * 네임스페이스에 요소 설정
          * 네임스피이스 
          */
-        NamespaceManager.prototype.set = function(p_ns, p_key, p_elem) {
+        // NamespaceManager.prototype.set = function(p_ns, p_key, p_elem) {
+        NamespaceManager.prototype.set = function(p_fullName, p_elem) {
             var parent = this.__storage;
             var sections;
+            var key = this._getPath(p_fullName).key;
+            var ns = this._getPath(p_fullName).ns;
 
-            sections = __getArray(p_ns);
+            sections = __getArray(ns);
             
-            if (sections.length > 0) this.register(p_ns);
-            if (!__validName(p_key)) throw new Error('They have different [p_key] conventions.'); 
+            if (sections.length > 0) this.register(ns);
+            if (!__validName(key)) throw new Error('They have different [key] conventions.'); 
         
             if (sections.length === 0) {    // 최상위 등록
-                parent[p_key] = p_elem;
+                parent[key] = p_elem;
                 return;
             }
 
@@ -272,11 +275,33 @@
                 var sName = sections[i];
                 if (typeof parent[sName] === "undefined") parent[sName] = this.__createNsObject();
                 if (i === sections.length - 1) { 
-                    parent[sName][p_key] = p_elem;
+                    parent[sName][key] = p_elem;
                 } else parent = parent[sName];
             }
         };
 
+        // NamespaceManager.prototype.get2 = function(p_fullName) {
+        //     // var parent = this.__storage;
+        //     var sections;
+
+        //     sections = __getArray(p_fullName);
+        //     var o = getElem(this.__storage, sections);
+        //     return o;
+
+        //     // inner function
+        //     function getElem(elem, sec) {
+        //         // var section = sec.length === 0 ? sec.slice(0) : sec.slice(1);
+        //         var section = sec.slice(0, 1);
+        //         var n_section = sec.slice(1);
+        //         var obj;
+
+        //         if (elem[section[0]]) {
+        //             if (elem[section[0]]['_type'] === 'ns') obj = getElem(elem[section[0]], sec.slice(1));
+        //             else obj = elem[section[0]];
+        //         }
+        //         return obj;
+        //     }
+        // };
         /**
          * 네임스페이스 요소 얻기
          * @returns {*}
@@ -295,28 +320,6 @@
             }
         };
 
-        NamespaceManager.prototype.get2 = function(p_fullName) {
-            // var parent = this.__storage;
-            var sections;
-
-            sections = __getArray(p_fullName);
-            var o = getElem(this.__storage, sections);
-            return o;
-
-            // inner function
-            function getElem(elem, sec) {
-                // var section = sec.length === 0 ? sec.slice(0) : sec.slice(1);
-                var section = sec.slice(0, 1);
-                var n_section = sec.slice(1);
-                var obj;
-
-                if (elem[section[0]]) {
-                    if (elem[section[0]]['_type'] === 'ns') obj = getElem(elem[section[0]], sec.slice(1));
-                    else obj = elem[section[0]];
-                }
-                return obj;
-            }
-        };
 
 
         NamespaceManager.prototype.del = function(p_fullName) {
@@ -409,7 +412,7 @@
                 var fullName = this.list[i];
                 var fun = this.get(fullName);
                 var nObj = this._getPath(fullName);
-                obj = { ns: nObj.ns, key: nObj.key, f: fun};
+                obj = { ns: nObj.ns, key: nObj.key, full: fullName, f: fun};
                 arr.push(obj);
             }
 
@@ -425,14 +428,16 @@
             
             this.init();
             if (typeof arr === 'string') {
-                if (typeof p_parse === 'function') arr = p_parse(p_obj, {lazyEval: false});
+                // if (typeof p_parse === 'function') arr = p_parse(p_obj, {lazyEval: false});
+                if (typeof p_parse === 'function') arr = p_parse(p_obj);
                 else arr = JSON.parse(p_obj, null);
             }
             if(Array.isArray(arr.arr)) {
                 for (var i = 0; i < arr.arr.length; i++) {
                     var o = arr.arr[i];
                     var fun = o.f;
-                    this.set(o.ns, o.key, fun);
+                    // this.set(o.ns, o.key, fun);
+                    this.set(o.full, fun);
                 }
             }
         };

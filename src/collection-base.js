@@ -61,17 +61,17 @@
             var _owner = p_owner || null;
             var _element = [];
             var _symbol = [];
-            var _event = new Observer(this, this);
+            var __event = new Observer(this, this);
             var _elementType  = [];  
 
             /** 
              * 이벤트 객체
              * @private 
-             * @member {Object} _L.Collection.BaseCollection#_event  
+             * @member {Object} _L.Collection.BaseCollection#__event  
              */
-            Object.defineProperty(this, '_event', {
+            Object.defineProperty(this, '__event', {
                 get: function() { 
-                    return _event;
+                    return __event;
                 },
                 enumerable: false,
                 configurable: false
@@ -173,7 +173,7 @@
              */
             Object.defineProperty(this, 'onAdd', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'add');
+                    this.__event.subscribe(p_fn, 'add');
                 },
                 enumerable: false,
                 configurable: true
@@ -185,7 +185,7 @@
              */
             Object.defineProperty(this, 'onRemove', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'remove');
+                    this.__event.subscribe(p_fn, 'remove');
                 },
                 enumerable: false,
                 configurable: true
@@ -197,7 +197,7 @@
              */
             Object.defineProperty(this, 'onClear', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'clear');
+                    this.__event.subscribe(p_fn, 'clear');
                 },
                 enumerable: false,
                 configurable: true
@@ -209,7 +209,7 @@
              */
             Object.defineProperty(this, 'onChanging', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'changing');
+                    this.__event.subscribe(p_fn, 'changing');
                 },
                 enumerable: false,
                 configurable: true
@@ -221,14 +221,14 @@
              */
             Object.defineProperty(this, 'onChanged', {
                 set: function(p_fn) {
-                    this._event.subscribe(p_fn, 'changed');
+                    this.__event.subscribe(p_fn, 'changed');
                 },
                 enumerable: false,
                 configurable: true
             });
 
             // 예약어 등록
-            this._symbol = this._symbol.concat(['_event', '_owner', '_element', '_symbol', 'elementType', 'list', 'count']);
+            this._symbol = this._symbol.concat(['__event', '_owner', '_element', '_symbol', 'elementType', 'list', 'count']);
             this._symbol = this._symbol.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
             this._symbol = this._symbol.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
             this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
@@ -263,7 +263,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
-            this._event.publish('add', p_idx, p_value, this); 
+            this.__event.publish('add', p_idx, p_value, this); 
         };
 
         /**
@@ -271,7 +271,7 @@
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_value) {
-            this._event.publish('remove', p_idx, p_value, this);
+            this.__event.publish('remove', p_idx, p_value, this);
         };
 
         /** 
@@ -279,7 +279,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
-            this._event.publish('clear', this); 
+            this.__event.publish('clear', this); 
         };
 
         /** 
@@ -287,7 +287,7 @@
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function() {
-            this._event.publish('changing', this); 
+            this.__event.publish('changing', this); 
         };
 
         /** 
@@ -295,7 +295,7 @@
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function() {
-            this._event.publish('changed', this); 
+            this.__event.publish('changed', this); 
         };
 
         /**
