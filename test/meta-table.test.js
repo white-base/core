@@ -476,7 +476,7 @@ describe("[target: meta-table.js]", () => {
                 var row = table1.newRow();
                 
                 // 예외 검사
-                // table1.rows.elementType.push(String);                
+                // table1.rows._elemTypes.push(String);                
                 // MetaRegistry.registerClass('', 'String', String);
                 
                 var str = table1.output(stringify, '\t');

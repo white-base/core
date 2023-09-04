@@ -350,6 +350,45 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns.count).toBe(1);
                 expect(result).toBeTruthy();
             });
+            it("- add(name, value, desc) : 기술자, 0 삭제후 0에 삽입 ", () => {
+                let s = new Student();
+                const desc1 = { value: 'A2', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
+                const desc2 = { value: 'A1', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
+                s.columns.add('a1', 'A1');
+                s.columns.add('a2', null, desc1);
+                s.columns.add('a3', 'A3');
+    
+                expect(s.columns['a1']).toBe('A1');
+                expect(s.columns['a2']).toBe('A2');
+                expect(s.columns['a3']).toBe('A3');
+                expect(s.columns._elements.length).toBe(3);
+                expect(s.columns._descriptors.length).toBe(3);
+                expect(s.columns.count).toBe(3);
+                expect(s.columns._descriptors[0]).toBe(undefined);
+                expect(s.columns._descriptors[1]).toBe(desc1);
+                expect(s.columns._descriptors[2]).toBe(undefined);
+                // 삭제 후 결과
+                s.columns.removeAt(0);
+                expect(s.columns['a2']).toBe('A2');
+                expect(s.columns['a3']).toBe('A3');
+                expect(s.columns._elements.length).toBe(2);
+                expect(s.columns._descriptors.length).toBe(2);
+                expect(s.columns.count).toBe(2);
+                expect(s.columns._descriptors[0]).toBe(desc1);
+                expect(s.columns._descriptors[1]).toBe(undefined);
+                // 추가후 결과
+                s.columns.add('a1', null, desc2);
+                expect(s.columns['a1']).toBe('A1');
+                expect(s.columns['a2']).toBe('A2');
+                expect(s.columns['a3']).toBe('A3');
+                expect(s.columns._elements.length).toBe(3);
+                expect(s.columns._descriptors.length).toBe(3);
+                expect(s.columns.count).toBe(3);
+                expect(s.columns._descriptors[0]).toBe(desc1);
+                expect(s.columns._descriptors[1]).toBe(undefined);
+                expect(s.columns._descriptors[2]).toBe(desc2);
+
+            });
             // it("- add(name) : 중복 이름 등록시 (경고)", () => {
             //     let s = new Student();
             //     const logSpy = jest.spyOn(global.console, 'warn');
@@ -375,9 +414,9 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             it("- add(name) : 예약어 사용시 (예외)", () => {
                 let s = new Student();
                 expect(() => s.columns.add('_owner')).toThrow(/Symbol word/);
-                expect(() => s.columns.add('_element')).toThrow(/Symbol word/);
-                expect(() => s.columns.add('_symbol')).toThrow(/Symbol word/);
-                expect(() => s.columns.add('elementType')).toThrow(/Symbol word/);
+                expect(() => s.columns.add('_elements')).toThrow(/Symbol word/);
+                expect(() => s.columns.add('_KEYWORD')).toThrow(/Symbol word/);
+                expect(() => s.columns.add('_elemTypes')).toThrow(/Symbol word/);
                 expect(() => s.columns.add('list')).toThrow(/Symbol word/);
                 expect(() => s.columns.add('count')).toThrow(/Symbol word/);
                 expect(() => s.columns.add('onAddr')).toThrow(/Symbol word/);
@@ -507,7 +546,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
         //     expect(()=> s.columns._remove('str')).toThrow(/idx.*number/);
         // });
     });
-    describe("BaseCollection.elementType <전체 타입을 설정할 경우 : 클래스타입>", () => {
+    describe("BaseCollection._elemTypes <전체 타입을 설정할 경우 : 클래스타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
@@ -521,15 +560,15 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             }
             School = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns.elementType = Student }
+                constructor() { this.columns._elemTypes = Student }
             }
             Corp = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns.elementType = [Member, Student] }
+                constructor() { this.columns._elemTypes = [Member, Student] }
             }
             House = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns.elementType = null }
+                constructor() { this.columns._elemTypes = null }
             }
             Space = class {
                 columns = new PropertyCollection(this);
@@ -622,17 +661,17 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             expect(result2).toBeTruthy();
         });
     });
-    describe("BaseCollection.elementType <전체 타입을 설정할 경우 : 원시타입>", () => {
+    describe("BaseCollection._elemTypes <전체 타입을 설정할 경우 : 원시타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
             School = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns.elementType = String }
+                constructor() { this.columns._elemTypes = String }
             }
             Corp = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns.elementType = [String, Boolean] }
+                constructor() { this.columns._elemTypes = [String, Boolean] }
             }
         });
         it("- 단일 타입 : columns.add(name, obj) ", () => {

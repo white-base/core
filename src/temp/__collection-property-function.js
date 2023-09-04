@@ -42,7 +42,7 @@
         function PropertyFunctionCollection(p_owner) {
             _super.call(this, p_owner);
 
-            this.elementType = Function;
+            this._elemTypes = Function;
         }
         Util.inherits(PropertyFunctionCollection, _super);
 

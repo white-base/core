@@ -316,6 +316,36 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 expect(s.rows.count).toBe(1);
                 expect(result).toBeTruthy();
             });
+            it("- add(value, desc) : 기술자, 0 삭제후 0에 삽입 ", () => {
+                let s = new Student();
+                const desc1 = { value: 'A2', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
+                const desc2 = { value: 'A1', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
+                s.rows.add('A1');
+                s.rows.add(null, desc1);
+                s.rows.add('A3');
+    
+                expect(s.rows[0]).toBe('A1');
+                expect(s.rows[1]).toBe('A2');
+                expect(s.rows[2]).toBe('A3');
+                expect(s.rows._elements.length).toBe(3);
+                expect(s.rows._descriptors.length).toBe(3);
+                expect(s.rows.count).toBe(3);
+                // 삭제 후 결과
+                s.rows.removeAt(0);
+                expect(s.rows[0]).toBe('A2');
+                expect(s.rows[1]).toBe('A3');
+                expect(s.rows._elements.length).toBe(2);
+                expect(s.rows._descriptors.length).toBe(2);
+                expect(s.rows.count).toBe(2);
+                // 추가후 결과
+                s.rows.insertAt(0, null, desc2);
+                expect(s.rows[0]).toBe('A1');
+                expect(s.rows[1]).toBe('A2');
+                expect(s.rows[2]).toBe('A3');
+                expect(s.rows._elements.length).toBe(3);
+                expect(s.rows._descriptors.length).toBe(3);
+                expect(s.rows.count).toBe(3);
+            });
         });
         describe("this.clear() <초기화>", () => {
             it("- clear() ", () => {
@@ -329,8 +359,22 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 expect(s.rows.list.length).toBe(0);
             });
         });
+        describe("this.list <목록>", () => {
+            it("- 목록 변경시 불변여부 ", () => {
+                let s = new Student();
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                let arr = s.rows.list;
+                expect(s.rows.count).toBe(3);
+                expect(s.rows.list.length).toBe(3);
+                arr.pop();
+                expect(arr.length).toBe(2);
+                expect(s.rows.count).toBe(3);
+            });
+        });
     });
-    describe("this.elementType <전체 타입을 설정할 경우 : 클래스타입>", () => {
+    describe("this._elemTypes <전체 타입을 설정할 경우 : 클래스타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
@@ -344,15 +388,15 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             }
             School = class {
                 rows = new ArrayCollection(this);
-                constructor() { this.rows.elementType = Student }
+                constructor() { this.rows._elemTypes = Student }
             }
             Corp = class {
                 rows = new ArrayCollection(this);
-                constructor() { this.rows.elementType = [Member, Student] }
+                constructor() { this.rows._elemTypes = [Member, Student] }
             }
             House = class {
                 rows = new ArrayCollection(this);
-                constructor() { this.rows.elementType = null }
+                constructor() { this.rows._elemTypes = null }
             }
             Space = class {
                 rows = new ArrayCollection(this);
@@ -440,17 +484,17 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             expect(result2).toBeTruthy();
         });
     });
-    describe("this.elementType <전체 타입을 설정할 경우 : 원시타입>", () => {
+    describe("this._elemTypes <전체 타입을 설정할 경우 : 원시타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
             School = class {
                 rows = new ArrayCollection(this);
-                constructor() { this.rows.elementType = String }
+                constructor() { this.rows._elemTypes = String }
             }
             Corp = class {
                 rows = new ArrayCollection(this);
-                constructor() { this.rows.elementType = [String, Boolean] }
+                constructor() { this.rows._elemTypes = [String, Boolean] }
             }
         });
         it("- 단일 타입 : rows.add(name, obj) ", () => {

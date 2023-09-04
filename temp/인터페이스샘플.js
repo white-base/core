@@ -58,7 +58,7 @@ var type2 = function() {
         level: Number 
     }
     this.count = Array;
-    this.course = [];   // 타입제한 필요시 ArrayCollection.elementType 사용
+    this.course = [];   // 타입제한 필요시 ArrayCollection._elemTypes 사용
 }
 
 /**

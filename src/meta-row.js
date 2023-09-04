@@ -60,7 +60,7 @@
         function MetaRow(p_entity) {
             _super.call(this);
             
-            var __element = [];
+            var _elements = [];
             var _this   = this;
             var __event  = new Observer(this);
             var _entity  = null;
@@ -115,7 +115,7 @@
              */
             Object.defineProperty(this, 'count', {
                 get: function() {
-                    return __element.length;
+                    return _elements.length;
                 },
                 configurable: false,
                 enumerable: false
@@ -129,7 +129,7 @@
                 enumerable: false,
                 configurable: true,
                 get: function() {
-                    return __element;
+                    return _elements;
                 }
             });
 
@@ -138,8 +138,8 @@
              * @event _L.Meta.Entity.MetaRow#onChanged 
              */
             Object.defineProperty(this, 'onChanging', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'onChanging');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'onChanging');
                 },
                 enumerable: true,
                 configurable: true,
@@ -150,8 +150,8 @@
              * @event _L.Meta.Entity.MetaRow#onChanged 
              */
             Object.defineProperty(this, 'onChanged', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'onChanged');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'onChanged');
                 },
                 enumerable: true,
                 configurable: true,
@@ -162,9 +162,9 @@
                 this._entity = p_entity;
 
                 for (var i = 0; i < _entity.columns.count; i++) {
-                    var idx = __element.length;
+                    var idx = _elements.length;
                     var alias = _entity.columns[i].alias;
-                    __element.push(_entity.columns[i].default);  // 기본값 등록
+                    _elements.push(_entity.columns[i].default);  // 기본값 등록
                     _keys.push(alias);
                     Object.defineProperty(this, [i], getPropDescriptor(idx));
                     Object.defineProperty(this, alias, getPropDescriptor(idx));
@@ -173,9 +173,9 @@
 
             function getPropDescriptor(p_idx) {
                 return {
-                    get: function() { return __element[p_idx]; },
+                    get: function() { return _elements[p_idx]; },
                     set: function(newValue) { 
-                        var oldValue = __element[p_idx];
+                        var oldValue = _elements[p_idx];
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (this._entity && !this._entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
@@ -186,7 +186,7 @@
                         }
                         // 이벤트 및 처리
                         _this._onChanging(p_idx, newValue, oldValue);
-                        __element[p_idx] = newValue;
+                        _elements[p_idx] = newValue;
                         _this._onChanged(p_idx, newValue, oldValue);
 
                     },
@@ -294,7 +294,7 @@
         function MetaRowCollection(p_owner) {
             _super.call(this, p_owner);
 
-            this.elementType = MetaRow;   // 컬렉션타입 설정
+            this._elemTypes = MetaRow;   // 컬렉션타입 설정
             this.autoChanges = true;    // 트랜젝션 기본 해제 해제입니다.
         }
         Util.inherits(MetaRowCollection, _super);
@@ -310,13 +310,13 @@
          */
         MetaRowCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this._element[p_idx]; },
+                get: function() { return this._elements[p_idx]; },
                 set: function(newValue) {
                     var typeName;
-                    if (this.elementType.length > 0) Util.validType(newValue, this.elementType);
+                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
                     if (newValue._entity !== this._owner) throw new Error('_entity 가 서로 다릅니다.');
-                    this._transQueue.update(p_idx, newValue, this._element[p_idx]); 
-                    this._element[p_idx] = newValue;
+                    this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
+                    this._elements[p_idx] = newValue;
                 },
                 enumerable: true,
                 configurable: true
@@ -330,7 +330,7 @@
          * @returns 
          */
         MetaRowCollection.prototype.add  = function(p_row, p_checkValid) {
-            return this.insertAt(this._element.length, p_row, p_checkValid);
+            return this.insertAt(this._elements.length, p_row, p_checkValid);
         };
 
         /**

@@ -418,7 +418,7 @@ describe("[target: collection-trans.js]", () => {
             });
         });
     });
-    describe("this.elementType <전체 타입을 설정할 경우 : 클래스타입>", () => {
+    describe("this._elemTypes <전체 타입을 설정할 경우 : 클래스타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
@@ -432,15 +432,15 @@ describe("[target: collection-trans.js]", () => {
             }
             School = class {
                 rows = new TransactionCollection(this);
-                constructor() { this.rows.elementType = Student }
+                constructor() { this.rows._elemTypes = Student }
             }
             Corp = class {
                 rows = new TransactionCollection(this);
-                constructor() { this.rows.elementType = [Member, Student] }
+                constructor() { this.rows._elemTypes = [Member, Student] }
             }
             House = class {
                 rows = new TransactionCollection(this);
-                constructor() { this.rows.elementType = null }
+                constructor() { this.rows._elemTypes = null }
             }
             Space = class {
                 rows = new TransactionCollection(this);
@@ -528,17 +528,17 @@ describe("[target: collection-trans.js]", () => {
             expect(result2).toBeTruthy();
         });
     });
-    describe("this.elementType <전체 타입을 설정할 경우 : 원시타입>", () => {
+    describe("this._elemTypes <전체 타입을 설정할 경우 : 원시타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
             School = class {
                 rows = new TransactionCollection(this);
-                constructor() { this.rows.elementType = String }
+                constructor() { this.rows._elemTypes = String }
             }
             Corp = class {
                 rows = new TransactionCollection(this);
-                constructor() { this.rows.elementType = [String, Boolean] }
+                constructor() { this.rows._elemTypes = [String, Boolean] }
             }
         });
         it("- 단일 타입 : rows.add(name, obj) ", () => {

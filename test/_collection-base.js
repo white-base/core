@@ -20,10 +20,10 @@ describe("< BaseCollection >", () => {
         }
         School = class {
             columns = new PropertyCollection(this);
-            constructor() { this.columns.elementType = Student }
+            constructor() { this.columns._elemTypes = Student }
         }
     });
-    describe("[ this.elementType 전체 타입을 설정할 경우 : 클래스타입 ]", () => {
+    describe("[ this._elemTypes 전체 타입을 설정할 경우 : 클래스타입 ]", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
@@ -33,7 +33,7 @@ describe("< BaseCollection >", () => {
             }
             School = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns.elementType = Student }
+                constructor() { this.columns._elemTypes = Student }
             }
         });
         it("- columns.add(name, obj) ", () => {
@@ -58,7 +58,7 @@ describe("< BaseCollection >", () => {
             expect(result).toBeTruthy();
         });
     });
-    describe("[ this.elementType 전체 타입을 설정할 경우 : 원시타입(String)  ]", () => {
+    describe("[ this._elemTypes 전체 타입을 설정할 경우 : 원시타입(String)  ]", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
@@ -68,7 +68,7 @@ describe("< BaseCollection >", () => {
             }
             School = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns.elementType = String }
+                constructor() { this.columns._elemTypes = String }
             }
         });
         it("- columns.add(name, obj) ", () => {
@@ -89,9 +89,9 @@ describe("< BaseCollection >", () => {
 /**
  * TODO: 
  * - _getPropDescriptor() : 상속할때 오버라이딩해서 변형 => 나중에..
- *  + elementType : 타입으로 간단하게 타입의 검사가 가능할 수 있다.
+ *  + _elemTypes : 타입으로 간단하게 타입의 검사가 가능할 수 있다.
  *  + 세부 제어를 위해서 _get... 을 사용함
- * - elementType 타입 지정시 해당 인스턴스만 입력가능
+ * - _elemTypes 타입 지정시 해당 인스턴스만 입력가능
  * 
  * ###############################
  * - 이벤트 => 별도로 파일로 분리

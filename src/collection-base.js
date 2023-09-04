@@ -58,11 +58,12 @@
             _super.call(this);
             
             // private variable
-            var _owner = p_owner || null;
-            var _element = [];
-            var _symbol = [];
             var __event = new Observer(this, this);
-            var _elementType  = [];  
+            var _owner = p_owner || null;
+            var _elements = [];
+            var _descriptors = [];
+            var _KEYWORD = [];
+            var _elemTypes  = []; 
 
             /** 
              * 이벤트 객체
@@ -97,30 +98,48 @@
              * 컬랙선 내부값 
              * TODO: setter 는 빠지는게 적합흘듯
              * @protected 
-             * @member {Array} _L.Collection.BaseCollection#_element  
+             * @member {Array} _L.Collection.BaseCollection#_elements  
              */
-            Object.defineProperty(this, '_element', {
+            Object.defineProperty(this, '_elements', {
                 get: function() {
-                    return _element;
+                    return _elements;
                 },
                 set: function(val) {
-                    _element = val;
+                    _elements = val;
                 },
                 enumerable: true,
                 configurable: false
             });
 
             /** 
+             * 컬랙선 내부값 
+             * TODO: setter 는 빠지는게 적합흘듯
+             * @protected 
+             * @member {Array} _L.Collection.BaseCollection#_descriptors  
+             */
+            Object.defineProperty(this, '_descriptors', {
+                get: function() {
+                    return _descriptors;
+                },
+                set: function(val) {
+                    _descriptors = val;
+                },
+                enumerable: false,
+                configurable: false
+            });
+
+            
+            /** 
              * 심볼 예약어 목록 
              * @protected
-             * @member {Array}  _L.Collection.BaseCollection#_symbol  
+             * @member {Array}  _L.Collection.BaseCollection#_KEYWORD  
              */
-             Object.defineProperty(this, '_symbol', {
+             Object.defineProperty(this, '_KEYWORD', {
                 get: function() { 
-                    return _symbol;
+                    return _KEYWORD;
                 },
                 set: function(p_val) {
-                    _symbol = p_val;
+                    _KEYWORD = p_val;
                 },
                 enumerable: false,
                 configurable: false
@@ -128,12 +147,14 @@
 
             /**
              * 컬렉션 목록 
-             * TODO: 제거되어야 맞을듯, _element 와 중복되며, 공개의 의미가 아님, 직접 접근 제한함
+             * TODO: 제거되어야 맞을듯, _elements 와 중복되며, 공개의 의미가 아님, 직접 접근 제한함
              * @member {Array}  _L.Collection.BaseCollection#list  
              */
             Object.defineProperty(this, 'list', {
                 get: function() {
-                    return this._element;
+                    var arr = [];
+                    for (var i = 0; i < this._elements.length; i++) arr.push(this._elements[i]);
+                    return arr;
                 },
                 enumerable: false,
                 configurable: true
@@ -145,7 +166,7 @@
              */
             Object.defineProperty(this, 'count', {
                 get: function() {
-                    return this._element.length;
+                    return this._elements.length;
                 },
                 enumerable: false,
                 configurable: true
@@ -153,15 +174,15 @@
 
             /** 
              * 요소타입
-             * @member {Observer}  _L.Collection.BaseCollection#elementType  
+             * @member {Observer}  _L.Collection.BaseCollection#_elemTypes  
              */
-            Object.defineProperty(this, 'elementType', {
+            Object.defineProperty(this, '_elemTypes', {
                 get: function() {
-                    return _elementType;
+                    return _elemTypes;
                 },
                 set: function(val) {
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
-                    _elementType = arrType;
+                    _elemTypes = arrType;
                 },
                 enumerable: true,
                 configurable: false
@@ -172,8 +193,8 @@
              * @event _L.Collection.BaseCollection#onAdd 
              */
             Object.defineProperty(this, 'onAdd', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'add');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'add');
                 },
                 enumerable: false,
                 configurable: true
@@ -184,8 +205,8 @@
              * @event _L.Collection.BaseCollection#onRemove
              */
             Object.defineProperty(this, 'onRemove', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'remove');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'remove');
                 },
                 enumerable: false,
                 configurable: true
@@ -196,8 +217,8 @@
              * @event _L.Collection.BaseCollection#onClear
              */
             Object.defineProperty(this, 'onClear', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'clear');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'clear');
                 },
                 enumerable: false,
                 configurable: true
@@ -208,8 +229,8 @@
              * @event _L.Collection.BaseCollection#onChanging 
              */
             Object.defineProperty(this, 'onChanging', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'changing');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'changing');
                 },
                 enumerable: false,
                 configurable: true
@@ -220,18 +241,18 @@
              * @event _L.Collection.BaseCollection#onChanged 
              */
             Object.defineProperty(this, 'onChanged', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'changed');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'changed');
                 },
                 enumerable: false,
                 configurable: true
             });
 
             // 예약어 등록
-            this._symbol = this._symbol.concat(['__event', '_owner', '_element', '_symbol', 'elementType', 'list', 'count']);
-            this._symbol = this._symbol.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
-            this._symbol = this._symbol.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
-            this._symbol = this._symbol.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
+            this._KEYWORD = this._KEYWORD.concat(['__event', '_owner', '_elements', '_KEYWORD', '_elemTypes', 'list', 'count']);
+            this._KEYWORD = this._KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
+            this._KEYWORD = this._KEYWORD.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
+            this._KEYWORD = this._KEYWORD.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
 
             Util.implements(this, ICollection, IBaseCollection);
         }
@@ -247,11 +268,11 @@
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this._element[p_idx]; },
+                get: function() { return this._elements[p_idx]; },
                 set: function(newValue) {
                     var typeName;
-                    if (this.elementType.length > 0) Util.validType(newValue, this.elementType);
-                    this._element[p_idx] = newValue; 
+                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
+                    this._elements[p_idx] = newValue; 
                 },
                 enumerable: true,
                 configurable: true
@@ -308,19 +329,19 @@
             var _elems = [];
 
             obj._owner = MetaRegistry.createReferObject(this._owner);
-            for (var i = 0; i < this.elementType.length; i++) {
-                var elem = this.elementType[i];
+            for (var i = 0; i < this._elemTypes.length; i++) {
+                var elem = this._elemTypes[i];
                 if (typeof elem === 'function') _elems.push(MetaRegistry.createNsObject(elem));
                 else _elems.push(elem);
             }
-            obj.elementType = _elems;
+            obj._elemTypes = _elems;
 
-            obj._elem = [];
-            for (var i = 0; i < this._element.length; i++) {
-                var elem = this._element[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
-                else obj._elem.push(elem);
-            }
+            // obj._elem = [];
+            // for (var i = 0; i < this._elements.length; i++) {
+            //     var elem = this._elements[i];
+            //     if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
+            //     else obj._elem.push(elem);
+            // }
             return obj;                        
         };
 
@@ -328,7 +349,7 @@
             _super.prototype.setObject.call(this, mObj);
             
             this.clear();
-            this.elementType = mObj.elementType;
+            this._elemTypes = mObj._elemTypes;
         };
 
         /** 
@@ -374,7 +395,7 @@
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
             if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added');
-            var elem = this._element[p_idx];
+            var elem = this._elements[p_idx];
 
             if (this.exist(p_idx)) {
                 // before event
@@ -395,7 +416,7 @@
          * @returns {Boolean}
          */
         BaseCollection.prototype.contains = function(p_elem) {
-            return this._element.indexOf(p_elem) > -1;
+            return this._elements.indexOf(p_elem) > -1;
         };
 
         /**
@@ -404,7 +425,7 @@
          * @returns {Number}
          */
         BaseCollection.prototype.indexOf = function(p_elem) {
-            return this._element.indexOf(p_elem);
+            return this._elements.indexOf(p_elem);
         };
 
         /**

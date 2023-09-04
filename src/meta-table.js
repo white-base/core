@@ -226,7 +226,7 @@
                 enumerable: true
             });
 
-            this.elementType = MetaTable;   // 컬렉션타입 설정
+            this._elemTypes = MetaTable;   // 컬렉션타입 설정
 
         }
         Util.inherits(MetaTableCollection, _super);

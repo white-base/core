@@ -126,15 +126,15 @@
 
             /** 
              * 요소타입
-             * @member {Observer}  _L.Common.NamespaceManager#elementType  
+             * @member {Observer}  _L.Common.NamespaceManager#_elemTypes  
              */
-            Object.defineProperty(this, 'elementType', {
+            Object.defineProperty(this, '_elemTypes', {
                 get: function() {
-                    return _elementType;
+                    return __elemTypes;
                 },
                 set: function(val) {
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
-                    _elementType = arrType;
+                    __elemTypes = arrType;
                 },
                 enumerable: true,
                 configurable: false
@@ -151,7 +151,7 @@
                 enumerable: true
             });
 
-            this.__symbol = ['namespace', 'ns', 'NS', '_type'];
+            this.__KEYWORD = ['namespace', 'ns', 'NS', '_type'];
         }
 
         NamespaceManager._NS = 'Common';    // namespace
@@ -200,7 +200,7 @@
             var sections = __getArray(p_ns);
         
             // 에약어 제거
-            if (this.__symbol.indexOf(sections[0]) > -1) sections = sections.slice(1);
+            if (this.__KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1);
         
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];

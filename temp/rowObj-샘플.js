@@ -7,7 +7,7 @@ var rObj = {
       _guid: "f9fa8ed2-9904-f662-56fb-3e6c688c114e",
       _type: "MetaTableColumnCollection",
       _owner: [Circular],
-      elementType: [
+      _elemTypes: [
       ],
       _elem: [
         {
@@ -34,7 +34,7 @@ var rObj = {
       _guid: "792aecdb-ab84-1397-c137-f82751f43a76",
       _type: "MetaRowCollection",
       _owner: [Circular],
-      elementType: [
+      _elemTypes: [
         function MetaRow(p_entity) {
           _super.call(this);
           var __element = [];

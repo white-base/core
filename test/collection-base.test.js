@@ -21,7 +21,7 @@ describe("[target: collection-base.js]", () => {
             // }
             // School = class {
             //     columns = new ArrayCollection(this);
-            //     constructor() { this.columns.elementType = Student }
+            //     constructor() { this.columns._elemTypes = Student }
             // }
             School = class {
                 columns = new BaseCollection(this);

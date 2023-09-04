@@ -71,7 +71,7 @@
             });
 
             // 예약어 등록
-            this._symbol = this._symbol.concat(['keys', '_keys', 'indexOf', 'keyOf']);
+            this._KEYWORD = this._KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
             Util.implements(this, IPropertyCollection);
         }
         Util.inherits(PropertyCollection, _super);
@@ -86,6 +86,13 @@
          */
         PropertyCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
+
+            obj._elem = [];
+            for (var i = 0; i < this._elements.length; i++) {
+                var elem = this._elements[i];
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
+                else obj._elem.push(elem);
+            }
 
             obj._key = [];
             for (var i = 0; i < this._keys.length; i++) {
@@ -136,8 +143,8 @@
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
                     var obj = MetaRegistry.createObject(elem);
                     obj.setObject(elem);
-                    this._element.push(obj);
-                } else this._element.push(elem);
+                    this._elements.push(obj);
+                } else this._elements.push(elem);
             }
         };
 
@@ -149,7 +156,7 @@
          * @returns {number} 삭제한 인덱스
          */
         PropertyCollection.prototype._remove = function(p_idx) {
-            var count = this._element.length - 1;
+            var count = this._elements.length - 1;
             var propName = this.keyOf(p_idx);   // number 검사함
             
             // if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added'); 
@@ -157,14 +164,19 @@
             // 프로퍼티 삭제
             delete this[propName];                      
             // 원시 자료 변경
-            this._element.splice(p_idx, 1);
+            this._elements.splice(p_idx, 1);
             this._keys.splice(p_idx, 1);
+            this._descriptors.splice(p_idx, 1);
             // 참조 자료 변경
             if (p_idx < count) {
                 for (var i = p_idx; i < count; i++) {
-                    Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
                     propName = this.keyOf(i);
-                    Object.defineProperty(this, propName, this._getPropDescriptor(i));
+                    Object.defineProperty(this, [i], desc);
+                    Object.defineProperty(this, propName, desc);
+                    // Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                    // propName = this.keyOf(i);
+                    // Object.defineProperty(this, propName, this._getPropDescriptor(i));
                 }
                 delete this[count];                     // 마지막 idx 삭제
             } else {
@@ -180,12 +192,12 @@
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
             // p_value = typeof p_value === 'undefined' ? null : p_value;
-            var index   = this._element.length;;
+            var index   = this._elements.length;;
             
             if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
-            if (this.elementType.length > 0) Util.validType(p_value, this.elementType);
+            if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
             // 예약어 검사
-            if (this._symbol.indexOf(p_name) > -1) {
+            if (this._KEYWORD.indexOf(p_name) > -1) {
                 throw new Error(' [' + p_name + '] is a Symbol word');   
             }
             if (this.exist(p_name)) {
@@ -195,9 +207,11 @@
             // before event
             this._onChanging();
             this._onAdd(index, p_value);
-            // process
-            this._element.push(p_value);
+            // data process
+            this._elements.push(p_value);
             this._keys.push(p_name);
+            this._descriptors.push(p_desc);
+            // property define
             if (typeof p_desc === 'object') {
                 Object.defineProperty(this, [index], p_desc);
                 Object.defineProperty(this, p_name, p_desc);
@@ -220,12 +234,12 @@
            this._onChanging();
            this._onClear();
             // process
-           for (var i = 0; i < this._element.length; i++) {
+           for (var i = 0; i < this._elements.length; i++) {
                propName = this.keyOf(i);
                delete this[i];
                delete this[propName];
             }
-            this._element = [];
+            this._elements = [];
             this._keys = [];
             // after event
             this._onChanged();
@@ -241,11 +255,11 @@
             var opt = p_opt || 0;
             
             if (opt === 0) {
-                return this._element.indexOf(p_obj);
+                return this._elements.indexOf(p_obj);
             }
             if (opt === 1) {    
                 if (typeof p_obj !== 'string')  throw new Error('Only [p_obj] type "string" can be added'); 
-                // return this._element.indexOf(this[p_obj]);
+                // return this._elements.indexOf(this[p_obj]);
                 for (var i = 0; i < this._keys.length; i++) {
                     if (this._keys[i] === p_obj) return i;
                  }

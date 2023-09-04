@@ -145,7 +145,7 @@
         function MetaRowCollection(p_owner) {
             _super.call(this, p_owner);
 
-            this.elementType = MetaRow;   // 컬렉션타입 설정
+            this._elemTypes = MetaRow;   // 컬렉션타입 설정
         }
         Util.inherits(MetaRowCollection, _super);
 

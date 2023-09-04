@@ -86,17 +86,17 @@
              * @private
              * @member {*} _L.Meta.Entity.MetaColumn#__value
              */
-            Object.defineProperty(this, '__value', 
-            {
-                get: function() { return __value; },
-                set: function(newValue) { 
-                    // 직접 입력하면 안됨
-                    // throw new Error('Only getter !! ');
-                    __value = newValue;
-                },
-                configurable: true,
-                enumerable: true
-            });
+            // Object.defineProperty(this, '__value', 
+            // {
+            //     get: function() { return __value; },
+            //     set: function(newValue) { 
+            //         // 직접 입력하면 안됨
+            //         // throw new Error('Only getter !! ');
+            //         __value = newValue;
+            //     },
+            //     configurable: true,
+            //     enumerable: true
+            // });
 
             /** 
              * 이벤트 객체
@@ -361,8 +361,8 @@
              * @event _L.Meta.Entity.MetaColumn#onChanged 
              */
             Object.defineProperty(this, 'onChanged', {
-                set: function(p_fn) {
-                    this.__event.subscribe(p_fn, 'onChanged');
+                set: function(fun) {
+                    this.__event.subscribe(fun, 'onChanged');
                 },
                 enumerable: true,
                 configurable: true,

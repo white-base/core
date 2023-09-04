@@ -265,7 +265,7 @@
                 enumerable: true
             });
 
-            this.elementType = MetaView;   // 컬렉션타입 설정
+            this._elemTypes = MetaView;   // 컬렉션타입 설정
         }
         Util.inherits(MetaViewCollection, _super);
 
