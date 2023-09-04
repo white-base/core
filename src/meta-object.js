@@ -52,7 +52,7 @@
 
             /**
              * _guid
-             * @member {Array} _L.Meta.MetaObject#_guid 
+             * @member {array} _L.Meta.MetaObject#_guid 
              */
             Object.defineProperty(this, '_guid', 
             {
@@ -64,8 +64,8 @@
                 enumerable: true
             });    
             /**
-             * _guid
-             * @member {Array} _L.Meta.MetaObject#_type 
+             * _type
+             * @member {function} _L.Meta.MetaObject#_type 
              */
             Object.defineProperty(this, '_type', 
             {
@@ -81,7 +81,7 @@
             MetaRegistry.register(this);
 
             // inner variable access
-            this.__SET_guid = function(val, call) {
+            this.__SET$_guid = function(val, call) {
                 if (call instanceof MetaObject) _guid = val;
             }
 
@@ -94,6 +94,7 @@
         /**
          * 메타 객체를 얻는다
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
          * @returns {object}
          */
         MetaObject.prototype.getObject = function(p_vOpt) {
@@ -107,11 +108,11 @@
         /**
          * 메타 객체를 설정한다
          * @virtual
-         * @returns {object}
+         * @param {object} p_mObj 레벨 옵션
          */
         MetaObject.prototype.setObject  = function(p_mObj) {
             if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
-            this.__SET_guid(p_mObj._guid, this);
+            this.__SET$_guid(p_mObj._guid, this);
         };
         
         /**

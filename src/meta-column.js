@@ -283,14 +283,14 @@
                         __val = getter.call(this);
                         
                         // 검사 및 이벤트 발생
-                        if (this.__value !== null && this.__value !== __val) {
-                            this._onChanged(__val, this.__value);
-                            this.__value = __val;   // 내부에 저장
+                        if (__value !== null && __value !== __val) {
+                            this._onChanged(__val, __value);
+                            __value = __val;   // 내부에 저장
                         }
                     
                     // 우선순위 : 2
                     } else {
-                        __val = this.__value;
+                        __val = __value;
                     }
                     
                     /**
@@ -299,14 +299,14 @@
                      *  - getter 리턴이 없는 경우
                      */
                     if (typeof __val === 'undefined' || __val === null) {
-                        __val = this.__value || this.default;  
+                        __val = __value || this.default;  
                     }
 
                     return __val; 
                 },
                 set:  function(val) { 
                     var __val, _val;
-                    var _oldVal = this.__value;
+                    var _oldVal = __value;
                     if (typeof setter === 'function' ) _val = setter.call(this, val);
                     
                     // settter 의 리턴이 여부
@@ -317,7 +317,7 @@
                     if(['number', 'string', 'boolean'].indexOf(typeof __val) < 0) {
                         throw new Error('Only [value] type "number, string, boolean" can be added');    // COVER:
                     }
-                    this.__value = __val;
+                    __value = __val;
                     // 검사 및 이벤트 발생
                     if (_oldVal !== __val && __val) this._onChanged(__val, _oldVal);
                 },
@@ -368,13 +368,22 @@
                 configurable: true,
             });
             
-            this.columnName  = p_name || '';            
-            if (p_property) this._load(p_property);
 
             // inner variable access
             this.__GET$alias = function(call) {
                 if (call instanceof MetaColumn) return alias;
             }
+            // inner variable access
+            this.__GET$__value = function(call) {
+                if (call instanceof MetaColumn) return __value;
+            }
+            // inner variable access
+            this.__SET$__value = function(val, call) {
+                if (call instanceof MetaColumn) __value = val;
+            }
+
+            this.columnName  = p_name || '';            
+            if (p_property) this._load(p_property);
         }
         Util.inherits(MetaColumn, _super);
 
@@ -386,7 +395,7 @@
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
         MetaColumn.prototype._onChanged = function(p_nValue, p_oValue) {
-            p_oValue = p_oValue || this.__value;
+            p_oValue = p_oValue || this.__GET$__value(this);
             this.__event.publish('onChanged', p_nValue, p_oValue);
         };
 
@@ -482,7 +491,7 @@
                 constraints.push(this.constraints[i]);
             }
             if (this.constraints) clone['constraints']  = constraints;
-            if (this.__value) clone['__value']          = this.__value;
+            if (this.__GET$__value(this)) clone['__value']          = this.__GET$__value(this);
             if (this.getter) clone['getter']            = this.getter;
             if (this.setter) clone['setter']            = this.setter;
             

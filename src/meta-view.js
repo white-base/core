@@ -128,7 +128,7 @@
             columns = new MetaViewColumnCollection(this, refCollection);
 
             // inner variable access
-            this.__SET_refEntity = function(val, call) {
+            this.__SET$_refEntity = function(val, call) {
                 if (call instanceof MetaView) _refEntity = val;
             }
         }
@@ -176,7 +176,7 @@
             this.columns.setObject(mObj.columns);
             this.rows.setObject(mObj.rows);
             this.viewName = mObj.viewName;
-            this.__SET_refEntity(mObj._refEntity, this);
+            this.__SET$_refEntity(mObj._refEntity, this);
         };
 
         /**

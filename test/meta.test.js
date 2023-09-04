@@ -120,7 +120,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         describe("기타", () => {
             it("- this.__SET_guid : 내부 setter ", () => {
                 const i = new MetaObject();
-                i.__SET_guid(10, i);    // 
+                i.__SET$_guid(10, i);    // 
                 // i.__SET_guid(10);
 
                 expect(i._guid).toBe(10);
