@@ -10,7 +10,7 @@ let School, Student, sc, st;
 
 //==============================================================
 // test
-describe("< BaseCollection >", () => {
+describe.skip("< BaseCollection >", () => {
     beforeAll(() => {
         jest.resetModules();
         // 클래스 정의

@@ -15,7 +15,7 @@ describe("[target: namespace-manager.js]", () => {
         beforeEach(() => {
             jest.resetModules();
         });
-        describe("this.list <요소 목록>", () => {
+        describe("NamespaceManager.list <요소 목록>", () => {
             it("- list : 목록 얻기 ", () => {
                 const ns = new NamespaceManager();
                 ns.set('a1.b1.Fun', Function);
@@ -33,7 +33,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(list.length).toBe(0);
             });
         });
-        describe("this.count <요소 갯수>", () => {
+        describe("NamespaceManager.count <요소 갯수>", () => {
             it("- count : 갯수 ", () => {
                 const ns = new NamespaceManager();
                 ns.set('a1.b1', 'Fun', Function);
@@ -49,7 +49,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(count).toBe(0);
             });
         });
-        describe("this.register(ns) <네임스페이스 등록>", () => {
+        describe("NamespaceManager.register(ns) <네임스페이스 등록>", () => {
             it("- register() : 등록 ", () => {
                 const ns = new NamespaceManager();
                 ns.register('aa.bb');
@@ -88,7 +88,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(() => ns.register('aa.3bb')).toThrow(/section/);
             });
         });
-        describe("this.release(ns) <네임스페이스 해제>", () => {
+        describe("NamespaceManager.release(ns) <네임스페이스 해제>", () => {
             it("- release() : leaf 해제 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -131,7 +131,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(s.a1.b1).toBeDefined();
             });
         });
-        describe("this.path(ns?) <네임스페이스 경로 얻기>", () => {
+        describe("NamespaceManager.path(ns?) <네임스페이스 경로 얻기>", () => {
             it("- path() : 전체 경로 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -160,7 +160,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(p).not.toBeDefined();
             });
         });
-        describe("this.set(fullName, elem) <네임스페이스에 요소 설정>", () => {
+        describe("NamespaceManager.set(fullName, elem) <네임스페이스에 요소 설정>", () => {
             it("- set() : Function 등록 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -185,7 +185,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(() => ns.set('a1.b1.Fun%', Function)).toThrow(/key/);
             });
         });
-        describe("this.get(fullname) <네임스페이스에 요소 얻기>", () => {
+        describe("NamespaceManager.get(fullname) <네임스페이스에 요소 얻기>", () => {
             it("- get(fullName) : Function 얻기 ", () => {
                 const ns = new NamespaceManager();
                 ns.set('a1.b1.Fun', Function);
@@ -195,7 +195,7 @@ describe("[target: namespace-manager.js]", () => {
             });
         });
 
-        describe("this.del(fullName): bool <네임스페이스에 요소 삭제>", () => {
+        describe("NamespaceManager.del(fullName): bool <네임스페이스에 요소 삭제>", () => {
             it("- del(fullName) : 요소 삭제", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -212,7 +212,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(r2).toBe(false);
             });
         });
-        describe("this.find(elem) <네임스페이스 얻기>", () => {
+        describe("NamespaceManager.find(elem) <네임스페이스 얻기>", () => {
             it("- find(elem) : 네임스페이스 얻기", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -241,7 +241,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(str).not.toBeDefined();
             });
         });
-        describe("this.has(elem): bool <네임스페이스에 요소 유무>", () => {
+        describe("NamespaceManager.has(elem): bool <네임스페이스에 요소 유무>", () => {
             it("- has(elem) : 객체로 요소 검사 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -284,7 +284,7 @@ describe("[target: namespace-manager.js]", () => {
         //         expect(ns._getPath(fun3).full).toBe('a1.b1.c1.fun3');
         //     });
         // });
-        describe("this.output(stringify?, space?, vOpt?): str <네임스페이스에 출력>", () => {
+        describe("NamespaceManager.output(stringify?, space?, vOpt?): str <네임스페이스에 출력>", () => {
             it("- output(stringify) : 함수 출력 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -325,7 +325,7 @@ describe("[target: namespace-manager.js]", () => {
                 // console.log(0);
             });
         });
-        describe("this.load(str, parse?) <네임스페이스 불러오기>", () => {
+        describe("NamespaceManager.load(str, parse?) <네임스페이스 불러오기>", () => {
             it("- getPath(elem) : 객체로 얻기 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;

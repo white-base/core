@@ -68,18 +68,6 @@
 
             var _keys = [];
 
-            Object.defineProperty(this, '_keys',
-            {
-                get: function() { return _keys; },
-                configurable: false,
-                enumerable: false,
-            });
-
-            // MetaEntity 등록 & order(순서) 값 계산
-            if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
-                throw new Error('Only [p_entity] type "MetaEntity" can be added');
-            }
-
             /** 
              * 이벤트 객체
              * @protected 
@@ -89,7 +77,9 @@
                 get: function() { return __event; },
                 enumerable: false,
                 configurable: false,
-            });        
+            });
+
+            
 
             /**
              * 로우의 소유 엔티티
@@ -123,6 +113,13 @@
                 },
                 enumerable: true,
                 configurable: false
+            });
+
+            Object.defineProperty(this, '_keys',
+            {
+                get: function() { return _keys; },
+                configurable: false,
+                enumerable: false,
             });
 
             /**
@@ -174,6 +171,11 @@
                 enumerable: true,
                 configurable: true,
             });
+            
+            // MetaEntity 등록 & order(순서) 값 계산
+            if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
+                throw new Error('Only [p_entity] type "MetaEntity" can be added');
+            }
             
             // 설정
             if (p_entity) {

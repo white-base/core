@@ -90,24 +90,6 @@
                 configurable: false,
                 enumerable: true
             });
-
-            /**
-             * 트랜젝션 사용 유무 (기본값: 사용 false)
-             * @member {boolean}  _L.Meta.Entity.MetaSet#autoChanges
-             */
-            Object.defineProperty(this, 'autoChanges', {
-                set: function(newValue) { 
-                    if (typeof newValue !== 'boolean') {
-                        throw new Error('Only [autoChanges] type "boolean" can be added');
-                    }
-                    for (var i = 0; i < this.tables.count; i++) {
-                        this.tables[i].rows.autoChanges = newValue;
-                    }
-                },
-                configurable: false,
-                enumerable: true
-            });
-
             
             /**
              * 메타 테이블 컬렉션
@@ -127,6 +109,23 @@
             Object.defineProperty(this, 'views', 
             {
                 get: function() { return views; },
+                configurable: false,
+                enumerable: true
+            });
+
+            /**
+             * 트랜젝션 사용 유무 (기본값: 사용 false)
+             * @member {boolean}  _L.Meta.Entity.MetaSet#autoChanges
+             */
+            Object.defineProperty(this, 'autoChanges', {
+                set: function(newValue) { 
+                    if (typeof newValue !== 'boolean') {
+                        throw new Error('Only [autoChanges] type "boolean" can be added');
+                    }
+                    for (var i = 0; i < this.tables.count; i++) {
+                        this.tables[i].rows.autoChanges = newValue;
+                    }
+                },
                 configurable: false,
                 enumerable: true
             });

@@ -76,10 +76,7 @@
             var setter        = null;
             var alias         = null;
 
-            // MetaEntity 등록 & order(순서) 값 계산
-            if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
-                _entity    = p_entity;
-            }
+            
 
             /**
              * value 내부값 (필터 및 getter/setter 무시)
@@ -382,6 +379,11 @@
                 if (call instanceof MetaColumn) __value = val;
             }
 
+            // MetaEntity 등록 & order(순서) 값 계산
+            if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
+                _entity    = p_entity;
+            }
+            
             this.columnName  = p_name || '';            
             if (p_property) this._load(p_property);
         }

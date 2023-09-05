@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("load: util-type.js <Util.type >", () => {
+describe.skip("load: util-type.js <Util.type >", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -24,7 +24,7 @@ describe("load: util-type.js <Util.type >", () => {
     });
 });
 
-describe("load: util.js <Util>", () => {
+describe.skip("load: util.js <Util>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;

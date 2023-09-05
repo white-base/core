@@ -419,15 +419,7 @@
             return obj;                        
         };
 
-        /** @abstract */
-        MetaEntity.prototype.clone = function() {
-            throw new Error('[ clone() ] Abstract method definition, fail...');
-        };
-
-        /** @abstract */
-        MetaEntity.prototype.copy = function() {
-            throw new Error('[ copy() ] Abstract method definition, fail...');
-        };
+        
 
         /** @override **/
         // Entity.prototype.getTypes = function() {
@@ -541,6 +533,140 @@
         //     this.__fillRow(p_target);
         // };
         
+        
+
+
+        /**
+         * 새로운 MetaRow 를 추가한다.
+         */
+        MetaEntity.prototype.newRow  = function() {
+            return new MetaRow(this);
+        };
+
+        /**
+         * 아아템의 value을 MetaRow 형식으로 얻는다.
+         * @returns {MetaRow}
+         */
+        MetaEntity.prototype.getValue  = function() {
+            var row = this.newRow();
+            
+            for(var i = 0; this.columns.count > i; i++) {
+                 row[i] = this.columns[i].value;
+            }
+            return row;
+        };
+
+        /**
+         * MetaRow 의 값을 아이템의 value에 설정한다.
+         * @param {*} p_row 
+         */
+        MetaEntity.prototype.setValue  = function(p_row) {
+            var alias = '';
+
+            if (!(p_row instanceof MetaRow)) throw new Error('Only [p_row] type "Row" can be added');
+
+            for(var i = 0; this.columns.count > i; i++) {
+                // this.columns[i].value = p_row[i];
+                alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
+                this.columns[i].value = p_row[alias];
+            }
+        };
+
+
+        /** 
+         * 엔티티를 조회(검색) 한다.
+         * @param {Object} p_filter 필터객체
+         * @param {(Number | Array<Number>)?} p_index 인덱스 시작번호 또는 목록
+         * @param {Number?} p_end 인덱스 종료번호
+         * @return {MetaEntity}
+         * @example
+         * // 상속기법을 이용함
+         * filter = {
+         *  __except : ['name'...],        // 제외 아이템 (1방법)
+         *  아이템명: { __except: true }    // 아이템 제외 (2방법)
+         *  아이템명: { order: 100 }        // 속성 오버라이딩
+         * }
+         */
+        // MetaEntity.prototype.select  = function(p_filter, p_index, p_end) {
+        //     var EXECEPT = '__except';
+        //     var list = [];
+        //     var excepts = [];
+        //     var obj, f;
+        //     var filterItem;
+            
+        //     // REVIEW:: 이후에 복제로 변경 검토, 자신의 생성자로 생성
+        //     var entity = new this.constructor(this.name);   
+        //     var idx;
+
+
+        //     // var MetaView                    = require('./meta-view').MetaView;
+
+        //     // 1.제외 아이템 조회
+        //     if (p_filter && p_filter[EXECEPT]) {
+        //         if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
+        //         else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
+        //     }
+        //     for (var i = 0; this.columns.count > i; i++) {
+        //         if (excepts.indexOf(this.columns[i].name) < 0)  {
+                    
+        //             // 임시함수에 객체 생성방식
+        //             f = function() {};
+        //             f.prototype = this.columns[i];
+        //             var obj = new f();
+                    
+        //             // 필터 설정(등록)
+        //             if (p_filter && p_filter[this.columns[i].name]) {
+        //                 filterItem = p_filter[this.columns[i].name];    
+        //                 for(var prop in filterItem) {
+        //                     obj[prop] = filterItem[prop];
+        //                 }
+        //             }
+        //             if (obj[EXECEPT] !== true) list.push(obj);
+        //         }
+        //     }
+
+        //     // 2.정렬
+        //     list.sort(function(a, b) { return a.order - b.order; });
+
+        //     // 3.리턴 MetaEntity 의 MetaColumn 구성 : 참조형
+        //     for(var i = 0; i < list.length; i++) {
+        //         entity.columns.add(list[i]);
+        //     }
+            
+        //     // 4.리턴 MetaEntity 의 MetaRow 구성 : 참조형
+        //     if (typeof p_index === 'number') {
+        //         for(var i = p_index; i < this.rows.count; i++) {
+        //             // entity.rows.add(this.rows[idx]);
+        //             entity.rows.add(createRow(i, this));
+        //             if (typeof p_end === 'number' && i === p_end) break;
+        //         }
+        //     } else if (Array.isArray(p_index)) {
+        //         for(var i = 0; i < p_index.length; i++) {
+        //             idx = p_index[i];
+        //             if (typeof idx === 'number' && typeof this.rows[idx] !== 'undefined') {
+        //                 // entity.rows.add(this.rows[idx]);
+        //                 entity.rows.add(createRow(idx, this));
+        //             }
+        //         }
+        //     }
+            
+        //     return entity;
+
+        //     /** @inner row 항목을 재구성하여 생성 (내부 함수) */
+        //     function createRow(rowIdx, orgEntity) {
+        //         var row = entity.newRow();
+        //         var i_name;
+
+        //         for (var i = 0; entity.columns.count > i ; i++) {
+        //             i_name = entity.columns[i].name;
+        //             if (typeof row[i_name] !== 'undefined' && typeof orgEntity.rows[rowIdx][i_name] !== 'undefined') {
+        //                 row[i_name] = orgEntity.rows[rowIdx][i_name];
+        //             }
+        //         }
+        //         return row;
+        //     }
+        // };
+
         /**
          * 병합
          * TODO: 컬럼 추가시 row 존재시 오류 발생 추가
@@ -750,137 +876,6 @@
                 }
             }
         };
-
-
-        /**
-         * 새로운 MetaRow 를 추가한다.
-         */
-        MetaEntity.prototype.newRow  = function() {
-            return new MetaRow(this);
-        };
-
-        /**
-         * MetaRow 의 값을 아이템의 value에 설정한다.
-         * @param {*} p_row 
-         */
-        MetaEntity.prototype.setValue  = function(p_row) {
-            var alias = '';
-
-            if (!(p_row instanceof MetaRow)) throw new Error('Only [p_row] type "Row" can be added');
-
-            for(var i = 0; this.columns.count > i; i++) {
-                // this.columns[i].value = p_row[i];
-                alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
-                this.columns[i].value = p_row[alias];
-            }
-        };
-
-        /**
-         * 아아템의 value을 MetaRow 형식으로 얻는다.
-         * @returns {MetaRow}
-         */
-        MetaEntity.prototype.getValue  = function() {
-            var row = this.newRow();
-            
-            for(var i = 0; this.columns.count > i; i++) {
-                 row[i] = this.columns[i].value;
-            }
-            return row;
-        };
-
-        /** 
-         * 엔티티를 조회(검색) 한다.
-         * @param {Object} p_filter 필터객체
-         * @param {(Number | Array<Number>)?} p_index 인덱스 시작번호 또는 목록
-         * @param {Number?} p_end 인덱스 종료번호
-         * @return {MetaEntity}
-         * @example
-         * // 상속기법을 이용함
-         * filter = {
-         *  __except : ['name'...],        // 제외 아이템 (1방법)
-         *  아이템명: { __except: true }    // 아이템 제외 (2방법)
-         *  아이템명: { order: 100 }        // 속성 오버라이딩
-         * }
-         */
-        // MetaEntity.prototype.select  = function(p_filter, p_index, p_end) {
-        //     var EXECEPT = '__except';
-        //     var list = [];
-        //     var excepts = [];
-        //     var obj, f;
-        //     var filterItem;
-            
-        //     // REVIEW:: 이후에 복제로 변경 검토, 자신의 생성자로 생성
-        //     var entity = new this.constructor(this.name);   
-        //     var idx;
-
-
-        //     // var MetaView                    = require('./meta-view').MetaView;
-
-        //     // 1.제외 아이템 조회
-        //     if (p_filter && p_filter[EXECEPT]) {
-        //         if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
-        //         else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
-        //     }
-        //     for (var i = 0; this.columns.count > i; i++) {
-        //         if (excepts.indexOf(this.columns[i].name) < 0)  {
-                    
-        //             // 임시함수에 객체 생성방식
-        //             f = function() {};
-        //             f.prototype = this.columns[i];
-        //             var obj = new f();
-                    
-        //             // 필터 설정(등록)
-        //             if (p_filter && p_filter[this.columns[i].name]) {
-        //                 filterItem = p_filter[this.columns[i].name];    
-        //                 for(var prop in filterItem) {
-        //                     obj[prop] = filterItem[prop];
-        //                 }
-        //             }
-        //             if (obj[EXECEPT] !== true) list.push(obj);
-        //         }
-        //     }
-
-        //     // 2.정렬
-        //     list.sort(function(a, b) { return a.order - b.order; });
-
-        //     // 3.리턴 MetaEntity 의 MetaColumn 구성 : 참조형
-        //     for(var i = 0; i < list.length; i++) {
-        //         entity.columns.add(list[i]);
-        //     }
-            
-        //     // 4.리턴 MetaEntity 의 MetaRow 구성 : 참조형
-        //     if (typeof p_index === 'number') {
-        //         for(var i = p_index; i < this.rows.count; i++) {
-        //             // entity.rows.add(this.rows[idx]);
-        //             entity.rows.add(createRow(i, this));
-        //             if (typeof p_end === 'number' && i === p_end) break;
-        //         }
-        //     } else if (Array.isArray(p_index)) {
-        //         for(var i = 0; i < p_index.length; i++) {
-        //             idx = p_index[i];
-        //             if (typeof idx === 'number' && typeof this.rows[idx] !== 'undefined') {
-        //                 // entity.rows.add(this.rows[idx]);
-        //                 entity.rows.add(createRow(idx, this));
-        //             }
-        //         }
-        //     }
-            
-        //     return entity;
-
-        //     /** @inner row 항목을 재구성하여 생성 (내부 함수) */
-        //     function createRow(rowIdx, orgEntity) {
-        //         var row = entity.newRow();
-        //         var i_name;
-
-        //         for (var i = 0; entity.columns.count > i ; i++) {
-        //             i_name = entity.columns[i].name;
-        //             if (typeof row[i_name] !== 'undefined' && typeof orgEntity.rows[rowIdx][i_name] !== 'undefined') {
-        //                 row[i_name] = orgEntity.rows[rowIdx][i_name];
-        //             }
-        //         }
-        //         return row;
-        //     }
-        // };
 
         MetaEntity.prototype.select  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
@@ -1245,6 +1240,16 @@
                 obj.rows.push(rObj);
             }
             return obj;
+        };
+
+        /** @abstract */
+        MetaEntity.prototype.clone = function() {
+            throw new Error('[ clone() ] Abstract method definition, fail...');
+        };
+
+        /** @abstract */
+        MetaEntity.prototype.copy = function() {
+            throw new Error('[ copy() ] Abstract method definition, fail...');
         };
 
         return MetaEntity;

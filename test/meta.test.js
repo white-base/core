@@ -35,20 +35,54 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         //     expect(typeNames[2]).toBe('MetaObjectSub');
         //     expect(typeNames.length).toBe(3);
         // });
-        describe("this.getTypes() : arr<func> <타입 조회>", () => {
+        describe("MetaObject._type: fun <타입>", () => {
             it("- _type : function ", () => {
                 const c = new MetaObjectSub();
                 const type = c._type;
         
                 expect(type).toBe(MetaObjectSub);
             });
-            // it("- _type : 강제 예외 ", () => {
-            //     const c = new MetaObjectSub();
-            //     const temp = c.__proto__;
-            //     const type = c._type;
-            //     c.__proto__ = temp; // 복구
-            //     expect(type).toBe(MetaObjectSub);
-            // });
+        });
+        describe("MetaObject.guid: str <GUID 얻기>", () => {
+            it("- this.guid ", () => {
+                const c1 = new MetaObjectSub();
+                const c2 = new MetaObjectSub();
+                const guid1 = c1._guid;
+                const guid2 = c1._guid;
+                const guid3 = c2._guid;
+        
+                expect(guid1.length).toBe(36);
+                expect(guid2.length).toBe(36); // guid 길이
+                expect(guid1).toBe(guid2);
+                expect(guid1).not.toBe(guid3);
+            });
+        });
+        describe("MetaObject.getObject(): obj<ref> <객체 얻기>", () => {
+            it("- getObject() : 직렬화 객체 얻기 ", () => {
+                const c = new MetaObjectSub();
+                const obj = c.getObject();
+        
+                expect(typeof obj._type === 'string').toBe(true);
+                expect(typeof obj._guid === 'string').toBe(true);
+            });
+        });
+        describe("MetaObject.setObject(mObj) <객체 설정>", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
+                const m1 = new MetaObjectSub();
+                const obj = m1.getObject();
+                const m2 = new MetaObjectSub();
+                const m3 = new MetaObject();
+                m2.setObject(obj);
+                m3.setObject(obj);
+        
+                expect(m1 !== m2).toBe(true);
+                expect(m1._guid === m2._guid).toBe(true);
+                expect(m1._type === m2._type).toBe(true);
+                expect(m1._guid === m3._guid).toBe(true);
+                expect(m1._type !== m3._type).toBe(true);
+            });
+        });
+        describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- getTypes() : array<function> ", () => {
                 const c = new MetaObjectSub();
                 const types = c.getTypes();
@@ -59,7 +93,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(types.length).toBe(3);
             });
         });
-        describe("this.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
+        describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
                 const c = new MetaObjectSub();
         
@@ -108,17 +142,18 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c.instanceOf({})).toBe(false);
             });
         });
-
-        it("- EmpytClass : 검사 ", () => {
-            const c = new EmpytClass();
-    
-            expect(c.getType).not.toBeDefined();
-            expect(c.getTypes).not.toBeDefined();
-            expect(c.instanceOf).not.toBeDefined();
+        describe("빈 검사", () => {
+            it("- EmpytClass : 검사 ", () => {
+                const c = new EmpytClass();
+        
+                expect(c.getType).not.toBeDefined();
+                expect(c.getTypes).not.toBeDefined();
+                expect(c.instanceOf).not.toBeDefined();
+            });
         });
 
         describe("기타", () => {
-            it("- this.__SET_guid : 내부 setter ", () => {
+            it("- MetaObject.__SET_guid : 내부 setter ", () => {
                 const i = new MetaObject();
                 i.__SET$_guid(10, i);    // 
                 // i.__SET_guid(10);
@@ -126,7 +161,6 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(i._guid).toBe(10);
             });
         });
-
     });
     describe("MetaElement :: 클래스", () => {
         beforeAll(() => {
@@ -192,21 +226,8 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        describe("this.guid: str <GUID 얻기>", () => {
-            it("- this.guid ", () => {
-                const c1 = new MetaElementSub();
-                const c2 = new MetaElementSub();
-                const guid1 = c1._guid;
-                const guid2 = c1._guid;
-                const guid3 = c2._guid;
         
-                expect(guid1.length).toBe(36);
-                expect(guid2.length).toBe(36); // guid 길이
-                expect(guid1).toBe(guid2);
-                expect(guid1).not.toBe(guid3);
-            });
-        });
-        describe("this.getObject(p_vOpt): fun <객체 얻기>", () => {
+        describe("MetaElement.getObject(p_vOpt): fun <객체 얻기>", () => {
             it("- getObject(): fun ", () => {
                 function Foo(name) {
                     MetaElement.call(this, name);
@@ -279,6 +300,19 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 } };
         
                 expect(obj).toEqual(comp);
+            });
+        });
+        describe("MetaElement.setObject(mObj) <객체 설정>", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
+                const m1 = new MetaElement();
+                const obj = m1.getObject();
+                const m2 = new MetaElement();
+                m2.setObject(obj);
+        
+                expect(m1 !== m2).toBe(true);
+                expect(m1._guid === m2._guid).toBe(true);
+                expect(m1._type === m2._type).toBe(true);
+                expect(m1.metaName === m2.metaName).toBe(true);
             });
         });
         describe("예외", () => {

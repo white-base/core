@@ -98,8 +98,8 @@
          */
         TransactionCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this);
-
-            obj.autoChanges = this.autoChanges;
+            
+            if (this.autoChanges !== false) obj.autoChanges = this.autoChanges;
             return obj;                        
         };
 
@@ -111,23 +111,22 @@
          */
         TransactionCollection.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
-            
-            this.autoChanges = mObj.autoChanges;
-        };
-
-        TransactionCollection.prototype.clear = function() {
-            this._transQueue.init();
-            return _super.prototype.clear.call(this);
-        };
-
-        TransactionCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
-            if (!this.autoChanges) this._transQueue.insert(p_pos, p_value);
-            return _super.prototype.insertAt.call(this, p_pos, p_value, p_desc);
+            if (mObj.autoChanges) this.autoChanges = mObj.autoChanges;
         };
 
         TransactionCollection.prototype.removeAt = function(p_pos) {
             if (!this.autoChanges) this._transQueue.delete(p_pos, this[p_pos]);
             return _super.prototype.removeAt.call(this, p_pos);
+        };
+
+        TransactionCollection.prototype.clear = function() {
+            _super.prototype.clear.call(this);
+            this._transQueue.init();
+        };
+
+        TransactionCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
+            if (!this.autoChanges) this._transQueue.insert(p_pos, p_value);
+            return _super.prototype.insertAt.call(this, p_pos, p_value, p_desc);
         };
 
         TransactionCollection.prototype.commit = function() {

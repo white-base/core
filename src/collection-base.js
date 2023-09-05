@@ -145,6 +145,22 @@
                 configurable: false
             });
 
+            /** 
+             * 요소타입
+             * @member {Observer}  _L.Collection.BaseCollection#_elemTypes  
+             */
+            Object.defineProperty(this, '_elemTypes', {
+                get: function() {
+                    return _elemTypes;
+                },
+                set: function(val) {
+                    var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
+                    _elemTypes = arrType;
+                },
+                enumerable: true,
+                configurable: false
+            });
+
             /**
              * 컬렉션 목록 
              * TODO: 제거되어야 맞을듯, _elements 와 중복되며, 공개의 의미가 아님, 직접 접근 제한함
@@ -171,22 +187,7 @@
                 enumerable: false,
                 configurable: true
             });
-
-            /** 
-             * 요소타입
-             * @member {Observer}  _L.Collection.BaseCollection#_elemTypes  
-             */
-            Object.defineProperty(this, '_elemTypes', {
-                get: function() {
-                    return _elemTypes;
-                },
-                set: function(val) {
-                    var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
-                    _elemTypes = arrType;
-                },
-                enumerable: true,
-                configurable: false
-            });
+            
 
             /** 
              * 변경(등록/삭제) 후 이벤트  
@@ -321,6 +322,14 @@
             };
         };
 
+        /** 
+         * 컬렉션을 삭제한다.
+         * @abstract 
+         */
+        BaseCollection.prototype._remove  = function() {
+            throw new Error('[ _remove(idx) ] Abstract method definition, fail...');
+        };
+
         /**
          * 메타 객체를 얻는다
          * @virtual
@@ -354,30 +363,9 @@
             this._elemTypes = mObj._elemTypes;
         };
 
-        /** 
-         * 컬렉션을 삭제한다.
-         * @abstract 
-         */
-        BaseCollection.prototype._remove  = function() {
-            throw new Error('[ _remove(idx) ] Abstract method definition, fail...');
-        };
-
-        /** 
-         * 컬렉션을 추가한다.
-         * @abstract 
-         */
-        BaseCollection.prototype.add  = function() {
-            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
-        };
         
-        /**
-         * 전체삭제(초기화)한다.
-         * @abstract 
-         * @fires _L.Collection.BaseCollection#onClear 
-         */
-        BaseCollection.prototype.clear  = function() {
-            throw new Error('[ clear() ] Abstract method definition, fail...');
-        };
+
+        
 
         /**
          * 컬렉션을 삭제한다.
@@ -439,6 +427,23 @@
             if (typeof p_key === 'number' || typeof p_key === 'string') 
                 return this.hasOwnProperty(p_key);
             throw new Error('Only [p_key] type "number, string" can be added');
+        };
+
+        /** 
+         * 컬렉션을 추가한다.
+         * @abstract 
+         */
+        BaseCollection.prototype.add  = function() {
+            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
+        };
+        
+        /**
+         * 전체삭제(초기화)한다.
+         * @abstract 
+         * @fires _L.Collection.BaseCollection#onClear 
+         */
+        BaseCollection.prototype.clear  = function() {
+            throw new Error('[ clear() ] Abstract method definition, fail...');
         };
 
         return BaseCollection;

@@ -19,7 +19,6 @@ describe("[target: collection-trans.js]", () => {
                 rows = new TransactionCollection(this);
             }
         });
-
         describe("BaseCollection.remove(elem): bool <컬렉션 삭제>", () => {
             // beforeAll(() => {
             //     let s = new Student();
@@ -67,90 +66,142 @@ describe("[target: collection-trans.js]", () => {
                 expect(result).not.toBeTruthy();
             });
         });
-
-        describe("this.commit() <커밋>", () => {
-            it("- isChanges : 변경 유무", () => {
+        describe("BaseCollection.contains(elem): bool <존재유무 검사>", () => {
+            it("- contains(str | obj | num): bool = {특정요소를 찾을경우 : name}", () => {
                 let s = new Student();
-                
-                // 초기
-                expect(s.rows.isChanges).toBe(false);
-                // 변경후
+                const a2 = { style: 1};
                 s.rows.add('A1');
-                expect(s.rows.isChanges).toBe(true);
-                // 커밋 후
-                s.rows.commit();
-                expect(s.rows.isChanges).toBe(false);
+                s.rows.add(a2);
+                s.rows.add(10);
+                
+                expect(s.rows.contains('A1')).toBeTruthy();
+                expect(s.rows.contains(a2)).toBeTruthy();
+                expect(s.rows.contains(10)).toBeTruthy();
+                expect(s.rows.count).toBe(3);
             });
         });
-
-        describe("this.rollback() <롤백>", () => {
-            it("- add() : 추가 후 롤백", () => {
+        describe("BaseCollection.indexOf(elem): num <인덱스 조회>", () => {
+            it("- indexOf() = {동일객체 있을경우 첫번째 값을 리턴} ", () => {
                 let s = new Student();
+                const a2 = { style: 1};
                 s.rows.add('A1');
-
-                // 초기                
-                expect(s.rows.count).toBe(1);
-                // 롤백 후
-                s.rows.rollback();
-                expect(s.rows.count).toBe(0);
-            });
-            it("- remove() : 추가 커밋 -> 삭제 -> 롤백", () => {
-                let s = new Student();
+                s.rows.add(a2);
+                s.rows.add(10);
+                s.rows.add(10);
                 
-                // 추가 커밋 
-                s.rows.add('A1');
-                s.rows.commit();
-                expect(s.rows.count).toBe(1);
-                // 삭제
-                s.rows.remove('A1');
-                expect(s.rows.count).toBe(0);
-                // 롤백
-                s.rows.rollback();
-                expect(s.rows.count).toBe(1);
+                expect(s.rows.indexOf('A1')).toBe(0);
+                expect(s.rows.indexOf(a2)).toBe(1);
+                expect(s.rows.indexOf(10)).toBe(2);    // 원시타입 사용시 값으로 조회해서 a4는 조회 못함
+                expect(s.rows.count).toBe(4);
             });
-            it("- add(), remove() : 추가 커밋 -> 삭제 -> 커밋 -> 추가 -> 롤백 ", () => {
-                let s = new Student();
-                
-                // 추가 커밋 
-                s.rows.add('A1');
-                s.rows.commit();
-                expect(s.rows.count).toBe(1);
-                // 삭제 
-                s.rows.remove('A1');
-                expect(s.rows.count).toBe(0);
-                // 커밋
-                s.rows.commit();
-                expect(s.rows.count).toBe(0);
-                // 추가
-                s.rows.add('A2');
-                s.rows.add('A3');
-                expect(s.rows.count).toBe(2);
-                expect(s.rows[0]).toBe('A2');
-                expect(s.rows[1]).toBe('A3');
-                // 롤백
-                s.rows.rollback();
-                expect(s.rows.count).toBe(0);
+        });
+        describe("ArrayCollection.add(value?, desc?): bool <컬렉션 추가>", () => {
+            beforeAll(() => {
             });
-            it("- add(), insertAt() remove() : 중복 추가 삭제시 ", () => {
+            it("- add() : undefined", () => {
                 let s = new Student();
-                
-                // 추가 커밋 
-                s.rows.add('A1');
-                s.rows.commit();
+                const result = s.rows.add();
+        
+                expect(s.rows[0]).toBeUndefined();
                 expect(s.rows.count).toBe(1);
-                // 삭제 및 추가 삭제
-                s.rows.remove('A1');
-                s.rows.add('A2');
-                s.rows.add('A3');
-                s.rows.insertAt(0, 'A1');
-                expect(s.rows.count).toBe(3);
+                expect(result).toBeTruthy();
+            });
+            it("- add(value) ", () => {
+                let s = new Student();
+                const result = s.rows.add('A1');
+        
                 expect(s.rows[0]).toBe('A1');
-                expect(s.rows[1]).toBe('A2');
-                expect(s.rows[2]).toBe('A3');
-                // 롤백
-                s.rows.rollback();
                 expect(s.rows.count).toBe(1);
+                expect(result).toBeTruthy();
+            });
+            it("- add(value, desc) : 읽기 전용", () => {
+                let s = new Student();
+                const desc = {
+                    value: 'A1',
+                    writable: false
+                };
+                const result = s.rows.add(null, desc);
+    
+                expect(() => s.rows[0] = 1).toThrow(/0/);
                 expect(s.rows[0]).toBe('A1');
+                expect(s.rows['0']).toBe('A1');
+                expect(s.rows.count).toBe(1);
+                expect(result).toBeTruthy();
+            });
+            it("- add(name, value, desc) : set/get (제약조건 추가) ", () => {
+                let s = new Student();
+                let bValue;
+                const desc = {
+                    get() {
+                      return bValue;
+                    },
+                    set(newValue) {
+                        if (typeof newValue !== 'string') throw new Error('string 타입만')
+                        bValue = newValue;
+                    },
+                    enumerable: true,
+                    configurable: true,
+                }
+                const result = s.rows.add(null, desc);
+                s.rows[0] = 'A1';
+    
+                expect(() => s.rows[0] = 1).toThrow(/string/);
+                expect(s.rows[0]).toBe('A1');
+                expect(s.rows['0']).toBe('A1');
+                expect(s.rows.count).toBe(1);
+                expect(result).toBeTruthy();
+            });
+        });
+        
+
+        describe("TransactionCollection.getObject(): obj<ref> <객체 얻기>", () => {
+            it("- getObject() : 직렬화 객체 얻기 ", () => {
+                const a1 = new TransactionCollection();
+                a1.add(10);
+                a1.add(20);
+                const obj = a1.getObject();
+        
+                expect(obj._elem).toEqual([10, 20]);
+                expect(obj._type === 'Collection.TransactionCollection').toBe(true);
+            });
+            it("- getObject() : 직렬화 객체 얻기 <상속, _NS 설정 안함>", () => {
+                class SubClass extends TransactionCollection{
+                    constructor(){ super() }
+                }
+                const a1 = new SubClass();
+                a1.add(10);
+                a1.add(20);
+                const obj = a1.getObject();
+        
+                expect(obj._elem).toEqual([10, 20]);
+                expect(obj._type === 'Collection.SubClass').toBe(true);
+            });
+            it("- getObject() : 직렬화 객체 얻기 <상속, _NS 설정>", () => {
+                class SubClass extends TransactionCollection{
+                    constructor(){ super() }
+                    static _NS = 'Etc'
+                }
+                const a1 = new SubClass();
+                const obj = a1.getObject();
+        
+                expect(obj._type === 'Etc.SubClass').toBe(true);
+            });
+        });
+        describe("TransactionCollection.setObject(mObj) <객체 설정>", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
+                const a1 = new TransactionCollection();
+                a1.add(10);
+                a1.add(20);
+                const obj = a1.getObject();
+                const a2 = new TransactionCollection();
+                a2.setObject(obj);
+        
+                expect(a1 !== a2).toBe(true);
+                expect(a1._guid === a2._guid).toBe(true);
+                expect(a1.count).toBe(2);
+                expect(a2.count).toBe(2);
+                expect(a2[0]).toBe(10);
+                expect(a2[1]).toBe(20);
             });
         });
 
@@ -163,7 +214,7 @@ describe("[target: collection-trans.js]", () => {
          *  - 경고 메세지
          *  - remove 메소드 삭제
          */
-        describe("BaseCollection.removeAt(num): bool <컬렉션 idx로 삭제>", () => {
+        describe("TransactionCollection.removeAt(num): bool <컬렉션 idx로 삭제>", () => {
             // beforeAll(() => {
             //     let s = new Student();
             // });
@@ -247,7 +298,7 @@ describe("[target: collection-trans.js]", () => {
             });
         });
 
-        describe("this.insertAt(num): bool <idx 위치에 추가>", () => {
+        describe("TransactionCollection.insertAt(num): bool <idx 위치에 추가>", () => {
             // beforeAll(() => {
             //     let s = new Student();
             // });
@@ -318,93 +369,94 @@ describe("[target: collection-trans.js]", () => {
             });
         });
 
-        describe("BaseCollection.contains(elem): bool <존재유무 검사>", () => {
-            it("- contains(str | obj | num): bool = {특정요소를 찾을경우 : name}", () => {
+        describe("TransactionCollection.commit() <커밋>", () => {
+            it("- isChanges : 변경 유무", () => {
                 let s = new Student();
-                const a2 = { style: 1};
-                s.rows.add('A1');
-                s.rows.add(a2);
-                s.rows.add(10);
                 
-                expect(s.rows.contains('A1')).toBeTruthy();
-                expect(s.rows.contains(a2)).toBeTruthy();
-                expect(s.rows.contains(10)).toBeTruthy();
+                // 초기
+                expect(s.rows.isChanges).toBe(false);
+                // 변경후
+                s.rows.add('A1');
+                expect(s.rows.isChanges).toBe(true);
+                // 커밋 후
+                s.rows.commit();
+                expect(s.rows.isChanges).toBe(false);
+            });
+        });
+
+        describe("TransactionCollection.rollback() <롤백>", () => {
+            it("- add() : 추가 후 롤백", () => {
+                let s = new Student();
+                s.rows.add('A1');
+
+                // 초기                
+                expect(s.rows.count).toBe(1);
+                // 롤백 후
+                s.rows.rollback();
+                expect(s.rows.count).toBe(0);
+            });
+            it("- remove() : 추가 커밋 -> 삭제 -> 롤백", () => {
+                let s = new Student();
+                
+                // 추가 커밋 
+                s.rows.add('A1');
+                s.rows.commit();
+                expect(s.rows.count).toBe(1);
+                // 삭제
+                s.rows.remove('A1');
+                expect(s.rows.count).toBe(0);
+                // 롤백
+                s.rows.rollback();
+                expect(s.rows.count).toBe(1);
+            });
+            it("- add(), remove() : 추가 커밋 -> 삭제 -> 커밋 -> 추가 -> 롤백 ", () => {
+                let s = new Student();
+                
+                // 추가 커밋 
+                s.rows.add('A1');
+                s.rows.commit();
+                expect(s.rows.count).toBe(1);
+                // 삭제 
+                s.rows.remove('A1');
+                expect(s.rows.count).toBe(0);
+                // 커밋
+                s.rows.commit();
+                expect(s.rows.count).toBe(0);
+                // 추가
+                s.rows.add('A2');
+                s.rows.add('A3');
+                expect(s.rows.count).toBe(2);
+                expect(s.rows[0]).toBe('A2');
+                expect(s.rows[1]).toBe('A3');
+                // 롤백
+                s.rows.rollback();
+                expect(s.rows.count).toBe(0);
+            });
+            it("- add(), insertAt() remove() : 중복 추가 삭제시 ", () => {
+                let s = new Student();
+                
+                // 추가 커밋 
+                s.rows.add('A1');
+                s.rows.commit();
+                expect(s.rows.count).toBe(1);
+                // 삭제 및 추가 삭제
+                s.rows.remove('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                s.rows.insertAt(0, 'A1');
                 expect(s.rows.count).toBe(3);
+                expect(s.rows[0]).toBe('A1');
+                expect(s.rows[1]).toBe('A2');
+                expect(s.rows[2]).toBe('A3');
+                // 롤백
+                s.rows.rollback();
+                expect(s.rows.count).toBe(1);
+                expect(s.rows[0]).toBe('A1');
             });
         });
-        describe("BaseCollection.indexOf(elem): num <인덱스 조회>", () => {
-            it("- indexOf() = {동일객체 있을경우 첫번째 값을 리턴} ", () => {
-                let s = new Student();
-                const a2 = { style: 1};
-                s.rows.add('A1');
-                s.rows.add(a2);
-                s.rows.add(10);
-                s.rows.add(10);
-                
-                expect(s.rows.indexOf('A1')).toBe(0);
-                expect(s.rows.indexOf(a2)).toBe(1);
-                expect(s.rows.indexOf(10)).toBe(2);    // 원시타입 사용시 값으로 조회해서 a4는 조회 못함
-                expect(s.rows.count).toBe(4);
-            });
-        });
-        describe("this.add(value?, desc?): bool <컬렉션 추가>", () => {
-            beforeAll(() => {
-            });
-            it("- add() : undefined", () => {
-                let s = new Student();
-                const result = s.rows.add();
+
         
-                expect(s.rows[0]).toBeUndefined();
-                expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
-            });
-            it("- add(value) ", () => {
-                let s = new Student();
-                const result = s.rows.add('A1');
-        
-                expect(s.rows[0]).toBe('A1');
-                expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
-            });
-            it("- add(value, desc) : 읽기 전용", () => {
-                let s = new Student();
-                const desc = {
-                    value: 'A1',
-                    writable: false
-                };
-                const result = s.rows.add(null, desc);
-    
-                expect(() => s.rows[0] = 1).toThrow(/0/);
-                expect(s.rows[0]).toBe('A1');
-                expect(s.rows['0']).toBe('A1');
-                expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
-            });
-            it("- add(name, value, desc) : set/get (제약조건 추가) ", () => {
-                let s = new Student();
-                let bValue;
-                const desc = {
-                    get() {
-                      return bValue;
-                    },
-                    set(newValue) {
-                        if (typeof newValue !== 'string') throw new Error('string 타입만')
-                        bValue = newValue;
-                    },
-                    enumerable: true,
-                    configurable: true,
-                }
-                const result = s.rows.add(null, desc);
-                s.rows[0] = 'A1';
-    
-                expect(() => s.rows[0] = 1).toThrow(/string/);
-                expect(s.rows[0]).toBe('A1');
-                expect(s.rows['0']).toBe('A1');
-                expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
-            });
-        });
-        describe("this.clear() <초기화>", () => {
+        describe("TransactionCollection.clear() <초기화>", () => {
             it("- clear() ", () => {
                 let s = new Student();
                 s.rows.add('A1');
@@ -418,7 +470,7 @@ describe("[target: collection-trans.js]", () => {
             });
         });
     });
-    describe("this._elemTypes <전체 타입을 설정할 경우 : 클래스타입>", () => {
+    describe("BaseCollection._elemTypes <전체 타입을 설정할 경우 : 클래스타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의
@@ -528,7 +580,7 @@ describe("[target: collection-trans.js]", () => {
             expect(result2).toBeTruthy();
         });
     });
-    describe("this._elemTypes <전체 타입을 설정할 경우 : 원시타입>", () => {
+    describe("BaseCollection._elemTypes <전체 타입을 설정할 경우 : 원시타입>", () => {
         beforeAll(() => {
             jest.resetModules();
             // 클래스 정의

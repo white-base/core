@@ -82,7 +82,7 @@
 
             // inner variable access
             this.__SET$_guid = function(val, call) {
-                if (call instanceof MetaObject) _guid = val;
+                if (call instanceof MetaObject) _guid = val;    // 상속접근 허용
             }
 
             Util.implements(this, IObject, IMarshal);
