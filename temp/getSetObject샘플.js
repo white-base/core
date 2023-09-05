@@ -69,7 +69,7 @@ class MetaColumn extends MetaElement {
         let obj = super.getObject(p_vOpt);
         // obj._type = 'MetaColumn';
         // obj._entity = {$ref: this._entity._guid }
-        obj._entity = MetaReistry.createReferObject(this._entity);
+        obj._entity = MetaReistry.createRefer(this._entity);
         obj.caption = this.caption;
         obj.value = this.value instanceof MetaObject ? this.value.getObject(p_vOpt) : this.value;
         return obj;
@@ -164,7 +164,7 @@ class MetaView extends MetaElement {
     getObject(getOpt) {
         let obj = super.getObject(p_vOpt);
         // obj.name = this.name;
-        obj._master = MetaReistry.createReferObject(this._master);
+        obj._master = MetaReistry.createRefer(this._master);
         obj.columns = this.columns.getObject(p_vOpt)
         return obj;
     }
@@ -193,7 +193,7 @@ class MetaView extends MetaElement {
     /**
      * 대상이름
      * referObject()
-     * createReferObject() : 생성 + 객체 + GUID
+     * createRefer() : 생성 + 객체 + GUID
      * referObjectGuid() : 참조 + 객체 + GUID
      */
     referObject() {
@@ -215,7 +215,7 @@ class MetaView extends MetaElement {
         // this.setObject(obj);
     }
     _load(obj) {
-        function createObject(obj, target) {
+        function createMetaObject(obj, target) {
             if (typeof obj !== 'object') throw new Error('object 가 아닙니다.');
             if (obj._guid && obj._type) return createMetaObject(obj, target);
             else if (obj.$ref) return createMetaObject(obj, target);
@@ -230,7 +230,7 @@ class MetaView extends MetaElement {
                 // 검사
                 if (prop === '_type' && obj['_type'] !== target['_type']) throw new Error('object _type 이 다릅니다.');
                 // 객체 설정
-                if (typeof obj[prop] === 'object') createObject(obj[prop], target[prop]);
+                if (typeof obj[prop] === 'object') createMetaObject(obj[prop], target[prop]);
                 else if (prop === '_elem' && Array.isArray(obj[prop])) createCollectionObject(obj, target);
                 else target[prop] = obj[prop];
             }
@@ -255,7 +255,7 @@ class MetaReistry {
     }
     static register(meta) {
         const fName = meta._type.name;
-        if (this.hasMetaObject(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
+        if (this.has(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
         // 클래스명 중복 검사
         if (this.#funs[fName] && this.#funs[fName] !== meta._type) throw new Error('class 명 중복'); 
         if (!this.#funs[fName]) this.#funs[fName] = meta._type;
@@ -270,7 +270,7 @@ class MetaReistry {
             }
         }
     }
-    static createObject(creator, className, prop) {
+    static createMetaObject(creator, className, prop) {
         let classBody = this.#funs[className];
         let params = classBody.params; // arr
         // let args = [null];
@@ -288,14 +288,14 @@ class MetaReistry {
         // return new classBody.apply(creator, args);
     }
 
-    static createReferObject(obj) {
+    static createRefer(obj) {
         if (obj && obj._guid && obj._guid.length > 0 ) return { $ref: obj._guid };
     }
     static hasMetaClass(fName) {
 
     }
 
-    static hasMetaObject(meta) {
+    static has(meta) {
         for(let i = 0; i < this.#list.length; i++) {
             if (this.#list[i]._guid === meta._guid) return true;
         }
@@ -317,7 +317,7 @@ class MetaReistry {
      * @param {*} obj
      * @return {boolean} 
      */
-    static validMetaObject(mObj) {
+    static valid(mObj) {
         var arrObj = this.__extractListObject(mObj);
         // return validReference(mObj, arrObj);
         if (validReference(mObj, arrObj) === false) return false;
@@ -455,19 +455,19 @@ console.log('str2 => ', str2);
 // console.log('str3 => ', str3);
 // console.log('list2 => ', MetaReistry.list);
 
-console.log(MetaReistry.validMetaObject(obj));
+console.log(MetaReistry.valid(obj));
 obj._master.$ref = '실패'
-console.log(MetaReistry.validMetaObject(obj));
+console.log(MetaReistry.valid(obj));
 
 
 var ctor = this;
 var ctor = {KK:10};
 
 
-var c1 = MetaReistry.createObject(ctor, 'MetaElement', {});
-var c2 = MetaReistry.createObject(ctor, 'MetaElement', {name: 'NAME'});
-var c3 = MetaReistry.createObject(ctor, 'MetaElement', {name: 'NAME', test: 'TEST'});
-var c4 = MetaReistry.createObject(ctor, 'MetaElement', {test: 'TEST'});
+var c1 = MetaReistry.createMetaObject(ctor, 'MetaElement', {});
+var c2 = MetaReistry.createMetaObject(ctor, 'MetaElement', {name: 'NAME'});
+var c3 = MetaReistry.createMetaObject(ctor, 'MetaElement', {name: 'NAME', test: 'TEST'});
+var c4 = MetaReistry.createMetaObject(ctor, 'MetaElement', {test: 'TEST'});
 
 
 

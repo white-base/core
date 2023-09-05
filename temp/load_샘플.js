@@ -3,7 +3,7 @@
 // 로드셈플
 function MetaColumn() {}
 function MetaRegistry() {}
-MetaRegistry.prototype.createObject = function(obj) {
+MetaRegistry.prototype.createMetaObject = function(obj) {
     if (obj._parent.$ref) {
         obj._parent = MetaRegistry.find(obj._parent.$ref);  // 참조를 연결한다.
     }
@@ -13,10 +13,10 @@ function MetaTable () {
     this.load = function(obj) {
         // 이미 생성되어 있다는 의미
         if (obj.columns) {
-            this.columns = MetaRegistry.createObject(obj.columns);
+            this.columns = MetaRegistry.createMetaObject(obj.columns);
         }
         if (obj.columns._type === 'MetaColumn') {
-            this.columns = MetaColumn.createObject(guid);
+            this.columns = MetaColumn.createMetaObject(guid);
         }
         if (obj.column) {
             this.columns = new MetaColumn();

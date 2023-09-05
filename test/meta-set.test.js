@@ -611,7 +611,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set2.views['V1'].rows[0].count).toBe(1);
                 expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
             });
-            it("- output() : createObject() 생성 후 load() ", () => {
+            it("- output() : createMetaObject() 생성 후 load() ", () => {
                 var set1 = new MetaSet('S1');
                 var json1 = { 
                     tables: {
@@ -644,7 +644,7 @@ describe("[target: meta-set.js]", () => {
                 loadNamespace();    // init() 초기화하여 불러와야함
                 const load_ns_Cnt = MetaRegistry.ns.count;
                 // 등록소를 통해서 생성
-                const set2 = MetaRegistry.createObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
+                const set2 = MetaRegistry.createMetaObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
                 set2.load(str, parse);
 
                 expect(beginCnt).toBe(18);
@@ -771,7 +771,7 @@ describe("[target: meta-set.js]", () => {
                 loadNamespace();
                 const load_ns_Cnt = MetaRegistry.ns.count;
                 // 등록소를 통해서 생성
-                const set2 = MetaRegistry.createObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
+                const set2 = MetaRegistry.createMetaObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
                 set2.load(str, parse);
                 const json3 = set2.write();
 

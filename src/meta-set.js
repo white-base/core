@@ -228,6 +228,15 @@
             this.views.setObject(mObj.views);
         };
 
+        MetaSet.prototype.clear  = function() {
+            for(var i = 0; i < this.tables.count; i++) this.tables[i].clear();
+            for(var i = 0; i < this.views.count; i++) this.views[i].clear();
+        };
+        
+        MetaSet.prototype.reset  = function() {
+            this.tables.clear();
+            this.views.clear();
+        };
 
         MetaSet.prototype.clone  = function() {
             var clone = new MetaSet(this.setName);
@@ -240,17 +249,6 @@
                 clone.views.add(this.views[i].clone());
             }
             return clone;
-        };
-
-        
-        MetaSet.prototype.clear  = function() {
-            for(var i = 0; i < this.tables.count; i++) this.tables[i].clear();
-            for(var i = 0; i < this.views.count; i++) this.views[i].clear();
-        };
-        
-        MetaSet.prototype.reset  = function() {
-            this.tables.clear();
-            this.views.clear();
         };
         
         // MetaSet.prototype.load  = function(p_target, p_opt) {
@@ -279,7 +277,7 @@
             }
 
             if (MetaRegistry.isGuidObject(obj)) {
-                mObj = MetaRegistry.hasReferObject(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
+                mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
                 this.setObject(mObj);
             } else {
                 throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
@@ -343,7 +341,7 @@
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
 
             if (MetaRegistry.isGuidObject(metaSet)) {
-                if (MetaRegistry.hasReferObject(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
+                if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformObject(metaSet);
             } else obj = metaSet;
 
@@ -390,8 +388,8 @@
                 if (Object.hasOwnProperty.call(p_collec, key) && typeof p_collec[key] === 'object') {
                     // if (_this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                     var prop = p_collec[key];
-                    if (prop['_metaSet'] && MetaRegistry.hasMetaObject(prop['_metaSet'])) {
-                        prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']['_guid']);
+                    if (prop['_metaSet'] && MetaRegistry.has(prop['_metaSet'])) {
+                        prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']);
                     }
                     // var entity = new p_baseCollec._baseType(key, _this, prop);      // TODO: register 로 변경 요망
                     if (p_baseCollec.exist(key)) throw new Error('기존에 key 가 존재합니다.');
@@ -417,7 +415,7 @@
 
 
             if (MetaRegistry.isGuidObject(metaSet)) {
-                if (MetaRegistry.hasReferObject(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
+                if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformObject(metaSet);
             } else obj = metaSet;
 

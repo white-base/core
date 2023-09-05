@@ -19,20 +19,7 @@ describe("[target: meta-registry.js]", () => {
         it("- 초기값 조회 ", () => {
             expect(MetaRegistry.count).toBe(0);
         });
-        describe("this.release() <등록/해제>", () => {
-            it("- release() : 등록/해제 ", () => {
-                let i = new MetaObject();
-                
-                // 등록 [자동]
-                // MetaRegistry.register(i);
-                expect(MetaRegistry.count).toBe(1);
-                // 해제
-                MetaRegistry.release(i);
-                // expect(MetaRegistry.count).toBe(0);
-            });
-
-        });
-        describe("this.init() <초기화>", () => {
+        describe("MetaRegistry.init() <초기화>", () => {
             it("- init() : 초기화 ", () => {
                 let i = new MetaObject();
                 // MetaRegistry.register(i);
@@ -44,26 +31,100 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.count).toBe(0);
             });
         });
-        describe("this.hasReferObject() <참조객체 여부>", () => {
-            it("- hasReferObject() : 참조객체 여부 ", () => {
+        describe("MetaRegistry.register() <메타객체 등록>", () => {
+            it("- register() : 메타객체 등록 ", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.release() <해제>", () => {
+            it("- release() : 해제 ", () => {
+                let i = new MetaObject();
+                
+                // 등록 [자동]
+                // MetaRegistry.register(i);
+                expect(MetaRegistry.count).toBe(1);
+                // 해제
+                MetaRegistry.release(i);
+                // expect(MetaRegistry.count).toBe(0);
+            });
+
+        });
+        describe("MetaRegistry.has(meta) <메타객체 여부>", () => {
+            it("- has() : 메타객체 여부 검사 ", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.find() <메타객체 조회>", () => {
+            it("- find() : 메타객체 조회", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.createMetaObject() <메타객체 생성>", () => {
+            it("- createMetaObject() : 메타객체 생성", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.createReferObject() <참조객체 생성>", () => {
+            it("- register() : 메타객체 등록 ", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.createNsReferObject() <네임스페이스 객체 생성>", () => {
+            it("- createNsRefer() : 네임스페이스 객체 생성", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.validObject() <메태객체 유효성 검사>", () => {
+            it("- valid() : 유효성 검사", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.isGuidObject() <guid 객체 여부 감사>", () => {
+            it("- isGuidObject() : guid 객체 여부 검사", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.hasRefer(obj) <참조객체 여부>", () => {
+            it("- hasRefer() : 참조객체 여부 ", () => {
                 let i = new MetaObject();
                 let obj1 = i.getObject();
                 let obj2 = i.getObject();
                 obj1.obj = MetaRegistry.createReferObject(obj2);    // 강제 참조 생성
     
-                expect(MetaRegistry.hasReferObject(obj1)).toBe(true);
-                expect(MetaRegistry.hasReferObject(obj2)).toBe(false);
+                expect(MetaRegistry.hasRefer(obj1)).toBe(true);
+                expect(MetaRegistry.hasRefer(obj2)).toBe(false);
             });
         });
-        // describe("this.ns <네임스페이스 여부>", () => {
-        //     it("- ns.get() : 네임스페이스 조회 ", () => {
-        //         let i = new MetaObject();
-        //         let i2 = new MetaObject();
-        //         const nsMgr = MetaRegistry.ns;
-               
-        //         expect(nsMgr.get('MetaObject')).toBe(MetaObject);
-        //     });
-        // });
+        describe("MetaRegistry.transformRefer() <참조 객체 변환>", () => {
+            it("- transformRefer() : $ref, $ns 참조로 변환", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.registerClass() <클래스 등록>", () => {
+            it("- registerClass() : ns에 클래스 등록", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.releaseClass() <클래스 해제>", () => {
+            it("- releaseClass() : ns에서 클래스 해제", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.findClass() <클래스 조화>", () => {
+            it("- findClass() : ns에서 클래스 조회", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.getClass() <클래스 얻기>", () => {
+            it("- getClass() : ns에서 클래스 얻기 ", () => {
+                // TODO:
+            });
+        });
+        describe("MetaRegistry.loading() <로드>", () => {
+            it("- loading() : 로드", () => {
+                // TODO:
+            });
+        });
     });
     
 });

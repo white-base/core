@@ -455,7 +455,7 @@
             _super.prototype.setObject.call(this, mObj);
             
             if (mObj.columnName) this.columnName = mObj.columnName;
-            if (mObj._entity['_guid']) this._entity = MetaRegistry.find(mObj._entity['_guid']);
+            if (mObj._entity['_guid']) this._entity = MetaRegistry.find(mObj._entity);
             if (mObj.default) this.default = mObj.default;
             if (mObj.caption) this.caption = mObj.caption;
             if (mObj.isNotNull) this.isNotNull = mObj.isNotNull;

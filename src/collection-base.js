@@ -342,7 +342,7 @@
             obj._owner = MetaRegistry.createReferObject(this._owner);
             for (var i = 0; i < this._elemTypes.length; i++) {
                 var elem = this._elemTypes[i];
-                if (typeof elem === 'function') _elems.push(MetaRegistry.createNsObject(elem));
+                if (typeof elem === 'function') _elems.push(MetaRegistry.createNsReferObject(elem));
                 else _elems.push(elem);
             }
             obj._elemTypes = _elems;

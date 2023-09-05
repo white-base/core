@@ -960,7 +960,7 @@
             // if (p_obj instanceof MetaEntity) {
             //     this._readEntity(p_obj, 3);
             // } else if (typeof p_obj === 'object') {
-            //     mObj = MetaRegistry.hasReferObject(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
+            //     mObj = MetaRegistry.hasRefer(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
             //     this.setObject(mObj);
             // } else {
             //     throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
@@ -974,10 +974,10 @@
             }
 
             // 기존에 존재하면 기존 객체 리턴
-            if (MetaRegistry.hasMetaObject(obj)) return MetaRegistry.find(obj['_guid']);
+            if (MetaRegistry.has(obj)) return MetaRegistry.find(obj);
             
             if (MetaRegistry.isGuidObject(obj)) {
-                mObj = MetaRegistry.hasReferObject(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
+                mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
                 this.setObject(mObj);
             } else {
                 throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
@@ -1018,7 +1018,7 @@
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
             
             // if (p_obj instanceof MetaObject) throw new Error('[p_obj] MetaObject 인스턴스는 읽을 수 없습니다.');
-            // if (MetaRegistry.hasReferObject(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
+            // if (MetaRegistry.hasRefer(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
 
             if (p_obj instanceof MetaEntity) {
                 this._readEntity(p_obj, 3);
@@ -1050,7 +1050,7 @@
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
 
             if (MetaRegistry.isGuidObject(p_obj)) {
-                if (MetaRegistry.hasReferObject(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
+                if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 else obj = p_obj;
                 obj = MetaEntity._transformObject(obj);
             }
@@ -1065,7 +1065,7 @@
                     // if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
                     //     if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                     //     var prop = columns[key];
-                    //     if (prop['_entity'] && MetaRegistry.hasMetaObject(prop['_entity'])) {
+                    //     if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
                     //         prop['_entity'] = MetaRegistry.find(prop['_entity']['_guid']);
                     //     }
                     //     var column = new Column(key, this, prop);
@@ -1087,8 +1087,8 @@
                     if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
                         if (_this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                         var prop = columns[key];
-                        if (prop['_entity'] && MetaRegistry.hasMetaObject(prop['_entity'])) {
-                            prop['_entity'] = MetaRegistry.find(prop['_entity']['_guid']);
+                        if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
+                            prop['_entity'] = MetaRegistry.find(prop['_entity']);
                         }
                         var column = new Column(key, _this, prop);
                         if (_this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
@@ -1148,11 +1148,11 @@
             if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
 
             if (MetaRegistry.isGuidObject(p_obj)) {
-                if (MetaRegistry.hasReferObject(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
+                if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 obj = MetaEntity._transformObject(p_obj);
             }
 
-            // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasReferObject(p_obj)) {
+            // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasRefer(p_obj)) {
             //     p_obj = MetaRegistry.transformRefer(p_obj);
             // }
 

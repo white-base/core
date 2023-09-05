@@ -270,7 +270,7 @@
             _super.prototype.setObject.call(this, mObj);
             
             // this._entity = mObj._entity;
-            this._entity = MetaRegistry.find(mObj._entity['_guid']);
+            this._entity = MetaRegistry.find(mObj._entity);
 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];

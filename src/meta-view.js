@@ -172,7 +172,7 @@
             _super.prototype.setObject.call(this, mObj);
             
             // this.metaSet = mObj.metaSet;
-            this.metaSet = MetaRegistry.find(mObj.metaSet['_guid']);
+            this.metaSet = MetaRegistry.find(mObj.metaSet);
             this.columns.setObject(mObj.columns);
             this.rows.setObject(mObj.rows);
             this.viewName = mObj.viewName;

@@ -115,7 +115,7 @@
         MetaTable.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
             
-            if(mObj.metaSet) this.metaSet = MetaRegistry.find(mObj.metaSet['_guid']);
+            if(mObj.metaSet) this.metaSet = MetaRegistry.find(mObj.metaSet);
             this.columns.setObject(mObj.columns);
             this.rows.setObject(mObj.rows);
             this.tableName = mObj.tableName;

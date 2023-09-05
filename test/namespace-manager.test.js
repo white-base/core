@@ -49,6 +49,16 @@ describe("[target: namespace-manager.js]", () => {
                 expect(count).toBe(0);
             });
         });
+        describe("NamespaceManager.init() <초기화>", () => {
+            it("- init() : 초기화 ", () => {
+                const ns = new NamespaceManager();
+                ns.set('a1.b1', 'Fun', Function);
+                ns.set('a1.b2', 'Str', String);
+                ns.init();
+
+                expect(ns.count).toBe(0);
+            });
+        });
         describe("NamespaceManager.register(ns) <네임스페이스 등록>", () => {
             it("- register() : 등록 ", () => {
                 const ns = new NamespaceManager();

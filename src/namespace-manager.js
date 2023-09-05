@@ -27,7 +27,7 @@
          */
         function NamespaceManager() {
 
-            var __storage = this.__createNsObject();
+            var __storage = this.__createNsRefer();
             var isOverlap = false;
             // var __element = [];
             /**
@@ -179,7 +179,7 @@
         /**
          * 네임스페이스 기본객체
          */
-        NamespaceManager.prototype.__createNsObject = function() {
+        NamespaceManager.prototype.__createNsRefer = function() {
             return { _type: 'ns' };
         };
 
@@ -187,7 +187,7 @@
          * 초기화
          */
         NamespaceManager.prototype.init = function() {
-            this.__storage = this.__createNsObject();
+            this.__storage = this.__createNsRefer();
         };
 
         /**
@@ -206,7 +206,7 @@
                 var sName = sections[i];
                 if (!__validName(sName)) throw new Error('They have different [section name] conventions.'); 
                 if (typeof parent[sections[i]] === "undefined") {
-                    parent[sections[i]] = this.__createNsObject();
+                    parent[sections[i]] = this.__createNsRefer();
                 }
                 parent = parent[sections[i]];
             }
@@ -273,7 +273,7 @@
 
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
-                if (typeof parent[sName] === "undefined") parent[sName] = this.__createNsObject();
+                if (typeof parent[sName] === "undefined") parent[sName] = this.__createNsRefer();
                 if (i === sections.length - 1) { 
                     parent[sName][key] = p_elem;
                 } else parent = parent[sName];
