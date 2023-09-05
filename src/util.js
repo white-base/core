@@ -144,11 +144,11 @@
 
         if (typeof object._interface === 'undefined') {
             Object.defineProperty(object, '_interface', {
-                enumerable: false,
-                configurable: true,
                 get: function() { 
                     return _interface;
-                }
+                },
+                enumerable: false,
+                configurable: true
             });
         }
 

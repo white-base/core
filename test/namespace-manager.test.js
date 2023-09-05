@@ -15,6 +15,40 @@ describe("[target: namespace-manager.js]", () => {
         beforeEach(() => {
             jest.resetModules();
         });
+        describe("this.list <요소 목록>", () => {
+            it("- list : 목록 얻기 ", () => {
+                const ns = new NamespaceManager();
+                ns.set('a1.b1.Fun', Function);
+                ns.set('a1.b2.Str', String);
+                const list = ns.list;
+
+                expect(list.length).toBe(2);
+                expect(list[0]).toBe('a1.b1.Fun');
+                expect(list[1]).toBe('a1.b2.Str');
+            });
+            it("- list : 빈 목록 얻기 ", () => {
+                const ns = new NamespaceManager();
+                const list = ns.list;
+
+                expect(list.length).toBe(0);
+            });
+        });
+        describe("this.count <요소 갯수>", () => {
+            it("- count : 갯수 ", () => {
+                const ns = new NamespaceManager();
+                ns.set('a1.b1', 'Fun', Function);
+                ns.set('a1.b2', 'Str', String);
+                const count = ns.count;
+
+                expect(count).toBe(2);
+            });
+            it("- list : 빈 목록 얻기 ", () => {
+                const ns = new NamespaceManager();
+                const count = ns.count;
+
+                expect(count).toBe(0);
+            });
+        });
         describe("this.register(ns) <네임스페이스 등록>", () => {
             it("- register() : 등록 ", () => {
                 const ns = new NamespaceManager();
@@ -158,40 +192,6 @@ describe("[target: namespace-manager.js]", () => {
                 const fun = ns.get('a1.b1.Fun');
 
                 expect(fun).toBe(Function);
-            });
-        });
-        describe("this.list <요소 목록>", () => {
-            it("- list : 목록 얻기 ", () => {
-                const ns = new NamespaceManager();
-                ns.set('a1.b1.Fun', Function);
-                ns.set('a1.b2.Str', String);
-                const list = ns.list;
-
-                expect(list.length).toBe(2);
-                expect(list[0]).toBe('a1.b1.Fun');
-                expect(list[1]).toBe('a1.b2.Str');
-            });
-            it("- list : 빈 목록 얻기 ", () => {
-                const ns = new NamespaceManager();
-                const list = ns.list;
-
-                expect(list.length).toBe(0);
-            });
-        });
-        describe("this.count <요소 갯수>", () => {
-            it("- count : 갯수 ", () => {
-                const ns = new NamespaceManager();
-                ns.set('a1.b1', 'Fun', Function);
-                ns.set('a1.b2', 'Str', String);
-                const count = ns.count;
-
-                expect(count).toBe(2);
-            });
-            it("- list : 빈 목록 얻기 ", () => {
-                const ns = new NamespaceManager();
-                const count = ns.count;
-
-                expect(count).toBe(0);
             });
         });
 

@@ -61,13 +61,13 @@
              */
             Object.defineProperty(this, '_keys',
             {
-                configurable: false,
-                enumerable: false,
                 get: function() { return _keys; },
                 set: function(newValue) { 
                     // TODO: string, len 체크
                     _keys = newValue; 
                 },
+                configurable: false,
+                enumerable: false
             });
 
             // 예약어 등록
@@ -78,76 +78,6 @@
 
         PropertyCollection._NS = 'Collection';      // namespace
         PropertyCollection._PARAMS = ['_owner'];    // creator parameter
-
-        /**
-         * 메타 객체를 얻는다
-         * @virtual
-         * @returns {object}
-         */
-        PropertyCollection.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
-
-            obj._elem = [];
-            for (var i = 0; i < this._elements.length; i++) {
-                var elem = this._elements[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
-                else obj._elem.push(elem);
-            }
-
-            obj._key = [];
-            for (var i = 0; i < this._keys.length; i++) {
-                var key = this._keys[i];
-                obj._key.push(key);
-            }
-            return obj;                        
-        };
-
-        /**
-         * 메타 객체를 설정한다
-         * @virtual
-         * @returns {object}
-         */
-        // PropertyCollection.prototype.setObject  = function(mObj) {
-        //     _super.prototype.setObject.call(this, mObj);
-
-        //     // this.clear();
-        //     for(var i = 0; i < mObj._elem.length; i++) {
-        //         var elem = mObj._elem[i];
-        //         var key = mObj._key[i];
-        //         if (elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
-        //             this.add(key);
-        //             this[key].setObject(elem);
-        //         } else {
-        //             this.add(key, elem);
-        //         } 
-        //     }
-
-        //     // TODO: add(desc) 이것도 별도로 저장해둬야 함
-        //     // obj.metaName = mObj.name;
-        // };
-        PropertyCollection.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
-
-            if (mObj._key.length !== mObj._elem.length) throw new Error('_key, _elem 의 길이가 다릅니다.');
-
-            this._keys.length = 0;
-            for(var i = 0; i < mObj._key.length; i++) {
-                var key = mObj._key[i];
-                this._keys.push(key);
-                Object.defineProperty(this, [i], this._getPropDescriptor(i));
-                Object.defineProperty(this, key, this._getPropDescriptor(i));
-            }
-
-            for(var i = 0; i < mObj._elem.length; i++) {
-                var elem = mObj._elem[i];
-                if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
-                    var obj = MetaRegistry.createObject(elem);
-                    obj.setObject(elem);
-                    this._elements.push(obj);
-                } else this._elements.push(elem);
-            }
-        };
-
 
         /**
          * 속성 컬렉션을 삭제한다. (내부처리) [구현]
@@ -183,6 +113,60 @@
                 delete this[p_idx];                     // idx 삭제 (끝일 경우)
             }
         };
+
+        /**
+         * 메타 객체를 얻는다
+         * @virtual
+         * @returns {object}
+         */
+        PropertyCollection.prototype.getObject = function(p_vOpt) {
+            var obj = _super.prototype.getObject.call(this);
+
+            obj._elem = [];
+            for (var i = 0; i < this._elements.length; i++) {
+                var elem = this._elements[i];
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
+                else obj._elem.push(elem);
+            }
+
+            obj._key = [];
+            for (var i = 0; i < this._keys.length; i++) {
+                var key = this._keys[i];
+                obj._key.push(key);
+            }
+            return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @returns {object}
+         */
+        PropertyCollection.prototype.setObject  = function(mObj) {
+            _super.prototype.setObject.call(this, mObj);
+
+            if (mObj._key.length !== mObj._elem.length) throw new Error('_key, _elem 의 길이가 다릅니다.');
+
+            this._keys.length = 0;
+            for(var i = 0; i < mObj._key.length; i++) {
+                var key = mObj._key[i];
+                this._keys.push(key);
+                Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                Object.defineProperty(this, key, this._getPropDescriptor(i));
+            }
+
+            for(var i = 0; i < mObj._elem.length; i++) {
+                var elem = mObj._elem[i];
+                if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
+                    var obj = MetaRegistry.createObject(elem);
+                    obj.setObject(elem);
+                    this._elements.push(obj);
+                } else this._elements.push(elem);
+            }
+        };
+
+
+
 
         /**
          * 속성컬렉션을 등록한다.[구현]

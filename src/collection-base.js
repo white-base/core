@@ -153,7 +153,7 @@
             Object.defineProperty(this, 'list', {
                 get: function() {
                     var arr = [];
-                    for (var i = 0; i < this._elements.length; i++) arr.push(this._elements[i]);
+                    for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
                     return arr;
                 },
                 enumerable: false,
@@ -261,23 +261,7 @@
         BaseCollection._NS = 'Collection';     // namespace
         BaseCollection._PARAMS = ['_owner'];    // creator parameter
 
-        /**
-         * 프로퍼티 기술자 설정
-         * @protected
-         * @param {Number} p_idx 인덱스
-         */
-        BaseCollection.prototype._getPropDescriptor = function(p_idx) {
-            return {
-                get: function() { return this._elements[p_idx]; },
-                set: function(newValue) {
-                    var typeName;
-                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
-                    this._elements[p_idx] = newValue; 
-                },
-                enumerable: true,
-                configurable: true
-            };
-        };
+        
 
         /**
          * 추가 이벤트 수신자
@@ -317,6 +301,24 @@
          */        
         BaseCollection.prototype._onChanged = function() {
             this.__event.publish('changed', this); 
+        };
+
+        /**
+         * 프로퍼티 기술자 설정
+         * @protected
+         * @param {Number} p_idx 인덱스
+         */
+        BaseCollection.prototype._getPropDescriptor = function(p_idx) {
+            return {
+                get: function() { return this._elements[p_idx]; },
+                set: function(newValue) {
+                    var typeName;
+                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
+                    this._elements[p_idx] = newValue; 
+                },
+                enumerable: true,
+                configurable: true
+            };
         };
 
         /**

@@ -108,6 +108,36 @@
                 configurable: false,
                 enumerable: true
             });
+
+            /** 
+             * 컬랙선 내부값 
+             * @protected 
+             * @member {Array} _L.Collection.BaseCollection#_elements  
+             */
+            Object.defineProperty(this, '_elements', {
+                get: function() {
+                    return _elements;
+                },
+                set: function(val) {
+                    _elements = val;
+                },
+                enumerable: true,
+                configurable: false
+            });
+
+            /**
+             * 컬렉션 목록 
+             * @member {Array}  _L.Meta.Entity.MetaRow#list  
+             */
+            Object.defineProperty(this, 'list', {
+                get: function() {
+                    var arr = [];
+                    for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
+                    return arr;
+                },
+                enumerable: false,
+                configurable: true
+            });            
             
             /**
              * 컬랙션 갯수 
@@ -119,18 +149,6 @@
                 },
                 configurable: false,
                 enumerable: false
-            });
-
-            /**
-             * 컬렉션 목록 
-             * @member {Array}  _L.Meta.Entity.MetaRow#list  
-             */
-            Object.defineProperty(this, 'list', {
-                enumerable: false,
-                configurable: true,
-                get: function() {
-                    return _elements;
-                }
             });
 
             /**
@@ -254,8 +272,8 @@
 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
-                if (MetaRegistry.isGuidObject(elem)) this.list[i].setObject(elem);
-                else this.list[i] = elem;
+                if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem);
+                else this._elements[i] = elem;
                 // if (obj[prop] !== null && elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
                 //     this.list[i].setObject(elem);
                 // } else {
@@ -274,7 +292,7 @@
             var clone = new MetaRow(entity);
 
             for (var i = 0; i < this.count; i++) {
-                clone.list[i] = this.list[i];   // 내부 복사
+                clone._elements[i] = this._elements[i];   // 내부 복사
             }
             return clone;
         };

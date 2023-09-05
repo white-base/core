@@ -3,7 +3,7 @@
  */
 var Util                       = require('./src/util');
 var Observer                    = require("./src/observer").Observer;
-var CustomError                 = require('./src/error-custom').CustomError;
+var CustomError                 = require('./src/custom-error').CustomError;
 var BaseCollection              = require("./src/collection-base").BaseCollection;
 var ArrayCollection             = require("./src/collection-array").ArrayCollection;
 var PropertyCollection          = require("./src/collection-property").PropertyCollection;

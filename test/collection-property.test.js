@@ -353,7 +353,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             it("- add(name, value, desc) : 기술자, 0 삭제후 0에 삽입 ", () => {
                 let s = new Student();
                 const desc1 = { value: 'A2', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
-                const desc2 = { value: 'A1', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
+                const desc2 = { value: 'A1', writable: false, configurable: true};
                 s.columns.add('a1', 'A1');
                 s.columns.add('a2', null, desc1);
                 s.columns.add('a3', 'A3');

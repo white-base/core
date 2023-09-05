@@ -25,7 +25,7 @@
     if (isNode) {     
         Util                    = require('./util');
         Observer                = require('./observer').Observer;
-        CustomError             = require('./error-custom').CustomError;
+        CustomError             = require('./custom-error').CustomError;
         MetaElement             = require('./meta-element').MetaElement;
         PropertyCollection      = require('./collection-property').PropertyCollection;
         MetaRegistry            = require('./meta-registry').MetaRegistry;

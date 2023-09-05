@@ -45,7 +45,11 @@
          * @member {string} _L.Meta.MetaRegistry#metaName
          */
         Object.defineProperty(MetaRegistry, "list", {
-            get: function() { return list; },
+            get: function() { 
+                var arr = [];
+                for (var i = 0; i < list.length; i++) arr.push(list[i]);
+                return arr;
+            },
             enumerable: false,
             configurable: false
         });

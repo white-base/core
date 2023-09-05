@@ -61,6 +61,31 @@
         ArrayCollection._PARAMS = ['_owner'];   // creator parameter
 
         /**
+         * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]
+         * @protected
+         * @param {*} p_idx 인덱스 번호
+         */
+        ArrayCollection.prototype._remove = function(p_idx) {
+            var count = this._elements.length - 1;   // [idx] 포인트 이동
+            
+            this._elements.splice(p_idx, 1);
+            this._descriptors.splice(p_idx, 1);
+            
+            if (p_idx < count) {
+                // 참조 변경(이동)
+                for (var i = p_idx; i < count; i++) {
+                    // Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                    // delete this[i];
+                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
+                    Object.defineProperty(this, [i], desc);
+                }
+                delete this[count];                      // 마지막 idx 삭제
+            } else {
+                delete this[p_idx];                      // idx 삭제 (끝일 경우)
+            }
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
@@ -91,25 +116,6 @@
          * @virtual
          * @returns {object}
          */
-        // ArrayCollection.prototype.setObject  = function(mObj) {
-        //     _super.prototype.setObject.call(this, mObj);
-            
-
-        //     for(var i = 0; i < mObj._elem.length; i++) {
-        //         var elem = mObj._elem[i];
-        //         if (elem['_guid'] && elem['_type']) {
-        //             var obj = MetaRegistry.createObject(elem);
-        //             obj.setObject(elem);
-        //             this.add(obj);
-        //             // this[i].setObject(elem);
-        //         } else {
-        //             this.add(elem);
-        //         }
-        //     }
-        //     // TODO: add(desc) 이것도 별도로 저장해둬야 함
-        //     // obj.metaName = mObj.name;
-        // };
-        // POINT:C
         ArrayCollection.prototype.setObject  = function(mObj) {
             _super.prototype.setObject.call(this, mObj);
 
@@ -126,32 +132,7 @@
                 } else this._elements.push(elem);
             }
 
-        };
-
-        /**
-         * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]
-         * @protected
-         * @param {*} p_idx 인덱스 번호
-         */
-        ArrayCollection.prototype._remove = function(p_idx) {
-            var count = this._elements.length - 1;   // [idx] 포인트 이동
-            
-            this._elements.splice(p_idx, 1);
-            this._descriptors.splice(p_idx, 1);
-            
-            if (p_idx < count) {
-                // 참조 변경(이동)
-                for (var i = p_idx; i < count; i++) {
-                    // Object.defineProperty(this, [i], this._getPropDescriptor(i));
-                    // delete this[i];
-                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
-                    Object.defineProperty(this, [i], desc);
-                }
-                delete this[count];                      // 마지막 idx 삭제
-            } else {
-                delete this[p_idx];                      // idx 삭제 (끝일 경우)
-            }
-        };
+        };        
 
         /**
          * 배열속성 컬렉션을 추가한다. [구현]

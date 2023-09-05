@@ -61,7 +61,7 @@
         BaseCollection              = require('./collection-base').BaseCollection;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         TransactionCollection       = require('./collection-transaction').TransactionCollection;
-        CustomError                 = require('./error-custom').CustomError;
+        CustomError                 = require('./custom-error').CustomError;
         IArrayCollection            = require('./i-collection-array').IArrayCollection;
         IBaseCollection             = require('./i-collection-base').IBaseCollection;
         IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
