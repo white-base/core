@@ -114,6 +114,16 @@
             if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
             this.__SET$_guid(p_mObj._guid, this);
         };
+        // MetaObject.prototype.setObject  = function(p_mObj) {
+        //     var meta;
+
+        //     if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
+        //     meta = MetaRegistry.find(p_mObj);
+        //     if (!meta) {
+        //         this.__SET$_guid(p_mObj._guid, this);
+        //     } else return meta;
+        // };
+
         
         /**
          * 객체 타입 이름 얻기 (상속포함)

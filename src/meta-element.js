@@ -90,6 +90,12 @@
             _super.prototype.setObject.call(this, mObj);
             this.metaName = mObj.name;
         };
+        // MetaElement.prototype.setObject  = function(mObj) {
+        //     var parent = _super.prototype.setObject.call(this, mObj);
+        //     if(!parent) {
+        //         this.metaName = mObj.name;
+        //     } else return parent;
+        // };
 
         return MetaElement;
 

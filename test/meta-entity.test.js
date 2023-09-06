@@ -22,6 +22,13 @@ describe("[target: meta-entity.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
+        describe("MetaEntity.rows <컬럼 속성>", () => {
+            it("- this.rows : 타입 조회 ", () => {
+                var table1 = new MetaTable('T1');
+        
+                expect(table1.rows.instanceOf('MetaRowCollection')).toBe(true);
+            });
+        });
         describe("MetaObject.getTypes(): arr<func> <타입 얻기> ", () => {
             it("- getTypes() : array<function> ", () => {
                 const c = new MetaEntity();
@@ -64,7 +71,7 @@ describe("[target: meta-entity.js]", () => {
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        describe("this.clone() <복제 : 추상메소드>", () => {
+        describe("MetaEntity.clone() <복제 : 추상메소드>", () => {
             it("- clone() : 예외 ", () => {
                 var entity1 = new MetaEntity('T1');
         

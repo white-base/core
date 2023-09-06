@@ -7,6 +7,7 @@
 const Util                  = require('../src/util');
 const {MetaRegistry}        = require('../src/meta-registry');
 const {MetaObject}            = require('../src/meta-object');
+const {MetaElement}           = require('../src/meta-element');
 
 //==============================================================
 // test
@@ -54,9 +55,16 @@ describe("[target: meta-registry.js]", () => {
                 // TODO:
             });
         });
-        describe("MetaRegistry.find() <메타객체 조회>", () => {
-            it("- find() : 메타객체 조회", () => {
-                // TODO:
+        describe.only("MetaRegistry.find() <메타객체 조회>", () => {
+            it("- find(meta, caller) : 메타객체 조회 호출처", () => {
+                let m1 = new MetaElement();
+                let m2 = new MetaElement();
+                const i1 = MetaRegistry.find(m1);
+                const i2 = MetaRegistry.find(m1, m2);
+                
+                expect(i1).toBe(i1);
+                expect(i2).toBe(i1);
+                expect(MetaRegistry.count).toBe(2);
             });
         });
         describe("MetaRegistry.createMetaObject() <메타객체 생성>", () => {

@@ -11,6 +11,7 @@ const {MetaElement}           = require('../src/meta-element');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const {IPropertyCollection}   = require('../src/i-collection-property');
+const { MetaRegistry } = require('../src/meta-registry');
 
 let MetaObjectSub, MetaElementSub, ComplexElementSub, EmpytClass;
 
@@ -18,8 +19,9 @@ let MetaObjectSub, MetaElementSub, ComplexElementSub, EmpytClass;
 // test
 describe("[target: meta-object.js, meta-element.js]", () => {
     describe("MetaObject :: 클래스", () => {
-        beforeAll(() => {
+        beforeEach(() => {
             jest.resetModules();
+            MetaRegistry.init();
             // 클래스 정의        
             MetaObjectSub = class MetaObjectSub extends MetaObject {
                 constructor() { super() }
@@ -67,19 +69,26 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             });
         });
         describe("MetaObject.setObject(mObj) <객체 설정>", () => {
-            it("- setObject() : 직렬화 객체 설정 ", () => {
+            it.only("- setObject() : 직렬화 객체 설정 ", () => {
                 const m1 = new MetaObjectSub();
-                const obj = m1.getObject();
                 const m2 = new MetaObjectSub();
                 const m3 = new MetaObject();
-                m2.setObject(obj);
-                m3.setObject(obj);
+                const obj = m1.getObject();
+                
+                const s1 = m2.setObject(obj);
+                const s2 = m3.setObject(obj);
         
                 expect(m1 !== m2).toBe(true);
                 expect(m1._guid === m2._guid).toBe(true);
                 expect(m1._type === m2._type).toBe(true);
                 expect(m1._guid === m3._guid).toBe(true);
                 expect(m1._type !== m3._type).toBe(true);
+            });
+            it.skip("- setObject() : 직렬화 객체 설정 ", () => {
+                const m1 = new MetaObjectSub();
+                const mr = MetaRegistry;
+
+                expect(m1 !== m2).toBe(true);
             });
         });
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {

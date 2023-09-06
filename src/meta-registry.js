@@ -110,13 +110,7 @@
             return arr;
         };
 
-        /**
-         * 초기화
-         */
-        MetaRegistry.init = function() {
-            list.length = 0;
-            this.ns.init();
-        };
+
 
         /**
          * 메타객체 등록
@@ -157,6 +151,14 @@
                     return true;
                 }
             }
+        };
+
+        /**
+         * 초기화
+         */
+        MetaRegistry.init = function() {
+            list.length = 0;
+            this.ns.init();
         };
 
         /**

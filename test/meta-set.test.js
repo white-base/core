@@ -28,8 +28,106 @@ describe("[target: meta-set.js]", () => {
        jest.resetModules();
        MetaRegistry.init();
     });
+    
     describe("MetaSet :: 클래스", () => {
-        describe("this.clear() <rows 초기화>", () => {
+        describe("MetaSet.getObject(): obj<ref> <객체 얻기>", () => {
+            it("- getObject() : 직렬화 객체 얻기 ", () => {
+                var set1 = new MetaSet('S1');
+                // table add
+                set1.tables.add("T1");
+                set1.tables['T1'].columns.add('i1');
+                set1.tables['T1'].columns.add('i2');
+                var row = set1.tables['T1'].newRow();
+                row['i1'] = 'R1';
+                row['i2'] = 'R2';
+                set1.tables['T1'].rows.add(row);
+                // view add
+                set1.views.add("V1");
+                set1.views['V1'].columns.add('i3');
+                var row = set1.views['V1'].newRow();
+                row['i3'] = 'R3';
+                set1.views['V1'].rows.add(row);
+                const obj = set1.getObject();
+    
+                expect(obj._type === 'Meta.Entity.MetaSet').toBe(true);
+                expect(obj.name === 'S1').toBe(true);
+                expect(obj.tables._elem[0]._type === 'Meta.Entity.MetaTable').toBe(true);
+                expect(obj.tables._elem[0].name === 'T1').toBe(true);
+                expect(obj.tables._elem[0].tableName === 'T1').toBe(true);
+                expect(obj.tables._elem[0].columns._elem[0]._type === 'Meta.Entity.MetaColumn').toBe(true);
+                expect(obj.tables._elem[0].columns._elem[0].name === 'i1').toBe(true);
+                expect(obj.tables._elem[0].columns._elem[0].columnName === 'i1').toBe(true);
+                expect(obj.tables._elem[0].columns._elem[1]._type === 'Meta.Entity.MetaColumn').toBe(true);
+                expect(obj.tables._elem[0].columns._elem[1].name === 'i2').toBe(true);
+                expect(obj.tables._elem[0].columns._elem[1].columnName === 'i2').toBe(true);
+                expect(obj.tables._elem[0].columns._key).toEqual(['i1', 'i2']);
+                expect(obj.tables._elem[0].rows._elem[0]._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj.tables._elem[0].rows._elem[0]._elem).toEqual(['R1', 'R2']);
+                expect(obj.tables._elem[0].rows._elem[0]._key).toEqual(['i1', 'i2']);
+                expect(obj.views._elem[0]._type === 'Meta.Entity.MetaView').toBe(true);
+                expect(obj.views._elem[0].name === 'V1').toBe(true);
+                expect(obj.views._elem[0].viewName === 'V1').toBe(true);
+                expect(obj.views._elem[0].columns._elem[0]._type === 'Meta.Entity.MetaColumn').toBe(true);
+                expect(obj.views._elem[0].columns._elem[0].name === 'i3').toBe(true);
+                expect(obj.views._elem[0].columns._elem[0].columnName === 'i3').toBe(true);
+                expect(obj.views._elem[0].columns._key).toEqual(['i3']);
+                expect(obj.views._elem[0].rows._elem[0]._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj.views._elem[0].rows._elem[0]._elem).toEqual(['R3']);
+            });
+        });
+        describe("MetaTable.setObject(mObj) <객체 설정>", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
+                var set1 = new MetaSet('S1');
+                // table add
+                set1.tables.add("T1");
+                set1.tables['T1'].columns.add('i1');
+                set1.tables['T1'].columns.add('i2');
+                var row = set1.tables['T1'].newRow();
+                row['i1'] = 'R1';
+                row['i2'] = 'R2';
+                set1.tables['T1'].rows.add(row);
+                // view add
+                set1.views.add("V1");
+                set1.views['V1'].columns.add('i3');
+                var row = set1.views['V1'].newRow();
+                row['i3'] = 'R3';
+                set1.views['V1'].rows.add(row);
+                const obj1 = set1.getObject();
+                // 참조 변환 > 객체 초기화 > 네임스페이스 로드
+                const mObj = MetaRegistry.transformRefer(obj1);  
+                MetaRegistry.init();
+                loadNamespace();
+                const set2 = new MetaSet('S2');
+                set2.setObject(mObj);
+                const obj2 = set2.getObject();
+
+                expect(obj2._type === 'Meta.Entity.MetaSet').toBe(true);
+                expect(obj2.name === 'S1').toBe(true);
+                expect(obj2.tables._elem[0]._type === 'Meta.Entity.MetaTable').toBe(true);
+                expect(obj2.tables._elem[0].name === 'T1').toBe(true);
+                expect(obj2.tables._elem[0].tableName === 'T1').toBe(true);
+                expect(obj2.tables._elem[0].columns._elem[0]._type === 'Meta.Entity.MetaColumn').toBe(true);
+                expect(obj2.tables._elem[0].columns._elem[0].name === 'i1').toBe(true);
+                expect(obj2.tables._elem[0].columns._elem[0].columnName === 'i1').toBe(true);
+                expect(obj2.tables._elem[0].columns._elem[1]._type === 'Meta.Entity.MetaColumn').toBe(true);
+                expect(obj2.tables._elem[0].columns._elem[1].name === 'i2').toBe(true);
+                expect(obj2.tables._elem[0].columns._elem[1].columnName === 'i2').toBe(true);
+                expect(obj2.tables._elem[0].columns._key).toEqual(['i1', 'i2']);
+                expect(obj2.tables._elem[0].rows._elem[0]._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj2.tables._elem[0].rows._elem[0]._elem).toEqual(['R1', 'R2']);
+                expect(obj2.tables._elem[0].rows._elem[0]._key).toEqual(['i1', 'i2']);
+                expect(obj2.views._elem[0]._type === 'Meta.Entity.MetaView').toBe(true);
+                expect(obj2.views._elem[0].name === 'V1').toBe(true);
+                expect(obj2.views._elem[0].viewName === 'V1').toBe(true);
+                expect(obj2.views._elem[0].columns._elem[0]._type === 'Meta.Entity.MetaColumn').toBe(true);
+                expect(obj2.views._elem[0].columns._elem[0].name === 'i3').toBe(true);
+                expect(obj2.views._elem[0].columns._elem[0].columnName === 'i3').toBe(true);
+                expect(obj2.views._elem[0].columns._key).toEqual(['i3']);
+                expect(obj2.views._elem[0].rows._elem[0]._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj2.views._elem[0].rows._elem[0]._elem).toEqual(['R3']);
+            });
+        });
+        describe("MetaSet.clear() <rows 초기화>", () => {
             it("- clear() : rows 초기화 ", () => {
                 const set1 = new MetaSet('S1');
                 const table1 = new MetaTable('T1');
@@ -67,7 +165,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views[0].rows.count).toBe(0);
             });
         });
-        describe("this.reset() <rows, columns 초기화>", () => {
+        describe("MetaSet.reset() <rows, columns 초기화>", () => {
             it("- reset() : rows, columns 초기화 ", () => {
                 const set1 = new MetaSet('S1');
                 const table1 = new MetaTable('T1');
@@ -101,7 +199,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views.count).toBe(0);
             });
         });
-        describe("this.clone() <복제>", () => {
+        describe("MetaSet.clone() <복제>", () => {
             it("- clone() : 복제 ", () => {
                 const set1 = new MetaSet('S1');
                 const table1 = new MetaTable('T1');
@@ -142,359 +240,7 @@ describe("[target: meta-set.js]", () => {
         //     it("- TODO: ", () => {
         //     });
         // });
-        describe("this.read(json, opt) <가져오기>", () => {
-            it("- read(obj) object 가져오기 ", () => {
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                set1.read(json1);
-
-                // table
-                expect(set1.tables['T1']).toBeDefined();
-                expect(set1.tables['T1'].columns.count).toBe(2);
-                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
-                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
-                expect(set1.tables['T1'].rows.count).toBe(1);
-                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
-                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
-                // view
-                expect(set1.views['V1']).toBeDefined();
-                expect(set1.views['V1'].columns.count).toBe(1);
-                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
-                expect(set1.views['V1'].rows.count).toBe(1);
-                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
-            });
-            it("- read(rObj) object 가져오기 ", () => {
-                var set0 = new MetaSet('S0');
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                set0.read(json1);
-                let rObj = set0.getObject();
-                set1.read(rObj);
-
-                // table
-                expect(set1.tables['T1']).toBeDefined();
-                expect(set1.tables['T1'].columns.count).toBe(2);
-                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
-                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
-                expect(set1.tables['T1'].rows.count).toBe(1);
-                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
-                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
-                // view
-                expect(set1.views['V1']).toBeDefined();
-                expect(set1.views['V1'].columns.count).toBe(1);
-                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
-                expect(set1.views['V1'].rows.count).toBe(1);
-                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
-            });
-        });
-        
-        describe("this.readSchema() <스키마 가져오기>", () => {
-            it("- readSchema() : 기본 로딩 ", () => {
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                set1.readSchema(json1);
-
-                // table
-                expect(set1.tables['T1']).toBeDefined();
-                expect(set1.tables['T1'].columns.count).toBe(2);
-                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
-                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
-                expect(set1.tables['T1'].rows.count).toBe(0);
-                // view
-                expect(set1.views['V1']).toBeDefined();
-                expect(set1.views['V1'].columns.count).toBe(1);
-                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
-                expect(set1.views['V1'].rows.count).toBe(0);
-            });
-            it("- 예외 : 기존에 중복 테이블/뷰가 존재할 경우 ", () => {
-                // TODO:
-            });
-        });
-        describe("this.readData() <데이터 가져오기>", () => {
-            it("- readData() : 기본 로딩", () => {
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                
-                // schema
-                set1.readSchema(json1);
-                expect(set1.tables['T1']).toBeDefined();
-                expect(set1.tables['T1'].columns.count).toBe(2);
-                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
-                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
-                expect(set1.views['V1']).toBeDefined();
-                expect(set1.views['V1'].columns.count).toBe(1);
-                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
-                expect(set1.tables['T1'].rows.count).toBe(0);
-                expect(set1.views['V1'].rows.count).toBe(0);
-                // data
-                set1.readData(json1);
-                expect(set1.tables['T1'].rows.count).toBe(1);
-                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
-                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
-                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
-                expect(set1.views['V1'].rows.count).toBe(1);
-            });
-            it("- 테이블이 존재하지 않을 때", () => {
-                // TODO:
-            });
-        });
-        describe("this.writeSchema() <스키마 내보내기>", () => {
-            it("- writeSchema() : 스키마 내보내기 ", () => {
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                const json2 = {
-                    setName: 'S1',
-                    tables: {
-                        _key: ['T1'],
-                        T1: {
-                            columns: {
-                                _key: ['i1', 'i2'],
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: []
-                        },
-                    },
-                    views: {
-                        _key: ['V1'],
-                        V1: {
-                            columns: {
-                                _key: ['i1'],
-                                i1: { caption: 'C1'},
-                            },
-                            rows: []
-                        },
-                    },
-                }
-                set1.read(json1);
-                const obj = set1.writeSchema();
-
-                expect(obj).toEqual(json2);
-            });
-            it("- 뷰 출력의 경우, 참조가 외부에 있는 경우, 복제 ", () => {
-                // TODO:
-            });
-        });
-        describe("this.writeData() <데이터 내보내기>", () => {
-            it("- writeData() : 내보내기 ", () => {
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                const json2 = {
-                    setName: 'S1',
-                    tables: {
-                        T1: {
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                }
-                set1.read(json1);
-                const obj = set1.writeData();
-
-                expect(obj).toEqual(json2); 
-            });
-        });
-        describe("this.write() <내보내기>", () => {
-            it("- write() : 스키마/데이터 내보내기 ", () => {
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                const json2 = { 
-                    setName: 'S1',
-                    tables: {
-                        _key: ['T1'],
-                        T1: {
-                            columns: {
-                                _key: ['i1', 'i2'],
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        _key: ['V1'],
-                        V1: {
-                            columns: {
-                                _key: ['i1'],
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                set1.read(json1);
-                const obj = set1.write();
-
-                expect(obj).toEqual(json2); 
-            });
-        });
-        describe("this.load(str | rObj) 출력", () => {
+        describe("MetaSet.load(str | rObj) 출력", () => {
             it("- load(str) :  ", () => {
                 const set1 = new MetaSet('S1');
                 var json1 = { 
@@ -543,7 +289,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
             });
         });
-        describe("this.output() 출력", () => {
+        describe("MetaSet.output() 출력", () => {
             it("- output() : new 객체 비교 ", () => {
                 const set1 = new MetaSet('S1');
                 const set2 = new MetaSet('S2');
@@ -781,7 +527,360 @@ describe("[target: meta-set.js]", () => {
                 expect(load_ns_Cnt).toBe(38);
             });
         });
-        describe("this.acceptChanges() <커밋>", () => {
+        describe("MetaSet.read(json, opt) <가져오기>", () => {
+            it("- read(obj) object 가져오기 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+
+                // table
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
+                // view
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.views['V1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+            });
+            it("- read(rObj) object 가져오기 ", () => {
+                var set0 = new MetaSet('S0');
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set0.read(json1);
+                let rObj = set0.getObject();
+                set1.read(rObj);
+
+                // table
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
+                // view
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.views['V1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+            });
+        });
+        
+        describe("MetaSet.readSchema() <스키마 가져오기>", () => {
+            it("- readSchema() : 기본 로딩 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.readSchema(json1);
+
+                // table
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.tables['T1'].rows.count).toBe(0);
+                // view
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.views['V1'].rows.count).toBe(0);
+            });
+            it("- 예외 : 기존에 중복 테이블/뷰가 존재할 경우 ", () => {
+                // TODO:
+            });
+        });
+        describe("MetaSet.readData() <데이터 가져오기>", () => {
+            it("- readData() : 기본 로딩", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                
+                // schema
+                set1.readSchema(json1);
+                expect(set1.tables['T1']).toBeDefined();
+                expect(set1.tables['T1'].columns.count).toBe(2);
+                expect(set1.tables['T1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].columns['i2'].caption).toBe('C2');
+                expect(set1.views['V1']).toBeDefined();
+                expect(set1.views['V1'].columns.count).toBe(1);
+                expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
+                expect(set1.tables['T1'].rows.count).toBe(0);
+                expect(set1.views['V1'].rows.count).toBe(0);
+                // data
+                set1.readData(json1);
+                expect(set1.tables['T1'].rows.count).toBe(1);
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
+                expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set1.views['V1'].rows.count).toBe(1);
+            });
+            it("- 테이블이 존재하지 않을 때", () => {
+                // TODO:
+            });
+        });
+        describe("MetaSet.writeSchema() <스키마 내보내기>", () => {
+            it("- writeSchema() : 스키마 내보내기 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                const json2 = {
+                    setName: 'S1',
+                    tables: {
+                        _key: ['T1'],
+                        T1: {
+                            columns: {
+                                _key: ['i1', 'i2'],
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: []
+                        },
+                    },
+                    views: {
+                        _key: ['V1'],
+                        V1: {
+                            columns: {
+                                _key: ['i1'],
+                                i1: { caption: 'C1'},
+                            },
+                            rows: []
+                        },
+                    },
+                }
+                set1.read(json1);
+                const obj = set1.writeSchema();
+
+                expect(obj).toEqual(json2);
+            });
+            it("- 뷰 출력의 경우, 참조가 외부에 있는 경우, 복제 ", () => {
+                // TODO:
+            });
+        });
+        describe("MetaSet.writeData() <데이터 내보내기>", () => {
+            it("- writeData() : 내보내기 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                const json2 = {
+                    setName: 'S1',
+                    tables: {
+                        T1: {
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                }
+                set1.read(json1);
+                const obj = set1.writeData();
+
+                expect(obj).toEqual(json2); 
+            });
+        });
+        describe("MetaSet.write() <내보내기>", () => {
+            it("- write() : 스키마/데이터 내보내기 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                const json2 = { 
+                    setName: 'S1',
+                    tables: {
+                        _key: ['T1'],
+                        T1: {
+                            columns: {
+                                _key: ['i1', 'i2'],
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        _key: ['V1'],
+                        V1: {
+                            columns: {
+                                _key: ['i1'],
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+                const obj = set1.write();
+
+                expect(obj).toEqual(json2); 
+            });
+        });
+        
+        describe("MetaSet.acceptChanges() <커밋>", () => {
             it("- autoChanges : 전체 트랜젝션 모드 변경후 커밋", () => {
                 var set1 = new MetaSet('S1');
                 set1.tables.add('T1');
@@ -806,7 +905,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.hasChanges()).toBe(false);
             });
         });
-        describe("this.rejectChanges() <롤백>", () => {
+        describe("MetaSet.rejectChanges() <롤백>", () => {
             it("- add() -> remove() -> 롤백 ", () => {
                 var set1 = new MetaSet('S1');
                 set1.tables.add('T1');
@@ -843,7 +942,7 @@ describe("[target: meta-set.js]", () => {
         });
         
         // REVIEW: 삭제 대기
-        describe.skip("this.getChanges() <변경 내역 얻기>", () => {
+        describe.skip("MetaSet.getChanges() <변경 내역 얻기>", () => {
             it("- add() -> remove() -> getChanages() ", () => {
                 var set1 = new MetaSet('S1');
                 set1.tables.add('T1');
@@ -878,7 +977,7 @@ describe("[target: meta-set.js]", () => {
                 // var set1Changes = set1.getChanges();
             });
         });
-        describe("this.hasChanges() <변경 유무>", () => {
+        describe("MetaSet.hasChanges() <변경 유무>", () => {
             it("- 등록 후 검사, 삭제 후 검사 ", () => {
                 var set1 = new MetaSet('S1');
                 set1.tables.add('T1');
@@ -900,7 +999,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.hasChanges()).toBe(false);
             });
         });
-        describe("this.autoChanges <자동 변경 유무 설정>", () => {
+        describe("MetaSet.autoChanges <자동 변경 유무 설정>", () => {
             it("- 설정 전, 설정 후 ", () => {
                 var set1 = new MetaSet('S1');
                 set1.tables.add('T1');
@@ -927,7 +1026,7 @@ describe("[target: meta-set.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
-        describe("this.add() <테이블 추가>", () => {
+        describe("MetaTableCollection.add() <테이블 추가>", () => {
             it("- tables.add() ", () => {
                 const set1 = new MetaSet('S1');
                 const table1 = new MetaTable('T1');
@@ -937,9 +1036,9 @@ describe("[target: meta-set.js]", () => {
             });
         });
     });
-    describe("MetaTableCollection :: 클래스", () => {
-        describe("this.add() <뷰 추가>", () => {
-            it("- views.add() ", () => {
+    describe("MetaVieweCollection :: 클래스", () => {
+        describe("MetaTableCollection.add() <뷰 추가>", () => {
+            it("- add() ", () => {
                 const set1 = new MetaSet('S1');
                 const veiw1 = new MetaView('V1');
                 set1.views.add(veiw1);
