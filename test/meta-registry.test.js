@@ -55,7 +55,7 @@ describe("[target: meta-registry.js]", () => {
                 // TODO:
             });
         });
-        describe.only("MetaRegistry.find() <메타객체 조회>", () => {
+        describe("MetaRegistry.find() <메타객체 조회>", () => {
             it("- find(meta, caller) : 메타객체 조회 호출처", () => {
                 let m1 = new MetaElement();
                 let m2 = new MetaElement();
@@ -90,6 +90,24 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.isGuidObject() <guid 객체 여부 감사>", () => {
             it("- isGuidObject() : guid 객체 여부 검사", () => {
                 // TODO:
+            });
+        });
+        describe("MetaRegistry.findSetObject(mObj, target) <guid로 생성한 객체 조회>", () => {
+            it("- findSetObject() : 객체 검색", () => {
+                let m1 = new MetaElement('M1');
+                let m2 = new MetaElement('M2');
+                let m3 = new MetaElement('M3');
+                var rObj = m1.getObject();
+                
+                // $set 설정한 객체가 없는 경우                
+                // REVIEW: guid 타입만 가능한게 맞는건지?
+                // var obj = MetaRegistry.findSetObject(rObj, m1._guid);
+                var obj = MetaRegistry.findSetObject(rObj, m1.getObject());
+                expect(obj).toBe(undefined);
+                // $set 설정한 객체가 있는 경우                
+                rObj.$set = m2._guid;
+                var obj = MetaRegistry.findSetObject(rObj, m1.getObject());
+                expect(obj === m2).toBe(true);
             });
         });
         describe("MetaRegistry.hasRefer(obj) <참조객체 여부>", () => {

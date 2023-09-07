@@ -1466,7 +1466,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
         describe("MetaTable.setObject(mObj) <객체 설정>", () => {
-            it.only("- setObject() : 직렬화 객체 설정 ", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
                 const a1 = new MetaTable('T1');
                 a1.columns.add('a1');
                 a1.columns.add('a2');
@@ -1483,6 +1483,7 @@ describe("[target: meta-table.js]", () => {
                 a2.setObject(mObj);
                 const obj = a2.getObject();
 
+                expect(a2 !== a1).toBe(true);
                 expect(obj._type === 'Meta.Entity.MetaTable').toBe(true);
                 expect(obj.name === 'T1').toBe(true);
                 expect(obj.tableName === 'T1').toBe(true);

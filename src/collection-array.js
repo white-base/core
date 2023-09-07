@@ -116,8 +116,9 @@
          * @virtual
          * @returns {object}
          */
-        ArrayCollection.prototype.setObject  = function(mObj) {
+        ArrayCollection.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj);
+            var origin = oObj ? oObj : mObj;
 
             for(var i = 0; i < mObj._elem.length; i++) {
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
@@ -126,8 +127,8 @@
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
-                    var obj = MetaRegistry.createMetaObject(elem);
-                    obj.setObject(elem);
+                    var obj = MetaRegistry.createMetaObject(elem, origin);
+                    obj.setObject(elem, origin);
                     this._elements.push(obj);
                 } else this._elements.push(elem);
             }

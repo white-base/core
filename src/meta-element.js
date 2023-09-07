@@ -86,8 +86,8 @@
          * @virtual
          * @returns {object}
          */
-        MetaElement.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        MetaElement.prototype.setObject  = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
             this.metaName = mObj.name;
         };
         // MetaElement.prototype.setObject  = function(mObj) {

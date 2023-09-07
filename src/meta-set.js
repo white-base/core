@@ -220,12 +220,13 @@
          * @virtual
          * @returns {object}
          */
-        MetaSet.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        MetaSet.prototype.setObject  = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
+            var origin = oObj ? oObj : mObj;
             
             this.setName = mObj.setName;
-            this.tables.setObject(mObj.tables);
-            this.views.setObject(mObj.views);
+            this.tables.setObject(mObj.tables, origin);
+            this.views.setObject(mObj.views, origin);
         };
 
         MetaSet.prototype.clear  = function() {

@@ -99,7 +99,7 @@
         MetaRegistry.__getObjectList = function(mObj, arr) {
             arr = arr || [];
             if (this.isGuidObject(mObj)) arr.push(mObj);
-            for(let prop in mObj) {
+            for(var prop in mObj) {
                 if (typeof mObj[prop] === 'object') this.__getObjectList(mObj[prop], arr);
                 else if (Array.isArray(mObj[prop])){
                 for(var i = 0; i < mObj[prop].length; i++) {
@@ -145,7 +145,7 @@
             var guid = typeof target === 'string' ? target : target['_guid'];
 
             if (typeof guid !== 'string') return false;
-            for(let i = 0; i < list.length; i++) {
+            for(var i = 0; i < list.length; i++) {
                 if (list[i]._guid === guid) {
                     list.splice(i, 1);
                     return true;
@@ -170,7 +170,7 @@
             var guid = typeof target === 'string' ? target : target['_guid'];
             
             if (typeof guid !== 'string') return;
-            for(let i = 0; i < list.length; i++) {
+            for(var i = 0; i < list.length; i++) {
                 if (list[i]._guid === guid) return true;
             }
             return false;
@@ -185,17 +185,19 @@
             var guid = typeof target === 'string' ? target : target['_guid'];
 
             if (typeof guid !== 'string') return;
-            for(let i = 0; i < list.length; i++) {
+            for(var i = 0; i < list.length; i++) {
                 if (list[i]._guid === guid) return list[i];
             }
         };
+
+        
         
         /**
          * 메타 객체 생성
          * @param {*} mObj 
          * @returns 
          */
-        MetaRegistry.createMetaObject = function(mObj) {
+        MetaRegistry.createMetaObject = function(mObj, oObj) {
             /**
              * - ns 에서 대상 조회
              * - params 를 기준으로 파리머터 구성
@@ -212,14 +214,23 @@
             if (typeof coClass !== 'function') throw new Error('생성클래스가 존재하지 않습니다.  ' + fullName); 
             var params = coClass._PARAMS || []; // arr
 
-            for (let i = 0; i < params.length; i++) {
+            for (var i = 0; i < params.length; i++) {
                 var argName = params[i];
                 var prop = mObj[argName];
-                var obj = this.isGuidObject(prop) ? this.find(prop['_guid']) : prop;
+                // var obj = this.isGuidObject(prop) ? this.find(prop['_guid']) : prop;
+                // var obj = this.isGuidObject(prop) ? this.findSetObject(oObj, prop) : prop;
+                var obj;
+                if (typeof prop === 'object' && prop['$ref']) obj = this.findSetObject(oObj, prop['$ref']);
+                else obj = prop;
+
+                // var obj;
+                // if (this.isGuidObject(prop)) {
+                //     if (caller[argName]) obj = caller[argName].setObject(prop);
+                //     else obj = this.createMetaObject(prop);
+                // }
                 if (mObj[argName]) args.push(obj);
             }
-    
-            instance = new (Function.prototype.bind.apply(coClass, args));
+             instance = new (Function.prototype.bind.apply(coClass, args));
             // instance.setObject(mObj);
 
             return instance;
@@ -275,7 +286,7 @@
 
             // inner function
             function validReference(mObj, arr) {
-                for(let prop in mObj) {
+                for(var prop in mObj) {
                     if (typeof mObj[prop] === 'object') {
                         if (mObj[prop]['$ref']) {
                             if (typeof findGuid(mObj[prop]['$ref'], arr) !== 'object') return false;
@@ -296,7 +307,7 @@
                 return true;
             }
             function validCollection(mObj, arr) {
-                for(let prop in mObj) {
+                for(var prop in mObj) {
                     if (typeof mObj[prop] === 'object') {
                         if (Array.isArray(mObj[prop]['_elem']) && Array.isArray(mObj[prop]['_key'])) {
                             if (mObj[prop]['_elem'].length !== mObj[prop]['_key'].length) return false;
@@ -327,6 +338,41 @@
             return false;
         };
 
+        MetaRegistry.findSetObject = function(p_origin, p_target) {
+            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
+            var origin = p_origin ? p_origin : mObj;
+
+
+            if (!this.isGuidObject(origin)) throw new Error('guid 타입이 아닙니다.');
+            return findObject(origin);
+            
+            // inner finction
+            function findObject(mObj) {
+                var result;
+
+                if (typeof mObj === 'object') {
+                    if (mObj._type) console.log(mObj._type);
+                    if (mObj['_guid'] && mObj['_guid'] === guid) {
+                        result = mObj['$set'] ? MetaRegistry.find(mObj['$set']) : undefined;
+                        return result;
+                    }
+                    for (var prop in mObj) {
+                        var obj = mObj[prop];
+                        if (typeof obj === 'object' || Array.isArray(obj) ) {
+                            result = findObject(obj);
+                            if(result) return result;
+                        }
+                    }
+                // } else if (Array.isArray(mObj)) {
+                //     for(var i = 0; i < mObj.length; i++) {
+                //         var obj = mObj[i];
+                //         if (typeof obj === 'object' || Array.isArray(obj) ) return findObject(obj);
+                //     }
+                }
+                return result;
+            }
+        };
+
         /**
          * 참조 객체 여부 검사
          * @param {*} obj 
@@ -340,7 +386,7 @@
 
             // inner function
             function hasRefer(obj) {
-                for(let prop in obj) {
+                for(var prop in obj) {
                     if (typeof obj[prop] === 'object') {
                         if (obj[prop]['$ref'] && typeof obj[prop]['$ref'] === 'string') {
                             return true;
@@ -366,6 +412,51 @@
          * @param {*} rObj 
          * @returns 
          */
+        // MetaRegistry.transformRefer = function(rObj) {
+        //     var _this = this;
+        //     var arrObj = this.__getObjectList(rObj);
+        //     var clone = deepCopy(rObj);
+        //     linkReference(clone, arrObj);
+
+        //     return clone;
+        //     // inner function
+        //     function linkReference(obj, arr) {
+        //         // inner function
+        //         for(var prop in obj) {
+        //             if (obj[prop] === null) continue;
+        //             if (typeof obj[prop] === 'object') {
+        //                 if (obj[prop]['$ref']) {
+        //                     var ref = findGuid(obj[prop]['$ref'], arr);
+        //                     if (typeof ref !== 'object') throw new Error('참조 연결 실패 $ref:' + obj[prop]['$ref']);
+        //                     obj[prop] = ref;
+        //                 } else if (obj[prop]['$ns']) {
+        //                     // obj[prop] = _this.ns.get(obj[prop]['$ns']);
+        //                     var ns = _this.getClass(obj[prop]['$ns']);
+        //                     if (typeof ns !== 'function') throw new Error('참조 연결 실패 $ns:' + obj[prop]['$ns']);
+        //                     obj[prop] = ns;
+        //                 } else linkReference(obj[prop], arr);
+        //             } else if (Array.isArray(obj[prop])){
+        //                 for(var i = 0; i < obj[prop].length; i++) {
+        //                     if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i], arr);
+        //                 }  
+        //             } 
+        //         }
+        //     }
+        //     function deepCopy(object) {
+        //         if (object === null || typeof object !== "object") {
+        //           return object;
+        //         }
+        //         // 객체인지 배열인지 판단
+        //         const copy = Array.isArray(object) ? [] : {};
+               
+        //         for (var key of Object.keys(object)) {
+        //           copy[key] = deepCopy(object[key]);
+        //         }
+               
+        //         return copy;
+        //       }
+    
+        // };
         MetaRegistry.transformRefer = function(rObj) {
             var _this = this;
             var arrObj = this.__getObjectList(rObj);
@@ -376,14 +467,14 @@
             // inner function
             function linkReference(obj, arr) {
                 // inner function
-                for(let prop in obj) {
+                for(var prop in obj) {
                     if (obj[prop] === null) continue;
                     if (typeof obj[prop] === 'object') {
-                        if (obj[prop]['$ref']) {
-                            var ref = findGuid(obj[prop]['$ref'], arr);
-                            if (typeof ref !== 'object') throw new Error('참조 연결 실패 $ref:' + obj[prop]['$ref']);
-                            obj[prop] = ref;
-                        } else if (obj[prop]['$ns']) {
+                        // if (obj[prop]['$ref']) {
+                        //     var ref = findGuid(obj[prop]['$ref'], arr);
+                        //     if (typeof ref !== 'object') throw new Error('참조 연결 실패 $ref:' + obj[prop]['$ref']);
+                        //     obj[prop] = ref;
+                        if (obj[prop]['$ns']) {
                             // obj[prop] = _this.ns.get(obj[prop]['$ns']);
                             var ns = _this.getClass(obj[prop]['$ns']);
                             if (typeof ns !== 'function') throw new Error('참조 연결 실패 $ns:' + obj[prop]['$ns']);
@@ -403,7 +494,7 @@
                 // 객체인지 배열인지 판단
                 const copy = Array.isArray(object) ? [] : {};
                
-                for (let key of Object.keys(object)) {
+                for (var key of Object.keys(object)) {
                   copy[key] = deepCopy(object[key]);
                 }
                

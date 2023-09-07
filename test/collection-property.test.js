@@ -369,7 +369,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 a2.setObject(obj);
         
                 expect(a1 !== a2).toBe(true);
-                expect(a1._guid === a2._guid).toBe(true);
+                expect(a1._guid !== a2._guid).toBe(true);
                 expect(a1.count).toBe(2);
                 expect(a2.count).toBe(2);
                 expect(a2[0]).toBe(10);

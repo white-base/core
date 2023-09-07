@@ -451,11 +451,12 @@
          * @virtual
          * @returns {object}
          */
-        MetaColumn.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        MetaColumn.prototype.setObject  = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
+            var origin = oObj ? oObj : mObj;
             
             if (mObj.columnName) this.columnName = mObj.columnName;
-            if (mObj._entity['_guid']) this._entity = MetaRegistry.find(mObj._entity);
+            if (mObj._entity['_guid']) this._entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
             if (mObj.default) this.default = mObj.default;
             if (mObj.caption) this.caption = mObj.caption;
             if (mObj.isNotNull) this.isNotNull = mObj.isNotNull;

@@ -112,7 +112,9 @@
          */
         MetaObject.prototype.setObject  = function(p_mObj) {
             if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
-            this.__SET$_guid(p_mObj._guid, this);
+            
+            p_mObj['$set'] = this._guid;
+            // this.__SET$_guid(p_mObj._guid, this);
         };
         // MetaObject.prototype.setObject  = function(p_mObj) {
         //     var meta;

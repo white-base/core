@@ -356,8 +356,8 @@
             return obj;                        
         };
 
-        BaseCollection.prototype.setObject = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        BaseCollection.prototype.setObject = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
             
             this.clear();
             this._elemTypes = mObj._elemTypes;

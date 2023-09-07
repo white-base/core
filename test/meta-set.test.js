@@ -268,8 +268,8 @@ describe("[target: meta-set.js]", () => {
                 };
                 set1.read(json1);
                 const str = set1.output(stringify, '\t');
-                MetaRegistry.init();
-                loadNamespace();
+                // MetaRegistry.init();
+                // loadNamespace();
                 var set2 = new MetaSet('S2');
                 set2.load(str, parse);
 
@@ -300,7 +300,7 @@ describe("[target: meta-set.js]", () => {
                 // load() 후
                 set2.load(set1.output());
                 expect(set1 === set2).toBe(false);
-                expect(set1._guid === set2._guid).toBe(true);
+                expect(set1._guid !== set2._guid).toBe(true);
                 expect(set1.setName === set2.setName).toBe(true);
             });
             it("- output() : new 생성후 load() ", () => {

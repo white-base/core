@@ -142,8 +142,9 @@
          * @virtual
          * @returns {object}
          */
-        PropertyCollection.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        PropertyCollection.prototype.setObject  = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
+            var origin = oObj ? oObj : mObj;
 
             if (mObj._key.length !== mObj._elem.length) throw new Error('_key, _elem 의 길이가 다릅니다.');
 
@@ -158,8 +159,8 @@
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
-                    var obj = MetaRegistry.createMetaObject(elem);
-                    obj.setObject(elem);
+                    var obj = MetaRegistry.createMetaObject(elem, oObj);
+                    obj.setObject(elem, origin);
                     this._elements.push(obj);
                 } else this._elements.push(elem);
             }

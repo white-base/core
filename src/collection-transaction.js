@@ -109,8 +109,8 @@
          * @virtual
          * @returns {object}
          */
-        TransactionCollection.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        TransactionCollection.prototype.setObject  = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
             if (mObj.autoChanges) this.autoChanges = mObj.autoChanges;
         };
 

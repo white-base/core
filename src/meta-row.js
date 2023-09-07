@@ -266,15 +266,16 @@
          * @virtual
          * @returns {object}
          */
-        MetaRow.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
+        MetaRow.prototype.setObject  = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
+            var origin = oObj ? oObj : mObj;
             
             // this._entity = mObj._entity;
-            this._entity = MetaRegistry.find(mObj._entity);
+            this._entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
-                if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem);
+                if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem, origin);
                 else this._elements[i] = elem;
                 // if (obj[prop] !== null && elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
                 //     this.list[i].setObject(elem);

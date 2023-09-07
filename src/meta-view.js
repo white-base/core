@@ -168,13 +168,14 @@
          * @virtual
          * @returns {object}
          */
-        MetaView.prototype.setObject  = function(mObj) {
-            _super.prototype.setObject.call(this, mObj);
-            
+        MetaView.prototype.setObject  = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
+            var origin = oObj ? oObj : mObj;
+
             // this.metaSet = mObj.metaSet;
-            this.metaSet = MetaRegistry.find(mObj.metaSet);
-            this.columns.setObject(mObj.columns);
-            this.rows.setObject(mObj.rows);
+            this.metaSet = MetaRegistry.findSetObject(origin, mObj.metaSet.$ref);
+            this.columns.setObject(mObj.columns, origin);
+            this.rows.setObject(mObj.rows, origin);
             this.viewName = mObj.viewName;
             this.__SET$_refEntity(mObj._refEntity, this);
         };

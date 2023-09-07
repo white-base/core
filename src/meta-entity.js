@@ -150,8 +150,19 @@
                 for (var i = 0; i < mObj['_elem'].length; i++) {
                     var column = mObj['_elem'][i];
                     var key = mObj['_key'][i] || column.name;
-                    obj[key] = column;
+                    obj[key] = {};
+                    if (column['_entity']['$ref']) obj[key]['_entity'] = MetaRegistry.find(column['_entity']['$ref']);
+                    if (column.default) obj[key].default = column.default;
+                    if (column.caption) obj[key].caption = column.caption;            
+                    if (column.isNotNull) obj[key].isNotNull = column.isNotNull;
+                    if (column.isNullPass) obj[key].isNullPass = column.isNullPass;
+                    if (column.constraints) obj[key].constraints = column.constraints;    // REVIEW: 배열 검사 필요
+                    if (column.getter) obj[key].getter = column.getter;
+                    if (column.setter) obj[key].setter = column.setter;
+                    if (column.alias) obj[key].alias = column.alias;
+                    if (column.value) obj[key].value = column.value;
                 }
+
                 obj['_key'] = mObj['_key'];
                 return obj;
             }
@@ -974,7 +985,7 @@
             }
 
             // 기존에 존재하면 기존 객체 리턴
-            if (MetaRegistry.has(obj)) return MetaRegistry.find(obj);
+            // if (MetaRegistry.has(obj)) return MetaRegistry.findSetObject(obj);
             
             if (MetaRegistry.isGuidObject(obj)) {
                 mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
@@ -1087,10 +1098,15 @@
                     if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
                         if (_this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
                         var prop = columns[key];
+                        var obj = {};
                         if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
-                            prop['_entity'] = MetaRegistry.find(prop['_entity']);
+                            obj['_entity'] = MetaRegistry.find(prop['_entity']);
                         }
-                        var column = new Column(key, _this, prop);
+                        for (var p in prop) {
+                            obj[p] = prop[p];
+                        }
+
+                        var column = new Column(key, _this, obj);
                         if (_this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
                         _this.columns.add(column);
                     }

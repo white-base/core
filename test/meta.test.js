@@ -79,9 +79,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const s2 = m3.setObject(obj);
         
                 expect(m1 !== m2).toBe(true);
-                expect(m1._guid === m2._guid).toBe(true);
+                expect(m1._guid !== m2._guid).toBe(true);
                 expect(m1._type === m2._type).toBe(true);
-                expect(m1._guid === m3._guid).toBe(true);
+                expect(m1._guid !== m3._guid).toBe(true);
                 expect(m1._type !== m3._type).toBe(true);
             });
             it.skip("- setObject() : 직렬화 객체 설정 ", () => {
