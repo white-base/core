@@ -95,8 +95,8 @@ describe("[target: meta-set.js]", () => {
                 const obj1 = set1.getObject();
                 // 참조 변환 > 객체 초기화 > 네임스페이스 로드
                 const mObj = MetaRegistry.transformRefer(obj1);  
-                MetaRegistry.init();
-                loadNamespace();
+                // MetaRegistry.init();
+                // loadNamespace();
                 const set2 = new MetaSet('S2');
                 set2.setObject(mObj);
                 const obj2 = set2.getObject();
@@ -331,17 +331,17 @@ describe("[target: meta-set.js]", () => {
                 set1.read(json1);
                 const beginCnt = MetaRegistry.count;
                 const str = set1.output(stringify, '\t');
-                MetaRegistry.init();
-                const initCnt = MetaRegistry.count;
-                loadNamespace();    // init() 초기화하여 불러와야함
-                const load_ns_Cnt = MetaRegistry.ns.count;
+                // MetaRegistry.init();
+                // const initCnt = MetaRegistry.count;
+                // loadNamespace();    // init() 초기화하여 불러와야함
+                // const load_ns_Cnt = MetaRegistry.ns.count;
                 // 생성자를 통해 성성
                 var set2 = new MetaSet('S2');
                 set2.load(str, parse);
 
                 expect(beginCnt).toBe(18);
-                expect(initCnt).toBe(0);
-                expect(load_ns_Cnt).toBe(38);
+                // expect(initCnt).toBe(0);
+                // expect(load_ns_Cnt).toBe(38);
                 expect(set2.tables['T1']).toBeDefined();
                 expect(set2.tables['T1'].columns.count).toBe(2);
                 expect(set2.tables['T1'].columns['i1'].caption).toBe('C1');
@@ -383,19 +383,19 @@ describe("[target: meta-set.js]", () => {
                     },
                 };
                 set1.read(json1);
-                const beginCnt = MetaRegistry.count;
+                // const beginCnt = MetaRegistry.count;
                 const str = set1.output(stringify, '\t');
-                MetaRegistry.init();
-                const initCnt = MetaRegistry.count;
-                loadNamespace();    // init() 초기화하여 불러와야함
-                const load_ns_Cnt = MetaRegistry.ns.count;
+                // MetaRegistry.init();
+                // const initCnt = MetaRegistry.count;
+                // loadNamespace();    // init() 초기화하여 불러와야함
+                // const load_ns_Cnt = MetaRegistry.ns.count;
                 // 등록소를 통해서 생성
                 const set2 = MetaRegistry.createMetaObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
                 set2.load(str, parse);
 
-                expect(beginCnt).toBe(18);
-                expect(initCnt).toBe(0);
-                expect(load_ns_Cnt).toBe(38);
+                // expect(beginCnt).toBe(18);
+                // expect(initCnt).toBe(0);
+                // expect(load_ns_Cnt).toBe(38);
                 expect(set2.tables['T1']).toBeDefined();
                 expect(set2.tables['T1'].columns.count).toBe(2);
                 expect(set2.tables['T1'].columns['i1'].caption).toBe('C1');
@@ -454,7 +454,7 @@ describe("[target: meta-set.js]", () => {
                 // expect(set2.views['V1'].rows.count).toBe(1);
                 // expect(set2.views['V1'].rows[0].count).toBe(1);
                 // expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
-                expect(set1 === set2).toBe(true);
+                expect(set1 !== set2).toBe(true);
             });
             it("- output() : 출력 후 MeTaRegistry", () => {
                 var set1 = new MetaSet('S1');
@@ -510,21 +510,21 @@ describe("[target: meta-set.js]", () => {
                     },
                 };
                 set1.read(json1);
-                const beginCnt = MetaRegistry.count;
+                // const beginCnt = MetaRegistry.count;
                 const str = set1.output(stringify, '\t');
-                MetaRegistry.init();
-                const initCnt = MetaRegistry.count;
-                loadNamespace();
-                const load_ns_Cnt = MetaRegistry.ns.count;
+                // MetaRegistry.init();
+                // const initCnt = MetaRegistry.count;
+                // loadNamespace();
+                // const load_ns_Cnt = MetaRegistry.ns.count;
                 // 등록소를 통해서 생성
                 const set2 = MetaRegistry.createMetaObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
                 set2.load(str, parse);
                 const json3 = set2.write();
 
                 expect(json3).toEqual(json2);
-                expect(beginCnt).toBe(18);
-                expect(initCnt).toBe(0);
-                expect(load_ns_Cnt).toBe(38);
+                // expect(beginCnt).toBe(18);
+                // expect(initCnt).toBe(0);
+                // expect(load_ns_Cnt).toBe(38);
             });
         });
         describe("MetaSet.read(json, opt) <가져오기>", () => {

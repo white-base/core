@@ -173,7 +173,7 @@
             var origin = oObj ? oObj : mObj;
 
             // this.metaSet = mObj.metaSet;
-            this.metaSet = MetaRegistry.findSetObject(origin, mObj.metaSet.$ref);
+            if (mObj.metaSet) this.metaSet = MetaRegistry.findSetObject(origin, mObj.metaSet.$ref);
             this.columns.setObject(mObj.columns, origin);
             this.rows.setObject(mObj.rows, origin);
             this.viewName = mObj.viewName;

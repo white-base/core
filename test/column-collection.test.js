@@ -22,7 +22,7 @@ describe("[target: meta-column.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
-        describe("this.initValue() <컬럼 value 초기화>", () => {
+        describe("MetaColumnCollection.initValue() <컬럼 value 초기화>", () => {
             it("- initValue(entity) : 컬렉션 전체값 초기화 ", () => {
                 var view1 = new MetaView('T1');
                 view1.columns.addValue('i1', 'V1');
@@ -37,7 +37,7 @@ describe("[target: meta-column.js]", () => {
             });
         });
 
-        describe("this.existAlias(key): bool <별칭 유무 검사>", () => {
+        describe("MetaColumnCollection.existAlias(key): bool <별칭 유무 검사>", () => {
             it("- existAlias(key) : 기본값 ", () => {
                 var view1 = new MetaView('T1');
                 view1.columns.addValue('i1', 'V1');
@@ -84,7 +84,7 @@ describe("[target: meta-column.js]", () => {
                 expect(view1.columns.existAlias('i3')).toBe(false);
             });
         });
-        describe("this.alias(key): MetaColumn <별칭으로 조회> ", () => {
+        describe("MetaColumnCollection.alias(key): MetaColumn <별칭으로 조회> ", () => {
             it("- alias(key) : 별칭으로 조회 하기 ", () => {
                 var view1 = new MetaView('T1');
                 view1.columns.addValue('i1', 'V1');
@@ -117,7 +117,7 @@ describe("[target: meta-column.js]", () => {
                 expect(table1.columns['i2'].value).toBe('V2');
             });
         });
-        describe("this.add(name | column) <컬럼 추가>", () => {
+        describe("MetaTableColumnCollection.add(name | column) <컬럼 추가>", () => {
             it("- add(name) : 아이템명으로 추가 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
@@ -142,6 +142,19 @@ describe("[target: meta-column.js]", () => {
                 expect(table2.columns.count).toBe(1);
                 expect(table2.columns['i2'].caption).toBe('C1');
                 expect(table2.columns['i2']._entity.tableName).toBe('T2');
+            });
+            it("- add(name) : 로우 존재시 컬럼 추가/제거 예외 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                var row1 = table1.newRow();
+                row1['i1'] = 'R1';
+                row1['i2'] = 'R2';
+                table1.rows.add(row1);
+
+                expect(() => table1.columns.add('i3')).toThrow(/row/);
+                expect(() => table1.columns.removeAt(0) ).toThrow(/row/);
+                expect(() => table1.columns.remove(table1.columns['i2'])).toThrow(/row/);
             });
         });
 
@@ -195,7 +208,7 @@ describe("[target: meta-column.js]", () => {
                 expect(view3.columns['i4']).toEqual(view2.columns['i4']);
             });
         });
-        describe("this.add(name, baseCollection) <컬럼 추가>", () => {
+        describe("MetaViewColumnCollection.add(name, baseCollection) <컬럼 추가>", () => {
             it("- add(name, baseCollection) : 독립형 생성 ", () => {
                 var view1 = new MetaView('T1');        // 독립형 생성
                 view1.columns.add('i1');                   // 아이템 추가
@@ -224,7 +237,7 @@ describe("[target: meta-column.js]", () => {
             });
         });
 
-        describe("this.addEntity(entity) <엔티티의 전체 컬럼 추가>", () => {
+        describe("MetaViewColumnCollection.addEntity(entity) <엔티티의 전체 컬럼 추가>", () => {
             it("- addEntity(entity) : 엔티티의 컬렉션 모두 추가 ", () => {
                 var view1 = new MetaView('T1');
                 var view2 = new MetaView('T2');

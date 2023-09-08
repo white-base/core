@@ -678,10 +678,16 @@
 
         MetaColumnCollection.prototype.add = function(p_name, p_value) {
             
+            if (this._owner.rows.count > 0) throw new Error('row가 존재햐여 컬럼을 추가할 수 없습니다.');  
             if (this.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
             if (this.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!');
             
             return _super.prototype.add.call(this, p_name, p_value);
+        };
+
+        MetaColumnCollection.prototype.removeAt = function(p_idx) {
+            if (this._owner.rows.count > 0) throw new Error('row가 존재햐여 컬럼을 제거할 수 없습니다.');  
+            return _super.prototype.removeAt.call(this, p_idx);
         };
 
         /**

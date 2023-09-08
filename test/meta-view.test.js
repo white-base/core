@@ -29,10 +29,10 @@ describe("[target: meta-view.js]", () => {
                 view1.columns.add('i1');
                 view1.columns.add('i2');
                 view1.columns['i2'].caption = 'C1';
-                var row = view1.newRow();
-                row['i1'] = 'R1';
-                row['i2'] = 'R2';
-                view1.rows.add(row);
+                // var row = view1.newRow();
+                // row['i1'] = 'R1';
+                // row['i2'] = 'R2';
+                // view1.rows.add(row);
                 var view3 = new MetaView('T3');
                 view3.columns.addValue('i5','V5');
                 var view2 = new MetaView('T2', view1); // 참조 뷰
@@ -47,15 +47,15 @@ describe("[target: meta-view.js]", () => {
                 // view1
                 expect(view1.viewName).toBe('E1');
                 expect(view1.columns.count).toBe(4);
-                expect(view1.rows.count).toBe(1);
+                // expect(view1.rows.count).toBe(1);
                 expect(view1.columns['i2'].caption).toBe('C2');
                 expect(view1.columns['i3'].caption).toBe('C3');
                 expect(view1.columns['i4'].value).toBe('V4');
                 expect(view1.columns._baseCollection).toBe(undefined);
                 expect(view1.columns['i1']._entity.metaName).toBe('E1');
                 expect(view1.columns['i2']._entity.metaName).toBe('E1');
-                expect(view1.rows[0]['i1']).toBe('R1');
-                expect(view1.rows[0]['i2']).toBe('R2');
+                // expect(view1.rows[0]['i1']).toBe('R1');
+                // expect(view1.rows[0]['i2']).toBe('R2');
                 // view2
                 expect(view2._refEntities[0].metaName).toBe('E1');
                 expect(view2._refEntities[1].metaName).toBe('T3');
@@ -270,8 +270,7 @@ describe("[target: meta-view.js]", () => {
                 expect(obj.rows._elem[0]._key).toEqual(['a2', 'a3']);
             });
         });
-        // POINT:
-        describe.skip("MetaView.setObject(mObj) <객체 설정>", () => {
+        describe("MetaView.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 다른 뷰를 참조로 추가할 경우 ", () => {
                 const v1 = new MetaView('V1');
                 v1.columns.add('a1');
@@ -287,12 +286,19 @@ describe("[target: meta-view.js]", () => {
                 const rObj = v2.getObject();
                 // 참조 변환 > 객체 초기화 > 네임스페이스 로드
                 const mObj = MetaRegistry.transformRefer(rObj);  
-                MetaRegistry.init();
-                loadNamespace();
+                // MetaRegistry.init();
+                // loadNamespace();
                 const v3 = new MetaView('V3');
                 v3.setObject(mObj);
                 const obj = v3.getObject();
-                
+            });
+            it("- setObject() : 다른 타입에 setObject() 경우 <예외>", () => {
+                const v1 = new MetaView('V1');
+                const t1 = new MetaTable('T2')
+                const rObj = v1.getObject();
+                const mObj = MetaRegistry.transformRefer(rObj);  
+
+                expect(() => t1.setObject(mObj)).toThrow(/setObject/);
             });
         });
         describe("MetaView.clone() <뷰 복제>", () => {

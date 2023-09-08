@@ -791,9 +791,9 @@ describe("[target: meta-table.js]", () => {
                 row['i2'] = 'R200';
                 table1.rows.add(row);
                 var rObj = table1.getObject();
-                MetaRegistry.init();
+                // MetaRegistry.init();
                 // MetaRegistry.registerClass('Meta.Entity', 'MetaRow', MetaRow);
-                loadNamespace();    // init() 초기화하여 불러와야함
+                // loadNamespace();    // init() 초기화하여 불러와야함
                 var table2 = new MetaTable('T2');
                 table2.load(rObj);
         

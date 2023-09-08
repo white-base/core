@@ -92,6 +92,7 @@
 
         /**
          * 객체배열 리턴
+         * string에서 사용
          * @param {*} mObj 
          * @param {*} arr 
          * @returns 
@@ -124,16 +125,15 @@
 
             if (meta['_type'] && meta['_guid']) {
                 if (this.has(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
+                // 객체 등록
                 list.push(meta);
-                
+                // 클래스 등록
                 _ns = meta['_ns'] || '';
                 type = meta['_type'];
                 key = type.name;
                 fullName = meta['_ns'] && meta['_ns'].length > 0 ?  _ns +'.'+key : key;
-                // this.ns.set(ns, key, type);
-                // this.registerClass(_ns, key, type);
                 this.registerClass(_ns, key, type);
-            }
+            } else throw new Error('_type: function, _guid: string 속성이 필요합니다.');
         };
 
         /**
@@ -169,6 +169,8 @@
         MetaRegistry.has = function(target) {
             var guid = typeof target === 'string' ? target : target['_guid'];
             
+            if (!MetaRegistry.isMetaObject(target)) return false;
+
             if (typeof guid !== 'string') return;
             for(var i = 0; i < list.length; i++) {
                 if (list[i]._guid === guid) return true;
@@ -190,7 +192,12 @@
             }
         };
 
-        
+        MetaRegistry.isMetaObject = function(p_obj) {
+            if (p_obj === null || typeof p_obj !== 'object') return false;
+            if (p_obj['_guid'] && typeof p_obj['_guid'] === 'string'
+                && p_obj['_type'] && typeof p_obj['_type'] === 'function') return true;
+            return false;
+        };
         
         /**
          * 메타 객체 생성
@@ -198,42 +205,25 @@
          * @returns 
          */
         MetaRegistry.createMetaObject = function(mObj, oObj) {
-            /**
-             * - ns 에서 대상 조회
-             * - params 를 기준으로 파리머터 구성
-             * - 생성 리턴
-             */
             var args = [null];
             var type = mObj._type;
             var _ns = mObj._ns || '';
             var fullName =  _ns !== '' ? [_ns, type].join('.') : type;
-            var instance;
-
-            // var coClass = this.ns.get(fullName);
             var coClass = this.getClass(fullName);
+            var params;
+            
             if (typeof coClass !== 'function') throw new Error('생성클래스가 존재하지 않습니다.  ' + fullName); 
-            var params = coClass._PARAMS || []; // arr
+            params = coClass._PARAMS || []; // arr
 
             for (var i = 0; i < params.length; i++) {
                 var argName = params[i];
                 var prop = mObj[argName];
-                // var obj = this.isGuidObject(prop) ? this.find(prop['_guid']) : prop;
-                // var obj = this.isGuidObject(prop) ? this.findSetObject(oObj, prop) : prop;
                 var obj;
                 if (typeof prop === 'object' && prop['$ref']) obj = this.findSetObject(oObj, prop['$ref']);
                 else obj = prop;
-
-                // var obj;
-                // if (this.isGuidObject(prop)) {
-                //     if (caller[argName]) obj = caller[argName].setObject(prop);
-                //     else obj = this.createMetaObject(prop);
-                // }
                 if (mObj[argName]) args.push(obj);
             }
-             instance = new (Function.prototype.bind.apply(coClass, args));
-            // instance.setObject(mObj);
-
-            return instance;
+            return new (Function.prototype.bind.apply(coClass, args));
         };
         
         /**
@@ -338,6 +328,8 @@
             return false;
         };
 
+
+
         MetaRegistry.findSetObject = function(p_origin, p_target) {
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
             var origin = p_origin ? p_origin : mObj;
@@ -351,7 +343,7 @@
                 var result;
 
                 if (typeof mObj === 'object') {
-                    if (mObj._type) console.log(mObj._type);
+                    // if (mObj._type) console.log(mObj._type);
                     if (mObj['_guid'] && mObj['_guid'] === guid) {
                         result = mObj['$set'] ? MetaRegistry.find(mObj['$set']) : undefined;
                         return result;
