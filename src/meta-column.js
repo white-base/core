@@ -648,7 +648,7 @@
                     return _baseType; 
                 },
                 set: function(newValue) { 
-                    if (typeof p_baseType === 'function')  throw new Error('It is not a function type.');
+                    if (!(typeof newValue === 'function'))  throw new Error('It is not a function type.');
                     if (!(new newValue() instanceof MetaColumn)) throw new Error('MetaColumn is not a subfunction.');
                     _baseType = newValue; 
                 },
