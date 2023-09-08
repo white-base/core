@@ -15,6 +15,26 @@ describe("[target: namespace-manager.js]", () => {
         beforeEach(() => {
             jest.resetModules();
         });
+        describe("NamespaceManager.isOverlap <중복 허용 여부>", () => {
+            it("- this.isOverlap : 중복 허용 ", () => {
+                const ns = new NamespaceManager();
+                const fun1 = function() {return 'Fun1'};
+                ns.isOverlap = true; // 중복허용
+                ns.set('fun1', fun1);
+                ns.set('a1.fun1', fun1);
+
+                expect(ns.count).toBe(2);
+                expect(ns.has('fun1')).toBe(true);
+                expect(ns.has('a1.fun1')).toBe(true);
+            });
+            it("- this.isOverlap : 중복 허용 ", () => {
+                const ns = new NamespaceManager();
+                const fun1 = function() {return 'Fun1'};
+                ns.set('fun1', fun1);
+
+                expect(()=> ns.set('a1.fun1', fun1)).toThrow(/isOverlap/);
+            });
+        });
         describe("NamespaceManager.list <요소 목록>", () => {
             it("- list : 목록 얻기 ", () => {
                 const ns = new NamespaceManager();

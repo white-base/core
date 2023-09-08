@@ -28,6 +28,7 @@
         function NamespaceManager() {
 
             var __storage = this.__createNsRefer();
+            var _elemTypes  = []; 
             var isOverlap = false;
             // var __element = [];
             /**
@@ -75,6 +76,23 @@
             //     configurable: false,
             //     enumerable: false
             // });
+
+            /** 
+             * 요소타입
+             * @member {Observer}  _L.Collection.NamespaceManager#_elemTypes  
+             */
+            Object.defineProperty(this, '_elemTypes', {
+                get: function() {
+                    return _elemTypes;
+                },
+                set: function(val) {
+                    var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
+                    _elemTypes = arrType;
+                },
+                enumerable: true,
+                configurable: false
+            });
+
 
             /**
              * 목록 
@@ -124,21 +142,7 @@
                 configurable: false
             });
 
-            /** 
-             * 요소타입
-             * @member {Observer}  _L.Common.NamespaceManager#_elemTypes  
-             */
-            Object.defineProperty(this, '_elemTypes', {
-                get: function() {
-                    return __elemTypes;
-                },
-                set: function(val) {
-                    var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
-                    __elemTypes = arrType;
-                },
-                enumerable: true,
-                configurable: false
-            });
+            
 
             /**
              * 중복 요소 등록 여부
@@ -147,6 +151,10 @@
             Object.defineProperty(this, 'isOverlap',
             {
                 get: function() { return isOverlap; },
+                set: function(val) { 
+                    if (typeof val !== 'boolean') throw new Error('Only [isOverlap] type "boolean" can be added');
+                    isOverlap = val;
+                },
                 configurable: false,
                 enumerable: true
             });
@@ -265,7 +273,10 @@
             
             if (sections.length > 0) this.register(ns);
             if (!__validName(key)) throw new Error('They have different [key] conventions.'); 
-        
+            if (!this.isOverlap && this.find(p_elem)) {
+                throw new Error('중복이 금지되어 [isOverlap=false] 등록할 수 없습니다.'); 
+            }
+
             if (sections.length === 0) {    // 최상위 등록
                 parent[key] = p_elem;
                 return;

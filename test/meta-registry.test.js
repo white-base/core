@@ -8,7 +8,9 @@ const Util                  = require('../src/util');
 const {MetaRegistry}        = require('../src/meta-registry');
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
+const { MetaTable, MetaTableCollection }    = require('../src/meta-table');
 const { loadNamespace } = require('../src/load-namespace');
+const { replacer, reviver, stringify, parse }              = require('telejson');
 
 //==============================================================
 // test
@@ -454,6 +456,7 @@ describe("[target: meta-registry.js]", () => {
             });
             it("- registerClass() :사용자 클래스(함수) 등록", () => {
                 const fun1 = function() {return 'Fun1'};
+                MetaRegistry.ns.isOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 MetaRegistry.registerClass(fun1, 'a1.b1', 'fun1');
@@ -466,22 +469,56 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.releaseClass() <클래스 해제>", () => {
             it("- releaseClass() : ns에서 클래스 해제", () => {
-                // TODO:
+                const fun1 = function() {return 'Fun1'};
+                MetaRegistry.ns.isOverlap = true; // 중복허용
+                MetaRegistry.registerClass(fun1, 'fun1');
+                MetaRegistry.registerClass(fun1, 'a1.fun1');
+                MetaRegistry.registerClass(fun1, 'a1.b1', 'fun1');
+
+                // 등록
+                expect(MetaRegistry.ns.count).toBe(3);
+                // 해제
+                MetaRegistry.releaseClass('fun1');
+                MetaRegistry.releaseClass('a1.fun1');
+                MetaRegistry.releaseClass('a1.b1.fun1');
+                expect(MetaRegistry.ns.count).toBe(0);
             });
         });
         describe("MetaRegistry.findClass() <클래스 조화>", () => {
-            it("- findClass() : ns에서 클래스 조회", () => {
-                // TODO:
+            it("- findClass() : 같은 클래스를 여러 곳에 등록한 경우", () => {
+                const fun1 = function() {return 'Fun1'};
+                MetaRegistry.ns.isOverlap = true; // 중복허용
+                MetaRegistry.registerClass(fun1, 'fun1');
+                MetaRegistry.registerClass(fun1, 'a1.fun1');
+                const fullName = MetaRegistry.findClass(fun1);
+                // 첫번째 요소 리턴
+                expect(fullName).toBe('fun1');
             });
         });
         describe("MetaRegistry.getClass() <클래스 얻기>", () => {
-            it("- getClass() : ns에서 클래스 얻기 ", () => {
-                // TODO:
+            it("- getClass() : 클래스 얻기 ", () => {
+                const fun1 = function() {return 'Fun1'};
+                MetaRegistry.ns.isOverlap = true; // 중복허용
+                MetaRegistry.registerClass(fun1, 'fun1');
+                MetaRegistry.registerClass(fun1, 'a1.fun1');
+                const elem = MetaRegistry.getClass('a1.fun1');
+                // 첫번째 요소 리턴
+                expect(elem).toBe(fun1);
             });
         });
         describe("MetaRegistry.loading() <로드>", () => {
-            it("- loading() : 로드", () => {
-                // TODO:
+            it("- loading() : output 통해서 로딩하는 경우", () => {
+                const t1 = new MetaTable('T1');
+                t1.columns.add('i1');
+                t1.columns.add('i2');
+                const str = t1.output(stringify, '\t');
+                const t2 = MetaRegistry.loading(str, parse);
+
+                expect(t2.tableName).toBe('T1');
+                expect(t2.columns.count).toBe(2);
+                expect(t2.columns['i1']).toBeDefined();
+                expect(t2.columns['i2']).toBeDefined();
+                expect(t2.columns['i3']).not.toBeDefined();
             });
         });
     });

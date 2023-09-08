@@ -65,7 +65,7 @@
             this.name = p_name || 'CustomError';
             
             // TODO:: 추후 [내부처리] 부분 구현
-            this.innerExecute();
+            this._execute();
         }
         Util.inherits(CustomError, _super);
 
@@ -74,8 +74,8 @@
         /**
          * 내부처리
          */
-         CustomError.prototype.innerExecute = function() {
-            // console.log('CustomError.innerExecute()');
+         CustomError.prototype._execute = function() {
+            // console.log('CustomError._execute()');
         };
 
         return CustomError;
