@@ -82,7 +82,8 @@
         }
         function _isBuiltFunction(obj) {
             if (typeof obj === 'function' && (false 
-                || obj === Number || obj === String || obj === Boolean
+                || obj === Number || obj === String 
+                || obj === Boolean || obj === Function
                 || obj === Object || obj === Array
                 || obj === RegExp || obj === Date 
                 || obj === Symbol || obj === BigInt
@@ -132,7 +133,7 @@
                 type = meta['_type'];
                 key = type.name;
                 fullName = meta['_ns'] && meta['_ns'].length > 0 ?  _ns +'.'+key : key;
-                this.registerClass(_ns, key, type);
+                this.registerClass(type, _ns, key);
             } else throw new Error('_type: function, _guid: string 속성이 필요합니다.');
         };
 
@@ -205,6 +206,7 @@
          * @returns 
          */
         MetaRegistry.createMetaObject = function(mObj, oObj) {
+            var origin = oObj ? oObj : mObj;
             var args = [null];
             var type = mObj._type;
             var _ns = mObj._ns || '';
@@ -219,7 +221,7 @@
                 var argName = params[i];
                 var prop = mObj[argName];
                 var obj;
-                if (typeof prop === 'object' && prop['$ref']) obj = this.findSetObject(oObj, prop['$ref']);
+                if (typeof prop === 'object' && prop['$ref']) obj = this.findSetObject(origin, prop['$ref']);
                 else obj = prop;
                 if (mObj[argName]) args.push(obj);
             }
@@ -227,7 +229,7 @@
         };
         
         /**
-         * 참조 객체 생성 : $ref
+         * 참조 속성 생성 : $ref
          * @param {object} meta 
          * @returns {object}
          */
@@ -236,7 +238,7 @@
         };
 
         /**
-         * 네임스페이스 객체 생성 : $ns
+         * 네임스페이스 속성 생성 : $ns
          * @param {*} fun 
          * @returns 
          */
@@ -247,7 +249,7 @@
             if (!this.findClass(fun)) {
                 ns = fun._NS;
                 key = fun.name;
-                this.registerClass(ns, key, fun);
+                this.registerClass(fun, ns, key);
             }
 
             fullName = this.findClass(fun);
@@ -255,12 +257,13 @@
             else throw new Error('네임스페이스에 클래스가 존재하지 않습니다.' + fun.name); 
         };
 
-        
-        
+        MetaRegistry.createSetObject = function(target, meta) {
+            if (meta && meta._guid && meta._guid.length > 0 ) {
+                target['$set'] = meta._guid;
+                return target;
+            } else throw new Error('Meta 객체가 아닙니다.');
+        };
          
-
-        
-
         /**
          * 메타 객체 유효성 검사
          * @param {*} rObj 
@@ -270,44 +273,42 @@
             var _this = this;
             var arrObj = this.__getObjectList(rObj);
 
-            if (validReference(rObj, arrObj) === false) return false;
-            if (validCollection(rObj, arrObj) === false) return false;
+            if (validReference(rObj) === false) return false;
+            if (validCollection(rObj) === false) return false;
             return true;
 
             // inner function
-            function validReference(mObj, arr) {
-                for(var prop in mObj) {
-                    if (typeof mObj[prop] === 'object') {
-                        if (mObj[prop]['$ref']) {
-                            if (typeof findGuid(mObj[prop]['$ref'], arr) !== 'object') return false;
-                        } else if (mObj[prop]['$ns']) {
-                            // if (!_this.ns.get(mObj[prop]['$ns'])) return false;
-                            if (!_this.getClass(mObj[prop]['$ns'])) return false;
-                        } else {
-                            if (validReference(mObj[prop], arr) === false) return false;
+            function validReference(mObj) {
+                if (typeof mObj === 'object') {
+                    if (mObj['$ref']) if (!findGuid(mObj['$ref'], arrObj)) return false;
+                    if (mObj['$set']) if (!findGuid(mObj['$set'], arrObj)) return false;
+                    if (mObj['$ns']) if (!_this.getClass(mObj['$ns'])) return false;
+            
+                    for(var prop in mObj) {
+                        if (typeof mObj[prop] === 'object') {
+                            if (validReference(mObj[prop]) === false) return false
+                        } else if (Array.isArray(mObj[prop])){
+                          for(var i = 0; i < mObj[prop].length; i++) {
+                            if (typeof mObj[prop][i] === 'object') {
+                                if (validReference(mObj[prop][i]) === false) return false;
+                            }
+                          }  
                         }
-                    } else if (Array.isArray(mObj[prop])){
-                      for(var i = 0; i < mObj[prop].length; i++) {
-                        if (typeof mObj[prop][i] === 'object') {
-                            if (validReference(mObj[prop][i], arr) === false) return false;
-                        }
-                      }  
                     }
                 }
                 return true;
             }
-            function validCollection(mObj, arr) {
+            function validCollection(mObj) {
+                if (Array.isArray(mObj['_elem']) && Array.isArray(mObj['_key'])) {
+                    if (mObj['_elem'].length !== mObj['_key'].length) return false;
+                }
                 for(var prop in mObj) {
                     if (typeof mObj[prop] === 'object') {
-                        if (Array.isArray(mObj[prop]['_elem']) && Array.isArray(mObj[prop]['_key'])) {
-                            if (mObj[prop]['_elem'].length !== mObj[prop]['_key'].length) return false;
-                        } else {
-                            if (validCollection(mObj[prop], arr) === false) return false;
-                        }
+                        if (validCollection(mObj[prop]) === false) return false;
                     } else if (Array.isArray(mObj[prop])){
                       for(var i = 0; i < mObj[prop].length; i++) {
                         if (typeof mObj[prop][i] === 'object') {
-                            if (validCollection(mObj[prop][i], arr) === false) return false;
+                            if (validCollection(mObj[prop][i]) === false) return false;
                         }
                       }  
                     }
@@ -330,10 +331,16 @@
 
 
 
+        /**
+         * setObject() 로 설정한 객체
+         * $set 여부 조회
+         * @param {rObj | mObj} p_origin 검색 원본 객체
+         * @param {string | rObj | meta} p_target 검색 대상
+         * @returns {MetaObject}
+         */
         MetaRegistry.findSetObject = function(p_origin, p_target) {
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
             var origin = p_origin ? p_origin : mObj;
-
 
             if (!this.isGuidObject(origin)) throw new Error('guid 타입이 아닙니다.');
             return findObject(origin);
@@ -341,9 +348,7 @@
             // inner finction
             function findObject(mObj) {
                 var result;
-
                 if (typeof mObj === 'object') {
-                    // if (mObj._type) console.log(mObj._type);
                     if (mObj['_guid'] && mObj['_guid'] === guid) {
                         result = mObj['$set'] ? MetaRegistry.find(mObj['$set']) : undefined;
                         return result;
@@ -355,11 +360,6 @@
                             if(result) return result;
                         }
                     }
-                // } else if (Array.isArray(mObj)) {
-                //     for(var i = 0; i < mObj.length; i++) {
-                //         var obj = mObj[i];
-                //         if (typeof obj === 'object' || Array.isArray(obj) ) return findObject(obj);
-                //     }
                 }
                 return result;
             }
@@ -378,21 +378,19 @@
 
             // inner function
             function hasRefer(obj) {
-                for(var prop in obj) {
-                    if (typeof obj[prop] === 'object') {
-                        if (obj[prop]['$ref'] && typeof obj[prop]['$ref'] === 'string') {
-                            return true;
-                        } else if (obj[prop]['$ns'] && typeof obj[prop]['$ns'] === 'string') {
-                            return true;
-                        } else {
+                if (typeof obj === 'object') {
+                    if (obj['$ref'] && typeof obj['$ref'] === 'string') return true;
+                    if (obj['$ns'] && typeof obj['$ns'] === 'string') return true;
+                    for(var prop in obj) {
+                        if (typeof obj[prop] === 'object') {
                             if (hasRefer(obj[prop]) === true) return true;
+                        } else if (Array.isArray(obj[prop])){
+                          for(var i = 0; i < obj[prop].length; i++) {
+                            if (typeof obj[prop][i] === 'object') {
+                                if (hasRefer(obj[prop]) === true) return true;
+                            }
+                          }  
                         }
-                    } else if (Array.isArray(obj[prop])){
-                      for(var i = 0; i < obj[prop].length; i++) {
-                        if (typeof obj[prop][i] === 'object') {
-                            if (hasRefer(obj[prop]) === true) return true;
-                        }
-                      }  
                     }
                 }
                 return false;
@@ -453,21 +451,16 @@
             var _this = this;
             var arrObj = this.__getObjectList(rObj);
             var clone = deepCopy(rObj);
-            linkReference(clone, arrObj);
 
+            linkReference(clone, arrObj);
             return clone;
+
             // inner function
             function linkReference(obj, arr) {
-                // inner function
                 for(var prop in obj) {
                     if (obj[prop] === null) continue;
                     if (typeof obj[prop] === 'object') {
-                        // if (obj[prop]['$ref']) {
-                        //     var ref = findGuid(obj[prop]['$ref'], arr);
-                        //     if (typeof ref !== 'object') throw new Error('참조 연결 실패 $ref:' + obj[prop]['$ref']);
-                        //     obj[prop] = ref;
                         if (obj[prop]['$ns']) {
-                            // obj[prop] = _this.ns.get(obj[prop]['$ns']);
                             var ns = _this.getClass(obj[prop]['$ns']);
                             if (typeof ns !== 'function') throw new Error('참조 연결 실패 $ns:' + obj[prop]['$ns']);
                             obj[prop] = ns;
@@ -479,35 +472,38 @@
                     } 
                 }
             }
+            // TODO: Util 공통으로 이전해야 할듯
             function deepCopy(object) {
                 if (object === null || typeof object !== "object") {
                   return object;
                 }
                 // 객체인지 배열인지 판단
-                const copy = Array.isArray(object) ? [] : {};
+                var copy = Array.isArray(object) ? [] : {};
                
                 for (var key of Object.keys(object)) {
                   copy[key] = deepCopy(object[key]);
                 }
-               
                 return copy;
               }
-    
         };
-
-        
 
         /**
          * 클래스(함수) 등록
-         * @param {*} p_ns 
-         * @param {*} key 
+         * key 를 별도 등록안하면 ns 를 fullName 으로 처리
          * @param {*} fun 
+         * @param {*} p_ns fullname 또는 메임스페이스 
+         * @param {*} key 
          * @returns 
          */
-        MetaRegistry.registerClass = function(p_ns, key, fun) {
-            var fullName = p_ns.length > 0 ? p_ns+'.'+key : key;
+        MetaRegistry.registerClass = function(fun, p_ns, key) {
+            var fullName;
+            
+            if (key) fullName = p_ns.length > 0 ? p_ns +'.'+ key : key;
+            else fullName = p_ns;
+
             // 내장함수 제외
             if (_isBuiltFunction(fun)) return;
+            if (typeof _global[fullName] === 'function') return;
             // 중복 검사 
             // if (!this.ns.get(fullName)) this.ns.set(p_ns, key, fun);
             if (!this.ns.get(fullName)) this.ns.set(fullName, fun);
