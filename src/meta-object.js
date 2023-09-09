@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var IObject;
     var IMarshal;
@@ -12,17 +13,19 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Meta          = _global._L.Meta || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
+        Message                 = require('./message').Message;
         Util                    = require('./util');
         IObject                 = require('./i-object').IObject;
         IMarshal                = require('./i-marshal').IMarshal;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
+        Message                 = _global._L.Message;
         Util                    = _global._L.Util
         IObject                 = _global._L.IObject;
         IMarshal                = _global._L.IMarshal;
@@ -31,10 +34,10 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IObject === 'undefined') throw new Error('[IObject] module load fail...');
-    if (typeof IMarshal === 'undefined') throw new Error('[IMarshal] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IObject === 'undefined') Message.error('ES011', ['IObject', 'i-object']);
+    if (typeof IMarshal === 'undefined') Message.error('ES011', ['IMarshal', 'i-marshal']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   

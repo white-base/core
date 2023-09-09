@@ -5,28 +5,31 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var IBaseCollection;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Collection    = _global._L.Collection || {};
+    _global._L                  = _global._L || {};
+    _global._L.Collection       = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                        = require('./util');
-        IBaseCollection             = require('./i-collection-base').IBaseCollection;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        IBaseCollection         = require('./i-collection-base').IBaseCollection;
     } else {    // COVER:
-        Util                        = _global._L.Util;
-        IBaseCollection             = _global._L.IBaseCollection;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        IBaseCollection         = _global._L.IBaseCollection;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
 
     //==============================================================
     // 4. module implementation   

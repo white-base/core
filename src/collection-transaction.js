@@ -5,32 +5,35 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var ArrayCollection;
     var TransactionQueue;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Collection    = _global._L.Collection || {};
+    _global._L                  = _global._L || {};
+    _global._L.Collection       = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        ArrayCollection     = require('./collection-array').ArrayCollection;
-        TransactionQueue    = require('./trans-queue').TransactionQueue;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        ArrayCollection         = require('./collection-array').ArrayCollection;
+        TransactionQueue        = require('./trans-queue').TransactionQueue;
     } else {    
-        Util                = _global._L.Util;
-        ArrayCollection     = _global._L.ArrayCollection;
-        TransactionQueue    = _global._L.TransactionQueue;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        ArrayCollection         = _global._L.ArrayCollection;
+        TransactionQueue        = _global._L.TransactionQueue;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof ArrayCollection === 'undefined') throw new Error('[ArrayCollection] module load fail...');
-    if (typeof TransactionQueue === 'undefined') throw new Error('[TransactionQueue] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof ArrayCollection === 'undefined') Message.error('ES011', ['ArrayCollection', 'collection-array']);
+    if (typeof TransactionQueue === 'undefined') Message.error('ES011', ['TransactionQueue', 'trans-queue']);
 
     //==============================================================
     // 4. module implementation

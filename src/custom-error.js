@@ -5,24 +5,27 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
+    _global._L                  = _global._L || {};
+    _global._L.Common           = _global._L.Common || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                        = require('./util');
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
     } else {    // COVER:
-        Util                        = _global._L.Util;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
     }
 
     //==============================================================Á
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
 
     //==============================================================
     // 4. module implementation   

@@ -5,29 +5,32 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var MetaObject;
     // var IMarshal;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Meta          = _global._L.Meta || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
    
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                        = require('./util');
-        MetaObject                  = require('./meta-object').MetaObject;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        MetaObject              = require('./meta-object').MetaObject;
     } else {
-        Util                        = _global._L.Util;
-        MetaObject                  = _global._L.MetaObject;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        MetaObject              = _global._L.MetaObject;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
 
     //==============================================================
     // 4. 모듈 구현

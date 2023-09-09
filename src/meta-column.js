@@ -7,6 +7,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var Observer;
     var CustomError;
@@ -16,13 +17,14 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
+    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
+        Message                 = require('./message').Message;
         Util                    = require('./util');
         Observer                = require('./observer').Observer;
         CustomError             = require('./custom-error').CustomError;
@@ -30,6 +32,7 @@
         PropertyCollection      = require('./collection-property').PropertyCollection;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
+        Message                 = _global._L.Message;
         Util                    = _global._L.Util;
         Observer                = _global._L.Observer;
         CustomError             = _global._L.CustomError;
@@ -40,12 +43,12 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
-    if (typeof CustomError === 'undefined') throw new Error('[CustomError] module load fail...');
-    if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
-    if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
+    if (typeof CustomError === 'undefined') Message.error('ES011', ['CustomError', 'custom-error']);
+    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
+    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation

@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var MetaObject;
     var MetaElement;
@@ -13,50 +14,51 @@
     var MetaRowCollection;
     var MetaRow;
     var MetaColumnCollection;
-    var MetaView;
     var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
+    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                        = require('./util');
-        IGroupControl               = require('./i-control-group').IGroupControl;
-        IAllControl                 = require('./i-control-all').IAllControl;
-        MetaObject                  = require('./meta-object').MetaObject;
-        MetaElement                 = require('./meta-element').MetaElement;
-        MetaRowCollection           = require('./meta-row').MetaRowCollection;
-        MetaRow                     = require('./meta-row').MetaRow;
-        MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        IGroupControl           = require('./i-control-group').IGroupControl;
+        IAllControl             = require('./i-control-all').IAllControl;
+        MetaObject              = require('./meta-object').MetaObject;
+        MetaElement             = require('./meta-element').MetaElement;
+        MetaRowCollection       = require('./meta-row').MetaRowCollection;
+        MetaRow                 = require('./meta-row').MetaRow;
+        MetaColumnCollection    = require('./meta-column').MetaColumnCollection;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
-        Util                        = _global._L.Util;
-        IGroupControl               = _global._L.IGroupControl;
-        IAllControl                 = _global._L.IAllControl;
-        MetaObject                  = _global._L.MetaObject;
-        MetaElement                 = _global._L.MetaElement;
-        MetaRowCollection           = _global._L.MetaRowCollection;
-        MetaRow                     = _global._L.MetaRow;
-        MetaColumnCollection        = _global._L.MetaColumnCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        IGroupControl           = _global._L.IGroupControl;
+        IAllControl             = _global._L.IAllControl;
+        MetaObject              = _global._L.MetaObject;
+        MetaElement             = _global._L.MetaElement;
+        MetaRowCollection       = _global._L.MetaRowCollection;
+        MetaRow                 = _global._L.MetaRow;
+        MetaColumnCollection    = _global._L.MetaColumnCollection;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IGroupControl === 'undefined') throw new Error('[IGroupControl] module load fail...');
-    if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
-    if (typeof MetaRowCollection === 'undefined') throw new Error('[MetaRowCollection] module load fail...');
-    if (typeof MetaRow === 'undefined') throw new Error('[MetaRow] module load fail...');
-    if (typeof MetaColumnCollection === 'undefined') throw new Error('[MetaColumnCollection] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IGroupControl === 'undefined') Message.error('ES011', ['IGroupControl', 'i-control-group']);
+    if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
+    if (typeof MetaRowCollection === 'undefined') Message.error('ES011', ['MetaRowCollection', 'meta-row']);
+    if (typeof MetaRow === 'undefined') Message.error('ES011', ['MetaRow', 'meta-row']);
+    if (typeof MetaColumnCollection === 'undefined') Message.error('ES011', ['MetaColumnCollection', 'meta-column']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   

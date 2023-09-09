@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Observer;    
     var Util;
     var ICollection;
@@ -14,12 +15,13 @@
     
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Collection    = _global._L.Collection || {};
+    _global._L                  = _global._L || {};
+    _global._L.Collection       = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {
+        Message                 = require('./message').Message;
         Util                    = require('./util');
         Observer                = require('./observer').Observer;
         ICollection             = require('./i-collection').ICollection;
@@ -27,6 +29,7 @@
         MetaObject              = require('./meta-object').MetaObject;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
+        Message                 = _global._L.Message;
         Util                    = _global._L.Util;
         Observer                = _global._L.Observer;
         ICollection             = _global._L.ICollection;
@@ -37,12 +40,12 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
-    if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
-    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
+    if (typeof ICollection === 'undefined') throw Message.error('ES011', ['ICollection', 'i-collection']);
+    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation

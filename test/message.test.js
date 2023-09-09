@@ -20,7 +20,7 @@ describe("[target: message.js]", () => {
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
 
                 console.warn(msg);
-                expect(msg).toMatch(/NamespaceManager/);
+                expect(msg).toMatch(/ES011/);
             });
             it("- get() : 메세지 얻기 : 한글", () => {
                 Message.lang = 'kor';
@@ -49,7 +49,7 @@ describe("[target: message.js]", () => {
                 const msg = Message.getInfo('ES011');
 
                 console.warn(msg);
-                expect(msg.memo).toMatch(/1/);
+                expect(msg.memo).toMatch(/1:/);
             });
         });
         

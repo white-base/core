@@ -33,10 +33,11 @@
         */
        function Message() { 
         }
-        Message._NS = 'Common';    // namespace
-
+        Message._NS = 'Common';     // namespace
+        Message._PARAMS = [];       // creator parameter
+        
         // var define
-        var lang = 'eng';
+        var lang = 'kor';
         var isLong = true;
 
         /**
@@ -49,30 +50,35 @@
             eng: {
                 E: { // Error
                     S01: { // failure
-                        One: {
+                        1: {
                             msg: 'Failed to import module ["$1"]',
                             long: 'Load the ["$1"] module through require("...$2"). ',
                             memo: '1: class name, 2: file name'
                         },
                         2: {
+                            msg: 'Failed to import function ["$1"()]',
+                            long: 'Invoke the ["$1"()] function through require("...$2"). ',
+                            memo: '1: function name, 2: file name'
+                        },
+                        3: {
                             msg: '[$1] is an abstract method.',
                             long: ''
                         },
-                        3: {
+                        4: {
                             msg: '[$1] should set [$2]. ',
                             long: ''
                         },
-                        4: {
+                        5: {
                             msg: 'Linking reference [$2] to [$1] failed. ',
                             long: ''
                         },
-                        5: {
+                        6: {
                             msg: 'You cannot enter [$1] and [$2] at the same time. ',
                             long: ''
                         },
                     },
                     S02: { // type
-                        One: {
+                        1: {
                             msg: '[$1] can only be of type [$2].',
                             long: ''
                         },
@@ -98,7 +104,7 @@
                         },
                     },
                     S03: { // object
-                        One: {
+                        1: {
                             msg: '[$1] is not an object. ',
                             long: ''
                         },
@@ -117,7 +123,7 @@
                     },
                    
                     S04: { // duplicate
-                        One: {
+                        1: {
                             msg: 'A duplicate occurred in [$1]. ',
                             long: ''
                         },
@@ -151,7 +157,7 @@
                         },
                     },
                     S05: { // required
-                        One: {
+                        1: {
                             msg: 'Required value [$1] is missing. ',
                             long: ''
                         },
@@ -165,7 +171,7 @@
                         },
                     },
                     S06: { // scope
-                        One: {
+                        1: {
                             msg: 'The size of [$1] exceeds the range.',
                             long: ''
                         },
@@ -195,18 +201,23 @@
                             memo: '1:클래스명, 2:파일명'
                         },
                         2: {
+                            msg: '["$1"()] 함수를 가져오는데 실패하였습니다.',
+                            long: '["$1"()] 함수를 require("...$2") 통해서 불어오세요. ',
+                            memo: '1:함수명, 2:파일명'
+                        },
+                        3: {
                             msg: '[$1]는 추상메소드 입니다.',
                             long: ''
                         },
-                        3: {
+                        4: {
                             msg: '[$1]는 [$2]을 설정해야 합니다. ',
                             long: ''
                         },
-                        4: {
+                        5: {
                             msg: '[$1]에 [$2]참조 연결이 실패하였습니다. ',
                             long: ''
                         },
-                        5: {
+                        6: {
                             msg: '[$1]와 [$2]을 동시에 입력할 수 없습니다. ',
                             long: ''
                         },
@@ -387,7 +398,7 @@
             // inner function
             function _build(p_msg) {
                 var msg = p_msg || '';
-                var result = obj.msg.match(/\$\d+/g);
+                var result = msg.match(/\$\d+/g);
                 var max = result.reduce((acc, cur, idx) => { 
                     var num = Number(cur.replace('$',''));
                     return acc < num ? num : acc; 
@@ -420,6 +431,10 @@
 
         Message.getInfo = function(p_code) {
             return getCodeObject(p_code);
+        };
+
+        Message.error = function(p_code, p_aValue) {
+            throw new Error(Message.get(p_code, p_aValue));
         };
 
         Message.init = function() {

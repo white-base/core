@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var IPropertyCollection;
     var BaseCollection;
@@ -13,32 +14,34 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Collection    = _global._L.Collection || {};
+    _global._L                  = _global._L || {};
+    _global._L.Collection       = _global._L.Collection || {};
     
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        IPropertyCollection = require('./i-collection-property').IPropertyCollection;
-        BaseCollection      = require('./collection-base').BaseCollection;
-        MetaObject          = require('./meta-object').MetaObject;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        IPropertyCollection     = require('./i-collection-property').IPropertyCollection;
+        BaseCollection          = require('./collection-base').BaseCollection;
+        MetaObject              = require('./meta-object').MetaObject;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
-        Util                = _global._L.Util;
-        IPropertyCollection = _global._L.IPropertyCollection;
-        BaseCollection      = _global._L.BaseCollection;
-        MetaObject          = _global._L.MetaObject;
-        MetaRegistry                = _global._L.MetaRegistry;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        IPropertyCollection     = _global._L.IPropertyCollection;
+        BaseCollection          = _global._L.BaseCollection;
+        MetaObject              = _global._L.MetaObject;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IPropertyCollection === 'undefined') throw new Error('[IPropertyCollection] module load fail...');
-    if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IPropertyCollection === 'undefined') Message.error('ES011', ['IPropertyCollection', 'i-collection-property']);
+    if (typeof BaseCollection === 'undefined') Message.error('ES011', ['BaseCollection', 'collection-base']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     
     //==============================================================
     // 4. module implementation   

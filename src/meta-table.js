@@ -6,6 +6,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var MetaEntity;
     var PropertyCollection;
@@ -14,33 +15,35 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
+    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
     
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                        = require('./util');
-        PropertyCollection          = require('./collection-property').PropertyCollection;
-        MetaEntity                  = require('./meta-entity').MetaEntity;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        PropertyCollection      = require('./collection-property').PropertyCollection;
+        MetaEntity              = require('./meta-entity').MetaEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {    
-        Util                        = _global._L.Util;
-        PropertyCollection          = _global._L.PropertyCollection;
-        MetaEntity                  = _global._L.MetaEntity;
-        MetaRegistry                = _global._L.MetaRegistry;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        PropertyCollection      = _global._L.PropertyCollection;
+        MetaEntity              = _global._L.MetaEntity;
         MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
-    if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
-    if (typeof MetaTableColumnCollection === 'undefined') throw new Error('[MetaTableColumnCollection] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
+    if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaTableColumnCollection === 'undefined') Message.error('ES011', ['MetaTableColumnCollection', 'meta-column']);
 
     //==============================================================
     // 4. module implementation   

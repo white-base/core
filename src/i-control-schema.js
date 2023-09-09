@@ -5,32 +5,35 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var IImportControl;
     var IExportControl;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Interface     = _global._L.Interface || {};
+    _global._L                  = _global._L || {};
+    _global._L.Interface        = _global._L.Interface || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        IImportControl      = require('./i-control-import').IImportControl;
-        IExportControl      = require('./i-control-export').IExportControl;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        IImportControl          = require('./i-control-import').IImportControl;
+        IExportControl          = require('./i-control-export').IExportControl;
     } else {
-        Util                = _global._L.Util;
-        IImportControl      = _global._L.IImportControl;
-        IExportControl      = _global._L.IExportControl;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        IImportControl          = _global._L.IImportControl;
+        IExportControl          = _global._L.IExportControl;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IImportControl === 'undefined') throw new Error('[IImportControl] module load fail...');
-    if (typeof IExportControl === 'undefined') throw new Error('[IExportControl] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
+    if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
 
     //==============================================================
     // 4. module implementation   

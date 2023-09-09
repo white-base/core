@@ -8,6 +8,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var Observer;
     var IBaseCollection;
@@ -17,13 +18,14 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
+    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
+        Message                 = require('./message').Message;
         Util                    = require('./util');
         Observer                = require('./observer').Observer;
         IBaseCollection         = require('./i-collection-base').IBaseCollection;
@@ -31,6 +33,7 @@
         TransactionCollection   = require('./collection-transaction').TransactionCollection;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {    // COVER:
+        Message                 = _global._L.Message;
         Util                    = _global._L.Util;
         Observer                = _global._L.Observer;
         MetaObject              = _global._L.MetaObject;
@@ -41,12 +44,12 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof Observer === 'undefined') throw new Error('[Observer] module load fail...');
-    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    if (typeof TransactionCollection === 'undefined') throw new Error('[TransactionCollection] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
+    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof TransactionCollection === 'undefined') Message.error('ES011', ['TransactionCollection', 'collection-transaction']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   

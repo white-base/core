@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var BaseCollection;
     var IArrayCollection;
@@ -13,33 +14,35 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Collection    = _global._L.Collection || {};
+    _global._L                  = _global._L || {};
+    _global._L.Collection       = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
+        Message                 = require('./message').Message;
         Util                    = require('./util');
         IArrayCollection        = require('./i-collection-array').IArrayCollection;
         BaseCollection          = require('./collection-base').BaseCollection;
-        MetaObject          = require('./meta-object').MetaObject;
+        MetaObject              = require('./meta-object').MetaObject;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {    
+        Message                 = _global._L.Message;
         Util                    = _global._L.Util;
         IArrayCollection        = _global._L.IArrayCollection;
         BaseCollection          = _global._L.BaseCollection;
-        MetaObject          = _global._L.MetaObject;
+        MetaObject              = _global._L.MetaObject;
         MetaRegistry            = _global._L.MetaRegistry;
     }
-
+    
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IArrayCollection === 'undefined') throw new Error('[IArrayCollection] module load fail...');
-    if (typeof BaseCollection === 'undefined') throw new Error('[BaseCollection] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
-
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IArrayCollection === 'undefined') Message.error('ES011', ['IArrayCollection', 'i-collection-array']);
+    if (typeof BaseCollection === 'undefined') Message.error('ES011', ['BaseCollection', 'collection-base']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
+    
     //==============================================================
     // 4. module implementation
     var ArrayCollection  = (function (_super) {

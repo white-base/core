@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var ISchemaControl;
     var IAllControl;
@@ -17,13 +18,14 @@
 
     //==============================================================
     // 1. 의존 모듈 선언
-    _global._L               = _global._L || {};
-    _global._L.Meta          = _global._L.Meta || {};
-    _global._L.Meta.Entity   = _global._L.Meta.Entity || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
+    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
+        Message                 = require('./message').Message;
         Util                    = require('./util');
         ISchemaControl          = require('./i-control-schema').ISchemaControl;
         IAllControl             = require('./i-control-all').IAllControl;
@@ -32,8 +34,9 @@
         MetaEntity              = require('./meta-entity').MetaEntity;
         MetaTableCollection     = require('./meta-table').MetaTableCollection;
         MetaViewCollection      = require('./meta-view').MetaViewCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
+        Message                 = _global._L.Message;
         Util                    = _global._L.Common.Util;
         ISchemaControl          = _global._L.ISchemaControl;
         IAllControl             = _global._L.IAllControl;
@@ -42,20 +45,20 @@
         MetaEntity              = _global._L.MetaEntity;
         MetaTableCollection     = _global._L.MetaTableCollection;
         MetaViewCollection      = _global._L.MetaViewCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof ISchemaControl === 'undefined') throw new Error('[ISchemaControl] module load fail...');
-    if (typeof IAllControl === 'undefined') throw new Error('[IAllControl] module load fail...');
-    if (typeof ITransaction === 'undefined') throw new Error('[ITransaction] module load fail...');
-    if (typeof MetaElement === 'undefined') throw new Error('[MetaElement] module load fail...');
-    if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
-    if (typeof MetaTableCollection === 'undefined') throw new Error('[MetaTableCollection] module load fail...');
-    if (typeof MetaViewCollection === 'undefined') throw new Error('[MetaViewCollection] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
+    if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
+    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
+    if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
+    if (typeof MetaTableCollection === 'undefined') Message.error('ES011', ['MetaTableCollection', 'meta-table']);
+    if (typeof MetaViewCollection === 'undefined') Message.error('ES011', ['MetaViewCollection', 'meta-view']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   

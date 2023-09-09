@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var IPartControl;
     var ILookupControl;
     var IBaseCollection;
@@ -12,30 +13,32 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Interface     = _global._L.Interface || {};    
+    _global._L                  = _global._L || {};
+    _global._L.Interface        = _global._L.Interface || {};    
     
     //==============================================================
     // 2. import module
     
     if (isNode) {     
-        Util                = require('./util');
-        IPartControl        = require('./i-control-part').IPartControl;
-        ILookupControl      = require('./i-control-lookup').ILookupControl;
-        IBaseCollection     = require('./i-collection-base').IBaseCollection;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        IPartControl            = require('./i-control-part').IPartControl;
+        ILookupControl          = require('./i-control-lookup').ILookupControl;
+        IBaseCollection         = require('./i-collection-base').IBaseCollection;
     } else {
-        Util                = _global._L.Util
-        IPartControl        = _global._L.IPartControl;
-        ILookupControl      = _global._L.ILookupControl;
-        IBaseCollection     = _global._L.IBaseCollection;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util
+        IPartControl            = _global._L.IPartControl;
+        ILookupControl          = _global._L.ILookupControl;
+        IBaseCollection         = _global._L.IBaseCollection;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof IPartControl === 'undefined') throw new Error('[IPartControl] module load fail...');
-    if (typeof ILookupControl === 'undefined') throw new Error('[ILookupControl] module load fail...');
-    if (typeof IBaseCollection === 'undefined') throw new Error('[IBaseCollection] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IPartControl === 'undefined') Message.error('ES011', ['IPartControl', 'i-control-part']);
+    if (typeof ILookupControl === 'undefined') Message.error('ES011', ['ILookupControl', 'i-control-lookup']);
+    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
 
     //==============================================================
     // 4. module implementation

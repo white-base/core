@@ -5,28 +5,31 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var ICollection;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L               = _global._L || {};
-    _global._L.Interface     = _global._L.Interface || {};
+    _global._L                  = _global._L || {};
+    _global._L.Interface        = _global._L.Interface || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                = require('./util');
-        ICollection         = require('./i-collection').ICollection;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        ICollection             = require('./i-collection').ICollection;
     } else {
-        Util                = _global._L.Util;
-        ICollection         = _global._L.ICollection;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        ICollection             = _global._L.ICollection;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof ICollection === 'undefined') throw new Error('[ICollection] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof ICollection === 'undefined') Message.error('ES011', ['Util', 'i-collection']);
 
     //==============================================================
     // 4. module implementation   

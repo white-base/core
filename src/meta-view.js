@@ -6,6 +6,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var Util;
     var MetaObject;
     var MetaEntity;
@@ -22,19 +23,21 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Util                        = require('./util');
-        PropertyCollection          = require('./collection-property').PropertyCollection;
-        MetaObject                  = require('./meta-object').MetaObject;
-        MetaEntity                  = require('./meta-entity').MetaEntity;
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        PropertyCollection      = require('./collection-property').PropertyCollection;
+        MetaObject              = require('./meta-object').MetaObject;
+        MetaEntity              = require('./meta-entity').MetaEntity;
         MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
-        Util                        = _global._L.Util;
-        PropertyCollection          = _global._L.PropertyCollection;
-        MetaObject                  = _global._L.MetaObject;
-        MetaEntity                  = _global._L.MetaEntity;
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        PropertyCollection      = _global._L.PropertyCollection;
+        MetaObject              = _global._L.MetaObject;
+        MetaEntity              = _global._L.MetaEntity;
         MetaViewColumnCollection    = _global._L.MetaViewColumnCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================

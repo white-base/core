@@ -5,26 +5,29 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    // var MetaObject;
+    var Message;
     var NamespaceManager;
+    // var MetaObject;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L              = _global._L || {};
-    _global._L.Meta         = _global._L.Meta || {};
+    _global._L                  = _global._L || {};
+    _global._L.Meta             = _global._L.Meta || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        NamespaceManager            = require('./namespace-manager').NamespaceManager;
+        Message                 = require('./message').Message;
+        NamespaceManager        = require('./namespace-manager').NamespaceManager;
     } else {
-        NamespaceManager            = _global._L.NamespaceManager;
+        Message                 = _global._L.Message;
+        NamespaceManager        = _global._L.NamespaceManager;
     }
 
     //==============================================================Á
     // 3. module dependency check
-    if (typeof NamespaceManager === 'undefined') throw new Error('[NamespaceManager] module load fail...');
-
+    if (typeof NamespaceManager === 'undefined') Message.error('ES011', ['NamespaceManager', 'namespace-manager']);
+    
     //==============================================================
     // 4. module implementation       
     var MetaRegistry = (function () {

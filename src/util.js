@@ -5,6 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
+    var Message;
     var getAllProperties;
     var getTypeMap;
     var checkType;
@@ -21,30 +22,31 @@
     //==============================================================
     // 2. import module
     if (isNode) {
-        getAllProperties    = require('./util-type').getAllProperties;
-        getTypeMap          = require('./util-type').getTypeMap;
-        checkType           = require('./util-type').checkType;
-        checkUnionType      = require('./util-type').checkUnionType;
-        validType           = require('./util-type').validType;
-        validUnionType      = require('./util-type').validUnionType;
+        Message                 = require('./message').Message;
+        getAllProperties        = require('./util-type').getAllProperties;
+        getTypeMap              = require('./util-type').getTypeMap;
+        checkType               = require('./util-type').checkType;
+        checkUnionType          = require('./util-type').checkUnionType;
+        validType               = require('./util-type').validType;
+        validUnionType          = require('./util-type').validUnionType;
     } else {    
-        getAllProperties    = _global._L.Util.getAllProperties
-        getTypeMap          = _global._L.Util.getTypeMap
-        checkType           = _global._L.Util.checkType
-        checkUnionType      = _global._L.Util.checkUnionType
-        validType           = _global._L.Util.validType
-        validUnionType      = _global._L.Util.validUnionType
+        Message                 = _global._L.Message;
+        getAllProperties        = _global._L.Util.getAllProperties
+        getTypeMap              = _global._L.Util.getTypeMap
+        checkType               = _global._L.Util.checkType
+        checkUnionType          = _global._L.Util.checkUnionType
+        validType               = _global._L.Util.validType
+        validUnionType          = _global._L.Util.validUnionType
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof getAllProperties === 'undefined') throw new Error('[getAllProperties] module load fail...');
-    if (typeof getTypeMap === 'undefined') throw new Error('[getTypeMap] module load fail...');
-    if (typeof checkType === 'undefined') throw new Error('[checkType] module load fail...');
-    if (typeof checkUnionType === 'undefined') throw new Error('[checkUnionType] module load fail...');
-    if (typeof validType === 'undefined') throw new Error('[validType] module load fail...');
-    if (typeof validUnionType === 'undefined') throw new Error('[validUnionType] module load fail...');
-
+    if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
+    if (typeof getTypeMap === 'undefined') Message.error('ES012', ['getTypeMap', 'util-type']);
+    if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
+    if (typeof checkUnionType === 'undefined') Message.error('ES012', ['checkUnionType', 'util-type']);
+    if (typeof validType === 'undefined') Message.error('ES012', ['validType', 'util-type']);
+    if (typeof validUnionType === 'undefined') Message.error('ES012', ['validUnionType', 'util-type']);
     //==============================================================
     // 4. module implementation   
 
