@@ -71,7 +71,7 @@
                 get: function() { return tableName; },
                 set: function(newValue) { 
                     if (newValue === this.tableName) return;
-                    if (typeof newValue !== 'string') throw new Error('Only [tableName] type "string" can be added');
+                    if (typeof newValue !== 'string') Message.error('ES021', ['tableName', 'string']);
                     if (this.metaSet && this.metaSet.tables.existTableName(newValue)) throw new Error('tableName 중복 발생!!');
                     tableName = newValue;
                 },
@@ -222,7 +222,7 @@
                 get: function() { return _baseType; },
                 set: function(newValue) { 
                     if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
-                        throw new Error('Only [_baseType] type "MetaEntity" can be added');
+                        Message.error('ES032', ['_baseType', 'MetaEntity']);
                     }
                     _baseType = newValue;
                 },

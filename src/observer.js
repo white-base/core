@@ -44,7 +44,7 @@
             {
                 get: function() { return isLog; },
                 set: function(nVal) {
-                    if (typeof nVal !== 'boolean') throw new Error('Only [isLog] type "boolean" can be added');
+                    if (typeof nVal !== 'boolean') Message.error('ES021', ['isLog', 'boolean']);
                     isLog = nVal;
                 }
             });
@@ -58,7 +58,7 @@
             {
                 get: function() { return isSingleMode; },
                 set: function(nVal) { 
-                    if (typeof nVal !== 'boolean') throw new Error('Only [isSingleMode] type "boolean" can be added');
+                    if (typeof nVal !== 'boolean') Message.error('ES021', ['isSingleMode', 'boolean']);
                     isSingleMode = nVal;
                 }
             });
@@ -87,8 +87,8 @@
             {
                 get: function() { return __subscribers; },
                 set: function(nVal) { 
-                    if (typeof nVal !== 'object') throw new Error('Only [__subscribers] type "object" can be added');
-                    if (typeof nVal.any === 'undefined') throw new Error('Only [__subscribers.any] type "array" can be added');
+                    if (typeof nVal !== 'object') Message.error('ES021', ['__subscribers', 'object']);
+                    if (typeof nVal.any === 'undefined') Message.error('ES021', ['__subscribers.any', 'array']);
                     __subscribers = nVal;
                 }
             });
@@ -106,7 +106,7 @@
         Observer.prototype.subscribe = function(p_fn, p_code) {
             p_code = p_code || 'any';
 
-            if (typeof p_fn !== 'function') throw new Error('Only [p_fn] type "function" can be added');
+            if (typeof p_fn !== 'function') Message.error('ES021', ['fn', 'function']);
             
             if (this.isSingleMode && this.__subscribers[p_code]) this.unsubscribe(p_code);    // 싱글모드시 초기화
             if (typeof this.__subscribers[p_code] === 'undefined') {

@@ -139,8 +139,8 @@
                 set: function(newValue) { 
                     if (newValue === this.columnName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
-                    if (_entity && _entity.columns.existColumnName(newValue)) throw new Error('p_name columnName 과 중복 발생!! '+p_name);  
-                    if (_entity && _entity.columns.existAlias(newValue)) throw new Error('p_name alias 과 중복 발생!! '+p_name); 
+                    if (_entity && _entity.columns.existColumnName(newValue)) Message.error('ES042', [newValue, 'columnName']);
+                    if (_entity && _entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
                     columnName = newValue;
                 },
                 configurable: false,
@@ -162,7 +162,7 @@
                 set: function(newValue) { 
                    var entity = this._entity;
                    if(typeof newValue !== 'string') Message.error('ES021', ['alias', 'string']);
-                   if (entity && entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
+                   if (entity && entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
                    alias = newValue;
                 },
                 configurable: true,
@@ -217,7 +217,7 @@
                 // },
                 get: function() { return isNotNull },
                 set: function(newValue) { 
-                    if(typeof newValue !== 'boolean') throw new Error('Only [isNotNull] type "boolean" can be added');
+                    if(typeof newValue !== 'boolean') Message.error('ES021', ['isNotNull', 'boolean']);
                     isNotNull = newValue; 
                 },
                 configurable: true,
@@ -232,7 +232,7 @@
             {
                 get: function() { return isNullPass },
                 set: function(newValue) { 
-                    if(typeof newValue !== 'boolean') throw new Error('Only [isNullPass] type "boolean" can be added');
+                    if(typeof newValue !== 'boolean') Message.error('ES021', ['isNullPass', 'boolean']);
                     isNullPass = newValue; 
                 },
                 configurable: true,
@@ -262,7 +262,7 @@
                     // 유효성 검사
                     for(var i = 0; list.length > i; i++) {
                         if (!(typeof list[i] === 'function' || (typeof list[i].regex === 'object' && typeof list[i].msg === 'string'))) {
-                            throw new Error('Only [constraints] type "function OR {regex:object, msg:string, ?code:number}" can be added'); // COVER:
+                            Message.error('ES021', ['constraints', 'array<function | {regex,msg,code}>']);
                          }
                     }
                     constraints = list;
@@ -318,7 +318,7 @@
 
                     __val = __val === null ? '' : __val;  // null 등록 오류 처리
                     if(['number', 'string', 'boolean'].indexOf(typeof __val) < 0) {
-                        throw new Error('Only [value] type "number, string, boolean" can be added');    // COVER:
+                        Message.error('ES021', ['value', 'number, string, boolean']);
                     }
                     __value = __val;
                     // 검사 및 이벤트 발생
@@ -336,7 +336,7 @@
             {
                 get: function() { return getter; },
                 set: function(val) { 
-                    if(val !== null && typeof val !== 'function') throw new Error('Only [getter] type "function" can be added');
+                    if(val !== null && typeof val !== 'function') Message.error('ES021', ['getter', 'function']);
                     getter = val;
                 },
                 configurable: true,
@@ -351,7 +351,7 @@
             {
                 get: function() { return setter; },
                 set: function(val) { 
-                    if(val !== null && typeof val !== 'function') throw new Error('Only [setter] type "function" can be added');
+                    if(val !== null && typeof val !== 'function') Message.error('ES021', ['setter', 'function']);
                     setter = val;
                 },
                 configurable: true,
@@ -547,8 +547,8 @@
 
             var constraint = {};
 
-            if (!(p_regex instanceof RegExp)) throw new Error('Only [p_regex] type "RegExp" can be added');
-            if (!(typeof p_msg === 'string')) throw new Error('Only [p_msg] type "string" can be added');
+            if (!(p_regex instanceof RegExp)) Message.error('ES021', ['regex', 'RegExp']);
+            if (!(typeof p_msg === 'string')) Message.error('ES021', ['msg', 'string']);
 
             constraint.regex = p_regex;
             constraint.msg = p_msg;
@@ -654,9 +654,9 @@
                     return _baseType; 
                 },
                 set: function(newValue) { 
-                    if (!(typeof newValue === 'function'))  throw new Error('It is not a function type.');
-                    if (!(new newValue() instanceof MetaColumn)) throw new Error('MetaColumn is not a subfunction.');
-                    _baseType = newValue; 
+                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
+                    if (!(new newValue() instanceof MetaColumn)) Message.error('ES032', ['_baseType', 'MetaColumn']);
+                    _baseType = newValue;
                 },
                 enumerable: true,
                 configurable: false,
@@ -684,15 +684,15 @@
 
         MetaColumnCollection.prototype.add = function(p_name, p_value) {
             
-            if (this._owner.rows.count > 0) throw new Error('row가 존재햐여 컬럼을 추가할 수 없습니다.');  
-            if (this.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
-            if (this.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!');
+            if (this._owner.rows.count > 0) Message.error('ES045', ['_owner.rows', 'column']);
+            if (this.existColumnName(p_name)) Message.error('ES042', ['name', 'columnName']);
+            if (this.existAlias(p_name)) Message.error('ES042', ['name', 'alias']);
             
             return _super.prototype.add.call(this, p_name, p_value);
         };
 
         MetaColumnCollection.prototype.removeAt = function(p_idx) {
-            if (this._owner.rows.count > 0) throw new Error('row가 존재햐여 컬럼을 제거할 수 없습니다.');  
+            if (this._owner.rows.count > 0) Message.error('ES044', ['_owner.rows', 'idx']);
             return _super.prototype.removeAt.call(this, p_idx);
         };
 
@@ -706,9 +706,9 @@
             var item;
             var property = {};
 
-            if (typeof p_name !== 'string') throw new Error('There is no required value [p_name].');
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
-                throw new Error('Only [value] type "number, string, boolean" can be added');    // COVER:
+                Message.error('ES021', ['value', 'number, string, boolean']);
             }
             
             property = { value: p_value };
@@ -805,10 +805,10 @@
                 i_value = p_object.clone();
                 i_value._entity = this._owner;
             } else {
-                throw new Error('string | MetaColumn object [p_object].');    // COVER:
+                Message.error('ES022', ['object']);
             }
 
-            if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
+            if (typeof i_name === 'undefined') Message.error('ES051', ['name | obj.columnName']);
 
             return _super.prototype.add.call(this, i_name, i_value);
         };
@@ -843,7 +843,7 @@
             {
                 get: function() { return _baseCollection; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
+                    if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);
                     _baseCollection = newValue;
                 },
                 configurable: false,
@@ -899,7 +899,7 @@
             //         this.add(p_object.columns[i]);
             //     }
             } else {
-                throw new Error('p_object string | MetaColumn instance param request fail...');   // COVER:
+                Message.error('ES021', ['object']);
             }
 
             // TODO:: 이름 충돌검사
@@ -936,8 +936,9 @@
          * @param {MetaEntity} p_entity 
          */
         MetaViewColumnCollection.prototype.addEntity  = function(p_entity) {
+            // REVIEW: MetaEntity 로 변경 요망
             if (typeof p_entity === 'undefined' && !(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
-                throw new Error('Only [p_entity] type "MetaEntity" can be added');  // COVER:
+                Message.error('ES032', ['entity', 'MetaEntity']);
             }
 
             for (var i = 0; p_entity.columns.count > i; i++) {

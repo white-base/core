@@ -55,12 +55,12 @@ describe("[target: observer.js]", () => {
             const e = new EventClass();
             
             // subscribe()
-            expect(()=> e._event.subscribe()).toThrow(/type.*function/);
-            expect(()=> e._event.subscribe('str')).toThrow(/type.*function/);
+            expect(()=> e._event.subscribe()).toThrow('ES021');
+            expect(()=> e._event.subscribe('str')).toThrow('ES021');
             // __subscribers
-            expect(()=> e._event.__subscribers = 1).toThrow(/type.*object/);
-            expect(()=> e._event.__subscribers = 'str').toThrow(/type.*object/);
-            expect(()=> e._event.__subscribers = {}).toThrow(/any/);
+            expect(()=> e._event.__subscribers = 1).toThrow('ES021');
+            expect(()=> e._event.__subscribers = 'str').toThrow('ES021');
+            expect(()=> e._event.__subscribers = {}).toThrow('ES021');
         });
         it("- __subscribers 강제삽입 : 강제 예외 (any 함수 아닌 값을 삽입) ", () => {
             const result = [];
@@ -211,7 +211,7 @@ describe("[target: observer.js]", () => {
             e.onAdd = func2
             e._onAdd();
             
-            expect(()=> e._event.isLog = 1).toThrow(/type.*boolean/)
+            expect(()=> e._event.isLog = 1).toThrow('ES021')
         });
         it("- this._caller ", () => {
             global.console.log = jest.fn((val) => {

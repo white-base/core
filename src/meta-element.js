@@ -59,7 +59,7 @@
             {
                 get: function() { return metaName; },
                 set: function(newValue) { 
-                    if (typeof newValue !== 'string')  throw new Error('Only [metaName] type "string" can be added');   // COVER: 2
+                    if (typeof newValue !== 'string') Message.error('ES021', ['metaName', 'string']);
                     metaName = newValue;
                 },
                 configurable: false,

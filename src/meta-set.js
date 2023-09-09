@@ -87,7 +87,7 @@
             {
                 get: function() { return setName; },
                 set: function(newValue) { 
-                    if (typeof newValue !== 'string') throw new Error('Only [setName] type "string" can be added');
+                    if (typeof newValue !== 'string') Message.error('ES021', ['setName', 'string']);
                     setName = newValue;
                 },
                 configurable: false,
@@ -123,7 +123,7 @@
             Object.defineProperty(this, 'autoChanges', {
                 set: function(newValue) { 
                     if (typeof newValue !== 'boolean') {
-                        throw new Error('Only [autoChanges] type "boolean" can be added');
+                        Message.error('ES021', ['autoChanges', 'boolean']);
                     }
                     for (var i = 0; i < this.tables.count; i++) {
                         this.tables[i].rows.autoChanges = newValue;
@@ -185,7 +185,7 @@
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;
 
-            if (!(p_metaSet instanceof MetaEntity)) throw new Error('Only [p_metaSet] type "MetaEntity" can be added');
+            if (!(p_metaSet instanceof MetaEntity)) Message.error('ES032', ['metaSet', 'MetaSet']);
             if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
 
             if (p_metaSet.tables) loadEntity(p_metaSet.tables, this.tables); 
@@ -315,8 +315,8 @@
             var metaSet = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             
-            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
+            if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
 
             if (p_obj instanceof MetaEntity) {
                 if (p_obj.setName && p_obj.setName.length > 0) this.setName = p_obj.setName;
@@ -413,7 +413,7 @@
             var obj;
             var rows;
 
-            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
+            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
             
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
 

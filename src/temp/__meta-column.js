@@ -124,7 +124,7 @@
             {
                 get: function() { return columnName; },
                 set: function(newValue) { 
-                    if (typeof newValue !== 'string') throw new Error('Only [columnName] type "string" can be added');
+                    if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
                     if (_entity && _entity.columns.existColumnName(p_name)) throw new Error('p_name columnName 과 중복 발생!!');  
                     if (_entity && _entity.columns.existAlias(p_name)) throw new Error('p_name alias 과 중복 발생!!'); 
                     
@@ -148,7 +148,7 @@
                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
                 set: function(newValue) { 
                    var entity = this._entity;
-                   if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
+                   if(typeof newValue !== 'string') Message.error('ES021', ['alias', 'string']);
                    if (entity && entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
                    alias = newValue;
                 },

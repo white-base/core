@@ -116,7 +116,7 @@
         MetaObject.prototype.setObject  = function(p_mObj) {
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
-            if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
+            if (typeof p_mObj !== 'object') Message.error('ES021', ['mObj', 'object']);
             if (p_mObj._type !== fullName) throw new Error('setObject() 객체가 다릅니다. '+ p_mObj._type);
             
             // this.__SET$_guid(p_mObj._guid, this);

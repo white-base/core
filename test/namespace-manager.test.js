@@ -105,9 +105,9 @@ describe("[target: namespace-manager.js]", () => {
             it("- register() : [예외] 자른 다료형 ", () => {
                 const ns = new NamespaceManager();
     
-                expect(() => ns.register(10)).toThrow(/Only/);
-                expect(() => ns.register({})).toThrow(/Only/);
-                expect(() => ns.register(true)).toThrow(/Only/);
+                expect(() => ns.register(10)).toThrow('ES021');
+                expect(() => ns.register({})).toThrow('ES021');
+                expect(() => ns.register(true)).toThrow('ES021');
             });
             it("- register() : [예외] ns/section 이름 규칙 ", () => {
                 const ns = new NamespaceManager();

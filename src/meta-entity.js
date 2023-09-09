@@ -88,7 +88,7 @@
                 get: function() { return metaSet; },
                 set: function(newValue) { 
                     if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaSet'))) {
-                        throw new Error('Only [metaSet] type "MetaSet" can be added');
+                        Message.error('ES032', ['metaSet', 'MetaSet']);
                     }
                     metaSet = newValue;
                 },
@@ -104,7 +104,8 @@
             {
                 get: function() { return columns; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaColumnCollection)) throw new Error('Only [columns] type "MetaColumnCollection" can be added');
+                    // REVIEW: row가 존재하면 교체하면 안됨, 또는 다른곳에서 참조할 경우?
+                    if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['columns', 'MetaColumnCollection']);
                     columns = newValue;
                 },
                 configurable: true,
@@ -340,19 +341,18 @@
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;
 
-            if (!(p_entity instanceof MetaEntity)) throw new Error('Only [p_entity] type "MetaEntity" can be added');
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
-
+            if (!(p_entity instanceof MetaEntity)) Message.error('ES032', ['entity', 'MetaEntity']);
+            if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
             if (opt % 2 === 1) loadColumn(); // opt: 1, 3
             if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
 
             function loadColumn() {
-                if (_this.rows.count > 0 ) throw new Error('rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
                 
                 for (let i = 0; i < p_entity.columns.count; i++) {
                     var column = p_entity.columns[i].clone();
                     var key = p_entity.columns.keyOf(i);
-                    if (_this.columns.exist(key))  throw new Error('기존에 key 가 존재합니다.');
+                    if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
                     _this.columns.add(column);
                 }
             }
@@ -387,10 +387,10 @@
             } else {
                 for (var i = 0; i < p_items.length; i++) {
                     columnName = p_items[i];
-                    if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
+                    if (typeof columnName !== 'string') Message.error('ES045', ['items', 'string']);
                     // if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
                     // entity.columns.add(columnName);  // 참조로 등록
-                    if (!this.columns.exist(columnName)) throw new Error('items 의 column 이 없습니다.');
+                    if (!this.columns.exist(columnName)) Message.error('ES053', ['items', 'column']);
                     entity.columns.add(this.columns[i]);
                 }
             }
@@ -576,8 +576,7 @@
         MetaEntity.prototype.setValue  = function(p_row) {
             var alias = '';
 
-            if (!(p_row instanceof MetaRow)) throw new Error('Only [p_row] type "Row" can be added');
-
+            if (!(p_row instanceof MetaRow)) Message.error('ES032', ['row', 'MetaRow']);
             for(var i = 0; this.columns.count > i; i++) {
                 // this.columns[i].value = p_row[i];
                 alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
@@ -697,8 +696,8 @@
             var target;
 
             // 1.유효성 검사
-            if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
-            if (typeof p_option !== 'number') throw new Error('Only [p_option] type "Number" can be added');
+            if (!(p_target instanceof MetaEntity)) Message.error('ES032', ['target', 'MetaEntity']);
+            if (typeof p_option !== 'number') Message.error('ES021', ['option', 'number']);
 
             // 타겟 복제본 만들기
             target = p_target.clone();
@@ -740,8 +739,8 @@
                 // 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
                     alias = tarColumns[i].alias;
-                    if (this.columns.exist(alias)) throw new Error('column.name 중복 발생 '+ key);
-                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
+                    if (this.columns.exist(alias)) Message.error('ES042', ['column.name', alias]);
+                    if (this.columns.existAlias(alias)) Message.error('ES042', ['column.alias', alias]);
                 }
                 // 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
@@ -829,8 +828,8 @@
                 for (var i = 0; i < tarColumns.count; i++) {
                     // key = tarColumns.keyOf(i);
                     alias = tarColumns[i].alias;
-                    if (this.columns.exist(alias)) throw new Error('column.name 중복 발생 '+ key);
-                    if (this.columns.existAlias(alias)) throw new Error('column.alias 중복 발생 '+ key);
+                    if (this.columns.exist(alias)) Message.error('ES042', ['columnName', alias]);
+                    if (this.columns.existAlias(alias)) Message.error('ES042', ['alais', alias]);
                     // key = tarColumns[i].alias;
                     // if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
                 }
@@ -978,7 +977,7 @@
             // } else {
             //     throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
             // }
-            if (p_obj instanceof MetaEntity) throw new Error('[MetaEntity] 타입을 load() 할수 없습니다. read()로 읽으세요.');
+            if (p_obj instanceof MetaEntity) Message.error('ES034', ['MetaEntity']);
 
             // if (typeof obj === 'string') obj = JSON.parse(obj, p_reviver()); 
             if (typeof obj === 'string') {
@@ -992,9 +991,8 @@
             if (MetaRegistry.isGuidObject(obj)) {
                 mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
                 this.setObject(mObj);
-            } else {
-                throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
-            }
+            } else 
+            Message.error('ES022', ['obj']);
         };
 
         
@@ -1027,8 +1025,8 @@
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
-            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
+            if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
             
             // if (p_obj instanceof MetaObject) throw new Error('[p_obj] MetaObject 인스턴스는 읽을 수 없습니다.');
             // if (MetaRegistry.hasRefer(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
@@ -1060,7 +1058,7 @@
             var rows;
             var Column = this.columns._baseType;
 
-            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
+            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
@@ -1163,7 +1161,7 @@
             var obj = p_obj;
             var rows;
 
-            if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
+            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);

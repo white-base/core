@@ -44,10 +44,10 @@ describe("[target: meta-row.js]", () => {
                 expect(row2['i2']).toBeDefined();
             });
             it("- new Row() : 예외(빈 엔티티) ", () => {
-                expect(() => new MetaRow()).toThrow('p_entity');
+                expect(() => new MetaRow()).toThrow('ES032');
             });
             it("- new Row() : 예외(빈 엔티티) ", () => {
-                expect(() => new MetaRow({})).toThrow('p_entity');
+                expect(() => new MetaRow({})).toThrow('ES032');
             });
         });
         describe("this.clone(): Row <복제>", () => {

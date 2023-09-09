@@ -105,7 +105,7 @@
                 get: function() { return viewName; },
                 set: function(newValue) { 
                     if (newValue === this.viewName) return;
-                    if (typeof newValue !== 'string') throw new Error('Only [viewName] type "string" can be added');
+                    if (typeof newValue !== 'string') Message.error('ES021', ['viewName', 'string']);
                     if (this.metaSet && this.metaSet.views.existViewName(newValue)) throw new Error('tableName 중복 발생!!');
                     viewName = newValue;
                 },
@@ -145,7 +145,7 @@
          * @param {MetaEntity} p_entity 
          */
         MetaView.prototype._regRefer  = function(p_entity) {
-            if (!(p_entity instanceof MetaEntity)) throw new Error('Only [p_entity] type "MetaEntity" can be added');
+            if (!(p_entity instanceof MetaEntity)) Message.error('ES032', ['entity', 'MetaEntity']);
             if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
         };
         
@@ -261,7 +261,7 @@
                 get: function() { return _baseType; },
                 set: function(newValue) { 
                     if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
-                        throw new Error('Only [_baseType] type "MetaEntity" can be added');
+                        Message.error('ES032', ['_baseType', 'MetaEntity']);
                     }
                     _baseType = newValue;
                 },

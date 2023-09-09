@@ -158,7 +158,7 @@
             {
                 get: function() { return isOverlap; },
                 set: function(val) { 
-                    if (typeof val !== 'boolean') throw new Error('Only [isOverlap] type "boolean" can be added');
+                    if (typeof val !== 'boolean') Message.error('ES021', ['isOverlap', 'boolean']);
                     isOverlap = val;
                 },
                 configurable: false,
@@ -186,7 +186,7 @@
                 if (!__validNamespace(p_ns)) throw new Error('They have different [p_ns] conventions. '+p_ns); 
                 sections = p_ns.split('.');
             } else if (Array.isArray(p_ns)) sections = p_ns;
-            else throw new Error('Only [p_ns] type "string, array" can be added'); 
+            else Message.error('ES021', ['ns', 'string, array']);
             return sections;
         }
         

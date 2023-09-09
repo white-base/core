@@ -94,7 +94,7 @@
                 set: function(newValue) {       // REVIEW: MetaRow 에서 entity는 존재할 경우 설정할 수 없다.
                     // TODO:: 자료종류를 검사해야함
                     if (newValue && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
-                        throw new Error('Only [_entity] type "MetaEntity" can be added');    // COVER:
+                        Message.error('ES032', ['_entity', 'MetaEntity']);
                     }
                     _entity = newValue;
                 },
@@ -177,7 +177,7 @@
             
             // MetaEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
-                throw new Error('Only [p_entity] type "MetaEntity" can be added');
+                Message.error('ES032', ['entity', 'MetaEntity']);
             }
             
             // 설정

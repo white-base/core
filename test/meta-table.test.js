@@ -474,7 +474,7 @@ describe("[target: meta-table.js]", () => {
                 table1.read(json1, 3);
                 table2.read(json2, 3);
     
-                expect(() => table1.merge(table2, 1)).toThrow(/name 중복/);
+                expect(() => table1.merge(table2, 1)).toThrow('ES042');
             });
             it("- merge() : opt = 1 (예외 : 컬럼 중복 2) ", () => {
                 var table1 = new MetaTable('T1');
@@ -503,7 +503,7 @@ describe("[target: meta-table.js]", () => {
                 table2.read(json2, 3);
                 table2.columns['i3'].alias = 'i1'; // 별칭 처리
     
-                expect(() => table1.merge(table2, 1)).toThrow(/name 중복/);
+                expect(() => table1.merge(table2, 1)).toThrow('ES042');
             });
             it("- merge() : opt = 1 (예외 : 별칭 중복 1) ", () => {
                 var table1 = new MetaTable('T1');
@@ -532,7 +532,7 @@ describe("[target: meta-table.js]", () => {
                 table2.read(json2, 3);
                 table1.columns['i1'].alias = 'ii1';
     
-                expect(() => table1.merge(table2, 1)).toThrow(/alias 중복/);
+                expect(() => table1.merge(table2, 1)).toThrow('ES042');
             });
             it("- merge() : opt = 1 (예외 : 컬럼 중복 2) ", () => {
                 var table1 = new MetaTable('T1');
@@ -562,7 +562,7 @@ describe("[target: meta-table.js]", () => {
                 table1.columns['i1'].alias = 'ii1';
                 table2.columns['i3'].alias = 'ii1';
     
-                expect(() => table1.merge(table2, 1)).toThrow(/alias 중복/);
+                expect(() => table1.merge(table2, 1)).toThrow('ES042');
             });
             it("- merge() : opt = 2 (다른 구조) ", () => {
                 var table1 = new MetaTable('T1');

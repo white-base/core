@@ -149,7 +149,7 @@
             _super.prototype.setObject.call(this, mObj, oObj);
             var origin = oObj ? oObj : mObj;
 
-            if (mObj._key.length !== mObj._elem.length) throw new Error('_key, _elem 의 길이가 다릅니다.');
+            if (mObj._key.length !== mObj._elem.length) Message.error('ES063', ['_elem', '_key']);
 
             this._keys.length = 0;
             for(var i = 0; i < mObj._key.length; i++) {
@@ -186,7 +186,7 @@
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
             // 예약어 검사
             if (this._KEYWORD.indexOf(p_name) > -1) {
-                throw new Error(' [' + p_name + '] is a Symbol word');   
+                Message.error('ES048', [p_name, 'Symbol word']);
             }
             if (this.exist(p_name)) {
                 console.warn('Warning:: 프로퍼티 이름 중복 !!');
