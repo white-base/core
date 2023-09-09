@@ -1262,12 +1262,12 @@
 
         /** @abstract */
         MetaEntity.prototype.clone = function() {
-            throw new Error('[ clone() ] Abstract method definition, fail...');
+            Message.error('ES013', ['clone()']);
         };
 
         /** @abstract */
         MetaEntity.prototype.copy = function() {
-            throw new Error('[ copy() ] Abstract method definition, fail...');
+            Message.error('ES013', ['copy()']);
         };
 
         return MetaEntity;

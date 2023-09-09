@@ -157,9 +157,9 @@
         ArrayCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
             var index   = this._elements.length;
 
-            if (typeof p_pos !== 'number') throw new Error('Only [p_idx] type "number" can be added');
-            if (index < p_pos) throw new Error('[p_pos] size 를 초과하였습니다.');
-            if (p_pos < 0) throw new Error('[p_pos] 0 보다 작을 수 없습니다.');
+            if (typeof p_pos !== 'number') Message.error('ES021', ['pos', 'number']);
+            if (index < p_pos) Message.error('ES061', ['pos']);
+            if (p_pos < 0) Message.error('ES062', ['pos', '0']);
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
             // before event
             this._onChanging();

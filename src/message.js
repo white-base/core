@@ -398,8 +398,12 @@
             // inner function
             function _build(p_msg) {
                 var msg = p_msg || '';
-                var result = msg.match(/\$\d+/g);
-                var max = result.reduce((acc, cur, idx) => { 
+                var result;
+                var max;
+                
+                if (msg === '') return msg;
+                result = msg.match(/\$\d+/g);
+                max = result.reduce((acc, cur, idx) => { 
                     var num = Number(cur.replace('$',''));
                     return acc < num ? num : acc; 
                 }, 0);

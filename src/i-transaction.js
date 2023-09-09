@@ -39,7 +39,7 @@
          * @abstract
          */
         ITransaction.prototype.acceptChanges  = function() {
-            throw new Error('[ acceptChanges() ] Abstract method definition, fail...');
+            Message.error('ES013', ['acceptChanges()']);
         };
 
         /**
@@ -47,7 +47,7 @@
          * @abstract
          */
         ITransaction.prototype.rejectChanges  = function() {
-            throw new Error('[ rejectChanges() ] Abstract method definition, fail...');
+            Message.error('ES013', ['rejectChanges()']);
         };
 
         return ITransaction;

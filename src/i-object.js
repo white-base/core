@@ -39,7 +39,7 @@
          * 객체타입 얻기
          */
         IObject.prototype.getTypes  = function() {
-            throw new Error('[ getTypes() : array<function> ] Abstract method definition, fail...');
+            Message.error('ES013', ['getTypes(): array<function>']);
         };
         
         /**
@@ -47,7 +47,7 @@
          * @returns {Boolean}
          */
         IObject.prototype.instanceOf  = function() {
-            throw new Error('[ instanceOf(function | string) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['instanceOf(function | string): boolean']);
         };
     
         return IObject;

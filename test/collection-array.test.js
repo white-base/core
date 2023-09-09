@@ -434,14 +434,14 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 s.rows.add('A0');
                 s.rows.add('A1');
 
-                expect(()=> s.rows.insertAt(3, 'A2')).toThrow(/pos.*size/);
+                expect(()=> s.rows.insertAt(3, 'A2')).toThrow(/ES061/);
             });
             it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
                 let s = new Student();
                 s.rows.add('A0');
                 s.rows.add('A1');
 
-                expect(()=> s.rows.insertAt(-1, 'A2')).toThrow(/pos.*0/);
+                expect(()=> s.rows.insertAt(-1, 'A2')).toThrow(/ES062/);
             });
         });
         

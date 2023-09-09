@@ -39,7 +39,7 @@
          * @abstract
          */
         ILookupControl.prototype.contains  = function() {
-            throw new Error('[ contains(any) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['contains(any): boolean']);
         };
 
         return ILookupControl;

@@ -330,7 +330,7 @@
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
-            throw new Error('[ _remove(idx) ] Abstract method definition, fail...');
+            Message.error('ES013', ['_remove(idx)']);
         };
 
         /**
@@ -376,20 +376,20 @@
          * @returns {boolean} 처리결과
          */
         BaseCollection.prototype.remove = function(p_elem) {
-            var idx = this.indexOf(p_elem);
-            
+            var idx = this._elements.indexOf(p_elem);
             return idx < 0 ? false : this.removeAt(idx);
         };
         
         /**
          * 배열속성 삭제한다.
          * @param {Number} p_idx 인덱스
-         * @returns {boolean} 처리 결과
+         * @returns {boolean} 처리 결과  
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
-            if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added');
-            var elem = this._elements[p_idx];
-
+            var elem;
+            
+            if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
+            elem = this._elements[p_idx];
             if (this.exist(p_idx)) {
                 // before event
                 this._onChanging();
@@ -427,9 +427,10 @@
          * @returns
          */
         BaseCollection.prototype.exist = function(p_key) {
-            if (typeof p_key === 'number' || typeof p_key === 'string') 
+            if (typeof p_key === 'number' || typeof p_key === 'string') {
                 return this.hasOwnProperty(p_key);
-            throw new Error('Only [p_key] type "number, string" can be added');
+            }
+            Message.error('ES021', ['key', 'number, string']);
         };
 
         /** 
@@ -437,7 +438,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['add(any): boolean']);
         };
         
         /**
@@ -446,7 +447,7 @@
          * @fires _L.Collection.BaseCollection#onClear 
          */
         BaseCollection.prototype.clear  = function() {
-            throw new Error('[ clear() ] Abstract method definition, fail...');
+            Message.error('ES013', ['clear()']);
         };
 
         return BaseCollection;

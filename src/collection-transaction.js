@@ -69,7 +69,7 @@
                 get: function() { return autoChanges; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'boolean') {
-                        throw new Error('Only [p_collection] type "ArrayCollection" can be added');
+                        Message.error('ES021', ['autoChanges', 'boolean']);
                     }
                     autoChanges = newValue;
                 },

@@ -64,7 +64,7 @@
          * @abstract
          */
         IControlCollection.prototype.merge  = function() {
-            throw new Error('[ concat() ] Abstract method definition, fail...');
+            Message.error('ES013', ['merge()']);
         };
 
         /**
@@ -72,7 +72,7 @@
          * @abstract
          */
         IControlCollection.prototype.copy  = function() {
-            throw new Error('[ copy() ] Abstract method definition, fail...');
+            Message.error('ES013', ['copy()']);
         };
 
         /**
@@ -80,7 +80,7 @@
          * @abstract
          */
         IControlCollection.prototype.clone  = function() {
-            throw new Error('[ clone() ] Abstract method definition, fail...');
+            Message.error('ES013', ['clone()']);
         };
 
         /**
@@ -88,7 +88,7 @@
          * @abstract
          */
         IControlCollection.prototype.load  = function() {
-            throw new Error('[ load() ] Abstract method definition, fail...');
+            Message.error('ES013', ['load()']);
         };
 
         /**
@@ -96,7 +96,7 @@
          * @abstract
          */
         IControlCollection.prototype.clear  = function() {
-            throw new Error('[ clear() ] Abstract method definition, fail...');
+            Message.error('ES013', ['clear()']);
         };
     
         return IControlCollection;

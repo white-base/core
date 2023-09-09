@@ -39,7 +39,7 @@
          * @abstract
          */
         IGroupControl.prototype.merge  = function() {
-            throw new Error('[ merge(any) ] Abstract method definition, fail...');
+            Message.error('ES013', ['merge(any)']);
         };
 
         /**
@@ -47,7 +47,7 @@
          * @abstract
          */
         IGroupControl.prototype.copy  = function() {
-            throw new Error('[ copy() ] Abstract method definition, fail...');
+            Message.error('ES013', ['copy()']);
         };
 
         return IGroupControl;

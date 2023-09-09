@@ -182,7 +182,7 @@
             // p_value = typeof p_value === 'undefined' ? null : p_value;
             var index   = this._elements.length;;
             
-            if (typeof p_name !== 'string') throw new Error('Only [p_name] type "string" can be added');
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
             // 예약어 검사
             if (this._KEYWORD.indexOf(p_name) > -1) {
@@ -246,7 +246,7 @@
                 return this._elements.indexOf(p_obj);
             }
             if (opt === 1) {    
-                if (typeof p_obj !== 'string')  throw new Error('Only [p_obj] type "string" can be added'); 
+                if (typeof p_obj !== 'string')  Message.error('ES021', ['opt=1', 'string']);
                 // return this._elements.indexOf(this[p_obj]);
                 for (var i = 0; i < this._keys.length; i++) {
                     if (this._keys[i] === p_obj) return i;
@@ -261,7 +261,7 @@
          * @returns {string}
          */
         PropertyCollection.prototype.keyOf = function(p_idx) {
-            if (typeof p_idx !== 'number')  throw new Error('Only [p_idx] type "number" can be added'); 
+            if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
             return this._keys[p_idx];
         };
 

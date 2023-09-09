@@ -61,28 +61,28 @@
          * 스키마 읽기
          */
         ISchemaControl.prototype.read  = function() {
-            throw new Error('[ read(JSON) ] Abstract method definition, fail...');
+            Message.error('ES013', ['read(JSON)']);
         };
 
         /**
          * 스키마 읽기
          */
         ISchemaControl.prototype.write  = function() {
-            throw new Error('[ write() : JSON ] Abstract method definition, fail...');
+            Message.error('ES013', ['write(): JSON']);
         };
 
         /**
          * 스키마 읽기
          */
         ISchemaControl.prototype.readSchema  = function() {
-            throw new Error('[ readSchema(JSON) ] Abstract method definition, fail...');
+            Message.error('ES013', ['readSchema(JSON)']);
         };
 
         /**
          * 스키마 읽기
          */
         ISchemaControl.prototype.writeSchema  = function() {
-            throw new Error('[ writeSchema() : JSON ] Abstract method definition, fail...');
+            Message.error('ES013', ['writeSchema(): JSON']);
         };
     
         return ISchemaControl;

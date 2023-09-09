@@ -39,7 +39,7 @@
          * @abstract
          */
         IImportControl.prototype.read  = function() {
-            throw new Error('[ read(any) ] Abstract method definition, fail...');
+            Message.error('ES013', ['read(any)']);
         };
     
         return IImportControl;

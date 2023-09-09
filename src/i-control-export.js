@@ -39,7 +39,7 @@
          * @abstract
          */
         IExportControl.prototype.write  = function() {
-            throw new Error('[ write(any) ] Abstract method definition, fail...');
+            Message.error('ES013', ['write(any)']);
         };
     
         return IExportControl;

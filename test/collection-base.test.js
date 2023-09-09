@@ -22,7 +22,7 @@ describe("[target: collection-base.js]", () => {
             // School = class {
             //     columns = new ArrayCollection(this);
             //     constructor() { this.columns._elemTypes = Student }
-            // }
+            // } 
             School = class {
                 columns = new BaseCollection(this);
                 constructor() { }
@@ -35,9 +35,9 @@ describe("[target: collection-base.js]", () => {
             it("- 예외 : 상속 없이 사용할 경우 ", () => {
                 const i = new School();
                 
-                expect(()=> i.columns.add('a1')).toThrow(/add.*Abstract/);
-                expect(()=> i.columns.clear()).toThrow(/clear.*Abstract/);
-                expect(()=> i.columns._remove('a1')).toThrow(/_remove.*Abstract/);
+                expect(()=> i.columns.add('a1')).toThrow(/ES013/);
+                expect(()=> i.columns.clear()).toThrow(/ES013/);
+                expect(()=> i.columns._remove('a1')).toThrow(/ES013/);
             });
             it("- _owner : 변경  ", () => {
                 const i1 = new School();

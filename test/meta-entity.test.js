@@ -75,7 +75,7 @@ describe("[target: meta-entity.js]", () => {
             it("- clone() : 예외 ", () => {
                 var entity1 = new MetaEntity('T1');
         
-                expect(()=> entity1.clone()).toThrow(/clone.*Abstract/);
+                expect(()=> entity1.clone()).toThrow(/ES013/);
             });
         });
     });

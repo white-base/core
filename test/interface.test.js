@@ -35,11 +35,11 @@ describe("[target: i-* ]", () => {
             const i = new IObject();
 
             // extends
-            expect(()=> s.getTypes()).toThrow(/Abstract/);
-            expect(()=> s.instanceOf()).toThrow(/Abstract/);
+            expect(()=> s.getTypes()).toThrow(/ES013/);
+            expect(()=> s.instanceOf()).toThrow(/ES013/);
             // create
-            expect(()=> i.getTypes()).toThrow(/Abstract/);
-            expect(()=> i.instanceOf()).toThrow(/Abstract/);
+            expect(()=> i.getTypes()).toThrow(/ES013/);
+            expect(()=> i.instanceOf()).toThrow(/ES013/);
         });
 
     });
@@ -52,13 +52,13 @@ describe("[target: i-* ]", () => {
             // extends
             // expect(()=> s.getTypes()).toThrow(/Abstract/);
             // expect(()=> s.instanceOf()).toThrow(/Abstract/);
-            expect(()=> s.getObject()).toThrow(/Abstract/);
-            expect(()=> s.setObject()).toThrow(/Abstract/);
+            expect(()=> s.getObject()).toThrow(/ES013/);
+            expect(()=> s.setObject()).toThrow(/ES013/);
             // create
             // expect(()=> i.getTypes()).toThrow(/Abstract/);
             // expect(()=> i.instanceOf()).toThrow(/Abstract/);
-            expect(()=> i.getObject()).toThrow(/Abstract/);
-            expect(()=> i.setObject()).toThrow(/Abstract/);
+            expect(()=> i.getObject()).toThrow(/ES013/);
+            expect(()=> i.setObject()).toThrow(/ES013/);
         });
     });
     describe("IExportControl :: 인터페이스", () => {
@@ -68,9 +68,9 @@ describe("[target: i-* ]", () => {
             const i = new IExportControl();
 
             // extends
-            expect(()=> s.write()).toThrow(/Abstract/);
+            expect(()=> s.write()).toThrow(/ES013/);
             // create
-            expect(()=> i.write()).toThrow(/Abstract/);
+            expect(()=> i.write()).toThrow(/ES013/);
         });
     });
     describe("IGroupControl :: 인터페이스", () => {
@@ -80,9 +80,9 @@ describe("[target: i-* ]", () => {
             const i = new IGroupControl();
 
             // extends
-            expect(()=> s.merge()).toThrow(/Abstract/);
+            expect(()=> s.merge()).toThrow(/ES013/);
             // create
-            expect(()=> i.copy()).toThrow(/Abstract/);
+            expect(()=> i.copy()).toThrow(/ES013/);
         });
     });
     describe("IImportControl :: 인터페이스", () => {
@@ -92,9 +92,9 @@ describe("[target: i-* ]", () => {
             const i = new IImportControl();
 
             // extends
-            expect(()=> s.read()).toThrow(/Abstract/);
+            expect(()=> s.read()).toThrow(/ES013/);
             // create
-            expect(()=> i.read()).toThrow(/Abstract/);
+            expect(()=> i.read()).toThrow(/ES013/);
         });
     });
     describe("ILookupControl :: 인터페이스", () => {
@@ -104,9 +104,9 @@ describe("[target: i-* ]", () => {
             const i = new ILookupControl();
 
             // extends
-            expect(()=> s.contains()).toThrow(/Abstract/);
+            expect(()=> s.contains()).toThrow(/ES013/);
             // create
-            expect(()=> i.contains()).toThrow(/Abstract/);
+            expect(()=> i.contains()).toThrow(/ES013/);
         });
     });
     describe("IPartControl :: 인터페이스", () => {
@@ -116,11 +116,11 @@ describe("[target: i-* ]", () => {
             const i = new IPartControl();
 
             // extends
-            expect(()=> s.add()).toThrow(/Abstract/);
-            expect(()=> s.remove()).toThrow(/Abstract/);
+            expect(()=> s.add()).toThrow(/ES013/);
+            expect(()=> s.remove()).toThrow(/ES013/);
             // create
-            expect(()=> i.add()).toThrow(/Abstract/);
-            expect(()=> i.remove()).toThrow(/Abstract/);
+            expect(()=> i.add()).toThrow(/ES013/);
+            expect(()=> i.remove()).toThrow(/ES013/);
         });
     });
     describe("IAllControl :: 인터페이스", () => {
@@ -130,13 +130,13 @@ describe("[target: i-* ]", () => {
             const i = new IAllControl();
 
             // extends
-            expect(()=> s.clone()).toThrow(/Abstract/);
-            expect(()=> s.load()).toThrow(/Abstract/);
-            expect(()=> s.clear()).toThrow(/Abstract/);
+            expect(()=> s.clone()).toThrow(/ES013/);
+            expect(()=> s.load()).toThrow(/ES013/);
+            expect(()=> s.clear()).toThrow(/ES013/);
             // create
-            expect(()=> i.clone()).toThrow(/Abstract/);
-            expect(()=> i.load()).toThrow(/Abstract/);
-            expect(()=> i.clear()).toThrow(/Abstract/);
+            expect(()=> i.clone()).toThrow(/ES013/);
+            expect(()=> i.load()).toThrow(/ES013/);
+            expect(()=> i.clear()).toThrow(/ES013/);
         });
     });
     describe("ISchemaControl :: 인터페이스", () => {
@@ -146,15 +146,15 @@ describe("[target: i-* ]", () => {
             const i = new ISchemaControl();
 
             // extends
-            expect(()=> s.read()).toThrow(/Abstract/);
-            expect(()=> s.write()).toThrow(/Abstract/);
-            expect(()=> s.readSchema()).toThrow(/Abstract/);
-            expect(()=> s.writeSchema()).toThrow(/Abstract/);
+            expect(()=> s.read()).toThrow(/ES013/);
+            expect(()=> s.write()).toThrow(/ES013/);
+            expect(()=> s.readSchema()).toThrow(/ES013/);
+            expect(()=> s.writeSchema()).toThrow(/ES013/);
             // create
-            expect(()=> i.read()).toThrow(/Abstract/);
-            expect(()=> i.write()).toThrow(/Abstract/);
-            expect(()=> i.readSchema()).toThrow(/Abstract/);
-            expect(()=> i.writeSchema()).toThrow(/Abstract/);
+            expect(()=> i.read()).toThrow(/ES013/);
+            expect(()=> i.write()).toThrow(/ES013/);
+            expect(()=> i.readSchema()).toThrow(/ES013/);
+            expect(()=> i.writeSchema()).toThrow(/ES013/);
         });
     });
 
@@ -166,21 +166,21 @@ describe("[target: i-* ]", () => {
             const i = new ICollection();
 
             // extends
-            expect(()=> s.add()).toThrow(/Abstract/);
-            expect(()=> s.remove()).toThrow(/Abstract/);
-            expect(()=> s.removeAt()).toThrow(/Abstract/);
-            expect(()=> s.clear()).toThrow(/Abstract/);
-            expect(()=> s.contains()).toThrow(/Abstract/);
-            expect(()=> s.indexOf()).toThrow(/Abstract/);
-            expect(()=> s.exist()).toThrow(/Abstract/);
+            expect(()=> s.add()).toThrow(/ES013/);
+            expect(()=> s.remove()).toThrow(/ES013/);
+            expect(()=> s.removeAt()).toThrow(/ES013/);
+            expect(()=> s.clear()).toThrow(/ES013/);
+            expect(()=> s.contains()).toThrow(/ES013/);
+            expect(()=> s.indexOf()).toThrow(/ES013/);
+            expect(()=> s.exist()).toThrow(/ES013/);
             // create
-            expect(()=> i.add()).toThrow(/Abstract/);
-            expect(()=> i.remove()).toThrow(/Abstract/);
-            expect(()=> i.removeAt()).toThrow(/Abstract/);
-            expect(()=> i.clear()).toThrow(/Abstract/);
-            expect(()=> i.contains()).toThrow(/Abstract/);
-            expect(()=> i.indexOf()).toThrow(/Abstract/);
-            expect(()=> i.exist()).toThrow(/Abstract/);
+            expect(()=> i.add()).toThrow(/ES013/);
+            expect(()=> i.remove()).toThrow(/ES013/);
+            expect(()=> i.removeAt()).toThrow(/ES013/);
+            expect(()=> i.clear()).toThrow(/ES013/);
+            expect(()=> i.contains()).toThrow(/ES013/);
+            expect(()=> i.indexOf()).toThrow(/ES013/);
+            expect(()=> i.exist()).toThrow(/ES013/);
         });
     });
     describe("IPropertyCollection :: 인터페이스", () => {
@@ -190,27 +190,27 @@ describe("[target: i-* ]", () => {
             const i = new IPropertyCollection();
 
             // extends
-            expect(()=> s.add()).toThrow(/Abstract/);
-            expect(()=> s.remove()).toThrow(/Abstract/);
-            expect(()=> s.removeAt()).toThrow(/Abstract/);
-            expect(()=> s.clear()).toThrow(/Abstract/);
-            expect(()=> s.contains()).toThrow(/Abstract/);
-            expect(()=> s.indexOf()).toThrow(/Abstract/);
-            expect(()=> s.exist()).toThrow(/Abstract/);
-            expect(()=> s.keyOf()).toThrow(/Abstract/);
-            // expect(()=> s.removeByProp()).toThrow(/Abstract/);
-            // expect(()=> s.indexOfProp()).toThrow(/Abstract/);
+            expect(()=> s.add()).toThrow(/ES013/);
+            expect(()=> s.remove()).toThrow(/ES013/);
+            expect(()=> s.removeAt()).toThrow(/ES013/);
+            expect(()=> s.clear()).toThrow(/ES013/);
+            expect(()=> s.contains()).toThrow(/ES013/);
+            expect(()=> s.indexOf()).toThrow(/ES013/);
+            expect(()=> s.exist()).toThrow(/ES013/);
+            expect(()=> s.keyOf()).toThrow(/ES013/);
+            // expect(()=> s.removeByProp()).toThrow(/ES013/);
+            // expect(()=> s.indexOfProp()).toThrow(/ES013/);
             // create
-            expect(()=> i.add()).toThrow(/Abstract/);
-            expect(()=> i.remove()).toThrow(/Abstract/);
-            expect(()=> i.removeAt()).toThrow(/Abstract/);
-            expect(()=> i.clear()).toThrow(/Abstract/);
-            expect(()=> i.contains()).toThrow(/Abstract/);
-            expect(()=> i.indexOf()).toThrow(/Abstract/);
-            expect(()=> i.exist()).toThrow(/Abstract/);
-            expect(()=> i.keyOf()).toThrow(/Abstract/);
-            // expect(()=> i.removeByProp()).toThrow(/Abstract/);
-            // expect(()=> i.indexOfProp()).toThrow(/Abstract/);
+            expect(()=> i.add()).toThrow(/ES013/);
+            expect(()=> i.remove()).toThrow(/ES013/);
+            expect(()=> i.removeAt()).toThrow(/ES013/);
+            expect(()=> i.clear()).toThrow(/ES013/);
+            expect(()=> i.contains()).toThrow(/ES013/);
+            expect(()=> i.indexOf()).toThrow(/ES013/);
+            expect(()=> i.exist()).toThrow(/ES013/);
+            expect(()=> i.keyOf()).toThrow(/ES013/);
+            // expect(()=> i.removeByProp()).toThrow(/ES013/);
+            // expect(()=> i.indexOfProp()).toThrow(/ES013/);
         });
     });
     // });

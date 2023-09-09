@@ -50,7 +50,7 @@
          * 조회 : 인덱스로 이름 조회
          */
         IPropertyCollection.prototype.keyOf  = function() {
-            throw new Error('[ keyOf(idx) : str ] Abstract method definition, fail...');
+            Message.error('ES013', ['keyOf(idx): str']);
         };
 
         return IPropertyCollection;

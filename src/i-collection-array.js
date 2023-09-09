@@ -50,7 +50,7 @@
          * 조회 : 인덱스로 이름 조회
          */
         IArrayCollection.prototype.insertAt  = function() {
-            throw new Error('[ insertAt(pos, val, ...) : bool ] Abstract method definition, fail...');
+            Message.error('ES013', ['insertAt(pos, val, ...): bool']);
         };
     
         return IArrayCollection;

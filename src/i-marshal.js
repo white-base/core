@@ -50,7 +50,7 @@
          * @returns {Object}
          */
         IMarshal.prototype.getObject = function(p_vOpt) {
-            throw new Error('[ getObject() : object ] Abstract method definition, fail...');
+            Message.error('ES013', ['getObject(): object']);
         };
 
         /**
@@ -59,7 +59,7 @@
          * @returns {Stirng}
          */
         IMarshal.prototype.setObject  = function() {
-            throw new Error('[ setObject(mObj) ] Abstract method definition, fail...');
+            Message.error('ES013', ['setObject(mObj)']);
         };
 
         return IMarshal;

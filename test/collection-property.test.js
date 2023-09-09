@@ -412,7 +412,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 s.columns.add('a1', 'A1');
         
                 expect(s.columns.indexOf('a5', 2)).toBe(-1); // 없는 경우
-                expect(()=> s.columns.indexOf(100, 1)).toThrow(/obj.*string/);  
+                expect(()=> s.columns.indexOf(100, 1)).toThrow(/ES021/);  
             });
             // it("- keyOf(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
             //     let s = new Student();
@@ -577,7 +577,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             });
             it("- add(name) : 이름을 숫자로 사용할 경우 (예외)", () => {
                 let s = new Student();
-                expect(() => s.columns.add(10)).toThrow(/"string" can be added/);
+                expect(() => s.columns.add(10)).toThrow(/ES021/);
             });
         });
         describe("PropertyCollection.clear() <초기화> ", () => {

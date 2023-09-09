@@ -39,7 +39,7 @@
          * @abstract
          */
         IAllControl.prototype.clone  = function() {
-            throw new Error('[ clone() : obj ] Abstract method definition, fail...');
+            Message.error('ES013', ['clone(): obj']);
         };
 
         /**
@@ -47,7 +47,7 @@
          * @abstract
          */
         IAllControl.prototype.load  = function() {
-            throw new Error('[ load(any) ] Abstract method definition, fail...');
+            Message.error('ES013', ['load(any)']);
         };
 
         /**
@@ -55,7 +55,7 @@
          * @abstract
          */
         IAllControl.prototype.clear  = function() {
-            throw new Error('[ clear() ] Abstract method definition, fail...');
+            Message.error('ES013', ['clear()']);
         };
     
         return IAllControl;

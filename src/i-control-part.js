@@ -40,7 +40,7 @@
          * @abstract
          */
         IPartControl.prototype.add  = function() {
-            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['add(any): boolean']);
         };
 
         /**
@@ -48,7 +48,7 @@
          * @abstract
          */
         IPartControl.prototype.remove  = function() {
-            throw new Error('[ remove(any) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['remove(any): boolean']);
         };
     
         return IPartControl;

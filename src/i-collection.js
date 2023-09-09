@@ -76,7 +76,7 @@
          * @abstract
          */
         ICollection.prototype.add  = function() {
-            throw new Error('[ add(any) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['add(any): boolean']);
         };
 
         /**
@@ -84,7 +84,7 @@
          * @abstract
          */
         ICollection.prototype.remove  = function() {
-            throw new Error('[ remove(elem) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['remove(elem) : boolean']);
         };
 
         /**
@@ -92,7 +92,7 @@
          * @abstract
          */
         ICollection.prototype.removeAt  = function() {
-            throw new Error('[ removeAt(idx) : boolean ] Abstract method definition, fail...');
+            Message.error('ES013', ['removeAt(idx): boolean']);
         };
 
         /**
@@ -100,7 +100,7 @@
          * @abstract
          */
         ICollection.prototype.clear  = function() {
-            throw new Error('[ clear() ] Abstract method definition, fail...');
+            Message.error('ES013', ['clear()']);
         };
 
         /**
@@ -108,7 +108,7 @@
          * @abstract
          */
         ICollection.prototype.contains  = function() {
-            throw new Error('[ contains() ] Abstract method definition, fail...');
+            Message.error('ES013', ['contains()']);
         };
 
         /**
@@ -116,7 +116,7 @@
          * @abstract
          */
         ICollection.prototype.indexOf  = function() {
-            throw new Error('[ indexOf() ] Abstract method definition, fail...');
+            Message.error('ES013', ['indexOf()']);
         };
 
         /**
@@ -124,7 +124,7 @@
          * @abstract
          */
         ICollection.prototype.exist  = function() {
-            throw new Error('[ exist() ] Abstract method definition, fail...');
+            Message.error('ES013', ['exist()']);
         };
 
         return ICollection;

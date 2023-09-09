@@ -121,7 +121,7 @@
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
                     if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
-                        throw new Error('Only [_entity] type "MetaEntity" can be added');    // COVER:
+                        Message.error('ES032', ['_entity', 'MetaEntity']);
                     }
                     _entity = newValue;
                 },
@@ -138,7 +138,7 @@
                 get: function() { return columnName; },
                 set: function(newValue) { 
                     if (newValue === this.columnName) return;
-                    if (typeof newValue !== 'string') throw new Error('Only [columnName] type "string" can be added');
+                    if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
                     if (_entity && _entity.columns.existColumnName(newValue)) throw new Error('p_name columnName 과 중복 발생!! '+p_name);  
                     if (_entity && _entity.columns.existAlias(newValue)) throw new Error('p_name alias 과 중복 발생!! '+p_name); 
                     columnName = newValue;
@@ -161,7 +161,7 @@
                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
                 set: function(newValue) { 
                    var entity = this._entity;
-                   if(typeof newValue !== 'string') throw new Error('Only [alias] type "string" can be added');
+                   if(typeof newValue !== 'string') Message.error('ES021', ['alias', 'string']);
                    if (entity && entity.columns.existAlias(newValue)) throw new Error('[alias] 중복 ');
                    alias = newValue;
                 },
@@ -179,7 +179,10 @@
             {
                 get: function() { return defaultValue; },
                 set: function(newValue) { 
-                    if(typeof newValue !== 'undefined' && newValue !== null &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) throw new Error('Only [default] type "string | boolea | number" can be added');
+                    if(typeof newValue !== 'undefined' && newValue !== null 
+                        &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
+                            Message.error('ES021', ['default', 'string | boolea | number']);
+                        }
                     defaultValue = newValue; 
                 },
                 configurable: true,
@@ -194,7 +197,7 @@
             {
                 get: function() { return caption; },
                 set: function(newValue) { 
-                    if(typeof newValue !== 'string') throw new Error('Only [caption] type "string" can be added');
+                    if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']);
                     caption = newValue; 
                 },
                 configurable: true,
