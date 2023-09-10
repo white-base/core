@@ -32,7 +32,7 @@
          * @param {object} p_caller 함수 호출 본문에서 this 역활 publish.apply(p_caller, ...)
          */
         function Observer(p_caller) {
-            if (typeof p_caller !== 'object') throw new Error('p_caller 대상객체를 지정해야 합니다.');
+            if (typeof p_caller !== 'object') Message.error('ES031', ['caller']);
             
             var isLog = false;
             var isSingleMode = false;

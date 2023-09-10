@@ -56,8 +56,7 @@ describe("[target: util-type.js.js]", () => {
             expect(getTypeMap(Symbol).name).toBe('symbol');  
             expect(getTypeMap(Symbol('a')).name).toBe('symbol');  // 존재하지 않는 타입
             // BigInt는 사용 안함
-            expect(() => getTypeMap(2n ** 53n).name).toThrow('타입이 존재하지 않습니다');
-    
+            expect(() => getTypeMap(2n ** 53n).name).toThrow('ES022');
         });
         it('- 예외 : validType(), validUnionType()  ', () => {
             expect(() => validType({}, undefined)).toThrow(/타입이/);
@@ -185,8 +184,8 @@ describe("[target: util-type.js.js]", () => {
         it('- 타입이 없는 경우 ', () => {
             expect(checkType(1)).toBe(false);
             expect(checkUnionType(1)).toBe(false);
-            expect(()=> validType(1)).toThrow(/검사할.*타입이/);
-            expect(()=> validUnionType(1)).toThrow(/검사할.*타입이/);
+            expect(()=> validType(1)).toThrow('ES026');
+            expect(()=> validUnionType(1)).toThrow('ES026');
         });
         it('- null : any 타입 (단독, or, and) ', () => {
             // 단독 검사

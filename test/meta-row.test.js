@@ -130,7 +130,7 @@ describe("[target: meta-row.js]", () => {
                 expect(table1.rows[0]['i1']).toBe('R1');
                 expect(table1.rows[0]['i2']).toBe(10);
                 expect(() => table1.rows.add(row2, true)).toThrow('숫자');
-                expect(() => table1.rows.add(row3, true)).toThrow('p_row');
+                expect(() => table1.rows.add(row3, true)).toThrow('ES054');
             });
             /**
              * TODO: 많은 조건이 있음
@@ -148,7 +148,7 @@ describe("[target: meta-row.js]", () => {
                 row['i1'] = 'R1';
                 table1.rows.add(row);
             
-                expect(() => table2.rows.add(row)).toThrow('entity');        
+                expect(() => table2.rows.add(row)).toThrow('ES034');        
             });
         });
 

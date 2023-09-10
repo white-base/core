@@ -28,7 +28,7 @@
         PropertyCollection      = require('./collection-property').PropertyCollection;
         MetaObject              = require('./meta-object').MetaObject;
         MetaEntity              = require('./meta-entity').MetaEntity;
-        MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
+        MetaViewColumnCollection= require('./meta-column').MetaViewColumnCollection;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
         Message                 = _global._L.Message;
@@ -36,18 +36,18 @@
         PropertyCollection      = _global._L.PropertyCollection;
         MetaObject              = _global._L.MetaObject;
         MetaEntity              = _global._L.MetaEntity;
-        MetaViewColumnCollection    = _global._L.MetaViewColumnCollection;
+        MetaViewColumnCollection= _global._L.MetaViewColumnCollection;
         MetaRegistry            = _global._L.MetaRegistry;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new Error('[Util] module load fail...');
-    if (typeof PropertyCollection === 'undefined') throw new Error('[PropertyCollection] module load fail...');
-    if (typeof MetaObject === 'undefined') throw new Error('[MetaObject] module load fail...');
-    if (typeof MetaEntity === 'undefined') throw new Error('[MetaEntity] module load fail...');
-    if (typeof MetaViewColumnCollection === 'undefined') throw new Error('[MetaViewColumnCollection] module load fail...');
-    if (typeof MetaRegistry === 'undefined') throw new Error('[MetaRegistry] module load fail...');
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
+    if (typeof MetaViewColumnCollection === 'undefined') Message.error('ES011', ['MetaViewColumnCollection', 'meta-column']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   
@@ -106,7 +106,7 @@
                 set: function(newValue) { 
                     if (newValue === this.viewName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['viewName', 'string']);
-                    if (this.metaSet && this.metaSet.views.existViewName(newValue)) throw new Error('tableName 중복 발생!!');
+                    if (this.metaSet && this.metaSet.views.existViewName(newValue)) Message.error('ES041', [newValue]);
                     viewName = newValue;
                 },
                 configurable: false,
@@ -296,16 +296,14 @@
                 i_value = new MetaView(i_name, p_baseEntity);
                 i_value.metaSet = this._owner;
             } else if (p_object instanceof MetaView) {
-                if (p_baseEntity) throw new Error(' MetaView 객체와 refEntity객체를 동시에 입력할 수 없습니다. !!');
+                if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
                 i_name  = p_object.viewName;
                 i_value = p_object;
                 p_object.metaSet = this._owner;
-            } else {
-                throw new Error('string | MetaView object [p_object].');
-            }
+            } else Message.error('ES021', ['object', 'string, MetaView object']);
 
-            if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
-            if (this.existViewName(i_name)) throw new Error('viewName 중복 발생!!');
+            if (typeof i_name === 'undefined') Message.error('ES051', ['viewName']);
+            if (this.existViewName(i_name)) Message.error('ES042', ['viewName', i_name]);
 
             return _super.prototype.add.call(this, i_name, i_value);
         };

@@ -338,7 +338,7 @@
                 set: function(newValue) {
                     var typeName;
                     if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
-                    if (newValue._entity !== this._owner) throw new Error('_entity 가 서로 다릅니다.');
+                    if (newValue._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
                     this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
                     this._elements[p_idx] = newValue;
                 },
@@ -371,14 +371,14 @@
             var entity = p_row._entity;
 
 
-            if (!(p_row instanceof MetaRow )) throw new Error('MetaRow | MetaRow object [p_row].');   // COVER:
-            if (entity._guid !== this._owner._guid) throw new Error('[p_row] MetaRow 의 entity 가 다릅니다.');   // COVER:            
+            if (!(p_row instanceof MetaRow )) Message.error('ES032', ['row', 'MetaRow']);
+            if (entity._guid !== this._owner._guid) Message.error('ES034', ['_guid', '_owner._guid']);
             
             // valid 검사
             if (checkValid === true) {
                 for (let i = 0; i < p_row.count; i++) {
                     if(entity.columns[i].valid(p_row[i], r_result) !== true) {
-                        throw new Error('[p_row] valid check Error.' + r_result.msg);
+                        Message.error('ES054', ['row', 'column.valid()', r_result.msg]);
                     }
                 }
             }

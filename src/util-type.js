@@ -206,7 +206,7 @@
         //     else obj.name = 'object';
         //     return obj;
         // }
-        throw new Error('타입이 존재하지 않습니다.');
+        Message.error('ES022', ['type']);
     }
 
     /**
@@ -351,7 +351,7 @@
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '', arrMsg = [];
 
-        if (arrType.length === 0) throw new Error('검사할 타입이 없습니다.');
+        if (arrType.length === 0) Message.error('ES026', ['arguments.length == 0']);
 
         for(var i = 0; i < arrType.length; i++) {
             msg = _checkTypeMessage(arrType[i], target);
@@ -383,7 +383,7 @@
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
         
-        if (arrType.length === 0) throw new Error('검사할 타입이 없습니다.');
+        if (arrType.length === 0) Message.error('ES026', ['arguments.length == 0']);
 
         for(var i = 0; i < arrType.length; i++) {
             msg = _checkTypeMessage(arrType[i], target);

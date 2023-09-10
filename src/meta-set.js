@@ -186,19 +186,19 @@
             var _this = this;
 
             if (!(p_metaSet instanceof MetaEntity)) Message.error('ES032', ['metaSet', 'MetaSet']);
-            if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
+            if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
 
             if (p_metaSet.tables) loadEntity(p_metaSet.tables, this.tables); 
             if (p_metaSet.views) loadEntity(p_metaSet.views, this.views); 
 
 
             function loadEntity(p_target, p_orignal) {
-                if (!(p_target instanceof MetaTableCollection || p_target instanceof MetaViewCollection )) {
-                    throw new Error('[p_target] 컬렉션이 아닙니다.');
+                if (!(p_target instanceof MetaTableCollection || p_target instanceof MetaTableCollection )) {
+                    Message.error('ES032', ['target', 'MetaTableCollection, MetaTableCollection']);
                 }
                 for (var i = 0; i < p_target.count; i++) {
                     var key = p_target.keyOf(i);
-                    if (p_orignal.exist(key))  throw new Error('기존에 entity 가 존재합니다.');
+                    if (p_orignal.exist(key)) Message.error('ES046', ['collection', key]);
                     p_orignal._loadEntity(p_target[i], opt);
                 }
             }
@@ -273,7 +273,7 @@
             var obj = p_obj;
             var mObj;
 
-            if (p_obj instanceof MetaSet) throw new Error('[MetaSet] 타입을 load() 할수 없습니다. read()로 읽으세요.');
+            if (p_obj instanceof MetaSet) Message.error('ES022', ['MetaSet']);
 
             if (typeof obj === 'string') {
                 if (typeof p_parse === 'function') obj = p_parse(obj);
@@ -283,9 +283,7 @@
             if (MetaRegistry.isGuidObject(obj)) {
                 mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
                 this.setObject(mObj);
-            } else {
-                throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
-            }
+            } else Message.error('ES022', ['obj']);
         };
 
         MetaSet.prototype.output = function(p_stringify, p_space, p_vOpt) {
@@ -396,7 +394,7 @@
                         prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']);
                     }
                     // var entity = new p_baseCollec._baseType(key, _this, prop);      // TODO: register 로 변경 요망
-                    if (p_baseCollec.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                    if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
                     p_baseCollec.add(key);
                     p_baseCollec[key].readSchema(p_collec[key], p_createRow);
                     

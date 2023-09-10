@@ -67,7 +67,7 @@
                     // TODO:: 자료종류를 검사해야함
                     // TODO: ArrayCollection 으로 변경 요망! -> 원래대로..
                     if (!(newValue.isImplementOf(IBaseCollection))) {
-                        throw new Error('IBaseCollection 인터페이스를 구현한 컬렉션이 아닙니다.');
+                        Message.error('ES033', ['collection', 'IBaseCollection']);
                     }
                     collection = newValue;
                 },

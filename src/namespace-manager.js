@@ -183,7 +183,7 @@
             var sections = [];
             if (p_ns === '') return sections;
             if (typeof p_ns === 'string') {
-                if (!__validNamespace(p_ns)) throw new Error('They have different [p_ns] conventions. '+p_ns); 
+                if (!__validNamespace(p_ns)) Message.error('ES042', [p_ns, '__validNamespace()']);
                 sections = p_ns.split('.');
             } else if (Array.isArray(p_ns)) sections = p_ns;
             else Message.error('ES021', ['ns', 'string, array']);
@@ -218,7 +218,7 @@
         
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
-                if (!__validName(sName)) throw new Error('They have different [section name] conventions.'); 
+                if (!__validName(sName)) Message.error('ES054', [sName, '__validName()']);
                 if (typeof parent[sections[i]] === "undefined") {
                     parent[sections[i]] = this.__createNsRefer();
                 }
@@ -278,9 +278,9 @@
             sections = __getArray(ns);
             
             if (sections.length > 0) this.register(ns);
-            if (!__validName(key)) throw new Error('They have different [key] conventions.'); 
+            if (!__validName(key)) Message.error('ES054', [key, '__validName()']);
             if (!this.isOverlap && this.find(p_elem)) {
-                throw new Error('중복이 금지되어 [isOverlap=false] 등록할 수 없습니다.'); 
+                Message.error('ES041', ['elem', '[isOverlap=false]']);
             }
 
             if (sections.length === 0) {    // 최상위 등록

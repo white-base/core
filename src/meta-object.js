@@ -117,8 +117,7 @@
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
             if (typeof p_mObj !== 'object') Message.error('ES021', ['mObj', 'object']);
-            if (p_mObj._type !== fullName) throw new Error('setObject() 객체가 다릅니다. '+ p_mObj._type);
-            
+            if (p_mObj._type !== fullName) Message.error('ES046', [p_mObj._type, fullName]);
             // this.__SET$_guid(p_mObj._guid, this);
             // p_mObj['$set'] = this._guid;
             MetaRegistry.createSetObject(p_mObj, this);

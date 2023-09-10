@@ -298,7 +298,7 @@ describe("[target: meta-view.js]", () => {
                 const rObj = v1.getObject();
                 const mObj = MetaRegistry.transformRefer(rObj);  
 
-                expect(() => t1.setObject(mObj)).toThrow(/setObject/);
+                expect(() => t1.setObject(mObj)).toThrow('ES046');
             });
         });
         describe("MetaView.clone() <뷰 복제>", () => {

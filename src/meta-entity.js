@@ -977,7 +977,7 @@
             // } else {
             //     throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
             // }
-            if (p_obj instanceof MetaEntity) Message.error('ES034', ['MetaEntity']);
+            if (p_obj instanceof MetaEntity) Message.error('ES022', ['MetaEntity']);
 
             // if (typeof obj === 'string') obj = JSON.parse(obj, p_reviver()); 
             if (typeof obj === 'string') {
@@ -1096,7 +1096,7 @@
                 }
                 function addColumn(key, columns) {
                     if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
-                        if (_this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
+                        if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
                         var prop = columns[key];
                         var obj = {};
                         if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
@@ -1107,7 +1107,7 @@
                         }
 
                         var column = new Column(key, _this, obj);
-                        if (_this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
+                        if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
                         _this.columns.add(column);
                     }
                 }

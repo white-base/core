@@ -112,10 +112,10 @@ describe("[target: namespace-manager.js]", () => {
             it("- register() : [예외] ns/section 이름 규칙 ", () => {
                 const ns = new NamespaceManager();
     
-                expect(() => ns.register('.aa')).toThrow(/p_ns/);
-                expect(() => ns.register('aa-bb')).toThrow(/p_ns/);
-                expect(() => ns.register('aa.bb@')).toThrow(/p_ns/);
-                expect(() => ns.register('aa.3bb')).toThrow(/section/);
+                expect(() => ns.register('.aa')).toThrow('ES042');
+                expect(() => ns.register('aa-bb')).toThrow('ES042');
+                expect(() => ns.register('aa.bb@')).toThrow('ES042');
+                expect(() => ns.register('aa.3bb')).toThrow('ES054');
             });
         });
         describe("NamespaceManager.release(ns) <네임스페이스 해제>", () => {
@@ -212,7 +212,7 @@ describe("[target: namespace-manager.js]", () => {
                 const ns = new NamespaceManager();
     
                 // expect(() => ns.set('a1.b1', '.Fun', Function)).toThrow(/p_key/);
-                expect(() => ns.set('a1.b1.Fun%', Function)).toThrow(/key/);
+                expect(() => ns.set('a1.b1.Fun%', Function)).toThrow('ES054');
             });
         });
         describe("NamespaceManager.get(fullname) <네임스페이스에 요소 얻기>", () => {

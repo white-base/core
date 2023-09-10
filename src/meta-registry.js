@@ -27,7 +27,7 @@
     //==============================================================Á
     // 3. module dependency check
     if (typeof NamespaceManager === 'undefined') Message.error('ES011', ['NamespaceManager', 'namespace-manager']);
-    
+
     //==============================================================
     // 4. module implementation       
     var MetaRegistry = (function () {
@@ -128,7 +128,7 @@
             var fullName;
 
             if (meta['_type'] && meta['_guid']) {
-                if (this.has(meta)) throw new Error('중복 메타 등록 _guid:' + meta._guid); 
+                if (this.has(meta)) Message.error('ES042', ['meta', '_guid']);
                 // 객체 등록
                 list.push(meta);
                 // 클래스 등록
@@ -137,7 +137,7 @@
                 key = type.name;
                 fullName = meta['_ns'] && meta['_ns'].length > 0 ?  _ns +'.'+key : key;
                 this.registerClass(type, _ns, key);
-            } else throw new Error('_type: function, _guid: string 속성이 필요합니다.');
+            } else Message.error('ES052', ['meta', '_type:function, _guid: string']);
         };
 
         /**
@@ -217,7 +217,7 @@
             var coClass = this.getClass(fullName);
             var params;
             
-            if (typeof coClass !== 'function') throw new Error('생성클래스가 존재하지 않습니다.  ' + fullName); 
+            if (typeof coClass !== 'function') Message.error('ES053', [fullName, 'function(class)']);
             params = coClass._PARAMS || []; // arr
 
             for (var i = 0; i < params.length; i++) {
@@ -257,14 +257,14 @@
 
             fullName = this.findClass(fun);
             if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
-            else throw new Error('네임스페이스에 클래스가 존재하지 않습니다.' + fun.name); 
+            else Message.error('ES053', ['ns', fun.name]);
         };
 
         MetaRegistry.createSetObject = function(target, meta) {
             if (meta && meta._guid && meta._guid.length > 0 ) {
                 target['$set'] = meta._guid;
                 return target;
-            } else throw new Error('Meta 객체가 아닙니다.');
+            } else Message.error('ES031', ['meta']);
         };
          
         /**
@@ -345,7 +345,7 @@
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
             var origin = p_origin ? p_origin : mObj;
 
-            if (!this.isGuidObject(origin)) throw new Error('guid 타입이 아닙니다.');
+            if (!this.isGuidObject(origin)) Message.error('ES024', ['object', 'guid']);
             return findObject(origin);
             
             // inner finction
@@ -374,8 +374,8 @@
          * @returns 
          */
         MetaRegistry.hasRefer = function(obj) {
-            if (typeof obj !== 'object') throw new Error('object 타입이 아닙니다.');
-            if (!this.isGuidObject(obj)) throw new Error('guid 타입이 아닙니다.');
+            if (typeof obj !== 'object') Message.error('ES024', ['target', 'object']);
+            if (!this.isGuidObject(obj)) Message.error('ES024', ['target', 'guid']);
 
             return hasRefer(obj);
 
@@ -465,7 +465,7 @@
                     if (typeof obj[prop] === 'object') {
                         if (obj[prop]['$ns']) {
                             var ns = _this.getClass(obj[prop]['$ns']);
-                            if (typeof ns !== 'function') throw new Error('참조 연결 실패 $ns:' + obj[prop]['$ns']);
+                            if (typeof ns !== 'function') Message.error('ES015', ['$ns', obj[prop]['$ns']]);
                             obj[prop] = ns;
                         } else linkReference(obj[prop], arr);
                     } else if (Array.isArray(obj[prop])){
@@ -574,9 +574,7 @@
                 meta = this.createMetaObject(mObj);
                 meta.setObject(mObj);
                 return meta;
-            } else {
-                throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
-            }
+            } else Message.error('ES022', ['obj']);
         };
 
         return MetaRegistry;

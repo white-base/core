@@ -134,16 +134,7 @@
         var obj;    
         var _interface = [];
 
-        function isImplementOf(target) {
-            if (typeof target !== 'function') throw new Error(' 함수 타입이 아닙니다. ');
-            for (var i = 0; i < this._interface.length; i++) {
-                if (this._interface[i] === target) return true;  
-            }
-            return false;
-        }
-
-        if (typeof object !== 'object') throw new Error(' object 타입이 아닙니다. ');
-
+        if (typeof object !== 'object') Message.error('ES024', ['object', 'object']);
         if (typeof object._interface === 'undefined') {
             Object.defineProperty(object, '_interface', {
                 get: function() { 
@@ -161,7 +152,7 @@
                     object._interface.push(arguments[i]);
                     // object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
                 }
-            } else throw new Error('함수타입만 가능합니다.');
+            } else Message.error('ES021', ['arguments', 'function']);
             // 비교 원본 인터페이스 임시 객체 생성    
             // obj = new arguments[i];
     
@@ -178,6 +169,15 @@
                 value: isImplementOf,
                 enumerable: false
             });
+        }
+
+        // inner function
+        function isImplementOf(target) {
+            if (typeof target !== 'function') Message.error('ES024', ['target', 'function']);
+            for (var i = 0; i < this._interface.length; i++) {
+                if (this._interface[i] === target) return true;  
+            }
+            return false;
         }
     }
 

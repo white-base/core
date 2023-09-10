@@ -125,7 +125,7 @@
                     S04: { // duplicate
                         1: {
                             msg: 'A duplicate occurred in [$1]. ',
-                            long: ''
+                            long: '$2'
                         },
                         2: {
                             msg: '[$1] overlaps with [$2]. ',
@@ -168,6 +168,10 @@
                         3: {
                             msg: '[$2] does not exist in [$1]. ',
                             long: ''
+                        },
+                        4: {
+                            msg: '[$1] is not a valid character in the [$2] test. ',
+                            long: 'test result : $3'
                         },
                     },
                     S06: { // scope
@@ -274,7 +278,7 @@
                     S04: {  // 중복
                         1: {
                             msg: '[$1]에 중복이 발생했습니다. ',
-                            long: ''
+                            long: '$2'
                         },
                         2: {
                             msg: '[$1]는 [$2]와 중복이 발생했습니다. ',
@@ -317,6 +321,10 @@
                         3: {
                             msg: '[$1]에 [$2]이 존재하지 않습니다. ',
                             long: ''
+                        },
+                        4: {
+                            msg: '[$1]는 [$2]검사에서 유효하지 않습니다. ',
+                            long: '검사결과 : $3'
                         },
                     },
                     S06: {  // 범위

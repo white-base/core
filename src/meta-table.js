@@ -72,7 +72,7 @@
                 set: function(newValue) { 
                     if (newValue === this.tableName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['tableName', 'string']);
-                    if (this.metaSet && this.metaSet.tables.existTableName(newValue)) throw new Error('tableName 중복 발생!!');
+                    if (this.metaSet && this.metaSet.tables.existTableName(newValue)) Message.error('ES042', ['tableName', newValue]);
                     tableName = newValue;
                 },
                 configurable: false,
@@ -255,12 +255,10 @@
                 i_name  = p_object.tableName;
                 i_value = p_object;
                 p_object.metaSet = this._owner;
-            } else {
-                throw new Error('string | MetaTable object [p_object].');
-            }
+            } else Message.error('ES021', ['object', 'string, MetaTable object']);
 
-            if (typeof i_name === 'undefined') throw new Error('There is no required value [p_name].');
-            if (this.existTableName(i_name)) throw new Error('tableName 중복 발생!!');
+            if (typeof i_name === 'undefined') Message.error('ES051', ['tableName']);
+            if (this.existTableName(i_name)) Message.error('ES042', ['tableName', i_name]);
 
             _super.prototype.add.call(this, i_name, i_value);
 
