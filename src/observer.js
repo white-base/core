@@ -96,6 +96,7 @@
         }
 
         Observer._NS = 'Common';    // namespace
+        Observer._PARAMS = ['caller'];  // creator parameter
 
         /**
          * 구독 신청

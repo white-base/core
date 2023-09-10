@@ -34,7 +34,6 @@
        function Message() { 
         }
         Message._NS = 'Common';     // namespace
-        Message._PARAMS = [];       // creator parameter
         
         // var define
         var lang = 'kor';
