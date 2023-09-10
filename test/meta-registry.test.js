@@ -23,6 +23,17 @@ describe("[target: meta-registry.js]", () => {
         it("- 초기값 조회 ", () => {
             expect(MetaRegistry.count).toBe(0);
         });
+        describe("MetaRegistry.init() <초기화>", () => {
+            it("- init() : 초기화 ", () => {
+                let i = new MetaObject();
+    
+                // 등록 조회
+                expect(MetaRegistry.count).toBe(1);
+                MetaRegistry.init();
+                //초기화 후 조회
+                expect(MetaRegistry.count).toBe(0);
+            });
+        });
         describe("MetaRegistry.register() <메타객체 등록>", () => {
             it("- register() : 자동등록", () => {
                 const m1 = new MetaElement('E1');
@@ -67,17 +78,7 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.count).toBe(0);
             });
         });
-        describe("MetaRegistry.init() <초기화>", () => {
-            it("- init() : 초기화 ", () => {
-                let i = new MetaObject();
-    
-                // 등록 조회
-                expect(MetaRegistry.count).toBe(1);
-                MetaRegistry.init();
-                //초기화 후 조회
-                expect(MetaRegistry.count).toBe(0);
-            });
-        });
+        
         describe("MetaRegistry.has(meta) <메타객체 여부>", () => {
             it("- has() : 메타객체 여부 검사 ", () => {
                 let m1 = new MetaObject();
@@ -164,7 +165,7 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.createNsReferObject() <네임스페이스 속성 생성>", () => {
             it("- createNsRefer() : 네임스페이스 객체 생성", () => {
                 loadNamespace();    // 클래스 로딩
-                const class1 = MetaRegistry.ns.get('Meta.Entity.MetaTable');
+                const class1 = MetaRegistry.ns.find('Meta.Entity.MetaTable');
                 const obj1 = {
                     cls1: MetaRegistry.createNsReferObject(class1),
                     name: 'OBJ'
@@ -506,13 +507,13 @@ describe("[target: meta-registry.js]", () => {
                 expect(elem).toBe(fun1);
             });
         });
-        describe("MetaRegistry.loading() <로드>", () => {
-            it("- loading() : output 통해서 로딩하는 경우", () => {
+        describe("MetaRegistry.loadMetaObject() <로드>", () => {
+            it("- loadMetaObject() : output 통해서 로딩하는 경우", () => {
                 const t1 = new MetaTable('T1');
                 t1.columns.add('i1');
                 t1.columns.add('i2');
                 const str = t1.output(stringify, '\t');
-                const t2 = MetaRegistry.loading(str, parse);
+                const t2 = MetaRegistry.loadMetaObject(str, parse);
 
                 expect(t2.tableName).toBe('T1');
                 expect(t2.columns.count).toBe(2);

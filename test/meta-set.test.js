@@ -438,7 +438,7 @@ describe("[target: meta-set.js]", () => {
                 };
                 set1.read(json1);
                 const str = set1.output(stringify, '\t');
-                const set2 = MetaRegistry.loading(str, parse);
+                const set2 = MetaRegistry.loadMetaObject(str, parse);
                 
                 // expect(set2.tables['T1']).toBeDefined();
                 // expect(set2.tables['T1'].columns.count).toBe(2);

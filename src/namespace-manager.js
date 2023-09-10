@@ -197,6 +197,26 @@
             return { _type: 'ns' };
         };
 
+        NamespaceManager.prototype._getPathObject = function(p_obj) {
+            var fullName;
+            var arr;
+            var key;
+            var nsPath;
+            var obj = {};
+
+            if (typeof p_obj === 'string') fullName = p_obj;
+            else fullName = this.getPath(p_obj); 
+
+            if (typeof fullName !== 'string') return;
+            arr = fullName.split('.');
+            key = arr.pop();
+            nsPath = arr.join('.');
+            obj['ns'] = nsPath;
+            obj['key'] = key;
+
+            return obj;
+        };
+        
         /**
          * 초기화
          */
@@ -209,7 +229,7 @@
          * TODO: 등록시 참조 목록에 등록해 둔다. (조회시 단순해짐)
          * @param {string | array} p_ns 
          */
-        NamespaceManager.prototype.register = function(p_ns) {
+        NamespaceManager.prototype.addNamespace = function(p_ns) {
             var parent = this.__storage;
             var sections = __getArray(p_ns);
         
@@ -230,7 +250,7 @@
          * 네임스페이스 해제
          * @param {string | array} p_ns 
          */
-        NamespaceManager.prototype.release = function(p_ns) {
+        NamespaceManager.prototype.delNamespace = function(p_ns) {
             var parent = this.__storage;
             var sections = __getArray(p_ns);
         
@@ -269,17 +289,17 @@
          * 네임스피이스 
          */
         // NamespaceManager.prototype.set = function(p_ns, p_key, p_elem) {
-        NamespaceManager.prototype.set = function(p_fullName, p_elem) {
+        NamespaceManager.prototype.register = function(p_fullName, p_elem) {
             var parent = this.__storage;
             var sections;
-            var key = this._getPath(p_fullName).key;
-            var ns = this._getPath(p_fullName).ns;
+            var key = this._getPathObject(p_fullName).key;
+            var ns = this._getPathObject(p_fullName).ns;
 
             sections = __getArray(ns);
             
-            if (sections.length > 0) this.register(ns);
+            if (sections.length > 0) this.addNamespace(ns);
             if (!__validName(key)) Message.error('ES054', [key, '__validName()']);
-            if (!this.isOverlap && this.find(p_elem)) {
+            if (!this.isOverlap && this.getPath(p_elem)) {
                 Message.error('ES041', ['elem', '[isOverlap=false]']);
             }
 
@@ -297,49 +317,7 @@
             }
         };
 
-        // NamespaceManager.prototype.get2 = function(p_fullName) {
-        //     // var parent = this.__storage;
-        //     var sections;
-
-        //     sections = __getArray(p_fullName);
-        //     var o = getElem(this.__storage, sections);
-        //     return o;
-
-        //     // inner function
-        //     function getElem(elem, sec) {
-        //         // var section = sec.length === 0 ? sec.slice(0) : sec.slice(1);
-        //         var section = sec.slice(0, 1);
-        //         var n_section = sec.slice(1);
-        //         var obj;
-
-        //         if (elem[section[0]]) {
-        //             if (elem[section[0]]['_type'] === 'ns') obj = getElem(elem[section[0]], sec.slice(1));
-        //             else obj = elem[section[0]];
-        //         }
-        //         return obj;
-        //     }
-        // };
-        /**
-         * 네임스페이스 요소 얻기
-         * @returns {*}
-         */
-        NamespaceManager.prototype.get = function(p_fullName) {
-            var parent = this.__storage;
-            var sections;
-
-            sections = __getArray(p_fullName);
-            for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
-                if (parent[sName]) {
-                    if (i === sections.length - 1) return parent[sName];
-                    else parent = parent[sName];
-                } else return;
-            }
-        };
-
-
-
-        NamespaceManager.prototype.del = function(p_fullName) {
+        NamespaceManager.prototype.release = function(p_fullName) {
             var parent = this.__storage;
             var sections;
 
@@ -356,12 +334,45 @@
         };
 
         /**
-         * 요소로 네임스페이스 조회
+         * 요소로 네임스페이스 여부
+         * @param {string | array} p_ns 
+         */
+        NamespaceManager.prototype.has = function(p_obj) {
+            if (typeof p_obj === 'string' && this.find(p_obj)) return true;
+            else if (typeof this.getPath(p_obj) === 'string') return true;
+        
+            return false;
+        };
+
+        /**
+         * 네임스페이스 요소 얻기
+         * @returns {*}
+         */
+        NamespaceManager.prototype.find = function(p_fullName) {
+            var parent = this.__storage;
+            var sections;
+
+            sections = __getArray(p_fullName);
+            for (var i = 0; i < sections.length; i+=1) {
+                var sName = sections[i];
+                if (parent[sName]) {
+                    if (i === sections.length - 1) return parent[sName];
+                    else parent = parent[sName];
+                } else return;
+            }
+        };
+
+
+
+        
+        
+        /**
+         * 요소로 네임스페이스 조회 (중복시 첫요소 리턴)
          * @param {string} p_ns
          * @param {boolean?} p_isFullName^
          * @returns {array} 네임스페이스 
          */
-        NamespaceManager.prototype.find = function(p_elem) {
+        NamespaceManager.prototype.getPath = function(p_elem) {
             var namespace = this.__storage;
             var stack = [];
 
@@ -389,36 +400,9 @@
             }
         };
 
-        /**
-         * 요소로 네임스페이스 여부
-         * @param {string | array} p_ns 
-         */
-        NamespaceManager.prototype.has = function(p_obj) {
-            if (typeof p_obj === 'string' && this.get(p_obj)) return true;
-            else if (typeof this.find(p_obj) === 'string') return true;
         
-            return false;
-        };
 
-        NamespaceManager.prototype._getPath = function(p_obj) {
-            var fullName;
-            var arr;
-            var key;
-            var nsPath;
-            var obj = {};
 
-            if (typeof p_obj === 'string') fullName = p_obj;
-            else fullName = this.find(p_obj); 
-
-            if (typeof fullName !== 'string') return;
-            arr = fullName.split('.');
-            key = arr.pop();
-            nsPath = arr.join('.');
-            obj['ns'] = nsPath;
-            obj['key'] = key;
-
-            return obj;
-        };
 
         NamespaceManager.prototype.output = function(p_stringify, p_space) {
             var arr = [];
@@ -427,8 +411,8 @@
 
             for (var i = 0; i < this.list.length; i++) {
                 var fullName = this.list[i];
-                var fun = this.get(fullName);
-                var nObj = this._getPath(fullName);
+                var fun = this.find(fullName);
+                var nObj = this._getPathObject(fullName);
                 obj = { ns: nObj.ns, key: nObj.key, full: fullName, f: fun};
                 arr.push(obj);
             }
@@ -454,7 +438,7 @@
                     var o = arr.arr[i];
                     var fun = o.f;
                     // this.set(o.ns, o.key, fun);
-                    this.set(o.full, fun);
+                    this.register(o.full, fun);
                 }
             }
         };

@@ -509,7 +509,7 @@
             if (typeof _global[fullName] === 'function') return;
             // 중복 검사 
             // if (!this.ns.get(fullName)) this.ns.set(p_ns, key, fun);
-            if (!this.ns.get(fullName)) this.ns.set(fullName, fun);
+            if (!this.ns.find(fullName)) this.ns.register(fullName, fun);
         };
         
         /**
@@ -521,7 +521,7 @@
             // 내장함수 & 전역 함수
             if (typeof _global[fullName] === 'function') return true;
 
-            return this.ns.del(fullName);
+            return this.ns.release(fullName);
         };
         
         /**
@@ -534,7 +534,7 @@
             // 내장함수 & 전역 함수
             if (typeof _global[fullName] === 'function') return fullName;
 
-            return this.ns.find(fun);
+            return this.ns.getPath(fun);
         };
         
         /**
@@ -546,7 +546,7 @@
             // 내장함수 & 전역 함수
             if (typeof _global[fullName] === 'function') return _global[fullName];
 
-            return this.ns.get(fullName);
+            return this.ns.find(fullName);
         };
 
         /**
@@ -554,7 +554,7 @@
          * @param {*} p_obj 
          * @param {*} p_parse 
          */
-        MetaRegistry.loading = function(p_obj, p_parse) {
+        MetaRegistry.loadMetaObject = function(p_obj, p_parse) {
             var obj = p_obj;
             var mObj;
             var meta;
