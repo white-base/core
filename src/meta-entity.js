@@ -1,3 +1,5 @@
+const { ISerialize } = require('./i-serialize');
+
 /**
  * namespace _L.Meta.Entity.Entity
  */
@@ -10,7 +12,8 @@
     var MetaObject;
     var MetaElement;
     var IGroupControl;
-    var IAllControl;
+    // var IAllControl;
+    var ISerialize;
     var MetaRowCollection;
     var MetaRow;
     var MetaColumnCollection;
@@ -28,7 +31,8 @@
         Message                 = require('./message').Message;
         Util                    = require('./util');
         IGroupControl           = require('./i-control-group').IGroupControl;
-        IAllControl             = require('./i-control-all').IAllControl;
+        // IAllControl             = require('./i-control-all').IAllControl;
+        ISerialize              = require('./i-serialize').ISerialize;
         MetaObject              = require('./meta-object').MetaObject;
         MetaElement             = require('./meta-element').MetaElement;
         MetaRowCollection       = require('./meta-row').MetaRowCollection;
@@ -39,7 +43,8 @@
         Message                 = _global._L.Message;
         Util                    = _global._L.Util;
         IGroupControl           = _global._L.IGroupControl;
-        IAllControl             = _global._L.IAllControl;
+        // IAllControl             = _global._L.IAllControl;
+        ISerialize              = _global._L.ISerialize;
         MetaObject              = _global._L.MetaObject;
         MetaElement             = _global._L.MetaElement;
         MetaRowCollection       = _global._L.MetaRowCollection;
@@ -52,7 +57,8 @@
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof IGroupControl === 'undefined') Message.error('ES011', ['IGroupControl', 'i-control-group']);
-    if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    // if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     if (typeof MetaRowCollection === 'undefined') Message.error('ES011', ['MetaRowCollection', 'meta-row']);
@@ -123,7 +129,7 @@
                 enumerable: true
             });
 
-            Util.implements(this, IGroupControl, IAllControl);
+            Util.implements(this, IGroupControl, ISerialize);
         }
         Util.inherits(MetaEntity, _super);
 

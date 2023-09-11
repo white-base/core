@@ -27,12 +27,12 @@ var IMarshal                    = require('./src/i-marshal').IMarshal;
 var ICollection                 = require('./src/i-collection').ICollection;
 // var IControlCollection          = require('./src/i-collection-control');
 var IPropertyCollection         = require('./src/i-collection-property').IPropertyCollection;
-var IAllControl                 = require('./src/i-control-all').IAllControl;
+// var IAllControl                 = require('./src/i-control-all').IAllControl;
 var IExportControl              = require('./src/i-control-export').IExportControl;
 var IGroupControl               = require('./src/i-control-group').IGroupControl;
 var IImportControl              = require('./src/i-control-import').IImportControl;
-var ILookupControl              = require('./src/i-control-lookup').ILookupControl;
-var IPartControl                = require('./src/i-control-part').IPartControl;
+// var ILookupControl              = require('./src/i-control-lookup').ILookupControl;
+// var IPartControl                = require('./src/i-control-part').IPartControl;
 
 module.exports = {
     Util: Util,
@@ -61,12 +61,12 @@ module.exports = {
     ICollection: ICollection,
     // IControlCollection: IControlCollection,
     IPropertyCollection: IPropertyCollection,
-    IAllControl: IAllControl,
+    // IAllControl: IAllControl,
     IExportControl: IExportControl,
     IGroupControl: IGroupControl,
     IImportControl: IImportControl,
-    ILookupControl: ILookupControl,
-    IPartControl: IPartControl,
+    // ILookupControl: ILookupControl,
+    // IPartControl: IPartControl,
     // namespace
     Common: {
         Util: Util,
@@ -102,11 +102,11 @@ module.exports = {
         ICollection: ICollection,
         // IControlCollection: IControlCollection,
         IPropertyCollection: IPropertyCollection,
-        IAllControl: IAllControl,
+        // IAllControl: IAllControl,
         IExportControl: IExportControl,
         IGroupControl: IGroupControl,
         IImportControl: IImportControl,
-        ILookupControl: ILookupControl,
-        IPartControl: IPartControl,
+        // ILookupControl: ILookupControl,
+        // IPartControl: IPartControl,
     },
 }

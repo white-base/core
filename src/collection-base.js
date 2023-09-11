@@ -9,7 +9,7 @@
     var Observer;    
     var Util;
     var ICollection;
-    var IBaseCollection;
+    var IList;
     var MetaObject;
     var MetaRegistry;
     
@@ -25,7 +25,7 @@
         Util                    = require('./util');
         Observer                = require('./observer').Observer;
         ICollection             = require('./i-collection').ICollection;
-        IBaseCollection         = require('./i-collection-base').IBaseCollection;
+        IList                   = require('./i-list').IList;
         MetaObject              = require('./meta-object').MetaObject;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
     } else {
@@ -33,7 +33,7 @@
         Util                    = _global._L.Util;
         Observer                = _global._L.Observer;
         ICollection             = _global._L.ICollection;
-        IBaseCollection         = _global._L.IBaseCollection;
+        IList                   = _global._L.IList;
         MetaObject              = _global._L.MetaObject;
         MetaRegistry            = _global._L.MetaRegistry;
     }
@@ -43,7 +43,7 @@
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof ICollection === 'undefined') throw Message.error('ES011', ['ICollection', 'i-collection']);
-    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
+    if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
@@ -258,7 +258,7 @@
             this._KEYWORD = this._KEYWORD.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
             this._KEYWORD = this._KEYWORD.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
 
-            Util.implements(this, ICollection, IBaseCollection);
+            Util.implements(this, ICollection, IList);
         }
         Util.inherits(BaseCollection, _super);
 

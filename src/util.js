@@ -216,7 +216,7 @@
             return object != null && typeof object === 'object';
         }
       }
-       
+      // TODO: getAllProperties() 사용한 문법으로 교체 필요 ES5 
       
 
     //==============================================================

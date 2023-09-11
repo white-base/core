@@ -8,6 +8,7 @@
     var Message;
     var Util;
     var MetaObject;
+    var IElement;
     // var IMarshal;
 
     //==============================================================
@@ -20,16 +21,19 @@
     if (isNode) {     
         Message                 = require('./message').Message;
         Util                    = require('./util');
+        IElement                = require('./i-element').IElement;
         MetaObject              = require('./meta-object').MetaObject;
     } else {
         Message                 = _global._L.Message;
         Util                    = _global._L.Util;
+        IElement                = _global._L.IElement;
         MetaObject              = _global._L.MetaObject;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IElement === 'undefined') Message.error('ES011', ['IElement', 'i-element']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
 
     //==============================================================
@@ -43,7 +47,7 @@
          * @constructs _L.Meta.MetaElement
          * @abstract
          * @extends _L.Meta.MetaObject
-         * @implements {_L.Interface.IMarshal}
+         * @implements {_L.Interface.IElement}
          * @param {*} p_name 
          */
         function MetaElement(p_name) {
@@ -72,6 +76,8 @@
             this.__SET$_name = function(val, call) {
                 if (call instanceof MetaElement) _name = val;    // 상속접근 허용
             }
+
+            Util.implements(this, IElement);
         }
         Util.inherits(MetaElement, _super);
     
@@ -116,6 +122,12 @@
         //         this._name = mObj.name;
         //     } else return parent;
         // };
+
+        MetaElement.prototype.clone  = function() {
+            Message.error('ES013', ['clone()']);
+            // var clone = new MetaElement(this._name);
+            // return clone;
+        };
 
         return MetaElement;
 

@@ -14,13 +14,13 @@ const {IMarshal}              = require('../src/i-marshal');
 // const IControlCollection    = require('../src/i-collection-control');
 const {IPropertyCollection}   = require('../src/i-collection-property');
 const {ICollection}           = require('../src/i-collection');
-const {IAllControl}           = require('../src/i-control-all');
+// const {IAllControl}           = require('../src/i-control-all');
 const {IExportControl}        = require('../src/i-control-export');
 const {IGroupControl}         = require('../src/i-control-group');
 const {IImportControl}        = require('../src/i-control-import');
-const {ILookupControl}        = require('../src/i-control-lookup');
+// const {ILookupControl}        = require('../src/i-control-lookup');
 const {ISchemaControl}        = require('../src/i-control-schema');
-const {IPartControl}          = require('../src/i-control-part');
+// const {IPartControl}          = require('../src/i-control-part');
 
 //==============================================================
 // test
@@ -97,48 +97,48 @@ describe("[target: i-* ]", () => {
             expect(()=> i.read()).toThrow(/ES013/);
         });
     });
-    describe("ILookupControl :: 인터페이스", () => {
-        it("- ILookupControl() : 생성 및 상속 ", () => {
-            class SubClass extends ILookupControl {}
-            const s = new SubClass();
-            const i = new ILookupControl();
+    // describe("ILookupControl :: 인터페이스", () => {
+    //     it("- ILookupControl() : 생성 및 상속 ", () => {
+    //         class SubClass extends ILookupControl {}
+    //         const s = new SubClass();
+    //         const i = new ILookupControl();
 
-            // extends
-            expect(()=> s.contains()).toThrow(/ES013/);
-            // create
-            expect(()=> i.contains()).toThrow(/ES013/);
-        });
-    });
-    describe("IPartControl :: 인터페이스", () => {
-        it("- IPartControl() : 생성 및 상속 ", () => {
-            class SubClass extends IPartControl {}
-            const s = new SubClass();
-            const i = new IPartControl();
+    //         // extends
+    //         expect(()=> s.contains()).toThrow(/ES013/);
+    //         // create
+    //         expect(()=> i.contains()).toThrow(/ES013/);
+    //     });
+    // });
+    // describe("IPartControl :: 인터페이스", () => {
+    //     it("- IPartControl() : 생성 및 상속 ", () => {
+    //         class SubClass extends IPartControl {}
+    //         const s = new SubClass();
+    //         const i = new IPartControl();
 
-            // extends
-            expect(()=> s.add()).toThrow(/ES013/);
-            expect(()=> s.remove()).toThrow(/ES013/);
-            // create
-            expect(()=> i.add()).toThrow(/ES013/);
-            expect(()=> i.remove()).toThrow(/ES013/);
-        });
-    });
-    describe("IAllControl :: 인터페이스", () => {
-        it("- IAllControl() : 생성 및 상속 ", () => {
-            class SubClass extends IAllControl {}
-            const s = new SubClass();
-            const i = new IAllControl();
+    //         // extends
+    //         expect(()=> s.add()).toThrow(/ES013/);
+    //         expect(()=> s.remove()).toThrow(/ES013/);
+    //         // create
+    //         expect(()=> i.add()).toThrow(/ES013/);
+    //         expect(()=> i.remove()).toThrow(/ES013/);
+    //     });
+    // });
+    // describe("IAllControl :: 인터페이스", () => {
+    //     it("- IAllControl() : 생성 및 상속 ", () => {
+    //         class SubClass extends IAllControl {}
+    //         const s = new SubClass();
+    //         const i = new IAllControl();
 
-            // extends
-            expect(()=> s.clone()).toThrow(/ES013/);
-            expect(()=> s.load()).toThrow(/ES013/);
-            expect(()=> s.clear()).toThrow(/ES013/);
-            // create
-            expect(()=> i.clone()).toThrow(/ES013/);
-            expect(()=> i.load()).toThrow(/ES013/);
-            expect(()=> i.clear()).toThrow(/ES013/);
-        });
-    });
+    //         // extends
+    //         expect(()=> s.clone()).toThrow(/ES013/);
+    //         expect(()=> s.load()).toThrow(/ES013/);
+    //         expect(()=> s.clear()).toThrow(/ES013/);
+    //         // create
+    //         expect(()=> i.clone()).toThrow(/ES013/);
+    //         expect(()=> i.load()).toThrow(/ES013/);
+    //         expect(()=> i.clear()).toThrow(/ES013/);
+    //     });
+    // });
     describe("ISchemaControl :: 인터페이스", () => {
         it("- ISchemaControl() : 생성 및 상속 ", () => {
             class SubClass extends ISchemaControl {}
@@ -168,19 +168,19 @@ describe("[target: i-* ]", () => {
             // extends
             expect(()=> s.add()).toThrow(/ES013/);
             expect(()=> s.remove()).toThrow(/ES013/);
-            expect(()=> s.removeAt()).toThrow(/ES013/);
-            expect(()=> s.clear()).toThrow(/ES013/);
+            // expect(()=> s.removeAt()).toThrow(/ES013/);
+            // expect(()=> s.clear()).toThrow(/ES013/);
             expect(()=> s.contains()).toThrow(/ES013/);
             expect(()=> s.indexOf()).toThrow(/ES013/);
-            expect(()=> s.exist()).toThrow(/ES013/);
+            // expect(()=> s.exist()).toThrow(/ES013/);
             // create
             expect(()=> i.add()).toThrow(/ES013/);
             expect(()=> i.remove()).toThrow(/ES013/);
-            expect(()=> i.removeAt()).toThrow(/ES013/);
-            expect(()=> i.clear()).toThrow(/ES013/);
+            // expect(()=> i.removeAt()).toThrow(/ES013/);
+            // expect(()=> i.clear()).toThrow(/ES013/);
             expect(()=> i.contains()).toThrow(/ES013/);
             expect(()=> i.indexOf()).toThrow(/ES013/);
-            expect(()=> i.exist()).toThrow(/ES013/);
+            // expect(()=> i.exist()).toThrow(/ES013/);
         });
     });
     describe("IPropertyCollection :: 인터페이스", () => {
@@ -192,22 +192,22 @@ describe("[target: i-* ]", () => {
             // extends
             expect(()=> s.add()).toThrow(/ES013/);
             expect(()=> s.remove()).toThrow(/ES013/);
-            expect(()=> s.removeAt()).toThrow(/ES013/);
-            expect(()=> s.clear()).toThrow(/ES013/);
+            // expect(()=> s.removeAt()).toThrow(/ES013/);
+            // expect(()=> s.clear()).toThrow(/ES013/);
             expect(()=> s.contains()).toThrow(/ES013/);
             expect(()=> s.indexOf()).toThrow(/ES013/);
-            expect(()=> s.exist()).toThrow(/ES013/);
+            // expect(()=> s.exist()).toThrow(/ES013/);
             expect(()=> s.keyOf()).toThrow(/ES013/);
             // expect(()=> s.removeByProp()).toThrow(/ES013/);
             // expect(()=> s.indexOfProp()).toThrow(/ES013/);
             // create
             expect(()=> i.add()).toThrow(/ES013/);
             expect(()=> i.remove()).toThrow(/ES013/);
-            expect(()=> i.removeAt()).toThrow(/ES013/);
-            expect(()=> i.clear()).toThrow(/ES013/);
+            // expect(()=> i.removeAt()).toThrow(/ES013/);
+            // expect(()=> i.clear()).toThrow(/ES013/);
             expect(()=> i.contains()).toThrow(/ES013/);
             expect(()=> i.indexOf()).toThrow(/ES013/);
-            expect(()=> i.exist()).toThrow(/ES013/);
+            // expect(()=> i.exist()).toThrow(/ES013/);
             expect(()=> i.keyOf()).toThrow(/ES013/);
             // expect(()=> i.removeByProp()).toThrow(/ES013/);
             // expect(()=> i.indexOfProp()).toThrow(/ES013/);

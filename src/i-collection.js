@@ -22,9 +22,9 @@
     if (isNode) {     
         Message                 = require('./message').Message;
         Util                    = require('./util');
-        IPartControl            = require('./i-control-part').IPartControl;
-        ILookupControl          = require('./i-control-lookup').ILookupControl;
-        IBaseCollection         = require('./i-collection-base').IBaseCollection;
+        // IPartControl            = require('./i-control-part').IPartControl;
+        // ILookupControl          = require('./i-control-lookup').ILookupControl;
+        // IBaseCollection         = require('./i-collection-base').IBaseCollection;
     } else {
         Message                 = _global._L.Message;
         Util                    = _global._L.Util
@@ -36,38 +36,22 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IPartControl === 'undefined') Message.error('ES011', ['IPartControl', 'i-control-part']);
-    if (typeof ILookupControl === 'undefined') Message.error('ES011', ['ILookupControl', 'i-control-lookup']);
-    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
+    // if (typeof IPartControl === 'undefined') Message.error('ES011', ['IPartControl', 'i-control-part']);
+    // if (typeof ILookupControl === 'undefined') Message.error('ES011', ['ILookupControl', 'i-control-lookup']);
+    // if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
 
     //==============================================================
     // 4. module implementation
-    var ICollection  = (function (_super) {
+    var ICollection  = (function () {
         /**
          * 컬렉션 최상위
          * @classdesc 컬렉션 최상위 컬렉션 인터페이스
          * @constructs _L.Interface.ICollection
-         * @extends  _L.Interface.IBaseCollection
          * @interface
-         * @implements {_L.Interface.IPartControl}
-         * @implements {_L.Interface.ILookupControl}
          */
         function ICollection() {
-            /**
-             * 컬렉션 갯수
-             * @member
-             */
-            // this.count = 0;
-
-            /**
-             * 컬렉션 배열 반환
-             * @member
-             */
-            // this.list = [];
-
-            Util.implements(this, IPartControl, ILookupControl);
         }
-        Util.inherits(IBaseCollection, _super);
+
     
         ICollection._NS = 'Interface';    // namespace
 
@@ -88,22 +72,6 @@
         };
 
         /**
-         * 삭제 (번호) : delete
-         * @abstract
-         */
-        ICollection.prototype.removeAt  = function() {
-            Message.error('ES013', ['removeAt(idx): boolean']);
-        };
-
-        /**
-         * 초기화 : update (delete 후 insert 의 의미)
-         * @abstract
-         */
-        ICollection.prototype.clear  = function() {
-            Message.error('ES013', ['clear()']);
-        };
-
-        /**
          * 유무 검사 (소유) : read (select)
          * @abstract
          */
@@ -117,14 +85,6 @@
          */
         ICollection.prototype.indexOf  = function() {
             Message.error('ES013', ['indexOf()']);
-        };
-
-        /**
-         * 키 유무
-         * @abstract
-         */
-        ICollection.prototype.exist  = function() {
-            Message.error('ES013', ['exist()']);
         };
 
         return ICollection;

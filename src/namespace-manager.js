@@ -6,6 +6,9 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var Util;
+    var IList;
+    var IListControl;
 
     //==============================================================
     // 1. namespace declaration
@@ -22,9 +25,23 @@
 
     //==============================================================Á
     // 3. module dependency check
+    if (isNode) {     
+        Message                 = require('./message').Message;
+        Util                    = require('./util');
+        IList                   = require('./i-list').IList;
+        IListControl            = require('./i-control-list').IListControl;
+    } else {
+        Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        IList                   = _global._L.IList;
+        IListControl            = _global._L.IListControl;
+    }
 
     //==============================================================
     // 4. module implementation   
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
+    if (typeof IListControl === 'undefined') Message.error('ES011', ['IListControl', 'i-control-list']);
     
     var NamespaceManager = (function () {
         /**
@@ -166,6 +183,8 @@
             });
 
             this.__KEYWORD = ['namespace', 'ns', 'NS', '_type'];
+
+            Util.implements(this, IList, IListControl);
         }
 
         NamespaceManager._NS = 'Meta';    // namespace

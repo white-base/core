@@ -6,6 +6,9 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var Util;
+    // var IList;
+    // var IListControl;
     var NamespaceManager;
     // var MetaObject;
 
@@ -18,14 +21,23 @@
     // 2. import module
     if (isNode) {     
         Message                 = require('./message').Message;
+        Util                    = require('./util');
+        // IList                   = require('./i-list').IList;
+        // IListControl            = require('./i-control-list').IListControl;
         NamespaceManager        = require('./namespace-manager').NamespaceManager;
     } else {
         Message                 = _global._L.Message;
+        Util                    = _global._L.Util;
+        // IList                   = _global._L.IList;
+        // IListControl            = _global._L.IListControl;
         NamespaceManager        = _global._L.NamespaceManager;
     }
 
     //==============================================================Á
     // 3. module dependency check
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    // if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
+    // if (typeof IListControl === 'undefined') Message.error('ES011', ['IListControl', 'i-control-list']);
     if (typeof NamespaceManager === 'undefined') Message.error('ES011', ['NamespaceManager', 'namespace-manager']);
 
     //==============================================================

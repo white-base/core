@@ -50,12 +50,12 @@ describe("[target: index.js]", () => {
             expect(typeof index.ICollection).toBe('function');
             // expect(typeof index.IControlCollection).toBe('function');
             expect(typeof index.IPropertyCollection).toBe('function');
-            expect(typeof index.IAllControl).toBe('function');
+            // expect(typeof index.IAllControl).toBe('function');
             expect(typeof index.IExportControl).toBe('function');
             expect(typeof index.IGroupControl).toBe('function');
             expect(typeof index.IImportControl).toBe('function');
-            expect(typeof index.ILookupControl).toBe('function');
-            expect(typeof index.IPartControl).toBe('function');
+            // expect(typeof index.ILookupControl).toBe('function');
+            // expect(typeof index.IPartControl).toBe('function');
         });
         it('- _L.Interface.* ', () => { 
             // namespace
@@ -65,12 +65,12 @@ describe("[target: index.js]", () => {
             expect(typeof index.Interface.ICollection).toBe('function');
             // expect(typeof index.Interface.IControlCollection).toBe('function');
             expect(typeof index.Interface.IPropertyCollection).toBe('function');
-            expect(typeof index.Interface.IAllControl).toBe('function');
+            // expect(typeof index.Interface.IAllControl).toBe('function');
             expect(typeof index.Interface.IExportControl).toBe('function');
             expect(typeof index.Interface.IGroupControl).toBe('function');
             expect(typeof index.Interface.IImportControl).toBe('function');
-            expect(typeof index.Interface.ILookupControl).toBe('function');
-            expect(typeof index.Interface.IPartControl).toBe('function');
+            // expect(typeof index.Interface.ILookupControl).toBe('function');
+            // expect(typeof index.Interface.IPartControl).toBe('function');
     
         });
     });

@@ -7,7 +7,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var Util;
-    var IBaseCollection;
+    var IArrayCollection;
 
     //==============================================================
     // 1. namespace declaration
@@ -19,17 +19,17 @@
     if (isNode) {     
         Message                 = require('./message').Message;
         Util                    = require('./util');
-        IBaseCollection         = require('./i-collection-base').IBaseCollection;
+        IArrayCollection         = require('./i-collection-array').IArrayCollection;
     } else {    // COVER:
         Message                 = _global._L.Message;
         Util                    = _global._L.Util;
-        IBaseCollection         = _global._L.IBaseCollection;
+        IArrayCollection         = _global._L.IArrayCollection;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
+    if (typeof IArrayCollection === 'undefined') Message.error('ES011', ['IArrayCollection', 'i-collection-base']);
 
     //==============================================================
     // 4. module implementation   
@@ -66,8 +66,8 @@
                 set: function(newValue) { 
                     // TODO:: 자료종류를 검사해야함
                     // TODO: ArrayCollection 으로 변경 요망! -> 원래대로..
-                    if (!(newValue.isImplementOf(IBaseCollection))) {
-                        Message.error('ES033', ['collection', 'IBaseCollection']);
+                    if (!(newValue.isImplementOf(IArrayCollection))) {
+                        Message.error('ES033', ['collection', 'IArrayCollection']);
                     }
                     collection = newValue;
                 },

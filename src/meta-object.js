@@ -96,6 +96,8 @@
 
         /**
          * 단일 객체 비교
+         * getObject()
+         *  -1 >= : _guid 제외, $ref 또 빠져야함
          * @param {*} p_obj1 
          * @param {*} p_obj2 
          * @returns 
@@ -109,22 +111,47 @@
             if (p_obj1 instanceof MetaObject) {
                 var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체
                 var obj2 = p_obj1.getObject(-1);
+                // var isCir = isCirculate(p_obj1);
                 return Util.deepEqual(obj1, obj2);
+
+                // if (isCirculate(p_obj1)) {
+                //     var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체
+                //     var obj2 = p_obj1.getObject(-1);
+                //     return Util.deepEqual(obj1, obj2);
+                // } else return p_obj1.equal(p_obj2);
+                
                 // if (!p_obj1.equal(p_obj2)) return false;
-            } else if (typeof p_obj1 === 'object' && p_obj1 !== null) {
+            } else if (typeof p_obj1 === 'object' && p_obj1 !== null) { // TODO: 함수로 추출
                 return Util.deepEqual(p_obj1, p_obj2);
-            } else {
-                return p_obj1 === p_obj2;
+            // } else {
+            //     return p_obj1 === p_obj2;
             }
+            return false;
             
             // inner function
             function compareArray(p_arr1, p_arr2) {
                 if (!Array.isArray(p_arr1) || !Array.isArray(p_arr2)) return false;
                 if (p_arr1.length !== p_arr2.length) return false;
                 for (var i = 0; i < p_arr1.length; i++) {
-                    if (!_this._compare(p_arr1[i], p_arr2[i])) return false;
+                    if (p_arr1[i] instanceof MetaObject) if (!p_arr1[i].equal(p_arr2[i])) return false;
+                    if(!_this._compare(p_arr1[i], p_arr2[i])) return false;
+                    // if (!_this._compare(p_arr1[i], p_arr2[i])) return false;
                 }
                 return true;
+            }
+            // TODO: 작동 완료후 for of 문 >> getAllProperties()
+            function isCirculate(meta, bObj) {
+                var beginObj = bObj || meta;
+                var keys1 = Object.keys(meta);
+                for(var key of keys1) {
+                    var val = meta[key];
+                    if (beginObj === val) return true;
+                    if (isObject(val)) return isCirculate(val, beginObj);
+                }
+                return false;
+            }
+            function isObject(object) {
+                return object != null && typeof object === 'object';
             }
         };
 

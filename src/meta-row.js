@@ -11,7 +11,7 @@
     var Message;
     var Util;
     var Observer;
-    var IBaseCollection;
+    var IList;
     var MetaObject;
     var TransactionCollection;
     var MetaRegistry;
@@ -28,7 +28,7 @@
         Message                 = require('./message').Message;
         Util                    = require('./util');
         Observer                = require('./observer').Observer;
-        IBaseCollection         = require('./i-collection-base').IBaseCollection;
+        IList                   = require('./i-list').IList;
         MetaObject              = require('./meta-object').MetaObject;
         TransactionCollection   = require('./collection-transaction').TransactionCollection;
         MetaRegistry            = require('./meta-registry').MetaRegistry;
@@ -37,7 +37,7 @@
         Util                    = _global._L.Util;
         Observer                = _global._L.Observer;
         MetaObject              = _global._L.MetaObject;
-        IBaseCollection         = _global._L.IBaseCollection;
+        IList         = _global._L.IList;
         TransactionCollection   = _global._L.TransactionCollection;
         MetaRegistry            = _global._L.MetaRegistry;
     }
@@ -46,7 +46,7 @@
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
-    if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
+    if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof TransactionCollection === 'undefined') Message.error('ES011', ['TransactionCollection', 'collection-transaction']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
@@ -216,7 +216,7 @@
                 };
             }
 
-            Util.implements(this, IBaseCollection);
+            Util.implements(this, IList);
         }
         Util.inherits(MetaRow, _super);
 

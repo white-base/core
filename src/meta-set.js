@@ -8,7 +8,8 @@
     var Message;
     var Util;
     var ISchemaControl;
-    var IAllControl;
+    // var IAllControl;
+    var ISerialize;
     var ITransaction;
     var MetaElement;
     var MetaEntity;
@@ -28,7 +29,8 @@
         Message                 = require('./message').Message;
         Util                    = require('./util');
         ISchemaControl          = require('./i-control-schema').ISchemaControl;
-        IAllControl             = require('./i-control-all').IAllControl;
+        // IAllControl             = require('./i-control-all').IAllControl;
+        ISerialize              = require('./i-serialize').ISerialize;
         ITransaction            = require('./i-transaction').ITransaction;
         MetaElement             = require('./meta-element').MetaElement;
         MetaEntity              = require('./meta-entity').MetaEntity;
@@ -39,7 +41,8 @@
         Message                 = _global._L.Message;
         Util                    = _global._L.Common.Util;
         ISchemaControl          = _global._L.ISchemaControl;
-        IAllControl             = _global._L.IAllControl;
+        // IAllControl             = _global._L.IAllControl;
+        ISerialize              = _global._L.ISerialize;
         ITransaction            = _global._L.ITransaction;
         MetaElement             = _global._L.MetaElement;
         MetaEntity              = _global._L.MetaEntity;
@@ -52,7 +55,8 @@
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
-    if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    // if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
     if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
@@ -137,7 +141,7 @@
             this.setName  = p_name || '';
             
             // this._implements(ISchemaControl, IAllControl);
-            Util.implements(this, ISchemaControl, IAllControl, ITransaction);
+            Util.implements(this, ISchemaControl, ITransaction, ISerialize);
         }
         Util.inherits(MetaSet, _super);
 
@@ -203,6 +207,23 @@
                     p_orignal._loadEntity(p_target[i], opt);
                 }
             }
+        };
+
+        /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaSet.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this.setName, p_target.setName)) return false;
+            // if (!this._compare(this.columns, p_target.columns)) return false;
+            // if (!this._compare(this.rows, p_target.rows)) return false;
+            if (!this.tables.equal(p_target.tables)) return false;
+            if (!this.views.equal(p_target.views)) return false;
+            return true;
         };
 
         /**

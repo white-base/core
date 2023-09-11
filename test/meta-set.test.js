@@ -45,7 +45,49 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.setName).toBe('S2');
             });
         });
+        describe("MetaTable.equal() <객체 비교>", () => {
+            it("- equal() : 생성 후 비교 ", () => {
+                const c1 = new MetaSet('S1');
+                const c2 = new MetaSet('S1');
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1._guid === c2._guid).toBe(false);
+                expect(c1 === c2).toBe(false);
+            });
+            it("- equal() : columns 추가 후 비교 ", () => {
+                const c1 = new MetaSet('S1');
+                const c2 = new MetaSet('S1');
+                c2.tables.add('a1');
 
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : column 추가 후 비교 ", () => {
+                const c1 = new MetaSet('S1');
+                const c2 = new MetaSet('S1');
+                c1.tables.add('T1');
+                c2.tables.add('T1');
+
+                expect(c1.equal(c2)).toBe(true);
+                // column 추가
+                c1.tables['T1'].columns.add('a1');
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : rows 추가 후 비교 ", () => {
+                const c1 = new MetaSet('S1');
+                const c2 = new MetaSet('S1');
+                c1.tables.add('T1');
+                c2.tables.add('T1');
+                c1.tables['T1'].columns.add('a1');
+                c2.tables['T1'].columns.add('a1');
+
+                expect(c1.equal(c2)).toBe(true);
+                // row 추가
+                var row = c1.tables['T1'].newRow();
+                row['a1'] = 'R1';
+                c1.tables['T1'].rows.add(row);
+                expect(c1.equal(c2)).toBe(false);
+            });
+        });
         describe("MetaSet.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {
                 var set1 = new MetaSet('S1');

@@ -48,30 +48,30 @@ describe.skip("load: i-marshal.js <IMarshal>", () => {
         expect(() => require('../src/i-marshal')).toThrow(/IObject/);
     });
 });
-describe.skip("load: i-control-part.js <IPartControl>", () => {
-    beforeEach(() => {
-        jest.resetModules();
-        global._L = null;
-     });
-    it("- namespace : IPartControl ", () => {
-        require('../src/i-control-part');
+// describe.skip("load: i-control-part.js <IPartControl>", () => {
+//     beforeEach(() => {
+//         jest.resetModules();
+//         global._L = null;
+//      });
+//     it("- namespace : IPartControl ", () => {
+//         require('../src/i-control-part');
         
-        expect(global._L.IPartControl).toBeDefined();
-        expect(global._L.Interface.IPartControl).toBeDefined();
-    });
-});
-describe.skip("load: i-control-lookup.js <ILookupControl>", () => {
-    beforeEach(() => {
-        jest.resetModules();
-        global._L = null;
-     });
-    it("- namespace : ILookupControl ", () => {
-        require('../src/i-control-lookup');
+//         expect(global._L.IPartControl).toBeDefined();
+//         expect(global._L.Interface.IPartControl).toBeDefined();
+//     });
+// });
+// describe.skip("load: i-control-lookup.js <ILookupControl>", () => {
+//     beforeEach(() => {
+//         jest.resetModules();
+//         global._L = null;
+//      });
+//     it("- namespace : ILookupControl ", () => {
+//         require('../src/i-control-lookup');
         
-        expect(global._L.ILookupControl).toBeDefined();
-        expect(global._L.Interface.ILookupControl).toBeDefined();
-    });
-});
+//         expect(global._L.ILookupControl).toBeDefined();
+//         expect(global._L.Interface.ILookupControl).toBeDefined();
+//     });
+// });
 describe.skip("load: i-control-import.js <IImportControl>", () => {
     beforeEach(() => {
         jest.resetModules();
@@ -108,18 +108,18 @@ describe.skip("load: i-control-export.js <IExportControl>", () => {
         expect(global._L.Interface.IExportControl).toBeDefined();
     });
 });
-describe.skip("load: i-control-all.js <IAllControl>", () => {
-    beforeEach(() => {
-        jest.resetModules();
-        global._L = null;
-     });
-    it("- namespace : IAllControl ", () => {
-        require('../src/i-control-all');
+// describe.skip("load: i-control-all.js <IAllControl>", () => {
+//     beforeEach(() => {
+//         jest.resetModules();
+//         global._L = null;
+//      });
+//     it("- namespace : IAllControl ", () => {
+//         require('../src/i-control-all');
         
-        expect(global._L.IAllControl).toBeDefined();
-        expect(global._L.Interface.IAllControl).toBeDefined();
-    });
-});
+//         expect(global._L.IAllControl).toBeDefined();
+//         expect(global._L.Interface.IAllControl).toBeDefined();
+//     });
+// });
 describe.skip("load: i-collection.js <ICollection>", () => {
     beforeEach(() => {
         jest.resetModules();
@@ -128,9 +128,9 @@ describe.skip("load: i-collection.js <ICollection>", () => {
     it("- namespace : ICollection ", () => {
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-lookup');
-        require('../src/i-control-part');
-        require('../src/i-collection-base');
+        // require('../src/i-control-lookup');
+        // require('../src/i-control-part');
+        // require('../src/i-collection-base');
         require('../src/i-collection');
 
         expect(global._L.ICollection).toBeDefined();
@@ -139,25 +139,25 @@ describe.skip("load: i-collection.js <ICollection>", () => {
     it("- 예외 : Util 로딩이 인된경우", () => {
         expect(() => require('../src/i-collection')).toThrow(/Util/);
     });
-    it("- 예외 : IPartControl 로딩이 인된경우", () => {
-        require('../src/util-type');
-        require('../src/util');
-        require('../src/i-control-lookup');
-        expect(() => require('../src/i-collection')).toThrow(/IPartControl/);
-    });
-    it("- 예외 : ILookupControl 로딩이 인된경우", () => {
-        require('../src/util-type');
-        require('../src/util');
-        require('../src/i-control-part');
-        expect(() => require('../src/i-collection')).toThrow(/ILookupControl/);
-    });
-    it("- 예외 : IBaseCollection 로딩이 인된경우", () => {
-        require('../src/util-type');
-        require('../src/util');
-        require('../src/i-control-part');
-        require('../src/i-control-lookup');
-        expect(() => require('../src/i-collection')).toThrow(/IBaseCollection/);
-    });
+    // it("- 예외 : IPartControl 로딩이 인된경우", () => {
+    //     require('../src/util-type');
+    //     require('../src/util');
+    //     require('../src/i-control-lookup');
+    //     expect(() => require('../src/i-collection')).toThrow(/IPartControl/);
+    // });
+    // it("- 예외 : ILookupControl 로딩이 인된경우", () => {
+    //     require('../src/util-type');
+    //     require('../src/util');
+    //     require('../src/i-control-part');
+    //     expect(() => require('../src/i-collection')).toThrow(/ILookupControl/);
+    // });
+    // it("- 예외 : IBaseCollection 로딩이 인된경우", () => {
+    //     require('../src/util-type');
+    //     require('../src/util');
+    //     require('../src/i-control-part');
+    //     require('../src/i-control-lookup');
+    //     expect(() => require('../src/i-collection')).toThrow(/IBaseCollection/);
+    // });
     it("- 예외 : 모두 로딩이 인된경우", () => {
         expect(() => require('../src/i-collection')).toThrow(/module load/);
     });
@@ -171,9 +171,9 @@ describe.skip("load: i-collection-property.js <IPropertyCollection>", () => {
     it("- namespace : IPropertyCollection ", () => {
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-lookup');
-        require('../src/i-control-part');
-        require('../src/i-collection-base');
+        // require('../src/i-control-lookup');
+        // require('../src/i-control-part');
+        // require('../src/i-collection-base');
         require('../src/i-collection');
         require('../src/i-collection-property');
 
@@ -183,8 +183,8 @@ describe.skip("load: i-collection-property.js <IPropertyCollection>", () => {
     it("- 예외 : ICollection 로딩이 인된경우", () => {
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-lookup');
-        require('../src/i-control-part');
+        // require('../src/i-control-lookup');
+        // require('../src/i-control-part');
 
         expect(() => require('../src/i-collection-property')).toThrow(/ICollection/);
     });

@@ -30,9 +30,9 @@ describe.skip("[target: collection-property.js, collection-array.js, collection-
         it("- 로딩 성공 ", () => {
             require('../src/util-type');            // ref
             require('../src/util');
-            require('../src/i-control-lookup');     // ref
-            require('../src/i-control-part');       // ref
-            require('../src/i-collection-base');
+            // require('../src/i-control-lookup');     // ref
+            // require('../src/i-control-part');       // ref
+            // require('../src/i-collection-base');
             require('../src/i-collection');
             require('../src/observer');
             require('../src/collection-base');
@@ -58,9 +58,9 @@ describe.skip("[target: collection-property.js, collection-array.js, collection-
         it("- 예외 : BaseCollection 로딩이 인된 경우", () => {
             require('../src/util-type');            // ref
             require('../src/util');
-            require('../src/i-control-lookup');     // ref
-            require('../src/i-control-part');       // ref
-            require('../src/i-collection-base');         // ref
+            // require('../src/i-control-lookup');     // ref
+            // require('../src/i-control-part');       // ref
+            // require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/i-collection-array');         // ref
             expect(() => require('../src/collection-array')).toThrow(/BaseCollection/);
@@ -68,9 +68,9 @@ describe.skip("[target: collection-property.js, collection-array.js, collection-
         it("- 로딩 성공 ", () => {
             require('../src/util-type');            // ref
             require('../src/util');
-            require('../src/i-control-lookup');     // ref
-            require('../src/i-control-part');       // ref
-            require('../src/i-collection-base');         // ref
+            // require('../src/i-control-lookup');     // ref
+            // require('../src/i-control-part');       // ref
+            // require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/i-collection-array');         // ref
             require('../src/observer');             // ref
@@ -98,9 +98,9 @@ describe.skip("[target: collection-property.js, collection-array.js, collection-
         it("- 예외 : BaseCollection 로딩이 인된경우", () => {
             require('../src/util-type');            // ref
             require('../src/util');
-            require('../src/i-control-lookup');     // ref
-            require('../src/i-control-part');       // ref
-            require('../src/i-collection-base');         // ref
+            // require('../src/i-control-lookup');     // ref
+            // require('../src/i-control-part');       // ref
+            // require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/i-collection-property');
     
@@ -109,9 +109,9 @@ describe.skip("[target: collection-property.js, collection-array.js, collection-
         it("- 로딩 성공 ", () => {
             require('../src/util-type');            // ref
             require('../src/util');
-            require('../src/i-control-lookup');     // ref
-            require('../src/i-control-part');       // ref
-            require('../src/i-collection-base');         // ref
+            // require('../src/i-control-lookup');     // ref
+            // require('../src/i-control-part');       // ref
+            // require('../src/i-collection-base');         // ref
             require('../src/i-collection');         // ref
             require('../src/observer');             // ref
             require('../src/collection-base');
