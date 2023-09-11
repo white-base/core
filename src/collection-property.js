@@ -118,12 +118,25 @@
         };
 
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        PropertyCollection.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+            
+            if (!this._compare(this._keys, p_target._keys)) return false;
+            return true;
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
         PropertyCollection.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
 
             obj._elem = [];
             for (var i = 0; i < this._elements.length; i++) {

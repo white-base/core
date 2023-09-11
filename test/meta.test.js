@@ -59,6 +59,17 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(guid1).not.toBe(guid3);
             });
         });
+        describe("MetaObject.equal(tar): bool <객체 비교>", () => {
+            it("- equal() : 비교, 거꾸로 비교 ", () => {
+                const c1 = new MetaObjectSub();
+                const c2 = new MetaObjectSub();
+        
+                expect(c1.equal(c2)).toBe(true);
+                expect(c2.equal(c1)).toBe(true);
+                expect(c2.equal({})).toBe(false);
+                expect(c2.equal(10)).toBe(false);
+            });
+        });
         describe("MetaObject.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {
                 const c = new MetaObjectSub();
@@ -189,6 +200,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         //     expect(typeNames[3]).toBe('MetaElementSub');
         //     expect(typeNames.length).toBe(4);
         // });
+        
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- _type : function ", () => {
                 const c = new MetaElementSub();
@@ -235,7 +247,27 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
+        describe("MetaElement.equal(tar): bool <객체 비교>", () => {
+            it("- equal() : 비교, 거꾸로 비교 ", () => {
+                const c1 = new MetaElementSub('E1');
+                const c2 = new MetaElementSub('E1');
+                const c3 = new MetaElementSub('E2');
         
+                expect(c1.equal(c2)).toBe(true);
+                expect(c2.equal(c1)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+                expect(c1.equal({})).toBe(false);
+                expect(c1.equal(10)).toBe(false);
+            });
+            it("- equal() : 타입 비교", () => {
+                const c1 = new MetaObject();
+                const c2 = new MetaElement();
+        
+                expect(c1.equal(c2)).toBe(false);
+                expect(c2.equal(c1)).toBe(false);
+            });
+
+        });
         describe("MetaElement.getObject(p_vOpt): fun <객체 얻기>", () => {
             it("- getObject(): fun ", () => {
                 function Foo(name) {
@@ -321,14 +353,14 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(m1 !== m2).toBe(true);
                 expect(m1._guid !== m2._guid).toBe(true);
                 expect(m1._type === m2._type).toBe(true);
-                expect(m1.metaName === m2.metaName).toBe(true);
+                expect(m1._name === m2._name).toBe(true);
             });
         });
         describe("예외", () => {
-            it("- 예외 : metaName, guid ", () => {
-                const i = new MetaElement('metaName');
-        
-                expect(()=> i.metaName = 10).toThrow(/metaName.*string/);
+            it("- 예외 : _name, guid ", () => {
+                const i = new MetaElement('_name');
+                
+                expect(()=> i._name = 10).toThrow('ES021');
                 expect(()=> i._guid = 10).toThrow(/set.*_guid/); // 직접 설정할 경우는 없음
             });
         });

@@ -95,15 +95,64 @@
         MetaObject._PARAMS = [];         // creator parameter
 
         /**
+         * 단일 객체 비교
+         * @param {*} p_obj1 
+         * @param {*} p_obj2 
+         * @returns 
+         */
+        MetaObject.prototype._compare = function(p_obj1, p_obj2) {
+            var _this = this;
+            
+            if (p_obj1 === p_obj2) return true;
+            if (Array.isArray(p_obj1)) return compareArray(p_obj1, p_obj2);
+
+            if (p_obj1 instanceof MetaObject) {
+                var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체
+                var obj2 = p_obj1.getObject(-1);
+                return Util.deepEqual(obj1, obj2);
+                // if (!p_obj1.equal(p_obj2)) return false;
+            } else if (typeof p_obj1 === 'object' && p_obj1 !== null) {
+                return Util.deepEqual(p_obj1, p_obj2);
+            } else {
+                return p_obj1 === p_obj2;
+            }
+            
+            // inner function
+            function compareArray(p_arr1, p_arr2) {
+                if (!Array.isArray(p_arr1) || !Array.isArray(p_arr2)) return false;
+                if (p_arr1.length !== p_arr2.length) return false;
+                for (var i = 0; i < p_arr1.length; i++) {
+                    if (!_this._compare(p_arr1[i], p_arr2[i])) return false;
+                }
+                return true;
+            }
+        };
+
+        /**
+         * 객체 비교
+         * === 연산자의 객체주소 비교가 아니고, 타입과 값에 대한 비교
+         * 단, _guid 는 비고 제외 
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaObject.prototype.equal = function(p_target) {
+            if (typeof p_target !== 'object') return false;
+            return this._type === p_target._type ? true : false;
+        };
+
+        /**
          * 메타 객체를 얻는다
+         * -1 : _guid 제외
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
          * @returns {object}
          */
         MetaObject.prototype.getObject = function(p_vOpt) {
             var obj = {};
+            var vOpt = p_vOpt || 0;
 
-            obj._guid = this._guid;
+            if (vOpt > -1) obj._guid = this._guid;
             obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
             return obj;                        
         };
@@ -131,6 +180,7 @@
         //         this.__SET$_guid(p_mObj._guid, this);
         //     } else return meta;
         // };
+
 
         
         /**

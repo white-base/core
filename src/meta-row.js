@@ -63,13 +63,11 @@
         function MetaRow(p_entity) {
             _super.call(this);
             
-            var _elements = [];
-            var _this   = this;
             var __event  = new Observer(this);
             var _entity  = null;
-            // var _transQueue = new TransactionQueue(this);
-
+            var _elements = [];
             var _keys = [];
+            var _this   = this;
 
             /** 
              * 이벤트 객체
@@ -240,12 +238,28 @@
         };
 
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaRow.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
+            if (!this._compare(this._entity, p_target._entity)) return false;
+            if (!this._compare(this._elements, p_target._elements)) return false;
+            if (!this._compare(this._keys, p_target._keys)) return false;
+            return true;
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
         MetaRow.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
 
             obj._entity = MetaRegistry.createReferObject(this._entity);
             obj._elem = [];

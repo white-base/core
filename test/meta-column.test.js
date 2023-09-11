@@ -22,6 +22,18 @@ describe("[target: meta-column.js ]", () => {
         // jest.resetModules();
     });
     describe("MetaColumn :: 클래스", () => {
+        describe("MetaColumn.columnName", () => {
+            it("- this.columnName : 컬럼명 변경시 메타명 변경 ", () => {
+                var item1 = new MetaColumn('i1');
+                
+                expect(item1.columnName).toBe('i1');
+                expect(item1._name).toBe('i1');
+                // 변경
+                item1.columnName = 'ii1';
+                expect(item1.columnName).toBe('ii1');
+                expect(item1._name).toBe('ii1');
+            });
+        });
         describe("MetaColumn() <생성자>", () => {
             it("- new MetaColumn(name, null, property) : 생성시 속성 설정 ", () => {
                 var item1 = new MetaColumn('i1', null, {
@@ -181,49 +193,132 @@ describe("[target: meta-column.js ]", () => {
             });
         });
         
-        describe("this.valid(value, r_result) <제약조건 검사>", () => {
-            it("- valid(value, r_result) : 제약조건 검사 ", () => {     // REVIEW: r_result => 존재시 object 이어야함, 검사 추가
-                var item1 = new MetaColumn('i1');
-                item1.isNotNull = false;
-                item1.setConstraint(/10/, '10 시작...', 100, true);
-                item1.setConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
-                item1.setConstraint(/\D/, '숫자만...', 300);   // return 기본값 = false
-                var result = {};
         
-                // true
-                expect(item1.valid('10', result)).toBe(true);
-                expect(item1.valid('1000', result)).toBe(true);
-                // false
-                expect(item1.valid('', result)).toBe(false);        // 실패 : 10로 시작을 안해서
-                expect(item1.valid('10000', result)).toBe(false);   // 실패 : 5자리 이상
-                expect(item1.valid('100a', result)).toBe(false);    // 실패 : 문자가 들어가서
+        describe("MetaRow.equal() <객체 비교>", () => {
+            it("- equal() : __event ", () => {
+                var c1 = new MetaColumn();
+                var c2 = new MetaColumn();
+                var fun1 = function(){return 'Fun1'};
+
+                expect(c1.equal(c2)).toBe(true);
+                c1.onChanged = fun1;
+                expect(c1.equal(c2)).toBe(false);
             });
-            it("- valid(value, r_result) : isNotNull 여부 ", () => {
-                var item1 = new MetaColumn('i1');
-                item1.isNotNull = false;
-                var item2 = new MetaColumn('i2');
-                item2.isNotNull = true;     // 공백허용 안함
-                var result1 = {};
-                var result2 = {};
-        
-                expect(item1.valid('', result1)).toBe(true);
-                expect(item2.valid('', result2)).toBe(false);
+            it("- equal() : 각각 _entity 로 비교 ", () => {
+                var c1 = new MetaColumn('C1');
+                var c2 = new MetaColumn('C1');
+
+                expect(c1.equal(c2)).toBe(true);
             });
-            it("- valid(value, r_result) : isNotNull, isNullPass ", () => {
-                var item1 = new MetaColumn('i1');
-                item1.isNotNull      = false;
-                item1.isNullPass     = true;
-                var item2 = new MetaColumn('i2');
-                item2.isNotNull     = true;     // 공백 불가
-                item2.isNullPass    = true;     
-                var result1 = {};
-                var result2 = {};
-        
-                expect(item1.valid('', result1)).toBe(true);
-                expect(item2.valid('', result2)).toBe(false);
+            it("- equal() : 속성들 비교 ", () => {
+                var prop1 = {
+                    default: 'D1',
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                var prop2 = {   // default 빠짐
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                var prop3 = {   // caption 빠짐
+                    default: 'D1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                var prop4 = {   // isNotNull 빠짐
+                    default: 'D1',
+                    caption: 'C1',
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                var prop5 = {   // constraints 대문자
+                    default: 'D1',
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'MESSAGE', code: 'C1', return: true },  // 다른 위치
+                    ],   
+                    value: 'V1'
+                };
+                var prop6 = {   // value 빠짐
+                    default: 'D1',
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                };
+
+                var c1 = new MetaColumn('C1', null, prop1);
+                var c2 = new MetaColumn('C1',null, prop1);
+                var c3 = new MetaColumn('C1',null, prop2);
+                var c4 = new MetaColumn('C1',null, prop3);
+                var c5 = new MetaColumn('C1',null, prop4);
+                var c6 = new MetaColumn('C1',null, prop5);
+                var c7 = new MetaColumn('C1',null, prop6);
+
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+                expect(c1.equal(c4)).toBe(false);
+                expect(c1.equal(c5)).toBe(false);
+                expect(c1.equal(c6)).toBe(false);
+                expect(c1.equal(c7)).toBe(false);
+            });
+            it("- equal() : setter 로 비교 ", () => {
+                var c1 = new MetaColumn('C1');
+                var c2 = new MetaColumn('C1');
+                var c3 = new MetaColumn('C1');
+                var c4 = new MetaColumn('C1');
+                var c5 = new MetaColumn('C1');
+                var fun1 = function() {return 1};
+                var fun2 = function() {return 1};   // fun1 내용은 같음, 주소는 다름
+                var fun3 = function() {return 2};   // 내용 다름
+                c1.setter = fun1;
+                c2.setter = fun1;
+                c3.setter = fun2;
+                c4.setter = fun3;
+
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+                expect(c1.equal(c4)).toBe(false);
+            });
+            it("- equal() : getter 로 비교 ", () => {
+                var c1 = new MetaColumn('C1');
+                var c2 = new MetaColumn('C1');
+                var c3 = new MetaColumn('C1');
+                var c4 = new MetaColumn('C1');
+                var c5 = new MetaColumn('C1');
+                var fun1 = function() {return 1};
+                var fun2 = function() {return 1};   // fun1 내용은 같음, 주소는 다름
+                var fun3 = function() {return 2};   // 내용 다름
+                c1.getter = fun1;
+                c2.getter = fun1;
+                c3.getter = fun2;
+                c4.getter = fun3;
+
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+                expect(c1.equal(c4)).toBe(false);
             });
         });
-        describe("this.clone() <복제>", () => {
+        
+        // TODO: getObject()
+        // TODO: setObject()
+
+        describe("MetaColumn.clone() <복제>", () => {
             it("- clone() : 복제 ", () => {
                 var table = new MetaTable('T1');
                 var item1 = new MetaColumn('i1', table, {
@@ -266,6 +361,51 @@ describe("[target: meta-column.js ]", () => {
                 expect(item2.value).toBe('V1');
                 // 비교
                 expect(item1 === item2).toBe(false);
+            });
+        });
+
+        // TODO:: setContraint()
+
+        describe("MetaColumn.valid(value, r_result) <제약조건 검사>", () => {
+            it("- valid(value, r_result) : 제약조건 검사 ", () => {     // REVIEW: r_result => 존재시 object 이어야함, 검사 추가
+                var item1 = new MetaColumn('i1');
+                item1.isNotNull = false;
+                item1.setConstraint(/10/, '10 시작...', 100, true);
+                item1.setConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
+                item1.setConstraint(/\D/, '숫자만...', 300);   // return 기본값 = false
+                var result = {};
+        
+                // true
+                expect(item1.valid('10', result)).toBe(true);
+                expect(item1.valid('1000', result)).toBe(true);
+                // false
+                expect(item1.valid('', result)).toBe(false);        // 실패 : 10로 시작을 안해서
+                expect(item1.valid('10000', result)).toBe(false);   // 실패 : 5자리 이상
+                expect(item1.valid('100a', result)).toBe(false);    // 실패 : 문자가 들어가서
+            });
+            it("- valid(value, r_result) : isNotNull 여부 ", () => {
+                var item1 = new MetaColumn('i1');
+                item1.isNotNull = false;
+                var item2 = new MetaColumn('i2');
+                item2.isNotNull = true;     // 공백허용 안함
+                var result1 = {};
+                var result2 = {};
+        
+                expect(item1.valid('', result1)).toBe(true);
+                expect(item2.valid('', result2)).toBe(false);
+            });
+            it("- valid(value, r_result) : isNotNull, isNullPass ", () => {
+                var item1 = new MetaColumn('i1');
+                item1.isNotNull      = false;
+                item1.isNullPass     = true;
+                var item2 = new MetaColumn('i2');
+                item2.isNotNull     = true;     // 공백 불가
+                item2.isNullPass    = true;     
+                var result1 = {};
+                var result2 = {};
+        
+                expect(item1.valid('', result1)).toBe(true);
+                expect(item2.valid('', result2)).toBe(false);
             });
         });
 

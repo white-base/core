@@ -1,5 +1,5 @@
 /**
- * namespace _L.Common
+ * namespace _L.Meta
  */
 (function(_global) {
     'use strict';
@@ -10,7 +10,7 @@
     //==============================================================
     // 1. namespace declaration
     _global._L                  = _global._L || {};
-    _global._L.Common           = _global._L.Common || {};
+    _global._L.Meta             = _global._L.Meta || {};
 
     //==============================================================
     // 2. import module
@@ -29,7 +29,7 @@
     var NamespaceManager = (function () {
         /**
          * 네임스페이스 관리자
-         * @constructs _L.Common.NamespaceManager
+         * @constructs _L.Meta.NamespaceManager
          */
         function NamespaceManager() {
 
@@ -39,7 +39,7 @@
             // var __element = [];
             /**
              * __storage
-             * @member {Array} _L.Common.NamespaceManager#namespace 
+             * @member {Array} _L.Meta.NamespaceManager#namespace 
              */
             Object.defineProperty(this, '__storage',
             {
@@ -50,7 +50,7 @@
             });
             // /**
             //  * __element
-            //  * @member {Array} _L.Common.NamespaceManager#__element 
+            //  * @member {Array} _L.Meta.NamespaceManager#__element 
             //  */
             // Object.defineProperty(this, '__element',
             // {
@@ -61,7 +61,7 @@
 
             // /**
             //  * __path
-            //  * @member {Array} _L.Common.NamespaceManager#__path 
+            //  * @member {Array} _L.Meta.NamespaceManager#__path 
             //  */
             // Object.defineProperty(this, '__path',
             // {
@@ -102,7 +102,7 @@
 
             /**
              * 목록 
-             * @member {Array}  _L.Common.NamespaceManager#list  
+             * @member {Array}  _L.Meta.NamespaceManager#list  
              */
             Object.defineProperty(this, 'list', {
                 get: function() {
@@ -138,7 +138,7 @@
 
             /**
              * 갯수 
-             * @member {Number} _L.Common.NamespaceManager#count 
+             * @member {Number} _L.Meta.NamespaceManager#count 
              */
             Object.defineProperty(this, 'count', {
                 get: function() {
@@ -152,7 +152,7 @@
 
             /**
              * 중복 요소 등록 여부
-             * @member {boolean} _L.Common.NamespaceManager#isOverlap
+             * @member {boolean} _L.Meta.NamespaceManager#isOverlap
              */
             Object.defineProperty(this, 'isOverlap',
             {
@@ -168,7 +168,7 @@
             this.__KEYWORD = ['namespace', 'ns', 'NS', '_type'];
         }
 
-        NamespaceManager._NS = 'Common';    // namespace
+        NamespaceManager._NS = 'Meta';    // namespace
         
         // private 메소드
         function __validNamespace(p_name) {
@@ -452,7 +452,7 @@
         exports.NamespaceManager = NamespaceManager;
     } else {
         _global._L.NamespaceManager = NamespaceManager;
-        _global._L.Common.NamespaceManager = NamespaceManager;    // namespace
+        _global._L.Meta.NamespaceManager = NamespaceManager;    // namespace
     }
 
 }(typeof window !== 'undefined' ? window : global));

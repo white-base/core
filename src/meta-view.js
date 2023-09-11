@@ -64,7 +64,7 @@
 
             var _refEntity = p_baseEntity;
             var _refEntities = [];
-            var viewName;
+            // var viewName;
             var columns;
             var refCollection;
 
@@ -102,12 +102,13 @@
              */
             Object.defineProperty(this, 'viewName', 
             {
-                get: function() { return viewName; },
+                get: function() { return this._name; },
                 set: function(newValue) { 
                     if (newValue === this.viewName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['viewName', 'string']);
                     if (this.metaSet && this.metaSet.views.existViewName(newValue)) Message.error('ES041', [newValue]);
-                    viewName = newValue;
+                    // viewName = newValue;
+                    this.__SET$_name(newValue, this);
                 },
                 configurable: false,
                 enumerable: true
@@ -125,7 +126,7 @@
             });
            
             // this.viewName      = p_name || '';
-            this.viewName = p_name;
+            this.viewName = p_name || '';
             
             // this._refEntities   = [];
             columns = new MetaViewColumnCollection(this, refCollection);
@@ -150,12 +151,27 @@
         };
         
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaView.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this.viewName, p_target.viewName)) return false;
+            if (!this._compare(this._refEntity, p_target._refEntity)) return false;
+            if (!this._compare(this._refEntities, p_target._refEntities)) return false;
+            return true;
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
         MetaView.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
 
             obj.viewName = this.viewName;
             obj._refEntity = MetaRegistry.createReferObject(this.metaSet);            
@@ -275,6 +291,19 @@
 
         MetaViewCollection._NS = 'Meta.Entity';    // namespace
         MetaViewCollection._PARAMS = ['_owner'];  // creator parameter
+
+        /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaViewCollection.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this._baseType, p_target._baseType)) return false;
+            return true;
+        };
 
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.

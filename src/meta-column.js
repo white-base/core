@@ -60,7 +60,7 @@
          * @constructs _L.Meta.Entity.MetaColumn
          * @extends _L.Meta.MetaElement
          * @param {String} p_name 아이템명
-         * @param {MetaEntity} p_entity 소유 MetaEntity
+         * @param {MetaEntity?} p_entity 소유 MetaEntity
          * @param {Object} p_property 속성 객체
          */
         function MetaColumn(p_name, p_entity, p_property) {
@@ -68,7 +68,7 @@
 
             var __value       = null;
             var __event        = new Observer(this);
-            var columnName;
+            // var columnName;
             var _entity;
             var defaultValue  = null;
             var caption       = null;
@@ -135,13 +135,14 @@
              */
             Object.defineProperty(this, 'columnName', 
             {
-                get: function() { return columnName; },
+                get: function() { return this._name; },
                 set: function(newValue) { 
                     if (newValue === this.columnName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
                     if (_entity && _entity.columns.existColumnName(newValue)) Message.error('ES042', [newValue, 'columnName']);
                     if (_entity && _entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
-                    columnName = newValue;
+                    // columnName = newValue;
+                    this.__SET$_name(newValue, this);
                 },
                 configurable: false,
                 enumerable: true
@@ -428,12 +429,36 @@
         };
 
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaColumn.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
+            if (!this._compare(this._entity, p_target._entity)) return false;
+            if (!this._compare(this.columnName, p_target.columnName)) return false;
+            if (!this._compare(this.alias, p_target.alias)) return false;
+            if (!this._compare(this.default, p_target.default)) return false;
+            if (!this._compare(this.caption, p_target.caption)) return false;
+            if (!this._compare(this.isNotNull, p_target.isNotNull)) return false;
+            if (!this._compare(this.isNullPass, p_target.isNullPass)) return false;
+            if (!this._compare(this.constraints, p_target.constraints)) return false;
+            if (!this._compare(this.value, p_target.value)) return false;
+            if (!this._compare(this.getter, p_target.getter)) return false;
+            if (!this._compare(this.setter, p_target.setter)) return false;
+            return true;
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
         MetaColumn.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
 
             // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
             obj.columnName = this.columnName;
@@ -670,6 +695,19 @@
         MetaColumnCollection._PARAMS = ['_owner', '_baseType'];         // creator parameter
 
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaColumnCollection.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this._baseType, p_target._baseType)) return false;
+            return true;
+        };
+
+        /**
          * 컬렉션에 아이템 유무를 검사한다.
          * @param {*} p_elem 
          * @returns {*} 
@@ -859,6 +897,20 @@
 
         MetaViewColumnCollection._NS = 'Meta.Entity';                       // namespace
         MetaViewColumnCollection._PARAMS = ['_owner', '_baseCollection'];   // creator parameter
+
+        /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaViewColumnCollection.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this._baseCollection, p_target._baseCollection)) return false;
+            return true;
+        };
+
 
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.

@@ -182,6 +182,43 @@
         }
     }
 
+    var deepCopy = function(object) {
+        if (object === null || typeof object !== "object") {
+          return object;
+        }
+        // 객체인지 배열인지 판단
+        var copy = Array.isArray(object) ? [] : {};
+       
+        for (var key of Object.keys(object)) {
+          copy[key] = deepCopy(object[key]);
+        }
+        return copy;
+      }
+
+      var deepEqual = function(object1, object2) {
+        var keys1 = Object.keys(object1);
+        var keys2 = Object.keys(object2);
+       
+        if (keys1.length !== keys2.length) return false;
+       
+        for (const key of keys1) {
+          var val1 = object1[key];
+          var val2 = object2[key];
+          var areObjects = isObject(val1) && isObject(val2);
+          if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+            return false;
+          }
+        }
+        return true;
+        
+        // inner function
+        function isObject(object) {
+            return object != null && typeof object === 'object';
+        }
+      }
+       
+      
+
     //==============================================================
     // 5. module export
     if (isNode) {     
@@ -195,6 +232,8 @@
         exports.checkUnionType = checkUnionType;
         exports.validType = validType;
         exports.validUnionType = validUnionType;
+        exports.deepCopy = deepCopy;
+        exports.deepEqual = deepEqual;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
         // module.exports.equalType = equalType;
     } else {
@@ -208,7 +247,9 @@
             checkType: checkType,
             checkUnionType: checkUnionType,
             validType: validType,
-            validUnionType: validUnionType
+            validUnionType: validUnionType,
+            deepCopy: deepCopy,
+            deepEqual: deepEqual,
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;

@@ -45,7 +45,7 @@
     
         /**
          * 메타 이름
-         * @member {string} _L.Meta.MetaRegistry#metaName
+         * @member {string} _L.Meta.MetaRegistry#_name
          */
         Object.defineProperty(MetaRegistry, "list", {
             get: function() { 

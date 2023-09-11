@@ -22,7 +22,7 @@ describe("[target: meta-row.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
-        describe("Row(entity) <생성자>", () => {
+        describe("MetaRow(entity) <생성자>", () => {
             it("- new Row(entity) : 생성 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');
@@ -50,7 +50,53 @@ describe("[target: meta-row.js]", () => {
                 expect(() => new MetaRow({})).toThrow('ES032');
             });
         });
-        describe("this.clone(): Row <복제>", () => {
+        describe("MetaRow.equal() <객체 비교>", () => {
+            it("- equal() : __event ", () => {
+                var table1 = new MetaTable('T1');
+                var table2 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                table2.columns.addValue('i1', 'V1');
+                var row1 = new MetaRow(table1);
+                var row2 = new MetaRow(table2);
+                var fun1 = function(){return 'Fun1'};
+
+                expect(row1.equal(row2)).toBe(true);
+                row2.onChanged = fun1;
+                expect(row1.equal(row2)).toBe(false);
+            });
+            it("- equal() : 하나의 _entity 로 비교 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                var row1 = new MetaRow(table1);
+                var row2 = new MetaRow(table1);
+                
+                expect(row1.equal(row2)).toBe(true);
+            });
+            it("- equal() : 다른 _entity 비교 ", () => {
+                var table1 = new MetaTable('T1');
+                var table2 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                table2.columns.addValue('i1', 'V1');
+                var row1 = new MetaRow(table1);
+                var row2 = new MetaRow(table2);
+                
+                expect(row1.equal(row2)).toBe(true);
+                row2['i1'] = 'R1';
+                expect(row1.equal(row2)).toBe(false);
+            });
+            it("- equal() : _elements, _keys 비교 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                var row1 = new MetaRow(table1);
+                table1.columns.addValue('i2', 'V2');
+                var row2 = new MetaRow(table1);
+                
+                expect(row1.equal(row2)).toBe(false);
+            });            
+        });
+        // TODO: getObject()
+        // TODO: setObject()
+        describe("MetaRow.clone(): Row <복제>", () => {
             it("- clone() : 복사 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');

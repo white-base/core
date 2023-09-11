@@ -30,6 +30,22 @@ describe("[target: meta-set.js]", () => {
     });
     
     describe("MetaSet :: 클래스", () => {
+        describe("MetaSet.setName <셋이름>", () => {
+            it("- this.setName : 조회 ", () => {
+                var set1 = new MetaSet('S1');
+        
+                expect(set1._name).toBe('S1');
+                expect(set1.setName).toBe('S1');
+            });
+            it("- this.setName : 수정 ", () => {
+                var set1 = new MetaSet('S1');
+                set1.setName = 'S2';
+
+                expect(set1._name).toBe('S2');
+                expect(set1.setName).toBe('S2');
+            });
+        });
+
         describe("MetaSet.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {
                 var set1 = new MetaSet('S1');

@@ -186,6 +186,10 @@
                             msg: '[$1] and [$2] have different lengths. ',
                             long: ''
                         },
+                        4: {
+                            msg: '[$1] is a private type. You cannot set it directly. ',
+                            long: 'If you want to force it, set it to __SET$$1(val, target object).'
+                        },
                     },
                 },
                 W: {    // warning
@@ -338,6 +342,10 @@
                         3: {
                             msg: '[$1]와 [$2]의 길이가 다릅니다. ',
                             long: ''
+                        },
+                        4: {
+                            msg: '[$1]은 private 타입입니다. 직접 설정할 수 없습니다. ',
+                            long: '강제로 설정할 경우, [$2]을 사용해 설정하세요.'
                         },
                     },
                 },

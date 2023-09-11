@@ -49,29 +49,46 @@
         function MetaElement(p_name) {
             _super.call(this);
             
-            var metaName;
+            var _name;
 
             /**
              * 메타 이름
-             * @member {string} _L.Meta.MetaElement#metaName
+             * @member {string} _L.Meta.MetaElement#_name
              */
-            Object.defineProperty(this, 'metaName',
+            Object.defineProperty(this, '_name',
             {
-                get: function() { return metaName; },
+                get: function() { return _name; },
                 set: function(newValue) { 
-                    if (typeof newValue !== 'string') Message.error('ES021', ['metaName', 'string']);
-                    metaName = newValue;
+                    if (typeof newValue !== 'string') Message.error('ES021', ['_name', 'string']);
+                    _name = newValue;
                 },
                 configurable: false,
                 enumerable: true
             });
                         
-            this.metaName = p_name || '';
+            this._name = p_name || '';
+
+            // inner variable access
+            this.__SET$_name = function(val, call) {
+                if (call instanceof MetaElement) _name = val;    // 상속접근 허용
+            }
         }
         Util.inherits(MetaElement, _super);
     
         MetaElement._NS = 'Meta';           // namespace
         MetaElement._PARAMS = ['name'];     // creator parameter
+
+        
+        /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaElement.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+            return this._name === p_target._name ? true : false;
+        };
 
         /**
          * 메타 객체를 얻는다
@@ -79,8 +96,8 @@
          * @returns {object}
          */
         MetaElement.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
-            obj.name = this.metaName;
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
+            obj.name = this._name;
             return obj;                        
         };
 
@@ -91,12 +108,12 @@
          */
         MetaElement.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
-            this.metaName = mObj.name;
+            this._name = mObj.name;
         };
         // MetaElement.prototype.setObject  = function(mObj) {
         //     var parent = _super.prototype.setObject.call(this, mObj);
         //     if(!parent) {
-        //         this.metaName = mObj.name;
+        //         this._name = mObj.name;
         //     } else return parent;
         // };
 

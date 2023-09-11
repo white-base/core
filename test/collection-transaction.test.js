@@ -19,6 +19,7 @@ describe("[target: collection-trans.js]", () => {
                 rows = new TransactionCollection(this);
             }
         });
+
         describe("BaseCollection.remove(elem): bool <컬렉션 삭제>", () => {
             // beforeAll(() => {
             //     let s = new Student();
@@ -153,7 +154,30 @@ describe("[target: collection-trans.js]", () => {
             });
         });
         
+        describe("TransactionCollection.equal() <객체 비교>", () => {
+            it("- equal() : 커밋 전후 비교 ", () => {
+                const c1 = new TransactionCollection();
+                const c2 = new TransactionCollection();
+                c1.add('a1');
+                c2.add('a1');
+                c1.removeAt(0);
+                c2.removeAt(0);
 
+                expect(c1.equal(c2)).toBe(true);
+                c2.commit();    // 커밋후
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : 커밋 전후 비교 ", () => {
+                const c1 = new TransactionCollection();
+                const c2 = new TransactionCollection();
+                c1.add('a1');
+                c2.add('a1');
+
+                expect(c1.equal(c2)).toBe(true);
+                c2.rollback();    // 롤백후
+                expect(c1.equal(c2)).toBe(false);
+            });
+        });
         describe("TransactionCollection.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {
                 const a1 = new TransactionCollection();

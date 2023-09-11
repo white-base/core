@@ -23,6 +23,22 @@ describe("[target: meta-view.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
+        describe("MetaView.viewName <뷰이름>", () => {
+            it("- this.viewName : 조회 ", () => {
+                var table1 = new MetaView('V1');
+        
+                expect(table1._name).toBe('V1');
+                expect(table1.viewName).toBe('V1');
+            });
+            it("- this.viewName : 수정 ", () => {
+                var table1 = new MetaView('V1');
+                table1.viewName = 'V2';
+
+                expect(table1._name).toBe('V2');
+                expect(table1.viewName).toBe('V2');
+            });
+        });
+
         describe("MetaView(name, baseEntity) <생성자>", () => {
             it("- new MetaView(name, baseEntity) ", () => {
                 var view1 = new MetaView('E1');        // 일반 뷰
@@ -52,22 +68,22 @@ describe("[target: meta-view.js]", () => {
                 expect(view1.columns['i3'].caption).toBe('C3');
                 expect(view1.columns['i4'].value).toBe('V4');
                 expect(view1.columns._baseCollection).toBe(undefined);
-                expect(view1.columns['i1']._entity.metaName).toBe('E1');
-                expect(view1.columns['i2']._entity.metaName).toBe('E1');
+                expect(view1.columns['i1']._entity._name).toBe('E1');
+                expect(view1.columns['i2']._entity._name).toBe('E1');
                 // expect(view1.rows[0]['i1']).toBe('R1');
                 // expect(view1.rows[0]['i2']).toBe('R2');
                 // view2
-                expect(view2._refEntities[0].metaName).toBe('E1');
-                expect(view2._refEntities[1].metaName).toBe('T3');
+                expect(view2._refEntities[0]._name).toBe('E1');
+                expect(view2._refEntities[1]._name).toBe('T3');
                 expect(view2.columns['i2'].caption).toBe('C2');
                 expect(view2.columns['i3'].caption).toBe('C3');
                 expect(view2.columns['i4'].value).toBe('V4');
-                expect(view2.columns._baseCollection._owner.metaName).toBe('E1');
+                expect(view2.columns._baseCollection._owner._name).toBe('E1');
                 expect(view2.viewName).toBe('T2');
                 expect(view2.columns.count).toBe(5);
                 expect(view2.rows.count).toBe(0);
-                expect(view2.columns['i1']._entity.metaName).toBe('E1');
-                expect(view2.columns['i2']._entity.metaName).toBe('E1');
+                expect(view2.columns['i1']._entity._name).toBe('E1');
+                expect(view2.columns['i2']._entity._name).toBe('E1');
             });
         });
 
@@ -239,6 +255,38 @@ describe("[target: meta-view.js]", () => {
                 expect(view2.rows[1]['i1']).toBe(10);
             });
         });
+
+        describe("MetaTable.equal() <객체 비교>", () => {
+            it("- equal() : 생성 후 비교 ", () => {
+                const c1 = new MetaView();
+                const c2 = new MetaView();
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1._guid === c2._guid).toBe(false);
+                expect(c1 === c2).toBe(false);
+            });
+            it("- equal() : columns 추가 후 비교 ", () => {
+                const c1 = new MetaView('T1');
+                const c2 = new MetaView('T1');
+                c2.columns.add('a1');
+
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : rows 추가 후 비교 ", () => {
+                const c1 = new MetaView('T1');
+                const c2 = new MetaView('T1');
+                c1.columns.add('a1');
+                c2.columns.add('a1');
+
+                expect(c1.equal(c2)).toBe(true);
+                // row 추가
+                var row = c1.newRow();
+                row['a1'] = 'R1';
+                c1.rows.add(row);
+                expect(c1.equal(c2)).toBe(false);
+            });
+        });
+
         describe("MetaView.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 다른 뷰를 참조로 추가할 경우 ", () => {
                 const v1 = new MetaView('V1');

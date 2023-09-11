@@ -323,7 +323,20 @@ describe("[target: collection-property.js, collection-base.js]", () => {
         
                 expect(s.columns.count).toBe(0);
             });
-        });    
+        });
+        describe("BaseCollection.equal() <객체 비교>", () => {
+            it("- equal() : 생성 후 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const c3 = new PropertyCollection();
+                c1.add('a1');
+                c2.add('a1');
+                c3.add('a2');
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+            });
+        });
         describe("PropertyCollection.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {
                 const a1 = new PropertyCollection();

@@ -419,12 +419,29 @@
         };
 
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaEntity.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this.metaSet, p_target.metaSet)) return false;
+            // if (!this._compare(this.columns, p_target.columns)) return false;
+            // if (!this._compare(this.rows, p_target.rows)) return false;
+            if (!this.columns.equal(p_target.columns)) return false;
+            if (!this.rows.equal(p_target.rows)) return false;
+            return true;
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
         MetaEntity.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
 
             obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
             obj.columns = this.columns.getObject(p_vOpt);

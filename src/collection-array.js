@@ -94,7 +94,7 @@
          * @returns {object}
          */
         ArrayCollection.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
             // var _elems = [];
 
             // obj._owner = MetaRegistry.createReferObject(this._owner);
@@ -120,7 +120,7 @@
          * @returns {object}
          */
         ArrayCollection.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj);
+            _super.prototype.setObject.call(this, mObj, oObj);
             var origin = oObj ? oObj : mObj;
 
             for(var i = 0; i < mObj._elem.length; i++) {

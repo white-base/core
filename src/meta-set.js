@@ -85,10 +85,11 @@
              */
             Object.defineProperty(this, 'setName', 
             {
-                get: function() { return setName; },
+                get: function() { return this._name; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'string') Message.error('ES021', ['setName', 'string']);
-                    setName = newValue;
+                    // setName = newValue;
+                    this.__SET$_name(newValue, this);
                 },
                 configurable: false,
                 enumerable: true
@@ -210,7 +211,7 @@
          * @returns {object}
          */
         MetaSet.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
 
             obj.setName = this.setName;
             obj.tables = this.tables.getObject(p_vOpt);

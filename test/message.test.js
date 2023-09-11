@@ -19,14 +19,14 @@ describe("[target: message.js]", () => {
             it("- get() : 메세지 얻기", () => {
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
 
-                console.warn(msg);
+                // console.warn(msg);
                 expect(msg).toMatch(/ES011/);
             });
             it("- get() : 메세지 얻기 : 한글", () => {
                 Message.lang = 'kor';
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
 
-                console.warn(msg);
+                // console.warn(msg);
                 expect(msg).toMatch(/NamespaceManager/);
             });
             it("- get() : 짧은 메세지 얻기 : 한글", () => {
@@ -34,13 +34,13 @@ describe("[target: message.js]", () => {
                 Message.isLong = false;
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
 
-                console.warn(msg);
+                // console.warn(msg);
                 expect(msg).toMatch(/NamespaceManager/);
             });
             it("- get() : 없는 코드", () => {
                 const msg = Message.get('AEEEe1', ['NamespaceManager', 'namespace-manager']);
 
-                console.warn(msg);
+                // console.warn(msg);
                 expect(msg).toMatch(/code/);
             });
         });
@@ -48,7 +48,7 @@ describe("[target: message.js]", () => {
             it("- getInfo() : 메세지 얻기", () => {
                 const msg = Message.getInfo('ES011');
 
-                console.warn(msg);
+                // console.warn(msg);
                 expect(msg.memo).toMatch(/1:/);
             });
         });

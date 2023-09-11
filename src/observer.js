@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var Util;
     
     //==============================================================
     // 1. namespace declaration
@@ -16,12 +17,15 @@
     // 2. import module
     if (isNode) {     
         Message                 = require('./message').Message;
+        Util                    = require('./util');
     } else {    
         Message                 = _global._L.Message;
+        Util                    = _global._L.Util
     }
 
     //==============================================================Á
     // 3. module dependency check
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
 
     //==============================================================
     // 4. module implementation   
@@ -39,7 +43,27 @@
             var __subscribers = { any: [] };
 
             /*_______________________________________*/        
-            // public property
+            // priavte property
+            
+            /**
+             * 전역 구독자
+             * @private
+             * @member {object}
+             */
+            Object.defineProperty(this, '__subscribers',
+            {
+                get: function() { return __subscribers; },
+                // get: function() { 
+                //     return Util.deepCopy(__subscribers); 
+                // },
+                set: function(nVal) { 
+                    Message.error('ES064', ['__subscribers', '__SET$__subscribers(val, caller)']);                    
+                    // if (typeof nVal !== 'object') Message.error('ES021', ['__subscribers', 'object']);
+                    // if (typeof nVal.any === 'undefined') Message.error('ES021', ['__subscribers.any', 'array']);
+                    // __subscribers = nVal;
+                }
+            });
+
             Object.defineProperty(this, 'isLog', 
             {
                 get: function() { return isLog; },
@@ -63,9 +87,6 @@
                 }
             });
 
-            /*_______________________________________*/        
-            // protected property
-
             /**
              * 등록함수의 this 
              * @protected
@@ -75,28 +96,24 @@
                 value: p_caller,
                 writable: false
             });
-            
-            /*_______________________________________*/        
-            // priavte property
 
-            /**
-             * 전역 구독자
-             * @member {object}
-             */
-            Object.defineProperty(this, '__subscribers',
-            {
-                get: function() { return __subscribers; },
-                set: function(nVal) { 
-                    if (typeof nVal !== 'object') Message.error('ES021', ['__subscribers', 'object']);
-                    if (typeof nVal.any === 'undefined') Message.error('ES021', ['__subscribers.any', 'array']);
-                    __subscribers = nVal;
+            // inner variable access
+            this.__SET$__subscribers = function(val, call) {
+                if (call instanceof Observer) { // 상속접근 허용
+                    if (typeof val !== 'object') Message.error('ES021', ['__subscribers', 'object']);
+                    if (typeof val.any === 'undefined') Message.error('ES021', ['__subscribers.any', 'array']);
+                    __subscribers = val;    
                 }
-            });
-            
+            }
         }
 
         Observer._NS = 'Common';    // namespace
         Observer._PARAMS = ['caller'];  // creator parameter
+
+        Observer.prototype.init = function() {
+            var obj = { any: [] };
+            this.__SET$__subscribers(obj, this);
+        };
 
         /**
          * 구독 신청
@@ -123,7 +140,8 @@
          */
         Observer.prototype.unsubscribe = function(p_code, p_fn) {
             if (typeof p_code === 'undefined')  {
-                this.__subscribers = {any: []};
+                // this.__subscribers = {any: []};
+                this.init();
                 return;
             }
 

@@ -95,12 +95,26 @@
         TransactionCollection._PARAMS = ['_owner'];    // creator parameter
         
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        TransactionCollection.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+            
+            if (!this._compare(this._transQueue.queue, p_target._transQueue.queue)) return false;
+            if (this.autoChanges !== p_target.autoChanges) return false;
+            return true;
+        };
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
         TransactionCollection.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
             
             if (this.autoChanges !== false) obj.autoChanges = this.autoChanges;
             return obj;                        

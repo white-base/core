@@ -59,7 +59,7 @@
         function MetaTable(p_name) {
             _super.call(this, p_name);
 
-            var tableName;
+            // var tableName;
             var columns = new MetaTableColumnCollection(this);
 
             /**
@@ -68,12 +68,13 @@
              */
             Object.defineProperty(this, 'tableName', 
             {
-                get: function() { return tableName; },
+                get: function() { return this._name; },
                 set: function(newValue) { 
                     if (newValue === this.tableName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['tableName', 'string']);
                     if (this.metaSet && this.metaSet.tables.existTableName(newValue)) Message.error('ES042', ['tableName', newValue]);
-                    tableName = newValue;
+                    // tableName = newValue;
+                    this.__SET$_name(newValue, this);
                 },
                 configurable: false,
                 enumerable: true
@@ -99,12 +100,25 @@
         MetaTable._PARAMS = ['name'];  // creator parameter
 
         /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaTable.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this.tableName, p_target.tableName)) return false;
+            return true;
+        };
+        
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
         MetaTable.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this);
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
 
             obj.tableName = this.tableName;
             return obj;                        
@@ -237,6 +251,19 @@
 
         MetaTableCollection._NS = 'Meta.Entity';    // namespace
         MetaTableCollection._PARAMS = ['_owner'];  // creator parameter
+
+        /**
+         * 객체 비교
+         * @virtual
+         * @param {object} p_target 대상 MetaObject
+         * @returns {boolean}
+         */
+        MetaTableCollection.prototype.equal = function(p_target) {
+            if (!_super.prototype.equal.call(this, p_target)) return false;
+
+            if (!this._compare(this._baseType, p_target._baseType)) return false;
+            return true;
+        };
 
         /**
          * 테이블 컬렉션에 엔티티 추가한다.
