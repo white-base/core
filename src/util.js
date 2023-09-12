@@ -135,8 +135,7 @@
      * @param {function} args 대상 함수
      */
     var implement = function(object, args) {
-        var typeName;
-        var obj;    
+        // var obj;    
         var _interface = [];
         var msg = '';
 
@@ -167,8 +166,13 @@
             
             // POINT:
             // validType(object, arguments[i]);
-            msg = checkTypeMessage(arguments[i], object);
-            if (msg.length > 0) Message.error('ES017', [typeName(object), typeName(arguments[i]), msg]);
+            try {
+                validType(object, arguments[i]);
+            } catch (error) {
+                Message.error('ES017', [typeName(object), typeName(arguments[i]), error.message]);
+            }
+            // msg = checkTypeMessage(arguments[i], object);
+            // if (msg.length > 0) Message.error('ES017', [typeName(object), typeName(arguments[i]), msg]);
 
         }
         // var types = Array.prototype.slice.call(arguments, 1);

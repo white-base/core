@@ -381,8 +381,8 @@
             if(msg.length === 0) return true;
             else arrMsg.push(msg);
         }
-        Message.error('ES054', ['this', 'validType()', arrMsg]);
-        // throw new Error(arrMsg);
+        // Message.error('ES054', ['this', 'validType()', arrMsg]);
+        throw new Error(arrMsg);
     };
 
     // AND 조건
@@ -400,7 +400,7 @@
         return true;
     };
 
-
+    // REVIEW: 에러 처리시 try catch 로 잡이서 처리
     var validUnionType = function(target, types) {
         // var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
@@ -410,8 +410,8 @@
 
         for(var i = 0; i < arrType.length; i++) {
             msg = checkTypeMessage(arrType[i], target);
-            if(msg.length > 0)  Message.error('ES054', ['this', 'validUnionType()', msg]);
-            // if(msg.length > 0)  throw new Error(msg);
+            // if(msg.length > 0)  Message.error('ES054', ['this', 'validUnionType()', msg]);
+            if(msg.length > 0)  throw new Error(msg);
         }
         return true;
     };

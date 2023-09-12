@@ -80,6 +80,11 @@
                 enumerable: true
             });
             
+            // inner variable access
+            this.__SET$_guid = function(val, call) {
+                if (call instanceof MetaObject) _guid = val;    // 상속접근 허용
+            }
+
             // 추상클래스 검사
             if (this._type.hasOwnProperty('_ABSCRACT')) {
                 Message.error('ES018', [this._type.name, 'clone()']);
@@ -88,17 +93,6 @@
             // _NS 선언이 없으면 부모의 것을 기본으로 사용!
             if (this._type && this._type._NS) this._ns = this._type._NS;
             MetaRegistry.register(this);
-
-            // inner variable access
-            this.__SET$_guid = function(val, call) {
-                if (call instanceof MetaObject) _guid = val;    // 상속접근 허용
-            }
-            // this.__SET$_isAbstract = function(val, call) {
-            //     if (call instanceof MetaObject) {
-            //         if (typeof val !== 'boolean') Message.error('ES021', ['_isAbstract', 'boolean']);
-            //         _isAbstract = val;
-            //     } else Message.error('ES032', ['_isAbstract', 'MetaObject']);
-            // }
 
             Util.implements(this, IObject, IMarshal);
         }

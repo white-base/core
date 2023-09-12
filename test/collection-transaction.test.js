@@ -528,8 +528,8 @@ describe("[target: collection-trans.js]", () => {
             const c1 = new Student(1);
             const result = elem.rows.add(c1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES054(\s|.)*ES032/);
-            expect(() => elem.rows.add('str')).toThrow(/ES054(\s|.)*ES032/);
+            expect(() => elem.rows.add(null)).toThrow(/ES032/);
+            expect(() => elem.rows.add('str')).toThrow(/ES032/);
             expect(result).toBeTruthy();
         });
         it("- 단일 타입 : rows.요소명 = obj ", () => {
@@ -539,7 +539,7 @@ describe("[target: collection-trans.js]", () => {
             const result = elem.rows.add(c1);
             elem.rows[0] = c2;
     
-            expect(() => elem.rows[0] = 10 ).toThrow(/ES054(\s|.)*ES032/);
+            expect(() => elem.rows[0] = 10 ).toThrow(/ES032/);
             expect(elem.rows[0].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result).toBeTruthy();
@@ -580,8 +580,8 @@ describe("[target: collection-trans.js]", () => {
             const result1 = elem.rows.add(c1);
             const result2 = elem.rows.add(m1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES054(\s|.)*ES032(\s|.)*ES032/);
-            expect(() => elem.rows.add('str')).toThrow(/ES054(\s|.)*ES032(\s|.)*ES032/);
+            expect(() => elem.rows.add(null)).toThrow(/ES032(\s|.)*ES032/);
+            expect(() => elem.rows.add('str')).toThrow(/ES032(\s|.)*ES032/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -595,7 +595,7 @@ describe("[target: collection-trans.js]", () => {
             elem.rows[0] = c2;
             elem.rows[1] = c2;
     
-            expect(() => elem.rows[0] = 'str' ).toThrow(/ES054(\s|.)*ES032(\s|.)*ES032/);
+            expect(() => elem.rows[0] = 'str' ).toThrow(/ES032(\s|.)*ES032/);
             expect(elem.rows[0].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(elem.rows[1].level).toBe(2);                   // 교체된 객체

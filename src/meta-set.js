@@ -258,16 +258,6 @@
             this.views.setObject(mObj.views, origin);
         };
 
-        MetaSet.prototype.clear  = function() {
-            for(var i = 0; i < this.tables.count; i++) this.tables[i].clear();
-            for(var i = 0; i < this.views.count; i++) this.views[i].clear();
-        };
-        
-        MetaSet.prototype.reset  = function() {
-            this.tables.clear();
-            this.views.clear();
-        };
-
         MetaSet.prototype.clone  = function() {
             var clone = new MetaSet(this.setName);
 
@@ -280,6 +270,17 @@
             }
             return clone;
         };
+        
+        MetaSet.prototype.clear  = function() {
+            for(var i = 0; i < this.tables.count; i++) this.tables[i].clear();
+            for(var i = 0; i < this.views.count; i++) this.views[i].clear();
+        };
+        
+        MetaSet.prototype.reset  = function() {
+            this.tables.clear();
+            this.views.clear();
+        };
+
         
         // MetaSet.prototype.load  = function(p_target, p_opt) {
         //     var opt = typeof p_option === 'undefined' ? 3 : p_option;

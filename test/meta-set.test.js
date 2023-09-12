@@ -185,6 +185,43 @@ describe("[target: meta-set.js]", () => {
                 expect(obj2.views._elem[0].rows._elem[0]._elem).toEqual(['R3']);
             });
         });
+        describe("MetaSet.clone() <복제>", () => {
+            it("- clone() : 복제 ", () => {
+                const set1 = new MetaSet('S1');
+                const table1 = new MetaTable('T1');
+                const veiw1 = new MetaView('V1');
+                var row;
+                // table add
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                row = table1.newRow();
+                row['i1'] = 'R1';
+                row['i2'] = 'R2';
+                table1.rows.add(row);
+                set1.tables.add(table1);
+                // view add
+                veiw1.columns.add('i1');
+                row = veiw1.newRow();
+                row['i1'] = 'R1';
+                veiw1.rows.add(row);
+                set1.views.add(veiw1);
+                const set2 = set1.clone();
+        
+                expect(set2.setName).toMatch('S1');
+                expect(set2.tables['T1'].columns.count).toBe(2);
+                expect(set2.tables['T1'].columns['i1']).toBeDefined();
+                expect(set2.tables['T1'].columns['i2']).toBeDefined();
+                expect(set2.tables['T1'].rows.count).toBe(1);
+                expect(set2.tables['T1'].rows[0]['i1']).toBe('R1');
+                expect(set2.tables['T1'].rows[0]['i2']).toBe('R2');
+                expect(set2.views['V1'].columns['i1']).toBeDefined();
+                expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
+                expect(set2 === set1).toBe(false);
+                // 비교
+                expect(set1.tables['T1'] == set2.tables['T1']).toBe(false);
+                expect(set1.views['V1'] == set2.tables['V1']).toBe(false);
+            });
+        });
         describe("MetaSet.clear() <rows 초기화>", () => {
             it("- clear() : rows 초기화 ", () => {
                 const set1 = new MetaSet('S1');
@@ -257,43 +294,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views.count).toBe(0);
             });
         });
-        describe("MetaSet.clone() <복제>", () => {
-            it("- clone() : 복제 ", () => {
-                const set1 = new MetaSet('S1');
-                const table1 = new MetaTable('T1');
-                const veiw1 = new MetaView('V1');
-                var row;
-                // table add
-                table1.columns.add('i1');
-                table1.columns.add('i2');
-                row = table1.newRow();
-                row['i1'] = 'R1';
-                row['i2'] = 'R2';
-                table1.rows.add(row);
-                set1.tables.add(table1);
-                // view add
-                veiw1.columns.add('i1');
-                row = veiw1.newRow();
-                row['i1'] = 'R1';
-                veiw1.rows.add(row);
-                set1.views.add(veiw1);
-                const set2 = set1.clone();
         
-                expect(set2.setName).toMatch('S1');
-                expect(set2.tables['T1'].columns.count).toBe(2);
-                expect(set2.tables['T1'].columns['i1']).toBeDefined();
-                expect(set2.tables['T1'].columns['i2']).toBeDefined();
-                expect(set2.tables['T1'].rows.count).toBe(1);
-                expect(set2.tables['T1'].rows[0]['i1']).toBe('R1');
-                expect(set2.tables['T1'].rows[0]['i2']).toBe('R2');
-                expect(set2.views['V1'].columns['i1']).toBeDefined();
-                expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
-                expect(set2 === set1).toBe(false);
-                // 비교
-                expect(set1.tables['T1'] == set2.tables['T1']).toBe(false);
-                expect(set1.views['V1'] == set2.tables['V1']).toBe(false);
-            });
-        });
         // describe.skip("this.merge() <병합>", () => {
         //     it("- TODO: ", () => {
         //     });
