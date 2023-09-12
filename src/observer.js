@@ -10,17 +10,17 @@
     
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Common           = _global._L.Common || {};
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
     } else {    
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util
     }
 
     //==============================================================Á

@@ -9,15 +9,15 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Interface        = _global._L.Interface || {};
+    _global._L                      = _global._L || {};
+    _global._L.Interface            = _global._L.Interface || {};
     
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
+        Message                     = require('./message').Message;
     } else {    
-        Message                 = _global._L.Message;
+        Message                     = _global._L.Message;
     }
     //==============================================================
     // 3. module dependency check

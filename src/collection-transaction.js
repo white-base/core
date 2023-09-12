@@ -12,21 +12,21 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Collection       = _global._L.Collection || {};
+    _global._L                      = _global._L || {};
+    _global._L.Collection           = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        ArrayCollection         = require('./collection-array').ArrayCollection;
-        TransactionQueue        = require('./trans-queue').TransactionQueue;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        ArrayCollection             = require('./collection-array').ArrayCollection;
+        TransactionQueue            = require('./trans-queue').TransactionQueue;
     } else {    
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        ArrayCollection         = _global._L.ArrayCollection;
-        TransactionQueue        = _global._L.TransactionQueue;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        ArrayCollection             = _global._L.ArrayCollection;
+        TransactionQueue            = _global._L.TransactionQueue;
     }
 
     //==============================================================

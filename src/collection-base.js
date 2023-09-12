@@ -15,27 +15,27 @@
     
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Collection       = _global._L.Collection || {};
+    _global._L                      = _global._L || {};
+    _global._L.Collection           = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        Observer                = require('./observer').Observer;
-        ICollection             = require('./i-collection').ICollection;
-        IList                   = require('./i-list').IList;
-        MetaObject              = require('./meta-object').MetaObject;
-        MetaRegistry            = require('./meta-registry').MetaRegistry;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        Observer                    = require('./observer').Observer;
+        ICollection                 = require('./i-collection').ICollection;
+        IList                       = require('./i-list').IList;
+        MetaObject                  = require('./meta-object').MetaObject;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        Observer                = _global._L.Observer;
-        ICollection             = _global._L.ICollection;
-        IList                   = _global._L.IList;
-        MetaObject              = _global._L.MetaObject;
-        MetaRegistry            = _global._L.MetaRegistry;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        Observer                    = _global._L.Observer;
+        ICollection                 = _global._L.ICollection;
+        IList                       = _global._L.IList;
+        MetaObject                  = _global._L.MetaObject;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================

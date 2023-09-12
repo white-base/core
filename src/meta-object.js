@@ -13,23 +13,23 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        IObject                 = require('./i-object').IObject;
-        IMarshal                = require('./i-marshal').IMarshal;
-        MetaRegistry            = require('./meta-registry').MetaRegistry;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        IObject                     = require('./i-object').IObject;
+        IMarshal                    = require('./i-marshal').IMarshal;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util
-        IObject                 = _global._L.IObject;
-        IMarshal                = _global._L.IMarshal;
-        MetaRegistry            = _global._L.MetaRegistry;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util
+        IObject                     = _global._L.IObject;
+        IMarshal                    = _global._L.IMarshal;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================

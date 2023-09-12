@@ -9,16 +9,16 @@
 
     //==============================================================
     // 1. 의존 모듈 선언
-    _global._L                  = _global._L || {};
-    _global._L.Common           = _global._L.Common || {};
-    _global._L.Common.Util      = _global._L.Common.Util || {};
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+    _global._L.Common.Util          = _global._L.Common.Util || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
+        Message                     = require('./message').Message;
     } else {    
-        Message                 = _global._L.Message;
+        Message                     = _global._L.Message;
     }
 
     //==============================================================

@@ -19,36 +19,36 @@
 
     //==============================================================
     // 1. 의존 모듈 선언
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
-    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
+    _global._L.Meta.Entity          = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        ISchemaControl          = require('./i-control-schema').ISchemaControl;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        ISchemaControl              = require('./i-control-schema').ISchemaControl;
         // IAllControl             = require('./i-control-all').IAllControl;
-        ISerialize              = require('./i-serialize').ISerialize;
-        ITransaction            = require('./i-transaction').ITransaction;
-        MetaElement             = require('./meta-element').MetaElement;
-        MetaEntity              = require('./meta-entity').MetaEntity;
-        MetaTableCollection     = require('./meta-table').MetaTableCollection;
-        MetaViewCollection      = require('./meta-view').MetaViewCollection;
-        MetaRegistry            = require('./meta-registry').MetaRegistry;
+        ISerialize                  = require('./i-serialize').ISerialize;
+        ITransaction                = require('./i-transaction').ITransaction;
+        MetaElement                 = require('./meta-element').MetaElement;
+        MetaEntity                  = require('./meta-entity').MetaEntity;
+        MetaTableCollection         = require('./meta-table').MetaTableCollection;
+        MetaViewCollection          = require('./meta-view').MetaViewCollection;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Common.Util;
-        ISchemaControl          = _global._L.ISchemaControl;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Common.Util;
+        ISchemaControl              = _global._L.ISchemaControl;
         // IAllControl             = _global._L.IAllControl;
-        ISerialize              = _global._L.ISerialize;
-        ITransaction            = _global._L.ITransaction;
-        MetaElement             = _global._L.MetaElement;
-        MetaEntity              = _global._L.MetaEntity;
-        MetaTableCollection     = _global._L.MetaTableCollection;
-        MetaViewCollection      = _global._L.MetaViewCollection;
-        MetaRegistry            = _global._L.MetaRegistry;
+        ISerialize                  = _global._L.ISerialize;
+        ITransaction                = _global._L.ITransaction;
+        MetaElement                 = _global._L.MetaElement;
+        MetaEntity                  = _global._L.MetaEntity;
+        MetaTableCollection         = _global._L.MetaTableCollection;
+        MetaViewCollection          = _global._L.MetaViewCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================

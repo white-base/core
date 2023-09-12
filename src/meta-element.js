@@ -13,21 +13,21 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
    
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        IElement                = require('./i-element').IElement;
-        MetaObject              = require('./meta-object').MetaObject;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        IElement                    = require('./i-element').IElement;
+        MetaObject                  = require('./meta-object').MetaObject;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        IElement                = _global._L.IElement;
-        MetaObject              = _global._L.MetaObject;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        IElement                    = _global._L.IElement;
+        MetaObject                  = _global._L.MetaObject;
     }
 
     //==============================================================

@@ -11,19 +11,19 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Interface        = _global._L.Interface || {};
+    _global._L                      = _global._L || {};
+    _global._L.Interface            = _global._L.Interface || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        ICollection             = require('./i-collection').ICollection;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        ICollection                 = require('./i-collection').ICollection;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        ICollection             = _global._L.ICollection;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        ICollection                 = _global._L.ICollection;
     }
 
     //==============================================================

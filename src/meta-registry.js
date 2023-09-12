@@ -14,23 +14,23 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
         // IList                   = require('./i-list').IList;
         // IListControl            = require('./i-control-list').IListControl;
-        NamespaceManager        = require('./namespace-manager').NamespaceManager;
+        NamespaceManager            = require('./namespace-manager').NamespaceManager;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
         // IList                   = _global._L.IList;
         // IListControl            = _global._L.IListControl;
-        NamespaceManager        = _global._L.NamespaceManager;
+        NamespaceManager            = _global._L.NamespaceManager;
     }
 
     //==============================================================Á

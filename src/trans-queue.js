@@ -11,19 +11,19 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Collection       = _global._L.Collection || {};
+    _global._L                      = _global._L || {};
+    _global._L.Collection           = _global._L.Collection || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        IArrayCollection         = require('./i-collection-array').IArrayCollection;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        IArrayCollection            = require('./i-collection-array').IArrayCollection;
     } else {    // COVER:
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        IArrayCollection         = _global._L.IArrayCollection;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        IArrayCollection            = _global._L.IArrayCollection;
     }
 
     //==============================================================

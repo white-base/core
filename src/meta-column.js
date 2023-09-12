@@ -17,28 +17,28 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
-    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
+    _global._L.Meta.Entity          = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        Observer                = require('./observer').Observer;
-        CustomError             = require('./custom-error').CustomError;
-        MetaElement             = require('./meta-element').MetaElement;
-        PropertyCollection      = require('./collection-property').PropertyCollection;
-        MetaRegistry            = require('./meta-registry').MetaRegistry;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        Observer                    = require('./observer').Observer;
+        CustomError                 = require('./custom-error').CustomError;
+        MetaElement                 = require('./meta-element').MetaElement;
+        PropertyCollection          = require('./collection-property').PropertyCollection;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        Observer                = _global._L.Observer;
-        CustomError             = _global._L.CustomError;
-        MetaElement             = _global._L.MetaElement;
-        PropertyCollection      = _global._L.PropertyCollection;
-        MetaRegistry            = _global._L.MetaRegistry;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        Observer                    = _global._L.Observer;
+        CustomError                 = _global._L.CustomError;
+        MetaElement                 = _global._L.MetaElement;
+        PropertyCollection          = _global._L.PropertyCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================

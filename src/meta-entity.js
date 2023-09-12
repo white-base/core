@@ -28,29 +28,29 @@ const { ISerialize } = require('./i-serialize');
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        IGroupControl           = require('./i-control-group').IGroupControl;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        IGroupControl               = require('./i-control-group').IGroupControl;
         // IAllControl             = require('./i-control-all').IAllControl;
-        ISerialize              = require('./i-serialize').ISerialize;
-        MetaObject              = require('./meta-object').MetaObject;
-        MetaElement             = require('./meta-element').MetaElement;
-        MetaRowCollection       = require('./meta-row').MetaRowCollection;
-        MetaRow                 = require('./meta-row').MetaRow;
-        MetaColumnCollection    = require('./meta-column').MetaColumnCollection;
-        MetaRegistry            = require('./meta-registry').MetaRegistry;
+        ISerialize                  = require('./i-serialize').ISerialize;
+        MetaObject                  = require('./meta-object').MetaObject;
+        MetaElement                 = require('./meta-element').MetaElement;
+        MetaRowCollection           = require('./meta-row').MetaRowCollection;
+        MetaRow                     = require('./meta-row').MetaRow;
+        MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        IGroupControl           = _global._L.IGroupControl;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        IGroupControl               = _global._L.IGroupControl;
         // IAllControl             = _global._L.IAllControl;
-        ISerialize              = _global._L.ISerialize;
-        MetaObject              = _global._L.MetaObject;
-        MetaElement             = _global._L.MetaElement;
-        MetaRowCollection       = _global._L.MetaRowCollection;
-        MetaRow                 = _global._L.MetaRow;
-        MetaColumnCollection    = _global._L.MetaColumnCollection;
-        MetaRegistry            = _global._L.MetaRegistry;
+        ISerialize                  = _global._L.ISerialize;
+        MetaObject                  = _global._L.MetaObject;
+        MetaElement                 = _global._L.MetaElement;
+        MetaRowCollection           = _global._L.MetaRowCollection;
+        MetaRow                     = _global._L.MetaRow;
+        MetaColumnCollection        = _global._L.MetaColumnCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================

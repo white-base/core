@@ -12,29 +12,29 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
+        Message                     = require('./message').Message;
     } else {    
-        Message                 = _global._L.Message;
+        Message                     = _global._L.Message;
     }
 
     //==============================================================Á
     // 3. module dependency check
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        IList                   = require('./i-list').IList;
-        IListControl            = require('./i-control-list').IListControl;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        IList                       = require('./i-list').IList;
+        IListControl                = require('./i-control-list').IListControl;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        IList                   = _global._L.IList;
-        IListControl            = _global._L.IListControl;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        IList                       = _global._L.IList;
+        IListControl                = _global._L.IListControl;
     }
 
     //==============================================================

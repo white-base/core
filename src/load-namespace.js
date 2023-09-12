@@ -48,14 +48,14 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Common           = _global._L.Common || {};
-    _global._L.Common.Util      = _global._L.Common.Util || {};
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+    _global._L.Common.Util          = _global._L.Common.Util || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
+        Message                     = require('./message').Message;
         Util                        = require('./util');
         MetaRegistry                = require('./meta-registry').MetaRegistry;
         NamespaceManager            = require('./namespace-manager').NamespaceManager;

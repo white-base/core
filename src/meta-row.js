@@ -18,28 +18,28 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
-    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
+    _global._L.Meta.Entity          = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        Observer                = require('./observer').Observer;
-        IList                   = require('./i-list').IList;
-        MetaObject              = require('./meta-object').MetaObject;
-        TransactionCollection   = require('./collection-transaction').TransactionCollection;
-        MetaRegistry            = require('./meta-registry').MetaRegistry;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        Observer                    = require('./observer').Observer;
+        IList                       = require('./i-list').IList;
+        MetaObject                  = require('./meta-object').MetaObject;
+        TransactionCollection       = require('./collection-transaction').TransactionCollection;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    // COVER:
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        Observer                = _global._L.Observer;
-        MetaObject              = _global._L.MetaObject;
-        IList         = _global._L.IList;
-        TransactionCollection   = _global._L.TransactionCollection;
-        MetaRegistry            = _global._L.MetaRegistry;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        Observer                    = _global._L.Observer;
+        MetaObject                  = _global._L.MetaObject;
+        IList                       = _global._L.IList;
+        TransactionCollection       = _global._L.TransactionCollection;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================

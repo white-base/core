@@ -13,24 +13,24 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Interface        = _global._L.Interface || {};    
+    _global._L                      = _global._L || {};
+    _global._L.Interface            = _global._L.Interface || {};    
     
     //==============================================================
     // 2. import module
     
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
         // IPartControl            = require('./i-control-part').IPartControl;
         // ILookupControl          = require('./i-control-lookup').ILookupControl;
         // IBaseCollection         = require('./i-collection-base').IBaseCollection;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util
-        IPartControl            = _global._L.IPartControl;
-        ILookupControl          = _global._L.ILookupControl;
-        IBaseCollection         = _global._L.IBaseCollection;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util
+        IPartControl                = _global._L.IPartControl;
+        ILookupControl              = _global._L.ILookupControl;
+        IBaseCollection             = _global._L.IBaseCollection;
     }
 
     //==============================================================

@@ -15,26 +15,26 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Meta             = _global._L.Meta || {};
-    _global._L.Meta.Entity      = _global._L.Meta.Entity || {};
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
+    _global._L.Meta.Entity          = _global._L.Meta.Entity || {};
     
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        PropertyCollection      = require('./collection-property').PropertyCollection;
-        MetaEntity              = require('./meta-entity').MetaEntity;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        PropertyCollection          = require('./collection-property').PropertyCollection;
+        MetaEntity                  = require('./meta-entity').MetaEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
-        MetaRegistry            = require('./meta-registry').MetaRegistry;
+        MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        PropertyCollection      = _global._L.PropertyCollection;
-        MetaEntity              = _global._L.MetaEntity;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        PropertyCollection          = _global._L.PropertyCollection;
+        MetaEntity                  = _global._L.MetaEntity;
         MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
-        MetaRegistry            = _global._L.MetaRegistry;
+        MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================

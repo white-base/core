@@ -15,28 +15,28 @@
 
     //==============================================================
     // 1. 의존 모듈 선언
-    _global._L               = _global._L || {};
-    _global._L.Common        = _global._L.Common || {};
-    _global._L.Common.Util   = _global._L.Common.Util || {};
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+    _global._L.Common.Util          = _global._L.Common.Util || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {
-        Message                 = require('./message').Message;
-        getAllProperties        = require('./util-type').getAllProperties;
-        getTypeMap              = require('./util-type').getTypeMap;
-        checkType               = require('./util-type').checkType;
-        checkUnionType          = require('./util-type').checkUnionType;
-        validType               = require('./util-type').validType;
-        validUnionType          = require('./util-type').validUnionType;
+        Message                     = require('./message').Message;
+        getAllProperties            = require('./util-type').getAllProperties;
+        getTypeMap                  = require('./util-type').getTypeMap;
+        checkType                   = require('./util-type').checkType;
+        checkUnionType              = require('./util-type').checkUnionType;
+        validType                   = require('./util-type').validType;
+        validUnionType              = require('./util-type').validUnionType;
     } else {    
-        Message                 = _global._L.Message;
-        getAllProperties        = _global._L.Util.getAllProperties
-        getTypeMap              = _global._L.Util.getTypeMap
-        checkType               = _global._L.Util.checkType
-        checkUnionType          = _global._L.Util.checkUnionType
-        validType               = _global._L.Util.validType
-        validUnionType          = _global._L.Util.validUnionType
+        Message                     = _global._L.Message;
+        getAllProperties            = _global._L.Util.getAllProperties
+        getTypeMap                  = _global._L.Util.getTypeMap
+        checkType                   = _global._L.Util.checkType
+        checkUnionType              = _global._L.Util.checkUnionType
+        validType                   = _global._L.Util.validType
+        validUnionType              = _global._L.Util.validUnionType
     }
 
     //==============================================================

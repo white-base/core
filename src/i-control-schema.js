@@ -12,21 +12,21 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                  = _global._L || {};
-    _global._L.Interface        = _global._L.Interface || {};
+    _global._L                      = _global._L || {};
+    _global._L.Interface            = _global._L.Interface || {};
 
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                 = require('./message').Message;
-        Util                    = require('./util');
-        IImportControl          = require('./i-control-import').IImportControl;
-        IExportControl          = require('./i-control-export').IExportControl;
+        Message                     = require('./message').Message;
+        Util                        = require('./util');
+        IImportControl              = require('./i-control-import').IImportControl;
+        IExportControl              = require('./i-control-export').IExportControl;
     } else {
-        Message                 = _global._L.Message;
-        Util                    = _global._L.Util;
-        IImportControl          = _global._L.IImportControl;
-        IExportControl          = _global._L.IExportControl;
+        Message                     = _global._L.Message;
+        Util                        = _global._L.Util;
+        IImportControl              = _global._L.IImportControl;
+        IExportControl              = _global._L.IExportControl;
     }
 
     //==============================================================
