@@ -36,8 +36,8 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.register() <메타객체 등록>", () => {
             it("- register() : 자동등록", () => {
-                const m1 = new MetaElement('E1');
-                const m2 = new MetaElement('E2');
+                const m1 = new MetaObject();
+                const m2 = new MetaObject();
 
                 // 자동 등록
                 expect(MetaRegistry.count).toBe(2);
@@ -95,8 +95,8 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.find() <메타객체 조회>", () => {
             it("- find(meta) : 객체로 조회, guid로 조회 ", () => {
-                let m1 = new MetaElement('M1');
-                let m2 = new MetaElement('M2');
+                let m1 = new MetaObject('M1');
+                let m2 = new MetaObject('M2');
                 const f1 = MetaRegistry.find(m1);
                 const f2 = MetaRegistry.find(m2._guid);
                 
@@ -149,7 +149,7 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.createReferObject() <참조객체 생성>", () => {
             it("- createReferObject() : 일반객체에 생성 ", () => {
-                const m1 = new MetaElement('M1');
+                const m1 = new MetaObject('M1');
                 const obj1 = {
                     m1: MetaRegistry.createReferObject(m1),
                     name: 'OBJ'
@@ -180,7 +180,7 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.createSetObject() <setObject 설정 속성 생성>", () => {
             it("- createSetObject() : ", () => {
-                const m1 = new MetaElement('M1');
+                const m1 = new MetaObject('M1');
                 const obj1 = {
                     cls1: {},
                     name: 'OBJ'
@@ -196,7 +196,7 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.validObject() <메태객체 유효성 검사>", () => {
             it("- validObject() : 일반객체로 검사 ($ref, $set, $ns)", () => {
-                const a = new MetaElement();
+                const a = new MetaObject();
                 const obj1 = {
                     _guid: 'KEY1',
                     _type: 'T1',
@@ -209,7 +209,7 @@ describe("[target: meta-registry.js]", () => {
                         { _guid: 'KEY3', _type: 'T3', $set: 'KEY1'},
                         10
                     ],
-                    type: {$ns: 'Meta.MetaElement'},
+                    type: {$ns: 'Meta.MetaObject'},
                     onwer: {$ref: 'KEY2'},
                     $set: 'KEY3'
                 };
@@ -327,19 +327,19 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.isGuidObject() <guid 객체 여부 감사>", () => {
             it("- isGuidObject() : getObject() 검사 <성공>", () => {
-                const a = new MetaElement();
+                const a = new MetaObject();
                 expect(MetaRegistry.isGuidObject(a.getObject())).toBe(true);
             });
             it("- isGuidObject() : meta 검사 <실패>", () => {
-                const a = new MetaElement();
+                const a = new MetaObject();
                 expect(MetaRegistry.isGuidObject(a)).toBe(false);
             });
         });
         describe("MetaRegistry.findSetObject(mObj, target) <guid로 생성한 객체 조회>", () => {
             it("- findSetObject() : 객체 검색", () => {
-                let m1 = new MetaElement('M1');
-                let m2 = new MetaElement('M2');
-                let m3 = new MetaElement('M3');
+                let m1 = new MetaObject('M1');
+                let m2 = new MetaObject('M2');
+                let m3 = new MetaObject('M3');
                 var rObj = m1.getObject();
                 
                 // $set 설정한 객체가 없는 경우                
@@ -400,7 +400,7 @@ describe("[target: meta-registry.js]", () => {
         });
         describe("MetaRegistry.transformRefer() <참조 객체 변환>", () => {
             it("- transformRefer() : $ns 참조로 변환", () => {
-                const a = new MetaElement();
+                const a = new MetaObject();
                 const obj1 = {
                     _guid: 'KEY1',
                     _type: 'T1',
@@ -412,24 +412,24 @@ describe("[target: meta-registry.js]", () => {
                     subArr: [
                         { 
                             _guid: 'KEY3', _type: 'T3', $set: 'KEY1',
-                            oType: {$ns: 'Meta.MetaElement'},
+                            oType: {$ns: 'Meta.MetaObject'},
                             owner: {$ref: 'KEY2'}
                         },
                         10
                     ],
-                    oType: {$ns: 'Meta.MetaElement'},
+                    oType: {$ns: 'Meta.MetaObject'},
                     owner: {$ref: 'KEY2'}
                 };
                 const obj2 = MetaRegistry.transformRefer(obj1);
                 
-                expect(obj2.oType).toBe(MetaElement);
-                expect(obj2.subArr[0].oType).toBe(MetaElement);
+                expect(obj2.oType).toBe(MetaObject);
+                expect(obj2.subArr[0].oType).toBe(MetaObject);
             });
         });
         describe("MetaRegistry.registerClass() <클래스 등록>", () => {
             it("- registerClass() : 초기 자동 등록", () => {
                 // 메타객체는 자동 등록됨
-                const a = new MetaElement();
+                const a = new MetaObject();
                 expect(MetaRegistry.ns.count).toBe(1);
             });
             it("- registerClass() : 내장 함수 등록", () => {

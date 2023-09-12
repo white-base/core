@@ -223,6 +223,15 @@
         // throw new Error('함수 타입만 생성할 수 있습니다.');    => 불필요함 내부적으로 사용함
     }
 
+    function _typeName(obj) {
+        if (typeof obj === 'function') return obj.name;
+        if (typeof obj === 'object' && obj !== null) {
+            var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
+            return  proto.constructor.name;
+        }
+        return 'unknown';
+    }
+
     /**
      * 타입을 검사하여 메세지를 리턴
      * @param {any} type 검사할 타입
@@ -230,7 +239,7 @@
      * @param {string} parentName '' 공백시 성공
      * @returns 
      */
-    var _checkTypeMessage = function(type, target, parentName) {
+    var checkTypeMessage = function(type, target, parentName) {
         var parentName = parentName ? parentName : 'this';
         var typeDef = {type: type, name: '', default: null};
         var returnMsg = '', arrMsg = [];
@@ -242,7 +251,7 @@
 
         if (defType.name === 'or') {                                                    // or
             for(var i = 0; i < type.length; i++) {
-                returnMsg = _checkTypeMessage(type[i], target);
+                returnMsg = checkTypeMessage(type[i], target);
                 if(returnMsg.length === 0) return '';
                 else arrMsg.push(returnMsg);
             }
@@ -255,49 +264,58 @@
         if (defType.name === 'number') {
             if (defType.default && typeof target === 'undefined') target = defType.default; 
             if (typeof target === 'number') return '';
-            return parentName +'은 number 타입이 아닙니다.';
+            return Message.get('ES024', [parentName, 'number']);
+            // return parentName +'은 number 타입이 아닙니다.';
         }
         if (defType.name === 'string') {
             if (defType.default && typeof target === 'undefined') target = defType.default;
             if (typeof target === 'string') return '';
-            return parentName +'은 string 타입이 아닙니다.';
+            return Message.get('ES024', [parentName, 'string']);
+            // return parentName +'은 string 타입이 아닙니다.';
         }
         if (defType.name === 'boolean') {
             if (defType.default && typeof target === 'undefined') target = defType.default; 
             if (typeof target === 'boolean') return '';
-            return parentName +'은 boolean 타입이 아닙니다.';
+            return Message.get('ES024', [parentName, 'boolean']);
+            // return parentName +'은 boolean 타입이 아닙니다.';
         }
         if (defType.name === 'symbol') {
             if (typeof target === 'symbol') return '';
-            return parentName +'은 symbol 타입이 아닙니다.';
+            return Message.get('ES024', [parentName, 'symbol']);
+            // return parentName +'은 symbol 타입이 아닙니다.';
         }
         if (defType.name === 'array') {
             if (Array.isArray(target)) return '';
-            return parentName +'은 array 타입이 아닙니다.';
+            return Message.get('ES024', [parentName, 'array']);
+            // return parentName +'은 array 타입이 아닙니다.';
         }
         if (defType.name === 'function') {
             if (typeof target === 'function') return '';
-            return parentName +'은 function 타입이 아닙니다.';
+            return Message.get('ES024', [parentName, 'function']);
+            // return parentName +'은 function 타입이 아닙니다.';
         }
         if (defType.name === 'object') {
             // if (typeof target === 'object') return '';
             if (type === Object && target instanceof type) return '';
             if (type !== Object && target instanceof type.constructor) return '';
-            return parentName +'은 object 타입이 아닙니다.';
+            return Message.get('ES024', [parentName, 'object']);
+            // return parentName +'은 object 타입이 아닙니다.';
         }
         if (defType.name === 'class') {
         
             if (_isBuiltFunction(type)) {
                 if (target instanceof type) return ''; 
-                else return '대상 instance 가 아닙니다.';
+                else return Message.get('ES032', [parentName, _typeName(type)]);
+                // else return '대상 instance 가 아닙니다.';
             } else {
                 if (typeof target === 'object' && target instanceof type) return '';
-                if (typeof target === 'object' && target !== null) return _checkTypeMessage(_creator(type), target, parentName);
-                return parentName +'은 instance 타입이 아닙니다.';
+                if (typeof target === 'object' && target !== null) return checkTypeMessage(_creator(type), target, parentName);
+                return Message.get('ES032', [parentName, _typeName(type)]);
+                // return parentName +'은 instance 타입이 아닙니다.';
             }
             // && target instanceof type) return '';
-            // if (typeof target === 'object' && target !== null) return _checkTypeMessage(_creator(type), target, parentName);
-            // if (!_isBuiltFunction(type)) return _checkTypeMessage(_creator(type), target, parentName);
+            // if (typeof target === 'object' && target !== null) return checkTypeMessage(_creator(type), target, parentName);
+            // if (!_isBuiltFunction(type)) return checkTypeMessage(_creator(type), target, parentName);
             // return parentName +'은 instance 타입이 아닙니다.';
 
         }
@@ -309,26 +327,30 @@
                 var listDefType = getTypeMap(type[key]);
                 var msg = '';
                 
-                if (!_isObject(target)) return 'target 은 객체가 아닙니다.';                    // target 객체유무 검사
+                if (!_isObject(target)) return Message.get('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
+                // if (!_isObject(target)) return 'target 은 객체가 아닙니다.';                    // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
                 if (listDefType.default !== null && typeof target[key] === 'undefined')      // default 설정
                     target[key] = listDefType.default;
-                if (target !== null && !(key in target))
+                if (target !== null && !(key in target)) return Message.get('ES026', [listDefType.name, parentName + '.' + key]);    
+                // return ' 대상 없음 ' + parentName + '.' + key + ' : ' + typeof key;
                 // if (!(key in target))                                                       // key 유무 검사
-                    return ' 대상 없음 ' + parentName + '.' + key + ' : ' + typeof key;
+                
                 // if ([].indexOf(listDefType.name) > -1 && listDefType.name !== getTypeMap(target[key]).name) 
                 //     return ' 타입 다름 ' + parentName + '.' + key + ' : ' + typeof key;
                 if (listDefType.name === 'class'){
                     if (typeof target[key] === 'function') continue;                        // class method
                     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
-                    else return parentName + '.' + key + '은 instance 타입이 아닙니다.';
+                    else return Message.get('ES031', [parentName + '.' + key]);
+                    // else return parentName + '.' + key + '은 instance 타입이 아닙니다.';
                 } 
-                msg = _checkTypeMessage(type[key], target[key], parentName +'.'+ key);
+                msg = checkTypeMessage(type[key], target[key], parentName +'.'+ key);
                 if (msg.length > 0) return msg;
             }
             return '';
         }
-        return '맞는 타입이 없습니다.' + defType.name;
+        return Message.get('ES022', [defType.name]);
+        // return '맞는 타입이 없습니다.' + defType.name;
     };
 
     // OR 조건
@@ -340,7 +362,7 @@
         if (arrType.length === 0) return false;
 
         for(var i = 0; i < arrType.length; i++) {
-            msg = _checkTypeMessage(arrType[i], target);
+            msg = checkTypeMessage(arrType[i], target);
             if(msg.length === 0) return true;
         }
         return false;
@@ -354,12 +376,13 @@
         if (arrType.length === 0) Message.error('ES026', ['arguments.length == 0']);
 
         for(var i = 0; i < arrType.length; i++) {
-            msg = _checkTypeMessage(arrType[i], target);
+            msg = checkTypeMessage(arrType[i], target);
             
             if(msg.length === 0) return true;
             else arrMsg.push(msg);
         }
-        throw new Error(arrMsg);
+        Message.error('ES054', ['this', 'validType()', arrMsg]);
+        // throw new Error(arrMsg);
     };
 
     // AND 조건
@@ -371,7 +394,7 @@
         if (arrType.length === 0) return false;
 
         for(var i = 0; i < arrType.length; i++) {
-            msg = _checkTypeMessage(arrType[i], target);
+            msg = checkTypeMessage(arrType[i], target);
             if(msg.length > 0) return false;
         }
         return true;
@@ -386,8 +409,9 @@
         if (arrType.length === 0) Message.error('ES026', ['arguments.length == 0']);
 
         for(var i = 0; i < arrType.length; i++) {
-            msg = _checkTypeMessage(arrType[i], target);
-            if(msg.length > 0)  throw new Error(msg);
+            msg = checkTypeMessage(arrType[i], target);
+            if(msg.length > 0)  Message.error('ES054', ['this', 'validUnionType()', msg]);
+            // if(msg.length > 0)  throw new Error(msg);
         }
         return true;
     };
@@ -398,6 +422,7 @@
     // 5. module export
     if (isNode) {     
         exports.getAllProperties = getAllProperties;
+        exports.checkTypeMessage = checkTypeMessage;
         exports.getTypeMap = getTypeMap;
         exports.checkType = checkType;
         exports.checkUnionType = checkUnionType;
@@ -406,6 +431,7 @@
     } else {
         var ns = {
             getAllProperties: getAllProperties,
+            checkTypeMessage: checkTypeMessage,
             getTypeMap: getTypeMap,
             checkType: checkType,
             checkUnionType: checkUnionType,

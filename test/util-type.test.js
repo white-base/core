@@ -59,8 +59,8 @@ describe("[target: util-type.js.js]", () => {
             expect(() => getTypeMap(2n ** 53n).name).toThrow('ES022');
         });
         it('- 예외 : validType(), validUnionType()  ', () => {
-            expect(() => validType({}, undefined)).toThrow(/타입이/);
-            expect(() => validUnionType({}, undefined, Object)).toThrow(/타입이/);
+            expect(() => validType({}, undefined)).toThrow(/ES022/);
+            expect(() => validUnionType({}, undefined, Object)).toThrow(/ES022/);
         });
     });
     describe('< 비교 >', () => {
@@ -223,52 +223,52 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(0, NaN)).toBe(true);
             expect(checkType(NaN, NaN)).toBe(true);
             // false (예외)
-            expect(()=> validType(function any(){}, 1)).toThrow(/number.*타입/);
-            expect(()=> validType(function any(){}, NaN)).toThrow(/number.*타입/);
-            expect(()=> validType(function any(){}, Number)).toThrow(/number.*타입/);
-            expect(()=> validType(null, Number)).toThrow(/number.*타입/);
-            expect(()=> validType(true, Number)).toThrow(/number.*타입/);
-            expect(()=> validType(/reg/, Number)).toThrow(/number.*타입/);
-            expect(()=> validType('str', Number)).toThrow(/number.*타입/);
-            expect(()=> validType(Symbol(), Number)).toThrow(/number.*타입/);
-            expect(()=> validType([], Number)).toThrow(/number.*타입/);
-            expect(()=> validType({aa:1}, Number)).toThrow(/number.*타입/);
-            expect(()=> validType(Number, Number)).toThrow(/number.*타입/);
-            expect(()=> validType(Symbol, Number)).toThrow(/number.*타입/);
+            expect(()=> validType(function any(){}, 1)).toThrow('ES024');
+            expect(()=> validType(function any(){}, NaN)).toThrow('ES024');
+            expect(()=> validType(function any(){}, Number)).toThrow('ES024');
+            expect(()=> validType(null, Number)).toThrow('ES024');
+            expect(()=> validType(true, Number)).toThrow('ES024');
+            expect(()=> validType(/reg/, Number)).toThrow('ES024');
+            expect(()=> validType('str', Number)).toThrow('ES024');
+            expect(()=> validType(Symbol(), Number)).toThrow('ES024');
+            expect(()=> validType([], Number)).toThrow('ES024');
+            expect(()=> validType({aa:1}, Number)).toThrow('ES024');
+            expect(()=> validType(Number, Number)).toThrow('ES024');
+            expect(()=> validType(Symbol, Number)).toThrow('ES024');
         });
         it('- String, "str" : string 타입 ', () => {
             // true
             expect(checkType('', 'str')).toBe(true);
             expect(checkType('', String)).toBe(true);
             // false (예외)
-            expect(()=> validType(function any(){}, 'str')).toThrow(/string.*타입/);
-            expect(()=> validType(function any(){}, String)).toThrow(/string.*타입/);
-            expect(()=> validType(null, String)).toThrow(/string.*타입/);
-            expect(()=> validType(true, String)).toThrow(/string.*타입/);
-            expect(()=> validType(/reg/, String)).toThrow(/string.*타입/);
-            expect(()=> validType(1, String)).toThrow(/string.*타입/);
-            expect(()=> validType(Symbol(), String)).toThrow(/string.*타입/);
-            expect(()=> validType([], String)).toThrow(/string.*타입/);
-            expect(()=> validType({aa:1}, String)).toThrow(/string.*타입/);
-            expect(()=> validType(Number, String)).toThrow(/string.*타입/);
-            expect(()=> validType(Symbol, String)).toThrow(/string.*타입/);
+            expect(()=> validType(function any(){}, 'str')).toThrow('ES024');
+            expect(()=> validType(function any(){}, String)).toThrow('ES024');
+            expect(()=> validType(null, String)).toThrow('ES024');
+            expect(()=> validType(true, String)).toThrow('ES024');
+            expect(()=> validType(/reg/, String)).toThrow('ES024');
+            expect(()=> validType(1, String)).toThrow('ES024');
+            expect(()=> validType(Symbol(), String)).toThrow('ES024');
+            expect(()=> validType([], String)).toThrow('ES024');
+            expect(()=> validType({aa:1}, String)).toThrow('ES024');
+            expect(()=> validType(Number, String)).toThrow('ES024');
+            expect(()=> validType(Symbol, String)).toThrow('ES024');
         });
         it('- Boolean, true, false : boolean 타입 ', () => {
             // true
             expect(checkType(false, true)).toBe(true);
             expect(checkType(false, Boolean)).toBe(true);
             // false (예외)
-            expect(()=> validType(function any(){}, true)).toThrow(/boolean.*타입/);
-            expect(()=> validType(function any(){}, Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType(null, Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType('str', Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType(/reg/, Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType(1, Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType(Symbol(), Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType([], Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType({aa:1}, Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType(Number, Boolean)).toThrow(/boolean.*타입/);
-            expect(()=> validType(Symbol, Boolean)).toThrow(/boolean.*타입/);
+            expect(()=> validType(function any(){}, true)).toThrow('ES024');
+            expect(()=> validType(function any(){}, Boolean)).toThrow('ES024');
+            expect(()=> validType(null, Boolean)).toThrow('ES024');
+            expect(()=> validType('str', Boolean)).toThrow('ES024');
+            expect(()=> validType(/reg/, Boolean)).toThrow('ES024');
+            expect(()=> validType(1, Boolean)).toThrow('ES024');
+            expect(()=> validType(Symbol(), Boolean)).toThrow('ES024');
+            expect(()=> validType([], Boolean)).toThrow('ES024');
+            expect(()=> validType({aa:1}, Boolean)).toThrow('ES024');
+            expect(()=> validType(Number, Boolean)).toThrow('ES024');
+            expect(()=> validType(Symbol, Boolean)).toThrow('ES024');
         });
         
         it('- Array, [] : array 타입 ', () => {
@@ -276,30 +276,30 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType([], Array)).toBe(true);
             expect(checkType([false], [])).toBe(true);
             // false (예외)
-            expect(()=> validType(function any(){}, Array)).toThrow(/array.*타입/);
-            expect(()=> validType(function any(){}, [])).toThrow(/array.*타입/);
-            expect(()=> validType(null, Array)).toThrow(/array.*타입/);
-            expect(()=> validType('str', Array)).toThrow(/array.*타입/);
-            expect(()=> validType(/reg/, Array)).toThrow(/array.*타입/);
-            expect(()=> validType(1, Array)).toThrow(/array.*타입/);
-            expect(()=> validType(Symbol(), Array)).toThrow(/array.*타입/);
-            expect(()=> validType(true, Array)).toThrow(/array.*타입/);
-            expect(()=> validType({aa:1}, Array)).toThrow(/array.*타입/);
-            expect(()=> validType(Number, Array)).toThrow(/array.*타입/);
-            expect(()=> validType(Symbol, Array)).toThrow(/array.*타입/);
+            expect(()=> validType(function any(){}, Array)).toThrow('ES024');
+            expect(()=> validType(function any(){}, [])).toThrow('ES024');
+            expect(()=> validType(null, Array)).toThrow('ES024');
+            expect(()=> validType('str', Array)).toThrow('ES024');
+            expect(()=> validType(/reg/, Array)).toThrow('ES024');
+            expect(()=> validType(1, Array)).toThrow('ES024');
+            expect(()=> validType(Symbol(), Array)).toThrow('ES024');
+            expect(()=> validType(true, Array)).toThrow('ES024');
+            expect(()=> validType({aa:1}, Array)).toThrow('ES024');
+            expect(()=> validType(Number, Array)).toThrow('ES024');
+            expect(()=> validType(Symbol, Array)).toThrow('ES024');
         });
         it('- Function : function 타입 ', () => {
             // true
             expect(checkType(function any(){}, Function)).toBe(true);
             // false (예외)
-            expect(()=> validType([], Function)).toThrow(/function.*타입/);
-            expect(()=> validType(null, Function)).toThrow(/function.*타입/);
-            expect(()=> validType('str', Function)).toThrow(/function.*타입/);
-            expect(()=> validType(/reg/, Function)).toThrow(/function.*타입/);
-            expect(()=> validType(1, Function)).toThrow(/function.*타입/);
-            expect(()=> validType(Symbol(), Function)).toThrow(/function.*타입/);
-            expect(()=> validType(true, Function)).toThrow(/function.*타입/);
-            expect(()=> validType({aa:1}, Function)).toThrow(/function.*타입/);
+            expect(()=> validType([], Function)).toThrow('ES024');
+            expect(()=> validType(null, Function)).toThrow('ES024');
+            expect(()=> validType('str', Function)).toThrow('ES024');
+            expect(()=> validType(/reg/, Function)).toThrow('ES024');
+            expect(()=> validType(1, Function)).toThrow('ES024');
+            expect(()=> validType(Symbol(), Function)).toThrow('ES024');
+            expect(()=> validType(true, Function)).toThrow('ES024');
+            expect(()=> validType({aa:1}, Function)).toThrow('ES024');
         });
         it('- Object, {} : object 타입 (regex, new, null) ', () => {
             const Func = function() {};
@@ -313,13 +313,13 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(Symbol, {})).toBe(true);
             // false (예외)
             // expect(()=> validType(function any(){}, Object)).toThrow(/object.*타입/);
-            expect(()=> validType('str', Object)).toThrow(/object.*타입/);
-            expect(()=> validType(1, Object)).toThrow(/object.*타입/);
-            expect(()=> validType(Symbol(), Object)).toThrow(/object.*타입/);
-            expect(()=> validType(true, Object)).toThrow(/object.*타입/);
+            expect(()=> validType('str', Object)).toThrow('ES024');
+            expect(()=> validType(1, Object)).toThrow('ES024');
+            expect(()=> validType(Symbol(), Object)).toThrow('ES024');
+            expect(()=> validType(true, Object)).toThrow('ES024');
             // expect(()=> validType(Number, Object)).toThrow(/object.*타입/);
             // expect(()=> validType(Symbol, Object)).toThrow(/object.*타입/);
-            expect(()=> validType(null, Object)).toThrow(/object.*타입/);
+            expect(()=> validType(null, Object)).toThrow('ES024');
         });
         it('- function() : class 타입', () => {
             const Func1 = function() { this.aa = Number };
@@ -333,15 +333,15 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType({ aa: new Date() }, Func3)).toBe(true);
             // false (예외)
                 // expect(()=> validType(new Func1(), Func1)).toThrow(/aa.*number.*타입/);   // function 으로 생각하므로 오류
-            expect(()=> validType(function any(){}, Func1)).toThrow(/instance.*타입/);
-            expect(()=> validType(null, Func1)).toThrow(/instance.*타입/);
-            expect(()=> validType('str', Func1)).toThrow(/instance.*타입/);
-            expect(()=> validType(/reg/, Func1)).toThrow(/target.*객체/);
-            expect(()=> validType(1, Func1)).toThrow(/instance.*타입/);
-            expect(()=> validType(Symbol(), Func1)).toThrow(/instance.*타입/);
-            expect(()=> validType(true, Func1)).toThrow(/instance.*타입/);
-            expect(()=> validType(Number, Func1)).toThrow(/instance.*타입/);
-            expect(()=> validType(Symbol, Func1)).toThrow(/instance.*타입/);
+            expect(()=> validType(function any(){}, Func1)).toThrow('ES032');
+            expect(()=> validType(null, Func1)).toThrow('ES032');
+            expect(()=> validType('str', Func1)).toThrow('ES032');
+            expect(()=> validType(/reg/, Func1)).toThrow('ES031');
+            expect(()=> validType(1, Func1)).toThrow('ES032');
+            expect(()=> validType(Symbol(), Func1)).toThrow('ES032');
+            expect(()=> validType(true, Func1)).toThrow('ES032');
+            expect(()=> validType(Number, Func1)).toThrow('ES032');
+            expect(()=> validType(Symbol, Func1)).toThrow('ES032');
         });
 
         it('- [] : or 타입 (내장 타입) ', () => {
@@ -361,11 +361,11 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(new Func1(), [[String, Func1], Number])).toBe(true);   // 복합 배열
             expect(checkType(new Func1(), [[[Func1]], Number])).toBe(true);         // 복합 하위 배열
             // false (예외)
-            expect(()=> validType(1, [Array, String])).toThrow(/array.*타입.*string.*타입/);
-            expect(()=> validType(function any(){}, [Array])).toThrow(/array.*타입/);
-            expect(()=> validType(function any(){}, [String])).toThrow(/string.*타입/);
-            expect(()=> validType(null, [String, Number])).toThrow(/string.*타입.*number.*타입/);
-            expect(()=> validType('str', [Array, Number, Boolean])).toThrow(/array.*타입/);
+            expect(()=> validType(1, [Array, String])).toThrow(/ES024.*ES024/);
+            expect(()=> validType(function any(){}, [Array])).toThrow(/ES024/);
+            expect(()=> validType(function any(){}, [String])).toThrow(/ES024/);
+            expect(()=> validType(null, [String, Number])).toThrow(/ES024.*ES024/);
+            expect(()=> validType('str', [Array, Number, Boolean])).toThrow(/ES024.*ES024.*ES024/);
         });
         it('- {obj:...} : and 타입 ', () => {
        
@@ -374,51 +374,51 @@ describe("[target: util-type.js.js]", () => {
             // true
             expect(checkType(Symbol(), Symbol)).toBe(true);
             // false (예외)
-            expect(()=> validType(function any(){}, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType(function any(){}, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType(null, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType('str', Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType(/reg/, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType(1, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType(true, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType([], Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType({aa:1}, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType(Number, Symbol)).toThrow(/symbol.*타입/);
-            expect(()=> validType(Symbol, Symbol)).toThrow(/symbol.*타입/);
+            expect(()=> validType(function any(){}, Symbol)).toThrow('ES024');
+            expect(()=> validType(function any(){}, Symbol)).toThrow('ES024');
+            expect(()=> validType(null, Symbol)).toThrow('ES024');
+            expect(()=> validType('str', Symbol)).toThrow('ES024');
+            expect(()=> validType(/reg/, Symbol)).toThrow('ES024');
+            expect(()=> validType(1, Symbol)).toThrow('ES024');
+            expect(()=> validType(true, Symbol)).toThrow('ES024');
+            expect(()=> validType([], Symbol)).toThrow('ES024');
+            expect(()=> validType({aa:1}, Symbol)).toThrow('ES024');
+            expect(()=> validType(Number, Symbol)).toThrow('ES024');
+            expect(()=> validType(Symbol, Symbol)).toThrow('ES024');
         });
         it('- Date : object 타입 (class) ', () => {    
             // true
             expect(checkType(new Date(), Date)).toBe(true);
             expect(checkType(new Date(), new Date())).toBe(true);
             // false
-            expect(()=> validType(function any(){}, Date)).toThrow(/대상.*instance/);
-            expect(()=> validType(null, Date)).toThrow(/대상.*instance/);
-            expect(()=> validType(true, Date)).toThrow(/대상.*instance/);
-            expect(()=> validType(1, Date)).toThrow(/대상.*instance/);
-            expect(()=> validType('str', Date)).toThrow(/대상.*instance/);
-            expect(()=> validType([], Date)).toThrow(/대상.*instance/);
-            expect(()=> validType({aa:1}, Date)).toThrow(/대상.*instance/);
-            expect(()=> validType(Number, Date)).toThrow(/대상.*instance/);
-            expect(()=> validType(/reg/, Date)).toThrow(/대상.*instance/);
-            expect(()=> validType(Symbol(), Date)).toThrow(/대상.*instance/);
-            expect(()=> validType(Symbol, Date)).toThrow(/대상.*instance/);
+            expect(()=> validType(function any(){}, Date)).toThrow('ES032');
+            expect(()=> validType(null, Date)).toThrow('ES032');
+            expect(()=> validType(true, Date)).toThrow('ES032');
+            expect(()=> validType(1, Date)).toThrow('ES032');
+            expect(()=> validType('str', Date)).toThrow('ES032');
+            expect(()=> validType([], Date)).toThrow('ES032');
+            expect(()=> validType({aa:1}, Date)).toThrow('ES032');
+            expect(()=> validType(Number, Date)).toThrow('ES032');
+            expect(()=> validType(/reg/, Date)).toThrow('ES032');
+            expect(()=> validType(Symbol(), Date)).toThrow('ES032');
+            expect(()=> validType(Symbol, Date)).toThrow('ES032');
         });
         it('- RegExp : object 타입 (class)', () => {
             // true
             expect(checkType(/reg/, RegExp)).toBe(true);
             expect(checkType(/target/, /reg/)).toBe(true);
             // false
-            expect(()=> validType(function any(){}, RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType(null, RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType(true, RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType(1, RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType('str', RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType([], RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType({aa:1}, RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType(Number, RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType(new Date(), RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType(Symbol(), RegExp)).toThrow(/대상.*instance/);
-            expect(()=> validType(Symbol, RegExp)).toThrow(/대상.*instance/);
+            expect(()=> validType(function any(){}, RegExp)).toThrow('ES032');
+            expect(()=> validType(null, RegExp)).toThrow('ES032');
+            expect(()=> validType(true, RegExp)).toThrow('ES032');
+            expect(()=> validType(1, RegExp)).toThrow('ES032');
+            expect(()=> validType('str', RegExp)).toThrow('ES032');
+            expect(()=> validType([], RegExp)).toThrow('ES032');
+            expect(()=> validType({aa:1}, RegExp)).toThrow('ES032');
+            expect(()=> validType(Number, RegExp)).toThrow('ES032');
+            expect(()=> validType(new Date(), RegExp)).toThrow('ES032');
+            expect(()=> validType(Symbol(), RegExp)).toThrow('ES032');
+            expect(()=> validType(Symbol, RegExp)).toThrow('ES032');
         });
     });
     
@@ -448,7 +448,7 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(obj4, Func1)).toBe(true);
             expect(checkType(obj4, Func2)).toBe(false);
             // false (예외)
-            expect(()=> validType(obj5, Func1, Func2)).toThrow(/없음.*aa.*없음.*bb/);
+            expect(()=> validType(obj5, Func1, Func2)).toThrow(/ES026(.|\s)*ES026/);
         });
         it('- 원시 타입 ', () => {
             // true
@@ -515,10 +515,10 @@ describe("[target: util-type.js.js]", () => {
             expect(checkUnionType(obj5, Func1, Func2)).toBe(false); 
             expect(checkUnionType(obj5, Func1)).toBe(false);
             expect(checkUnionType(obj5, Func2)).toBe(false);
-            expect(()=> validUnionType(obj2, Func1, Func2)).toThrow(/없음.*bb/);
-            expect(()=> validUnionType(obj3, Func1, Func2)).toThrow(/없음.*aa/);
-            expect(()=> validUnionType(obj4, Func1, Func2)).toThrow(/bb.*타입/);
-            expect(()=> validUnionType(obj5, Func1, Func2)).toThrow(/없음/);    // aa, bb
+            expect(()=> validUnionType(obj2, Func1, Func2)).toThrow('ES026');
+            expect(()=> validUnionType(obj3, Func1, Func2)).toThrow('ES026');
+            expect(()=> validUnionType(obj4, Func1, Func2)).toThrow('ES024');
+            expect(()=> validUnionType(obj5, Func1, Func2)).toThrow('ES026');    // aa, bb
         });
         it('- 원시 타입 ', () => {
             // true

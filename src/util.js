@@ -7,6 +7,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var getAllProperties;
+    var checkTypeMessage;
     var getTypeMap;
     var checkType;
     var checkUnionType;
@@ -24,6 +25,7 @@
     if (isNode) {
         Message                     = require('./message').Message;
         getAllProperties            = require('./util-type').getAllProperties;
+        checkTypeMessage            = require('./util-type').checkTypeMessage;
         getTypeMap                  = require('./util-type').getTypeMap;
         checkType                   = require('./util-type').checkType;
         checkUnionType              = require('./util-type').checkUnionType;
@@ -32,6 +34,7 @@
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
+        checkTypeMessage            = _global._L.Util.checkTypeMessage
         getTypeMap                  = _global._L.Util.getTypeMap
         checkType                   = _global._L.Util.checkType
         checkUnionType              = _global._L.Util.checkUnionType
@@ -42,6 +45,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
+    if (typeof checkTypeMessage === 'undefined') Message.error('ES012', ['checkTypeMessage', 'util-type']);
     if (typeof getTypeMap === 'undefined') Message.error('ES012', ['getTypeMap', 'util-type']);
     if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
     if (typeof checkUnionType === 'undefined') Message.error('ES012', ['checkUnionType', 'util-type']);
@@ -134,8 +138,9 @@
         var typeName;
         var obj;    
         var _interface = [];
+        var msg = '';
 
-        if (typeof object !== 'object') Message.error('ES024', ['object', 'object']);
+        if (typeof object !== 'object') Message.error('ES024', ['this(target)', 'object']);
         if (typeof object._interface === 'undefined') {
             Object.defineProperty(object, '_interface', {
                 get: function() { 
@@ -159,7 +164,12 @@
     
             // 객체 타입을 비교 (값은 비교 안함, 타입만 비교함)
             // equalType(obj, object);
-            validType(object, arguments[i]);
+            
+            // POINT:
+            // validType(object, arguments[i]);
+            msg = checkTypeMessage(arguments[i], object);
+            if (msg.length > 0) Message.error('ES017', [typeName(object), typeName(arguments[i]), msg]);
+
         }
         // var types = Array.prototype.slice.call(arguments, 1);
 
@@ -172,6 +182,7 @@
             });
         }
 
+        // TODO: string 타입도 추가 검토
         // inner function
         function isImplementOf(target) {
             if (typeof target !== 'function') Message.error('ES024', ['target', 'function']);
@@ -179,6 +190,14 @@
                 if (this._interface[i] === target) return true;  
             }
             return false;
+        }
+        function typeName(obj) {
+            if (typeof obj === 'function') return obj.name;
+            if (typeof obj === 'object' && obj !== null) {
+                var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
+                return  proto.constructor.name;
+            }
+            return 'unknown';
         }
     }
 
@@ -227,6 +246,7 @@
         exports.createGuid = createGuid;
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
+        exports.checkTypeMessage = checkTypeMessage;
         exports.getTypeMap = getTypeMap;
         exports.checkType = checkType;
         exports.checkUnionType = checkUnionType;
@@ -243,6 +263,7 @@
             createGuid: createGuid,
             implements: implement,
             getAllProperties: getAllProperties,
+            checkTypeMessage: checkTypeMessage,
             getTypeMap: getTypeMap,
             checkType: checkType,
             checkUnionType: checkUnionType,

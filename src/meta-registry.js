@@ -230,8 +230,9 @@
             var params;
             
             if (typeof coClass !== 'function') Message.error('ES053', [fullName, 'function(class)']);
-            params = coClass._PARAMS || []; // arr
-
+            // params = coClass._PARAMS || []; // arr
+            params = coClass.hasOwnProperty('_PARAMS') ? coClass['_PARAMS'] : []; // arr
+            
             for (var i = 0; i < params.length; i++) {
                 var argName = params[i];
                 var prop = mObj[argName];

@@ -264,7 +264,7 @@
 
         BaseCollection._NS = 'Collection';     // namespace
         BaseCollection._PARAMS = ['_owner'];    // creator parameter
-
+        BaseCollection._ABSCRACT = true;
         
 
         /**
@@ -405,8 +405,9 @@
         BaseCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
             var _elems = [];
+            var vOpt = p_vOpt || 0;
 
-            obj._owner = MetaRegistry.createReferObject(this._owner);
+            if (vOpt > -2 && this._owner) obj._owner = MetaRegistry.createReferObject(this._owner);
             for (var i = 0; i < this._elemTypes.length; i++) {
                 var elem = this._elemTypes[i];
                 if (typeof elem === 'function') _elems.push(MetaRegistry.createNsReferObject(elem));

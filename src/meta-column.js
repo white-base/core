@@ -459,10 +459,11 @@
          */
         MetaColumn.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
+            var vOpt = p_vOpt || 0;
 
             // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
             obj.columnName = this.columnName;
-            if (this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
+            if (vOpt > -2 && this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
             if (this.default !== null) obj.default = this.default;
             if (this.caption !== null) obj.caption = this.caption;            
             if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;

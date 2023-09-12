@@ -52,7 +52,7 @@
         function MetaObject() {
 
             var _guid;
-
+            // var _isAbstract = false;
             /**
              * _guid
              * @member {array} _L.Meta.MetaObject#_guid 
@@ -80,6 +80,12 @@
                 enumerable: true
             });
             
+            // 추상클래스 검사
+            if (this._type.hasOwnProperty('_ABSCRACT')) {
+                Message.error('ES018', [this._type.name, 'clone()']);
+            }
+
+            // _NS 선언이 없으면 부모의 것을 기본으로 사용!
             if (this._type && this._type._NS) this._ns = this._type._NS;
             MetaRegistry.register(this);
 
@@ -87,12 +93,19 @@
             this.__SET$_guid = function(val, call) {
                 if (call instanceof MetaObject) _guid = val;    // 상속접근 허용
             }
+            // this.__SET$_isAbstract = function(val, call) {
+            //     if (call instanceof MetaObject) {
+            //         if (typeof val !== 'boolean') Message.error('ES021', ['_isAbstract', 'boolean']);
+            //         _isAbstract = val;
+            //     } else Message.error('ES032', ['_isAbstract', 'MetaObject']);
+            // }
 
             Util.implements(this, IObject, IMarshal);
         }
         
         MetaObject._NS = 'Meta';          // namespace
         MetaObject._PARAMS = [];         // creator parameter
+        
 
         /**
          * 단일 객체 비교
@@ -109,10 +122,11 @@
             if (Array.isArray(p_obj1)) return compareArray(p_obj1, p_obj2);
 
             if (p_obj1 instanceof MetaObject) {
-                var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체
-                var obj2 = p_obj1.getObject(-1);
+                var obj1 = p_obj1.getObject(-2);    // _guid, $ref 제외 객체
+                var obj2 = p_obj1.getObject(-2);
                 // var isCir = isCirculate(p_obj1);
                 return Util.deepEqual(obj1, obj2);
+                // return p_obj1.equal(p_obj2);
 
                 // if (isCirculate(p_obj1)) {
                 //     var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체

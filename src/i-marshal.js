@@ -35,11 +35,17 @@
          * @interface
          */
         function IMarshal() {
+
             /**
-             * 메타 이름
-             * @member {string} _L.Interface.IMarshal#guid
+             * GUID
+             * @member {string} _L.Interface.IMarshal#_guid
              */
+
             this._guid = '';
+            /**
+             * 타입
+             * @member {string} _L.Interface.IMarshal#_type
+             */
             this._type = Function;
         }
 
@@ -54,7 +60,7 @@
         };
 
         /**
-         * Guid 얻기
+         * 객체 설정
          * @abstract
          * @returns {Stirng}
          */

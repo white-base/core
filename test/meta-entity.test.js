@@ -31,19 +31,20 @@ describe("[target: meta-entity.js]", () => {
         });
         describe("MetaObject.getTypes(): arr<func> <타입 얻기> ", () => {
             it("- getTypes() : array<function> ", () => {
-                const c = new MetaEntity();
+                const c = new MetaTable();
                 const types = c.getTypes();
         
-                expect(types[0]).toBe(MetaEntity);
-                expect(types[1]).toBe(MetaElement);
-                expect(types[2]).toBe(MetaObject);
-                expect(types[3]).toBe(Object);
-                expect(types.length).toBe(4);
+                expect(types[0]).toBe(MetaTable);
+                expect(types[1]).toBe(MetaEntity);
+                expect(types[2]).toBe(MetaElement);
+                expect(types[3]).toBe(MetaObject);
+                expect(types[4]).toBe(Object);
+                expect(types.length).toBe(5);
             });
         });
         describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaEntity();
+                const c = new MetaTable();
         
                 expect(c.instanceOf('IObject')).toBe(true);
                 expect(c.instanceOf('IMarshal')).toBe(true);
@@ -57,7 +58,7 @@ describe("[target: meta-entity.js]", () => {
                 expect(c.instanceOf('String')).toBe(false);
             });
             it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaEntity();
+                const c = new MetaTable();
         
                 expect(c.instanceOf(IObject)).toBe(true);
                 expect(c.instanceOf(IMarshal)).toBe(true);
@@ -71,11 +72,10 @@ describe("[target: meta-entity.js]", () => {
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        describe("MetaEntity.clone() <복제 : 추상메소드>", () => {
-            it("- clone() : 예외 ", () => {
-                var entity1 = new MetaEntity('T1');
+        describe("MetaEntity.MetaEntity() <생성 : 추상클래스>", () => {
+            it("- new MetaEntity() : 예외 ", () => {
         
-                expect(()=> entity1.clone()).toThrow(/ES013/);
+                expect(()=> new MetaEntity('T1')).toThrow(/ES018/);
             });
         });
     });

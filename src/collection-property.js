@@ -73,7 +73,7 @@
                 enumerable: false
             });
 
-            // 예약어 등록
+            // 예약어 등록 
             this._KEYWORD = this._KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
             Util.implements(this, IPropertyCollection);
         }

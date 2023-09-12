@@ -8,7 +8,8 @@
     var Message;
     var Util;
     var ISchemaControl;
-    // var IAllControl;
+    var IImportControl;
+    var IExportControl;
     var ISerialize;
     var ITransaction;
     var MetaElement;
@@ -29,7 +30,8 @@
         Message                     = require('./message').Message;
         Util                        = require('./util');
         ISchemaControl              = require('./i-control-schema').ISchemaControl;
-        // IAllControl             = require('./i-control-all').IAllControl;
+        IImportControl              = require('./i-control-import').IImportControl;
+        IExportControl              = require('./i-control-export').IExportControl;
         ISerialize                  = require('./i-serialize').ISerialize;
         ITransaction                = require('./i-transaction').ITransaction;
         MetaElement                 = require('./meta-element').MetaElement;
@@ -41,7 +43,8 @@
         Message                     = _global._L.Message;
         Util                        = _global._L.Common.Util;
         ISchemaControl              = _global._L.ISchemaControl;
-        // IAllControl             = _global._L.IAllControl;
+        IImportControl              = _global._L.IImportControl;
+        IExportControl              = _global._L.IExportControl;
         ISerialize                  = _global._L.ISerialize;
         ITransaction                = _global._L.ITransaction;
         MetaElement                 = _global._L.MetaElement;
@@ -55,7 +58,8 @@
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
-    // if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
+    if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
     if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
     if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
@@ -141,7 +145,7 @@
             this.setName  = p_name || '';
             
             // this._implements(ISchemaControl, IAllControl);
-            Util.implements(this, ISchemaControl, ITransaction, ISerialize);
+            Util.implements(this, ISchemaControl, IImportControl, IExportControl, ITransaction, ISerialize);
         }
         Util.inherits(MetaSet, _super);
 

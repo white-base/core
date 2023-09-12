@@ -20,20 +20,20 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         Util                        = require('./util');
-        IImportControl              = require('./i-control-import').IImportControl;
-        IExportControl              = require('./i-control-export').IExportControl;
+        // IImportControl              = require('./i-control-import').IImportControl;
+        // IExportControl              = require('./i-control-export').IExportControl;
     } else {
         Message                     = _global._L.Message;
         Util                        = _global._L.Util;
-        IImportControl              = _global._L.IImportControl;
-        IExportControl              = _global._L.IExportControl;
+        // IImportControl              = _global._L.IImportControl;
+        // IExportControl              = _global._L.IExportControl;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
-    if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
+    // if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
+    // if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
 
     //==============================================================
     // 4. module implementation   
@@ -52,24 +52,24 @@
          * @interface
          */
         function ISchemaControl() {
-            Util.implements(this, IImportControl, IExportControl);
+            // Util.implements(this, IImportControl, IExportControl);
         }
 
         ISchemaControl._NS = 'Interface';    // namespace
 
-        /**
-         * 스키마 읽기
-         */
-        ISchemaControl.prototype.read  = function() {
-            Message.error('ES013', ['read(JSON)']);
-        };
+        // /**
+        //  * 스키마 읽기
+        //  */
+        // ISchemaControl.prototype.read  = function() {
+        //     Message.error('ES013', ['read(JSON)']);
+        // };
 
-        /**
-         * 스키마 읽기
-         */
-        ISchemaControl.prototype.write  = function() {
-            Message.error('ES013', ['write(): JSON']);
-        };
+        // /**
+        //  * 스키마 읽기
+        //  */
+        // ISchemaControl.prototype.write  = function() {
+        //     Message.error('ES013', ['write(): JSON']);
+        // };
 
         /**
          * 스키마 읽기

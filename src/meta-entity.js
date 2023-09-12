@@ -12,7 +12,9 @@ const { ISerialize } = require('./i-serialize');
     var MetaObject;
     var MetaElement;
     var IGroupControl;
-    // var IAllControl;
+    var ISchemaControl;
+    var IImportControl;
+    var IExportControl;
     var ISerialize;
     var MetaRowCollection;
     var MetaRow;
@@ -31,7 +33,9 @@ const { ISerialize } = require('./i-serialize');
         Message                     = require('./message').Message;
         Util                        = require('./util');
         IGroupControl               = require('./i-control-group').IGroupControl;
-        // IAllControl             = require('./i-control-all').IAllControl;
+        ISchemaControl              = require('./i-control-schema').ISchemaControl;
+        IImportControl              = require('./i-control-import').IImportControl;
+        IExportControl              = require('./i-control-export').IExportControl;
         ISerialize                  = require('./i-serialize').ISerialize;
         MetaObject                  = require('./meta-object').MetaObject;
         MetaElement                 = require('./meta-element').MetaElement;
@@ -43,7 +47,9 @@ const { ISerialize } = require('./i-serialize');
         Message                     = _global._L.Message;
         Util                        = _global._L.Util;
         IGroupControl               = _global._L.IGroupControl;
-        // IAllControl             = _global._L.IAllControl;
+        ISchemaControl              = _global._L.ISchemaControl;
+        IImportControl              = _global._L.IImportControl;
+        IExportControl              = _global._L.IExportControl;
         ISerialize                  = _global._L.ISerialize;
         MetaObject                  = _global._L.MetaObject;
         MetaElement                 = _global._L.MetaElement;
@@ -57,7 +63,9 @@ const { ISerialize } = require('./i-serialize');
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof IGroupControl === 'undefined') Message.error('ES011', ['IGroupControl', 'i-control-group']);
-    // if (typeof IAllControl === 'undefined') Message.error('ES011', ['IAllControl', 'i-control-all']);
+    if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
+    if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
+    if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
     if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
@@ -129,12 +137,13 @@ const { ISerialize } = require('./i-serialize');
                 enumerable: true
             });
 
-            Util.implements(this, IGroupControl, ISerialize);
+            Util.implements(this, IGroupControl, ISchemaControl, IImportControl, IExportControl, ISerialize);
         }
         Util.inherits(MetaEntity, _super);
 
         MetaEntity._NS = 'Meta.Entity';          // namespace
         MetaEntity._PARAMS = ['name'];         // creator parameter
+        MetaEntity._ABSCRACT = true;
 
         // 3가지 타입 입력
         MetaEntity._transformObject  = function(mObj) {
@@ -448,8 +457,9 @@ const { ISerialize } = require('./i-serialize');
          */
         MetaEntity.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
+            var vOpt = p_vOpt || 0;
 
-            obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
+            if (vOpt > -2 && this.metaSet) obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
             obj.columns = this.columns.getObject(p_vOpt);
             obj.rows = this.rows.getObject(p_vOpt);
             return obj;                        

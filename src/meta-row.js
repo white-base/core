@@ -260,8 +260,9 @@
          */
         MetaRow.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
+            var vOpt = p_vOpt || 0;
 
-            obj._entity = MetaRegistry.createReferObject(this._entity);
+            if (vOpt > -2 && this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
             obj._elem = [];
             for (var i = 0; i < this.list.length; i++) {
                 var elem = this.list[i];

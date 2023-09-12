@@ -172,9 +172,10 @@
          */
         MetaView.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
+            var vOpt = p_vOpt || 0;
 
             obj.viewName = this.viewName;
-            obj._refEntity = MetaRegistry.createReferObject(this.metaSet);            
+            if (vOpt > -2 && this._refEntity) obj._refEntity = MetaRegistry.createReferObject(this._refEntity);            
             /**
              * REVIEW:
              * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 

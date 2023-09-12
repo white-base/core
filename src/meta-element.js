@@ -69,13 +69,16 @@
                 configurable: false,
                 enumerable: true
             });
-                        
+
             this._name = p_name || '';
 
             // inner variable access
             this.__SET$_name = function(val, call) {
                 if (call instanceof MetaElement) _name = val;    // 상속접근 허용
             }
+            
+            // 추상 클래스로 정의
+            // this.__SET$_isAbstract(true, this); 
 
             Util.implements(this, IElement);
         }
@@ -83,7 +86,7 @@
     
         MetaElement._NS = 'Meta';           // namespace
         MetaElement._PARAMS = ['name'];     // creator parameter
-
+        MetaElement._ABSCRACT = true;
         
         /**
          * 객체 비교
@@ -112,10 +115,10 @@
          * @virtual
          * @returns {object}
          */
-        MetaElement.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
-            this._name = mObj.name;
-        };
+        // MetaElement.prototype.setObject  = function(mObj, oObj) {
+        //     _super.prototype.setObject.call(this, mObj, oObj);
+        //     this._name = mObj.name;
+        // };
         // MetaElement.prototype.setObject  = function(mObj) {
         //     var parent = _super.prototype.setObject.call(this, mObj);
         //     if(!parent) {
