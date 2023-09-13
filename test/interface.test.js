@@ -5,22 +5,25 @@
 // gobal defined
 'use strict';
 
-const Util                  = require('../src/util');
-const {MetaObject}            = require('../src/meta-object');
-const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}                = require('../src/meta-entity');
-const {IObject}               = require('../src/i-object');
-const {IMarshal}              = require('../src/i-marshal');
-// const IControlCollection    = require('../src/i-collection-control');
-const {IPropertyCollection}   = require('../src/i-collection-property');
-const {ICollection}           = require('../src/i-collection');
-// const {IAllControl}           = require('../src/i-control-all');
-const {IExportControl}        = require('../src/i-control-export');
-const {IGroupControl}         = require('../src/i-control-group');
-const {IImportControl}        = require('../src/i-control-import');
-// const {ILookupControl}        = require('../src/i-control-lookup');
-const {ISchemaControl}        = require('../src/i-control-schema');
-// const {IPartControl}          = require('../src/i-control-part');
+const Util                      = require('../src/util');
+const {MetaObject}              = require('../src/meta-object');
+const {MetaElement}             = require('../src/meta-element');
+const {MetaEntity}              = require('../src/meta-entity');
+
+const {IObject}                 = require('../src/i-object');
+const {IMarshal}                = require('../src/i-marshal');
+const {IPropertyCollection}     = require('../src/i-collection-property');
+const {ICollection}             = require('../src/i-collection');
+const {IExportControl}          = require('../src/i-control-export');
+const {IGroupControl}           = require('../src/i-control-group');
+const {IImportControl}          = require('../src/i-control-import');
+const {ISchemaControl}          = require('../src/i-control-schema');
+const {IList}                   = require('../src/i-list');
+const {IListControl}            = require('../src/i-control-list');
+const {IElement}                = require('../src/i-element');
+const {ISerialize}              = require('../src/i-serialize');
+const {ITransaction}            = require('../src/i-transaction');
+const {IArrayCollection}        = require('../src/i-collection-array');
 
 //==============================================================
 // test
@@ -37,9 +40,11 @@ describe("[target: i-* ]", () => {
             // extends
             expect(()=> s.getTypes()).toThrow(/ES013/);
             expect(()=> s.instanceOf()).toThrow(/ES013/);
+            expect(()=> s.equal()).toThrow(/ES013/);
             // create
             expect(()=> i.getTypes()).toThrow(/ES013/);
             expect(()=> i.instanceOf()).toThrow(/ES013/);
+            expect(()=> i.equal()).toThrow(/ES013/);
         });
 
     });
@@ -50,13 +55,13 @@ describe("[target: i-* ]", () => {
             const i = new IMarshal();
             
             // extends
-            // expect(()=> s.getTypes()).toThrow(/Abstract/);
-            // expect(()=> s.instanceOf()).toThrow(/Abstract/);
+            expect(s._guid).toBe(String);
+            expect(s._type).toBe(Function);
             expect(()=> s.getObject()).toThrow(/ES013/);
             expect(()=> s.setObject()).toThrow(/ES013/);
             // create
-            // expect(()=> i.getTypes()).toThrow(/Abstract/);
-            // expect(()=> i.instanceOf()).toThrow(/Abstract/);
+            expect(i._guid).toBe(String);
+            expect(i._type).toBe(Function);
             expect(()=> i.getObject()).toThrow(/ES013/);
             expect(()=> i.setObject()).toThrow(/ES013/);
         });
@@ -97,6 +102,84 @@ describe("[target: i-* ]", () => {
             expect(()=> i.read()).toThrow(/ES013/);
         });
     });
+    
+    
+    describe("IList :: 인터페이스", () => {
+        it("- 생성 및 상속 ", () => {
+            class SubClass extends IList {}
+            const s = new SubClass();
+            const i = new IList();
+
+            // extends
+            expect(s.list).toBe(Array);
+            expect(s.count).toBe(Number);
+            // create
+            expect(i.list).toBe(Array);
+            expect(i.count).toBe(Number);
+        });
+    });
+    describe("IListControl :: 인터페이스", () => {
+        it("- 생성 및 상속 ", () => {
+            class SubClass extends IListControl {}
+            const s = new SubClass();
+            const i = new IListControl();
+
+            // extends
+            expect(()=> s.register()).toThrow(/ES013/);
+            expect(()=> s.release()).toThrow(/ES013/);
+            expect(()=> s.has()).toThrow(/ES013/);
+            expect(()=> s.find()).toThrow(/ES013/);
+            // create
+            expect(()=> i.register()).toThrow(/ES013/);
+            expect(()=> i.release()).toThrow(/ES013/);
+            expect(()=> i.has()).toThrow(/ES013/);
+            expect(()=> i.find()).toThrow(/ES013/);
+        });
+    });
+    describe("IElement :: 인터페이스", () => {
+        it("- 생성 및 상속 ", () => {
+            class SubClass extends IElement {}
+            const s = new SubClass();
+            const i = new IElement();
+
+            // extends
+            expect(s._name).toBe(String);
+            expect(()=> s.clone()).toThrow(/ES013/);
+            // create
+            expect(i._name).toBe(String);
+            expect(()=> i.clone()).toThrow(/ES013/);
+        });
+    });
+
+    describe("ISerialize :: 인터페이스", () => {
+        it("- 생성 및 상속 ", () => {
+            class SubClass extends ISerialize {}
+            const s = new SubClass();
+            const i = new ISerialize();
+
+            // extends
+            expect(()=> s.load()).toThrow(/ES013/);
+            expect(()=> s.output()).toThrow(/ES013/);
+            // create
+            expect(()=> i.load()).toThrow(/ES013/);
+            expect(()=> i.output()).toThrow(/ES013/);
+        });
+    });
+    describe("ITransaction :: 인터페이스", () => {
+        it("- 생성 및 상속 ", () => {
+            class SubClass extends ITransaction {}
+            const s = new SubClass();
+            const i = new ITransaction();
+
+            // extends
+            expect(()=> s.acceptChanges()).toThrow(/ES013/);
+            expect(()=> s.rejectChanges()).toThrow(/ES013/);
+            // create
+            expect(()=> i.acceptChanges()).toThrow(/ES013/);
+            expect(()=> i.rejectChanges()).toThrow(/ES013/);
+        });
+    });
+
     // describe("ILookupControl :: 인터페이스", () => {
     //     it("- ILookupControl() : 생성 및 상속 ", () => {
     //         class SubClass extends ILookupControl {}
@@ -181,6 +264,26 @@ describe("[target: i-* ]", () => {
             expect(()=> i.contains()).toThrow(/ES013/);
             expect(()=> i.indexOf()).toThrow(/ES013/);
             // expect(()=> i.exist()).toThrow(/ES013/);
+        });
+    });
+    describe("ArrayCollection :: 인터페이스", () => {
+        it("- 생성 및 상속 ", () => {
+            class SubClass extends IArrayCollection {}
+            const s = new SubClass();
+            const i = new IArrayCollection();
+
+            // extends
+            expect(()=> s.add()).toThrow(/ES013/);
+            expect(()=> s.remove()).toThrow(/ES013/);
+            expect(()=> s.contains()).toThrow(/ES013/);
+            expect(()=> s.indexOf()).toThrow(/ES013/);
+            // create
+            expect(()=> i.add()).toThrow(/ES013/);
+            expect(()=> i.remove()).toThrow(/ES013/);
+            expect(()=> i.contains()).toThrow(/ES013/);
+            expect(()=> i.indexOf()).toThrow(/ES013/);
+            expect(()=> i.insertAt()).toThrow(/ES013/);
+
         });
     });
     describe("IPropertyCollection :: 인터페이스", () => {

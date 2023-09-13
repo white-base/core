@@ -41,7 +41,7 @@
              * @member {string} _L.Interface.IMarshal#_guid
              */
 
-            this._guid = '';
+            this._guid = String;
             /**
              * 타입
              * @member {string} _L.Interface.IMarshal#_type

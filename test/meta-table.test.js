@@ -1449,6 +1449,12 @@ describe("[target: meta-table.js]", () => {
                 expect(c1._guid === c2._guid).toBe(false);
                 expect(c1 === c2).toBe(false);
             });
+            it("- equal() : 이름이 다른 경우 ", () => {
+                const c1 = new MetaTable('T1');
+                const c2 = new MetaTable();
+                
+                expect(c1.equal(c2)).toBe(false);
+            });
             it("- equal() : columns 추가 후 비교 ", () => {
                 const c1 = new MetaTable('T1');
                 const c2 = new MetaTable('T1');

@@ -49,6 +49,14 @@
         IObject.prototype.instanceOf  = function() {
             Message.error('ES013', ['instanceOf(function | string): boolean']);
         };
+
+        /**
+         * 객체타입 얻기
+         */
+        IObject.prototype.equal  = function() {
+            Message.error('ES013', ['equal(meta): boolean']);
+        };
+        
     
         return IObject;
         

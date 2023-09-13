@@ -324,7 +324,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns.count).toBe(0);
             });
         });
-        describe("BaseCollection.equal() <객체 비교>", () => {
+        describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : 생성 후 비교 ", () => {
                 const c1 = new PropertyCollection();
                 const c2 = new PropertyCollection();
@@ -332,6 +332,38 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 c1.add('a1');
                 c2.add('a1');
                 c3.add('a2');
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+                expect(c1._guid === c2._guid).toBe(false);
+            });
+            it("- equal() : event 추가 후 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const fun1 = function(){return 'F1'};
+                c1.__event.subscribe(fun1, 'fun1');
+                
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : _descriptors 추가 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const c3 = new PropertyCollection();
+                c1._descriptors.push({aa: 1});
+                c2._descriptors.push({aa: 1});
+                c3._descriptors.push({aa: 2});
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+            });
+            it("- equal() : _elemType 추가 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const c3 = new PropertyCollection();
+                c1._elemTypes.push(String);
+                c2._elemTypes.push(String);
+                const fun1 = function(){return 'F1'};
+                c3._elemTypes.push(fun1);
                 
                 expect(c1.equal(c2)).toBe(true);
                 expect(c1.equal(c3)).toBe(false);

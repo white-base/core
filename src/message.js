@@ -49,6 +49,11 @@
             eng: {
                 E: { // Error
                     S01: { // failure
+                        0: {
+                            msg: '{$1}',
+                            long: 'Etc Error',
+                            memo: ''
+                        },
                         1: {
                             msg: 'Failed to import module ["$1"]',
                             long: 'Load the ["$1"] module through require("...$2"). ',
@@ -74,6 +79,18 @@
                         6: {
                             msg: 'You cannot enter [$1] and [$2] at the same time. ',
                             long: ''
+                        },
+                        7: {
+                            msg: 'Class [$1] must implement [$2]. ',
+                            long: '$3'
+                        },
+                        8: {
+                            msg: '[$1] cannot create an abstract class.',
+                            long: '[$2]Implement the abstract method.'
+                        },
+                        9: {
+                            msg: 'Failed to register collection [$1].',
+                            long: '[$2]'
                         },
                     },
                     S02: { // type
@@ -202,6 +219,11 @@
             kor: { // 구분 코드 : 중복, 필수, 타입, 범위, 객체
                 E: {        // Error
                     S01: {  // 실패
+                        0: {
+                            msg: '{$1}',
+                            long: '기타 오류',
+                            memo: ''
+                        },
                         1: {
                             msg: '["$1"] 모듈을 가져오는데 실패하였습니다.',
                             long: '["$1"] 모듈을 require("...$2") 통해서 불어오세요. ',
@@ -228,15 +250,15 @@
                             msg: '[$1]와 [$2]을 동시에 입력할 수 없습니다. ',
                             long: ''
                         },
-                        7: {    // REVIEW: 사용처가 컬럼인지? 확인후 이동 필요
+                        7: {
                             msg: '[$1]클래스는 [$2]을 구현해야 합니다. ',
                             long: '$3'
                         },
-                        8: {    // REVIEW: ADD
+                        8: {
                             msg: '[$1]는 추상클래스는 생성할 수 없습니다.',
                             long: '[$2]추상 메소드를 구현하세요.'
                         },
-                        9: {    // REVIEW: ADD
+                        9: {
                             msg: '[$1] 컬렉션 등록에 실패하였습니다.',
                             long: '[$2]'
                         },
@@ -266,7 +288,7 @@
                             msg: '[$1] 타입이 없습니다. ',
                             long: ''
                         },
-                        6: {    // REVIEW: ADD
+                        7: {    // REVIEW: ADD
                             msg: '[$1]타입의 [$2]이 없습니다. ',
                             long: '[$2]을 정의하세요.'
                         },
@@ -434,15 +456,17 @@
             function _build(p_msg) {
                 var msg = p_msg || '';
                 var result;
-                var max;
+                var max = 0;
                 
                 if (msg === '') return msg;
                 result = msg.match(/\$\d+/g);
+                if (!Array.isArray(result)) return msg;
+
                 max = result.reduce((acc, cur, idx) => { 
                     var num = Number(cur.replace('$',''));
                     return acc < num ? num : acc; 
                 }, 0);
-    
+                    
                 for (var i = 1; i <= max; i++) {
                     var val = p_arr[i -1];
                     msg = msg.replace('$'+ i, val);

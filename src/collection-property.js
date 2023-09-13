@@ -123,12 +123,12 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        PropertyCollection.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // PropertyCollection.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
             
-            if (!this._compare(this._keys, p_target._keys)) return false;
-            return true;
-        };
+        //     if (!this._compare(this._keys, p_target._keys)) return false;
+        //     return true;
+        // };
 
         /**
          * 메타 객체를 얻는다
@@ -138,6 +138,12 @@
         PropertyCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
 
+            if (this._descriptors.length > 0) {
+                obj._desc = [];
+                for (var i = 0; i < this._descriptors.length; i++) {
+                    obj._desc.push(this._descriptors[i]);
+                }
+            }
             obj._elem = [];
             for (var i = 0; i < this._elements.length; i++) {
                 var elem = this._elements[i];
@@ -163,6 +169,13 @@
             var origin = oObj ? oObj : mObj;
 
             if (mObj._key.length !== mObj._elem.length) Message.error('ES063', ['_elem', '_key']);
+            
+            if (Array.isArray(mObj._desc) && mObj._desc.length > 0) {
+                if (mObj._elem.length !== mObj._desc.length) Message.error('ES063', ['_elem', '_desc']);
+                for (var i = 0; i < mObj._desc.length; i++) {
+                    this._descriptors.push(mObj._desc[i]);
+                }
+            }
 
             this._keys.length = 0;
             for(var i = 0; i < mObj._key.length; i++) {

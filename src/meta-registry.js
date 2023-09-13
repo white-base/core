@@ -263,7 +263,7 @@
             var ns, key;
 
             if (!this.findClass(fun)) {
-                ns = fun._NS;
+                ns = fun._NS || '';
                 key = fun.name;
                 this.registerClass(fun, ns, key);
             }

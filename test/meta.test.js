@@ -70,38 +70,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c2.equal(10)).toBe(false);
             });
         });
-        describe("MetaObject.getObject(): obj<ref> <객체 얻기>", () => {
-            it("- getObject() : 직렬화 객체 얻기 ", () => {
-                const c = new MetaObjectSub();
-                const obj = c.getObject();
-
-                expect(typeof obj._type === 'string').toBe(true);
-                expect(typeof obj._guid === 'string').toBe(true);
-            });
-        });
-        describe("MetaObject.setObject(mObj) <객체 설정>", () => {
-            it("- setObject() : 직렬화 객체 설정 ", () => {
-                const m1 = new MetaObjectSub();
-                const m2 = new MetaObjectSub();
-                const m3 = new MetaObject();
-                const obj = m1.getObject();
-
-                const s1 = m2.setObject(obj);
-                // const s2 = m3.setObject(obj);
-
-                expect(m1 !== m2).toBe(true);
-                expect(m1._guid !== m2._guid).toBe(true);
-                expect(m1._type === m2._type).toBe(true);
-                // expect(m1._guid !== m3._guid).toBe(true);
-                // expect(m1._type !== m3._type).toBe(true);
-            });
-            it.skip("- setObject() : 직렬화 객체 설정 ", () => {
-                const m1 = new MetaObjectSub();
-                const mr = MetaRegistry;
-
-                expect(m1 !== m2).toBe(true);
-            });
-        });
+        
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- getTypes() : array<function> ", () => {
                 const c = new MetaObjectSub();
@@ -162,6 +131,40 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c.instanceOf({})).toBe(false);
             });
         });
+
+        describe("MetaObject.getObject(): obj<ref> <객체 얻기>", () => {
+            it("- getObject() : 직렬화 객체 얻기 ", () => {
+                const c = new MetaObjectSub();
+                const obj = c.getObject();
+
+                expect(typeof obj._type === 'string').toBe(true);
+                expect(typeof obj._guid === 'string').toBe(true);
+            });
+        });
+        describe("MetaObject.setObject(mObj) <객체 설정>", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
+                const m1 = new MetaObjectSub();
+                const m2 = new MetaObjectSub();
+                const m3 = new MetaObject();
+                const obj = m1.getObject();
+
+                const s1 = m2.setObject(obj);
+                // const s2 = m3.setObject(obj);
+
+                expect(m1 !== m2).toBe(true);
+                expect(m1._guid !== m2._guid).toBe(true);
+                expect(m1._type === m2._type).toBe(true);
+                // expect(m1._guid !== m3._guid).toBe(true);
+                // expect(m1._type !== m3._type).toBe(true);
+            });
+            it.skip("- setObject() : 직렬화 객체 설정 ", () => {
+                const m1 = new MetaObjectSub();
+                const mr = MetaRegistry;
+
+                expect(m1 !== m2).toBe(true);
+            });
+        });
+        
         describe("빈 검사", () => {
             it("- EmpytClass : 검사 ", () => {
                 const c = new EmpytClass();
@@ -222,27 +225,25 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         });
         describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaElementSub();
+                const c = new MetaElement();
 
                 expect(c.instanceOf('IObject')).toBe(true);
                 expect(c.instanceOf('IMarshal')).toBe(true);
                 expect(c.instanceOf('Object')).toBe(true);
                 expect(c.instanceOf('MetaObject')).toBe(true);
                 expect(c.instanceOf('MetaElement')).toBe(true);
-                expect(c.instanceOf('MetaElementSub')).toBe(true);
                 // false
                 expect(c.instanceOf('Array')).toBe(false);
                 expect(c.instanceOf('String')).toBe(false);
             });
             it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaElementSub();
+                const c = new MetaElement();
 
                 expect(c.instanceOf(IObject)).toBe(true);
                 expect(c.instanceOf(IMarshal)).toBe(true);
                 expect(c.instanceOf(Object)).toBe(true);
                 expect(c.instanceOf(MetaObject)).toBe(true);
                 expect(c.instanceOf(MetaElement)).toBe(true);
-                expect(c.instanceOf(MetaElementSub)).toBe(true);
                 // false
                 expect(c.instanceOf(Array)).toBe(false);
                 expect(c.instanceOf(String)).toBe(false);
@@ -347,9 +348,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         });
         describe("MetaElement.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
-                const m1 = new MetaElementSub();
+                const m1 = new MetaElement();
                 const obj = m1.getObject();
-                const m2 = new MetaElementSub();
+                const m2 = new MetaElement();
                 m2.setObject(obj);
 
                 expect(m1 !== m2).toBe(true);
@@ -360,7 +361,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         });
         describe("예외", () => {
             it("- 예외 : _name, guid ", () => {
-                const i = new MetaElementSub('_name');
+                const i = new MetaElement('_name');
 
                 expect(()=> i._name = 10).toThrow('ES021');
                 expect(()=> i._guid = 10).toThrow(/set.*_guid/); // 직접 설정할 경우는 없음

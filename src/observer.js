@@ -40,7 +40,7 @@
             
             var isLog = false;
             var isSingleMode = false;
-            var __subscribers = { any: [] };
+            var __subscribers = this._getInitObject();
 
             /*_______________________________________*/        
             // priavte property
@@ -110,8 +110,12 @@
         Observer._NS = 'Common';    // namespace
         Observer._PARAMS = ['caller'];  // creator parameter
 
+        Observer.prototype._getInitObject = function() {
+            return { any: [] };
+        };
+        
         Observer.prototype.init = function() {
-            var obj = { any: [] };
+            var obj = this._getInitObject();
             this.__SET$__subscribers(obj, this);
         };
 

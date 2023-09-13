@@ -154,7 +154,7 @@ describe("[target: collection-trans.js]", () => {
             });
         });
         
-        describe("TransactionCollection.equal() <객체 비교>", () => {
+        describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : 커밋 전후 비교 ", () => {
                 const c1 = new TransactionCollection();
                 const c2 = new TransactionCollection();
@@ -165,7 +165,7 @@ describe("[target: collection-trans.js]", () => {
 
                 expect(c1.equal(c2)).toBe(true);
                 c2.commit();    // 커밋후
-                expect(c1.equal(c2)).toBe(false);
+                expect(c1.equal(c2)).toBe(true);
             });
             it("- equal() : 커밋 전후 비교 ", () => {
                 const c1 = new TransactionCollection();

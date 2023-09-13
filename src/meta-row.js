@@ -243,15 +243,15 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaRow.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaRow.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
-            if (!this._compare(this._entity, p_target._entity)) return false;
-            if (!this._compare(this._elements, p_target._elements)) return false;
-            if (!this._compare(this._keys, p_target._keys)) return false;
-            return true;
-        };
+        //     if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
+        //     if (!this._compare(this._entity, p_target._entity)) return false;
+        //     if (!this._compare(this._elements, p_target._elements)) return false;
+        //     if (!this._compare(this._keys, p_target._keys)) return false;
+        //     return true;
+        // };
 
         /**
          * 메타 객체를 얻는다
@@ -262,6 +262,9 @@
             var obj = _super.prototype.getObject.call(this, p_vOpt);
             var vOpt = p_vOpt || 0;
 
+            if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
+                obj.__subscribers = this.__event.__subscribers;
+            }
             if (vOpt > -2 && this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
             obj._elem = [];
             for (var i = 0; i < this.list.length; i++) {
@@ -288,6 +291,9 @@
             _super.prototype.setObject.call(this, mObj, oObj);
             var origin = oObj ? oObj : mObj;
             
+            if (mObj.__subscribers) {
+                this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
+            }
             // this._entity = mObj._entity;
             this._entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
 

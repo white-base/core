@@ -219,16 +219,16 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaSet.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaSet.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this.setName, p_target.setName)) return false;
-            // if (!this._compare(this.columns, p_target.columns)) return false;
-            // if (!this._compare(this.rows, p_target.rows)) return false;
-            if (!this.tables.equal(p_target.tables)) return false;
-            if (!this.views.equal(p_target.views)) return false;
-            return true;
-        };
+        //     if (!this._compare(this.setName, p_target.setName)) return false;
+        //     // if (!this._compare(this.columns, p_target.columns)) return false;
+        //     // if (!this._compare(this.rows, p_target.rows)) return false;
+        //     if (!this.tables.equal(p_target.tables)) return false;
+        //     if (!this.views.equal(p_target.views)) return false;
+        //     return true;
+        // };
 
         /**
          * 메타 객체를 얻는다

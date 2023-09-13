@@ -104,7 +104,12 @@
             //     else _elems.push(elem);
             // }
             // obj._elemTypes = _elems;
-
+            if (this._descriptors.length > 0) {
+                obj._desc = [];
+                for (var i = 0; i < this._descriptors.length; i++) {
+                    obj._desc.push(this._descriptors[i]);
+                }
+            }
             obj._elem = [];
             for (var i = 0; i < this._elements.length; i++) {
                 var elem = this._elements[i];
@@ -123,6 +128,11 @@
             _super.prototype.setObject.call(this, mObj, oObj);
             var origin = oObj ? oObj : mObj;
 
+            if (Array.isArray(mObj._desc) && mObj._desc.length > 0) {
+                for (var i = 0; i < mObj._desc.length; i++) {
+                    this._descriptors.push(mObj._desc[i]);
+                }
+            }
             for(var i = 0; i < mObj._elem.length; i++) {
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
             }

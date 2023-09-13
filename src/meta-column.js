@@ -434,23 +434,25 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaColumn.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaColumn.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
-            if (!this._compare(this._entity, p_target._entity)) return false;
-            if (!this._compare(this.columnName, p_target.columnName)) return false;
-            if (!this._compare(this.alias, p_target.alias)) return false;
-            if (!this._compare(this.default, p_target.default)) return false;
-            if (!this._compare(this.caption, p_target.caption)) return false;
-            if (!this._compare(this.isNotNull, p_target.isNotNull)) return false;
-            if (!this._compare(this.isNullPass, p_target.isNullPass)) return false;
-            if (!this._compare(this.constraints, p_target.constraints)) return false;
-            if (!this._compare(this.value, p_target.value)) return false;
-            if (!this._compare(this.getter, p_target.getter)) return false;
-            if (!this._compare(this.setter, p_target.setter)) return false;
-            return true;
-        };
+        //     if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;            
+        //     // 
+        //     if (!this._compare(this._entity, p_target._entity)) return false;
+        //     // if (this._entity && !this._entity.equal(p_target._entity)) return false;  
+        //     if (!this._compare(this.columnName, p_target.columnName)) return false;
+        //     if (!this._compare(this.alias, p_target.alias)) return false;
+        //     if (!this._compare(this.default, p_target.default)) return false;
+        //     if (!this._compare(this.caption, p_target.caption)) return false;
+        //     if (!this._compare(this.isNotNull, p_target.isNotNull)) return false;
+        //     if (!this._compare(this.isNullPass, p_target.isNullPass)) return false;
+        //     if (!this._compare(this.constraints, p_target.constraints)) return false;
+        //     if (!this._compare(this.value, p_target.value)) return false;
+        //     if (!this._compare(this.getter, p_target.getter)) return false;
+        //     if (!this._compare(this.setter, p_target.setter)) return false;
+        //     return true;
+        // };
 
         /**
          * 메타 객체를 얻는다
@@ -460,10 +462,13 @@
         MetaColumn.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
             var vOpt = p_vOpt || 0;
-
+            
+            if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
+                obj.__subscribers = this.__event.__subscribers;
+            }
             // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
-            obj.columnName = this.columnName;
             if (vOpt > -2 && this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
+            obj.columnName = this.columnName;
             if (this.default !== null) obj.default = this.default;
             if (this.caption !== null) obj.caption = this.caption;            
             if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
@@ -473,7 +478,6 @@
             if (this.setter !== null) obj.setter = this.setter;
             if (this.__GET$alias(this) !== null) obj.alias = this.__GET$alias(this);
             if (this.value !== null) obj.value = this.value;
-            
             return obj;                        
         };
 
@@ -486,9 +490,11 @@
         MetaColumn.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
             var origin = oObj ? oObj : mObj;
-            
-            if (mObj.columnName) this.columnName = mObj.columnName;
+            if (mObj.__subscribers) {
+                this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
+            }
             if (mObj._entity['_guid']) this._entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
+            if (mObj.columnName) this.columnName = mObj.columnName;
             if (mObj.default) this.default = mObj.default;
             if (mObj.caption) this.caption = mObj.caption;
             if (mObj.isNotNull) this.isNotNull = mObj.isNotNull;
@@ -701,12 +707,12 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaColumnCollection.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaColumnCollection.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this._baseType, p_target._baseType)) return false;
-            return true;
-        };
+        //     if (!this._compare(this._baseType, p_target._baseType)) return false;
+        //     return true;
+        // };
 
         /**
          * 컬렉션에 아이템 유무를 검사한다.
@@ -816,7 +822,6 @@
          * @constructs _L.Meta.Entity.MetaTableColumnCollection
          * @extends _L.Meta.Entity.MetaColumnCollection
          * @param {*} p_owner 소유자
-         * @param {MetaColumnCollection?} p_baseCollection 참조기본 컬렉션
          */
         function MetaTableColumnCollection(p_owner) {
             _super.call(this, p_owner);
@@ -869,7 +874,9 @@
         function MetaViewColumnCollection(p_owner, p_baseCollection) {
             _super.call(this, p_owner);
 
-            var _baseCollection;
+            var _baseCollection = p_baseCollection;
+
+            if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);
 
             // if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) {
             //     throw new Error('Error!! MetaColumnCollection object [p_baseCollection].');   // COVER:
@@ -881,15 +888,15 @@
             Object.defineProperty(this, '_baseCollection', 
             {
                 get: function() { return _baseCollection; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);
-                    _baseCollection = newValue;
-                },
+                // set: function(newValue) { 
+                //     if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);
+                //     _baseCollection = newValue;
+                // },
                 configurable: false,
                 enumerable: true
             });
 
-            if (p_baseCollection) this._baseCollection = p_baseCollection;
+            // if (p_baseCollection) this._baseCollection = p_baseCollection;
 
             /** @protected */
             // this._baseCollection = p_baseCollection;
@@ -905,22 +912,22 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaViewColumnCollection.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaViewColumnCollection.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this._baseCollection, p_target._baseCollection)) return false;
-            return true;
-        };
+        //     if (!this._compare(this._baseCollection, p_target._baseCollection)) return false;
+        //     return true;
+        // };
 
 
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.
          * @param {String | MetaColumn} p_object 
-         * @param {?MetaColumnCollection} p_baseCollection
+         * @param {?MetaColumnCollection} p_refCollection
          * @example
          *  - base(all),    string | Itme, Collection   => Collection 에 생성후 자신에 등록 
          *  - base(N),      string | Itme               => this 에 생성후 자신에 등록
-         *  - base(Y),      string | MetaColumn               => Base 에 생성후 자신에 등록
+         *  - base(Y),      string | MetaColumn         => Base 에 생성후 자신에 등록
          * 
          *   // string                       => 생성 및 자신에 등록
          *   // string <base>                => 생성 및 소유처에 등록
@@ -932,7 +939,7 @@
          *  TODO:: filter 옵션 : 충돌방지에 이용
          *  TODO:: 객체 비교는 string 이 아니고 값과 타입을 비교해야함 (그래야 참조를 사용)
          */
-        MetaViewColumnCollection.prototype.add  = function(p_object, p_baseCollection) {
+        MetaViewColumnCollection.prototype.add  = function(p_object, p_refCollection) {
             var collection;
             var i_name;
             var i_value;
@@ -945,7 +952,6 @@
             } else if (typeof p_object === 'string') {
                 i_name = p_object;
                 i_value = new this._baseType(i_name, this._owner);
-// POINT::
             // } else if (p_object instanceof MetaElement && p_object.instanceOf('MetaEntity')) {
             //     // 아아템 가져오기
             //     for (var i = 0; p_object.columns.count > i; i++) {
@@ -957,20 +963,20 @@
 
             // TODO:: 이름 충돌검사
 
-            if (p_baseCollection instanceof MetaColumnCollection) {            // 전달값으로 기본컬렉션 지정시
-                collection = p_baseCollection;
+            // baseCollection & refCollection 의 경우
+            if (p_refCollection instanceof MetaColumnCollection) {            // 전달값으로 기본컬렉션 지정시
+                collection = p_refCollection;
             } else if (this._baseCollection instanceof MetaColumnCollection) { // 기본컬렉션 존재시
                 collection = this._baseCollection;
             }
             
             // 기본참조 컬렉션 또는 전달참조 컬렉션인 경우
             if (collection) {
-                if (collection.contains(collection[i_name])) {
-                    i_value = collection[i_name];                      // 참조 가져옴
-                } else {
-                    collection.add(p_object);                          // 컬렉션에 등록
+                if (collection.contains(collection[i_name])) {          // 기존에 존재하는지
+                    i_value = collection[i_name];                       // 참조 가져옴
+                } else {                                                // 컬렉션에 등록 
+                    collection.add(p_object);                          
                     i_value = collection[i_name];
-
                 }
                 
                 // REVIEW:: 의존성을 낮추기 위해서 검사후 등록

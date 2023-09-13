@@ -332,7 +332,7 @@
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
                 if (listDefType.default !== null && typeof target[key] === 'undefined')      // default 설정
                     target[key] = listDefType.default;
-                if (target !== null && !(key in target)) return Message.get('ES026', [listDefType.name, parentName + '.' + key]);    
+                if (target !== null && !(key in target)) return Message.get('ES027', [listDefType.name, parentName + '.' + key]);    
                 // return ' 대상 없음 ' + parentName + '.' + key + ' : ' + typeof key;
                 // if (!(key in target))                                                       // key 유무 검사
                 
@@ -381,8 +381,8 @@
             if(msg.length === 0) return true;
             else arrMsg.push(msg);
         }
-        // Message.error('ES054', ['this', 'validType()', arrMsg]);
-        throw new Error(arrMsg);
+        Message.error('ES010', [arrMsg]);
+        // throw new Error(arrMsg);
     };
 
     // AND 조건

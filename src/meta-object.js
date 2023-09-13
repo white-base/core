@@ -109,59 +109,77 @@
          * @param {*} p_obj2 
          * @returns 
          */
-        MetaObject.prototype._compare = function(p_obj1, p_obj2) {
+        
+        MetaObject.prototype.__compare = function(p_obj1, p_obj2) {
             var _this = this;
             
             if (p_obj1 === p_obj2) return true;
-            if (Array.isArray(p_obj1)) return compareArray(p_obj1, p_obj2);
 
-            if (p_obj1 instanceof MetaObject) {
+            if (p_obj1 instanceof MetaObject && p_obj2 instanceof MetaObject) {
                 var obj1 = p_obj1.getObject(-2);    // _guid, $ref 제외 객체
-                var obj2 = p_obj1.getObject(-2);
-                // var isCir = isCirculate(p_obj1);
+                var obj2 = p_obj2.getObject(-2);
                 return Util.deepEqual(obj1, obj2);
-                // return p_obj1.equal(p_obj2);
-
-                // if (isCirculate(p_obj1)) {
-                //     var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체
-                //     var obj2 = p_obj1.getObject(-1);
-                //     return Util.deepEqual(obj1, obj2);
-                // } else return p_obj1.equal(p_obj2);
-                
-                // if (!p_obj1.equal(p_obj2)) return false;
-            } else if (typeof p_obj1 === 'object' && p_obj1 !== null) { // TODO: 함수로 추출
+            } else if (typeof p_obj1 === 'object' && p_obj1 !== null) {
                 return Util.deepEqual(p_obj1, p_obj2);
-            // } else {
-            //     return p_obj1 === p_obj2;
             }
             return false;
-            
-            // inner function
-            function compareArray(p_arr1, p_arr2) {
-                if (!Array.isArray(p_arr1) || !Array.isArray(p_arr2)) return false;
-                if (p_arr1.length !== p_arr2.length) return false;
-                for (var i = 0; i < p_arr1.length; i++) {
-                    if (p_arr1[i] instanceof MetaObject) if (!p_arr1[i].equal(p_arr2[i])) return false;
-                    if(!_this._compare(p_arr1[i], p_arr2[i])) return false;
-                    // if (!_this._compare(p_arr1[i], p_arr2[i])) return false;
-                }
-                return true;
-            }
-            // TODO: 작동 완료후 for of 문 >> getAllProperties()
-            function isCirculate(meta, bObj) {
-                var beginObj = bObj || meta;
-                var keys1 = Object.keys(meta);
-                for(var key of keys1) {
-                    var val = meta[key];
-                    if (beginObj === val) return true;
-                    if (isObject(val)) return isCirculate(val, beginObj);
-                }
-                return false;
-            }
-            function isObject(object) {
-                return object != null && typeof object === 'object';
-            }
         };
+        // MetaObject.prototype.__compare = function(p_obj1, p_obj2) {
+        //     var _this = this;
+            
+        //     if (p_obj1 === p_obj2) return true;
+        //     if (Array.isArray(p_obj1)) return compareArray(p_obj1, p_obj2);
+
+        //     if (p_obj1 instanceof MetaObject && p_obj2 instanceof MetaObject) {
+        //         var obj1 = p_obj1.getObject(-2);    // _guid, $ref 제외 객체
+        //         var obj2 = p_obj2.getObject(-2);
+        //         // var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체
+        //         // var obj2 = p_obj2.getObject(-1);
+        //         // var isCir = isCirculate(p_obj1);
+        //         return Util.deepEqual(obj1, obj2);
+        //         // return p_obj1.equal(p_obj2);
+
+        //         // if (isCirculate(p_obj1)) {
+        //         //     var obj1 = p_obj1.getObject(-1);    // _guid 제외 객체
+        //         //     var obj2 = p_obj1.getObject(-1);
+        //         //     return Util.deepEqual(obj1, obj2);
+        //         // } else return p_obj1.equal(p_obj2);
+                
+        //         // if (!p_obj1.equal(p_obj2)) return false;
+        //     } else if (typeof p_obj1 === 'object' && p_obj1 !== null) { // TODO: 함수로 추출
+        //         return Util.deepEqual(p_obj1, p_obj2);
+        //     // } else {
+        //     //     return p_obj1 === p_obj2;
+        //     }
+        //     return false;
+            
+        //     // inner function
+        //     function compareArray(p_arr1, p_arr2) {
+        //         if (!Array.isArray(p_arr1) || !Array.isArray(p_arr2)) return false;
+        //         if (p_arr1.length !== p_arr2.length) return false;
+        //         for (var i = 0; i < p_arr1.length; i++) {
+        //             if (p_arr1[i] instanceof MetaObject) if (!p_arr1[i].equal(p_arr2[i])) return false;
+        //             if(!_this.__compare(p_arr1[i], p_arr2[i])) return false;
+        //             // if (!_this.__compare(p_arr1[i], p_arr2[i])) return false;
+        //         }
+        //         return true;
+        //     }
+        //     // TODO: 작동 완료후 for of 문 >> getAllProperties()
+        //     function isCirculate(meta, bObj) {
+        //         var beginObj = bObj || meta;
+        //         var keys1 = Object.keys(meta);
+        //         for(var key of keys1) {
+        //             var val = meta[key];
+        //             if (beginObj === val) return true;
+        //             if (isObject(val)) return isCirculate(val, beginObj);
+        //         }
+        //         return false;
+        //     }
+        //     function isObject(object) {
+        //         return object != null && typeof object === 'object';
+        //     }
+        // };
+        
 
         /**
          * 객체 비교
@@ -172,52 +190,13 @@
          * @returns {boolean}
          */
         MetaObject.prototype.equal = function(p_target) {
-            if (typeof p_target !== 'object') return false;
-            return this._type === p_target._type ? true : false;
+            if (!(p_target instanceof MetaObject)) return false;
+            // if (typeof p_target !== 'object') return false;
+            // return this._type === p_target._type ? true : false;
+            return this.__compare(this, p_target);
         };
 
-        /**
-         * 메타 객체를 얻는다
-         * -1 : _guid 제외
-         * @virtual
-         * @param {number} p_vOpt 레벨 옵션
-         * @returns {object}
-         */
-        MetaObject.prototype.getObject = function(p_vOpt) {
-            var obj = {};
-            var vOpt = p_vOpt || 0;
 
-            if (vOpt > -1) obj._guid = this._guid;
-            obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
-            return obj;                        
-        };
-
-        /**
-         * 메타 객체를 설정한다
-         * @virtual
-         * @param {object} p_mObj 레벨 옵션
-         */
-        MetaObject.prototype.setObject  = function(p_mObj) {
-            var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
-
-            if (typeof p_mObj !== 'object') Message.error('ES021', ['mObj', 'object']);
-            if (p_mObj._type !== fullName) Message.error('ES046', [p_mObj._type, fullName]);
-            // this.__SET$_guid(p_mObj._guid, this);
-            // p_mObj['$set'] = this._guid;
-            MetaRegistry.createSetObject(p_mObj, this);
-        };
-        // MetaObject.prototype.setObject  = function(p_mObj) {
-        //     var meta;
-
-        //     if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
-        //     meta = MetaRegistry.find(p_mObj);
-        //     if (!meta) {
-        //         this.__SET$_guid(p_mObj._guid, this);
-        //     } else return meta;
-        // };
-
-
-        
         /**
          * 객체 타입 이름 얻기 (상속포함)
          * @returns {array<function>}
@@ -277,6 +256,49 @@
                 return false;
             }
         };
+
+        /**
+         * 메타 객체를 얻는다
+         * -1 : _guid 제외
+         * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @returns {object}
+         */
+        MetaObject.prototype.getObject = function(p_vOpt) {
+            var obj = {};
+            var vOpt = p_vOpt || 0;
+
+            if (vOpt > -1) obj._guid = this._guid;
+            obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
+            return obj;                        
+        };
+
+        /**
+         * 메타 객체를 설정한다
+         * @virtual
+         * @param {object} p_mObj 레벨 옵션
+         */
+        MetaObject.prototype.setObject  = function(p_mObj) {
+            var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
+
+            if (typeof p_mObj !== 'object') Message.error('ES021', ['mObj', 'object']);
+            if (p_mObj._type !== fullName) Message.error('ES046', [p_mObj._type, fullName]);
+            // this.__SET$_guid(p_mObj._guid, this);
+            // p_mObj['$set'] = this._guid;
+            MetaRegistry.createSetObject(p_mObj, this);
+        };
+        // MetaObject.prototype.setObject  = function(p_mObj) {
+        //     var meta;
+
+        //     if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
+        //     meta = MetaRegistry.find(p_mObj);
+        //     if (!meta) {
+        //         this.__SET$_guid(p_mObj._guid, this);
+        //     } else return meta;
+        // };
+
+
+        
 
         return MetaObject;
         

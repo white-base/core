@@ -19,7 +19,7 @@ describe("[target: util.js]", () => {
                 Util.implements(this, ISuper);    /** @implements */
             }
     
-            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES026/);
+            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
         });
         it('- prototype 인터페이스 선언 : 예외 (인터페이스 미구현) ', () => {
             function ISuper() {}
@@ -28,7 +28,7 @@ describe("[target: util.js]", () => {
                 Util.implements(this, ISuper);    /** @implements */
             }
             
-            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES026/);
+            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
         });
     
         it('- class 인터페이스 선언 : 예외 (인터페이스 미구현)', () => {
@@ -41,7 +41,7 @@ describe("[target: util.js]", () => {
                 }
             }
     
-            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES026/);
+            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
         });
         it('- prototype 인터페이스 선언 : 예외 (인터페이스 미구현) ', () => {
             function ISuper() {}
@@ -50,7 +50,7 @@ describe("[target: util.js]", () => {
                 Util.implements(this, ISuper);    /** @implements */
             }
             
-            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES026/);
+            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
         });
     
         it('- this 인터페이스 선언 <-- 구현', () => {
@@ -220,7 +220,7 @@ describe("[target: util.js]", () => {
     
             expect(()=> new CoClass1()).toThrow(/ES017(.|\s)*ES024/);
             expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES031/);
-            expect(()=> new CoClass3()).toThrow(/ES017(.|\s)*ES026/);
+            expect(()=> new CoClass3()).toThrow(/ES017(.|\s)*ES027/);
         });
         
         it('- this 인터페이스 선언 <-- 구현 : 예외 (복합 타입) ', () => {
@@ -268,7 +268,7 @@ describe("[target: util.js]", () => {
                 Util.implements(this, ISuper);    /** @implements */
             }
             
-            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES026/);
+            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES027/);
         });
         
         it('- class 다중 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
@@ -299,7 +299,7 @@ describe("[target: util.js]", () => {
             let obj = new CoClass1();
     
             expect(obj.m1()).toBe('M1');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES026/);
+            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
         });
         it('- class 다중 인터페이스 선언 : 중복 등록', () => {
             // 인터페이스
@@ -356,7 +356,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.m1()).toBe('M1');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES026/);
+            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
         });
         it('- function 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
@@ -389,7 +389,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES026/);
+            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
         });
         it('- function 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
@@ -421,7 +421,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES026/);
+            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
         });
         it('- class 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
@@ -451,7 +451,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES026/);
+            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
         });
         it('- isImplementOf() : 예외 및 검사 ', () => {
             // 인터페이스

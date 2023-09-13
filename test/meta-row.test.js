@@ -50,7 +50,7 @@ describe("[target: meta-row.js]", () => {
                 expect(() => new MetaRow({})).toThrow('ES032');
             });
         });
-        describe("MetaRow.equal() <객체 비교>", () => {
+        describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : __event ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T1');
@@ -72,7 +72,7 @@ describe("[target: meta-row.js]", () => {
                 
                 expect(row1.equal(row2)).toBe(true);
             });
-            it("- equal() : 다른 _entity 비교 ", () => {
+            it("- equal() : 다른 _entity 비교, 값 삽입 ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');

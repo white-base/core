@@ -194,7 +194,7 @@ describe("[target: meta-column.js ]", () => {
         });
         
         
-        describe("MetaRow.equal() <객체 비교>", () => {
+        describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : __event ", () => {
                 var c1 = new MetaColumn();
                 var c2 = new MetaColumn();
@@ -204,11 +204,44 @@ describe("[target: meta-column.js ]", () => {
                 c1.onChanged = fun1;
                 expect(c1.equal(c2)).toBe(false);
             });
-            it("- equal() : 각각 _entity 로 비교 ", () => {
+            it("- equal() : 각각 생성 비교 ", () => {
                 var c1 = new MetaColumn('C1');
                 var c2 = new MetaColumn('C1');
 
                 expect(c1.equal(c2)).toBe(true);
+            });
+            it("- equal() : 각각 테이블에서 생성 비교 ", () => {
+                var table1 = new MetaTable('T1');
+                var table2 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                table2.columns.addValue('i1', 'V1');
+                const c1 = table1.columns['i1'];
+                const c2 = table1.columns['i1'];
+
+                expect(c1.equal(c2)).toBe(true);
+            });
+            it.only("- equal() : 각각 테이블에서 생성 비교 ", () => {
+                var table1 = new MetaTable('T1');
+                var table2 = new MetaTable('T2');   // 테이블명 다름
+                var table3 = new MetaTable('T1');   // row 추가
+                var table4 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                table2.columns.addValue('i1', 'V1');
+                table3.columns.addValue('i1', 'V1');
+                table4.columns.addValue('i1', 'V1');
+                table3.rows.add(table3.newRow()); 
+                const c1 = table1.columns['i1'];
+                const c2 = table2.columns['i1'];
+                const c3 = table3.columns['i1'];
+                const c4 = table3.columns['i1'];
+
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(true);
+                // 테이블 비교
+                expect(table1.equal(table2)).toBe(false);
+                expect(table1.equal(table3)).toBe(false);
+                expect(table1.equal(table4)).toBe(true);
+                
             });
             it("- equal() : 속성들 비교 ", () => {
                 var prop1 = {

@@ -339,63 +339,63 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        BaseCollection.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // BaseCollection.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
             
-            if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
-            if (!this._compare(this._owner, p_target._owner)) return false;
-            if (!this._compare(this._elements, p_target._elements)) return false;
-            if (!this._compare(this._descriptors, p_target._descriptors)) return false;
-            if (!this._compare(this._elemTypes, p_target._elemTypes)) return false;
-            return true;
-            // for (var i = 0; i < this._descriptors.length; i++) {
-            //     if (!this._compare(this._descriptors[i], p_target._descriptors[i])) return false;
-            // }
+        //     if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
+        //     if (!this._compare(this._owner, p_target._owner)) return false;
+        //     if (!this._compare(this._elements, p_target._elements)) return false;
+        //     if (!this._compare(this._descriptors, p_target._descriptors)) return false;
+        //     if (!this._compare(this._elemTypes, p_target._elemTypes)) return false;
+        //     return true;
+        //     // for (var i = 0; i < this._descriptors.length; i++) {
+        //     //     if (!this._compare(this._descriptors[i], p_target._descriptors[i])) return false;
+        //     // }
 
-            // if (!Util.deepEqual(this.__event.__subscribers, obj)) return false;
-            // obj = p_target._caller;
-            // if (this._caller instanceof MetaObject) {
-            //     if (!this._caller.equal(obj)) return false;
-            // } else if (typeof this._caller === 'object' && this._caller !== null) {
-            //     if (!Util.deepEqual(this._caller, obj)) return false;
-            // } else {
-            //     this._caller === obj;
-            // }
+        //     // if (!Util.deepEqual(this.__event.__subscribers, obj)) return false;
+        //     // obj = p_target._caller;
+        //     // if (this._caller instanceof MetaObject) {
+        //     //     if (!this._caller.equal(obj)) return false;
+        //     // } else if (typeof this._caller === 'object' && this._caller !== null) {
+        //     //     if (!Util.deepEqual(this._caller, obj)) return false;
+        //     // } else {
+        //     //     this._caller === obj;
+        //     // }
 
-            // // 분기하여 검사하는 부분 함수로...
-            // function compare(ob1, obj2) {
-            //     if (obj1 instanceof MetaObject) {
-            //         if (!obj1.equal(obj2)) return false;
-            //     } else if (typeof obj1 === 'object' && this._caller !== null) {
-            //         if (!Util.deepEqual(obj1, obj2)) return false;
-            //     } else {
-            //         return this._caller === obj2;
-            //     }
-            // }
+        //     // // 분기하여 검사하는 부분 함수로...
+        //     // function compare(ob1, obj2) {
+        //     //     if (obj1 instanceof MetaObject) {
+        //     //         if (!obj1.equal(obj2)) return false;
+        //     //     } else if (typeof obj1 === 'object' && this._caller !== null) {
+        //     //         if (!Util.deepEqual(obj1, obj2)) return false;
+        //     //     } else {
+        //     //         return this._caller === obj2;
+        //     //     }
+        //     // }
             
 
-            /**
-             * 비교대상
-             * __event
-             * _owner : MetaObject인경우, object, 기본자료형, 함수형
-             * _descriptors : arr<obj>
-             * _elements : arr<obj | 기본형 | meta>
-             * _elemType : arr<fun....>
-             */
+        //     /**
+        //      * 비교대상
+        //      * __event
+        //      * _owner : MetaObject인경우, object, 기본자료형, 함수형
+        //      * _descriptors : arr<obj>
+        //      * _elements : arr<obj | 기본형 | meta>
+        //      * _elemType : arr<fun....>
+        //      */
 
-            /**
-             * 비교방식
-             * - MetaObject : equal()
-             * - typeof === 'object' : deepEqual()
-             * - 기본자료형 : ===
-             * - array : 순환 
-             * - 함수 : ===
-             */
-            // return this._name === p_target._name ? true : false;
+        //     /**
+        //      * 비교방식
+        //      * - MetaObject : equal()
+        //      * - typeof === 'object' : deepEqual()
+        //      * - 기본자료형 : ===
+        //      * - array : 순환 
+        //      * - 함수 : ===
+        //      */
+        //     // return this._name === p_target._name ? true : false;
 
-            // inner function 
-            // function deepEqual(obj1, obj2){}
-        };
+        //     // inner function 
+        //     // function deepEqual(obj1, obj2){}
+        // };
 
         /**
          * 메타 객체를 얻는다
@@ -407,7 +407,11 @@
             var _elems = [];
             var vOpt = p_vOpt || 0;
 
+            if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
+                obj.__subscribers = this.__event.__subscribers;
+            }
             if (vOpt > -2 && this._owner) obj._owner = MetaRegistry.createReferObject(this._owner);
+            
             for (var i = 0; i < this._elemTypes.length; i++) {
                 var elem = this._elemTypes[i];
                 if (typeof elem === 'function') _elems.push(MetaRegistry.createNsReferObject(elem));
@@ -428,7 +432,12 @@
             _super.prototype.setObject.call(this, mObj, oObj);
             
             this.clear();
-            this._elemTypes = mObj._elemTypes;
+            if (mObj.__subscribers) {
+                this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
+            }
+            if (Array.isArray(mObj._elemTypes) && mObj._elemTypes.length > 0){
+                this._elemTypes = mObj._elemTypes;
+            }
         };
 
         

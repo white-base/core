@@ -105,12 +105,12 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaTable.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaTable.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this.tableName, p_target.tableName)) return false;
-            return true;
-        };
+        //     if (!this._compare(this.tableName, p_target.tableName)) return false;
+        //     return true;
+        // };
         
         /**
          * 메타 객체를 얻는다
@@ -258,12 +258,12 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaTableCollection.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaTableCollection.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this._baseType, p_target._baseType)) return false;
-            return true;
-        };
+        //     if (!this._compare(this._baseType, p_target._baseType)) return false;
+        //     return true;
+        // };
 
         /**
          * 테이블 컬렉션에 엔티티 추가한다.

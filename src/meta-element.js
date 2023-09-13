@@ -86,7 +86,6 @@
     
         MetaElement._NS = 'Meta';           // namespace
         MetaElement._PARAMS = ['name'];     // creator parameter
-        MetaElement._ABSCRACT = true;
         
         /**
          * 객체 비교
@@ -94,10 +93,10 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaElement.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
-            return this._name === p_target._name ? true : false;
-        };
+        // MetaElement.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
+        //     return this._name === p_target._name ? true : false;
+        // };
 
         /**
          * 메타 객체를 얻는다
@@ -127,9 +126,9 @@
         // };
 
         MetaElement.prototype.clone  = function() {
-            Message.error('ES013', ['clone()']);
-            // var clone = new MetaElement(this._name);
-            // return clone;
+            // Message.error('ES013', ['clone()']);
+            var clone = new MetaElement(this._name);
+            return clone;
         };
 
         return MetaElement;

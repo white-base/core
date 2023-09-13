@@ -448,7 +448,7 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(obj4, Func1)).toBe(true);
             expect(checkType(obj4, Func2)).toBe(false);
             // false (예외)
-            expect(()=> validType(obj5, Func1, Func2)).toThrow(/ES026(.|\s)*ES026/);
+            expect(()=> validType(obj5, Func1, Func2)).toThrow(/ES027(.|\s)*ES027/);
         });
         it('- 원시 타입 ', () => {
             // true
@@ -515,10 +515,10 @@ describe("[target: util-type.js.js]", () => {
             expect(checkUnionType(obj5, Func1, Func2)).toBe(false); 
             expect(checkUnionType(obj5, Func1)).toBe(false);
             expect(checkUnionType(obj5, Func2)).toBe(false);
-            expect(()=> validUnionType(obj2, Func1, Func2)).toThrow('ES026');
-            expect(()=> validUnionType(obj3, Func1, Func2)).toThrow('ES026');
+            expect(()=> validUnionType(obj2, Func1, Func2)).toThrow('ES027');
+            expect(()=> validUnionType(obj3, Func1, Func2)).toThrow('ES027');
             expect(()=> validUnionType(obj4, Func1, Func2)).toThrow('ES024');
-            expect(()=> validUnionType(obj5, Func1, Func2)).toThrow('ES026');    // aa, bb
+            expect(()=> validUnionType(obj5, Func1, Func2)).toThrow('ES027');    // aa, bb
         });
         it('- 원시 타입 ', () => {
             // true

@@ -62,24 +62,24 @@
         function MetaView(p_name, p_baseEntity) {
             _super.call(this, p_name);
 
-            var _refEntity = p_baseEntity;
+            var _baseEntity = p_baseEntity;
             var _refEntities = [];
             // var viewName;
             var columns;
-            var refCollection;
+            var baseCollection;
 
             if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
-                refCollection = p_baseEntity.columns;
+                baseCollection = p_baseEntity.columns;
             }
             
             /**
              * 기본 참조 컬렉션
              * // REVIEW: 필요 유무 검토 => 직렬화에 필요할 듯
-             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#_refEntity
+             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#_baseEntity
              */
-            Object.defineProperty(this, '_refEntity', 
+            Object.defineProperty(this, '_baseEntity', 
             {
-                get: function() { return _refEntity; },
+                get: function() { return _baseEntity; },
                 configurable: false,
                 enumerable: true
             });
@@ -129,11 +129,11 @@
             this.viewName = p_name || '';
             
             // this._refEntities   = [];
-            columns = new MetaViewColumnCollection(this, refCollection);
+            columns = new MetaViewColumnCollection(this, baseCollection);
 
             // inner variable access
-            this.__SET$_refEntity = function(val, call) {
-                if (call instanceof MetaView) _refEntity = val;
+            this.__SET$_baseEntity = function(val, call) {
+                if (call instanceof MetaView) _baseEntity = val;
             }
         }
         Util.inherits(MetaView, _super);
@@ -156,14 +156,14 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaView.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaView.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this.viewName, p_target.viewName)) return false;
-            if (!this._compare(this._refEntity, p_target._refEntity)) return false;
-            if (!this._compare(this._refEntities, p_target._refEntities)) return false;
-            return true;
-        };
+        //     if (!this._compare(this.viewName, p_target.viewName)) return false;
+        //     if (!this._compare(this._baseEntity, p_target._baseEntity)) return false;
+        //     if (!this._compare(this._refEntities, p_target._refEntities)) return false;
+        //     return true;
+        // };
 
         /**
          * 메타 객체를 얻는다
@@ -175,7 +175,7 @@
             var vOpt = p_vOpt || 0;
 
             obj.viewName = this.viewName;
-            if (vOpt > -2 && this._refEntity) obj._refEntity = MetaRegistry.createReferObject(this._refEntity);            
+            if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);            
             /**
              * REVIEW:
              * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
@@ -197,7 +197,7 @@
             this.columns.setObject(mObj.columns, origin);
             this.rows.setObject(mObj.rows, origin);
             this.viewName = mObj.viewName;
-            this.__SET$_refEntity(mObj._refEntity, this);
+            this.__SET$_baseEntity(mObj._baseEntity, this);
         };
 
         /**
@@ -299,12 +299,12 @@
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
-        MetaViewCollection.prototype.equal = function(p_target) {
-            if (!_super.prototype.equal.call(this, p_target)) return false;
+        // MetaViewCollection.prototype.equal = function(p_target) {
+        //     if (!_super.prototype.equal.call(this, p_target)) return false;
 
-            if (!this._compare(this._baseType, p_target._baseType)) return false;
-            return true;
-        };
+        //     if (!this._compare(this._baseType, p_target._baseType)) return false;
+        //     return true;
+        // };
 
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.
@@ -321,9 +321,16 @@
             var i_value;
             var i_name;
 
+            if (p_baseEntity instanceof MetaEntity) {
+                throw new Error('baseEntity 는 MetaEntity 의 인스턴스가 아닙니다.');    // TODO: 메세지 처리
+            }
+            if (p_object instanceof MetaView && p_baseEntity) {
+                throw new Error('MetaView 객체와 baseEntity 동시에 입력할 수 없습니다.');   // TODO: 메세지 처리
+            }
+
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
-                i_value = new MetaView(i_name, p_baseEntity);
+                i_value = new this._baseType(i_name, p_baseEntity);
                 i_value.metaSet = this._owner;
             } else if (p_object instanceof MetaView) {
                 if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
