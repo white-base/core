@@ -22,8 +22,9 @@ const { loadNamespace } = require('../src/load-namespace');
 // test
 describe("[target: meta-table.js]", () => {
     describe("MetaTable :: 클래스", () => {
-        beforeAll(() => {
-            // jest.resetModules();
+        beforeEach(() => {
+            jest.resetModules();
+            MetaRegistry.init();
         });
         describe("<테이블 등록후 속성 검사>", () => {
             it("- 테이블 등록후 속성 검사 ", () => {
@@ -685,6 +686,8 @@ describe("[target: meta-table.js]", () => {
                 row['i2'] = 20;
                 table1.rows.add(row);
 
+                // 초기화하여서 다시 임으로 불러와야함
+                MetaRegistry.ns.register('Meta.Entity.MetaView', MetaView);
                 var table2 = table1.select();
     
                 expect(table2.columns.count).toBe(2);
@@ -727,6 +730,7 @@ describe("[target: meta-table.js]", () => {
                 row['i2'] = 20;
                 table1.rows.add(row);
 
+                MetaRegistry.ns.register('Meta.Entity.MetaView', MetaView);
                 var table2 = table1.select(row => row['i1'] < 10);
                 
                 expect(table2.columns.count).toBe(2);
@@ -761,7 +765,7 @@ describe("[target: meta-table.js]", () => {
                 row['i1'] = 10;
                 row['i2'] = 20;
                 table1.rows.add(row);
-
+                MetaRegistry.ns.register('Meta.Entity.MetaView', MetaView);
                 var table2 = table1.select('i1');
     
                 expect(table2.columns.count).toBe(1);

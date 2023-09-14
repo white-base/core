@@ -89,22 +89,22 @@ const { ISerialize } = require('./i-serialize');
         function MetaEntity(p_name) {
             _super.call(this, p_name);
 
-            var metaSet = null;
+            var _metaSet = null;
             var columns = null;     
             var rows  = new MetaRowCollection(this);
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
-             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#metaSet
+             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#_metaSet
              */
-            Object.defineProperty(this, 'metaSet', 
+            Object.defineProperty(this, '_metaSet', 
             {
-                get: function() { return metaSet; },
+                get: function() { return _metaSet; },
                 set: function(newValue) { 
                     if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaSet'))) {
-                        Message.error('ES032', ['metaSet', 'MetaSet']);
+                        Message.error('ES032', ['_metaSet', 'MetaSet']);
                     }
-                    metaSet = newValue;
+                    _metaSet = newValue;
                 },
                 configurable: false,
                 enumerable: true
@@ -458,8 +458,9 @@ const { ISerialize } = require('./i-serialize');
         MetaEntity.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
             var vOpt = p_vOpt || 0;
+            var _metaSet;
 
-            if (vOpt > -2 && this.metaSet) obj.metaSet = MetaRegistry.createReferObject(this.metaSet);
+            if (vOpt > -2 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
             obj.columns = this.columns.getObject(p_vOpt);
             obj.rows = this.rows.getObject(p_vOpt);
             return obj;                        
@@ -925,7 +926,11 @@ const { ISerialize } = require('./i-serialize');
         MetaEntity.prototype.select  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
             var _this = this;
-            var MetaView                    = require('./meta-view').MetaView;
+            var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
+            
+            // var MetaView = require('./meta-view').MetaView;
+            if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
+
             var view = new MetaView('select', this);
             var items = [];
             var callback = null;

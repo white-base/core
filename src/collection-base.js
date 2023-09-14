@@ -431,9 +431,17 @@
         BaseCollection.prototype.setObject = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
             
+            var owner;
+            var origin = oObj ? oObj : mObj;
+            
             this.clear();
             if (mObj.__subscribers) {
                 this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
+            }
+            if (mObj._owner) {
+                owner = MetaRegistry.findSetObject(origin, mObj._owner.$ref);
+                if (!owner) Message.error('ES015', [mObj.name, '_owner']);
+                this._owner = owner;
             }
             if (Array.isArray(mObj._elemTypes) && mObj._elemTypes.length > 0){
                 this._elemTypes = mObj._elemTypes;

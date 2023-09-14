@@ -106,7 +106,7 @@
                 set: function(newValue) { 
                     if (newValue === this.viewName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['viewName', 'string']);
-                    if (this.metaSet && this.metaSet.views.existViewName(newValue)) Message.error('ES041', [newValue]);
+                    if (this._metaSet && this._metaSet.views.existViewName(newValue)) Message.error('ES041', [newValue]);
                     // viewName = newValue;
                     this.__SET$_name(newValue, this);
                 },
@@ -175,7 +175,7 @@
             var vOpt = p_vOpt || 0;
 
             obj.viewName = this.viewName;
-            if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);            
+            if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
             /**
              * REVIEW:
              * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
@@ -190,10 +190,22 @@
          */
         MetaView.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
+            
             var origin = oObj ? oObj : mObj;
+            var metaSet;
+            var baseEntity;
 
+            if(mObj._metaSet) {
+                metaSet = MetaRegistry.findSetObject(origin, mObj._metaSet.$ref);
+                if (!metaSet) Message.error('ES015', [mObj.name, '_metaSet']);
+                this._metaSet = metaSet;
+            }
             // this.metaSet = mObj.metaSet;
-            if (mObj.metaSet) this.metaSet = MetaRegistry.findSetObject(origin, mObj.metaSet.$ref);
+            if (mObj._baseEntity) {
+                baseEntity = MetaRegistry.findSetObject(origin, mObj._baseEntity.$ref);
+                if (!baseEntity) Message.error('ES015', [mObj.name, '_baseEntity']);
+                this.__SET$_baseEntity(baseEntity, this);
+            } 
             this.columns.setObject(mObj.columns, origin);
             this.rows.setObject(mObj.rows, origin);
             this.viewName = mObj.viewName;
@@ -202,6 +214,7 @@
 
         /**
          * 뷰 엔티티를 복제한다.
+         * 참조가 사라진다.??
          * @returns {*}
          */
         MetaView.prototype.clone  = function() {
@@ -321,7 +334,7 @@
             var i_value;
             var i_name;
 
-            if (p_baseEntity instanceof MetaEntity) {
+            if (p_baseEntity && !(p_baseEntity instanceof MetaEntity)) {
                 throw new Error('baseEntity 는 MetaEntity 의 인스턴스가 아닙니다.');    // TODO: 메세지 처리
             }
             if (p_object instanceof MetaView && p_baseEntity) {
@@ -331,12 +344,12 @@
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
                 i_value = new this._baseType(i_name, p_baseEntity);
-                i_value.metaSet = this._owner;
+                i_value._metaSet = this._owner;
             } else if (p_object instanceof MetaView) {
                 if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
                 i_name  = p_object.viewName;
                 i_value = p_object;
-                p_object.metaSet = this._owner;
+                p_object._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaView object']);
 
             if (typeof i_name === 'undefined') Message.error('ES051', ['viewName']);

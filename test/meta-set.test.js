@@ -1105,6 +1105,43 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views.count).toBe(1);
             });
         });
+        describe("output(), load()", () => {
+            it("- 참조뷰 ", () => {
+                const set1  = new MetaSet('S1');
+                set1.views.add('V1');
+                set1.views.add('V2', set1.views['V1']);
+                set1.views.add('V3');
+                set1.views['V1'].columns.add('c1');
+                set1.views['V2'].columns.add('c2');
+                set1.views['V3'].columns.add('c3', set1.views['V2'].columns);
+                const v1 = set1.views['V1'];
+                const v2 = set1.views['V2'];
+                const v3 = set1.views['V3'];
+                const str = set1.output(stringify, '\t');
+                const set2 = new MetaSet('S2');
+                const view = new MetaView('V');
+                set2.load(str, parse);
+                const vv1 = set1.views['V1'];
+                const vv2 = set1.views['V2'];
+                const vv3 = set1.views['V3'];              
+
+                expect(()=> view.load(v1.output(stringify, '\t'))).toThrow('ES015')
+                expect(()=> view.load(v2.output(stringify, '\t'))).toThrow('ES015')
+                expect(()=> view.load(v3.output(stringify, '\t'))).toThrow('ES015')
+                expect(v1.columns.count).toBe(3)
+                expect(v2.columns.count).toBe(2)
+                expect(v3.columns.count).toBe(1)
+                expect(vv1.columns.count).toBe(3)
+                expect(vv2.columns.count).toBe(2)
+                expect(vv3.columns.count).toBe(1)
+                expect(vv1._metaSet === set1).toBe(true)
+                expect(vv2._metaSet === set1).toBe(true)
+                expect(vv3._metaSet === set1).toBe(true)
+                expect(vv1.columns['c1']._entity === vv1).toBe(true)
+                expect(vv2.columns['c2']._entity === vv1).toBe(true)
+                expect(vv3.columns['c3']._entity === vv1).toBe(true)
+            });
+        });
     });
 
 });

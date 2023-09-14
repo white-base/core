@@ -289,14 +289,19 @@
          */
         MetaRow.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
+            
             var origin = oObj ? oObj : mObj;
+            var entity;
             
             if (mObj.__subscribers) {
                 this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
             }
             // this._entity = mObj._entity;
-            this._entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
-
+            if (mObj._entity) {
+                entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
+                if (!entity) Message.error('ES015', [mObj.name, '_entity']);
+                this._entity = entity;
+            } 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
                 if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem, origin);

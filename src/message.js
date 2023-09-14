@@ -262,6 +262,10 @@
                             msg: '[$1] 컬렉션 등록에 실패하였습니다.',
                             long: '[$2]'
                         },
+                        10: {   // REVIEW: ADD
+                            msg: '[$1]을 [$2] 에서 가져오는데 실패하였습니다.',
+                            long: ''
+                        },
                     },  
                     S02: {  // 타입
                         1: {
@@ -432,7 +436,7 @@
             
             div = p_code.substring(0, 1);
             part = p_code.substring(1, 4);
-            num = p_code.substring(5, p_code.length - 1);
+            num = p_code.substring(4, p_code.length);
             if (!MSG[div] || !MSG[div] || !MSG[div][part]) return;
 
             return MSG[div][part][num];

@@ -72,7 +72,7 @@
                 set: function(newValue) { 
                     if (newValue === this.tableName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['tableName', 'string']);
-                    if (this.metaSet && this.metaSet.tables.existTableName(newValue)) Message.error('ES042', ['tableName', newValue]);
+                    if (this._metaSet && this._metaSet.tables.existTableName(newValue)) Message.error('ES042', ['tableName', newValue]);
                     // tableName = newValue;
                     this.__SET$_name(newValue, this);
                 },
@@ -131,9 +131,15 @@
          */
         MetaTable.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
+            
             var origin = oObj ? oObj : mObj;
+            var metaSet;
 
-            if(mObj.metaSet) this.metaSet = MetaRegistry.findSetObject(origin, mObj.metaSet.$ref);
+            if(mObj._metaSet) {
+                metaSet = MetaRegistry.findSetObject(origin, mObj._metaSet.$ref);
+                if (!metaSet) Message.error('ES015', [mObj.name, 'metaSet']);
+                this._metaSet = metaSet;
+            }
             this.columns.setObject(mObj.columns, origin);
             this.rows.setObject(mObj.rows, origin);
             this.tableName = mObj.tableName;
@@ -277,11 +283,11 @@
             if (typeof p_object === 'string') {      
                 i_name  = p_object;
                 i_value = new MetaTable(i_name);
-                i_value.metaSet = this._owner;
+                i_value._metaSet = this._owner;
             } else if (p_object instanceof MetaTable) {
                 i_name  = p_object.tableName;
                 i_value = p_object;
-                p_object.metaSet = this._owner;
+                p_object._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaTable object']);
 
             if (typeof i_name === 'undefined') Message.error('ES051', ['tableName']);

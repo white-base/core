@@ -337,7 +337,6 @@
         // };
 
         MetaSet.prototype.read  = function(p_obj, p_opt) {
-            var metaSet = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);

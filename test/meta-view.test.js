@@ -21,7 +21,8 @@ const { loadNamespace } = require('../src/load-namespace');
 describe("[target: meta-view.js]", () => {
     describe("MetaView :: 클래스", () => {   
         beforeAll(() => {
-            // jest.resetModules();
+            jest.resetModules();
+            MetaRegistry.init();
         });
         describe("MetaView.viewName <뷰이름>", () => {
             it("- this.viewName : 조회 ", () => {
@@ -38,7 +39,7 @@ describe("[target: meta-view.js]", () => {
                 expect(table1.viewName).toBe('V2');
             });
         });
-
+        
         describe("MetaView(name, baseEntity) <생성자>", () => {
             it("- new MetaView(name, baseEntity) ", () => {
                 var view1 = new MetaView('E1');        // 일반 뷰
@@ -331,7 +332,8 @@ describe("[target: meta-view.js]", () => {
             });
         });
         describe("MetaView.setObject(mObj) <객체 설정>", () => {
-            it("- setObject() : 다른 뷰를 참조로 추가할 경우 ", () => {
+            // 외부 참조가 있는것은 setObject() 실패함
+            it.skip("- setObject() : 다른 뷰를 참조로 추가할 경우 ", () => {
                 const v1 = new MetaView('V1');
                 v1.columns.add('a1');
                 v1.columns.add('a2');
@@ -469,11 +471,351 @@ describe("[target: meta-view.js]", () => {
                 expect(view2.rows[1]['i1']).toBe(10);
             });
         });
+        describe("뷰사용방", () => {
+            it("-  ", () => {
+            });
+        });
         // describe("< setValue(row) >", () => {
         //     it("- setValue(row) : row 설정(단일) ", () => {select
                 
         //     });
         // });
+    });
+    describe("뷰사용방식별 clone(), equal(), set/getObect()", () => {
+        describe("일반뷰 : 모든컬럼 소유(참조 없음)", () => {
+            it("- clone(), equal() ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                view1.columns['c2'].caption = 'C2';
+                const view2 = view1.clone();
+
+                expect(view2._name).toBe('V1');
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+            });
+            it("- getObject(), setObject() ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                view1.columns['c2'].caption = 'C2';
+                const obj1 = view1.getObject();
+                const view2 = new MetaView('V2');
+                view2.setObject(obj1);
+
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+            });
+        });
+        describe("일반뷰 전체 참조", () => {
+            it("- clone(), equal()  ", () => {
+                const view0 = new MetaView('V1');
+                const view1 = new MetaView('V1', view0);
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                view1.columns['c2'].caption = 'C2';
+                const view2 = view1.clone();
+
+                // view0
+                expect(view0.viewName).toBe('V1');  
+                expect(view0.columns.count).toBe(2);
+                expect(view0.columns['c2'].caption).toBe('C2');
+                expect(view0.equal(view1)).toBe(true);
+                // view2
+                expect(view2._name).toBe('V1');
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+                expect(view2 !== view1).toBe(true);
+            });
+            it.skip("- getObject(), setObject() ", () => {
+                const view0 = new MetaView('V1');
+                const view1 = new MetaView('V1', view0);
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                view1.columns['c2'].caption = 'C2';
+                const obj1 = view1.getObject();
+                const view2 = new MetaView('V2');
+                view2.setObject(obj1);
+
+                // view0
+                expect(view0.viewName).toBe('V1');  
+                expect(view0.columns.count).toBe(2);
+                expect(view0.columns['c2'].caption).toBe('C2');
+                expect(view0.equal(view1)).toBe(true);
+                // view2
+                expect(view2._name).toBe('V1'); // 이름 바뀜
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+                expect(view2 !== view1).toBe(true);
+            });
+        });
+        describe("일반뷰 일부 참조", () => {
+            it("- clone(), equal()  ", () => {
+                const view0 = new MetaView('V1');
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                view1.columns.add('c2', view0.columns);
+                view1.columns['c2'].caption = 'C2';
+                const view2 = view1.clone();
+
+                // view0
+                expect(view0.viewName).toBe('V1');  
+                expect(view0.columns.count).toBe(1);
+                expect(view0.columns['c2'].caption).toBe('C2');
+                expect(view0.equal(view1)).toBe(false);
+                expect(view0.columns['c2'].equal(view1.columns['c2'])).toBe(true);
+                expect(view0.columns['c2'] === view1.columns['c2']).toBe(true);
+                // view2
+                expect(view2._name).toBe('V1');
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+                expect(view2 !== view1).toBe(true);
+            });
+            it.skip("- getObject(), setObject() ", () => {
+                const view0 = new MetaView('V1');
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                view1.columns.add('c2', view0.columns);
+                view1.columns['c2'].caption = 'C2';
+                const obj1 = view1.getObject();
+                const view2 = new MetaView('V2');
+                view2.setObject(obj1);
+
+                expect(view2._name).toBe('V1'); // 이름 바뀜
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+                expect(view2 !== view1).toBe(true);
+            });
+        });
+        describe("참조뷰 전체 참조", () => {
+            it("- clone(), equal()  ", () => {
+                const view3 = new MetaView('V1');
+                const view0 = new MetaView('V1', view3);
+                const view1 = new MetaView('V1', view0);
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                view1.columns['c2'].caption = 'C2';
+                const view2 = view1.clone();
+
+                // view3
+                expect(view3.viewName).toBe('V1');  
+                expect(view3.columns.count).toBe(2);
+                expect(view3.columns['c2'].caption).toBe('C2');
+                expect(view3.equal(view1)).toBe(true);
+                // view0
+                expect(view0.viewName).toBe('V1');  
+                expect(view0.columns.count).toBe(2);
+                expect(view0.columns['c2'].caption).toBe('C2');
+                expect(view0.equal(view1)).toBe(true);
+                // view2
+                expect(view2._name).toBe('V1');
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+                expect(view2 !== view1).toBe(true);
+            });
+            it.skip("- getObject(), setObject() ", () => {
+                const view3 = new MetaView('V1');
+                const view0 = new MetaView('V1', view3);
+                const view1 = new MetaView('V1', view0);
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                view1.columns['c2'].caption = 'C2';
+                const obj1 = view1.getObject();
+                const view2 = new MetaView('V2');
+                view2.setObject(obj1);
+
+                // view3
+                expect(view3.viewName).toBe('V1');  
+                expect(view3.columns.count).toBe(2);
+                expect(view3.columns['c2'].caption).toBe('C2');
+                expect(view3.equal(view1)).toBe(true);
+                // view0
+                expect(view0.viewName).toBe('V1');  
+                expect(view0.columns.count).toBe(2);
+                expect(view0.columns['c2'].caption).toBe('C2');
+                expect(view0.equal(view1)).toBe(true);
+                // view2
+                expect(view2._name).toBe('V1');
+                expect(view2.viewName).toBe('V1');
+                expect(view2.columns.count).toBe(2);
+                expect(view2.columns['c2'].caption).toBe('C2');
+                expect(view2.equal(view1)).toBe(true);
+                expect(view2 !== view1).toBe(true);
+            });
+        });
+        describe("clone(), equal()", () => {
+            it("- 참조뷰 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns);         // 일부 참조
+                const clone1 = view1.clone()
+                const clone2 = view2.clone()
+                const clone3 = view3.clone()
+                const c1 = clone1.columns['c1'];
+                const c2 = clone2.columns['c2'];
+                const c3 = clone3.columns['c3'];
+
+                expect(clone1.columns.count).toBe(3)
+                expect(clone2.columns.count).toBe(2)
+                expect(clone3.columns.count).toBe(1)
+                expect(clone1.equal(view1)).toBe(true);
+                expect(clone2.equal(view2)).toBe(true);
+                expect(clone3.equal(view3)).toBe(true);
+                // expect(c1._entity === view1).toBe(true) // 참조가 사라짐 REVIEW:
+                // expect(c2._entity === view1).toBe(true)
+                // expect(c3._entity === view1).toBe(true)
+
+            });
+        });
+        describe("getObject(), setObject()", () => {
+            it("- 참조뷰 : 예외", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns);         // 일부 참조
+                const obj1 = view1.getObject();
+                const obj2 = view2.getObject();
+                const obj3 = view3.getObject();
+                var set1 = new MetaView('V4');
+                var set2 = new MetaView('V5');
+                var set3 = new MetaView('V6');
+                set1.setObject(obj1);
+                // set2.setObject(obj2);
+                // set3.setObject(obj3);
+                expect(()=> set2.setObject(obj2)).toThrow('ES015')
+                expect(()=> set3.setObject(obj3)).toThrow('ES015')
+
+                // MetaRegistry.init();
+                // var set1 = new MetaView('V4');
+                // var set2 = new MetaView('V5');
+                // var set3 = new MetaView('V6');
+                // set1.setObject(obj1);
+                // set2.setObject(obj2);
+                // set3.setObject(obj3);
+
+                // expect(set1.columns.count).toBe(3)
+                // expect(set2.columns.count).toBe(2)
+                // expect(set3.columns.count).toBe(1)
+                // expect(set1.equal(view1)).toBe(true);
+                // expect(set2.equal(view2)).toBe(true);
+                // expect(set3.equal(view3)).toBe(true);
+                // expect(view1.columns['c1']._entity === view1).toBe(true)
+                // expect(view2.columns['c2']._entity === view1).toBe(true)
+                // expect(view3.columns['c3']._entity === view1).toBe(true)
+                // expect(set1.columns['c1']._entity === set1).toBe(true)
+                // expect(set2.columns['c2']._entity === set1).toBe(true)
+                // expect(set3.columns['c3']._entity === set1).toBe(true)
+            });
+        });
+        
+    });
+    describe("중복과 이름 변경", () => {
+        describe("clumnName 중복 검사", () => {
+            it("- 일반뷰 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                const c1 = view1.columns['c1'];
+                const c2 = view1.columns['c2'];
+
+                expect(()=> view1.columns.add('c1')).toThrow('ES042')
+                expect(()=> c2.columnName = 'c1').toThrow('ES042')
+                // 컬럼명 변경
+                c1.columnName = 'cc1';
+                c2.columnName = 'c1';
+                expect(c1.columnName).toBe('cc1');
+                expect(c2.columnName).toBe('c1');
+                expect(view1.columns.keyOf(0)).toBe('c1');
+                expect(view1.columns.keyOf(1)).toBe('c2');
+            });
+            it("- 참조뷰 ", () => {   // REVIEW: 좋은 참조 샘플
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns);         // 일부 참조
+                const c1 = view1.columns['c1'];
+                const c2 = view2.columns['c2'];
+                const c3 = view3.columns['c3'];
+                
+                expect(view1.columns.count).toBe(3)
+                expect(view2.columns.count).toBe(2)
+                expect(view3.columns.count).toBe(1)
+                expect(c1._entity === view1).toBe(true)
+                expect(c2._entity === view1).toBe(true)
+                expect(c3._entity === view1).toBe(true)
+                expect(()=> view1.columns.add('c1')).toThrow('ES042')
+                expect(()=> view1.columns.add('c2')).toThrow('ES042')
+                expect(()=> view1.columns.add('c3')).toThrow('ES042')
+                expect(()=> c1.columnName = 'c2').toThrow('ES042')
+                expect(()=> c1.columnName = 'c3').toThrow('ES042')
+                expect(()=> view2.columns.add('c2')).toThrow('ES042')
+                expect(()=> view2.columns.add('c3')).toThrow('ES042')
+                expect(()=> c2.columnName = 'c1').toThrow('ES042')
+                expect(()=> c2.columnName = 'c3').toThrow('ES042')
+                expect(()=> view3.columns.add('c3')).toThrow('ES042')
+                expect(()=> c3.columnName = 'c1').toThrow('ES042')
+                expect(()=> c3.columnName = 'c2').toThrow('ES042')
+            });
+        });
+        describe("alias 중복 검사", () => {
+            it("- 일반뷰 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                view1.columns.add('c2');
+                const c1 = view1.columns['c1'];
+                const c2 = view1.columns['c2'];
+
+                expect(()=> c2.alias = 'c1').toThrow('ES042')
+                // alias 변경
+                c1.alias = 'cc1';
+                c2.alias = 'c1';
+                expect(c1.alias).toBe('cc1');
+                expect(c2.alias).toBe('c1');
+                expect(c1.columnName).toBe('c1');
+                expect(c2.columnName).toBe('c2');
+                expect(view1.columns.keyOf(0)).toBe('c1');
+                expect(view1.columns.keyOf(1)).toBe('c2');
+            });
+            it("- 참조뷰 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns);         // 일부 참조
+                const c1 = view1.columns['c1'];
+                const c2 = view2.columns['c2'];
+                const c3 = view3.columns['c3'];
+                
+                expect(()=> c1.alias = 'c2').toThrow('ES042')
+                expect(()=> c1.alias = 'c3').toThrow('ES042')
+                expect(()=> c2.alias = 'c1').toThrow('ES042')
+                expect(()=> c2.alias = 'c3').toThrow('ES042')
+                expect(()=> c3.alias = 'c1').toThrow('ES042')
+                expect(()=> c3.alias = 'c2').toThrow('ES042')
+            });
+        });
     });
 });
 

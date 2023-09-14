@@ -489,11 +489,18 @@
          */
         MetaColumn.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
+            
             var origin = oObj ? oObj : mObj;
+            var entity;
+
             if (mObj.__subscribers) {
                 this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
             }
-            if (mObj._entity['_guid']) this._entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
+            if (mObj._entity) {
+                entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
+                if (!entity) Message.error('ES015', [mObj.name, '_entity']);
+                this._entity = entity;
+            } 
             if (mObj.columnName) this.columnName = mObj.columnName;
             if (mObj.default) this.default = mObj.default;
             if (mObj.caption) this.caption = mObj.caption;
@@ -958,7 +965,8 @@
             //         this.add(p_object.columns[i]);
             //     }
             } else {
-                Message.error('ES021', ['object']);
+                // 메세지 윈위치 TODO:
+                Message.error('ES022', [p_object._type.name]);
             }
 
             // TODO:: 이름 충돌검사
@@ -974,8 +982,8 @@
             if (collection) {
                 if (collection.contains(collection[i_name])) {          // 기존에 존재하는지
                     i_value = collection[i_name];                       // 참조 가져옴
-                } else {                                                // 컬렉션에 등록 
-                    collection.add(p_object);                          
+                } else {                                                
+                    collection.add(p_object);                           // 컬렉션에 등록 
                     i_value = collection[i_name];
                 }
                 
