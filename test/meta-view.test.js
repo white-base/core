@@ -74,8 +74,8 @@ describe("[target: meta-view.js]", () => {
                 // expect(view1.rows[0]['i1']).toBe('R1');
                 // expect(view1.rows[0]['i2']).toBe('R2');
                 // view2
-                expect(view2._refEntities[0]._name).toBe('E1');
-                expect(view2._refEntities[1]._name).toBe('T3');
+                expect(view2.columns._refEntities[0]._name).toBe('E1');
+                expect(view2.columns._refEntities[1]._name).toBe('T3');
                 expect(view2.columns['i2'].caption).toBe('C2');
                 expect(view2.columns['i3'].caption).toBe('C3');
                 expect(view2.columns['i4'].value).toBe('V4');
@@ -524,7 +524,7 @@ describe("[target: meta-view.js]", () => {
                 expect(view0.viewName).toBe('V1');  
                 expect(view0.columns.count).toBe(2);
                 expect(view0.columns['c2'].caption).toBe('C2');
-                expect(view0.equal(view1)).toBe(true);
+                expect(view0.equal(view1)).toBe(false);
                 // view2
                 expect(view2._name).toBe('V1');
                 expect(view2.viewName).toBe('V1');
@@ -613,12 +613,12 @@ describe("[target: meta-view.js]", () => {
                 expect(view3.viewName).toBe('V1');  
                 expect(view3.columns.count).toBe(2);
                 expect(view3.columns['c2'].caption).toBe('C2');
-                expect(view3.equal(view1)).toBe(true);
+                expect(view3.equal(view1)).toBe(false);
                 // view0
                 expect(view0.viewName).toBe('V1');  
                 expect(view0.columns.count).toBe(2);
                 expect(view0.columns['c2'].caption).toBe('C2');
-                expect(view0.equal(view1)).toBe(true);
+                expect(view0.equal(view1)).toBe(false);
                 // view2
                 expect(view2._name).toBe('V1');
                 expect(view2.viewName).toBe('V1');

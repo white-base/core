@@ -12,6 +12,7 @@
     var Observer;
     var CustomError;
     var MetaElement;
+    // var MetaEntity;
     var PropertyCollection;
     var MetaRegistry;
 
@@ -29,6 +30,7 @@
         Observer                    = require('./observer').Observer;
         CustomError                 = require('./custom-error').CustomError;
         MetaElement                 = require('./meta-element').MetaElement;
+        // MetaEntity                  = require('./meta-entity').MetaEntity;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
@@ -37,6 +39,7 @@
         Observer                    = _global._L.Observer;
         CustomError                 = _global._L.CustomError;
         MetaElement                 = _global._L.MetaElement;
+        // MetaEntity                  = _global._L.MetaEntity;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaRegistry                = _global._L.MetaRegistry;
     }
@@ -47,6 +50,7 @@
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof CustomError === 'undefined') Message.error('ES011', ['CustomError', 'custom-error']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
+    // if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
     if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
@@ -552,7 +556,6 @@
             
             return clone;
         };
-
         // 변형 POINT:
         MetaColumn.prototype.clone = function(p_entity) {
             var clone = new MetaColumn(this.columnName);
@@ -882,6 +885,7 @@
             _super.call(this, p_owner);
 
             var _baseCollection = p_baseCollection;
+            var _refEntities = [];
 
             if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);
 
@@ -903,15 +907,73 @@
                 enumerable: true
             });
 
+            Object.defineProperty(this, '_refEntities', 
+            {
+                get: function() { return _refEntities; },
+                configurable: false,
+                enumerable: true
+            });
             // if (p_baseCollection) this._baseCollection = p_baseCollection;
 
             /** @protected */
             // this._baseCollection = p_baseCollection;
+            
+            // inner variable access
+            this.__SET$_baseCollection = function(val, call) {
+                if (call instanceof MetaViewColumnCollection) _baseCollection = val;
+            }
         }
         Util.inherits(MetaViewColumnCollection, _super);
 
         MetaViewColumnCollection._NS = 'Meta.Entity';                       // namespace
         MetaViewColumnCollection._PARAMS = ['_owner', '_baseCollection'];   // creator parameter
+
+        MetaViewColumnCollection.prototype.getObject = function(p_vOpt) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt);
+            var vOpt = p_vOpt || 0;
+
+            if (this._baseCollection) obj._baseCollection = MetaRegistry.createReferObject(this._baseCollection);
+            if (vOpt > -2 && this._refEntities.length > 0) {
+                obj._refEntities = [];
+                for (var i = 0; i < this._refEntities.length; i++) {
+                    obj._refEntities.push(MetaRegistry.createReferObject(this._refEntities[i]));
+                }
+            }
+            // if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
+            /**
+             * REVIEW:
+             * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
+             */
+            return obj;                  
+        };
+
+        MetaViewColumnCollection.prototype.setObject = function(mObj, oObj) {
+            _super.prototype.setObject.call(this, mObj, oObj);
+            
+            var origin = oObj ? oObj : mObj;
+            var baseCollection, obj;
+
+            if (mObj._baseCollection) {
+                baseCollection = MetaRegistry.findSetObject(origin, mObj._baseCollection.$ref);
+                if (!baseCollection) Message.error('ES015', [mObj.name, '_baseCollection']);
+                this.__SET$_baseCollection(baseCollection, this);
+                // this._baseCollection = baseCollection;
+            }
+            if (Array.isArray(mObj) && mObj._refEntities.length > 0) {
+                for (var i = 0; i < mObj._refEntities.length; i++) {
+                    obj = MetaRegistry.findSetObject(origin, mObj._refEntities[i].$ref);
+                    if (!obj) Message.error('ES015', [mObj.name, '_refEntities']);    
+                    this._refEntities.push(obj);
+                }
+            }
+            // if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
+            /**
+             * REVIEW:
+             * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
+             */
+            return obj;                  
+        };
+
 
         /**
          * 객체 비교
@@ -925,6 +987,18 @@
         //     if (!this._compare(this._baseCollection, p_target._baseCollection)) return false;
         //     return true;
         // };
+
+        /**
+         * 뷰 엔티티에 참조를 등록한다. (중복 제거후)
+         * @param {MetaEntity} p_entity 
+         */
+        MetaViewColumnCollection.prototype._regRefer  = function(p_entity) {
+            if(!(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
+                Message.error('ES032', ['entity', 'MetaEntity']);
+            }
+            if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
+        };
+        
 
 
         /**
@@ -989,8 +1063,8 @@
                 
                 // REVIEW:: 의존성을 낮추기 위해서 검사후 등록
                 // 소유객체에 참조 등록 (중복제거됨)
-                if (this._owner._regRefer) {
-                    this._owner._regRefer(collection._owner);
+                if (this._regRefer) {
+                    this._regRefer(collection._owner);
                 }
             }
             

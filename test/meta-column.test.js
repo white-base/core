@@ -220,7 +220,7 @@ describe("[target: meta-column.js ]", () => {
 
                 expect(c1.equal(c2)).toBe(true);
             });
-            it.only("- equal() : 각각 테이블에서 생성 비교 ", () => {
+            it("- equal() : 각각 테이블에서 생성 비교 ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T2');   // 테이블명 다름
                 var table3 = new MetaTable('T1');   // row 추가
