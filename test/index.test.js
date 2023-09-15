@@ -19,9 +19,10 @@ describe("[target: index.js]", () => {
             expect(typeof index.Util.checkUnionType).toBe('function');
             expect(typeof index.Util.validType).toBe('function');
             expect(typeof index.Util.validUnionType).toBe('function');
-            // expect(typeof index.Util.validSelector).toBe('function');
             expect(typeof index.Util.getAllProperties).toBe('function');
             expect(typeof index.Util.implements).toBe('function');
+            expect(typeof index.Util.deepCopy).toBe('function');
+            expect(typeof index.Util.deepEqual).toBe('function');
         });
         it('- _L.Common.* ', () => { 
             // namespace
@@ -35,9 +36,10 @@ describe("[target: index.js]", () => {
             expect(typeof index.Common.Util.checkUnionType).toBe('function');
             expect(typeof index.Common.Util.validType).toBe('function');
             expect(typeof index.Common.Util.validUnionType).toBe('function');
-            // expect(typeof index.Common.Util.validSelector).toBe('function');
             expect(typeof index.Common.Util.getAllProperties).toBe('function');
             expect(typeof index.Common.Util.implements).toBe('function');
+            expect(typeof index.Common.Util.deepCopy).toBe('function');
+            expect(typeof index.Common.Util.deepEqual).toBe('function');
         });
     });
     describe(`IObject, IMarshal, 
@@ -48,14 +50,10 @@ describe("[target: index.js]", () => {
             expect(typeof index.IObject).toBe('function');
             expect(typeof index.IMarshal).toBe('function');
             expect(typeof index.ICollection).toBe('function');
-            // expect(typeof index.IControlCollection).toBe('function');
             expect(typeof index.IPropertyCollection).toBe('function');
-            // expect(typeof index.IAllControl).toBe('function');
             expect(typeof index.IExportControl).toBe('function');
             expect(typeof index.IGroupControl).toBe('function');
             expect(typeof index.IImportControl).toBe('function');
-            // expect(typeof index.ILookupControl).toBe('function');
-            // expect(typeof index.IPartControl).toBe('function');
         });
         it('- _L.Interface.* ', () => { 
             // namespace
@@ -63,15 +61,10 @@ describe("[target: index.js]", () => {
             expect(typeof index.Interface.IObject).toBe('function');
             expect(typeof index.Interface.IMarshal).toBe('function');
             expect(typeof index.Interface.ICollection).toBe('function');
-            // expect(typeof index.Interface.IControlCollection).toBe('function');
             expect(typeof index.Interface.IPropertyCollection).toBe('function');
-            // expect(typeof index.Interface.IAllControl).toBe('function');
             expect(typeof index.Interface.IExportControl).toBe('function');
             expect(typeof index.Interface.IGroupControl).toBe('function');
-            expect(typeof index.Interface.IImportControl).toBe('function');
-            // expect(typeof index.Interface.ILookupControl).toBe('function');
-            // expect(typeof index.Interface.IPartControl).toBe('function');
-    
+            expect(typeof index.Interface.IImportControl).toBe('function');    
         });
     });
     describe('BaseCollection, ArrayCollection, PropertyCollection', () => {
@@ -93,15 +86,17 @@ describe("[target: index.js]", () => {
         it('- _L.* ', () => {
             expect(typeof index.MetaObject).toBe('function');
             expect(typeof index.MetaElement).toBe('function');
-            // expect(typeof index.ComplexElement).toBe('function');
-            // namespace
+            expect(typeof index.MetaRegistry).toBe('function');
+            expect(typeof index.NamespaceManager).toBe('function');
         });
-            
+        
         it('- _L.Meta.* ', () => {
+            // namespace
             expect(typeof index.Meta).toBe('object');
             expect(typeof index.Meta.MetaObject).toBe('function');
             expect(typeof index.Meta.MetaElement).toBe('function');
-            // expect(typeof index.Meta.ComplexElement).toBe('function');
+            expect(typeof index.Meta.MetaRegistry).toBe('function');
+            expect(typeof index.Meta.NamespaceManager).toBe('function');
         });
     });
     describe(`MetaEntity, 

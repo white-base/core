@@ -387,8 +387,8 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             });
             it("- add(value, desc) : 기술자, 0 삭제후 0에 삽입 ", () => {
                 let s = new Student();
-                const desc1 = { value: 'A2', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
-                const desc2 = { value: 'A1', writable: false, configurable: true};   // TODO: config true 아니면 삭제 못함
+                const desc1 = { value: 'A2', writable: false, configurable: true};   // REVIEW: config true 아니면 삭제 못함
+                const desc2 = { value: 'A1', writable: false, configurable: true};   // REVIEW: config true 아니면 삭제 못함
                 s.rows.add('A1');
                 s.rows.add(null, desc1);
                 s.rows.add('A3');

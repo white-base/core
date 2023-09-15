@@ -99,7 +99,6 @@
 
             /** 
              * 컬랙선 내부값 
-             * TODO: setter 는 빠지는게 적합흘듯
              * @protected 
              * @member {Array} _L.Collection.BaseCollection#_elements  
              */
@@ -107,25 +106,18 @@
                 get: function() {
                     return _elements;
                 },
-                set: function(val) {
-                    _elements = val;
-                },
                 enumerable: true,
                 configurable: false
             });
 
             /** 
              * 컬랙선 내부값 
-             * TODO: setter 는 빠지는게 적합흘듯
              * @protected 
              * @member {Array} _L.Collection.BaseCollection#_descriptors  
              */
             Object.defineProperty(this, '_descriptors', {
                 get: function() {
                     return _descriptors;
-                },
-                set: function(val) {
-                    _descriptors = val;
                 },
                 enumerable: false,
                 configurable: false
@@ -166,7 +158,6 @@
 
             /**
              * 컬렉션 목록 
-             * TODO: 제거되어야 맞을듯, _elements 와 중복되며, 공개의 의미가 아님, 직접 접근 제한함
              * @member {Array}  _L.Collection.BaseCollection#list  
              */
             Object.defineProperty(this, 'list', {
@@ -252,6 +243,13 @@
                 configurable: true
             });
 
+            // inner variable access
+            this.__SET$_elements = function(val, call) {
+                if (call instanceof BaseCollection) _elements = val;    // 상속접근 허용
+            }
+            this.__SET$_descriptors = function(val, call) {
+                if (call instanceof BaseCollection) _descriptors = val;    // 상속접근 허용
+            }
             // 예약어 등록
             this._KEYWORD = this._KEYWORD.concat(['__event', '_owner', '_elements', '_KEYWORD', '_elemTypes', 'list', 'count']);
             this._KEYWORD = this._KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);

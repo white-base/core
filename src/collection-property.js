@@ -65,13 +65,14 @@
             Object.defineProperty(this, '_keys',
             {
                 get: function() { return _keys; },
-                set: function(newValue) { 
-                    // TODO: string, len 체크
-                    _keys = newValue; 
-                },
                 configurable: false,
                 enumerable: false
             });
+
+            // inner variable access
+            this.__SET$_keys = function(val, call) {
+                if (call instanceof PropertyCollection) _keys = val;    // 상속접근 허용
+            }
 
             // 예약어 등록 
             this._KEYWORD = this._KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
@@ -187,7 +188,7 @@
 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
-                if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
+                if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, oObj);
                     obj.setObject(elem, origin);
                     this._elements.push(obj);
@@ -253,8 +254,11 @@
                delete this[i];
                delete this[propName];
             }
-            this._elements = [];
-            this._keys = [];
+            this.__SET$_elements([], this);
+            this.__SET$_descriptors([], this);
+            this.__SET$_keys([], this);
+            // this._elements = [];
+            // this._keys = [];
             // after event
             this._onChanged();
         };
@@ -262,7 +266,7 @@
         /**
          * 
          * @param {string | any} p_obj key 또는 대상 객체
-         * @param {number} p_opt 옵션 :  0 = 요소로 조회, 1 = idx로 조회  REVIEW: 타입은 소문자로 바꿔야 함
+         * @param {number} p_opt 옵션 :  0 = 요소로 조회, 1 = idx로 조회
          * @returns 
          */
         PropertyCollection.prototype.indexOf = function(p_obj, p_opt) {

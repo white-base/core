@@ -124,12 +124,12 @@ describe("[target: meta-column.js ]", () => {
                 
             });
         });
-        describe("this.setConstraint(regexp, msg, code, return) <제약조건 등록>", () => {
-            it("- setConstraint(regexp, msg, code, return) : 제약조건 등록 ", () => {   // REVIEW: 검사해야함
+        describe("this.addConstraint(regexp, msg, code, return) <제약조건 등록>", () => {
+            it("- addConstraint(regexp, msg, code, return) : 제약조건 등록 ", () => {   // REVIEW: 검사해야함
                 var item1 = new MetaColumn('i1');
-                item1.setConstraint(/10/, '10 시작...', 100, true);
-                item1.setConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
-                item1.setConstraint(/\D/, '5자리 이하만...', 300);   // return 기본값 = false
+                item1.addConstraint(/10/, '10 시작...', 100, true);
+                item1.addConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
+                item1.addConstraint(/\D/, '5자리 이하만...', 300);   // return 기본값 = false
         
                 expect(item1.constraints.length).toBe(3);
                 expect(item1.constraints[0].code).toBe(100);
@@ -403,18 +403,18 @@ describe("[target: meta-column.js ]", () => {
             it("- valid(value, r_result) : 제약조건 검사 ", () => {     // REVIEW: r_result => 존재시 object 이어야함, 검사 추가
                 var item1 = new MetaColumn('i1');
                 item1.isNotNull = false;
-                item1.setConstraint(/10/, '10 시작...', 100, true);
-                item1.setConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
-                item1.setConstraint(/\D/, '숫자만...', 300);   // return 기본값 = false
+                item1.addConstraint(/10/, '10 시작...', 100, true);
+                item1.addConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
+                item1.addConstraint(/\D/, '숫자만...', 300);   // return 기본값 = false
                 var result = {};
         
                 // true
-                expect(item1.valid('10', result)).toBe(true);
-                expect(item1.valid('1000', result)).toBe(true);
+                expect(item1.valid('10')).not.toBeDefined();
+                expect(item1.valid('1000')).not.toBeDefined();
                 // false
-                expect(item1.valid('', result)).toBe(false);        // 실패 : 10로 시작을 안해서
-                expect(item1.valid('10000', result)).toBe(false);   // 실패 : 5자리 이상
-                expect(item1.valid('100a', result)).toBe(false);    // 실패 : 문자가 들어가서
+                expect(item1.valid('')).toBeDefined();        // 실패 : 10로 시작을 안해서
+                expect(item1.valid('10000')).toBeDefined();   // 실패 : 5자리 이상
+                expect(item1.valid('100a')).toBeDefined();    // 실패 : 문자가 들어가서
             });
             it("- valid(value, r_result) : isNotNull 여부 ", () => {
                 var item1 = new MetaColumn('i1');
@@ -424,8 +424,8 @@ describe("[target: meta-column.js ]", () => {
                 var result1 = {};
                 var result2 = {};
         
-                expect(item1.valid('', result1)).toBe(true);
-                expect(item2.valid('', result2)).toBe(false);
+                expect(item1.valid('', result1)).not.toBeDefined();
+                expect(item2.valid('', result2)).toBeDefined();
             });
             it("- valid(value, r_result) : isNotNull, isNullPass ", () => {
                 var item1 = new MetaColumn('i1');
@@ -437,8 +437,8 @@ describe("[target: meta-column.js ]", () => {
                 var result1 = {};
                 var result2 = {};
         
-                expect(item1.valid('', result1)).toBe(true);
-                expect(item2.valid('', result2)).toBe(false);
+                expect(item1.valid('', result1)).not.toBeDefined();
+                expect(item2.valid('', result2)).toBeDefined();
             });
         });
 

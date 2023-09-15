@@ -245,7 +245,6 @@
 
         /**
          * 네임스페이스 등록
-         * TODO: 등록시 참조 목록에 등록해 둔다. (조회시 단순해짐)
          * @param {string | array} p_ns 
          */
         NamespaceManager.prototype.addNamespace = function(p_ns) {

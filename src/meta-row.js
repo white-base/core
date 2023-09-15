@@ -57,7 +57,7 @@
         /**
          * 메타 로우
          * @constructs _L.Meta.Entity.MetaRow
-         * @extends _L.Collection.MetaElement     // REVIEW: 상속위치를 바꿔야함
+         * @extends _L.Meta.MetaObject
          * @param {MetaEntity?} p_entity 메타엔티티
          */
         function MetaRow(p_entity) {
@@ -89,11 +89,12 @@
             Object.defineProperty(this, '_entity', 
             {
                 get: function() { return _entity; },
-                set: function(newValue) {       // REVIEW: MetaRow 에서 entity는 존재할 경우 설정할 수 없다.
-                    // TODO:: 자료종류를 검사해야함
+                set: function(newValue) {
+                    if (newValue === null) return _entity = null;
                     if (newValue && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
                         Message.error('ES032', ['_entity', 'MetaEntity']);
                     }
+                    if (this.count > 0) Message.error('ES045', ['MetaRow', '_entity']);
                     _entity = newValue;
                 },
                 configurable: false,
@@ -109,9 +110,9 @@
                 get: function() {
                     return _elements;
                 },
-                set: function(val) {
-                    _elements = val;
-                },
+                // set: function(val) {
+                //     _elements = val;
+                // },
                 enumerable: true,
                 configurable: false
             });
@@ -172,6 +173,14 @@
                 enumerable: true,
                 configurable: true,
             });
+
+            // inner variable access
+            this.__SET$_elements = function(val, call) {
+                if (call instanceof MetaRow) _elements = val;    // 상속접근 허용
+            }
+            this.__SET$_keys = function(val, call) {
+                if (call instanceof MetaRow) _keys = val;    // 상속접근 허용
+            }
             
             // MetaEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
@@ -237,6 +246,10 @@
             this.__event.publish('onChanged', p_idx, p_nValue, p_oValue);
         };
 
+        
+        MetaRow.prototype._onChanged = function(p_idx, p_nValue, p_oValue) {
+            this.__event.publish('onChanged', p_idx, p_nValue, p_oValue);
+        };
         /**
          * 객체 비교
          * @virtual
@@ -282,7 +295,6 @@
         };
 
         /**
-         * TODO: setObject 시점에 초기화 해야함
          * 메타 객체를 설정한다
          * @virtual
          * @returns {object}
@@ -292,6 +304,10 @@
             
             var origin = oObj ? oObj : mObj;
             var entity;
+            
+            if (mObj._elem.length !== mObj._key.length) Message.error('ES063', ['_elem', '_key']);
+
+            this.init();
             
             if (mObj.__subscribers) {
                 this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
@@ -306,12 +322,18 @@
                 var elem = mObj._elem[i];
                 if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem, origin);
                 else this._elements[i] = elem;
-                // if (obj[prop] !== null && elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
-                //     this.list[i].setObject(elem);
-                // } else {
-                //     this.list[i] = elem;
-                // }
+                this._keys[i] = mObj._key[i];
             }
+        };
+
+        /**
+         * 배열속성 컬렉션을 전체삭제한다. [구현]
+         */
+        MetaRow.prototype.init = function() {
+            this.__event.init();
+            this._entity = null;
+            this.__SET$_elements([], this);
+            this.__SET$_keys([], this);
         };
 
        /**
@@ -393,7 +415,7 @@
         MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_checkValid) {
             var _this = this;
             var checkValid = p_checkValid || false;
-            var r_result = {};
+            var result;
             var entity = p_row._entity;
 
 
@@ -403,8 +425,9 @@
             // valid 검사
             if (checkValid === true) {
                 for (let i = 0; i < p_row.count; i++) {
-                    if(entity.columns[i].valid(p_row[i], r_result) !== true) {
-                        Message.error('ES054', ['row', 'column.valid()', r_result.msg]);
+                    result = entity.columns[i].valid(p_row[i]);
+                    if(result) {
+                        Message.error('ES054', ['row', 'column.valid()', result.msg]);
                     }
                 }
             }

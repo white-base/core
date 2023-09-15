@@ -32,7 +32,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof ArrayCollection === 'undefined') Message.error('ES011', ['ArrayCollection', 'collection-array']);
+    if (typeof ArrayCollection === 'undefined') Message.error('ES011', ['ArrayCollection', 'i-collection-array']);
     if (typeof TransactionQueue === 'undefined') Message.error('ES011', ['TransactionQueue', 'trans-queue']);
 
     //==============================================================
@@ -120,13 +120,13 @@
         };
 
         /**
-         * TODO: setObject 시점에 초기화 해야함
          * 메타 객체를 설정한다
          * @virtual
          * @returns {object}
          */
         TransactionCollection.prototype.setObject  = function(mObj, oObj) {
             _super.prototype.setObject.call(this, mObj, oObj);
+            this._transQueue.init();
             if (mObj.autoChanges) this.autoChanges = mObj.autoChanges;
         };
 

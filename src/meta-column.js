@@ -123,7 +123,6 @@
             {
                 get: function() { return _entity; },
                 set: function(newValue) { 
-                    // TODO:: 자료종류를 검사해야함
                     if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
                         Message.error('ES032', ['_entity', 'MetaEntity']);
                     }
@@ -259,6 +258,9 @@
                 get: function() { return constraints; },
                 set: function(newValue) { 
                     var list = [];
+                    
+                    // 초기화
+                    constraints = [];
                     
                     // 배열로 일반화
                     if (Array.isArray(newValue))  list = newValue;
@@ -477,7 +479,7 @@
             if (this.caption !== null) obj.caption = this.caption;            
             if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
             if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;
-            if (this.constraints.length > 0) obj.constraints = this.constraints;    // REVIEW: 배열 검사 필요
+            if (this.constraints.length > 0) obj.constraints = Util.deepCopy(this.constraints);
             if (this.getter !== null) obj.getter = this.getter;
             if (this.setter !== null) obj.setter = this.setter;
             if (this.__GET$alias(this) !== null) obj.alias = this.__GET$alias(this);
@@ -486,7 +488,6 @@
         };
 
         /**
-         * TODO: setObject 시점에 초기화 해야함
          * 메타 객체를 설정한다
          * @virtual
          * @returns {object}
@@ -523,41 +524,6 @@
          * @returns 
          */
         MetaColumn.prototype.clone = function(p_entity) {
-            var clone = new MetaColumn(this.name);
-            var constraints = [];
-            var entity = this._entity;
-
-            if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity')) {
-                entity    = p_entity;
-            }
-
-            if (this._entity) clone['_entity']            = entity;
-            if (this.alias !== this.columnName) clone['alias'] = this.alias;
-            if (this.columnName) clone['columnName']    = this.columnName;
-            if (this.type) clone['type']                = this.type;
-            if (this.default) clone['default']          = this.default;
-            if (this.caption) clone['caption']          = this.caption;
-            if (this.isNotNull) clone['isNotNull']      = this.isNotNull;
-            if (this.isNullPass) clone['isNullPass']     = this.isNullPass;
-            for (var i = 0; this.constraints.length > i; i++) {
-                constraints.push(this.constraints[i]);
-            }
-            if (this.constraints) clone['constraints']  = constraints;
-            if (this.__GET$__value(this)) clone['__value']          = this.__GET$__value(this);
-            if (this.getter) clone['getter']            = this.getter;
-            if (this.setter) clone['setter']            = this.setter;
-            
-            // 이벤트 복사 (REVIEW:: 개선필요!!)
-            if (this.__event.__subscribers.onChanged) {
-                for (var i = 0; this.__event.__subscribers.onChanged.length > i; i++) {  // COVER:
-                    clone['onChanged'] = this.__event.__subscribers.onChanged[i];
-                }
-            }
-            
-            return clone;
-        };
-        // 변형 POINT:
-        MetaColumn.prototype.clone = function(p_entity) {
             var clone = new MetaColumn(this.columnName);
             var rObj = this.getObject();
 
@@ -577,14 +543,13 @@
         };
 
         /**
-         * 제약조건을 추가한다.
-         * REVIEW: addConstraint vs setConstraint 와 적합성 검토
+         * 제약조건을 추가
          * @param {*} p_regex 
          * @param {*} p_msg 
          * @param {*} p_code 
          * @param {*} p_return 
          */
-        MetaColumn.prototype.setConstraint = function(p_regex, p_msg, p_code, p_return) {
+        MetaColumn.prototype.addConstraint = function(p_regex, p_msg, p_code, p_return) {
             p_return = p_return || false;
 
             var constraint = {};
@@ -603,19 +568,21 @@
         /**
          * 아이템의 value에 유효성을 검사한다. (isNotnull, isNullPass, constraints 기준)
          * @param {string} p_value 
-         * @param {object} r_result 메세지는 참조(객체)형 으로 전달
+         * @param {object} result 메세지는 참조(객체)형 으로 전달
          * @param {number} p_option 1. isNotNull 참조 | 2: null검사 진행   |  3: null검사 무시
          */
-        // MetaColumn.prototype.valid = function(p_value, r_result, p_option) {
-        MetaColumn.prototype.valid = function(p_value, r_result) {
+        // MetaColumn.prototype.valid = function(p_value, result, p_option) {
+        MetaColumn.prototype.valid = function(p_value, result) {
             // p_option = p_option || 1;   
-            r_result.value = p_value;
-            r_result.msg = '';
-            r_result.code = '';
+            var result = {};
+            var match;
+            var value = null;
+            
+            result.value = p_value;
+            result.msg = '';
+            result.code = '';
             p_value = p_value || '';
             
-            var result;
-            var value = null;
 
             // if (!(typeof p_value === 'string')) throw new Error('Only [p_value] type 'string' can be added');
             p_value = typeof p_value === 'number' ? String(p_value) : p_value;  // number 형 변환
@@ -630,29 +597,34 @@
                 || (this.isNotNull === false && this.isNullPass === true && value.length === 0)
                 || (this.isNotNull === true && this.constraints.length === 0 && value.length > 0)
             ){
-                return true;
+                return;
+                // return true;
             }
             // 2-2. 실패조건 검사
             if (this.isNotNull === true && this.constraints.length === 0 && value.length === 0) {
-                r_result.msg   = this.caption+'('+this.name+')은  공백을 입력할 수 없습니다.';
-                r_result.code  = 0;
-                return false;
+                result.msg   = Message.get('ES055', [this.name]);
+                // result.msg   = this.caption+'('+this.name+')은  공백을 입력할 수 없습니다.';
+                result.code  = 0;
+                return result;
+                // return false;
             }
 
             // 2-3. 제약조건 검사
             for(var i = 0; this.constraints.length > i; i++) {
 
                 if (typeof this.constraints[i] === 'function') {
-                    return this.constraints[i].call(this, this, p_value, r_result);     // 함수형 제약조건  // COVER:
+                    return this.constraints[i].call(this, this, p_value, result);     // 함수형 제약조건  // COVER:
                 } else {
-                    result = p_value.match(this.constraints[i].regex);
+                    match = p_value.match(this.constraints[i].regex);
     
-                    if ((this.constraints[i].return === false && result !== null) ||    // 실패 조건
-                        (this.constraints[i].return === true && result === null)) {     // 성공 조건
+                    if ((this.constraints[i].return === false && match !== null) ||    // 실패 조건
+                        (this.constraints[i].return === true && match === null)) {     // 성공 조건
        
-                        r_result.msg   = this.constraints[i].msg;
-                        r_result.code  = this.constraints[i].code;
-                        return false;
+                        result.msg   = Message.get('ES056', [this.name, this.constraints[i].msg]);
+                        // result.msg   = this.constraints[i].msg;
+                        result.code  = this.constraints[i].code;
+                        return result;
+                        // return false;
                     }
                 }
             }            
@@ -664,7 +636,8 @@
             //     r_result.code  = 0;
             //     return false;
             // }
-            return true;
+            return;
+            // return true;
         };
 
         return MetaColumn;
@@ -939,11 +912,6 @@
                     obj._refEntities.push(MetaRegistry.createReferObject(this._refEntities[i]));
                 }
             }
-            // if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
-            /**
-             * REVIEW:
-             * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
-             */
             return obj;                  
         };
 
@@ -966,11 +934,6 @@
                     this._refEntities.push(obj);
                 }
             }
-            // if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
-            /**
-             * REVIEW:
-             * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
-             */
             return obj;                  
         };
 
@@ -992,7 +955,7 @@
          * 뷰 엔티티에 참조를 등록한다. (중복 제거후)
          * @param {MetaEntity} p_entity 
          */
-        MetaViewColumnCollection.prototype._regRefer  = function(p_entity) {
+        MetaViewColumnCollection.prototype._registerRefer  = function(p_entity) {
             if(!(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
                 Message.error('ES032', ['entity', 'MetaEntity']);
             }
@@ -1004,7 +967,7 @@
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.
          * @param {String | MetaColumn} p_object 
-         * @param {?MetaColumnCollection} p_refCollection
+         * @param {?MetaColumnCollection?} p_refCollection
          * @example
          *  - base(all),    string | Itme, Collection   => Collection 에 생성후 자신에 등록 
          *  - base(N),      string | Itme               => this 에 생성후 자신에 등록
@@ -1016,14 +979,19 @@
          *   // MetaColumn <base>                  => 생성 및 소유처에 등록
          *   // string, collection           => 참조만 등록
          *   // string, collection <base>    => 참조만 등록
-         * 
-         *  TODO:: filter 옵션 : 충돌방지에 이용
-         *  TODO:: 객체 비교는 string 이 아니고 값과 타입을 비교해야함 (그래야 참조를 사용)
          */
         MetaViewColumnCollection.prototype.add  = function(p_object, p_refCollection) {
             var collection;
             var i_name;
             var i_value;
+
+            // REVIEW: 필요 구조 정리 필요!!
+            if (p_refCollection && !(p_refCollection instanceof MetaColumnCollection)) {
+                Message.error('ES032', ['refCollection', 'MetaColumnCollection']);
+            }
+            if (p_object instanceof MetaColumn && p_refCollection) {
+                Message.error('ES016', ['MetaColumn', 'refCollection']);
+            }
 
             if (p_object instanceof MetaColumn) {
                 // 아이템 소유자 설정
@@ -1033,17 +1001,8 @@
             } else if (typeof p_object === 'string') {
                 i_name = p_object;
                 i_value = new this._baseType(i_name, this._owner);
-            // } else if (p_object instanceof MetaElement && p_object.instanceOf('MetaEntity')) {
-            //     // 아아템 가져오기
-            //     for (var i = 0; p_object.columns.count > i; i++) {
-            //         this.add(p_object.columns[i]);
-            //     }
-            } else {
-                // 메세지 윈위치 TODO:
-                Message.error('ES022', [p_object._type.name]);
-            }
-
-            // TODO:: 이름 충돌검사
+            } else Message.error('ES022', ['object '+ typeof p_object]);
+            
 
             // baseCollection & refCollection 의 경우
             if (p_refCollection instanceof MetaColumnCollection) {            // 전달값으로 기본컬렉션 지정시
@@ -1060,24 +1019,17 @@
                     collection.add(p_object);                           // 컬렉션에 등록 
                     i_value = collection[i_name];
                 }
-                
-                // REVIEW:: 의존성을 낮추기 위해서 검사후 등록
-                // 소유객체에 참조 등록 (중복제거됨)
-                if (this._regRefer) {
-                    this._regRefer(collection._owner);
-                }
+                // 소유객체에 참조 등록 (중복제거됨), 의존성을 낮추기 위해서 검사후 등록
+                if (this._registerRefer) this._registerRefer(collection._owner);
             }
-            
             return _super.prototype.add.call(this, i_name, i_value);
         };
 
         /**
          * 엔티티 추가한다.
-         * REVIEW:: 제거 대상 add() 로 합쳐짐
          * @param {MetaEntity} p_entity 
          */
         MetaViewColumnCollection.prototype.addEntity  = function(p_entity) {
-            // REVIEW: MetaEntity 로 변경 요망
             if (typeof p_entity === 'undefined' && !(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
                 Message.error('ES032', ['entity', 'MetaEntity']);
             }

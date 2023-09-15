@@ -117,11 +117,10 @@ const { ISerialize } = require('./i-serialize');
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { return columns; },
-                set: function(newValue) { 
-                    // REVIEW: row가 존재하면 교체하면 안됨, 또는 다른곳에서 참조할 경우?
-                    if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['columns', 'MetaColumnCollection']);
-                    columns = newValue;
-                },
+                // set: function(newValue) { 
+                //     if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['columns', 'MetaColumnCollection']);
+                //     columns = newValue;
+                // },
                 configurable: true,
                 enumerable: true
             });
@@ -174,7 +173,7 @@ const { ISerialize } = require('./i-serialize');
                     if (column.caption) obj[key].caption = column.caption;            
                     if (column.isNotNull) obj[key].isNotNull = column.isNotNull;
                     if (column.isNullPass) obj[key].isNullPass = column.isNullPass;
-                    if (column.constraints) obj[key].constraints = column.constraints;    // REVIEW: 배열 검사 필요
+                    if (Array.isArray(column.constraints)) obj[key].constraints = Util.deepCopy(column.constraints);
                     if (column.getter) obj[key].getter = column.getter;
                     if (column.setter) obj[key].setter = column.setter;
                     if (column.alias) obj[key].alias = column.alias;
@@ -201,157 +200,11 @@ const { ISerialize } = require('./i-serialize');
         };
 
         /**
-         * 아이템 추가한다. (내부)
-         * @Private
-         * @param {*} p_name 
-         * @param {*} p_property 
-         */
-        // MetaEntity.prototype.__addItem  = function(p_name, p_property) {
-            
-        //     if(!this.columns.contains(this.columns[p_name])) this.columns.add(p_name);
-            
-        //     if (typeof p_property === 'object' ) {
-        //         for(var prop in p_property) {
-        //             this.columns[p_name][prop] = p_property[prop];
-        //         }
-        //     }
-        // };
-
-        /**
-         * 빈 row 채운다.
-         * @param {*} p_target 
-         */
-        // MetaEntity.prototype.__fillRow  = function(p_target) {
-        //     var itemName;
-            
-        //     for (var i = 0 ; i < this.rows.count; i++) {
-        //         for (var ii = 0; ii < p_target.columns.count; ii++) {
-        //             itemName = p_target.columns[ii].name;
-        //             if (typeof this.rows[i][itemName] === 'undefined') {
-        //                 this.rows[i].add(itemName, '');
-        //             }
-        //         }
-        //     }            
-        // };
-
-        /**
-         * 객체(JSON)를 불러온다.
-         * @private 
-         * @param {*} p_object 로딩할 객체
-         * @param {*} p_option 로딩옵션
-         */
-        // MetaEntity.prototype.__loadJSON  = function(p_object, p_option) {
-        //     p_option = p_option || 1;   // 기본값 덮어쓰기
-            
-        //     var entity;
-        //     var row;
-        //     var itemName;
-
-        //     if (typeof p_object === 'undefined') throw new Error('Only [p_object] type "object" can be added');
-            
-        //     entity = p_object['entity']  || p_object['table'] || undefined;
-            
-        //     if (typeof entity === 'undefined') throw new Error('Only [p_object] type "entity | table" can be added');
-            
-
-        //     // 1.itmes, rows 배열로 구조 변경
-        //     if (!Array.isArray(entity.columns)) entity.columns = [entity.columns];
-        //     if (!Array.isArray(entity.rows)) entity.rows = [entity.rows];
-
-        //     // 2.병합
-        //     if (p_option === 1) {
-        //         // MetaColumn 기준으로 아이템 가져오기
-        //         if (entity.columns && entity.columns[0]) {
-        //             for(var i = 0; entity.columns.length > i; i++) {
-        //                 // MetaColumn 가져오기
-        //                 for (var prop in entity.columns[i]) {
-        //                     if (entity.columns[i].hasOwnProperty(prop)) {
-        //                         this.__addItem(prop, entity.columns[i][prop]);
-        //                     }
-        //                 }
-        //             }
-        //         }
-
-        //         // MetaRow 기준으로 아이템 가져오기 (첫번째 MetaRow 기준)
-        //         if (entity.rows && entity.rows[0]) {
-        //             for (var prop in entity.rows[0]) {
-        //                 if (entity.rows[0].hasOwnProperty(prop)) {
-        //                     this.__addItem(prop, '');
-        //                 }
-        //             }
-        //         }
-        //     }
-            
-        //     // 3.MetaRow 데이터 가져오기
-        //     if (this.columns.count > 0 && entity.rows && entity.rows[0]) {
-        //         for(var i = 0; entity.rows.length > i; i++) {
-                    
-        //             row = this.newRow();
-        //             for (var prop in entity.rows[i]) {
-        //                 if (entity.rows[i].hasOwnProperty(prop) && typeof row[prop] !== 'undefined') {
-        //                     row[prop] = entity.rows[i][prop];
-        //                 }
-        //             }
-        //             if (row.count) this.rows.add(row);
-        //         }
-        //     } 
-            
-        //     // 4.빈 MetaRow 채우기
-        //     for (var i = 0 ; i < this.rows.count; i++) {
-        //         for (var ii = 0; ii < this.columns.count; ii++) {
-        //             itemName = this.columns[ii].name;
-        //             if (typeof this.rows[i][itemName] === 'undefined') {
-        //                 this.rows[i].add(itemName, '');
-        //             }
-        //         }
-        //     }   
-        // };
-
-        /**
          * MetaEntity 를 불러(로드)온다.
          * @private
          * @param {*} p_object 대상 엔티티
          * @param {*} p_option 옵션
          */
-        // MetaEntity.prototype.__readEntity  = function(p_object, p_option) {
-        //     p_option = p_option || 1;   // 기본값 덮어쓰기
-
-        //     var entity = p_object;
-        //     var row;
-        //     var itemName;
-
-        //     // 1.병합
-        //     if (p_option === 1) {
-        //         // MetaColumn 기준으로 아이템 가져오기
-        //         for(var i = 0; entity.columns.count > i; i++) {
-        //             itemName = entity.columns[i].name;
-        //             if (typeof this.columns[itemName] === 'undefined') this.columns.add(entity.columns[i]);
-        //         }
-        //     }
-            
-        //     // 2.Row 데이터 가져오기
-        //     for(var i = 0; entity.rows.count > i; i++) {
-                
-        //         row = this.newRow();
-
-        //         for (var ii = 0; ii < this.columns.count; ii++) {
-        //             itemName = this.columns[ii].name;
-                    
-        //             // row[itemName] = typeof entity.rows[i][itemName] !== 'undefined' ? entity.rows[i][itemName] : '';
-        //             // 이해하기 쉽게 코드 변경
-        //             if (typeof entity.rows[i][itemName] !== 'undefined') {
-        //                 row[itemName] = entity.rows[i][itemName];    
-        //             } else {
-        //                 row[itemName] = ''; // COVER:
-        //             }
-        //         }
-        //         this.rows.add(row);
-        //     }
-
-        //     // 4.빈 Row 채우기
-        //     if (p_option === 1) this.__fillRow(entity);
-        // };
-
         MetaEntity.prototype._readEntity = function(p_entity, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;
@@ -416,10 +269,9 @@ const { ISerialize } = require('./i-serialize');
                     entity.rows.add(createRow(orignal.rows[i]));
                 } 
             }
-
             return entity;
 
-            // row 등록
+            // inner function
             function createRow(p_row) {
                 var alias, newRow;
 
@@ -432,23 +284,6 @@ const { ISerialize } = require('./i-serialize');
                 return newRow;
             }
         };
-
-        /**
-         * 객체 비교
-         * @virtual
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaEntity.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-
-        //     if (!this._compare(this.metaSet, p_target.metaSet)) return false;
-        //     // if (!this._compare(this.columns, p_target.columns)) return false;
-        //     // if (!this._compare(this.rows, p_target.rows)) return false;
-        //     if (!this.columns.equal(p_target.columns)) return false;
-        //     if (!this.rows.equal(p_target.rows)) return false;
-        //     return true;
-        // };
 
         /**
          * 메타 객체를 얻는다
@@ -466,39 +301,6 @@ const { ISerialize } = require('./i-serialize');
             return obj;                        
         };
 
-        
-
-        /** @override **/
-        // Entity.prototype.getTypes = function() {
-        //     var type = ['MetaEntity'];
-            
-        //     return type.concat(typeof _super !== 'undefined' && _super.prototype && _super.prototype.getTypes ? _super.prototype.getTypes() : []);
-        // };
-
-        // /** @override */
-        // Entity.prototype.getObject = function() {
-        //     // TODO::
-        // };
-
-        /**
-         * '데이터를 가져오는게 주용도임'
-         * 불러오기/가져오기 (!! 병합용도가 아님)
-         * 기존에 row 가 존재하면 newRow 부터 가져오고, 기존item 은 공백이 들어감
-         * @param {*} p_object MetaEntity 는 item과 row 는 쌍으로 존재함, JSON 은 row만 존재할 수 있음
-         * @param {Number} p_option 
-         * @param {Number} p_option.1 row 기준으로 가져옴, 없을시 item 생성, item 중복시 기존유지  <*기본값> 
-         * @param {Number} p_option.2 존재하는 item 데이터만 가져오기
-         */
-        // MetaEntity.prototype.load  = function(p_object, p_option) {
-        //     if (p_object instanceof MetaEntity) {
-        //         this.__readEntity(p_object, p_option);
-        //     } else {
-        //         this.__loadJSON(p_object, p_option);
-        //     }
-        // };
-        
-        
-
         /** 
          * 아이템과 로우를 초기화 한다.
          */
@@ -513,75 +315,6 @@ const { ISerialize } = require('./i-serialize');
 
             // MetaView                    = require('./meta-view').MetaView;
         };
-
-        /**
-         * 엔티티를 병합한다. (구조를 구성하는게 주용도임)
-         * @param {*} p_target 병합할 MetaEntity (대상)
-         * @param {*} p_option {item: 1, row:2}
-         * @desc
-         * 병합 : 컬렉션 순서에 따라 병한다.
-         * MetaColumn MetaRow 가 있는 경우
-         * - 1 columns, rows 병합 (기존유지) *기본값
-         * - 2 columns, rows 병합 (덮어쓰기)  
-         * - 3 row 안가져오기    (기존유지)
-         */
-        // MetaEntity.prototype.merge  = function(p_target, p_option) {
-        //     p_option = p_option || 1;    // 기본값
-
-        //     var row;
-        //     var itemName;
-
-        //     // 1.유효성 검사
-        //     if (!(p_target instanceof MetaEntity)) throw new Error('Only [p_target] type "MetaEntity" can be added');
-
-        //     // 2.병합 : MetaColumn 기준으로 아이템 가져오기
-        //     for(var i = 0; p_target.columns.count > i; i++) {
-        //         itemName = p_target.columns[i].name;
-                
-        //         // 없으면 생성
-        //         if (typeof this.columns[itemName] === 'undefined') {
-        //             this.columns.add(p_target.columns[i]);
-        //         }
-                
-        //         // option = 2: 기존 item 덮어쓰기
-        //         if (p_option === 2 && typeof this.columns[itemName] !== 'undefined') {
-        //             this.columns[itemName] = p_target.columns[itemName];
-        //         }
-        //     }
-            
-        //     // 3.MetaRow 데이터 가져오기
-        //     if (p_option !== 3) {
-        //         for(var i = 0; p_target.rows.count > i; i++) {
-        //             // this.rows 있는 경우
-        //             if (typeof this.rows[i] !== 'undefined') {  
-        //                 row = this.rows[i];
-        //                 for (var ii = 0; ii < p_target.columns.count; ii++) {
-        //                     itemName = p_target.columns[ii].name;
-        //                     if (typeof this.rows[i][itemName] === 'undefined') {    // 이름이 없는 경우
-        //                         row.add(itemName, p_target.rows[i][itemName]);
-        //                     } else if (p_option === 2 && typeof this.rows[i][itemName] !== 'undefined') {   // 덮어쓰기
-        //                         row[itemName] = p_target.rows[i][itemName];     
-        //                     }
-        //                 }
-        //             // this.rows 없는 경우
-        //             } else {                                    
-        //                 row = this.newRow();
-        //                 for (var ii = 0; ii < p_target.columns.count; ii++) {
-        //                     itemName = p_target.columns[ii].name;
-        //                     // 덮어쓰기
-        //                     if (p_option === 2) row[itemName] = p_target.rows[i][itemName];
-        //                 }
-        //                 this.rows.add(row);
-        //             }
-        //         }
-        //     }
-
-        //     // 4.공백 채우기
-        //     this.__fillRow(p_target);
-        // };
-        
-        
-
 
         /**
          * 새로운 MetaRow 를 추가한다.
@@ -617,101 +350,6 @@ const { ISerialize } = require('./i-serialize');
                 this.columns[i].value = p_row[alias];
             }
         };
-
-
-        /** 
-         * 엔티티를 조회(검색) 한다.
-         * @param {Object} p_filter 필터객체
-         * @param {(Number | Array<Number>)?} p_index 인덱스 시작번호 또는 목록
-         * @param {Number?} p_end 인덱스 종료번호
-         * @return {MetaEntity}
-         * @example
-         * // 상속기법을 이용함
-         * filter = {
-         *  __except : ['name'...],        // 제외 아이템 (1방법)
-         *  아이템명: { __except: true }    // 아이템 제외 (2방법)
-         *  아이템명: { order: 100 }        // 속성 오버라이딩
-         * }
-         */
-        // MetaEntity.prototype.select  = function(p_filter, p_index, p_end) {
-        //     var EXECEPT = '__except';
-        //     var list = [];
-        //     var excepts = [];
-        //     var obj, f;
-        //     var filterItem;
-            
-        //     // REVIEW:: 이후에 복제로 변경 검토, 자신의 생성자로 생성
-        //     var entity = new this.constructor(this.name);   
-        //     var idx;
-
-
-        //     // var MetaView                    = require('./meta-view').MetaView;
-
-        //     // 1.제외 아이템 조회
-        //     if (p_filter && p_filter[EXECEPT]) {
-        //         if (Array.isArray(p_filter[EXECEPT])) excepts = p_filter[EXECEPT];
-        //         else if (typeof p_filter[EXECEPT] === 'string') excepts.push(p_filter[EXECEPT]);    // COVER:
-        //     }
-        //     for (var i = 0; this.columns.count > i; i++) {
-        //         if (excepts.indexOf(this.columns[i].name) < 0)  {
-                    
-        //             // 임시함수에 객체 생성방식
-        //             f = function() {};
-        //             f.prototype = this.columns[i];
-        //             var obj = new f();
-                    
-        //             // 필터 설정(등록)
-        //             if (p_filter && p_filter[this.columns[i].name]) {
-        //                 filterItem = p_filter[this.columns[i].name];    
-        //                 for(var prop in filterItem) {
-        //                     obj[prop] = filterItem[prop];
-        //                 }
-        //             }
-        //             if (obj[EXECEPT] !== true) list.push(obj);
-        //         }
-        //     }
-
-        //     // 2.정렬
-        //     list.sort(function(a, b) { return a.order - b.order; });
-
-        //     // 3.리턴 MetaEntity 의 MetaColumn 구성 : 참조형
-        //     for(var i = 0; i < list.length; i++) {
-        //         entity.columns.add(list[i]);
-        //     }
-            
-        //     // 4.리턴 MetaEntity 의 MetaRow 구성 : 참조형
-        //     if (typeof p_index === 'number') {
-        //         for(var i = p_index; i < this.rows.count; i++) {
-        //             // entity.rows.add(this.rows[idx]);
-        //             entity.rows.add(createRow(i, this));
-        //             if (typeof p_end === 'number' && i === p_end) break;
-        //         }
-        //     } else if (Array.isArray(p_index)) {
-        //         for(var i = 0; i < p_index.length; i++) {
-        //             idx = p_index[i];
-        //             if (typeof idx === 'number' && typeof this.rows[idx] !== 'undefined') {
-        //                 // entity.rows.add(this.rows[idx]);
-        //                 entity.rows.add(createRow(idx, this));
-        //             }
-        //         }
-        //     }
-            
-        //     return entity;
-
-        //     /** @inner row 항목을 재구성하여 생성 (내부 함수) */
-        //     function createRow(rowIdx, orgEntity) {
-        //         var row = entity.newRow();
-        //         var i_name;
-
-        //         for (var i = 0; entity.columns.count > i ; i++) {
-        //             i_name = entity.columns[i].name;
-        //             if (typeof row[i_name] !== 'undefined' && typeof orgEntity.rows[rowIdx][i_name] !== 'undefined') {
-        //                 row[i_name] = orgEntity.rows[rowIdx][i_name];
-        //             }
-        //         }
-        //         return row;
-        //     }
-        // };
 
         /**
          * 병합
@@ -923,6 +561,20 @@ const { ISerialize } = require('./i-serialize');
             }
         };
 
+        /** 
+         * 엔티티를 조회(검색) 한다.
+         * @param {Object} p_filter 필터객체
+         * @param {(Number | Array<Number>)?} p_index 인덱스 시작번호 또는 목록
+         * @param {Number?} p_end 인덱스 종료번호
+         * @return {MetaEntity}
+         * @example
+         * // 상속기법을 이용함
+         * filter = {
+         *  __except : ['name'...],        // 제외 아이템 (1방법)
+         *  아이템명: { __except: true }    // 아이템 제외 (2방법)
+         *  아이템명: { order: 100 }        // 속성 오버라이딩
+         * }
+         */
         MetaEntity.prototype.select  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
             var _this = this;
@@ -949,55 +601,8 @@ const { ISerialize } = require('./i-serialize');
             }
 
             return this._buildEntity(view, callback, items);
-
-            // function createView(view, p_callback, p_items) {
-            //     var orignal = _this.clone();
-            //     var columnName;
-
-            //     // var MetaView                    = require('./meta-view').MetaView;
-                
-            //     // view 컬럼 구성
-            //     if (p_items.length === 0) {
-            //         for (var i = 0; i < _this.columns.count; i++) {
-            //             columnName = _this.columns[i].name;
-            //             view.columns.add(columnName);  // 참조로 등록
-            //         }
-            //     } else {
-            //         for (var i = 0; i < p_items.length; i++) {
-            //             columnName = p_items[i];
-            //             if (typeof columnName !== 'string') throw new Error('items 은 문자열만 가능합니다.');
-            //             if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
-            //             view.columns.add(columnName);  // 참조로 등록
-            //         }
-            //     }
-
-            //     // row 등록
-            //     for (var i = 0; i < orignal.rows.count; i++) {
-            //         if (!p_callback || (typeof p_callback === 'function' && p_callback.call(_this, orignal.rows[i], i, view))) {
-            //             view.rows.add(createRow(orignal.rows[i]));
-            //         } 
-            //     }
-
-            //     return view;
-
-            //     function createRow(p_row) {
-            //         var alias, newRow;
-    
-            //         newRow = view.newRow();
-            //         for (var ii = 0; ii < view.columns.count; ii++) {
-            //             alias = view.columns[ii].alias;
-            //             if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
-            //             newRow[alias] = p_row[alias];
-            //         }
-            //         return newRow;
-            //     }    
-            // }
         };
-        
-        // MetaEntity.prototype.select  = function(p_filter, p_arg) {
             
-        // };
-
         /**
          * 불러오기/가져오기 (!! 병합용도가 아님)
          * 기존을 초기화 하고 불러오는 역활
@@ -1072,7 +677,6 @@ const { ISerialize } = require('./i-serialize');
             if (p_obj instanceof MetaEntity) {
                 this._readEntity(p_obj, 3);
             } else if (typeof p_obj === 'object') {
-                // TODO: 이름 통일 필요
                 if (p_obj.viewName) this.viewName = p_obj.viewName;
                 if (p_obj.tableName) this.tableName = p_obj.tableName;
     
@@ -1149,15 +753,6 @@ const { ISerialize } = require('./i-serialize');
                         _this.columns.add(column);
                     }
                 }
-
-                // for(var i = 0; i < columns._elem.length; i++) {
-                //     var elem = columns._elem[i];
-                //     var key = columns._key[i];  // 없을경우 $key 도 경우에 삽입 TODO:
-                //     var column = new Column(key, this, elem);
-                //     if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
-                //     if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
-                //     this.columns.add(column);
-                // }
             }
 
             // opt
@@ -1174,20 +769,6 @@ const { ISerialize } = require('./i-serialize');
                     }
                 }
             }
-            // rows = p_obj['rows'];
-            // if (rows && p_createRow === true) {
-            //     if (Array.isArray(rows._elem) && rows._elem.length > 0)
-            //     var row = rows._elem[0];
-            //     if (Array.isArray(row['_key']) && row['key'].length > 0) {
-            //         for (var i = 0; i < row.length; i++) {
-            //             var key = row[i];
-            //             if (!this.columns.exist(key)) {
-            //                 var column = new Column(key, this);
-            //                 this.columns.add(column);
-            //             }
-            //         }
-            //     }
-            // }
         };
         
 
@@ -1231,20 +812,6 @@ const { ISerialize } = require('./i-serialize');
             return obj;
         };
 
-        // MetaEntity.prototype.writeSchema  = function() {
-        //     var obj = {
-        //         columns: {}
-        //     };
-
-        //     if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
-        //     if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
-
-        //     for(var i = 0; i < this.columns.count; i++) {
-        //         var key = this.columns.keyOf(i);
-        //         obj.columns[key] = this.columns[i].getObject(p_vOpt);
-        //     }
-        //     return obj;
-        // };
         MetaEntity.prototype.writeSchema  = function() {
             var obj = { columns: {}, rows: [] };
 
@@ -1257,7 +824,6 @@ const { ISerialize } = require('./i-serialize');
                 var cObj = {};
                 var rObj = column.getObject();
 
-                // TODO: 기본값과 같은경우, 없는경우 생략 getObject 를 기준으로 가져와야 맞을듯
                 if (rObj.cloumnName) cObj.cloumnName = column.columnName;
                 if (rObj.default) cObj.default = rObj.default;
                 if (rObj.caption) cObj.caption = rObj.caption;

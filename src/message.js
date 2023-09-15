@@ -92,6 +92,10 @@
                             msg: 'Failed to register collection [$1].',
                             long: '[$2]'
                         },
+                        10: {
+                            msg: 'Failed to retrieve [$1] from [$2].',
+                            long: ''
+                        },
                     },
                     S02: { // type
                         1: {
@@ -117,6 +121,10 @@
                         6: {
                             msg: 'Type [$1] does not exist. ',
                             long: ''
+                        },
+                        7: {
+                            msg: 'There is no [$2] of type [$1]. ',
+                            long: 'Define [$2].'
                         },
                     },
                     S03: { // object
@@ -189,6 +197,14 @@
                             msg: '[$1] is not a valid character in the [$2] test. ',
                             long: 'test result : $3'
                         },
+                        5: {
+                            msg: 'You cannot enter a space in [$1]. ',
+                            long: ''
+                        },
+                        6: {
+                            msg: 'Constraint failed on [$1]. ',
+                            long: '$2'
+                        },
                     },
                     S06: { // scope
                         1: {
@@ -206,6 +222,14 @@
                         4: {
                             msg: '[$1] is a private type. You cannot set it directly. ',
                             long: 'If you want to force it, set it to __SET$$1(val, target object).'
+                        },
+                        5: {
+                            msg: 'and(&&) condition check failed. ',
+                            long: '$1'
+                        },
+                        6: {
+                            msg: 'or(||) condition check failed. ',
+                            long: '$1'
                         },
                     },
                 },
@@ -246,7 +270,7 @@
                             msg: '[$1]에 [$2]참조 연결이 실패하였습니다. ',
                             long: ''
                         },
-                        6: {    // REVIEW: 사용처가 컬럼인지? 확인후 이동 필요
+                        6: {
                             msg: '[$1]와 [$2]을 동시에 입력할 수 없습니다. ',
                             long: ''
                         },
@@ -262,7 +286,7 @@
                             msg: '[$1] 컬렉션 등록에 실패하였습니다.',
                             long: '[$2]'
                         },
-                        10: {   // REVIEW: ADD
+                        10: {
                             msg: '[$1]을 [$2] 에서 가져오는데 실패하였습니다.',
                             long: ''
                         },
@@ -292,7 +316,7 @@
                             msg: '[$1] 타입이 없습니다. ',
                             long: ''
                         },
-                        7: {    // REVIEW: ADD
+                        7: {
                             msg: '[$1]타입의 [$2]이 없습니다. ',
                             long: '[$2]을 정의하세요.'
                         },
@@ -371,6 +395,14 @@
                             msg: '[$1]는 [$2]검사에서 유효하지 않습니다. ',
                             long: '검사결과 : $3'
                         },
+                        5: {
+                            msg: '[$1]에 공백을 입력할 수 없습니다. ',
+                            long: ''
+                        },
+                        6: {
+                            msg: '[$1]에 제약조건에 실패하였습니다. ',
+                            long: '$2'
+                        },
                     },
                     S06: {  // 범위
                         1: {
@@ -388,6 +420,14 @@
                         4: {
                             msg: '[$1]은 private 타입입니다. 직접 설정할 수 없습니다. ',
                             long: '강제로 설정할 경우, [$2]을 사용해 설정하세요.'
+                        },
+                        5: {
+                            msg: 'and(&&) 조건 검사에 실패하였습니다. ',
+                            long: '$1'
+                        },
+                        6: {
+                            msg: 'or(||) 조건 검사에 실패하였습니다. ',
+                            long: '$1'
                         },
                     },
                 },

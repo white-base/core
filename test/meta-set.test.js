@@ -826,7 +826,7 @@ describe("[target: meta-set.js]", () => {
                 expect(obj).toEqual(json2);
             });
             it("- 뷰 출력의 경우, 참조가 외부에 있는 경우, 복제 ", () => {
-                // TODO:
+                // TODO: 스키마에서의 참조키 역활? 필용한가?
             });
         });
         describe("MetaSet.writeData() <데이터 내보내기>", () => {
@@ -1140,6 +1140,9 @@ describe("[target: meta-set.js]", () => {
                 expect(vv1.columns['c1']._entity === vv1).toBe(true)
                 expect(vv2.columns['c2']._entity === vv1).toBe(true)
                 expect(vv3.columns['c3']._entity === vv1).toBe(true)
+                expect(vv1.equal(v1)).toBe(true)
+                expect(vv2.equal(v2)).toBe(true)
+                expect(vv3.equal(v3)).toBe(true)
             });
         });
     });

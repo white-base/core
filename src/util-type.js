@@ -77,7 +77,7 @@
      * @returns 
      */
     function _isFillObj(obj)  {
-        // if(typeof obj === 'object' && getAllProperties(obj).length > 0 && !(obj instanceof RegExp)) {   // REVIEW: RegExp 빠져야 할듯!!
+        // if(typeof obj === 'object' && getAllProperties(obj).length > 0 && !(obj instanceof RegExp)) {
         if(_isObject(obj) && getAllProperties(obj).length > 0) {   // REVIEW: RegExp 빠져야 할듯!!
           return true;
         }
@@ -96,14 +96,14 @@
         return false;
     }
     /**
-     * 내장함수 유무 => REVIEW: Function?
+     * 내장함수 유무
      * @param {*} obj 
      * @returns 
      */
     function _isBuiltFunction(obj) {
         if (typeof obj === 'function' && (false 
             || obj === Number || obj === String || obj === Boolean
-            || obj === Object || obj === Array
+            || obj === Object || obj === Array || obj === Function
             || obj === RegExp || obj === Date 
             || obj === Symbol || obj === BigInt
         )) return true;
@@ -350,12 +350,10 @@
             return '';
         }
         return Message.get('ES022', [defType.name]);
-        // return '맞는 타입이 없습니다.' + defType.name;
     };
 
     // OR 조건
     var checkType = function(target, types) {
-        // var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
 
@@ -369,7 +367,6 @@
     };
 
     var validType = function(target, types) {
-        // var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '', arrMsg = [];
 
@@ -381,13 +378,11 @@
             if(msg.length === 0) return true;
             else arrMsg.push(msg);
         }
-        Message.error('ES010', [arrMsg]);
-        // throw new Error(arrMsg);
+        Message.error('ES066', [arrMsg]);
     };
 
     // AND 조건
     var checkUnionType = function(target, types) {
-        // var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);  
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
         
@@ -400,9 +395,7 @@
         return true;
     };
 
-    // REVIEW: 에러 처리시 try catch 로 잡이서 처리
     var validUnionType = function(target, types) {
-        // var arrType = Array.isArray(types) ? types : Array.prototype.slice.call(arguments, 1);
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
         
@@ -410,8 +403,8 @@
 
         for(var i = 0; i < arrType.length; i++) {
             msg = checkTypeMessage(arrType[i], target);
-            // if(msg.length > 0)  Message.error('ES054', ['this', 'validUnionType()', msg]);
-            if(msg.length > 0)  throw new Error(msg);
+
+            if(msg.length > 0) Message.error('ES065', [msg]);
         }
         return true;
     };

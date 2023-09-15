@@ -161,11 +161,11 @@ describe("[target: meta-row.js]", () => {
                 table1.columns.addValue('i1', '');
                 table1.columns.addValue('i2', '');
                 table1.columns['i1'].isNotNull = true;
-                table1.columns['i2'].setConstraint(/\d/, '숫자', 'E1', true);
+                table1.columns['i2'].addConstraint(/\d/, '숫자', 'E1', true);
                 var row = new MetaRow(table1);
                 row['i1'] = 'R1';
                 row['i2'] = 10;
-                table1.rows.add(row, true);
+                table1.rows.add(row, true); // 검사활성화 옵션
                 var row2 = new MetaRow(table1);
                 row2['i1'] = 'R1';
                 row2['i2'] = 'ERR';

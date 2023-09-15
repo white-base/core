@@ -469,8 +469,9 @@ describe("[target: util.js]", () => {
             let obj = new CoClass1();
     
             expect(obj.isImplementOf(ISuper1)).toBe(true);
+            expect(obj.isImplementOf('ISuper1')).toBe(true);
             expect(obj.isImplementOf(ISuper2)).toBe(false);
-            expect(() => obj.isImplementOf(-1)).toThrow('ES024');
+            expect(() => obj.isImplementOf(-1)).toThrow('ES021');
         });
         it('- implements() : 예외 ', () => {
             function CoClass1() {

@@ -139,7 +139,7 @@
 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
-                if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
+                if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
                     this._elements.push(obj);
@@ -206,8 +206,10 @@
             this._onChanging();
             // process
             for (var i = 0; i < this._elements.length; i++) delete this[i];
-            this._elements = [];
-            this._descriptors = [];
+            this.__SET$_elements([], this);
+            this.__SET$_descriptors([], this);
+            // this._elements = [];
+            // this._descriptors = [];
             // after event
             this._onClear();
             this._onChanged();

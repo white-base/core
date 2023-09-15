@@ -60,7 +60,7 @@
             _super.call(this, p_name);
 
             // var tableName;
-            var columns = new MetaTableColumnCollection(this);
+            var columns;
 
             /**
              * 테이블 이름
@@ -87,12 +87,19 @@
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { return columns; },
+                set: function(newValue) { 
+                    if (!(newValue instanceof MetaTableColumnCollection)) Message.error('ES032', ['columns', 'MetaTableColumnCollection']);
+                    if (this.rows.count > 0) Message.error('ES047', ['rows', 'MetaRow', 'MetaTableColumnCollection']);
+                    columns = newValue;
+                },
                 configurable: false,
                 enumerable: true
             });
             
 
             this.tableName  = p_name || '';
+            this.columns = new MetaTableColumnCollection(this);
+
         }
         Util.inherits(MetaTable, _super);
 

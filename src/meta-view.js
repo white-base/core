@@ -71,30 +71,6 @@
             if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
                 baseCollection = p_baseEntity.columns;
             }
-            
-            /**
-             * 기본 참조 컬렉션
-             * // REVIEW: 필요 유무 검토 => 직렬화에 필요할 듯
-             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#_baseEntity
-             */
-            // Object.defineProperty(this, '_baseEntity', 
-            // {
-            //     get: function() { return _baseEntity; },
-            //     configurable: false,
-            //     enumerable: true
-            // });
-
-            /**
-             * add() 통해서 추가된 외부 엔티티 목록
-             * // REVIEW: 필요 유무 검토 => 직렬화에 필요할 듯
-             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#_refEntities
-             */
-            // Object.defineProperty(this, '_refEntities', 
-            // {
-            //     get: function() { return _refEntities; },
-            //     configurable: false,
-            //     enumerable: true
-            // });
 
             /**
              * 테이블 이름
@@ -121,6 +97,11 @@
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { return columns; },
+                set: function(newValue) { 
+                    if (!(newValue instanceof MetaViewColumnCollection)) Message.error('ES032', ['columns', 'MetaViewColumnCollection']);
+                    if (this.rows.count > 0) Message.error('ES047', ['rows', 'MetaRow', 'MetaViewColumnCollection']);
+                    columns = newValue;
+                },
                 configurable: false,
                 enumerable: true
             });
@@ -129,7 +110,7 @@
             this.viewName = p_name || '';
             
             // this._refEntities   = [];
-            columns = new MetaViewColumnCollection(this, baseCollection);
+            this.columns = new MetaViewColumnCollection(this, baseCollection);
 
             // inner variable access
             // this.__SET$_baseEntity = function(val, call) {
@@ -176,10 +157,6 @@
 
             obj.viewName = this.viewName;
             // if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
-            /**
-             * REVIEW:
-             * _refEntities 는 add 시점에 자동으로 추가되므로 필요 없을틋 
-             */
             return obj;                  
         };
 
@@ -227,7 +204,9 @@
                 clone.columns._refEntities.push(this.columns._refEntities[i]);
             }
             for(var i = 0; i < this.columns.count; i++) {
-                clone.columns.add(this.columns[i].clone(clone));
+                if (this.columns[i]._entity === this) clone.columns.add(this.columns[i].clone(clone));
+                else clone.columns.add(this.columns[i].clone());
+                // clone.columns.add(this.columns[i].clone(clone));
             }
 
             for(var i = 0; i < this.rows.count; i++) {
@@ -252,10 +231,8 @@
         MetaView.prototype.copy  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
             var _this = this;
-            // var MetaView                    = require('./meta-view').MetaView;
             var items = [];
             var callback = null;
-            var columnName;
             var entity = new MetaView(this.viewName, this);
             var orignal = this.clone();
 
@@ -344,10 +321,10 @@
             var i_name;
 
             if (p_baseEntity && !(p_baseEntity instanceof MetaEntity)) {
-                throw new Error('baseEntity 는 MetaEntity 의 인스턴스가 아닙니다.');    // TODO: 메세지 처리
+                Message.error('ES032', ['baseEntity', 'MetaEntity']);
             }
             if (p_object instanceof MetaView && p_baseEntity) {
-                throw new Error('MetaView 객체와 baseEntity 동시에 입력할 수 없습니다.');   // TODO: 메세지 처리
+                Message.error('ES016', ['baseEntity', 'MetaView']);
             }
 
             if (typeof p_object === 'string') {      

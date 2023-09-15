@@ -143,44 +143,55 @@ describe("[target: meta-view.js]", () => {
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        // POINT:  작업해야함
-        describe.skip("MetaEntity.setValue(row) <value 설정>", () => {
+        describe("MetaEntity.setValue(row) <value 설정>", () => {
             it("- setValue(row) : row 설정(단일) ", () => {
-                var entity1 = new MetaView('E1');
-                entity1.columns.add('i1');
-                entity1.columns.add('i2');
-                entity1.columns.add('i3');
-                var row = entity1.newRow();
-                row['i1'] = 'R1';
-                row['i2'] = 'R2';
-                row['i3'] = 'R3';
-                entity1.setValue(row);
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                var row = view1.newRow();
+                row['c1'] = 'R1';
+                row['c2'] = 'R2';
+                row['c3'] = 'R3';
+                view1.setValue(row);
                 
-                expect(entity1.columns['i1'].value).toBe('R1');
-                expect(entity1.columns['i2'].value).toBe('R2');
-                expect(entity1.columns['i3'].value).toBe('R3');
+                expect(view1.columns.count).toBe(3)
+                expect(view2.columns.count).toBe(2)
+                expect(view3.columns.count).toBe(1)
+                expect(view1.columns['c1'].value).toBe('R1');
+                expect(view1.columns['c2'].value).toBe('R2');
+                expect(view1.columns['c3'].value).toBe('R3');
+                expect(view2.columns['c2'].value).toBe('R2');
+                expect(view2.columns['c3'].value).toBe('R3');
+                expect(view3.columns['c3'].value).toBe('R3');
             });
             it("- setValue(row) :row 설정(단일), 별칭 사용 ", () => {
-                var entity1 = new MetaView('E1');
-                entity1.columns.add('i1');
-                entity1.columns.add('i2');
-                entity1.columns.add('i3');
-                entity1.columns['i2'].alias = 'ii2';    // 별칭
-                entity1.columns['i3'].alias = 'ii3';    // 별칭
-                var row = entity1.newRow();
-                row['i1'] = 'R1';
-                row['i2'] = 'R2';
-                row['ii3'] = 'RR3';
-                entity1.setValue(row);
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                view1.columns['c3'].alias = 'cc3';    // 별칭
+                var row = view1.newRow();
+                row['c1'] = 'R1';
+                row['c2'] = 'R2';
+                row['cc3'] = 'RR3';  // <= 별칭
+                view1.setValue(row);
         
-                expect(entity1.columns['i1'].value).toBe('R1');
-                expect(entity1.columns['i2'].value).toBe('');
-                expect(entity1.columns['i3'].value).toBe('RR3');
+                expect(view1.columns['c1'].value).toBe('R1');
+                expect(view1.columns['c2'].value).toBe('R2');
+                expect(view1.columns['c3'].value).toBe('RR3');
+                expect(view2.columns['c2'].value).toBe('R2');
+                expect(view2.columns['c3'].value).toBe('RR3');
+                expect(view3.columns['c3'].value).toBe('RR3');
             });
         });
         describe("MetaEntity.merge(entity, opt) <병합>", () => {
             it("- merge() : opt = 0 (같은 구조) ", () => {
-                // TODO:
+                // TODO:  MetaTable과 중복됨!!
             });
         });
         describe("MetaEntity.select(filter, args) <뷰 조회>", () => {
@@ -423,8 +434,8 @@ describe("[target: meta-view.js]", () => {
                 expect(view2.rows[1]['i2']).toBe(20);
                 // 참조 검사
                 expect(view2 === view1).toBe(false);
-                expect(view2.columns['i1'] === view1.columns['i1']).toBe(false);
-                expect(view2.columns['i2'] === view1.columns['i2']).toBe(false);
+                expect(view2.columns['i1'] === view1.columns['i1']).toBe(true); // REVIEW: copy 한 column 의 참조 여부
+                expect(view2.columns['i2'] === view1.columns['i2']).toBe(true);
                 expect(view2.instanceOf(MetaView)).toBe(true);
             });
             it("- copy(filter) : 필터 설정 ", () => {
@@ -664,7 +675,7 @@ describe("[target: meta-view.js]", () => {
                 const view2 = new MetaView('V2',view1); // 전체 참조
                 view2.columns.add('c2');
                 const view3 = new MetaView('V3');
-                view3.columns.add('c3', view2.columns);         // 일부 참조
+                view3.columns.add('c3', view2.columns); // 일부 참조
                 const clone1 = view1.clone()
                 const clone2 = view2.clone()
                 const clone3 = view3.clone()
@@ -678,9 +689,10 @@ describe("[target: meta-view.js]", () => {
                 expect(clone1.equal(view1)).toBe(true);
                 expect(clone2.equal(view2)).toBe(true);
                 expect(clone3.equal(view3)).toBe(true);
-                // expect(c1._entity === view1).toBe(true) // 참조가 사라짐 REVIEW:
-                // expect(c2._entity === view1).toBe(true)
-                // expect(c3._entity === view1).toBe(true)
+                // 참조가 사라짐 REVIEW:
+                expect(c1._entity === clone1).toBe(true)  // V1
+                expect(c2._entity === view1).toBe(true)  // V1
+                expect(c3._entity === view1).toBe(true)  // V3
 
             });
         });
@@ -691,7 +703,7 @@ describe("[target: meta-view.js]", () => {
                 const view2 = new MetaView('V2',view1); // 전체 참조
                 view2.columns.add('c2');
                 const view3 = new MetaView('V3');
-                view3.columns.add('c3', view2.columns);         // 일부 참조
+                view3.columns.add('c3', view2.columns); // 일부 참조
                 const obj1 = view1.getObject();
                 const obj2 = view2.getObject();
                 const obj3 = view3.getObject();

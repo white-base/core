@@ -466,7 +466,7 @@
         MetaRegistry.transformRefer = function(rObj) {
             var _this = this;
             var arrObj = this.__getObjectList(rObj);
-            var clone = deepCopy(rObj);
+            var clone = Util.deepCopy(rObj);
 
             linkReference(clone, arrObj);
             return clone;
@@ -488,19 +488,6 @@
                     } 
                 }
             }
-            // TODO: Util 공통으로 이전해야 할듯
-            function deepCopy(object) {
-                if (object === null || typeof object !== "object") {
-                  return object;
-                }
-                // 객체인지 배열인지 판단
-                var copy = Array.isArray(object) ? [] : {};
-               
-                for (var key of Object.keys(object)) {
-                  copy[key] = deepCopy(object[key]);
-                }
-                return copy;
-              }
         };
 
         /**
@@ -564,25 +551,23 @@
 
         /**
          * 로드
-         * @param {*} p_obj 
+         * @param {*} p_str 
          * @param {*} p_parse 
          */
-        MetaRegistry.loadMetaObject = function(p_obj, p_parse) {
-            var obj = p_obj;
+        MetaRegistry.loadMetaObject = function(p_str, p_parse) {
+            var obj = p_str;
             var mObj;
             var meta;
 
-            // TODO: metaObject 검사후 예외
+            if (typeof p_str !== 'string') Message.error('ES021', ['str', 'string']);
 
-            if (typeof obj === 'string') {
-                if (typeof p_parse === 'function') obj = p_parse(obj);
-                else obj = JSON.parse(obj, null);
-            }
+            if (typeof p_parse === 'function') obj = p_parse(obj);
+            else obj = JSON.parse(obj, null);
 
             if (this.has(obj)) return this.find(obj['_guid']);
 
             if (this.isGuidObject(obj)) {
-                mObj = this.hasRefer(obj) ? this.transformRefer(obj) : p_obj;
+                mObj = this.hasRefer(obj) ? this.transformRefer(obj) : p_str;
                 
                 meta = this.createMetaObject(mObj);
                 meta.setObject(mObj);

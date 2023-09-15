@@ -164,8 +164,6 @@
             // 객체 타입을 비교 (값은 비교 안함, 타입만 비교함)
             // equalType(obj, object);
             
-            // POINT:
-            // validType(object, arguments[i]);
             try {
                 validType(object, arguments[i]);
             } catch (error) {
@@ -186,15 +184,21 @@
             });
         }
 
-        // TODO: string 타입도 추가 검토
         // inner function
         function isImplementOf(target) {
-            if (typeof target !== 'function') Message.error('ES024', ['target', 'function']);
-            for (var i = 0; i < this._interface.length; i++) {
-                if (this._interface[i] === target) return true;  
-            }
+            // if (typeof target !== 'function') Message.error('ES024', ['target', 'function']);
+            if (typeof target === 'function') {
+                for (var i = 0; i < this._interface.length; i++) {
+                    if (this._interface[i] === target) return true;  
+                }
+            } else if (typeof target === 'string') {
+                for (var i = 0; i < this._interface.length; i++) {
+                    if (this._interface[i].name === target) return true;  
+                }
+            } else Message.error('ES021', ['isImplementOf()', 'function, string']);
             return false;
         }
+
         function typeName(obj) {
             if (typeof obj === 'function') return obj.name;
             if (typeof obj === 'object' && obj !== null) {

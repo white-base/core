@@ -7,6 +7,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var Util;
+    var MetaObject;
     var IArrayCollection;
 
     //==============================================================
@@ -19,17 +20,20 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         Util                        = require('./util');
+        MetaObject                  = require('./meta-object').MetaObject;
         IArrayCollection            = require('./i-collection-array').IArrayCollection;
     } else {    // COVER:
         Message                     = _global._L.Message;
         Util                        = _global._L.Util;
+        MetaObject                  = _global._L.MetaObject;
         IArrayCollection            = _global._L.IArrayCollection;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IArrayCollection === 'undefined') Message.error('ES011', ['IArrayCollection', 'i-collection-base']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof IArrayCollection === 'undefined') Message.error('ES011', ['IArrayCollection', 'i-collection-array']);
 
     //==============================================================
     // 4. module implementation   
@@ -64,8 +68,9 @@
                     return collection;
                 },
                 set: function(newValue) { 
-                    // TODO:: 자료종류를 검사해야함
-                    // TODO: ArrayCollection 으로 변경 요망! -> 원래대로..
+                    if (!(newValue instanceof MetaObject)) {
+                        Message.error('ES032', ['collection', 'MetaObject']);
+                    }
                     if (!(newValue.isImplementOf(IArrayCollection))) {
                         Message.error('ES033', ['collection', 'IArrayCollection']);
                     }
@@ -136,7 +141,7 @@
             });
         };
 
-        // TODO: p_target 을 파라메터로 받아야 적합할듯
+        
         /**
          * 삭제
          * @param {*} p_pos 

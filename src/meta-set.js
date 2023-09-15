@@ -214,23 +214,6 @@
         };
 
         /**
-         * 객체 비교
-         * @virtual
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaSet.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-
-        //     if (!this._compare(this.setName, p_target.setName)) return false;
-        //     // if (!this._compare(this.columns, p_target.columns)) return false;
-        //     // if (!this._compare(this.rows, p_target.rows)) return false;
-        //     if (!this.tables.equal(p_target.tables)) return false;
-        //     if (!this.views.equal(p_target.views)) return false;
-        //     return true;
-        // };
-
-        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
@@ -281,21 +264,6 @@
             this.views.clear();
         };
 
-        
-        // MetaSet.prototype.load  = function(p_target, p_opt) {
-        //     var opt = typeof p_option === 'undefined' ? 3 : p_option;
-
-        //     if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
-            
-        //     if (p_target instanceof MetaSet) {
-        //         this._loadMetaSet(p_target, opt);
-        //     } else if (typeof p_target === 'object') {
-        //         this.read(p_target, opt);
-        //     } else {
-        //         throw new Error('[p_target] 처리할 수 없는 타입입니다. ');
-        //     }
-        // };
-
         MetaSet.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
             var mObj;
@@ -321,20 +289,6 @@
             else str = JSON.stringify(rObj, null, p_space);
             return str;
         };
-
-        // MetaSet.prototype.read  = function(p_obj, p_opt) {
-        //     var metaSet = null;
-        //     var opt = typeof p_option === 'undefined' ? 3 : p_option;
-            
-        //     if (typeof p_obj !== 'object') throw new Error('Only [p_obj] type "object" can be added');
-        //     if (typeof opt !== 'number') throw new Error('[p_option] 은 number 타입만 가능합니다. ');
-
-            
-        //     metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
-
-        //     if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
-        //     if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
-        // };
 
         MetaSet.prototype.read  = function(p_obj, p_opt) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
@@ -380,12 +334,7 @@
                     for (var i = 0; i < entity['_key'].length; i++) {
                         addEntity(entity['_key'][i], entity, this.tables);
                     }
-                } else {
-                    for (var key in entity) {
-                        addEntity(key, entity, this.tables);
-                    }
-                }
-                // addEntity(obj['tables'], this.tables);
+                } else for (var key in entity) addEntity(key, entity, this.tables);
             }
             if (obj['views']) {
                 entity = obj['views'];
@@ -393,37 +342,22 @@
                     for (var i = 0; i < entity['_key'].length; i++) {
                         addEntity(entity['_key'][i], entity, this.views);
                     }
-                } else {
-                    for (var key in entity) {
-                        addEntity(key, entity, this.views);
-                    }
-                }
-                // addEntity(obj['views'], this.views);
+                } else for (var key in entity) addEntity(key, entity, this.views);
             }
             return;
 
             // inner funciton
-            // function addEntity(p_entity, p_collec) {
-            //     for (var key in p_entity) {
-            //         if (Object.hasOwnProperty.call(p_entity, key)) {
-            //             if (p_collec.exist(key)) throw new Error('"'+ key +'"가 존재하여, entity를 추가 할 수 없습니다.');
-            //             p_collec.add(key);
-            //             p_collec[key].readSchema(p_entity[key], p_createRow);
-            //         }
-            //     }
-            // }
             function addEntity(key, p_collec, p_baseCollec) {
+                var prop;
+
                 if (Object.hasOwnProperty.call(p_collec, key) && typeof p_collec[key] === 'object') {
-                    // if (_this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
-                    var prop = p_collec[key];
+                    prop = p_collec[key];
                     if (prop['_metaSet'] && MetaRegistry.has(prop['_metaSet'])) {
                         prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']);
                     }
-                    // var entity = new p_baseCollec._baseType(key, _this, prop);      // TODO: register 로 변경 요망
                     if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
                     p_baseCollec.add(key);
-                    p_baseCollec[key].readSchema(p_collec[key], p_createRow);
-                    
+                    p_baseCollec[key].readSchema(p_collec[key], p_createRow);                    
                 }
             }
         };
@@ -550,7 +484,6 @@
             return obj;
         };
 
-
         MetaSet.prototype.acceptChanges  = function() {
             for (let i = 0; i < this.tables.count; i++) {
                 this.tables[i].acceptChanges();                
@@ -562,18 +495,6 @@
                 this.tables[i].rejectChanges();                
             }
         };
-        
-        // MetaSet.prototype.getChanges  = function() {
-        //     var arr = {tables: {}};
-
-        //     for (let i = 0; i < this.tables.count; i++) {
-        //         var table = this.tables[i];
-        //         if (table.getChanges().length > 0) {
-        //             arr.tables[table.tableName] = table.getChanges();
-        //         }
-        //     }
-        //     return arr;
-        // };
         
         MetaSet.prototype.hasChanges  = function() {
             for (let i = 0; i < this.tables.count; i++) {
