@@ -857,7 +857,7 @@
         function MetaViewColumnCollection(p_owner, p_baseCollection) {
             _super.call(this, p_owner);
 
-            var _baseCollection = p_baseCollection;
+            var _baseCollection = p_baseCollection; // TODO: View 이동 요망, get/setObject 등 수정해야함
             var _refEntities = [];
 
             if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);

@@ -73,6 +73,42 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.tableName).toBe('T2');
             });
         });
+        describe("MetaObject.equal() <객체 비교>", () => {
+            it("- equal() : 생성 후 비교 ", () => {
+                const c1 = new MetaTable();
+                const c2 = new MetaTable();
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1._guid === c2._guid).toBe(false);
+                expect(c1 === c2).toBe(false);
+            });
+            it("- equal() : 이름이 다른 경우 ", () => {
+                const c1 = new MetaTable('T1');
+                const c2 = new MetaTable();
+                
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : columns 추가 후 비교 ", () => {
+                const c1 = new MetaTable('T1');
+                const c2 = new MetaTable('T1');
+                c2.columns.add('a1');
+
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : rows 추가 후 비교 ", () => {
+                const c1 = new MetaTable('T1');
+                const c2 = new MetaTable('T1');
+                c1.columns.add('a1');
+                c2.columns.add('a1');
+
+                expect(c1.equal(c2)).toBe(true);
+                // row 추가
+                var row = c1.newRow();
+                row['a1'] = 'R1';
+                c1.rows.add(row);
+                expect(c1.equal(c2)).toBe(false);
+            });
+        });
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- getTypes() : array<function> ", () => {
                 const c = new MetaTable();
@@ -1199,42 +1235,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
 
-        describe("MetaTable.equal() <객체 비교>", () => {
-            it("- equal() : 생성 후 비교 ", () => {
-                const c1 = new MetaTable();
-                const c2 = new MetaTable();
-                
-                expect(c1.equal(c2)).toBe(true);
-                expect(c1._guid === c2._guid).toBe(false);
-                expect(c1 === c2).toBe(false);
-            });
-            it("- equal() : 이름이 다른 경우 ", () => {
-                const c1 = new MetaTable('T1');
-                const c2 = new MetaTable();
-                
-                expect(c1.equal(c2)).toBe(false);
-            });
-            it("- equal() : columns 추가 후 비교 ", () => {
-                const c1 = new MetaTable('T1');
-                const c2 = new MetaTable('T1');
-                c2.columns.add('a1');
-
-                expect(c1.equal(c2)).toBe(false);
-            });
-            it("- equal() : rows 추가 후 비교 ", () => {
-                const c1 = new MetaTable('T1');
-                const c2 = new MetaTable('T1');
-                c1.columns.add('a1');
-                c2.columns.add('a1');
-
-                expect(c1.equal(c2)).toBe(true);
-                // row 추가
-                var row = c1.newRow();
-                row['a1'] = 'R1';
-                c1.rows.add(row);
-                expect(c1.equal(c2)).toBe(false);
-            });
-        });
+        
 
         describe("MetaTable.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {

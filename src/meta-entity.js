@@ -90,8 +90,8 @@ const { ISerialize } = require('./i-serialize');
             _super.call(this, p_name);
 
             var _metaSet = null;
-            var columns = null;     
             var rows  = new MetaRowCollection(this);
+            var columns = null;     
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
@@ -158,17 +158,18 @@ const { ISerialize } = require('./i-serialize');
             function transformEntity(mObj) {
                 var obj = {};
                 if (mObj['name']) obj['name'] = mObj['name'];
-                if (mObj['columns']) obj['columns'] = transformColumn(mObj['columns']);
-                if (mObj['rows']) obj['rows'] = transformRow(mObj['rows']);
+                if (mObj['columns']) obj['columns'] = transformColumn(mObj['columns'], mObj);
+                if (mObj['rows']) obj['rows'] = transformRow(mObj['rows'], mObj);
                 return obj;
             }
-            function transformColumn(mObj) {
+            function transformColumn(mObj, mEntity) {
                 var obj = {};
                 for (var i = 0; i < mObj['_elem'].length; i++) {
                     var column = mObj['_elem'][i];
                     var key = mObj['_key'][i] || column.name;
                     obj[key] = {};
-                    if (column['_entity']['$ref']) obj[key]['_entity'] = MetaRegistry.find(column['_entity']['$ref']);
+                    // if (column['_entity']['$ref']) obj[key]['_entity'] = MetaRegistry.find(column['_entity']['$ref']);
+                    if (column['_entity']['$ref'] !== mEntity['_guid']) obj[key]['_entity'] = column['_entity']['$ref'];
                     if (column.default) obj[key].default = column.default;
                     if (column.caption) obj[key].caption = column.caption;            
                     if (column.isNotNull) obj[key].isNotNull = column.isNotNull;
@@ -606,7 +607,8 @@ const { ISerialize } = require('./i-serialize');
         /**
          * 불러오기/가져오기 (!! 병합용도가 아님)
          * 기존을 초기화 하고 불러오는 역활
-         * @param {object | MetaEntity} p_target 로드 대상
+         * @param {string} p_target 로드 대상
+         * @param {function?} p_parse 파서
          */
         MetaEntity.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
@@ -690,7 +692,7 @@ const { ISerialize } = require('./i-serialize');
         /**
          * 없으면 빈 컬럼을 생성해야 하는지?
          * 이경우에 대해서 명료하게 처리햐야함 !!
-         * @param {*} p_obj 
+         * @param {object} p_obj gObj | obj   
          * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
         MetaEntity.prototype.readSchema  = function(p_obj, p_createRow) {
@@ -721,7 +723,7 @@ const { ISerialize } = require('./i-serialize');
                     //     if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
                     //         prop['_entity'] = MetaRegistry.find(prop['_entity']['_guid']);
                     //     }
-                    //     var column = new Column(key, this, prop);
+                    //     var column = new $Column(key, this, prop);
                     //     if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
                     //     this.columns.add(column);
                     // }
