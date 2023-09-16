@@ -158,30 +158,45 @@ const { ISerialize } = require('./i-serialize');
             function transformEntity(mObj) {
                 var obj = {};
                 if (mObj['name']) obj['name'] = mObj['name'];
+                if (mObj['_guid']) obj['_guid'] = mObj['_guid'];
+                if (mObj['_baseEntity']) obj['_baseEntity'] = mObj['_baseEntity'];
                 if (mObj['columns']) obj['columns'] = transformColumn(mObj['columns'], mObj);
                 if (mObj['rows']) obj['rows'] = transformRow(mObj['rows'], mObj);
                 return obj;
             }
             function transformColumn(mObj, mEntity) {
                 var obj = {};
+                
+                // if (mObj['$ref']) {
+                //     obj['$ref'] = mObj['$ref'];
+                //     return obj;
+                // }
                 for (var i = 0; i < mObj['_elem'].length; i++) {
                     var column = mObj['_elem'][i];
                     var key = mObj['_key'][i] || column.name;
+                    
                     obj[key] = {};
-                    // if (column['_entity']['$ref']) obj[key]['_entity'] = MetaRegistry.find(column['_entity']['$ref']);
-                    if (column['_entity']['$ref'] !== mEntity['_guid']) obj[key]['_entity'] = column['_entity']['$ref'];
-                    if (column.default) obj[key].default = column.default;
-                    if (column.caption) obj[key].caption = column.caption;            
-                    if (column.isNotNull) obj[key].isNotNull = column.isNotNull;
-                    if (column.isNullPass) obj[key].isNullPass = column.isNullPass;
-                    if (Array.isArray(column.constraints)) obj[key].constraints = Util.deepCopy(column.constraints);
-                    if (column.getter) obj[key].getter = column.getter;
-                    if (column.setter) obj[key].setter = column.setter;
-                    if (column.alias) obj[key].alias = column.alias;
-                    if (column.value) obj[key].value = column.value;
-                }
 
-                obj['_key'] = mObj['_key'];
+                    // POINT:
+                    if (column['$ref']){
+                        obj[key] = column;
+                    } else {
+                        // if (column['_entity']['$ref']) obj[key]['_entity'] = MetaRegistry.find(column['_entity']['$ref']);
+                        // if (column['_entity']['$ref'] !== mEntity['_guid']) obj[key]['_entity'] = column['_entity']['$ref'];
+                        if (column._guid) obj[key]._guid = column['_guid'];
+                        if (column.default) obj[key].default = column.default;
+                        if (column.caption) obj[key].caption = column.caption;            
+                        if (column.isNotNull) obj[key].isNotNull = column.isNotNull;
+                        if (column.isNullPass) obj[key].isNullPass = column.isNullPass;
+                        if (Array.isArray(column.constraints)) obj[key].constraints = Util.deepCopy(column.constraints);
+                        if (column.getter) obj[key].getter = column.getter;
+                        if (column.setter) obj[key].setter = column.setter;
+                        if (column.alias) obj[key].alias = column.alias;
+                        if (column.value) obj[key].value = column.value;
+                    }
+
+                }
+                obj['$key'] = mObj['_key'];
                 return obj;
             }
             function transformRow(mObj) {
@@ -427,7 +442,9 @@ const { ISerialize } = require('./i-serialize');
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
                     clone = tarColumns[i].clone(this);
-                    clone.columnName = tarColumns[i].alias;
+                    var key = tarColumns[i].alias;
+                    clone.columnName = key;
+                    clone.__SET$__key(key, clone);
                     this.columns.add(clone);
                 }
                 // 로우 추가 (기준:idx)
@@ -666,7 +683,7 @@ const { ISerialize } = require('./i-serialize');
          * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
          * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
          */
-        MetaEntity.prototype.read  = function(p_obj, p_option) {
+        MetaEntity.prototype.read  = function(p_obj, p_option, p_origin) {
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
@@ -696,42 +713,40 @@ const { ISerialize } = require('./i-serialize');
          * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
         MetaEntity.prototype.readSchema  = function(p_obj, p_createRow) {
-            var _this = this;
             var obj = p_obj;
-            var columns;
-            var rows;
-            var Column = this.columns._baseType;
+            
+
 
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 else obj = p_obj;
-                obj = MetaEntity._transformObject(obj);
+                obj = MetaEntity._transformObject(obj); // gObj >> sObj<요약>
             }
 
             // table <-> view 서로 호환됨
             // if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
             // if (this.instanceOf('MetaTable') && entity['tableName']) this['tableName'] = entity['tableName'];
             
+            this._readSchema(obj, p_createRow);
+        };
+        
+
+        MetaEntity.prototype._readSchema  = function(p_obj, p_createRow, p_origin) {
+            var _this = this;
+            var obj = p_obj;
+            var columns;
+            var rows;
+            var Column = this.columns._baseType;
+            var origin = p_origin ? p_origin : p_obj;
+
             columns = obj['columns'];
             if (columns) {
-                for (var key in columns) {
-                    // if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
-                    //     if (this.rows.count > 0 ) throw new Error('[제약조건] rows 가 존재하여, 컬럼을 추가 할 수 없습니다.');
-                    //     var prop = columns[key];
-                    //     if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
-                    //         prop['_entity'] = MetaRegistry.find(prop['_entity']['_guid']);
-                    //     }
-                    //     var column = new $Column(key, this, prop);
-                    //     if (this.columns.exist(key)) throw new Error('기존에 key 가 존재합니다.');
-                    //     this.columns.add(column);
-                    // }
-                }
                 // 키 추출방식 2가지
-                if (columns['_key'] && Array.isArray(columns['_key'])) {
-                    for (var i = 0; i < columns['_key'].length; i++) {
-                        addColumn(columns['_key'][i], columns);
+                if (columns['$key'] && Array.isArray(columns['$key'])) {
+                    for (var i = 0; i < columns['$key'].length; i++) {
+                        addColumn(columns['$key'][i], columns);
                     }
                 } else {
                     for (var key in columns) {
@@ -739,6 +754,7 @@ const { ISerialize } = require('./i-serialize');
                     }
                 }
                 function addColumn(key, columns) {
+                    var column;
                     if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
                         if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
                         var prop = columns[key];
@@ -749,8 +765,15 @@ const { ISerialize } = require('./i-serialize');
                         for (var p in prop) {
                             obj[p] = prop[p];
                         }
+                        
+                        // POINT:
+                        if (typeof prop === 'object' && prop['$ref']) {
+                            column = MetaRegistry.findSetObject(origin, prop['$ref']);
+                            if (!column) Message.error('ES015', [key, 'column']);
+                        } else column = new Column(key, _this, obj);
+                        MetaRegistry.createSetObject(prop, column); 
+                        // column = new Column(key, _this, obj);
 
-                        var column = new Column(key, _this, obj);
                         if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
                         _this.columns.add(column);
                     }
@@ -771,8 +794,8 @@ const { ISerialize } = require('./i-serialize');
                     }
                 }
             }
-        };
         
+        };
 
         /**
          * 존재하는 로우만 가져온다.
@@ -817,6 +840,9 @@ const { ISerialize } = require('./i-serialize');
         MetaEntity.prototype.writeSchema  = function() {
             var obj = { columns: {}, rows: [] };
 
+            obj._guid = this._guid;
+            if(this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity); 
+
             // if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
             // if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
 
@@ -826,6 +852,7 @@ const { ISerialize } = require('./i-serialize');
                 var cObj = {};
                 var rObj = column.getObject();
 
+                cObj._guid = column._guid;
                 if (rObj.cloumnName) cObj.cloumnName = column.columnName;
                 if (rObj.default) cObj.default = rObj.default;
                 if (rObj.caption) cObj.caption = rObj.caption;
@@ -840,10 +867,10 @@ const { ISerialize } = require('./i-serialize');
             }
 
             // TODO: 요소이름에서 _key 제외해야 함
-            obj.columns['_key'] = [];
+            obj.columns['$key'] = [];
             for (var i = 0; i < this.columns['_keys'].length; i++) {
                 var key = this.columns['_keys'][i];
-                obj.columns['_key'].push(key);
+                obj.columns['$key'].push(key);
             }
             return obj;
         };

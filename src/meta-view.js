@@ -62,15 +62,16 @@
         function MetaView(p_name, p_baseEntity) {
             _super.call(this, p_name);
 
+            var _baseEntity;
             // var _baseEntity = p_baseEntity;
             // var _refEntities = [];
             // var viewName;
             var columns;
-            var baseCollection;
+            // var _baseEntity;
 
-            if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
-                baseCollection = p_baseEntity.columns;
-            }
+            // if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
+            //     baseCollection = p_baseEntity.columns;
+            // }
 
             /**
              * 테이블 이름
@@ -106,16 +107,28 @@
                 enumerable: true
             });
            
+            Object.defineProperty(this, '_baseEntity', 
+            {
+                get: function() { return _baseEntity; },
+                set: function(newValue) { 
+                    if (!(newValue instanceof MetaEntity)) Message.error('ES032', ['_baseEntity', 'MetaEntity']);
+                    _baseEntity = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
+
             // this.viewName      = p_name || '';
             this.viewName = p_name || '';
+            if (p_baseEntity) this._baseEntity = p_baseEntity;
             
             // this._refEntities   = [];
-            this.columns = new MetaViewColumnCollection(this, baseCollection);
+            this.columns = new MetaViewColumnCollection(this);
 
             // inner variable access
-            // this.__SET$_baseEntity = function(val, call) {
-            //     if (call instanceof MetaView) _baseEntity = val;
-            // }
+            this.__SET$_baseEntity = function(val, call) {
+                if (call instanceof MetaView) _baseEntity = val;
+            }
         }
         Util.inherits(MetaView, _super);
 
@@ -156,7 +169,7 @@
             var vOpt = p_vOpt || 0;
 
             obj.viewName = this.viewName;
-            // if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
+            if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
             return obj;                  
         };
 
@@ -178,11 +191,11 @@
                 this._metaSet = metaSet;
             }
             // this.metaSet = mObj.metaSet;
-            // if (mObj._baseEntity) {
-            //     baseEntity = MetaRegistry.findSetObject(origin, mObj._baseEntity.$ref);
-            //     if (!baseEntity) Message.error('ES015', [mObj.name, '_baseEntity']);
-            //     this.__SET$_baseEntity(baseEntity, this);
-            // } 
+            if (mObj._baseEntity) {
+                baseEntity = MetaRegistry.findSetObject(origin, mObj._baseEntity.$ref);
+                if (!baseEntity) Message.error('ES015', [mObj.name, '_baseEntity']);
+                this.__SET$_baseEntity(baseEntity, this);
+            } 
             this.columns.setObject(mObj.columns, origin);
             this.rows.setObject(mObj.rows, origin);
             this.viewName = mObj.viewName;
@@ -194,12 +207,12 @@
          * @returns {*}
          */
         MetaView.prototype.clone  = function() {
-            var clone = new MetaView(this.viewName);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
+            var clone = new MetaView(this.viewName, this._baseEntity);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
 
             // 참조 복제 REVIEW::  필요성 검토 필요
-            if (this.columns._baseCollection) {
-                clone.columns.__SET$_baseCollection(this.columns._baseCollection, clone.columns);
-            }
+            // if (this.columns._baseCollection) {
+            //     clone.columns.__SET$_baseCollection(this.columns._baseCollection, clone.columns);
+            // }
             for(var i = 0; i < this.columns._refEntities.length; i++) {
                 clone.columns._refEntities.push(this.columns._refEntities[i]);
             }

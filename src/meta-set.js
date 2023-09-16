@@ -177,6 +177,7 @@
                     var key = mObj['_key'][i] || table.name;
                     obj[key] = MetaEntity._transformObject(table);
                 }
+                obj['$key'] = mObj['_key'];
                 return obj;
             }
             function transformView(mObj) {
@@ -186,6 +187,7 @@
                     var key = mObj['_key'][i] || view.name;
                     obj[key] = MetaEntity._transformObject(view);
                 }
+                obj['$key'] = mObj['_key'];
                 return obj;
             }
         };
@@ -330,17 +332,17 @@
 
             if (obj['tables']) {
                 entity = obj['tables'];
-                if (entity['_key'] && Array.isArray(entity['_key'])) {
-                    for (var i = 0; i < entity['_key'].length; i++) {
-                        addEntity(entity['_key'][i], entity, this.tables);
+                if (entity['$key'] && Array.isArray(entity['$key'])) {
+                    for (var i = 0; i < entity['$key'].length; i++) {
+                        addEntity(entity['$key'][i], entity, this.tables);
                     }
                 } else for (var key in entity) addEntity(key, entity, this.tables);
             }
             if (obj['views']) {
                 entity = obj['views'];
-                if (entity['_key'] && Array.isArray(entity['_key'])) {
-                    for (var i = 0; i < entity['_key'].length; i++) {
-                        addEntity(entity['_key'][i], entity, this.views);
+                if (entity['$key'] && Array.isArray(entity['$key'])) {
+                    for (var i = 0; i < entity['$key'].length; i++) {
+                        addEntity(entity['$key'][i], entity, this.views);
                     }
                 } else for (var key in entity) addEntity(key, entity, this.views);
             }
@@ -357,10 +359,16 @@
                     }
                     if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
                     p_baseCollec.add(key);
-                    p_baseCollec[key].readSchema(p_collec[key], p_createRow);                    
+                    
+                    // POINT:
+                    MetaRegistry.createSetObject(prop, p_baseCollec[key]); 
+                    
+                    p_baseCollec[key]._readSchema(p_collec[key], p_createRow, obj);                    
                 }
             }
         };
+
+
 
         /**
          * row 들을 불러 온다
@@ -447,10 +455,10 @@
                 obj.tables[key] = table.writeSchema();
             }
             // TODO: 요소이름에서 _key 제외해야 함
-            obj.tables['_key'] = [];
+            obj.tables['$key'] = [];
             for (var i = 0; i < this.tables['_keys'].length; i++) {
                 var key = this.tables['_keys'][i];
-                obj.tables['_key'].push(key);
+                obj.tables['$key'].push(key);
             }
 
             for(var i = 0; i < this.views.count; i++) {
@@ -459,10 +467,10 @@
                 obj.views[key] = view.writeSchema();
             }
             // TODO: 요소이름에서 _key 제외해야 함
-            obj.views['_key'] = [];
+            obj.views['$key'] = [];
             for (var i = 0; i < this.views['_keys'].length; i++) {
                 var key = this.views['_keys'][i];
-                obj.views['_key'].push(key);
+                obj.views['$key'].push(key);
             }
             return obj;
         };

@@ -941,7 +941,7 @@ describe("[target: meta-table.js]", () => {
                 var json1 = { 
                     name: 'T1',
                     columns: {
-                        _key: ['i2', 'i1'],
+                        $key: ['i2', 'i1'],
                         i1: { caption: 'C1'},
                         i2: { caption: 'C2'},
                     }
@@ -1187,7 +1187,8 @@ describe("[target: meta-table.js]", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
                     columns: {
-                        i1: { caption: 'C1', alias: 'ii1'},
+                        i1: { 
+                            caption: 'C1', alias: 'ii1'},
                         i2: { caption: 'C2'},
                     },
                     rows: [
@@ -1195,15 +1196,22 @@ describe("[target: meta-table.js]", () => {
                         { i1: 'R10', i2: 'R20' },
                     ]
                 };
+                table1.read(json1, 3);
                 const json2 = {
+                    _guid: table1._guid,
                     columns: {
-                        _key: ['i1', 'i2'],
-                        i1: { caption: 'C1', alias: 'ii1'},
-                        i2: { caption: 'C2'},
+                        $key: ['i1', 'i2'],
+                        i1: { 
+                            _guid: table1.columns.i1._guid,
+                            caption: 'C1', alias: 'ii1'
+                        },
+                        i2: { 
+                            _guid: table1.columns.i2._guid,
+                            caption: 'C2'
+                        },
                     },
                     rows: []
                 }
-                table1.read(json1, 3);
                 const obj = table1.writeSchema();
 
                 expect(obj).toEqual(json2);

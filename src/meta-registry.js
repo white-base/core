@@ -342,6 +342,8 @@
             if (p_obj === null || typeof p_obj !== 'object') return false;
             if (p_obj['_guid'] && typeof p_obj['_guid'] === 'string'
                 && p_obj['_type'] && typeof p_obj['_type'] === 'string') return true;
+            // if (p_obj['_guid'] && typeof p_obj['_guid'] === 'string') return true;
+
             return false;
         };
 
@@ -358,7 +360,8 @@
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
             var origin = p_origin ? p_origin : mObj;
 
-            if (!this.isGuidObject(origin)) Message.error('ES024', ['object', 'guid']);
+            // if (!this.isGuidObject(origin)) Message.error('ES024', ['object', 'guid']);
+            if (typeof origin !== 'object') Message.error('ES024', ['object', 'object']);
             return findObject(origin);
             
             // inner finction

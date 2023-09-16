@@ -80,7 +80,7 @@ describe("[target: meta-view.js]", () => {
                 expect(view2.columns['i2'].caption).toBe('C2');
                 expect(view2.columns['i3'].caption).toBe('C3');
                 expect(view2.columns['i4'].value).toBe('V4');
-                expect(view2.columns._baseCollection._owner._name).toBe('E1');
+                expect(view2._baseEntity._name).toBe('E1');
                 expect(view2.viewName).toBe('T2');
                 expect(view2.columns.count).toBe(5);
                 expect(view2.rows.count).toBe(0);
@@ -404,10 +404,16 @@ describe("[target: meta-view.js]", () => {
                 const view3 = new MetaView('V3');
                 view3.columns.add('c3', view2.columns); // 일부 참조
                 const gObj1 = view1.getObject()
+                const gObj2 = view2.getObject()
+                const gObj3 = view3.getObject()
                 const v1 = new MetaView('VV1');
                 const v2 = new MetaView('VV2');
                 const v3 = new MetaView('VV3');
                 v1.readSchema(gObj1);
+                
+                // const tObj1 = MetaEntity._transformObject(gObj1)
+                // const tObj2 = MetaEntity._transformObject(gObj2)
+                // const tObj3 = MetaEntity._transformObject(gObj3)
                 // POINT: gObj 스키마 변형 해야함
 
                 expect(v1.viewName).toBe('VV1');    // 기존유지
@@ -415,6 +421,8 @@ describe("[target: meta-view.js]", () => {
                 expect(v1.columns['c1']._entity === v1).toBe(true);
                 expect(v1.columns['c2']._entity === v1).toBe(true);
                 expect(v1.columns['c3']._entity === v1).toBe(true);
+                expect(()=> v2.readSchema(gObj2)).toThrow('ES015')
+                expect(()=> v3.readSchema(gObj3)).toThrow('ES015')
             });
         });
         describe("MetaEntity.readSchema() <데이터 읽기>", () => {
@@ -492,17 +500,19 @@ describe("[target: meta-view.js]", () => {
                 expect(obj._type).toBe('Meta.Entity.MetaView');
                 expect(obj.name).toBe('V2');
                 expect(obj.viewName).toBe('V2');
-                expect(obj.columns._elem[0]._type).toBe('Meta.Entity.MetaColumn');
-                expect(obj.columns._elem[0].name).toBe('a2');
-                expect(obj.columns._elem[0].columnName).toBe('a2');
-                expect(obj.columns._elem[0].caption).toBe('C1');
-                expect(obj.columns._elem[1]._type).toBe('Meta.Entity.MetaColumn');
-                expect(obj.columns._elem[1].name).toBe('a3');
-                expect(obj.columns._elem[1].columnName).toBe('a3');
-                expect(obj.columns._key).toEqual(['a2', 'a3']);
-                expect(obj.rows._elem[0]._type).toBe('Meta.Entity.MetaRow');
-                expect(obj.rows._elem[0]._elem).toEqual(['R2', 'R3']);
-                expect(obj.rows._elem[0]._key).toEqual(['a2', 'a3']);
+                expect(obj.columns._elem[0].$ref).toBe(v1.columns['a2']._guid);
+                // 참조형식을 가지고 있음
+                // expect(obj.columns._elem[0]._type).toBe('Meta.Entity.MetaColumn');
+                // expect(obj.columns._elem[0].name).toBe('a2');
+                // expect(obj.columns._elem[0].columnName).toBe('a2');
+                // expect(obj.columns._elem[0].caption).toBe('C1');
+                // expect(obj.columns._elem[1]._type).toBe('Meta.Entity.MetaColumn');
+                // expect(obj.columns._elem[1].name).toBe('a3');
+                // expect(obj.columns._elem[1].columnName).toBe('a3');
+                // expect(obj.columns._key).toEqual(['a2', 'a3']);
+                // expect(obj.rows._elem[0]._type).toBe('Meta.Entity.MetaRow');
+                // expect(obj.rows._elem[0]._elem).toEqual(['R2', 'R3']);
+                // expect(obj.rows._elem[0]._key).toEqual(['a2', 'a3']);
             });
         });
         describe("MetaView.setObject(mObj) <객체 설정>", () => {
@@ -698,7 +708,7 @@ describe("[target: meta-view.js]", () => {
                 expect(view0.viewName).toBe('V1');  
                 expect(view0.columns.count).toBe(2);
                 expect(view0.columns['c2'].caption).toBe('C2');
-                expect(view0.equal(view1)).toBe(false);
+                expect(view0.equal(view1)).toBe(true);
                 // view2
                 expect(view2._name).toBe('V1');
                 expect(view2.viewName).toBe('V1');
@@ -783,17 +793,17 @@ describe("[target: meta-view.js]", () => {
                 view1.columns['c2'].caption = 'C2';
                 const view2 = view1.clone();
 
-                // view3
+                // view1 VS view3
                 expect(view3.viewName).toBe('V1');  
                 expect(view3.columns.count).toBe(2);
                 expect(view3.columns['c2'].caption).toBe('C2');
-                expect(view3.equal(view1)).toBe(false);
-                // view0
+                expect(view3.equal(view1)).toBe(true);
+                // view1 VS view0
                 expect(view0.viewName).toBe('V1');  
                 expect(view0.columns.count).toBe(2);
                 expect(view0.columns['c2'].caption).toBe('C2');
-                expect(view0.equal(view1)).toBe(false);
-                // view2
+                expect(view0.equal(view1)).toBe(true);
+                // view1 VS view2
                 expect(view2._name).toBe('V1');
                 expect(view2.viewName).toBe('V1');
                 expect(view2.columns.count).toBe(2);

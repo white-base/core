@@ -540,34 +540,7 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                 };
-                const json2 = { 
-                    setName: 'S1',
-                    tables: {
-                        _key: ['T1'],
-                        T1: {
-                            columns: {
-                                _key: ['i1', 'i2'],
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        _key: ['V1'],
-                        V1: {
-                            columns: {
-                                _key: ['i1'],
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
+                
                 set1.read(json1);
                 // const beginCnt = MetaRegistry.count;
                 const str = set1.output(stringify, '\t');
@@ -579,6 +552,46 @@ describe("[target: meta-set.js]", () => {
                 const set2 = MetaRegistry.createMetaObject({_type: 'MetaSet', _ns: 'Meta.Entity', name: 'S2'});
                 set2.load(str, parse);
                 const json3 = set2.write();
+                const json2 = { 
+                    setName: 'S1',
+                    tables: {
+                        $key: ['T1'],
+                        T1: {
+                            _guid: set2.tables.T1._guid,
+                            columns: {
+                                $key: ['i1', 'i2'],
+                                i1: { 
+                                    _guid: set2.tables.T1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
+                                i2: { 
+                                    _guid: set2.tables.T1.columns.i2._guid,
+                                    caption: 'C2'
+                                },
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        $key: ['V1'],
+                        V1: {
+                            _guid: set2.views.V1._guid,
+                            columns: {
+                                $key: ['i1'],
+                                i1: { 
+                                    _guid: set2.views.V1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+
 
                 expect(json3).toEqual(json2);
                 // expect(beginCnt).toBe(18);
@@ -716,6 +729,45 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views['V1'].columns['i1'].caption).toBe('C1');
                 expect(set1.views['V1'].rows.count).toBe(0);
             });
+            it("- readSchema() : getObject()로 읽기 ", () => {
+                // 참조도 가능하게
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const set1 = new MetaSet('S1')
+                set1.views.add(view1)
+                set1.views.add(view2)
+                set1.views.add(view3)
+                const gObj1 = set1.getObject()
+                const set2 = new MetaSet('S1')
+                set2.readSchema(gObj1);
+                const v1 = set1.views.V1;
+                const v2 = set1.views.V2;
+                const v3 = set1.views.V3;
+
+                // const tObj1 = MetaEntity._transformObject(gObj1)
+                // const tObj2 = MetaEntity._transformObject(gObj2)
+                // const tObj3 = MetaEntity._transformObject(gObj3)
+                // POINT: gObj 스키마 변형 해야함
+
+                expect(set1.views.count).toBe(3);
+                expect(v1.viewName).toBe('V1');
+                expect(v2.viewName).toBe('V2');
+                expect(v3.viewName).toBe('V3');
+                // V1
+                expect(v1.columns.count).toBe(3);
+                expect(v1.columns['c1']._entity === v1).toBe(true);
+                expect(v1.columns['c2']._entity === v1).toBe(true);
+                expect(v1.columns['c3']._entity === v1).toBe(true);
+                // V2
+                expect(v2.columns['c2']._entity === v1).toBe(true);
+                expect(v2.columns['c3']._entity === v1).toBe(true);
+                // V3
+                expect(v3.columns['c3']._entity === v1).toBe(true);
+            });
             it("- 예외 : 기존에 중복 테이블/뷰가 존재할 경우 ", () => {
                 // TODO:
             });
@@ -796,31 +848,43 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                 };
+                set1.read(json1);
                 const json2 = {
                     setName: 'S1',
                     tables: {
-                        _key: ['T1'],
+                        $key: ['T1'],
                         T1: {
+                            _guid: set1.tables.T1._guid,
                             columns: {
-                                _key: ['i1', 'i2'],
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
+                                $key: ['i1', 'i2'],
+                                i1: { 
+                                    _guid: set1.tables.T1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
+                                i2: { 
+                                    _guid: set1.tables.T1.columns.i2._guid,
+                                    caption: 'C2'
+                                },
                             },
                             rows: []
                         },
                     },
                     views: {
-                        _key: ['V1'],
+                        $key: ['V1'],
                         V1: {
+                            _guid: set1.views.V1._guid,
                             columns: {
-                                _key: ['i1'],
-                                i1: { caption: 'C1'},
+                                $key: ['i1'],
+                                i1: { 
+                                    _guid: set1.views.V1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
                             },
                             rows: []
                         },
                     },
                 }
-                set1.read(json1);
+
                 const obj = set1.writeSchema();
 
                 expect(obj).toEqual(json2);
@@ -904,15 +968,24 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                 };
+                set1.read(json1);
+                const obj = set1.write();
                 const json2 = { 
                     setName: 'S1',
                     tables: {
-                        _key: ['T1'],
+                        $key: ['T1'],
                         T1: {
+                            _guid: set1.tables.T1._guid,
                             columns: {
-                                _key: ['i1', 'i2'],
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
+                                $key: ['i1', 'i2'],
+                                i1: { 
+                                    _guid: set1.tables.T1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
+                                i2: { 
+                                    _guid: set1.tables.T1.columns.i2._guid,
+                                    caption: 'C2'
+                                },
                             },
                             rows: [
                                 { i1: 'R1', i2: 'R2' },
@@ -920,11 +993,15 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                     views: {
-                        _key: ['V1'],
+                        $key: ['V1'],
                         V1: {
+                            _guid: set1.views.V1._guid,
                             columns: {
-                                _key: ['i1'],
-                                i1: { caption: 'C1'},
+                                $key: ['i1'],
+                                i1: { 
+                                    _guid: set1.views.V1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
                             },
                             rows: [
                                 { i1: 'R1' },
@@ -932,8 +1009,7 @@ describe("[target: meta-set.js]", () => {
                         },
                     },
                 };
-                set1.read(json1);
-                const obj = set1.write();
+
 
                 expect(obj).toEqual(json2); 
             });
