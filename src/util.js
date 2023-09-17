@@ -57,8 +57,8 @@
     
     // polyfill
     if (!Array.isArray) {
-        Array.isArray = function(arg) {
-          return Object.prototype.toString.call(arg) === '[object Array]';
+        Array.isArray = function(p_obj) {
+          return Object.prototype.toString.call(p_obj) === '[object Array]';
         };
     }
 
@@ -131,17 +131,17 @@
 
     /**
      * 구현 제약 조건 검사
-     * @param {object} object 대상 객체
+     * @param {object} p_obj 대상 객체
      * @param {function} args 대상 함수
      */
-    var implement = function(object, args) {
+    var implement = function(p_obj, args) {
         // var obj;    
         var _interface = [];
         var msg = '';
 
-        if (typeof object !== 'object') Message.error('ES024', ['this(target)', 'object']);
-        if (typeof object._interface === 'undefined') {
-            Object.defineProperty(object, '_interface', {
+        if (typeof p_obj !== 'object') Message.error('ES024', ['this(target)', 'obj']);
+        if (typeof p_obj._interface === 'undefined') {
+            Object.defineProperty(p_obj, '_interface', {
                 get: function() { 
                     return _interface;
                 },
@@ -153,8 +153,8 @@
         for(var i = 1; i < arguments.length; i++) {
             if (typeof arguments[i] === 'function') {
                 // 중복 제거
-                if (object._interface.indexOf(arguments[i]) < 0) {
-                    object._interface.push(arguments[i]);
+                if (p_obj._interface.indexOf(arguments[i]) < 0) {
+                    p_obj._interface.push(arguments[i]);
                     // object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
                 }
             } else Message.error('ES021', ['arguments', 'function']);
@@ -165,9 +165,9 @@
             // equalType(obj, object);
             
             try {
-                validType(object, arguments[i]);
+                validType(p_obj, arguments[i]);
             } catch (error) {
-                Message.error('ES017', [typeName(object), typeName(arguments[i]), error.message]);
+                Message.error('ES017', [typeName(p_obj), typeName(arguments[i]), error.message]);
             }
             // msg = checkTypeMessage(arguments[i], object);
             // if (msg.length > 0) Message.error('ES017', [typeName(object), typeName(arguments[i]), msg]);
@@ -176,8 +176,8 @@
         // var types = Array.prototype.slice.call(arguments, 1);
 
         // obj.prototype.isImplementOf = isImplementOf;
-        if (typeof object.isImplementOf === 'undefined') {
-            Object.defineProperty(object, 'isImplementOf',
+        if (typeof p_obj.isImplementOf === 'undefined') {
+            Object.defineProperty(p_obj, 'isImplementOf',
             {
                 value: isImplementOf,
                 enumerable: false
@@ -222,15 +222,15 @@
         return copy;
       }
 
-      var deepEqual = function(object1, object2) {
-        var keys1 = Object.keys(object1);
-        var keys2 = Object.keys(object2);
+      var deepEqual = function(obj1, obj2) {
+        var keys1 = Object.keys(obj1);
+        var keys2 = Object.keys(obj2);
        
         if (keys1.length !== keys2.length) return false;
        
         for (const key of keys1) {
-          var val1 = object1[key];
-          var val2 = object2[key];
+          var val1 = obj1[key];
+          var val2 = obj2[key];
           var areObjects = isObject(val1) && isObject(val2);
           if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
             return false;
@@ -239,8 +239,8 @@
         return true;
         
         // inner function
-        function isObject(object) {
-            return object != null && typeof object === 'object';
+        function isObject(obj) {
+            return obj != null && typeof obj === 'object';
         }
       }
       // TODO: getAllProperties() 사용한 문법으로 교체 필요 ES5 

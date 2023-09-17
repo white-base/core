@@ -30,12 +30,12 @@
     /**
      * 전체 프로퍼티 조회
      * @param {object} obj Object를 제외한 프로터피 리턴
-     * @param {boolean?} isObject Object를 포함 여부
+     * @param {boolean?} isObj Object를 포함 여부
      * @returns {array}  
      */
-    var getAllProperties = function(obj, isObject) {
+    var getAllProperties = function(obj, isObj) {
         var allProps = [], curr = obj;
-        var is = isObject || false;
+        var is = isObj || false;
 
         do {
             var props = Object.getOwnPropertyNames(curr);
@@ -353,7 +353,7 @@
     };
 
     // OR 조건
-    var checkType = function(target, types) {
+    var checkType = function(target) {
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
 
@@ -366,7 +366,7 @@
         return false;
     };
 
-    var validType = function(target, types) {
+    var validType = function(target) {
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '', arrMsg = [];
 
@@ -382,7 +382,7 @@
     };
 
     // AND 조건
-    var checkUnionType = function(target, types) {
+    var checkUnionType = function(target) {
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
         
@@ -395,7 +395,7 @@
         return true;
     };
 
-    var validUnionType = function(target, types) {
+    var validUnionType = function(target) {
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
         

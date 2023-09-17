@@ -426,23 +426,23 @@
             return obj;                        
         };
 
-        BaseCollection.prototype.setObject = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
+        BaseCollection.prototype.setObject = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
             var owner;
-            var origin = oObj ? oObj : mObj;
+            var origin = p_origin ? p_origin : p_oGuid;
             
             this.clear();
-            if (mObj.__subscribers) {
-                this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
+            if (p_oGuid.__subscribers) {
+                this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             }
-            if (mObj._owner) {
-                owner = MetaRegistry.findSetObject(origin, mObj._owner.$ref);
-                if (!owner) Message.error('ES015', [mObj.name, '_owner']);
+            if (p_oGuid._owner) {
+                owner = MetaRegistry.findSetObject(origin, p_oGuid._owner.$ref);
+                if (!owner) Message.error('ES015', [p_oGuid.name, '_owner']);
                 this._owner = owner;
             }
-            if (Array.isArray(mObj._elemTypes) && mObj._elemTypes.length > 0){
-                this._elemTypes = mObj._elemTypes;
+            if (Array.isArray(p_oGuid._elemTypes) && p_oGuid._elemTypes.length > 0){
+                this._elemTypes = p_oGuid._elemTypes;
             }
         };
 

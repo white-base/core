@@ -163,14 +163,14 @@
 
         /**
          * 상위 클래스 또는 인터페이스 구현 여부 검사
-         * @param {string | function} p_func 함수명으로 넣으면 이름만 검색, 클래스를 넣은면 클래스 검색
+         * @param {string | function} p_fun 함수명으로 넣으면 이름만 검색, 클래스를 넣은면 클래스 검색
          * @returns {boolean}
          */
-        MetaObject.prototype.instanceOf = function(p_func) {
+        MetaObject.prototype.instanceOf = function(p_fun) {
             var _this = this;
             
-            if (typeof p_func === 'string') return findFunctionName(p_func);
-            if (typeof p_func === 'function') return findFunction(p_func);
+            if (typeof p_fun === 'string') return findFunctionName(p_fun);
+            if (typeof p_fun === 'function') return findFunction(p_fun);
             return false;
 
             // inner function
@@ -219,16 +219,23 @@
         /**
          * 메타 객체를 설정한다
          * @virtual
-         * @param {object} p_mObj 레벨 옵션
+         * @param {object} p_oGuid 레벨 옵션
          */
-        MetaObject.prototype.setObject  = function(p_mObj) {
+        MetaObject.prototype.setObject  = function(p_oGuid, p_origin) {
+            var origin = p_origin ? p_origin : p_oGuid;
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
-            if (typeof p_mObj !== 'object') Message.error('ES021', ['mObj', 'object']);
-            if (p_mObj._type !== fullName) Message.error('ES046', [p_mObj._type, fullName]);
-            // this.__SET$_guid(p_mObj._guid, this);
-            // p_mObj['$set'] = this._guid;
-            MetaRegistry.createSetObject(p_mObj, this);
+            if (typeof p_oGuid !== 'object') Message.error('ES021', ['mObj', 'object']);
+            if (p_oGuid._type !== fullName) Message.error('ES046', [p_oGuid._type, fullName]);
+            
+            if (MetaRegistry.isGuidObject(origin)) {
+                if (!origin['__TRANSFORM_REFER'] || MetaRegistry.hasRefer(origin)) {
+                    origin = MetaRegistry.transformRefer(origin);
+                    origin['__TRANSFORM_REFER'] = true;
+                }
+            } else Message.error('ES022', [typeof p_oGuid]);
+            
+            MetaRegistry.createSetObject(p_oGuid, this); // $set 생성
         };
         // MetaObject.prototype.setObject  = function(p_mObj) {
         //     var meta;

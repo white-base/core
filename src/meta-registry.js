@@ -109,56 +109,56 @@
         /**
          * 객체배열 리턴
          * string에서 사용
-         * @param {*} mObj 
-         * @param {*} arr 
+         * @param {*} p_oGuid 
+         * @param {*} p_arr 
          * @returns 
          */
-        MetaRegistry.__getObjectList = function(mObj, arr) {
-            arr = arr || [];
-            if (this.isGuidObject(mObj)) arr.push(mObj);
-            for(var prop in mObj) {
-                if (typeof mObj[prop] === 'object') this.__getObjectList(mObj[prop], arr);
-                else if (Array.isArray(mObj[prop])){
-                for(var i = 0; i < mObj[prop].length; i++) {
-                    if (typeof mObj[prop][i] === 'object') this.__getObjectList(mObj[prop][i], arr);
+        MetaRegistry.__getObjectList = function(p_oGuid, p_arr) {
+            p_arr = p_arr || [];
+            if (this.isGuidObject(p_oGuid)) p_arr.push(p_oGuid);
+            for(var prop in p_oGuid) {
+                if (typeof p_oGuid[prop] === 'object') this.__getObjectList(p_oGuid[prop], p_arr);
+                else if (Array.isArray(p_oGuid[prop])){
+                for(var i = 0; i < p_oGuid[prop].length; i++) {
+                    if (typeof p_oGuid[prop][i] === 'object') this.__getObjectList(p_oGuid[prop][i], p_arr);
                 }  
                 }
             }
-            return arr;
+            return p_arr;
         };
 
 
 
         /**
          * 메타객체 등록
-         * @param {*} meta 
+         * @param {*} p_meta 
          */
-        MetaRegistry.register = function(meta) {
+        MetaRegistry.register = function(p_meta) {
             var _ns;
             var key;
             var type;
             var fullName;
 
-            if (meta['_type'] && meta['_guid']) {
-                if (this.has(meta)) Message.error('ES042', ['meta', '_guid']);
+            if (p_meta['_type'] && p_meta['_guid']) {
+                if (this.has(p_meta)) Message.error('ES042', ['meta', '_guid']);
                 // 객체 등록
-                list.push(meta);
+                list.push(p_meta);
                 // 클래스 등록
-                _ns = meta['_ns'] || '';
-                type = meta['_type'];
+                _ns = p_meta['_ns'] || '';
+                type = p_meta['_type'];
                 key = type.name;
-                fullName = meta['_ns'] && meta['_ns'].length > 0 ?  _ns +'.'+key : key;
+                fullName = p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
                 this.registerClass(type, _ns, key);
             } else Message.error('ES052', ['meta', '_type:function, _guid: string']);
         };
 
         /**
          * 메타객체 해제
-         * @param {*} target 
+         * @param {*} p_target 
          * @returns {boolean}
          */
-        MetaRegistry.release = function(target) {
-            var guid = typeof target === 'string' ? target : target['_guid'];
+        MetaRegistry.release = function(p_target) {
+            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
 
             if (typeof guid !== 'string') return false;
             for(var i = 0; i < list.length; i++) {
@@ -182,10 +182,10 @@
          * @param {object | string} obj  
          * @returns 
          */
-        MetaRegistry.has = function(target) {
-            var guid = typeof target === 'string' ? target : target['_guid'];
+        MetaRegistry.has = function(p_target) {
+            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
             
-            if (!MetaRegistry.isMetaObject(target)) return false;
+            if (!MetaRegistry.isMetaObject(p_target)) return false;
 
             if (typeof guid !== 'string') return;
             for(var i = 0; i < list.length; i++) {
@@ -199,8 +199,8 @@
          * @param {*} guid 
          * @returns 
          */
-        MetaRegistry.find = function(target) {
-            var guid = typeof target === 'string' ? target : target['_guid'];
+        MetaRegistry.find = function(p_target) {
+            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
 
             if (typeof guid !== 'string') return;
             for(var i = 0; i < list.length; i++) {
@@ -217,14 +217,14 @@
         
         /**
          * 메타 객체 생성
-         * @param {*} mObj 
+         * @param {*} p_oGuid 
          * @returns 
          */
-        MetaRegistry.createMetaObject = function(mObj, oObj) {
-            var origin = oObj ? oObj : mObj;
+        MetaRegistry.createMetaObject = function(p_oGuid, p_origin) {
+            var origin = p_origin ? p_origin : p_oGuid;
             var args = [null];
-            var type = mObj._type;
-            var _ns = mObj._ns || '';
+            var type = p_oGuid._type;
+            var _ns = p_oGuid._ns || '';
             var fullName =  _ns !== '' ? [_ns, type].join('.') : type;
             var coClass = this.getClass(fullName);
             var params;
@@ -235,78 +235,79 @@
             
             for (var i = 0; i < params.length; i++) {
                 var argName = params[i];
-                var prop = mObj[argName];
+                var prop = p_oGuid[argName];
                 var obj;
                 if (typeof prop === 'object' && prop['$ref']) obj = this.findSetObject(origin, prop['$ref']);
                 else obj = prop;
-                if (mObj[argName]) args.push(obj);
+                if (p_oGuid[argName]) args.push(obj);
             }
             return new (Function.prototype.bind.apply(coClass, args));
         };
         
         /**
          * 참조 속성 생성 : $ref
-         * @param {object} meta 
+         * @param {object} p_meta 
          * @returns {object}
          */
-        MetaRegistry.createReferObject = function(meta) {
-            if (meta && meta._guid && meta._guid.length > 0 ) return { $ref: meta._guid };
+        MetaRegistry.createReferObject = function(p_meta) {
+            if (p_meta && p_meta._guid && p_meta._guid.length > 0 ) return { $ref: p_meta._guid };
         };
 
         /**
          * 네임스페이스 속성 생성 : $ns
-         * @param {*} fun 
+         * @param {*} p_fun 
          * @returns 
          */
-        MetaRegistry.createNsReferObject = function(fun) {
+        MetaRegistry.createNsReferObject = function(p_fun) {
             var fullName;
             var ns, key;
 
-            if (!this.findClass(fun)) {
-                ns = fun._NS || '';
-                key = fun.name;
-                this.registerClass(fun, ns, key);
+            if (!this.findClass(p_fun)) {
+                ns = p_fun._NS || '';
+                key = p_fun.name;
+                this.registerClass(p_fun, ns, key);
             }
 
-            fullName = this.findClass(fun);
+            fullName = this.findClass(p_fun);
             if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
-            else Message.error('ES053', ['ns', fun.name]);
+            else Message.error('ES053', ['ns', p_fun.name]);
         };
 
-        MetaRegistry.createSetObject = function(target, meta) {
-            if (meta && meta._guid && meta._guid.length > 0 ) {
-                target['$set'] = meta._guid;
-                return target;
+        MetaRegistry.createSetObject = function(p_target, p_meta) {
+            if (p_meta && p_meta._guid && p_meta._guid.length > 0 ) {
+                p_target['$set'] = p_meta._guid;
+                return p_target;
             } else Message.error('ES031', ['meta']);
         };
          
         /**
          * 메타 객체 유효성 검사
-         * @param {*} rObj 
+         * TODO: guid 가 유일한지 검사 필요, 고정키를 가져올 경우
+         * @param {*} p_oGuid 
          * @returns 
          */
-        MetaRegistry.validObject = function(rObj) {
+        MetaRegistry.validObject = function(p_oGuid) {
             var _this = this;
-            var arrObj = this.__getObjectList(rObj);
+            var arrObj = this.__getObjectList(p_oGuid);
 
-            if (validReference(rObj) === false) return false;
-            if (validCollection(rObj) === false) return false;
+            if (validReference(p_oGuid) === false) return false;
+            if (validCollection(p_oGuid) === false) return false;
             return true;
 
             // inner function
-            function validReference(mObj) {
-                if (typeof mObj === 'object') {
-                    if (mObj['$ref']) if (!findGuid(mObj['$ref'], arrObj)) return false;
-                    if (mObj['$set']) if (!findGuid(mObj['$set'], arrObj)) return false;
-                    if (mObj['$ns']) if (!_this.getClass(mObj['$ns'])) return false;
+            function validReference(oGuid) {
+                if (typeof oGuid === 'object') {
+                    if (oGuid['$ref']) if (!findGuid(oGuid['$ref'], arrObj)) return false;
+                    if (oGuid['$set']) if (!findGuid(oGuid['$set'], arrObj)) return false;
+                    if (oGuid['$ns']) if (!_this.getClass(oGuid['$ns'])) return false;
             
-                    for(var prop in mObj) {
-                        if (typeof mObj[prop] === 'object') {
-                            if (validReference(mObj[prop]) === false) return false
-                        } else if (Array.isArray(mObj[prop])){
-                          for(var i = 0; i < mObj[prop].length; i++) {
-                            if (typeof mObj[prop][i] === 'object') {
-                                if (validReference(mObj[prop][i]) === false) return false;
+                    for(var prop in oGuid) {
+                        if (typeof oGuid[prop] === 'object') {
+                            if (validReference(oGuid[prop]) === false) return false
+                        } else if (Array.isArray(oGuid[prop])){
+                          for(var i = 0; i < oGuid[prop].length; i++) {
+                            if (typeof oGuid[prop][i] === 'object') {
+                                if (validReference(oGuid[prop][i]) === false) return false;
                             }
                           }  
                         }
@@ -314,17 +315,17 @@
                 }
                 return true;
             }
-            function validCollection(mObj) {
-                if (Array.isArray(mObj['_elem']) && Array.isArray(mObj['_key'])) {
-                    if (mObj['_elem'].length !== mObj['_key'].length) return false;
+            function validCollection(oGuid) {
+                if (Array.isArray(oGuid['_elem']) && Array.isArray(oGuid['_key'])) {
+                    if (oGuid['_elem'].length !== oGuid['_key'].length) return false;
                 }
-                for(var prop in mObj) {
-                    if (typeof mObj[prop] === 'object') {
-                        if (validCollection(mObj[prop]) === false) return false;
-                    } else if (Array.isArray(mObj[prop])){
-                      for(var i = 0; i < mObj[prop].length; i++) {
-                        if (typeof mObj[prop][i] === 'object') {
-                            if (validCollection(mObj[prop][i]) === false) return false;
+                for(var prop in oGuid) {
+                    if (typeof oGuid[prop] === 'object') {
+                        if (validCollection(oGuid[prop]) === false) return false;
+                    } else if (Array.isArray(oGuid[prop])){
+                      for(var i = 0; i < oGuid[prop].length; i++) {
+                        if (typeof oGuid[prop][i] === 'object') {
+                            if (validCollection(oGuid[prop][i]) === false) return false;
                         }
                       }  
                     }
@@ -352,28 +353,28 @@
         /**
          * setObject() 로 설정한 객체
          * $set 여부 조회
-         * @param {rObj | mObj} p_origin 검색 원본 객체
-         * @param {string | rObj | meta} p_target 검색 대상
+         * @param {object<Guid>} p_origin 검색 원본 객체
+         * @param {string | object<Guid>} p_target 검색 대상
          * @returns {MetaObject}
          */
         MetaRegistry.findSetObject = function(p_origin, p_target) {
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
-            var origin = p_origin ? p_origin : mObj;
+            var origin = p_origin;
 
             // if (!this.isGuidObject(origin)) Message.error('ES024', ['object', 'guid']);
             if (typeof origin !== 'object') Message.error('ES024', ['object', 'object']);
             return findObject(origin);
             
             // inner finction
-            function findObject(mObj) {
+            function findObject(oGuid) {
                 var result;
-                if (typeof mObj === 'object') {
-                    if (mObj['_guid'] && mObj['_guid'] === guid) {
-                        result = mObj['$set'] ? MetaRegistry.find(mObj['$set']) : undefined;
+                if (typeof oGuid === 'object') {
+                    if (oGuid['_guid'] && oGuid['_guid'] === guid) {
+                        result = oGuid['$set'] ? MetaRegistry.find(oGuid['$set']) : undefined;
                         return result;
                     }
-                    for (var prop in mObj) {
-                        var obj = mObj[prop];
+                    for (var prop in oGuid) {
+                        var obj = oGuid[prop];
                         if (typeof obj === 'object' || Array.isArray(obj) ) {
                             result = findObject(obj);
                             if(result) return result;
@@ -389,11 +390,11 @@
          * @param {*} obj 
          * @returns 
          */
-        MetaRegistry.hasRefer = function(obj) {
-            if (typeof obj !== 'object') Message.error('ES024', ['target', 'object']);
-            if (!this.isGuidObject(obj)) Message.error('ES024', ['target', 'guid']);
+        MetaRegistry.hasRefer = function(p_target) {
+            if (typeof p_target !== 'object') Message.error('ES024', ['target', 'object']);
+            if (!this.isGuidObject(p_target)) Message.error('ES024', ['target', 'guid']);
 
-            return hasRefer(obj);
+            return hasRefer(p_target);
 
             // inner function
             function hasRefer(obj) {
@@ -466,10 +467,10 @@
         //       }
     
         // };
-        MetaRegistry.transformRefer = function(rObj) {
+        MetaRegistry.transformRefer = function(p_oGuid) {
             var _this = this;
-            var arrObj = this.__getObjectList(rObj);
-            var clone = Util.deepCopy(rObj);
+            var arrObj = this.__getObjectList(p_oGuid);
+            var clone = Util.deepCopy(p_oGuid);
 
             linkReference(clone, arrObj);
             return clone;
@@ -482,7 +483,7 @@
                         if (obj[prop]['$ns']) {
                             var ns = _this.getClass(obj[prop]['$ns']);
                             if (typeof ns !== 'function') Message.error('ES015', ['$ns', obj[prop]['$ns']]);
-                            obj[prop] = ns;
+                            obj[prop] = ns; // function 타입 연결
                         } else linkReference(obj[prop], arr);
                     } else if (Array.isArray(obj[prop])){
                         for(var i = 0; i < obj[prop].length; i++) {
@@ -496,60 +497,60 @@
         /**
          * 클래스(함수) 등록
          * key 를 별도 등록안하면 ns 를 fullName 으로 처리
-         * @param {*} fun 
+         * @param {*} p_fun 
          * @param {*} p_ns fullname 또는 메임스페이스 
-         * @param {*} key 
+         * @param {*} p_key 
          * @returns 
          */
-        MetaRegistry.registerClass = function(fun, p_ns, key) {
+        MetaRegistry.registerClass = function(p_fun, p_ns, p_key) {
             var fullName;
             
-            if (key) fullName = p_ns.length > 0 ? p_ns +'.'+ key : key;
+            if (p_key) fullName = p_ns.length > 0 ? p_ns +'.'+ p_key : p_key;
             else fullName = p_ns;
 
             // 내장함수 제외
-            if (_isBuiltFunction(fun)) return;
+            if (_isBuiltFunction(p_fun)) return;
             if (typeof _global[fullName] === 'function') return;
             // 중복 검사 
-            // if (!this.ns.get(fullName)) this.ns.set(p_ns, key, fun);
-            if (!this.ns.find(fullName)) this.ns.register(fullName, fun);
+            // if (!this.ns.get(fullName)) this.ns.set(p_ns, p_key, p_fun);
+            if (!this.ns.find(fullName)) this.ns.register(fullName, p_fun);
         };
         
         /**
          * 클래스(함수) 해제
-         * @param {*} fullName 
+         * @param {*} p_fullName 
          * @returns 
          */
-        MetaRegistry.releaseClass = function(fullName) {
+        MetaRegistry.releaseClass = function(p_fullName) {
             // 내장함수 & 전역 함수
-            if (typeof _global[fullName] === 'function') return true;
+            if (typeof _global[p_fullName] === 'function') return true;
 
-            return this.ns.release(fullName);
+            return this.ns.release(p_fullName);
         };
         
         /**
          * 클래스(함수) 조회
-         * @param {*} fun 
+         * @param {*} p_fun 
          * @returns 
          */
-        MetaRegistry.findClass = function(fun) {
-            var fullName = fun.name;
+        MetaRegistry.findClass = function(p_fun) {
+            var fullName = p_fun.name;
             // 내장함수 & 전역 함수
             if (typeof _global[fullName] === 'function') return fullName;
 
-            return this.ns.getPath(fun);
+            return this.ns.getPath(p_fun);
         };
         
         /**
          * 클래스(함수) 얻기
-         * @param {*} fullName 
+         * @param {*} p_fullName 
          * @returns 
          */
-        MetaRegistry.getClass = function(fullName) {
+        MetaRegistry.getClass = function(p_fullName) {
             // 내장함수 & 전역 함수
-            if (typeof _global[fullName] === 'function') return _global[fullName];
+            if (typeof _global[p_fullName] === 'function') return _global[p_fullName];
 
-            return this.ns.find(fullName);
+            return this.ns.find(p_fullName);
         };
 
         /**
@@ -559,7 +560,7 @@
          */
         MetaRegistry.loadMetaObject = function(p_str, p_parse) {
             var obj = p_str;
-            var mObj;
+            var oGuid;
             var meta;
 
             if (typeof p_str !== 'string') Message.error('ES021', ['str', 'string']);
@@ -570,10 +571,10 @@
             if (this.has(obj)) return this.find(obj['_guid']);
 
             if (this.isGuidObject(obj)) {
-                mObj = this.hasRefer(obj) ? this.transformRefer(obj) : p_str;
+                oGuid = this.hasRefer(obj) ? this.transformRefer(obj) : p_str;
                 
-                meta = this.createMetaObject(mObj);
-                meta.setObject(mObj);
+                meta = this.createMetaObject(oGuid);
+                meta.setObject(oGuid);
                 return meta;
             } else Message.error('ES022', ['obj']);
         };

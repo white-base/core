@@ -124,10 +124,10 @@
          * @virtual
          * @returns {object}
          */
-        TransactionCollection.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
+        TransactionCollection.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
             this._transQueue.init();
-            if (mObj.autoChanges) this.autoChanges = mObj.autoChanges;
+            if (p_oGuid.autoChanges) this.autoChanges = p_oGuid.autoChanges;
         };
 
         TransactionCollection.prototype.removeAt = function(p_pos) {

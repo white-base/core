@@ -55,8 +55,8 @@
          * 객체 얻기
          * @returns {Object}
          */
-        IMarshal.prototype.getObject = function(p_vOpt) {
-            Message.error('ES013', ['getObject(): object']);
+        IMarshal.prototype.getObject = function() {
+            Message.error('ES013', ['getObject(p_vOpt): object']);
         };
 
         /**

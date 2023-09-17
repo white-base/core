@@ -165,31 +165,31 @@
          * @virtual
          * @returns {object}
          */
-        PropertyCollection.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
-            var origin = oObj ? oObj : mObj;
+        PropertyCollection.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
+            var origin = p_origin ? p_origin : p_oGuid;
 
-            if (mObj._key.length !== mObj._elem.length) Message.error('ES063', ['_elem', '_key']);
+            if (p_oGuid._key.length !== p_oGuid._elem.length) Message.error('ES063', ['_elem', '_key']);
             
-            if (Array.isArray(mObj._desc) && mObj._desc.length > 0) {
-                if (mObj._elem.length !== mObj._desc.length) Message.error('ES063', ['_elem', '_desc']);
-                for (var i = 0; i < mObj._desc.length; i++) {
-                    this._descriptors.push(mObj._desc[i]);
+            if (Array.isArray(p_oGuid._desc) && p_oGuid._desc.length > 0) {
+                if (p_oGuid._elem.length !== p_oGuid._desc.length) Message.error('ES063', ['_elem', '_desc']);
+                for (var i = 0; i < p_oGuid._desc.length; i++) {
+                    this._descriptors.push(p_oGuid._desc[i]);
                 }
             }
 
             this._keys.length = 0;
-            for(var i = 0; i < mObj._key.length; i++) {
-                var key = mObj._key[i];
+            for(var i = 0; i < p_oGuid._key.length; i++) {
+                var key = p_oGuid._key[i];
                 this._keys.push(key);
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
                 Object.defineProperty(this, key, this._getPropDescriptor(i));
             }
 
-            for(var i = 0; i < mObj._elem.length; i++) {
-                var elem = mObj._elem[i];
+            for(var i = 0; i < p_oGuid._elem.length; i++) {
+                var elem = p_oGuid._elem[i];
                 if (MetaRegistry.isGuidObject(elem)) {
-                    var obj = MetaRegistry.createMetaObject(elem, oObj);
+                    var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
                     this._elements.push(obj);
                 

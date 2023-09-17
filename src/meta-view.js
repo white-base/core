@@ -178,27 +178,27 @@
          * @virtual
          * @returns {object}
          */
-        MetaView.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
+        MetaView.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
-            var origin = oObj ? oObj : mObj;
+            var origin = p_origin ? p_origin : p_oGuid;
             var metaSet;
             var baseEntity;
 
-            if(mObj._metaSet) {
-                metaSet = MetaRegistry.findSetObject(origin, mObj._metaSet.$ref);
-                if (!metaSet) Message.error('ES015', [mObj.name, '_metaSet']);
+            if(p_oGuid._metaSet) {
+                metaSet = MetaRegistry.findSetObject(origin, p_oGuid._metaSet.$ref);
+                if (!metaSet) Message.error('ES015', [p_oGuid.name, '_metaSet']);
                 this._metaSet = metaSet;
             }
             // this.metaSet = mObj.metaSet;
-            if (mObj._baseEntity) {
-                baseEntity = MetaRegistry.findSetObject(origin, mObj._baseEntity.$ref);
-                if (!baseEntity) Message.error('ES015', [mObj.name, '_baseEntity']);
+            if (p_oGuid._baseEntity) {
+                baseEntity = MetaRegistry.findSetObject(origin, p_oGuid._baseEntity.$ref);
+                if (!baseEntity) Message.error('ES015', [p_oGuid.name, '_baseEntity']);
                 this.__SET$_baseEntity(baseEntity, this);
             } 
-            this.columns.setObject(mObj.columns, origin);
-            this.rows.setObject(mObj.rows, origin);
-            this.viewName = mObj.viewName;
+            this.columns.setObject(p_oGuid.columns, origin);
+            this.rows.setObject(p_oGuid.rows, origin);
+            this.viewName = p_oGuid.viewName;
         };
 
         /**
@@ -320,7 +320,7 @@
 
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.
-         * @param {string | MetaView} p_object 
+         * @param {string | MetaView} p_obj 
          * @param {MetaColumnCollection?} p_baseEntity
          * @returns {MetaView} 등록한 아이템
          * @example
@@ -329,26 +329,26 @@
          *  - entityView                :         entityView  이름으로 등록
          *  - entityView, collection    :         entityView  이름으로 등록 (collection보냄) => 오류발생
          */
-        MetaViewCollection.prototype.add  = function(p_object, p_baseEntity) {    // COVER:
+        MetaViewCollection.prototype.add  = function(p_obj, p_baseEntity) {    // COVER:
             var i_value;
             var i_name;
 
             if (p_baseEntity && !(p_baseEntity instanceof MetaEntity)) {
                 Message.error('ES032', ['baseEntity', 'MetaEntity']);
             }
-            if (p_object instanceof MetaView && p_baseEntity) {
+            if (p_obj instanceof MetaView && p_baseEntity) {
                 Message.error('ES016', ['baseEntity', 'MetaView']);
             }
 
-            if (typeof p_object === 'string') {      
-                i_name  = p_object;
+            if (typeof p_obj === 'string') {      
+                i_name  = p_obj;
                 i_value = new this._baseType(i_name, p_baseEntity);
                 i_value._metaSet = this._owner;
-            } else if (p_object instanceof MetaView) {
+            } else if (p_obj instanceof MetaView) {
                 if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
-                i_name  = p_object.viewName;
-                i_value = p_object;
-                p_object._metaSet = this._owner;
+                i_name  = p_obj.viewName;
+                i_value = p_obj;
+                p_obj._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaView object']);
 
             if (typeof i_name === 'undefined') Message.error('ES051', ['viewName']);

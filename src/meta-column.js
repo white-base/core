@@ -520,33 +520,33 @@
          * @virtual
          * @returns {object}
          */
-        MetaColumn.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
+        MetaColumn.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
-            var origin = oObj ? oObj : mObj;
+            var origin = p_origin ? p_origin : p_oGuid;
             var entity;
 
             // POINT:
             // 
 
-            if (mObj.__subscribers) {
-                this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
+            if (p_oGuid.__subscribers) {
+                this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             }
-            if (mObj._entity) {
-                entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
-                if (!entity) Message.error('ES015', [mObj.name, '_entity']);
+            if (p_oGuid._entity) {
+                entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
+                if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
                 this._entity = entity;
             } 
-            if (mObj.columnName) this.columnName = mObj.columnName;
-            if (mObj.default) this.default = mObj.default;
-            if (mObj.caption) this.caption = mObj.caption;
-            if (mObj.isNotNull) this.isNotNull = mObj.isNotNull;
-            if (mObj.isNullPass) this.isNullPass = mObj.isNullPass;
-            if (mObj.constraints) this.constraints = mObj.constraints;
-            if (mObj.getter) this.getter = mObj.getter;
-            if (mObj.setter) this.setter = mObj.setter;
-            if (mObj.alias) this.alias = mObj.alias;
-            if (mObj.value) this.value = mObj.value;
+            if (p_oGuid.columnName) this.columnName = p_oGuid.columnName;
+            if (p_oGuid.default) this.default = p_oGuid.default;
+            if (p_oGuid.caption) this.caption = p_oGuid.caption;
+            if (p_oGuid.isNotNull) this.isNotNull = p_oGuid.isNotNull;
+            if (p_oGuid.isNullPass) this.isNullPass = p_oGuid.isNullPass;
+            if (p_oGuid.constraints) this.constraints = p_oGuid.constraints;
+            if (p_oGuid.getter) this.getter = p_oGuid.getter;
+            if (p_oGuid.setter) this.setter = p_oGuid.setter;
+            if (p_oGuid.alias) this.alias = p_oGuid.alias;
+            if (p_oGuid.value) this.value = p_oGuid.value;
         };
 
         /**
@@ -603,7 +603,7 @@
          * @param {number} p_option 1. isNotNull 참조 | 2: null검사 진행   |  3: null검사 무시
          */
         // MetaColumn.prototype.valid = function(p_value, result, p_option) {
-        MetaColumn.prototype.valid = function(p_value, result) {
+        MetaColumn.prototype.valid = function(p_value) {
             // p_option = p_option || 1;   
             var result = {};
             var match;
@@ -847,20 +847,20 @@
 
         /**
          * 테이블컬렉션에 아이템을 추가한다.
-         * @param {string | MetaColumn} p_object 
+         * @param {string | MetaColumn} p_any 
          * @returns {MetaColumn} 등록한 아이템
          */
-        MetaTableColumnCollection.prototype.add  = function(p_object) {
+        MetaTableColumnCollection.prototype.add  = function(p_any) {
             var i_value;
             var i_name;
 
-            if (typeof p_object === 'string') {      
-                i_name  = p_object;
+            if (typeof p_any === 'string') {      
+                i_name  = p_any;
                 i_value = new this._baseType(i_name, this._owner);
-            } else if (p_object instanceof this._baseType) {
+            } else if (p_any instanceof this._baseType) {
                 // MetaTable 직접만 적용(참조형 아이템 소유 못함)
-                i_name  = p_object.columnName;
-                i_value = p_object.clone();
+                i_name  = p_any.columnName;
+                i_value = p_any.clone();
                 i_value._entity = this._owner;
             } else {
                 Message.error('ES022', ['object']);
@@ -985,11 +985,12 @@
             return obj;                  
         };
 
-        MetaViewColumnCollection.prototype.setObject = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
+        MetaViewColumnCollection.prototype.setObject = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
-            var origin = oObj ? oObj : mObj;
-            var baseCollection, obj;
+            var origin = p_origin ? p_origin : p_oGuid;
+            var obj;
+            // var baseCollection
 
             // if (mObj._baseCollection) {
             //     baseCollection = MetaRegistry.findSetObject(origin, mObj._baseCollection.$ref);
@@ -997,10 +998,10 @@
             //     this.__SET$_baseCollection(baseCollection, this);
             //     // this._baseCollection = baseCollection;
             // }
-            if (Array.isArray(mObj) && mObj._refEntities.length > 0) {
-                for (var i = 0; i < mObj._refEntities.length; i++) {
-                    obj = MetaRegistry.findSetObject(origin, mObj._refEntities[i].$ref);
-                    if (!obj) Message.error('ES015', [mObj.name, '_refEntities']);    
+            if (Array.isArray(p_oGuid) && p_oGuid._refEntities.length > 0) {
+                for (var i = 0; i < p_oGuid._refEntities.length; i++) {
+                    obj = MetaRegistry.findSetObject(origin, p_oGuid._refEntities[i].$ref);
+                    if (!obj) Message.error('ES015', [p_oGuid.name, '_refEntities']);    
                     this._refEntities.push(obj);
                 }
             }
@@ -1009,7 +1010,7 @@
 
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.
-         * @param {String | MetaColumn} p_object 
+         * @param {String | MetaColumn} p_any 
          * @param {?MetaColumnCollection?} p_refCollection
          * @example
          *  - base(all),    string | Itme, Collection   => Collection 에 생성후 자신에 등록 
@@ -1023,7 +1024,7 @@
          *   // string, collection           => 참조만 등록
          *   // string, collection <base>    => 참조만 등록
          */
-        MetaViewColumnCollection.prototype.add  = function(p_object, p_refCollection) {
+        MetaViewColumnCollection.prototype.add  = function(p_any, p_refCollection) {
             var collection;
             var i_name;
             var i_value;
@@ -1032,19 +1033,19 @@
             if (p_refCollection && !(p_refCollection instanceof MetaColumnCollection)) {
                 Message.error('ES032', ['refCollection', 'MetaColumnCollection']);
             }
-            if (p_object instanceof MetaColumn && p_refCollection) {
+            if (p_any instanceof MetaColumn && p_refCollection) {
                 Message.error('ES016', ['MetaColumn', 'refCollection']);
             }
 
-            if (p_object instanceof MetaColumn) {
+            if (p_any instanceof MetaColumn) {
                 // 아이템 소유자 설정
-                if (p_object._entity === null) p_object._entity = this._owner;
-                i_name = p_object.columnName;
-                i_value = p_object;
-            } else if (typeof p_object === 'string') {
-                i_name = p_object;
+                if (p_any._entity === null) p_any._entity = this._owner;
+                i_name = p_any.columnName;
+                i_value = p_any;
+            } else if (typeof p_any === 'string') {
+                i_name = p_any;
                 i_value = new this._baseType(i_name, this._owner);
-            } else Message.error('ES022', ['object '+ typeof p_object]);
+            } else Message.error('ES022', ['object '+ typeof p_any]);
             
 
             // baseCollection & refCollection 의 경우
@@ -1059,7 +1060,7 @@
                 if (collection.contains(collection[i_name])) {          // 기존에 존재하는지
                     i_value = collection[i_name];                       // 참조 가져옴
                 } else {                                                
-                    collection.add(p_object);                           // 컬렉션에 등록 
+                    collection.add(p_any);                           // 컬렉션에 등록 
                     i_value = collection[i_name];
                 }
                 // 소유객체에 참조 등록 (중복제거됨), 의존성을 낮추기 위해서 검사후 등록

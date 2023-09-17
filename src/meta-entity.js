@@ -145,35 +145,35 @@ const { ISerialize } = require('./i-serialize');
         MetaEntity._ABSCRACT = true;
 
         // 3가지 타입 입력
-        MetaEntity._transformObject  = function(mObj) {
+        MetaEntity._transformObject  = function(p_oGuid) {
             var obj  = {
                 columns: null,
                 rows: null
             };
 
-            if (mObj['columns'] || mObj['rows']) obj = mObj;
+            if (p_oGuid['columns'] || p_oGuid['rows']) obj = p_oGuid;
             return transformEntity(obj);
 
             // inner function
-            function transformEntity(mObj) {
+            function transformEntity(oGuid) {
                 var obj = {};
-                if (mObj['name']) obj['name'] = mObj['name'];
-                if (mObj['_guid']) obj['_guid'] = mObj['_guid'];
-                if (mObj['_baseEntity']) obj['_baseEntity'] = mObj['_baseEntity'];
-                if (mObj['columns']) obj['columns'] = transformColumn(mObj['columns'], mObj);
-                if (mObj['rows']) obj['rows'] = transformRow(mObj['rows'], mObj);
+                if (oGuid['name']) obj['name'] = oGuid['name'];
+                if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
+                if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
+                if (oGuid['columns']) obj['columns'] = transformColumn(oGuid['columns'], oGuid);
+                if (oGuid['rows']) obj['rows'] = transformRow(oGuid['rows'], oGuid);
                 return obj;
             }
-            function transformColumn(mObj, mEntity) {
+            function transformColumn(oGuid) {
                 var obj = {};
                 
-                // if (mObj['$ref']) {
-                //     obj['$ref'] = mObj['$ref'];
+                // if (oGuid['$ref']) {
+                //     obj['$ref'] = oGuid['$ref'];
                 //     return obj;
                 // }
-                for (var i = 0; i < mObj['_elem'].length; i++) {
-                    var column = mObj['_elem'][i];
-                    var key = mObj['_key'][i] || column.name;
+                for (var i = 0; i < oGuid['_elem'].length; i++) {
+                    var column = oGuid['_elem'][i];
+                    var key = oGuid['_key'][i] || column.name;
                     
                     obj[key] = {};
 
@@ -196,13 +196,13 @@ const { ISerialize } = require('./i-serialize');
                     }
 
                 }
-                obj['$key'] = mObj['_key'];
+                obj['$key'] = oGuid['_key'];
                 return obj;
             }
-            function transformRow(mObj) {
+            function transformRow(oGuid) {
                 var arr = [];
-                for (var i = 0; i < mObj['_elem'].length; i++) {
-                    var rows = mObj['_elem'][i];
+                for (var i = 0; i < oGuid['_elem'].length; i++) {
+                    var rows = oGuid['_elem'][i];
                     var obj = {};
                     for (var ii = 0; ii < rows['_elem'].length; ii++) {
                         var row = rows['_elem'][ii];
@@ -255,7 +255,7 @@ const { ISerialize } = require('./i-serialize');
             }
         };
 
-        MetaEntity.prototype._buildEntity = function(entity, p_callback, p_items) {
+        MetaEntity.prototype._buildEntity = function(p_entity, p_callback, p_items) {
             var orignal = this.clone();
             var columnName;
 
@@ -266,7 +266,7 @@ const { ISerialize } = require('./i-serialize');
                 for (var i = 0; i < this.columns.count; i++) {
                     // columnName = this.columns[i].name;
                     // entity.columns.add(columnName);  // 참조로 등록
-                    entity.columns.add(this.columns[i]);
+                    p_entity.columns.add(this.columns[i]);
                 }
             } else {
                 for (var i = 0; i < p_items.length; i++) {
@@ -275,32 +275,96 @@ const { ISerialize } = require('./i-serialize');
                     // if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
                     // entity.columns.add(columnName);  // 참조로 등록
                     if (!this.columns.exist(columnName)) Message.error('ES053', ['items', 'column']);
-                    entity.columns.add(this.columns[i]);
+                    p_entity.columns.add(this.columns[i]);
                 }
             }
 
             // row 등록
             for (var i = 0; i < orignal.rows.count; i++) {
-                if (!p_callback || (typeof p_callback === 'function' && p_callback.call(this, orignal.rows[i], i, entity))) {
-                    entity.rows.add(createRow(orignal.rows[i]));
+                if (!p_callback || (typeof p_callback === 'function' && p_callback.call(this, orignal.rows[i], i, p_entity))) {
+                    p_entity.rows.add(createRow(orignal.rows[i]));
                 } 
             }
-            return entity;
+            return p_entity;
 
             // inner function
-            function createRow(p_row) {
+            function createRow(row) {
                 var alias, newRow;
 
-                newRow = entity.newRow();
-                for (var ii = 0; ii < entity.columns.count; ii++) {
-                    alias = entity.columns[ii].alias;
+                newRow = p_entity.newRow();
+                for (var ii = 0; ii < p_entity.columns.count; ii++) {
+                    alias = p_entity.columns[ii].alias;
                     if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
-                    newRow[alias] = p_row[alias];
+                    newRow[alias] = row[alias];
                 }
                 return newRow;
             }
         };
 
+        MetaEntity.prototype._readSchema  = function(p_obj, p_createRow, p_origin) {
+            var _this = this;
+            var obj = p_obj;
+            var columns;
+            var rows;
+            var Column = this.columns._baseType;
+            var origin = p_origin ? p_origin : p_obj;
+
+            columns = obj['columns'];
+            if (columns) {
+                // 키 추출방식 2가지
+                if (columns['$key'] && Array.isArray(columns['$key'])) {
+                    for (var i = 0; i < columns['$key'].length; i++) {
+                        addColumn(columns['$key'][i], columns);
+                    }
+                } else {
+                    for (var key in columns) {
+                        addColumn(key, columns);
+                    }
+                }
+                function addColumn(key, columns) {
+                    var column;
+                    if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
+                        if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
+                        var prop = columns[key];
+                        var obj = {};
+                        if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
+                            obj['_entity'] = MetaRegistry.find(prop['_entity']);
+                        }
+                        for (var p in prop) {
+                            obj[p] = prop[p];
+                        }
+                        
+                        // POINT:
+                        if (typeof prop === 'object' && prop['$ref']) {
+                            column = MetaRegistry.findSetObject(origin, prop['$ref']);
+                            if (!column) Message.error('ES015', [key, 'column']);
+                        } else column = new Column(key, _this, obj);
+                        MetaRegistry.createSetObject(prop, column); 
+                        // column = new Column(key, _this, obj);
+
+                        if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
+                        _this.columns.add(column);
+                    }
+                }
+            }
+
+            // opt
+            if (p_createRow === true) {
+                rows = obj['rows'];
+                if (Array.isArray(rows) && rows.length > 0)
+                for (var key in rows[0]) {    // rows[0] 기준
+                    if (Object.hasOwnProperty.call(rows[0], key)) {
+                        var prop = rows[0][key];
+                        if (!this.columns.exist(key)) {
+                            var column = new Column(key, this);
+                            this.columns.add(column);
+                        }
+                    }
+                }
+            }
+        
+        };
+        
         /**
          * 메타 객체를 얻는다
          * @virtual
@@ -650,11 +714,11 @@ const { ISerialize } = require('./i-serialize');
             // 기존에 존재하면 기존 객체 리턴
             // if (MetaRegistry.has(obj)) return MetaRegistry.findSetObject(obj);
             
-            if (MetaRegistry.isGuidObject(obj)) {
-                mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
-                this.setObject(mObj);
-            } else 
-            Message.error('ES022', ['obj']);
+            this.setObject(obj);
+            // if (MetaRegistry.isGuidObject(obj)) {
+            //     mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
+            //     this.setObject(mObj);
+            // } else Message.error('ES022', ['obj']);
         };
 
         
@@ -683,7 +747,7 @@ const { ISerialize } = require('./i-serialize');
          * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
          * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
          */
-        MetaEntity.prototype.read  = function(p_obj, p_option, p_origin) {
+        MetaEntity.prototype.read  = function(p_obj, p_option) {
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
@@ -733,69 +797,7 @@ const { ISerialize } = require('./i-serialize');
         };
         
 
-        MetaEntity.prototype._readSchema  = function(p_obj, p_createRow, p_origin) {
-            var _this = this;
-            var obj = p_obj;
-            var columns;
-            var rows;
-            var Column = this.columns._baseType;
-            var origin = p_origin ? p_origin : p_obj;
-
-            columns = obj['columns'];
-            if (columns) {
-                // 키 추출방식 2가지
-                if (columns['$key'] && Array.isArray(columns['$key'])) {
-                    for (var i = 0; i < columns['$key'].length; i++) {
-                        addColumn(columns['$key'][i], columns);
-                    }
-                } else {
-                    for (var key in columns) {
-                        addColumn(key, columns);
-                    }
-                }
-                function addColumn(key, columns) {
-                    var column;
-                    if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
-                        if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
-                        var prop = columns[key];
-                        var obj = {};
-                        if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
-                            obj['_entity'] = MetaRegistry.find(prop['_entity']);
-                        }
-                        for (var p in prop) {
-                            obj[p] = prop[p];
-                        }
-                        
-                        // POINT:
-                        if (typeof prop === 'object' && prop['$ref']) {
-                            column = MetaRegistry.findSetObject(origin, prop['$ref']);
-                            if (!column) Message.error('ES015', [key, 'column']);
-                        } else column = new Column(key, _this, obj);
-                        MetaRegistry.createSetObject(prop, column); 
-                        // column = new Column(key, _this, obj);
-
-                        if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
-                        _this.columns.add(column);
-                    }
-                }
-            }
-
-            // opt
-            if (p_createRow === true) {
-                rows = obj['rows'];
-                if (Array.isArray(rows) && rows.length > 0)
-                for (var key in rows[0]) {    // rows[0] 기준
-                    if (Object.hasOwnProperty.call(rows[0], key)) {
-                        var prop = rows[0][key];
-                        if (!this.columns.exist(key)) {
-                            var column = new Column(key, this);
-                            this.columns.add(column);
-                        }
-                    }
-                }
-            }
         
-        };
 
         /**
          * 존재하는 로우만 가져온다.

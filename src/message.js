@@ -468,33 +468,33 @@
         });
 
         // local function
-        function getCodeObject(p_code){
+        function getCodeObject(code){
             var MSG = __STORAGE[lang];
             var div, part, num;
 
-            if (typeof p_code !== 'string') return;
+            if (typeof code !== 'string') return;
             
-            div = p_code.substring(0, 1);
-            part = p_code.substring(1, 4);
-            num = p_code.substring(4, p_code.length);
+            div = code.substring(0, 1);
+            part = code.substring(1, 4);
+            num = code.substring(4, code.length);
             if (!MSG[div] || !MSG[div] || !MSG[div][part]) return;
 
             return MSG[div][part][num];
         }
         
 
-        function buildMessage(p_code, p_arr) {
-            var obj = getCodeObject(p_code);
+        function buildMessage(code, arr) {
+            var obj = getCodeObject(code);
             var msg, long;
 
-            if (typeof obj !== 'object') return _intro(p_code) + 'There are no messages about the code.' 
+            if (typeof obj !== 'object') return _intro(code) + 'There are no messages about the code.' 
             
             msg = _build(obj.msg);
             if (isLong) {
                 long = _build(obj.long);
                 if (long.length > 0) msg += '\n' + long;
             }
-            return   _intro(p_code) + msg;
+            return   _intro(code) + msg;
 
             // inner function
             function _build(p_msg) {
@@ -512,18 +512,18 @@
                 }, 0);
                     
                 for (var i = 1; i <= max; i++) {
-                    var val = p_arr[i -1];
+                    var val = arr[i -1];
                     msg = msg.replace('$'+ i, val);
                 }
                 return msg;
             }
-            function _intro(p_code) {
-                var div = p_code.substring(0, 1);
+            function _intro(code) {
+                var div = code.substring(0, 1);
                 var intro;
-                if (div === 'E') intro = '[Err:'+p_code+'] ';
-                else if (div === 'W') intro = '[Warn:'+p_code+'] ';
-                else if (div === 'I') intro = '[Info:'+p_code+'] ';
-                else intro = '['+p_code+'] ';
+                if (div === 'E') intro = '[Err:'+code+'] ';
+                else if (div === 'W') intro = '[Warn:'+code+'] ';
+                else if (div === 'I') intro = '[Info:'+code+'] ';
+                else intro = '['+code+'] ';
                 return intro;
             }
         }

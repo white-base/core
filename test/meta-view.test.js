@@ -410,11 +410,6 @@ describe("[target: meta-view.js]", () => {
                 const v2 = new MetaView('VV2');
                 const v3 = new MetaView('VV3');
                 v1.readSchema(gObj1);
-                
-                // const tObj1 = MetaEntity._transformObject(gObj1)
-                // const tObj2 = MetaEntity._transformObject(gObj2)
-                // const tObj3 = MetaEntity._transformObject(gObj3)
-                // POINT: gObj 스키마 변형 해야함
 
                 expect(v1.viewName).toBe('VV1');    // 기존유지
                 expect(v1.columns.count).toBe(3);
@@ -423,6 +418,8 @@ describe("[target: meta-view.js]", () => {
                 expect(v1.columns['c3']._entity === v1).toBe(true);
                 expect(()=> v2.readSchema(gObj2)).toThrow('ES015')
                 expect(()=> v3.readSchema(gObj3)).toThrow('ES015')
+            });
+            it("- readSchema() : getObject()로 읽기 ", () => {
             });
         });
         describe("MetaEntity.readSchema() <데이터 읽기>", () => {

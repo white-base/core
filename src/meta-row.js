@@ -299,30 +299,30 @@
          * @virtual
          * @returns {object}
          */
-        MetaRow.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
+        MetaRow.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
-            var origin = oObj ? oObj : mObj;
+            var origin = p_origin ? p_origin : p_oGuid;
             var entity;
             
-            if (mObj._elem.length !== mObj._key.length) Message.error('ES063', ['_elem', '_key']);
+            if (p_oGuid._elem.length !== p_oGuid._key.length) Message.error('ES063', ['_elem', '_key']);
 
             this.init();
             
-            if (mObj.__subscribers) {
-                this.__event.__SET$__subscribers(mObj.__subscribers, this.__event);
+            if (p_oGuid.__subscribers) {
+                this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             }
-            // this._entity = mObj._entity;
-            if (mObj._entity) {
-                entity = MetaRegistry.findSetObject(origin, mObj._entity.$ref);
-                if (!entity) Message.error('ES015', [mObj.name, '_entity']);
+            // this._entity = p_oGuid._entity;
+            if (p_oGuid._entity) {
+                entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
+                if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
                 this._entity = entity;
             } 
-            for(var i = 0; i < mObj._elem.length; i++) {
-                var elem = mObj._elem[i];
+            for(var i = 0; i < p_oGuid._elem.length; i++) {
+                var elem = p_oGuid._elem[i];
                 if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem, origin);
                 else this._elements[i] = elem;
-                this._keys[i] = mObj._key[i];
+                this._keys[i] = p_oGuid._key[i];
             }
         };
 

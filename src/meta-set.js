@@ -153,41 +153,41 @@
         MetaSet._PARAMS = ['name'];  // creator parameter
 
         // 3가지 타입 입력
-        MetaSet._transformObject  = function(mObj) {
+        MetaSet._transformObject  = function(p_oGuid) {
             var obj  = {
                 tables: null,
                 views: null
             };
 
-            if (mObj['tables'] || mObj['views']) obj = mObj;
+            if (p_oGuid['tables'] || p_oGuid['views']) obj = p_oGuid;
             return transformSet(obj);
 
             // inner function
-            function transformSet(mObj) {
+            function transformSet(p_oGuid) {
                 var obj = {};
-                if (mObj['name']) obj['name'] = mObj['name'];
-                if (mObj['tables']) obj['tables'] = transformTable(mObj['tables']);
-                if (mObj['views']) obj['views'] = transformView(mObj['views']);
+                if (p_oGuid['name']) obj['name'] = p_oGuid['name'];
+                if (p_oGuid['tables']) obj['tables'] = transformTable(p_oGuid['tables']);
+                if (p_oGuid['views']) obj['views'] = transformView(p_oGuid['views']);
                 return obj;
             }
-            function transformTable(mObj) {
+            function transformTable(p_oGuid) {
                 var obj = {};
-                for (var i = 0; i < mObj['_elem'].length; i++) {
-                    var table = mObj['_elem'][i];
-                    var key = mObj['_key'][i] || table.name;
+                for (var i = 0; i < p_oGuid['_elem'].length; i++) {
+                    var table = p_oGuid['_elem'][i];
+                    var key = p_oGuid['_key'][i] || table.name;
                     obj[key] = MetaEntity._transformObject(table);
                 }
-                obj['$key'] = mObj['_key'];
+                obj['$key'] = p_oGuid['_key'];
                 return obj;
             }
-            function transformView(mObj) {
+            function transformView(p_oGuid) {
                 var obj = {};
-                for (var i = 0; i < mObj['_elem'].length; i++) {
-                    var view = mObj['_elem'][i];
-                    var key = mObj['_key'][i] || view.name;
+                for (var i = 0; i < p_oGuid['_elem'].length; i++) {
+                    var view = p_oGuid['_elem'][i];
+                    var key = p_oGuid['_key'][i] || view.name;
                     obj[key] = MetaEntity._transformObject(view);
                 }
-                obj['$key'] = mObj['_key'];
+                obj['$key'] = p_oGuid['_key'];
                 return obj;
             }
         };
@@ -234,13 +234,13 @@
          * @virtual
          * @returns {object}
          */
-        MetaSet.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
-            var origin = oObj ? oObj : mObj;
+        MetaSet.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
+            var origin = p_origin ? p_origin : p_oGuid;
             
-            this.setName = mObj.setName;
-            this.tables.setObject(mObj.tables, origin);
-            this.views.setObject(mObj.views, origin);
+            this.setName = p_oGuid.setName;
+            this.tables.setObject(p_oGuid.tables, origin);
+            this.views.setObject(p_oGuid.views, origin);
         };
 
         MetaSet.prototype.clone  = function() {
@@ -277,10 +277,11 @@
                 else obj = JSON.parse(obj, null);
             }
 
-            if (MetaRegistry.isGuidObject(obj)) {
-                mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
-                this.setObject(mObj);
-            } else Message.error('ES022', ['obj']);
+            this.setObject(obj);
+            // if (MetaRegistry.isGuidObject(obj)) {
+            //     mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
+            //     this.setObject(mObj);
+            // } else Message.error('ES022', ['obj']);
         };
 
         MetaSet.prototype.output = function(p_stringify, p_space, p_vOpt) {

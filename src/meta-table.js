@@ -136,20 +136,20 @@
          * @virtual
          * @returns {object}
          */
-        MetaTable.prototype.setObject  = function(mObj, oObj) {
-            _super.prototype.setObject.call(this, mObj, oObj);
+        MetaTable.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
-            var origin = oObj ? oObj : mObj;
+            var origin = p_origin ? p_origin : p_oGuid;
             var metaSet;
 
-            if(mObj._metaSet) {
-                metaSet = MetaRegistry.findSetObject(origin, mObj._metaSet.$ref);
-                if (!metaSet) Message.error('ES015', [mObj.name, 'metaSet']);
+            if(p_oGuid._metaSet) {
+                metaSet = MetaRegistry.findSetObject(origin, p_oGuid._metaSet.$ref);
+                if (!metaSet) Message.error('ES015', [p_oGuid.name, 'metaSet']);
                 this._metaSet = metaSet;
             }
-            this.columns.setObject(mObj.columns, origin);
-            this.rows.setObject(mObj.rows, origin);
-            this.tableName = mObj.tableName;
+            this.columns.setObject(p_oGuid.columns, origin);
+            this.rows.setObject(p_oGuid.rows, origin);
+            this.tableName = p_oGuid.tableName;
         };
 
         /**
@@ -280,21 +280,21 @@
 
         /**
          * 테이블 컬렉션에 엔티티 추가한다.
-         * @param {String | MetaColumn} p_object 
+         * @param {String | MetaColumn} p_any 
          * @returns {MetaColumn} 등록한 아이템
          */
-        MetaTableCollection.prototype.add  = function(p_object) { // COVER:
+        MetaTableCollection.prototype.add  = function(p_any) { // COVER:
             var i_value;
             var i_name;
 
-            if (typeof p_object === 'string') {      
-                i_name  = p_object;
+            if (typeof p_any === 'string') {      
+                i_name  = p_any;
                 i_value = new MetaTable(i_name);
                 i_value._metaSet = this._owner;
-            } else if (p_object instanceof MetaTable) {
-                i_name  = p_object.tableName;
-                i_value = p_object;
-                p_object._metaSet = this._owner;
+            } else if (p_any instanceof MetaTable) {
+                i_name  = p_any.tableName;
+                i_value = p_any;
+                p_any._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaTable object']);
 
             if (typeof i_name === 'undefined') Message.error('ES051', ['tableName']);
