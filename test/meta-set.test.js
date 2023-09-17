@@ -689,6 +689,27 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views['V1'].rows.count).toBe(1);
                 expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
             });
+            it("- getObect(0) vs getObject(1) 읽기 비교 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const set1 = new MetaSet('S1')
+                set1.views.add(view1)
+                set1.views.add(view2)
+                set1.views.add(view3)
+                const s1 = new MetaSet('S1');
+                const ss1 = new MetaSet('S1');
+                s1.read(set1.getObject(0));
+                ss1.read(set1.getObject(1));
+                
+                
+                // s1.equal(ss1) 와 동일
+                expect(s1.equal(ss1)).toBe(true);
+                expect(s1.getObject(2)).toEqual(ss1.getObject(2));
+            });
         });
         
         describe("MetaSet.readSchema() <스키마 가져오기>", () => {

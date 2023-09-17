@@ -64,7 +64,7 @@
             var __event = new Observer(this, this);
             var _owner = p_owner || null;
             var _elements = [];
-            var _descriptors = [];
+            var _descriptors = [];  // TODO: add 시점에 configurable: false 이면 경고 문구! 삭제 안됨
             var _KEYWORD = [];
             var _elemTypes  = []; 
 

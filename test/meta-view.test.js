@@ -379,19 +379,32 @@ describe("[target: meta-view.js]", () => {
             });
         });
         describe("MetaEntity.read() <읽기>", () => {
-            it("- read() :  ", () => {
-                // TODO:  MetaTable과 중복됨!!
-                // 참조도 가능하게
+            it("- getObect(0) vs getObject(1) 읽기 비교 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
                 const view2 = new MetaView('V2',view1); // 전체 참조
                 view2.columns.add('c2');
                 const view3 = new MetaView('V3');
                 view3.columns.add('c3', view2.columns); // 일부 참조
-                const c1 = view1.columns['c1'];
-                const c2 = view2.columns['c2'];
-                const c3 = view3.columns['c3'];
+                const v1 = new MetaView('V1')
+                const v2 = new MetaView('V2')
+                const v3 = new MetaView('V3')
+                const vv1 = new MetaView('V1')
+                const vv2 = new MetaView('V2')
+                const vv3 = new MetaView('V3')
+                v1.read(view1.getObject(0));
+                // REVIEW 참조가 연결되어 로딩 안됨
+                // v2.read(view2.getObject(0));
+                // v3.read(view3.getObject(0));
+                vv1.read(view1.getObject(1));
+                // vv2.read(view2.getObject(1));
+                // vv3.read(view3.getObject(1));
+                
+                expect(v1.getObject(2)).toEqual(vv1.getObject(2));
+                // expect(v2.getObject()).toEqual(vv2);
+                // expect(v3.getObject()).toEqual(vv3);
             });
+            // 빈곳이 아닌곳에 read 할 경우
         });
         describe("MetaEntity.readSchema() <스카마 읽기>", () => {
             it("- readSchema() : getObject()로 읽기 ", () => {

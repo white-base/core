@@ -788,6 +788,7 @@ const { ISerialize } = require('./i-serialize');
                 else obj = p_obj;
                 obj = MetaEntity._transformSchema(obj); // gObj >> sObj<요약>
             }
+            // obj = MetaEntity._transformSchema(p_obj); // gObj >> sObj<요약>
 
             // table <-> view 서로 호환됨
             // if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
@@ -812,6 +813,7 @@ const { ISerialize } = require('./i-serialize');
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 obj = MetaEntity._transformSchema(p_obj);
             }
+            // obj = MetaEntity._transformSchema(p_obj);
 
             // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasRefer(p_obj)) {
             //     p_obj = MetaRegistry.transformRefer(p_obj);
@@ -877,7 +879,6 @@ const { ISerialize } = require('./i-serialize');
         //         obj.columns[key] = cObj;
         //     }
 
-        //     // TODO: 요소이름에서 _key 제외해야 함
         //     obj.columns['$key'] = [];
         //     for (var i = 0; i < this.columns['_keys'].length; i++) {
         //         var key = this.columns['_keys'][i];

@@ -299,7 +299,7 @@
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
             if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
 
-            if (p_obj instanceof MetaEntity) {
+            if (p_obj instanceof MetaSet) {
                 if (p_obj.setName && p_obj.setName.length > 0) this.setName = p_obj.setName;
                 for (var i = 0; i < this.tables.count; i++) {
                     this.tables[i]._readEntity(p_obj, p_opt);
@@ -454,7 +454,6 @@
             return MetaSet._transformSchema(oGuid);
         };
 
-        // TODO: 참조 존재시 오류 또는 "경고"
         // MetaSet.prototype.writeSchema  = function(p_vOpt) {
         //     var vOpt = p_vOpt || 0;
         //     var obj = { tables: {}, views: {} };
@@ -465,7 +464,6 @@
         //         var key = this.tables._keys[i];
         //         obj.tables[key] = table.writeSchema(vOpt);
         //     }
-        //     // TODO: 요소이름에서 _key 제외해야 함
         //     obj.tables['$key'] = [];
         //     for (var i = 0; i < this.tables['_keys'].length; i++) {
         //         var key = this.tables['_keys'][i];
@@ -477,7 +475,6 @@
         //         var key = this.views._keys[i];
         //         obj.views[key] = view.writeSchema(vOpt);
         //     }
-        //     // TODO: 요소이름에서 _key 제외해야 함
         //     obj.views['$key'] = [];
         //     for (var i = 0; i < this.views['_keys'].length; i++) {
         //         var key = this.views['_keys'][i];
