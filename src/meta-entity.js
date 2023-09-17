@@ -145,7 +145,7 @@ const { ISerialize } = require('./i-serialize');
         MetaEntity._ABSCRACT = true;
 
         // 3가지 타입 입력
-        MetaEntity._transformObject  = function(p_oGuid) {
+        MetaEntity._transformSchema  = function(p_oGuid) {
             var obj  = {
                 columns: null,
                 rows: null
@@ -786,7 +786,7 @@ const { ISerialize } = require('./i-serialize');
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 else obj = p_obj;
-                obj = MetaEntity._transformObject(obj); // gObj >> sObj<요약>
+                obj = MetaEntity._transformSchema(obj); // gObj >> sObj<요약>
             }
 
             // table <-> view 서로 호환됨
@@ -811,7 +811,7 @@ const { ISerialize } = require('./i-serialize');
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = MetaEntity._transformObject(p_obj);
+                obj = MetaEntity._transformSchema(p_obj);
             }
 
             // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasRefer(p_obj)) {
@@ -832,14 +832,16 @@ const { ISerialize } = require('./i-serialize');
             }
         };
 
-        MetaEntity.prototype.write  = function() {
-            var obj = this.writeSchema();
+        MetaEntity.prototype.write  = function(p_vOpt) {
+            var vOpt = p_vOpt || 0;
+            var obj = this.writeSchema(vOpt);
             
-            obj.rows = this.writeData().rows;
+            obj.rows = this.writeData(vOpt).rows;
             return obj;
         };
 
-        MetaEntity.prototype.writeSchema  = function() {
+        MetaEntity.prototype.writeSchema  = function(p_vOpt) {
+            var vOpt = p_vOpt || 0;
             var obj = { columns: {}, rows: [] };
 
             obj._guid = this._guid;
@@ -852,7 +854,7 @@ const { ISerialize } = require('./i-serialize');
                 var column = this.columns[i];
                 var key = this.columns.keyOf(i);
                 var cObj = {};
-                var rObj = column.getObject();
+                var rObj = column.getObject(p_vOpt);
 
                 cObj._guid = column._guid;
                 if (rObj.cloumnName) cObj.cloumnName = column.columnName;
@@ -877,7 +879,8 @@ const { ISerialize } = require('./i-serialize');
             return obj;
         };
 
-        MetaEntity.prototype.writeData  = function() {
+        MetaEntity.prototype.writeData  = function(p_vOpt) {
+            var vOpt = p_vOpt || 0;
             var obj = { rows: [] };
             
             for(var i = 0; i < this.rows.count; i++) {

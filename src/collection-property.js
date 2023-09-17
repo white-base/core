@@ -198,6 +198,7 @@
                     var meta = MetaRegistry.findSetObject(origin, elem.$ref);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this._elements.push(meta);
+                    
                 } else this._elements.push(elem);
             }
         };

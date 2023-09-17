@@ -153,7 +153,7 @@
         MetaSet._PARAMS = ['name'];  // creator parameter
 
         // 3가지 타입 입력
-        MetaSet._transformObject  = function(p_oGuid) {
+        MetaSet._transformSchema  = function(p_oGuid) {
             var obj  = {
                 tables: null,
                 views: null
@@ -175,7 +175,7 @@
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var table = p_oGuid['_elem'][i];
                     var key = p_oGuid['_key'][i] || table.name;
-                    obj[key] = MetaEntity._transformObject(table);
+                    obj[key] = MetaEntity._transformSchema(table);
                 }
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
@@ -185,7 +185,7 @@
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var view = p_oGuid['_elem'][i];
                     var key = p_oGuid['_key'][i] || view.name;
-                    obj[key] = MetaEntity._transformObject(view);
+                    obj[key] = MetaEntity._transformSchema(view);
                 }
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
@@ -327,7 +327,7 @@
 
             if (MetaRegistry.isGuidObject(metaSet)) {
                 if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
-                obj = MetaSet._transformObject(metaSet);
+                obj = MetaSet._transformSchema(metaSet);
             } else obj = metaSet;
 
 
@@ -387,7 +387,7 @@
 
             if (MetaRegistry.isGuidObject(metaSet)) {
                 if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
-                obj = MetaSet._transformObject(metaSet);
+                obj = MetaSet._transformSchema(metaSet);
             } else obj = metaSet;
 
             // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
@@ -404,7 +404,8 @@
             }
         };
 
-        MetaSet.prototype.write  = function() {
+        MetaSet.prototype.write  = function(p_vOpt) {
+            var vOpt = p_vOpt || 0;
             var obj = { tables: {}, views: {} };
             var schema;
             var data;
@@ -417,7 +418,7 @@
             //     tObj.rows = table.writeData().rows;
             //     obj.tables[key] = tObj;
             // }
-            schema = this.writeSchema();
+            schema = this.writeSchema(vOpt);
             obj.tables = schema.tables;
             obj.views = schema.views;
 
@@ -434,26 +435,27 @@
             for(var i = 0; i < this.tables.count; i++) {
                 var table = this.tables[i];
                 var key = this.tables._keys[i];
-                obj.tables[key].rows = table.writeData().rows;
+                obj.tables[key].rows = table.writeData(vOpt).rows;
             }
             for(var i = 0; i < this.views.count; i++) {
                 var views = this.views[i];
                 var key = this.views._keys[i];
-                obj.views[key].rows = views.writeData().rows;
+                obj.views[key].rows = views.writeData(vOpt).rows;
             }
 
             return obj;
         };
         
         // TODO: 참조 존재시 오류 또는 "경고"
-        MetaSet.prototype.writeSchema  = function() {
+        MetaSet.prototype.writeSchema  = function(p_vOpt) {
+            var vOpt = p_vOpt || 0;
             var obj = { tables: {}, views: {} };
 
             obj.setName = this.setName;
             for(var i = 0; i < this.tables.count; i++) {
                 var table = this.tables[i];
                 var key = this.tables._keys[i];
-                obj.tables[key] = table.writeSchema();
+                obj.tables[key] = table.writeSchema(vOpt);
             }
             // TODO: 요소이름에서 _key 제외해야 함
             obj.tables['$key'] = [];
@@ -465,7 +467,7 @@
             for(var i = 0; i < this.views.count; i++) {
                 var view = this.views[i];
                 var key = this.views._keys[i];
-                obj.views[key] = view.writeSchema();
+                obj.views[key] = view.writeSchema(vOpt);
             }
             // TODO: 요소이름에서 _key 제외해야 함
             obj.views['$key'] = [];
@@ -476,19 +478,20 @@
             return obj;
         };
 
-        MetaSet.prototype.writeData  = function() {
+        MetaSet.prototype.writeData  = function(p_vOpt) {
+            var vOpt = p_vOpt || 0;
             var obj = { tables: {}, views: {} };
 
             obj.setName = this.setName;
             for(var i = 0; i < this.tables.count; i++) {
                 var table = this.tables[i];
                 var key = this.tables._keys[i];
-                obj.tables[key] = table.writeData();
+                obj.tables[key] = table.writeData(vOpt);
             }
             for(var i = 0; i < this.views.count; i++) {
                 var view = this.views[i];
                 var key = this.views._keys[i];
-                obj.views[key] = view.writeData();
+                obj.views[key] = view.writeData(vOpt);
             }
             return obj;
         };
