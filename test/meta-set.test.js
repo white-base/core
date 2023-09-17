@@ -553,11 +553,12 @@ describe("[target: meta-set.js]", () => {
                 set2.load(str, parse);
                 const json3 = set2.write();
                 const json2 = { 
-                    setName: 'S1',
+                    name: 'S1',
                     tables: {
                         $key: ['T1'],
                         T1: {
                             _guid: set2.tables.T1._guid,
+                            // name: 'T1',
                             columns: {
                                 $key: ['i1', 'i2'],
                                 i1: { 
@@ -578,6 +579,7 @@ describe("[target: meta-set.js]", () => {
                         $key: ['V1'],
                         V1: {
                             _guid: set2.views.V1._guid,
+                            // name: 'V1',
                             columns: {
                                 $key: ['i1'],
                                 i1: { 
@@ -850,11 +852,12 @@ describe("[target: meta-set.js]", () => {
                 };
                 set1.read(json1);
                 const json2 = {
-                    setName: 'S1',
+                    name: 'S1',
                     tables: {
                         $key: ['T1'],
                         T1: {
                             _guid: set1.tables.T1._guid,
+                            // name: 'T1',
                             columns: {
                                 $key: ['i1', 'i2'],
                                 i1: { 
@@ -873,6 +876,7 @@ describe("[target: meta-set.js]", () => {
                         $key: ['V1'],
                         V1: {
                             _guid: set1.views.V1._guid,
+                            // name: 'V1',
                             columns: {
                                 $key: ['i1'],
                                 i1: { 
@@ -920,16 +924,20 @@ describe("[target: meta-set.js]", () => {
                     },
                 };
                 const json2 = {
-                    setName: 'S1',
+                    name: 'S1',
                     tables: {
+                        $key: ['T1'],
                         T1: {
+                            columns: {},
                             rows: [
                                 { i1: 'R1', i2: 'R2' },
                             ]
                         },
                     },
                     views: {
+                        $key: ['V1'],
                         V1: {
+                            columns: {},
                             rows: [
                                 { i1: 'R1' },
                             ]
@@ -937,7 +945,7 @@ describe("[target: meta-set.js]", () => {
                     },
                 }
                 set1.read(json1);
-                const obj = set1.writeData();
+                const obj = set1.writeData(2);
 
                 expect(obj).toEqual(json2); 
             });
@@ -971,7 +979,7 @@ describe("[target: meta-set.js]", () => {
                 set1.read(json1);
                 const obj = set1.write();
                 const json2 = { 
-                    setName: 'S1',
+                    name: 'S1',
                     tables: {
                         $key: ['T1'],
                         T1: {

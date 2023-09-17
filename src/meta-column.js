@@ -501,7 +501,9 @@
                 obj.__subscribers = this.__event.__subscribers;
             }
             // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
-            if (vOpt > -2 && this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
+            if (vOpt < 2 && vOpt > -1 && this._entity) {
+                obj._entity = MetaRegistry.createReferObject(this._entity);
+            }
             obj.columnName = this.columnName;
             if (this.default !== null) obj.default = this.default;
             if (this.caption !== null) obj.caption = this.caption;            
@@ -965,21 +967,24 @@
             var vOpt = p_vOpt || 0;
 
             // if (this._baseCollection) obj._baseCollection = MetaRegistry.createReferObject(this._baseCollection);
-            if (vOpt > -2 && this._refEntities.length > 0) {
+            if (vOpt < 2 && vOpt > -1 && this._refEntities.length > 0) {
                 obj._refEntities = [];
                 for (var i = 0; i < this._refEntities.length; i++) {
                     obj._refEntities.push(MetaRegistry.createReferObject(this._refEntities[i]));
                 }
             }
-            // 참조로 바꿈
-            for (var i = 0; i < obj._elem.length; i++) {
-                var elem = obj._elem[i];
-                if (MetaRegistry.isGuidObject(elem)) {
-                    // POINT:
-                    if (vOpt > -2 && elem._entity && elem._entity['$ref'] !== this._owner._guid) {
-                        var rObj = MetaRegistry.createReferObject(elem); // 소유자가 아니면 참조 리턴
-                        obj._elem[i] = rObj;
-                    }
+            
+            if (vOpt <= 0) {
+                // 참조로 바꿈
+                for (var i = 0; i < obj._elem.length; i++) {
+                    var elem = obj._elem[i];
+                    // if (MetaRegistry.isGuidObject(elem)) {
+                        // POINT:
+                        if (vOpt < 2 && vOpt > -1 && elem._entity && elem._entity['$ref'] !== this._owner._guid) {
+                            var rObj = MetaRegistry.createReferObject(elem); // 소유자가 아니면 참조 리턴
+                            obj._elem[i] = rObj;
+                        }
+                    // }
                 }
             }
             return obj;                  

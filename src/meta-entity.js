@@ -157,7 +157,7 @@ const { ISerialize } = require('./i-serialize');
             // inner function
             function transformEntity(oGuid) {
                 var obj = {};
-                if (oGuid['name']) obj['name'] = oGuid['name'];
+                // if (oGuid['name']) obj['name'] = oGuid['name'];
                 if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
                 if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
                 if (oGuid['columns']) obj['columns'] = transformColumn(oGuid['columns'], oGuid);
@@ -375,7 +375,7 @@ const { ISerialize } = require('./i-serialize');
             var vOpt = p_vOpt || 0;
             var _metaSet;
 
-            if (vOpt > -2 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
+            if (vOpt < 2 && vOpt > -1 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
             obj.columns = this.columns.getObject(p_vOpt);
             obj.rows = this.rows.getObject(p_vOpt);
             return obj;                        
@@ -795,7 +795,6 @@ const { ISerialize } = require('./i-serialize');
             
             this._readSchema(obj, p_createRow);
         };
-        
 
         
 
@@ -832,68 +831,93 @@ const { ISerialize } = require('./i-serialize');
             }
         };
 
+        // MetaEntity.prototype.write  = function(p_vOpt) {
+        //     var vOpt = p_vOpt || 0;
+        //     var obj = this.writeSchema(vOpt);
+            
+        //     obj.rows = this.writeData(vOpt).rows;
+        //     return obj;
+        // };
+        // POINT:
         MetaEntity.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var obj = this.writeSchema(vOpt);
-            
-            obj.rows = this.writeData(vOpt).rows;
-            return obj;
+            var oSch;
+            var oGuid = this.getObject(p_vOpt);
+
+            return MetaEntity._transformSchema(oGuid);
         };
 
+        // MetaEntity.prototype.writeSchema  = function(p_vOpt) {
+        //     var vOpt = p_vOpt || 0;
+        //     var obj = { columns: {}, rows: [] };
+
+        //     obj._guid = this._guid;
+        //     if(this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity); 
+
+        //     // if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
+        //     // if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
+
+        //     for(var i = 0; i < this.columns.count; i++) {
+        //         var column = this.columns[i];
+        //         var key = this.columns.keyOf(i);
+        //         var cObj = {};
+        //         var rObj = column.getObject(p_vOpt);
+
+        //         cObj._guid = column._guid;
+        //         if (rObj.cloumnName) cObj.cloumnName = column.columnName;
+        //         if (rObj.default) cObj.default = rObj.default;
+        //         if (rObj.caption) cObj.caption = rObj.caption;
+        //         if (rObj.isNotNull) cObj.isNotNull = rObj.isNotNull;
+        //         if (rObj.constraints) cObj.constraints = rObj.constraints;
+        //         if (rObj.getter) cObj.getter = rObj.getter;
+        //         if (rObj.setter) cObj.setter = rObj.setter;
+        //         if (rObj.alias) cObj.alias = rObj.alias;
+        //         if (rObj.value) cObj.alias = rObj.value;
+                
+        //         obj.columns[key] = cObj;
+        //     }
+
+        //     // TODO: 요소이름에서 _key 제외해야 함
+        //     obj.columns['$key'] = [];
+        //     for (var i = 0; i < this.columns['_keys'].length; i++) {
+        //         var key = this.columns['_keys'][i];
+        //         obj.columns['$key'].push(key);
+        //     }
+        //     return obj;
+        // };
+        // POINT:
         MetaEntity.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var obj = { columns: {}, rows: [] };
-
-            obj._guid = this._guid;
-            if(this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity); 
-
-            // if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
-            // if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
-
-            for(var i = 0; i < this.columns.count; i++) {
-                var column = this.columns[i];
-                var key = this.columns.keyOf(i);
-                var cObj = {};
-                var rObj = column.getObject(p_vOpt);
-
-                cObj._guid = column._guid;
-                if (rObj.cloumnName) cObj.cloumnName = column.columnName;
-                if (rObj.default) cObj.default = rObj.default;
-                if (rObj.caption) cObj.caption = rObj.caption;
-                if (rObj.isNotNull) cObj.isNotNull = rObj.isNotNull;
-                if (rObj.constraints) cObj.constraints = rObj.constraints;
-                if (rObj.getter) cObj.getter = rObj.getter;
-                if (rObj.setter) cObj.setter = rObj.setter;
-                if (rObj.alias) cObj.alias = rObj.alias;
-                if (rObj.value) cObj.alias = rObj.value;
-                
-                obj.columns[key] = cObj;
-            }
-
-            // TODO: 요소이름에서 _key 제외해야 함
-            obj.columns['$key'] = [];
-            for (var i = 0; i < this.columns['_keys'].length; i++) {
-                var key = this.columns['_keys'][i];
-                obj.columns['$key'].push(key);
-            }
-            return obj;
+            
+            var schema = this.write(vOpt);
+            schema.rows = [];
+            return schema;
+            
         };
 
+        // MetaEntity.prototype.writeData  = function(p_vOpt) {
+        //     var vOpt = p_vOpt || 0;
+        //     var obj = { rows: [] };
+            
+        //     for(var i = 0; i < this.rows.count; i++) {
+        //         var row = this.rows[i];
+        //         var rObj = {};
+        //         for(var ii = 0; ii < row.list.length; ii++) {
+        //             var rValue = row.list[ii];
+        //             var rKey = row['_keys'][ii];
+        //             rObj[rKey] = rValue;
+        //         }
+        //         obj.rows.push(rObj);
+        //     }
+        //     return obj;
+        // };
+        // POINT:
         MetaEntity.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var obj = { rows: [] };
+            var schema = this.write(vOpt);
             
-            for(var i = 0; i < this.rows.count; i++) {
-                var row = this.rows[i];
-                var rObj = {};
-                for(var ii = 0; ii < row.list.length; ii++) {
-                    var rValue = row.list[ii];
-                    var rKey = row['_keys'][ii];
-                    rObj[rKey] = rValue;
-                }
-                obj.rows.push(rObj);
-            }
-            return obj;
+            schema.columns = {};
+            return schema;
         };
 
         /** @abstract */

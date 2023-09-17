@@ -278,7 +278,9 @@
             if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
                 obj.__subscribers = this.__event.__subscribers;
             }
-            if (vOpt > -2 && this._entity) obj._entity = MetaRegistry.createReferObject(this._entity);
+            if (vOpt < 2 && vOpt > -1 && this._entity) {
+                obj._entity = MetaRegistry.createReferObject(this._entity);
+            }
             obj._elem = [];
             for (var i = 0; i < this.list.length; i++) {
                 var elem = this.list[i];

@@ -116,8 +116,8 @@
             if (p_obj1 === p_obj2) return true;
 
             if (p_obj1 instanceof MetaObject && p_obj2 instanceof MetaObject) {
-                var obj1 = p_obj1.getObject(-2);    // _guid, $ref 제외 객체
-                var obj2 = p_obj2.getObject(-2);
+                var obj1 = p_obj1.getObject(2);    // _guid, $ref 제외 객체
+                var obj2 = p_obj2.getObject(2);
                 return Util.deepEqual(obj1, obj2);
             } else if (typeof p_obj1 === 'object' && p_obj1 !== null) {
                 return Util.deepEqual(p_obj1, p_obj2);
@@ -211,7 +211,7 @@
             var obj = {};
             var vOpt = p_vOpt || 0;
 
-            if (vOpt > -1) obj._guid = this._guid;
+            if (vOpt < 2 && vOpt > -1) obj._guid = this._guid;
             obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
             return obj;                        
         };

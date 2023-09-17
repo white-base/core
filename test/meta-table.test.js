@@ -1199,6 +1199,7 @@ describe("[target: meta-table.js]", () => {
                 table1.read(json1, 3);
                 const json2 = {
                     _guid: table1._guid,
+                    // name: 'T1',
                     columns: {
                         $key: ['i1', 'i2'],
                         i1: { 
@@ -1212,7 +1213,7 @@ describe("[target: meta-table.js]", () => {
                     },
                     rows: []
                 }
-                const obj = table1.writeSchema();
+                const obj = table1.writeSchema(1);
 
                 expect(obj).toEqual(json2);
             });
@@ -1231,13 +1232,15 @@ describe("[target: meta-table.js]", () => {
                     ]
                 };
                 const json2 = {
+                    // name: 'T1',
+                    columns: {},
                     rows: [
                         { i1: 'R1', i2: 'R2' },
                         { i1: 'R10', i2: 'R20' },
                     ]
                 }
                 table1.read(json1, 3);
-                const obj = table1.writeData();
+                const obj = table1.writeData(2);
 
                 expect(obj).toEqual(json2);
             });

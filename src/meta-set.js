@@ -404,96 +404,132 @@
             }
         };
 
+        // MetaSet.prototype.write  = function(p_vOpt) {
+        //     var vOpt = p_vOpt || 0;
+        //     var obj = { tables: {}, views: {} };
+        //     var schema;
+        //     var data;
+
+        //     obj.setName = this.setName;
+        //     // for(var i = 0; i < this.tables.count; i++) {
+        //     //     var table = this.tables[i];
+        //     //     var key = this.tables._keys[i];
+        //     //     var tObj = table.writeSchema();
+        //     //     tObj.rows = table.writeData().rows;
+        //     //     obj.tables[key] = tObj;
+        //     // }
+        //     schema = this.writeSchema(vOpt);
+        //     obj.tables = schema.tables;
+        //     obj.views = schema.views;
+
+        //     // obj.tables['_key'] = tObj['_key'];
+
+        //     // for(var i = 0; i < this.views.count; i++) {
+        //     //     var view = this.views[i];
+        //     //     var key = this.views._keys[i];
+        //     //     var vObj = view.writeSchema();
+        //     //     vObj.rows = view.writeData().rows;
+        //     //     obj.views[key] = vObj;
+        //     // }
+
+        //     for(var i = 0; i < this.tables.count; i++) {
+        //         var table = this.tables[i];
+        //         var key = this.tables._keys[i];
+        //         obj.tables[key].rows = table.writeData(vOpt).rows;
+        //     }
+        //     for(var i = 0; i < this.views.count; i++) {
+        //         var views = this.views[i];
+        //         var key = this.views._keys[i];
+        //         obj.views[key].rows = views.writeData(vOpt).rows;
+        //     }
+
+        //     return obj;
+        // };
+        // POINT:
         MetaSet.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var obj = { tables: {}, views: {} };
-            var schema;
-            var data;
+            var oSch;
+            var oGuid = this.getObject(p_vOpt);
 
-            obj.setName = this.setName;
-            // for(var i = 0; i < this.tables.count; i++) {
-            //     var table = this.tables[i];
-            //     var key = this.tables._keys[i];
-            //     var tObj = table.writeSchema();
-            //     tObj.rows = table.writeData().rows;
-            //     obj.tables[key] = tObj;
-            // }
-            schema = this.writeSchema(vOpt);
-            obj.tables = schema.tables;
-            obj.views = schema.views;
-
-            // obj.tables['_key'] = tObj['_key'];
-
-            // for(var i = 0; i < this.views.count; i++) {
-            //     var view = this.views[i];
-            //     var key = this.views._keys[i];
-            //     var vObj = view.writeSchema();
-            //     vObj.rows = view.writeData().rows;
-            //     obj.views[key] = vObj;
-            // }
-
-            for(var i = 0; i < this.tables.count; i++) {
-                var table = this.tables[i];
-                var key = this.tables._keys[i];
-                obj.tables[key].rows = table.writeData(vOpt).rows;
-            }
-            for(var i = 0; i < this.views.count; i++) {
-                var views = this.views[i];
-                var key = this.views._keys[i];
-                obj.views[key].rows = views.writeData(vOpt).rows;
-            }
-
-            return obj;
+            return MetaSet._transformSchema(oGuid);
         };
-        
+
         // TODO: 참조 존재시 오류 또는 "경고"
+        // MetaSet.prototype.writeSchema  = function(p_vOpt) {
+        //     var vOpt = p_vOpt || 0;
+        //     var obj = { tables: {}, views: {} };
+
+        //     obj.setName = this.setName;
+        //     for(var i = 0; i < this.tables.count; i++) {
+        //         var table = this.tables[i];
+        //         var key = this.tables._keys[i];
+        //         obj.tables[key] = table.writeSchema(vOpt);
+        //     }
+        //     // TODO: 요소이름에서 _key 제외해야 함
+        //     obj.tables['$key'] = [];
+        //     for (var i = 0; i < this.tables['_keys'].length; i++) {
+        //         var key = this.tables['_keys'][i];
+        //         obj.tables['$key'].push(key);
+        //     }
+
+        //     for(var i = 0; i < this.views.count; i++) {
+        //         var view = this.views[i];
+        //         var key = this.views._keys[i];
+        //         obj.views[key] = view.writeSchema(vOpt);
+        //     }
+        //     // TODO: 요소이름에서 _key 제외해야 함
+        //     obj.views['$key'] = [];
+        //     for (var i = 0; i < this.views['_keys'].length; i++) {
+        //         var key = this.views['_keys'][i];
+        //         obj.views['$key'].push(key);
+        //     }
+        //     return obj;
+        // };
+        // POINT:
         MetaSet.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var obj = { tables: {}, views: {} };
-
-            obj.setName = this.setName;
-            for(var i = 0; i < this.tables.count; i++) {
-                var table = this.tables[i];
-                var key = this.tables._keys[i];
-                obj.tables[key] = table.writeSchema(vOpt);
+            var schema = this.write(vOpt);
+            
+            for (var prop in schema.tables) {
+                if (prop.indexOf('$') < 0) schema.tables[prop].rows = [];
             }
-            // TODO: 요소이름에서 _key 제외해야 함
-            obj.tables['$key'] = [];
-            for (var i = 0; i < this.tables['_keys'].length; i++) {
-                var key = this.tables['_keys'][i];
-                obj.tables['$key'].push(key);
+            for (var prop in schema.views) {
+                if (prop.indexOf('$') < 0) schema.views[prop].rows = [];
             }
-
-            for(var i = 0; i < this.views.count; i++) {
-                var view = this.views[i];
-                var key = this.views._keys[i];
-                obj.views[key] = view.writeSchema(vOpt);
-            }
-            // TODO: 요소이름에서 _key 제외해야 함
-            obj.views['$key'] = [];
-            for (var i = 0; i < this.views['_keys'].length; i++) {
-                var key = this.views['_keys'][i];
-                obj.views['$key'].push(key);
-            }
-            return obj;
+            return schema;
+            
         };
 
+        // MetaSet.prototype.writeData  = function(p_vOpt) {
+        //     var vOpt = p_vOpt || 0;
+        //     var obj = { tables: {}, views: {} };
+
+        //     obj.setName = this.setName;
+        //     for(var i = 0; i < this.tables.count; i++) {
+        //         var table = this.tables[i];
+        //         var key = this.tables._keys[i];
+        //         obj.tables[key] = table.writeData(vOpt);
+        //     }
+        //     for(var i = 0; i < this.views.count; i++) {
+        //         var view = this.views[i];
+        //         var key = this.views._keys[i];
+        //         obj.views[key] = view.writeData(vOpt);
+        //     }
+        //     return obj;
+        // };
+        // POINT:
         MetaSet.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var obj = { tables: {}, views: {} };
+            var schema = this.write(vOpt);
 
-            obj.setName = this.setName;
-            for(var i = 0; i < this.tables.count; i++) {
-                var table = this.tables[i];
-                var key = this.tables._keys[i];
-                obj.tables[key] = table.writeData(vOpt);
+            for (var prop in schema.tables) {
+                if (prop.indexOf('$') < 0) schema.tables[prop].columns = {};
             }
-            for(var i = 0; i < this.views.count; i++) {
-                var view = this.views[i];
-                var key = this.views._keys[i];
-                obj.views[key] = view.writeData(vOpt);
+            for (var prop in schema.views) {
+                if (prop.indexOf('$') < 0) schema.views[prop].columns = {};
             }
-            return obj;
+            // schema.columns = {};
+            return schema;
         };
 
         MetaSet.prototype.acceptChanges  = function() {

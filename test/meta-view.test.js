@@ -511,6 +511,461 @@ describe("[target: meta-view.js]", () => {
                 // expect(obj.rows._elem[0]._elem).toEqual(['R2', 'R3']);
                 // expect(obj.rows._elem[0]._key).toEqual(['a2', 'a3']);
             });
+            // 옵션제외됨
+            it.skip("- getObject(-1) : 옵션에 따른 값 비교 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const obj1 = view1.getObject(-1);
+                const obj2 = view2.getObject(-1);
+                const obj3 = view3.getObject(-1);
+                const json1 = {
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V1",
+                    "viewName": "V1",
+                    "columns": {
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": view1._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined,undefined],
+                        "_elem": [
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c1",
+                                "_entity": {"$ref": view1._guid},
+                                "columnName": "c1"
+                            },
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c2",
+                                "_entity": {"$ref": view1._guid},
+                                "columnName": "c2"
+                            },
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "_entity": {"$ref": view1._guid},
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c1","c2","c3"]
+                    },
+                    "rows": {
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":view1._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json2 = {
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V2",
+                    "viewName": "V2",
+                    _baseEntity:  {"$ref": view1._guid},
+                    "columns": {
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": view2._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined],
+                        "_elem": [
+                            {"$ref": view1.columns[1]._guid},
+                            {"$ref": view1.columns[2]._guid}
+                        ],
+                        "_key": ["c2","c3"],
+                        _refEntities: [{"$ref": view1._guid}],
+                    },
+                    "rows": {
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":view2._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json3 = {
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V3",
+                    "viewName": "V3",
+                    "columns": {
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": view3._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined],
+                        "_elem": [
+                            {"$ref": view1.columns[2]._guid}
+                        ],
+                        "_key": ["c3"],
+                        _refEntities: [{"$ref": view2._guid}],
+                    },
+                    "rows": {
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":view3._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                // expect(obj3).toEqual(json3);
+            });
+
+            it("- getObject(0) : 옵션에 따른 값 비교 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const obj1 = view1.getObject();
+                const obj2 = view2.getObject();
+                const obj3 = view3.getObject();
+                const json1 = {
+                    "_guid": obj1._guid,
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V1",
+                    "viewName": "V1",
+                    "columns": {
+                        "_guid": obj1.columns._guid,
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": obj1._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined,undefined],
+                        "_elem": [
+                            {
+                                "_guid": obj1.columns._elem[0]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c1",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c1"
+                            },
+                            {
+                                "_guid": obj1.columns._elem[1]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c2",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c2"
+                            },
+                            {
+                                "_guid": obj1.columns._elem[2]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c1","c2","c3"]
+                    },
+                    "rows": {
+                        "_guid": obj1.rows._guid,
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":obj1._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json2 = {
+                    "_guid": obj2._guid,
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V2",
+                    "viewName": "V2",
+                    _baseEntity:  {"$ref": obj1._guid},
+                    "columns": {
+                        "_guid": obj2.columns._guid,
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": obj2._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined],
+                        "_elem": [
+                            {"$ref": obj1.columns._elem[1]._guid},
+                            {"$ref": obj1.columns._elem[2]._guid}
+                        ],
+                        "_key": ["c2","c3"],
+                        _refEntities: [{"$ref": obj1._guid}],
+                    },
+                    "rows": {
+                        "_guid": obj2.rows._guid,
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":obj2._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json3 = {
+                    "_guid": obj3._guid,
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V3",
+                    "viewName": "V3",
+                    "columns": {
+                        "_guid": obj3.columns._guid,
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": obj3._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined],
+                        "_elem": [
+                            {"$ref": obj1.columns._elem[2]._guid}
+                        ],
+                        "_key": ["c3"],
+                        _refEntities: [{"$ref": obj2._guid}],
+                    },
+                    "rows": {
+                        "_guid": obj3.rows._guid,
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":obj3._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+            });
+            it("- getObject(1) : 옵션에 따른 값 비교 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const obj1 = view1.getObject(1);
+                const obj2 = view2.getObject(1);
+                const obj3 = view3.getObject(1);
+                const json1 = {
+                    "_guid": obj1._guid,
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V1",
+                    "viewName": "V1",
+                    "columns": {
+                        "_guid": obj1.columns._guid,
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": obj1._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined,undefined],
+                        "_elem": [
+                            {
+                                "_guid": obj1.columns._elem[0]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c1",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c1"
+                            },
+                            {
+                                "_guid": obj1.columns._elem[1]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c2",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c2"
+                            },
+                            {
+                                "_guid": obj1.columns._elem[2]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c1","c2","c3"]
+                    },
+                    "rows": {
+                        "_guid": obj1.rows._guid,
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":obj1._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json2 = {
+                    "_guid": obj2._guid,
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V2",
+                    "viewName": "V2",
+                    _baseEntity:  {"$ref": obj1._guid},
+                    "columns": {
+                        "_guid": obj2.columns._guid,
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": obj2._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined],
+                        "_elem": [
+                            {
+                                "_guid": obj1.columns._elem[1]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c2",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c2"
+                            },
+                            {
+                                "_guid": obj1.columns._elem[2]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c2","c3"],
+                        _refEntities: [{"$ref": obj1._guid}],
+                    },
+                    "rows": {
+                        "_guid": obj2.rows._guid,
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":obj2._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json3 = {
+                    "_guid": obj3._guid,
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V3",
+                    "viewName": "V3",
+                    "columns": {
+                        "_guid": obj3.columns._guid,
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_owner": {"$ref": obj3._guid},
+                        "_elemTypes": [],
+                        "_desc": [undefined],
+                        "_elem": [
+                            {
+                                "_guid": obj1.columns._elem[2]._guid,
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "_entity": {"$ref": obj1._guid},
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c3"],
+                        _refEntities: [{"$ref": obj2._guid}],
+                    },
+                    "rows": {
+                        "_guid": obj3.rows._guid,
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_owner": {"$ref":obj3._guid},
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+            });
+            
+            it("- getObject(2) : 옵션에 따른 값 비교 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2',view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const obj1 = view1.getObject(2);
+                const obj2 = view2.getObject(2);
+                const obj3 = view3.getObject(2);
+                const json1 = {
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V1",
+                    "viewName": "V1",
+                    "columns": {
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined,undefined],
+                        "_elem": [
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c1",
+                                "columnName": "c1"
+                            },
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c2",
+                                "columnName": "c2"
+                            },
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c1","c2","c3"]
+                    },
+                    "rows": {
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json2 = {
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V2",
+                    "viewName": "V2",
+                    "columns": {
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_elemTypes": [],
+                        "_desc": [undefined,undefined],
+                        "_elem": [
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c2",
+                                "columnName": "c2"
+                            },
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c2","c3"],
+                    },
+                    "rows": {
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+                const json3 = {
+                    "_type": "Meta.Entity.MetaView",
+                    "name": "V3",
+                    "viewName": "V3",
+                    "columns": {
+                        "_type": "Meta.Entity.MetaViewColumnCollection",
+                        "_elemTypes": [],
+                        "_desc": [undefined],
+                        "_elem": [
+                            {
+                                "_type": "Meta.Entity.MetaColumn",
+                                "name": "c3",
+                                "columnName": "c3"
+                            }
+                        ],
+                        "_key": ["c3"],
+                    },
+                    "rows": {
+                        "_type": "Meta.Entity.MetaRowCollection",
+                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elem": [],
+                        "autoChanges": true
+                    },
+                };
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+            });
+
+
         });
         describe("MetaView.setObject(mObj) <객체 설정>", () => {
             // 외부 참조가 있는것은 setObject() 실패함

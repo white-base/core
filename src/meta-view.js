@@ -169,7 +169,9 @@
             var vOpt = p_vOpt || 0;
 
             obj.viewName = this.viewName;
-            if (vOpt > -2 && this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
+            if (vOpt < 2 && vOpt > -1 && this._baseEntity) {
+                obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
+            }
             return obj;                  
         };
 
