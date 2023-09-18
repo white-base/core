@@ -75,6 +75,7 @@ describe("[target: meta-view.js]", () => {
                 // expect(view1.rows[0]['i1']).toBe('R1');
                 // expect(view1.rows[0]['i2']).toBe('R2');
                 // view2
+                var aa = view2.columns._refEntities
                 expect(view2.columns._refEntities[0]._name).toBe('E1');
                 expect(view2.columns._refEntities[1]._name).toBe('T3');
                 expect(view2.columns['i2'].caption).toBe('C2');
@@ -589,7 +590,7 @@ describe("[target: meta-view.js]", () => {
                             {"$ref": view1.columns[2]._guid}
                         ],
                         "_key": ["c2","c3"],
-                        _refEntities: [{"$ref": view1._guid}],
+                        // _refEntities: [{"$ref": view1._guid}],
                     },
                     "rows": {
                         "_type": "Meta.Entity.MetaRowCollection",
@@ -612,7 +613,7 @@ describe("[target: meta-view.js]", () => {
                             {"$ref": view1.columns[2]._guid}
                         ],
                         "_key": ["c3"],
-                        _refEntities: [{"$ref": view2._guid}],
+                        // _refEntities: [{"$ref": view2._guid}],
                     },
                     "rows": {
                         "_type": "Meta.Entity.MetaRowCollection",
@@ -700,7 +701,7 @@ describe("[target: meta-view.js]", () => {
                             {"$ref": obj1.columns._elem[2]._guid}
                         ],
                         "_key": ["c2","c3"],
-                        _refEntities: [{"$ref": obj1._guid}],
+                        // _refEntities: [{"$ref": obj1._guid}],
                     },
                     "rows": {
                         "_guid": obj2.rows._guid,
@@ -726,7 +727,7 @@ describe("[target: meta-view.js]", () => {
                             {"$ref": obj1.columns._elem[2]._guid}
                         ],
                         "_key": ["c3"],
-                        _refEntities: [{"$ref": obj2._guid}],
+                        // _refEntities: [{"$ref": obj2._guid}],
                     },
                     "rows": {
                         "_guid": obj3.rows._guid,
@@ -826,7 +827,7 @@ describe("[target: meta-view.js]", () => {
                             }
                         ],
                         "_key": ["c2","c3"],
-                        _refEntities: [{"$ref": obj1._guid}],
+                        // _refEntities: [{"$ref": obj1._guid}],
                     },
                     "rows": {
                         "_guid": obj2.rows._guid,
@@ -858,7 +859,7 @@ describe("[target: meta-view.js]", () => {
                             }
                         ],
                         "_key": ["c3"],
-                        _refEntities: [{"$ref": obj2._guid}],
+                        // _refEntities: [{"$ref": obj2._guid}],
                     },
                     "rows": {
                         "_guid": obj3.rows._guid,

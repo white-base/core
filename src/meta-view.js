@@ -215,9 +215,9 @@
             // if (this.columns._baseCollection) {
             //     clone.columns.__SET$_baseCollection(this.columns._baseCollection, clone.columns);
             // }
-            for(var i = 0; i < this.columns._refEntities.length; i++) {
-                clone.columns._refEntities.push(this.columns._refEntities[i]);
-            }
+            // for(var i = 0; i < this.columns._refEntities.length; i++) {
+            //     clone.columns._refEntities.push(this.columns._refEntities[i]);
+            // }
             for(var i = 0; i < this.columns.count; i++) {
                 if (this.columns[i]._entity === this) clone.columns.add(this.columns[i].clone(clone));
                 else clone.columns.add(this.columns[i].clone());

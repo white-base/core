@@ -893,7 +893,7 @@ const { MetaEntity } = require('./meta-entity');
             _super.call(this, p_owner);
 
             // var _baseCollection = p_baseCollection; 
-            var _refEntities = [];
+            // var _refEntities = [];
 
             // if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);
 
@@ -917,7 +917,16 @@ const { MetaEntity } = require('./meta-entity');
 
             Object.defineProperty(this, '_refEntities', 
             {
-                get: function() { return _refEntities; },
+                get: function() { 
+                    var arr = [];
+                    for (var i = 0; i < this.count; i++) {
+                        var column = this[i];
+                        if (this._owner !== column._entity && arr.indexOf(column._entity) < 0) {
+                            arr.push(column._entity);
+                        }
+                    }
+                    return arr; 
+                },
                 configurable: false,
                 enumerable: false
             });
@@ -956,12 +965,12 @@ const { MetaEntity } = require('./meta-entity');
          * 뷰 엔티티에 참조를 등록한다. (중복 제거후)
          * @param {MetaEntity} p_entity 
          */
-        MetaViewColumnCollection.prototype._registerRefer  = function(p_entity) {
-            if(!(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
-                Message.error('ES032', ['entity', 'MetaEntity']);
-            }
-            if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
-        };
+        // MetaViewColumnCollection.prototype._registerRefer  = function(p_entity) {
+        //     if(!(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
+        //         Message.error('ES032', ['entity', 'MetaEntity']);
+        //     }
+        //     if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
+        // };
         
 
         MetaViewColumnCollection.prototype.getObject = function(p_vOpt) {
@@ -969,12 +978,12 @@ const { MetaEntity } = require('./meta-entity');
             var vOpt = p_vOpt || 0;
 
             // if (this._baseCollection) obj._baseCollection = MetaRegistry.createReferObject(this._baseCollection);
-            if (vOpt < 2 && vOpt > -1 && this._refEntities.length > 0) {
-                obj._refEntities = [];
-                for (var i = 0; i < this._refEntities.length; i++) {
-                    obj._refEntities.push(MetaRegistry.createReferObject(this._refEntities[i]));
-                }
-            }
+            // if (vOpt < 2 && vOpt > -1 && this._refEntities.length > 0) {
+            //     obj._refEntities = [];
+            //     for (var i = 0; i < this._refEntities.length; i++) {
+            //         obj._refEntities.push(MetaRegistry.createReferObject(this._refEntities[i]));
+            //     }
+            // }
             
             if (vOpt <= 0) {
                 // 참조로 바꿈
@@ -992,28 +1001,28 @@ const { MetaEntity } = require('./meta-entity');
             return obj;                  
         };
 
-        MetaViewColumnCollection.prototype.setObject = function(p_oGuid, p_origin) {
-            _super.prototype.setObject.call(this, p_oGuid, p_origin);
+        // MetaViewColumnCollection.prototype.setObject = function(p_oGuid, p_origin) {
+        //     _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
-            var origin = p_origin ? p_origin : p_oGuid;
-            var obj;
-            // var baseCollection
+        //     var origin = p_origin ? p_origin : p_oGuid;
+        //     var obj;
+        //     // var baseCollection
 
-            // if (mObj._baseCollection) {
-            //     baseCollection = MetaRegistry.findSetObject(origin, mObj._baseCollection.$ref);
-            //     if (!baseCollection) Message.error('ES015', [mObj.name, '_baseCollection']);
-            //     this.__SET$_baseCollection(baseCollection, this);
-            //     // this._baseCollection = baseCollection;
-            // }
-            if (Array.isArray(p_oGuid) && p_oGuid._refEntities.length > 0) {
-                for (var i = 0; i < p_oGuid._refEntities.length; i++) {
-                    obj = MetaRegistry.findSetObject(origin, p_oGuid._refEntities[i].$ref);
-                    if (!obj) Message.error('ES015', [p_oGuid.name, '_refEntities']);    
-                    this._refEntities.push(obj);
-                }
-            }
-            return obj;                  
-        };
+        //     // if (mObj._baseCollection) {
+        //     //     baseCollection = MetaRegistry.findSetObject(origin, mObj._baseCollection.$ref);
+        //     //     if (!baseCollection) Message.error('ES015', [mObj.name, '_baseCollection']);
+        //     //     this.__SET$_baseCollection(baseCollection, this);
+        //     //     // this._baseCollection = baseCollection;
+        //     // }
+        //     // if (Array.isArray(p_oGuid) && p_oGuid._refEntities.length > 0) {
+        //     //     for (var i = 0; i < p_oGuid._refEntities.length; i++) {
+        //     //         obj = MetaRegistry.findSetObject(origin, p_oGuid._refEntities[i].$ref);
+        //     //         if (!obj) Message.error('ES015', [p_oGuid.name, '_refEntities']);    
+        //     //         this._refEntities.push(obj);
+        //     //     }
+        //     // }
+        //     return obj;                  
+        // };
 
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.
