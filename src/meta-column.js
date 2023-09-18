@@ -1,3 +1,5 @@
+const { MetaEntity } = require('./meta-entity');
+
 /**
  * namespace _L.Meta.Entity.MetaColumn
  * namespace _L.Meta.Entity.MetaColumnCollection
@@ -853,24 +855,24 @@
          * @returns {MetaColumn} 등록한 아이템
          */
         MetaTableColumnCollection.prototype.add  = function(p_any) {
-            var i_value;
-            var i_name;
+            var column;
+            var key;
 
             if (typeof p_any === 'string') {      
-                i_name  = p_any;
-                i_value = new this._baseType(i_name, this._owner);
+                key  = p_any;
+                column = new this._baseType(key, this._owner);
             } else if (p_any instanceof this._baseType) {
                 // MetaTable 직접만 적용(참조형 아이템 소유 못함)
-                i_name  = p_any.columnName;
-                i_value = p_any.clone();
-                i_value._entity = this._owner;
+                key  = p_any.columnName;
+                column = p_any.clone(this._owner);
+                // column._entity = this._owner;
             } else {
                 Message.error('ES022', ['object']);
             }
 
-            if (typeof i_name === 'undefined') Message.error('ES051', ['name | obj.columnName']);
+            if (typeof key === 'undefined') Message.error('ES051', ['name | obj.columnName']);
 
-            return _super.prototype.add.call(this, i_name, i_value);
+            return _super.prototype.add.call(this, key, column);
         };
 
         return MetaTableColumnCollection;
@@ -1016,62 +1018,60 @@
         /**
          * 뷰컬렉션에 아이템을 추가(등록/설정)한다.
          * @param {String | MetaColumn} p_any 
-         * @param {?MetaColumnCollection?} p_refCollection
+         * @param {MetaColumnCollection?} p_refCollection
          * @example
-         *  - base(all),    string | Itme, Collection   => Collection 에 생성후 자신에 등록 
-         *  - base(N),      string | Itme               => this 에 생성후 자신에 등록
-         *  - base(Y),      string | MetaColumn         => Base 에 생성후 자신에 등록
-         * 
-         *   // string                       => 생성 및 자신에 등록
-         *   // string <base>                => 생성 및 소유처에 등록
-         *   // MetaColumn                         => 생성 및 자신에 등록
-         *   // MetaColumn <base>                  => 생성 및 소유처에 등록
-         *   // string, collection           => 참조만 등록
-         *   // string, collection <base>    => 참조만 등록
+         * 정리된 구조
+         * - entity가 있는 컬럼을 추가할 경우 : 참조가 추가되는 것이다.
+         *      + collection 존재할 경우 최상위 컬렉션에도 참조가 등록된다.
+         * - entity가 없는 컬럼을 추가할 경우 : 자신을 소유자로 등록한다.
+         * - collection에 컬럼이 존재할 경우 : columns 객체는 무시되고, 리턴한 객체의 참조를 등록한다.
+         * - collection에 컬럼이 없을 경우 : 컬렉션에 entity를 설정한다.(참조 재귀호출시 최상위만 등록됨)
+         *      + collection 존재할 경우 entity 항상 존재한다.
          */
         MetaViewColumnCollection.prototype.add  = function(p_any, p_refCollection) {
             var collection;
-            var i_name;
-            var i_value;
+            var key;
+            var column;
 
-            // REVIEW: 필요 구조 정리 필요!!
             if (p_refCollection && !(p_refCollection instanceof MetaColumnCollection)) {
                 Message.error('ES032', ['refCollection', 'MetaColumnCollection']);
             }
-            if (p_any instanceof MetaColumn && p_refCollection) {
-                Message.error('ES016', ['MetaColumn', 'refCollection']);
-            }
 
             if (p_any instanceof MetaColumn) {
-                // 아이템 소유자 설정
-                if (p_any._entity === null) p_any._entity = this._owner;
-                i_name = p_any.columnName;
-                i_value = p_any;
+                key = p_any.columnName;
+                column = p_any;
             } else if (typeof p_any === 'string') {
-                i_name = p_any;
-                i_value = new this._baseType(i_name, this._owner);
+                key = p_any;
+                column = new this._baseType(key, this._owner);
             } else Message.error('ES022', ['object '+ typeof p_any]);
             
 
             // baseCollection & refCollection 의 경우
-            if (p_refCollection instanceof MetaColumnCollection) {            // 전달값으로 기본컬렉션 지정시
+            if (p_refCollection instanceof MetaColumnCollection) {                                  
                 collection = p_refCollection;
-            } else if (this._owner && this._owner._baseEntity && this._owner._baseEntity.columns) { // 기본컬렉션 존재시
+            } else if (this._owner && this._owner._baseEntity && this._owner._baseEntity.columns) { 
                 collection = this._owner._baseEntity.columns;
             }
             
-            // 기본참조 컬렉션 또는 전달참조 컬렉션인 경우
+            // 컬렉션이 있는 경우 : _entity 항상 존재
             if (collection) {
-                if (collection.contains(collection[i_name])) {          // 기존에 존재하는지
-                    i_value = collection[i_name];                       // 참조 가져옴
+                if (collection.contains(collection[key])) {
+                    column = collection[key];   // 기존에 존재하면 참조 가져옴
                 } else {                                                
-                    collection.add(p_any);                           // 컬렉션에 등록 
-                    i_value = collection[i_name];
+                    collection.add(p_any);      // 없으면 컬렉션에 추가(owner 설정됨)
+                    column = collection[key];
                 }
                 // 소유객체에 참조 등록 (중복제거됨), 의존성을 낮추기 위해서 검사후 등록
                 if (this._registerRefer) this._registerRefer(collection._owner);
             }
-            return _super.prototype.add.call(this, i_name, i_value);
+            /**
+             * - entity가 있는 컬럼을 추가할 경우 : 참조가 추가되는 것이다.
+             * - entity가 없는 컬럼을 추가할 경우 : 자신을 소유자로 등록한다.
+             * - collection에 컬럼이 존재할 경우 : columns 객체는 무시되고, 리턴한 객체의 참조를 등록한다.
+             * - collection에 컬럼이 없을 경우 : 컬렉션에 entity를 설정한다.(참조 재귀호출시 최상위만 등록됨)
+             */
+            if (!column._entity) column._entity = this._owner;
+            return _super.prototype.add.call(this, key, column);
         };
 
         /**

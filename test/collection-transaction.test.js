@@ -33,7 +33,7 @@ describe("[target: collection-trans.js]", () => {
                 expect(s.rows['0']).toBeUndefined();
                 expect(s.rows.count).toBe(0);
                 expect(s.rows.list.length).toBe(0);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- remove(elem) : number ", () => {
                 let s = new Student();
@@ -64,7 +64,7 @@ describe("[target: collection-trans.js]", () => {
                 expect(s.rows[0]).not.toBeUndefined();
                 expect(s.rows.count).toBe(1);
                 expect(s.rows.list.length).toBe(1);
-                expect(result).not.toBeTruthy();
+                expect(result > -1).not.toBeTruthy();
             });
         });
         describe("BaseCollection.contains(elem): bool <존재유무 검사>", () => {
@@ -105,7 +105,7 @@ describe("[target: collection-trans.js]", () => {
         
                 expect(s.rows[0]).toBeUndefined();
                 expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- add(value) ", () => {
                 let s = new Student();
@@ -113,7 +113,7 @@ describe("[target: collection-trans.js]", () => {
         
                 expect(s.rows[0]).toBe('A1');
                 expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- add(value, desc) : 읽기 전용", () => {
                 let s = new Student();
@@ -127,7 +127,7 @@ describe("[target: collection-trans.js]", () => {
                 expect(s.rows[0]).toBe('A1');
                 expect(s.rows['0']).toBe('A1');
                 expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- add(name, value, desc) : set/get (제약조건 추가) ", () => {
                 let s = new Student();
@@ -150,7 +150,7 @@ describe("[target: collection-trans.js]", () => {
                 expect(s.rows[0]).toBe('A1');
                 expect(s.rows['0']).toBe('A1');
                 expect(s.rows.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
         });
         
@@ -530,7 +530,7 @@ describe("[target: collection-trans.js]", () => {
             
             expect(() => elem.rows.add(null)).toThrow(/ES032/);
             expect(() => elem.rows.add('str')).toThrow(/ES032/);
-            expect(result).toBeTruthy();
+            expect(result > -1).toBeTruthy();
         });
         it("- 단일 타입 : rows.요소명 = obj ", () => {
             const elem = new School();
@@ -542,7 +542,7 @@ describe("[target: collection-trans.js]", () => {
             expect(() => elem.rows[0] = 10 ).toThrow(/ES032/);
             expect(elem.rows[0].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(result).toBeTruthy();
+            expect(result > -1).toBeTruthy();
         });
         it("- null 타입 : rows.add(name, obj) ", () => {
             const elem = new House();
@@ -554,7 +554,7 @@ describe("[target: collection-trans.js]", () => {
             expect(elem.rows[0].level).toBe(1);
             elem.rows[0] = 'OVER';
             expect(elem.rows[0]).toBe('OVER');
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- undefined 타입 : rows.add(name, obj) ", () => {
@@ -569,7 +569,7 @@ describe("[target: collection-trans.js]", () => {
             expect(elem.rows[2]).toBeUndefined();
             elem.rows[2] = 'OVER';    // 수정
             expect(elem.rows[2]).toBe('OVER');
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
             expect(result3).toBeTruthy();
         });
@@ -582,7 +582,7 @@ describe("[target: collection-trans.js]", () => {
             
             expect(() => elem.rows.add(null)).toThrow(/ES032(\s|.)*ES032/);
             expect(() => elem.rows.add('str')).toThrow(/ES032(\s|.)*ES032/);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- 복합 타입 : rows.요소명 = obj ", () => {
@@ -600,7 +600,7 @@ describe("[target: collection-trans.js]", () => {
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(elem.rows[1].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[1] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
     });
@@ -627,7 +627,7 @@ describe("[target: collection-trans.js]", () => {
             expect(() => i.rows.add(null)).toThrow(/ES024/);     // 공백 예외
             expect(() => i.rows.add(10)).toThrow(/ES024/); // 타입 예외
             expect(() => i.rows[0] = 10).toThrow(/ES024/);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- 복합 타입 : rows.add(name, obj)  [String, Boolean] ", () => {
@@ -640,7 +640,7 @@ describe("[target: collection-trans.js]", () => {
             expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);// 타입 예외
             expect(() => i.rows.add({})).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);
             expect(() => i.rows[0] = 10).toThrow(/ES024(.|\s)*ES024/);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- 유무 검사 : exist(key) ", () => {
@@ -648,7 +648,7 @@ describe("[target: collection-trans.js]", () => {
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
             expect(i.rows.exist(0)).toBe(true);
             expect(i.rows.exist(1)).toBe(true);

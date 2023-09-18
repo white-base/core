@@ -284,25 +284,25 @@
          * @returns {MetaColumn} 등록한 아이템
          */
         MetaTableCollection.prototype.add  = function(p_any) { // COVER:
-            var i_value;
-            var i_name;
+            var table;
+            var key;
 
             if (typeof p_any === 'string') {      
-                i_name  = p_any;
-                i_value = new MetaTable(i_name);
-                i_value._metaSet = this._owner;
+                key  = p_any;
+                table = new MetaTable(key);
+                table._metaSet = this._owner;
             } else if (p_any instanceof MetaTable) {
-                i_name  = p_any.tableName;
-                i_value = p_any;
+                key  = p_any.tableName;
+                table = p_any;
                 p_any._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaTable object']);
 
-            if (typeof i_name === 'undefined') Message.error('ES051', ['tableName']);
-            if (this.existTableName(i_name)) Message.error('ES042', ['tableName', i_name]);
+            if (typeof key === 'undefined') Message.error('ES051', ['tableName']);
+            if (this.existTableName(key)) Message.error('ES042', ['tableName', key]);
 
-            _super.prototype.add.call(this, i_name, i_value);
+            _super.prototype.add.call(this, key, table);
 
-            return this[i_name];
+            return this[key];
         };
 
         MetaTableCollection.prototype.existTableName  = function(p_key) {

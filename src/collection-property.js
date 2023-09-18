@@ -253,7 +253,7 @@
             }
             // after event
             this._onChanged();
-            return true;
+            return index;
         };
 
         /**

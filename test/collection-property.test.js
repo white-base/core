@@ -34,7 +34,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns.a1).toBeUndefined();
                 expect(s.columns.count).toBe(0);
                 expect(s.columns.list.length).toBe(0);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- remove(elem) : number ", () => {
                 let s = new Student();
@@ -66,7 +66,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns.a1).not.toBeUndefined();
                 expect(s.columns.count).toBe(1);
                 expect(s.columns.list.length).toBe(1);
-                expect(result).not.toBeTruthy();
+                expect(result > -1).not.toBeTruthy();
             });
         });
         describe("BaseCollection.removeAt(num): bool <인덱스로 삭제>", () => {
@@ -300,7 +300,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 const result1 = i.columns.add('a1', 'A1');
                 const result2 = i.columns.add('a2', true);
                 
-                expect(result1).toBeTruthy();
+                expect(result1 > -1).toBeTruthy();
                 expect(result2).toBeTruthy();
                 expect(i.columns.exist('a1')).toBe(true);
                 expect(i.columns.exist('a2')).toBe(true);
@@ -486,7 +486,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns['a1']).toBe(undefined);
                 expect(s.columns.a1).toBe(undefined);
                 expect(s.columns.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- add(name, value) ", () => {
                 let s = new Student();
@@ -495,7 +495,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns['a1']).toBe('A1');
                 expect(s.columns.a1).toBe('A1');
                 expect(s.columns.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- add(name, value, desc) : 읽기 전용", () => {
                 let s = new Student();
@@ -510,7 +510,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns['a1']).toBe('A1');
                 expect(s.columns.a1).toBe('A1');
                 expect(s.columns.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
                 // expect(s.columns.count).toBe(0);
             });
             it("- add(name, value, desc) : set/get (제약조건 추가) ", () => {
@@ -534,7 +534,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns['a1']).toBe('A1');
                 expect(s.columns.a1).toBe('A1');
                 expect(s.columns.count).toBe(1);
-                expect(result).toBeTruthy();
+                expect(result > -1).toBeTruthy();
             });
             it("- add(name, value, desc) : 기술자, 0 삭제후 0에 삽입 ", () => {
                 let s = new Student();
@@ -595,7 +595,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 // const result2 = s.columns.add('a1');
                 
                 expect(()=> s.columns.add('a1')).toThrow(/ES042/);
-                expect(result1).toBeTruthy();
+                expect(result1 > -1).toBeTruthy();
                 // jest.mockRestore();
             });
             it("- add(name) : 예약어 사용시 (예외)", () => {
@@ -719,7 +719,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             expect(() => elem.columns['a1'] = 10 ).toThrow(/ES032/);
             expect(elem.columns['a1'].level).toBe(2);                   // 교체된 객체
             expect(elem.columns['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(result).toBeTruthy();
+            expect(result > -1).toBeTruthy();
         });
         it("- null 타입 : columns.add(name, obj) ", () => {
             const elem = new House();
@@ -733,7 +733,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             elem.columns['a1'] = 'OVER';
             expect(elem.columns[0]).toBe('OVER');
             expect(elem.columns['a1']).toBe('OVER');
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- undefined 타입 : columns.add(name, obj) ", () => {
@@ -752,7 +752,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             elem.columns['a3'] = 'OVER';    // 수정
             expect(elem.columns[2]).toBe('OVER');
             expect(elem.columns['a3']).toBe('OVER');
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
             expect(result3).toBeTruthy();
         });
@@ -765,7 +765,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             
             expect(() => elem.columns.add('a3')).toThrow(/ES032(\s|.)*ES032/);
             expect(() => elem.columns.add('a3', 'str')).toThrow(/ES032(\s|.)*ES032/);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- 복합 타입 : columns.요소명 = obj ", () => {
@@ -783,7 +783,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             expect(elem.columns['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(elem.columns['a2'].level).toBe(2);                   // 교체된 객체
             expect(elem.columns['a2'] instanceof Student).toBeTruthy(); // 인스턴스 검사
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
     });
@@ -810,7 +810,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             expect(() => i.columns.add('a3')).toThrow(/ES024/);     // 공백 예외
             expect(() => i.columns.add('a3', 10)).toThrow(/ES024/); // 타입 예외
             expect(() => i.columns['a1'] = 10).toThrow(/ES024/);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         it("- 복합 타입 : columns.add(name, obj)  [String, Boolean] ", () => {
@@ -822,7 +822,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             expect(() => i.columns.add('a3', 10)).toThrow(/ES024/); // 타입 예외
             expect(() => i.columns.add('a3', {})).toThrow(/ES066(.|\s)*ES024/);
             expect(() => i.columns['a1'] = 10).toThrow(/ES066(.|\s)*ES024/);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
         

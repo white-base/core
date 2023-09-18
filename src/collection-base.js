@@ -459,7 +459,9 @@
          */
         BaseCollection.prototype.remove = function(p_elem) {
             var idx = this._elements.indexOf(p_elem);
-            return idx < 0 ? false : this.removeAt(idx);
+            // return idx < 0 ? false : this.removeAt(idx);
+            if (idx >= 0 && this.removeAt(idx)) return idx;
+            return -1;
         };
         
         /**
@@ -476,7 +478,7 @@
                 // before event
                 this._onChanging();
                 // process
-                this._remove(p_idx);
+                if (this._remove(p_idx) > 0) return false;
                 this._onRemove(p_idx, elem);
                 // after event
                 this._onChanged();
@@ -520,7 +522,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            Message.error('ES013', ['add(any): boolean']);
+            Message.error('ES013', ['add(any): number']);
         };
         
         /**

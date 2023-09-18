@@ -51,7 +51,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             expect(arrResult[1]).toBe('ADD.0.A1.School');
             expect(arrResult[2]).toBe('CHANGED.School');
             expect(arrResult.length).toBe(3);
-            expect(result).toBeTruthy();
+            expect(result > -1).toBeTruthy();
         });
         it("- add() : 실패 (중복, 예외) => 이벤트 없음 ", () => {
             global.console.warn = jest.fn((val) => {
@@ -65,7 +65,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             expect(()=> i.columns.add('a1', 'A1')).toThrow(/ES042/);
             expect(()=> i.columns.add(0)).toThrow(/ES021/);
             expect(arrResult.length).toBe(0);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
         });
         it("- remove() : 성공 => onChanging, onRemove, onChanged", () => {
             const i = new School();
@@ -78,7 +78,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             expect(arrResult[1]).toBe('REMOVE.1.A2.School');
             expect(arrResult[2]).toBe('CHANGED.School');
             expect(arrResult.length).toBe(3);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
             expect(result3).toBeTruthy();
         });
@@ -89,8 +89,8 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             const result2 = i.columns.remove('A2');
     
             expect(arrResult.length).toBe(0);
-            expect(result1).toBeTruthy();
-            expect(result2).not.toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
+            expect(result2 > -1).not.toBeTruthy();
         });
         it("- clear() : 초기화 => onChanging, onClear, onChanged", () => {
             const i = new School();
@@ -102,7 +102,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             expect(arrResult[1]).toBe('CLEAR.School');
             expect(arrResult[2]).toBe('CHANGED.School');
             expect(arrResult.length).toBe(3);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
         });
     });
     
@@ -142,7 +142,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             expect(arrResult[1]).toBe('ADD.0.A1.School');
             expect(arrResult[2]).toBe('CHANGED.School');
             expect(arrResult.length).toBe(3);
-            expect(result).toBeTruthy();
+            expect(result > -1).toBeTruthy();
         });
         // it("- add() : 실패 (예외) ", () => {
         //     const i = new School();
@@ -164,7 +164,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             expect(arrResult[1]).toBe('REMOVE.1.A2.School');
             expect(arrResult[2]).toBe('CHANGED.School');
             expect(arrResult.length).toBe(3);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
             expect(result3).toBeTruthy();
         });
@@ -175,8 +175,8 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             const result2 = i.columns.remove('A2');
     
             expect(arrResult.length).toBe(0);
-            expect(result1).toBeTruthy();
-            expect(result2).not.toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
+            expect(result2 > -1).not.toBeTruthy();
         });
         it("- clear() : 초기화 => onChanging, onClear, onChanged", () => {
             const i = new School();
@@ -188,7 +188,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             expect(arrResult[1]).toBe('CLEAR.School');
             expect(arrResult[2]).toBe('CHANGED.School');
             expect(arrResult.length).toBe(3);
-            expect(result1).toBeTruthy();
+            expect(result1 > -1).toBeTruthy();
         });
     });
 });

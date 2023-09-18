@@ -211,7 +211,7 @@
         MetaView.prototype.clone  = function() {
             var clone = new MetaView(this.viewName, this._baseEntity);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
 
-            // 참조 복제 REVIEW::  필요성 검토 필요
+            // 참조 복제 REVIEW::  필요성 검토 필요 >> 빼고, getter 방식으로 변경
             // if (this.columns._baseCollection) {
             //     clone.columns.__SET$_baseCollection(this.columns._baseCollection, clone.columns);
             // }
@@ -332,8 +332,8 @@
          *  - entityView, collection    :         entityView  이름으로 등록 (collection보냄) => 오류발생
          */
         MetaViewCollection.prototype.add  = function(p_obj, p_baseEntity) {    // COVER:
-            var i_value;
-            var i_name;
+            var view;
+            var key;
 
             if (p_baseEntity && !(p_baseEntity instanceof MetaEntity)) {
                 Message.error('ES032', ['baseEntity', 'MetaEntity']);
@@ -343,20 +343,20 @@
             }
 
             if (typeof p_obj === 'string') {      
-                i_name  = p_obj;
-                i_value = new this._baseType(i_name, p_baseEntity);
-                i_value._metaSet = this._owner;
+                key  = p_obj;
+                view = new this._baseType(key, p_baseEntity);
+                view._metaSet = this._owner;
             } else if (p_obj instanceof MetaView) {
                 if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
-                i_name  = p_obj.viewName;
-                i_value = p_obj;
+                key  = p_obj.viewName;
+                view = p_obj;
                 p_obj._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaView object']);
 
-            if (typeof i_name === 'undefined') Message.error('ES051', ['viewName']);
-            if (this.existViewName(i_name)) Message.error('ES042', ['viewName', i_name]);
+            if (typeof key === 'undefined') Message.error('ES051', ['viewName']);
+            if (this.existViewName(key)) Message.error('ES042', ['viewName', key]);
 
-            return _super.prototype.add.call(this, i_name, i_value);
+            return _super.prototype.add.call(this, key, view);
         };
 
         MetaViewCollection.prototype.existViewName  = function(p_key) {

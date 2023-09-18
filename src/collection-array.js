@@ -161,8 +161,10 @@
          * @returns {boolean} 처리결과
          */
         ArrayCollection.prototype.add = function(p_value, p_desc) {
+            var pos = this._elements.length;
             try {
-                return this.insertAt(this._elements.length, p_value, p_desc);
+                if (this.insertAt(pos, p_value, p_desc) === true) return pos;
+                return -1;
             } catch (error) {
                 Message.error('ES019', ['add()', error.message]);
             }
