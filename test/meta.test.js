@@ -107,28 +107,8 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             });
             it("- instanceOf(function) : 예외 (_inteface 강제삭제) ", () => {
                 const c = new MetaObjectSub();
-                delete c._interface;
 
-                expect(c.instanceOf(IObject)).toBe(false);
-                expect(c.instanceOf(Object)).toBe(true);
-                expect(c.instanceOf(MetaObject)).toBe(true);
-                expect(c.instanceOf(MetaObjectSub)).toBe(true);
-            });
-            it("- instanceOf(string) : 예외 (_inteface 강제삭제) ", () => {
-                const c = new MetaObjectSub();
-                delete c._interface;
-
-                expect(c.instanceOf('IObject')).toBe(false);
-                expect(c.instanceOf('Object')).toBe(true);
-                expect(c.instanceOf('MetaObject')).toBe(true);
-                expect(c.instanceOf('MetaObjectSub')).toBe(true);
-            });
-            it("- instanceOf(function) : 예외  ", () => {
-                const c = new MetaObjectSub();
-                delete c._interface;
-
-                expect(c.instanceOf(Function)).toBe(false);
-                expect(c.instanceOf({})).toBe(false);
+                expect(()=> delete c._interface).toThrow(/Cannot delete property/);
             });
         });
 

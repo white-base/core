@@ -233,6 +233,14 @@
                         },
                     },
                 },
+                W: { // warning
+                    S01: { // range
+                        1: {
+                            msg: '[$1] target [$2] cannot be deleted.',
+                            long: 'If you set "configurable = true" you can delete it later. '
+                        },
+                    }
+                },
                 W: {    // warning
     
                 },
@@ -432,7 +440,12 @@
                     },
                 },
                 W: {    // warning
-    
+                    S01: {  // 범위
+                        1: {
+                            msg: '[$1] 대상 [$2]는 삭제 할 수 없습니다.',
+                            long: '"configurable = true" 로 설정하시면 이후 삭제 가능합니다. '
+                        },
+                    }
                 },
                 I: {    // Information
     
@@ -450,8 +463,8 @@
                 if (!__STORAGE[val]) throw new Error('The ['+ val +'] language does not exist.');
                 lang = val; 
             },
+            configurable: false,
             enumerable: false,
-            configurable: false
         });
 
         /**
@@ -463,8 +476,8 @@
             set: function(val) { 
                 isLong = val; 
             },
+            configurable: false,
             enumerable: false,
-            configurable: false
         });
 
         // local function
@@ -542,6 +555,10 @@
 
         Message.error = function(p_code, p_aValue) {
             throw new Error(Message.get(p_code, p_aValue));
+        };
+
+        Message.warn = function(p_code, p_aValue) {
+            console.warn(Message.get(p_code, p_aValue));
         };
 
         Message.init = function() {

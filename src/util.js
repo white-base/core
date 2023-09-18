@@ -76,9 +76,9 @@
                     ctor.prototype = Object.create(superCtor.prototype, {
                         constructor: {
                         	value: ctor,
-                        	enumerable: false,
                         	writable: true,
-                        	configurable: true
+                        	configurable: true,
+                        	enumerable: false,
                         }
                     });
                 }
@@ -145,8 +145,8 @@
                 get: function() { 
                     return _interface;
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });
         }
 

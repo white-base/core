@@ -589,9 +589,10 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                     expect(val).toBe('Warning:: 프로퍼티 이름 중복 !!');
                 });
                 const result1 = s.columns.add('a1');
-                const result2 = s.columns.add('a1');
+                // const result2 = s.columns.add('a1');
+                
+                expect(()=> s.columns.add('a1')).toThrow(/ES042/);
                 expect(result1).toBeTruthy();
-                expect(result2).not.toBeTruthy();
                 // jest.mockRestore();
             });
             it("- add(name) : 예약어 사용시 (예외)", () => {

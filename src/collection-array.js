@@ -182,6 +182,10 @@
             if (index < p_pos) Message.error('ES061', ['pos']);
             if (p_pos < 0) Message.error('ES062', ['pos', '0']);
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
+            if (typeof p_desc === 'object' && p_desc.configurable && p_desc.configurable === false ) {
+                Message.warn('WS011', ['configurable = false', 'element']);
+                // console.warn('[configurable = false] 대상 [컬렉션 요소]는 삭제 할 수 없습니다.');
+            }
             // before event
             this._onChanging();
             this._onAdd(p_pos, p_value);
@@ -236,3 +240,5 @@
     }
 
 }(typeof window !== 'undefined' ? window : global));
+
+// TODO: 모든 테스트 코드 예외: 코드값으로 변화

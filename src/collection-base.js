@@ -64,7 +64,7 @@
             var __event = new Observer(this, this);
             var _owner = p_owner || null;
             var _elements = [];
-            var _descriptors = [];  // TODO: add 시점에 configurable: false 이면 경고 문구! 삭제 안됨
+            var _descriptors = [];
             var _KEYWORD = [];
             var _elemTypes  = []; 
 
@@ -77,8 +77,8 @@
                 get: function() { 
                     return __event;
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: false
             });
 
              /** 
@@ -93,8 +93,8 @@
                     set: function(val) {
                         _owner = val;
                     },
-                    enumerable: true,
-                    configurable: false
+                    configurable: false,
+                    enumerable: false,
             });
 
             /** 
@@ -106,8 +106,8 @@
                 get: function() {
                     return _elements;
                 },
-                enumerable: true,
-                configurable: false
+                configurable: false,
+                enumerable: false,
             });
 
             /** 
@@ -119,8 +119,8 @@
                 get: function() {
                     return _descriptors;
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: false
             });
 
             
@@ -136,8 +136,8 @@
                 set: function(p_val) {
                     _KEYWORD = p_val;
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: false
             });
 
             /** 
@@ -152,8 +152,8 @@
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
                     _elemTypes = arrType;
                 },
-                enumerable: true,
-                configurable: false
+                configurable: false,
+                enumerable: false,
             });
 
             /**
@@ -166,8 +166,8 @@
                     for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
                     return arr;
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });
 
             /**
@@ -179,7 +179,7 @@
                     return this._elements.length;
                 },
                 enumerable: false,
-                configurable: true
+                configurable: false
             });
             
 
@@ -191,8 +191,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'add');
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });
 
             /** 
@@ -203,8 +203,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'remove');
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });
 
             /** 
@@ -215,8 +215,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'clear');
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });
 
             /** 
@@ -227,8 +227,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'changing');
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });
 
             /** 
@@ -239,8 +239,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'changed');
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });
 
             // inner variable access
@@ -318,8 +318,8 @@
                     if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
                     this._elements[p_idx] = newValue; 
                 },
+                configurable: true,
                 enumerable: true,
-                configurable: true
             };
         };
 

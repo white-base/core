@@ -58,7 +58,7 @@
             {
                 get: function() { return _transQueue; },
                 configurable: false,
-                enumerable: true
+                enumerable: false
             });
 
             /**
@@ -74,7 +74,7 @@
                     autoChanges = newValue;
                 },
                 configurable: false,
-                enumerable: true
+                enumerable: false
             });
 
             /**
@@ -85,7 +85,7 @@
             {
                 get: function() { return _transQueue.queue.length > 0; },
                 configurable: false,
-                enumerable: true
+                enumerable: false
             });
 
         }

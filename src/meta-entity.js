@@ -121,7 +121,7 @@ const { ISerialize } = require('./i-serialize');
                 //     if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['columns', 'MetaColumnCollection']);
                 //     columns = newValue;
                 // },
-                configurable: true,
+                configurable: true, // 하위에서 재정의 해야함
                 enumerable: true
             });
             

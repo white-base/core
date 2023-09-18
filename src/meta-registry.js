@@ -65,8 +65,8 @@
                 for (var i = 0; i < list.length; i++) arr.push(list[i]);
                 return arr;
             },
-            enumerable: false,
-            configurable: false
+            configurable: false,
+            enumerable: true,
         });
 
         /**
@@ -75,8 +75,8 @@
          */
         Object.defineProperty(MetaRegistry, "count", {
             get: function() { return list.length; },
-            enumerable: false,
-            configurable: false
+            configurable: false,
+            enumerable: true,
         });        
 
         /**
@@ -85,8 +85,8 @@
          */
         Object.defineProperty(MetaRegistry, "ns", {
             get: function() { return namespace; },
-            enumerable: false,
-            configurable: false
+            configurable: false,
+            enumerable: true,
         });
 
         // local function

@@ -76,8 +76,8 @@
              */
             Object.defineProperty(this, '__event', {
                 get: function() { return __event; },
-                enumerable: false,
                 configurable: false,
+                enumerable: false,
             });
 
             
@@ -98,7 +98,7 @@
                     _entity = newValue;
                 },
                 configurable: false,
-                enumerable: true
+                enumerable: false
             });
 
             /** 
@@ -113,8 +113,8 @@
                 // set: function(val) {
                 //     _elements = val;
                 // },
-                enumerable: true,
-                configurable: false
+                configurable: false,
+                enumerable: false,
             });
 
             Object.defineProperty(this, '_keys',
@@ -134,8 +134,8 @@
                     for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
                     return arr;
                 },
+                configurable: false,
                 enumerable: false,
-                configurable: true
             });            
             
             /**
@@ -158,8 +158,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'onChanging');
                 },
-                enumerable: true,
-                configurable: true,
+                configurable: false,
+                enumerable: false,
             });
             
             /**
@@ -170,8 +170,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'onChanged');
                 },
-                enumerable: true,
-                configurable: true,
+                configurable: false,
+                enumerable: false,
             });
 
             // inner variable access
@@ -220,7 +220,7 @@
                         _this._onChanged(p_idx, newValue, oldValue);
 
                     },
-                    enumerable: false,
+                    enumerable: true,
                     configurable: false
                 };
             }
@@ -392,8 +392,8 @@
                     this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
                     this._elements[p_idx] = newValue;
                 },
+                configurable: true,
                 enumerable: true,
-                configurable: true
             };
         };
 

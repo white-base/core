@@ -112,8 +112,8 @@
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
                     _elemTypes = arrType;
                 },
+                configurable: false,
                 enumerable: true,
-                configurable: false
             });
 
 
@@ -149,8 +149,8 @@
                         }
                     }
                 },
+                configurable: false,
                 enumerable: true,
-                configurable: false
             });
 
             /**
@@ -161,8 +161,8 @@
                 get: function() {
                     return this.list.length;
                 },
+                configurable: false,
                 enumerable: true,
-                configurable: false
             });
 
             

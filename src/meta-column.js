@@ -113,8 +113,8 @@
                 get: function() { 
                     return __event;
                 },
-                enumerable: false,
                 configurable: false,
+                enumerable: false,
             });        
             
             /**
@@ -129,8 +129,8 @@
                 //     if (newValue.length <= 0) Message.error('ES062', ['__key.length', '0']);
                 //     __key = newValue;
                 // },
-                configurable: true,
-                enumerable: true
+                configurable: false,
+                enumerable: false,
             });
             
             /**
@@ -146,7 +146,7 @@
                     }
                     _entity = newValue;
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
 
@@ -190,7 +190,7 @@
                    if (entity && entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
                    alias = newValue;
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             }); 
 
@@ -210,7 +210,7 @@
                         }
                     defaultValue = newValue; 
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
 
@@ -225,7 +225,7 @@
                     if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']);
                     caption = newValue; 
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
 
@@ -245,7 +245,7 @@
                     if(typeof newValue !== 'boolean') Message.error('ES021', ['isNotNull', 'boolean']);
                     isNotNull = newValue; 
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
 
@@ -260,7 +260,7 @@
                     if(typeof newValue !== 'boolean') Message.error('ES021', ['isNullPass', 'boolean']);
                     isNullPass = newValue; 
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
             
@@ -295,7 +295,7 @@
                     }
                     constraints = list;
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
             
@@ -352,7 +352,7 @@
                     // 검사 및 이벤트 발생
                     if (_oldVal !== __val && __val) this._onChanged(__val, _oldVal);
                 },
-                configurable: true,
+                configurable: true, // 하위에서 재정의 할수 있음
                 enumerable: true
             });
 
@@ -367,7 +367,7 @@
                     if(val !== null && typeof val !== 'function') Message.error('ES021', ['getter', 'function']);
                     getter = val;
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
 
@@ -382,7 +382,7 @@
                     if(val !== null && typeof val !== 'function') Message.error('ES021', ['setter', 'function']);
                     setter = val;
                 },
-                configurable: true,
+                configurable: false,
                 enumerable: true
             });
 
@@ -395,8 +395,8 @@
                 set: function(fun) {
                     this.__event.subscribe(fun, 'onChanged');
                 },
-                enumerable: true,
-                configurable: true,
+                configurable: false,
+                enumerable: false,
             });
             
 
@@ -706,7 +706,7 @@
                     if (!(new newValue() instanceof MetaColumn)) Message.error('ES032', ['_baseType', 'MetaColumn']);
                     _baseType = newValue;
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: false,
             });
 
@@ -917,7 +917,7 @@
             {
                 get: function() { return _refEntities; },
                 configurable: false,
-                enumerable: true
+                enumerable: false
             });
             // if (p_baseCollection) this._baseCollection = p_baseCollection;
 

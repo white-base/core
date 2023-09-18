@@ -223,8 +223,13 @@
                 Message.error('ES048', [p_name, 'Symbol word']);
             }
             if (this.exist(p_name)) {
-                console.warn('Warning:: 프로퍼티 이름 중복 !!');
-                return false;
+                Message.error('ES042', [p_name, 'property._keys']);
+                // console.warn('Warning:: 프로퍼티 이름 중복 !!');
+                // return false;
+            }
+            if (typeof p_desc === 'object' && p_desc.configurable && p_desc.configurable === false ) {
+                Message.warn('WS011', ['configurable = false', 'element']);
+                // console.warn('[configurable = false] 대상 [컬렉션 요소]는 삭제 할 수 없습니다.');
             }
             // before event
             this._onChanging();

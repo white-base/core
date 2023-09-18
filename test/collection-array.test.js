@@ -666,6 +666,11 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             // 예외 조건
             expect(()=> i.rows.exist(true)).toThrow(/key.*number.*string/);     
         });
+        it("- _elemTypes 삭제할 경우 : 예외 ", () => {
+            const i = new Corp();
+
+            expect(()=> delete i.rows._elemTypes).toThrow(/Cannot delete property/);     
+        });
     });
 });
 
