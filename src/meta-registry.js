@@ -113,19 +113,34 @@
          * @param {*} p_arr 
          * @returns 
          */
+        // MetaRegistry.__getObjectList = function(p_oGuid, p_arr) {
+        //     p_arr = p_arr || [];
+        //     if (this.isGuidObject(p_oGuid)) p_arr.push(p_oGuid);
+        //     for(var prop in p_oGuid) {
+        //         if (typeof p_oGuid[prop] === 'object') this.__getObjectList(p_oGuid[prop], p_arr);
+        //         else if (Array.isArray(p_oGuid[prop])){
+        //             for(var i = 0; i < p_oGuid[prop].length; i++) {
+        //                 if (typeof p_oGuid[prop][i] === 'object') this.__getObjectList(p_oGuid[prop][i], p_arr);
+        //             }  
+        //         }
+        //     }
+        //     return p_arr;
+        // };
         MetaRegistry.__getObjectList = function(p_oGuid, p_arr) {
             p_arr = p_arr || [];
             if (this.isGuidObject(p_oGuid)) p_arr.push(p_oGuid);
-            for(var prop in p_oGuid) {
-                if (typeof p_oGuid[prop] === 'object') this.__getObjectList(p_oGuid[prop], p_arr);
-                else if (Array.isArray(p_oGuid[prop])){
-                for(var i = 0; i < p_oGuid[prop].length; i++) {
-                    if (typeof p_oGuid[prop][i] === 'object') this.__getObjectList(p_oGuid[prop][i], p_arr);
-                }  
+            if (Array.isArray(p_oGuid)){
+                for(var i = 0; i < p_oGuid.length; i++) {
+                    if (typeof p_oGuid[i] === 'object') this.__getObjectList(p_oGuid[i], p_arr);
+                }
+            } else if (typeof p_oGuid === 'object') {
+                for(var prop in p_oGuid) {
+                    if (typeof p_oGuid[prop] === 'object') this.__getObjectList(p_oGuid[prop], p_arr);
                 }
             }
             return p_arr;
         };
+
 
 
 
@@ -282,7 +297,6 @@
          
         /**
          * 메타 객체 유효성 검사
-         * TODO: guid 가 유일한지 검사 필요, 고정키를 가져올 경우
          * @param {*} p_oGuid 
          * @returns 
          */
@@ -290,8 +304,9 @@
             var _this = this;
             var arrObj = this.__getObjectList(p_oGuid);
 
-            if (validReference(p_oGuid) === false) return false;
-            if (validCollection(p_oGuid) === false) return false;
+            if (validReference(p_oGuid) == false) return false;
+            if (validCollection(p_oGuid) == false) return false;
+            if (validUniqueGuid(p_oGuid)== false) return false;
             return true;
 
             // inner function
@@ -301,33 +316,66 @@
                     if (oGuid['$set']) if (!findGuid(oGuid['$set'], arrObj)) return false;
                     if (oGuid['$ns']) if (!_this.getClass(oGuid['$ns'])) return false;
             
-                    for(var prop in oGuid) {
-                        if (typeof oGuid[prop] === 'object') {
-                            if (validReference(oGuid[prop]) === false) return false
-                        } else if (Array.isArray(oGuid[prop])){
-                          for(var i = 0; i < oGuid[prop].length; i++) {
-                            if (typeof oGuid[prop][i] === 'object') {
-                                if (validReference(oGuid[prop][i]) === false) return false;
-                            }
-                          }  
+                    // for(var prop in oGuid) {
+                    //     if (typeof oGuid[prop] === 'object') {
+                    //         if (validReference(oGuid[prop]) === false) return false
+                    //     } else if (Array.isArray(oGuid[prop])){
+                    //       for(var i = 0; i < oGuid[prop].length; i++) {
+                    //         if (typeof oGuid[prop][i] === 'object') {
+                    //             if (validReference(oGuid[prop][i]) === false) return false;
+                    //         }
+                    //       }  
+                    //     }
+                    // }
+                    if (Array.isArray(oGuid)){
+                        for(var i = 0; i < oGuid.length; i++) {
+                            if (typeof oGuid[i] === 'object' && !validReference(oGuid[i])) return false
+                        }
+                    } else if (typeof oGuid === 'object') {
+                        for(var prop in oGuid) {
+                            if (typeof oGuid[prop] === 'object' && !validReference(oGuid[prop])) return false;
                         }
                     }
+
                 }
                 return true;
             }
             function validCollection(oGuid) {
+                // if (Array.isArray(oGuid['_elem']) && Array.isArray(oGuid['_key'])) {
+                //     if (oGuid['_elem'].length !== oGuid['_key'].length) return false;
+                // }
+                // for(var prop in oGuid) {
+                //     if (typeof oGuid[prop] === 'object') {
+                //         if (validCollection(oGuid[prop]) === false) return false;
+                //     } else if (Array.isArray(oGuid[prop])){
+                //       for(var i = 0; i < oGuid[prop].length; i++) {
+                //         if (typeof oGuid[prop][i] === 'object') {
+                //             if (validCollection(oGuid[prop][i]) === false) return false;
+                //         }
+                //       }  
+                //     }
+                // }
                 if (Array.isArray(oGuid['_elem']) && Array.isArray(oGuid['_key'])) {
                     if (oGuid['_elem'].length !== oGuid['_key'].length) return false;
                 }
-                for(var prop in oGuid) {
-                    if (typeof oGuid[prop] === 'object') {
-                        if (validCollection(oGuid[prop]) === false) return false;
-                    } else if (Array.isArray(oGuid[prop])){
-                      for(var i = 0; i < oGuid[prop].length; i++) {
-                        if (typeof oGuid[prop][i] === 'object') {
-                            if (validCollection(oGuid[prop][i]) === false) return false;
-                        }
-                      }  
+                
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object' && !validCollection(oGuid[i])) return false;
+                    }
+                } else if (typeof p_oGuid === 'object') {
+                    for(var prop in p_oGuid) {
+                        if (typeof oGuid[prop] === 'object' && !validCollection(oGuid[prop])) return false;
+                    }
+                }
+                return true;
+            }
+            function validUniqueGuid(oGuid) {
+                for (var i = 0; i < arrObj.length; i++) {
+                    if(typeof arrObj[i]._guid === 'string' && arrObj[i]._guid.length > 0) {
+                        for (var ii = 0; ii < arrObj.length; ii++) {
+                            if (arrObj[i]._guid === arrObj[ii]._guid) return true;
+                        } 
                     }
                 }
                 return true;
@@ -368,17 +416,36 @@
             // inner finction
             function findObject(oGuid) {
                 var result;
-                if (typeof oGuid === 'object') {
+                // if (typeof oGuid === 'object') {
+                //     if (oGuid['_guid'] && oGuid['_guid'] === guid) {
+                //         result = oGuid['$set'] ? MetaRegistry.find(oGuid['$set']) : undefined;
+                //         return result;
+                //     }
+                //     for (var prop in oGuid) {
+                //         var obj = oGuid[prop];
+                //         if (typeof obj === 'object' || Array.isArray(obj) ) {
+                //             result = findObject(obj);
+                //             if(result) return result;
+                //         }
+                //     }
+                // }
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object') {
+                            result = findObject(oGuid[i]);
+                            if(result) return result;
+                        }
+                    }
+                } else if (typeof oGuid === 'object') {
                     if (oGuid['_guid'] && oGuid['_guid'] === guid) {
                         result = oGuid['$set'] ? MetaRegistry.find(oGuid['$set']) : undefined;
                         return result;
                     }
-                    for (var prop in oGuid) {
-                        var obj = oGuid[prop];
-                        if (typeof obj === 'object' || Array.isArray(obj) ) {
-                            result = findObject(obj);
+                    for(var prop in oGuid) {
+                        if (typeof oGuid[prop] === 'object') {
+                            result = findObject(oGuid[prop]);
                             if(result) return result;
-                        }
+                        } 
                     }
                 }
                 return result;
@@ -397,22 +464,34 @@
             return hasRefer(p_target);
 
             // inner function
-            function hasRefer(obj) {
-                if (typeof obj === 'object') {
-                    if (obj['$ref'] && typeof obj['$ref'] === 'string') return true;
-                    if (obj['$ns'] && typeof obj['$ns'] === 'string') return true;
-                    for(var prop in obj) {
-                        if (typeof obj[prop] === 'object') {
-                            if (hasRefer(obj[prop]) === true) return true;
-                        } else if (Array.isArray(obj[prop])){
-                          for(var i = 0; i < obj[prop].length; i++) {
-                            if (typeof obj[prop][i] === 'object') {
-                                if (hasRefer(obj[prop]) === true) return true;
-                            }
-                          }  
-                        }
+            function hasRefer(oGuid) {
+                // if (typeof obj === 'object') {
+                //     if (obj['$ref'] && typeof obj['$ref'] === 'string') return true;
+                //     if (obj['$ns'] && typeof obj['$ns'] === 'string') return true;
+                //     for(var prop in obj) {
+                //         if (typeof obj[prop] === 'object') {
+                //             if (hasRefer(obj[prop]) === true) return true;
+                //         } else if (Array.isArray(obj[prop])){
+                //           for(var i = 0; i < obj[prop].length; i++) {
+                //             if (typeof obj[prop][i] === 'object') {
+                //                 if (hasRefer(obj[prop]) === true) return true;
+                //             }
+                //           }  
+                //         }
+                //     }
+                // }
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object' && hasRefer(oGuid[i])) return true;
+                    }
+                } else if (typeof oGuid === 'object') {
+                    if (oGuid['$ref'] && typeof oGuid['$ref'] === 'string') return true;
+                    if (oGuid['$ns'] && typeof oGuid['$ns'] === 'string') return true;
+                    for(var prop in oGuid) {
+                        if (typeof oGuid[prop] === 'object' && hasRefer(oGuid[prop])) return true
                     }
                 }
+
                 return false;
             }
         };       
@@ -476,20 +555,37 @@
             return clone;
 
             // inner function
-            function linkReference(obj, arr) {
-                for(var prop in obj) {
-                    if (obj[prop] === null) continue;
-                    if (typeof obj[prop] === 'object') {
-                        if (obj[prop]['$ns']) {
-                            var ns = _this.getClass(obj[prop]['$ns']);
-                            if (typeof ns !== 'function') Message.error('ES015', ['$ns', obj[prop]['$ns']]);
-                            obj[prop] = ns; // function 타입 연결
-                        } else linkReference(obj[prop], arr);
-                    } else if (Array.isArray(obj[prop])){
-                        for(var i = 0; i < obj[prop].length; i++) {
-                            if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i], arr);
-                        }  
-                    } 
+            function linkReference(oGuid, arr) {
+                // for(var prop in obj) {
+                //     if (obj[prop] === null) continue;
+                //     if (typeof obj[prop] === 'object') {
+                //         if (obj[prop]['$ns']) {
+                //             var ns = _this.getClass(obj[prop]['$ns']);
+                //             if (typeof ns !== 'function') Message.error('ES015', ['$ns', obj[prop]['$ns']]);
+                //             obj[prop] = ns; // function 타입 연결
+                //         } else linkReference(obj[prop], arr);
+                //     } else if (Array.isArray(obj[prop])){
+                //         for(var i = 0; i < obj[prop].length; i++) {
+                //             if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i], arr);
+                //         }  
+                //     } 
+                // }
+                ////
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object') linkReference(oGuid[i], arr);
+                    }
+                } else if (typeof oGuid === 'object') {
+                    for(var prop in oGuid) {
+                        if (oGuid[prop] === null) continue;
+                        if (typeof oGuid[prop] === 'object') {
+                            if (oGuid[prop]['$ns']) {
+                                var ns = _this.getClass(oGuid[prop]['$ns']);
+                                if (typeof ns !== 'function') Message.error('ES015', ['$ns', oGuid[prop]['$ns']]);
+                                oGuid[prop] = ns; // function 타입 연결
+                            } else linkReference(oGuid[prop], arr);
+                        }
+                    }
                 }
             }
         };

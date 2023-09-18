@@ -62,7 +62,7 @@ describe("[target: meta-registry.js]", () => {
                 }
                 const c1 = new CustomClass1();
 
-                expect(()=> MetaRegistry.register(c1)).toThrow(/_type.*_guid/);                
+                expect(()=> MetaRegistry.register(c1)).toThrow(/ES052/);                
             });
         });
         describe("MetaRegistry.release() <해제>", () => {
@@ -320,6 +320,27 @@ describe("[target: meta-registry.js]", () => {
                         _elem: [1],
                         _key: [],   // false
                     }
+                };
+
+                expect(MetaRegistry.validObject(obj1)).toBe(false);
+            });
+            it("- validObject() : 실패 4 (유일한 키)", () => {
+                const a = new MetaObject();
+                const obj1 = {
+                    _guid: 'KEY1',
+                    _type: 'T1',
+                    name: 'a1',
+                    subObj: {
+                        _guid: 'KEY2',
+                        _type: 'T2',
+                    },
+                    subArr: [
+                        { _guid: 'KEY2', _type: 'T3', $set: 'KEY1'},    // 중복키
+                        10
+                    ],
+                    type: {$ns: 'Meta.MetaObject'},
+                    onwer: {$ref: 'KEY2'},
+                    $set: 'KEY3'
                 };
 
                 expect(MetaRegistry.validObject(obj1)).toBe(false);

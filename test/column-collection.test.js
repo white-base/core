@@ -152,9 +152,9 @@ describe("[target: meta-column.js]", () => {
                 row1['i2'] = 'R2';
                 table1.rows.add(row1);
 
-                expect(() => table1.columns.add('i3')).toThrow(/row/);
-                expect(() => table1.columns.removeAt(0) ).toThrow(/row/);
-                expect(() => table1.columns.remove(table1.columns['i2'])).toThrow(/row/);
+                expect(() => table1.columns.add('i3')).toThrow(/ES045/);
+                expect(() => table1.columns.removeAt(0) ).toThrow(/ES044/);
+                expect(() => table1.columns.remove(table1.columns['i2'])).toThrow(/ES044/);
             });
         });
 

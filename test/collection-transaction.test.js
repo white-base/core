@@ -123,7 +123,7 @@ describe("[target: collection-trans.js]", () => {
                 };
                 const result = s.rows.add(null, desc);
     
-                expect(() => s.rows[0] = 1).toThrow(/0/);
+                expect(() => s.rows[0] = 1).toThrow(/Cannot assign to read only property/);
                 expect(s.rows[0]).toBe('A1');
                 expect(s.rows['0']).toBe('A1');
                 expect(s.rows.count).toBe(1);
@@ -137,7 +137,7 @@ describe("[target: collection-trans.js]", () => {
                       return bValue;
                     },
                     set(newValue) {
-                        if (typeof newValue !== 'string') throw new Error('string 타입만')
+                        if (typeof newValue !== 'string') throw new Error('ES024 string 타입만')
                         bValue = newValue;
                     },
                     enumerable: true,
@@ -146,7 +146,7 @@ describe("[target: collection-trans.js]", () => {
                 const result = s.rows.add(null, desc);
                 s.rows[0] = 'A1';
     
-                expect(() => s.rows[0] = 1).toThrow(/string/);
+                expect(() => s.rows[0] = 1).toThrow(/ES024/);
                 expect(s.rows[0]).toBe('A1');
                 expect(s.rows['0']).toBe('A1');
                 expect(s.rows.count).toBe(1);
@@ -318,7 +318,7 @@ describe("[target: collection-trans.js]", () => {
             it("- removeAt(str) : 예외 ", () => {
                 let s = new Student();
     
-                expect(()=> s.rows.removeAt('1')).toThrow(/idx.*number/);
+                expect(()=> s.rows.removeAt('1')).toThrow(/ES021/);
             });
         });
 
@@ -382,14 +382,14 @@ describe("[target: collection-trans.js]", () => {
                 s.rows.add('A0');
                 s.rows.add('A1');
 
-                expect(()=> s.rows.insertAt(3, 'A2')).toThrow(/pos.*size/);
+                expect(()=> s.rows.insertAt(3, 'A2')).toThrow(/ES061/);
             });
             it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
                 let s = new Student();
                 s.rows.add('A0');
                 s.rows.add('A1');
 
-                expect(()=> s.rows.insertAt(-1, 'A2')).toThrow(/pos.*0/);
+                expect(()=> s.rows.insertAt(-1, 'A2')).toThrow(/ES062/);
             });
         });
 
@@ -550,7 +550,7 @@ describe("[target: collection-trans.js]", () => {
             const result1 = elem.rows.add( c1);
             const result2 = elem.rows.add('str');
             
-            expect(() => elem.rows.add()).toThrow(/없습니다./);
+            expect(() => elem.rows.add()).toThrow(/ES019(.|\s)*ES066/);
             expect(elem.rows[0].level).toBe(1);
             elem.rows[0] = 'OVER';
             expect(elem.rows[0]).toBe('OVER');
@@ -624,9 +624,9 @@ describe("[target: collection-trans.js]", () => {
             i.rows[0] = 'AA1';
             i.rows[1] = 'AA2';
     
-            expect(() => i.rows.add(null)).toThrow(/string/);     // 공백 예외
-            expect(() => i.rows.add(10)).toThrow(/string/); // 타입 예외
-            expect(() => i.rows[0] = 10).toThrow(/string/);
+            expect(() => i.rows.add(null)).toThrow(/ES024/);     // 공백 예외
+            expect(() => i.rows.add(10)).toThrow(/ES024/); // 타입 예외
+            expect(() => i.rows[0] = 10).toThrow(/ES024/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -635,11 +635,11 @@ describe("[target: collection-trans.js]", () => {
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
-            expect(() => i.rows.add(undefined)).toThrow(/(boolean)|(string)/);  // 값이 없음
-            expect(() => i.rows.add(null)).toThrow(/(boolean)|(string)/);    // 공백 예외
-            expect(() => i.rows.add(10)).toThrow(/(boolean)|(string)/);// 타입 예외
-            expect(() => i.rows.add({})).toThrow(/(boolean)|(string)/);
-            expect(() => i.rows[0] = 10).toThrow(/(boolean)|(string)/);
+            expect(() => i.rows.add(undefined)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);  // 값이 없음
+            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);    // 공백 예외
+            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);// 타입 예외
+            expect(() => i.rows.add({})).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);
+            expect(() => i.rows[0] = 10).toThrow(/ES024(.|\s)*ES024/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -656,7 +656,7 @@ describe("[target: collection-trans.js]", () => {
             expect(i.rows.exist('0')).toBe(true);
             expect(i.rows.exist('1')).toBe(true);
             expect(i.rows.exist('2')).toBe(false);
-            expect(()=> i.rows.exist(true)).toThrow(/key.*number.*string/);
+            expect(()=> i.rows.exist(true)).toThrow(/ES021/);
         });
     });
 });

@@ -32,7 +32,7 @@ describe("[target: namespace-manager.js]", () => {
                 const fun1 = function() {return 'Fun1'};
                 ns.register('fun1', fun1);
 
-                expect(()=> ns.register('a1.fun1', fun1)).toThrow(/isOverlap/);
+                expect(()=> ns.register('a1.fun1', fun1)).toThrow(/ES041/);
             });
         });
         describe("NamespaceManager.list <요소 목록>", () => {

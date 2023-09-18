@@ -63,7 +63,7 @@ describe("[target: collection-property.js, ollection-array.js, collection-base.j
             // const result2 = i.columns.add('a1', 'A1');
     
             expect(()=> i.columns.add('a1', 'A1')).toThrow(/ES042/);
-            expect(()=> i.columns.add(0)).toThrow(/string/);
+            expect(()=> i.columns.add(0)).toThrow(/ES021/);
             expect(arrResult.length).toBe(0);
             expect(result1).toBeTruthy();
         });

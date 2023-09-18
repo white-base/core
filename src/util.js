@@ -61,6 +61,25 @@
           return Object.prototype.toString.call(p_obj) === '[object Array]';
         };
     }
+    if (!Object.keys) {
+        Object.keys = (function () {
+            var hasOwnProperty = Object.prototype.hasOwnProperty;
+            var hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString');
+            var dontEnums = ['toString', 'toLocaleString', 'valueOf', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'constructor'];
+            var dontEnumsLength = dontEnums.length;
+            return function (obj) {
+                if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
+                var result = [];
+                for (var prop in obj) if (hasOwnProperty.call(obj, prop)) result.push(prop);
+                if (hasDontEnumBug) {
+                  for (var i=0; i < dontEnumsLength; i++) {
+                    if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
+                  }
+                }
+                return result;
+            }
+        })()
+    };
 
     /**
      * inherits(대상, 부모) : 상속
@@ -216,25 +235,49 @@
         // 객체인지 배열인지 판단
         var copy = Array.isArray(object) ? [] : {};
        
-        for (var key of Object.keys(object)) {
-          copy[key] = deepCopy(object[key]);
+        if (Array.isArray(object)) {
+            for (var i = 0; i < object.length; i++) {
+                copy[i] = deepCopy(object[i]);
+            }
+        } else {
+            for (var key in object) {
+                if (object.hasOwnProperty(key)) {
+                    copy[key] = deepCopy(object[key]);
+                }
+            }
         }
+        // 최신버전 of
+        // for (var key of Object.keys(object)) {   
+        //   copy[key] = deepCopy(object[key]);
+        // }
         return copy;
-      }
+    }
 
-      var deepEqual = function(obj1, obj2) {
-        var keys1 = Object.keys(obj1);
-        var keys2 = Object.keys(obj2);
-       
-        if (keys1.length !== keys2.length) return false;
-       
-        for (const key of keys1) {
-          var val1 = obj1[key];
-          var val2 = obj2[key];
-          var areObjects = isObject(val1) && isObject(val2);
-          if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-            return false;
-          }
+    var deepEqual = function(obj1, obj2) {
+
+        if (Array.isArray(obj1)) {
+            if (!Array.isArray(obj1)) return false;
+            if (obj1.length !== obj2.length) return false;
+            for (var i = 0; i < obj1.length; i++) {
+                var val1 = obj1[i];
+                var val2 = obj2[i];
+                var areObjects = isObject(val1) && isObject(val2);
+                if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+                    return false;
+                }
+            }
+        } else {
+            if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+            for (var key in obj1) {
+                if (obj1.hasOwnProperty(key)) {
+                    var val1 = obj1[key];
+                    var val2 = obj2[key];
+                    var areObjects = isObject(val1) && isObject(val2);
+                    if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+                        return false;
+                    }
+                }
+            }
         }
         return true;
         
@@ -242,9 +285,25 @@
         function isObject(obj) {
             return obj != null && typeof obj === 'object';
         }
-      }
-      // TODO: getAllProperties() 사용한 문법으로 교체 필요 ES5 
-      
+    }
+    // 최신 문법 of
+    //   var deepEqual = function(object1, object2) {
+    //     var keys1 = Object.keys(object1);
+    //     var keys2 = Object.keys(object2);
+    //     if (keys1.length !== keys2.length) return false;
+    //     for (const key of keys1) {
+    //       var val1 = object1[key];
+    //       var val2 = object2[key];
+    //       var areObjects = isObject(val1) && isObject(val2);
+    //       if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+    //         return false;
+    //       }
+    //     }
+    //     return true;
+    //     function isObject(obj) {
+    //         return obj != null && typeof obj === 'object';
+    //     }
+    //   }
 
     //==============================================================
     // 5. module export

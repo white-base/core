@@ -161,11 +161,11 @@ describe("[target: util-type.js.js]", () => {
             expect(checkUnionType(compare.o4.target, compare.o4.type[0], compare.o4.type[1])).toBe(true);
             expect(checkUnionType(compare.o5.target, compare.o5.type[0], compare.o5.type[1])).toBe(false);
             // validUnionType()
-            expect(()=> validUnionType(compare.p0.target, compare.p0.type[0], compare.p0.type[1])).toThrow();
-            expect(()=> validUnionType(compare.p1.target, compare.p1.type[0], compare.p1.type[1])).toThrow();
-            expect(()=> validUnionType(compare.p2.target, compare.p2.type[0], compare.p2.type[1])).toThrow();
-            expect(()=> validUnionType(compare.p3.target, compare.p3.type[0], compare.p3.type[1])).toThrow();
-            expect(()=> validUnionType(compare.p4.target, compare.p4.type[0], compare.p4.type[1])).toThrow();
+            expect(()=> validUnionType(compare.p0.target, compare.p0.type[0], compare.p0.type[1])).toThrow(/ES065/);
+            expect(()=> validUnionType(compare.p1.target, compare.p1.type[0], compare.p1.type[1])).toThrow(/ES065/);
+            expect(()=> validUnionType(compare.p2.target, compare.p2.type[0], compare.p2.type[1])).toThrow(/ES065/);
+            expect(()=> validUnionType(compare.p3.target, compare.p3.type[0], compare.p3.type[1])).toThrow(/ES065/);
+            expect(()=> validUnionType(compare.p4.target, compare.p4.type[0], compare.p4.type[1])).toThrow(/ES065/);
             expect(validUnionType(compare.p5.target, compare.p5.type[0], compare.p5.type[1])).toBe(true);
             expect(validUnionType(compare.p6.target, compare.p6.type[0], compare.p6.type[1])).toBe(true);
             expect(validUnionType(compare.p7.target, compare.p7.type[0], compare.p7.type[1])).toBe(true);
@@ -173,10 +173,10 @@ describe("[target: util-type.js.js]", () => {
             expect(validUnionType(compare.r2.target, compare.r2.type[0], compare.r2.type[1])).toBe(true);
             expect(validUnionType(compare.r3.target, compare.r3.type[0], compare.r3.type[1])).toBe(true);
             expect(validUnionType(compare.o1.target, compare.o1.type[0], compare.o1.type[1])).toBe(true);
-            expect(()=> validUnionType(compare.o2.target, compare.o2.type[0], compare.o2.type[1])).toThrow();
-            expect(()=> validUnionType(compare.o3.target, compare.o3.type[0], compare.o3.type[1])).toThrow();
+            expect(()=> validUnionType(compare.o2.target, compare.o2.type[0], compare.o2.type[1])).toThrow(/ES065/);
+            expect(()=> validUnionType(compare.o3.target, compare.o3.type[0], compare.o3.type[1])).toThrow(/ES065/);
             expect(validUnionType(compare.o4.target, compare.o4.type[0], compare.o4.type[1])).toBe(true);
-            expect(()=> validUnionType(compare.o5.target, compare.o5.type[0], compare.o5.type[1])).toThrow();
+            expect(()=> validUnionType(compare.o5.target, compare.o5.type[0], compare.o5.type[1])).toThrow(/ES065/);
         });
     });
 

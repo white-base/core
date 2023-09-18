@@ -165,86 +165,87 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(result).toBeTruthy();
             });
         });
-        describe.skip("this.insertAt(num, name): bool <idx 위치에 추가>", () => {
-            // beforeAll(() => {
-            //     let s = new Student();
-            // });
-            it("- insertAt(idx) : 첫째 요소 삭제", () => {
-                let s = new Student();
-                s.columns.add('a2', 'A2');
-                s.columns.add('a3', 'A3');
-                const result = s.columns.insertAt(0, 'a1', 'A1');
+        // property 에는 insertAt 기능 빠짐
+        // describe.skip("this.insertAt(num, name): bool <idx 위치에 추가>", () => {
+        //     // beforeAll(() => {
+        //     //     let s = new Student();
+        //     // });
+        //     it("- insertAt(idx) : 첫째 요소 삭제", () => {
+        //         let s = new Student();
+        //         s.columns.add('a2', 'A2');
+        //         s.columns.add('a3', 'A3');
+        //         const result = s.columns.insertAt(0, 'a1', 'A1');
     
-                expect(s.columns['a1']).toBeDefined();
-                expect(s.columns['a2']).toBeDefined();
-                expect(s.columns['a3']).toBeDefined();
-                expect(s.columns[0] === s.columns['a1']).toBe(true);
-                expect(s.columns[1] === s.columns['a2']).toBe(true);
-                expect(s.columns[2] === s.columns['a3']).toBe(true);
-                expect(s.columns.indexOf('a1', 1)).toBe(0);  // 바뀐 idx 확인
-                expect(s.columns.indexOf('a2', 1)).toBe(1);  // 바뀐 idx 확인
-                expect(s.columns.indexOf('a3', 1)).toBe(2);  // 바뀐 idx 확인
-                expect(s.columns.count).toBe(3);
-                expect(s.columns.list.length).toBe(3);
-                expect(result).toBeTruthy();
-            });
-            it("- insertAt(idx) : 중간 요소 추가", () => {
-                let s = new Student();
-                s.columns.add('a1', 'A1');
-                s.columns.add('a3', 'A3');
-                const result = s.columns.insertAt(1, 'a2', 'A2');
+        //         expect(s.columns['a1']).toBeDefined();
+        //         expect(s.columns['a2']).toBeDefined();
+        //         expect(s.columns['a3']).toBeDefined();
+        //         expect(s.columns[0] === s.columns['a1']).toBe(true);
+        //         expect(s.columns[1] === s.columns['a2']).toBe(true);
+        //         expect(s.columns[2] === s.columns['a3']).toBe(true);
+        //         expect(s.columns.indexOf('a1', 1)).toBe(0);  // 바뀐 idx 확인
+        //         expect(s.columns.indexOf('a2', 1)).toBe(1);  // 바뀐 idx 확인
+        //         expect(s.columns.indexOf('a3', 1)).toBe(2);  // 바뀐 idx 확인
+        //         expect(s.columns.count).toBe(3);
+        //         expect(s.columns.list.length).toBe(3);
+        //         expect(result).toBeTruthy();
+        //     });
+        //     it("- insertAt(idx) : 중간 요소 추가", () => {
+        //         let s = new Student();
+        //         s.columns.add('a1', 'A1');
+        //         s.columns.add('a3', 'A3');
+        //         const result = s.columns.insertAt(1, 'a2', 'A2');
     
-                expect(s.columns['a1']).toBeDefined();
-                expect(s.columns['a2']).toBeDefined();
-                expect(s.columns['a3']).toBeDefined();
-                expect(s.columns[0] === s.columns['a1']).toBe(true);
-                expect(s.columns[1] === s.columns['a2']).toBe(true);
-                expect(s.columns[2] === s.columns['a3']).toBe(true);
-                expect(s.columns.indexOf('a1', 1)).toBe(0);  // 바뀐 idx 확인
-                expect(s.columns.indexOf('a2', 1)).toBe(1);  // 바뀐 idx 확인
-                expect(s.columns.indexOf('a3', 1)).toBe(2);  // 바뀐 idx 확인
-                expect(s.columns.count).toBe(3);
-                expect(s.columns.list.length).toBe(3);
-                expect(result).toBeTruthy();
-            });
-            it("- insertAt(idx) : 마지막 요소 추가 후 add()", () => {
-                let s = new Student();
-                s.columns.add('a1', 'A1');
-                s.columns.add('a2', 'A2');
-                const result = s.columns.insertAt(2, 'a3', 'A3');
-                s.columns.add('a4', 'A4');
+        //         expect(s.columns['a1']).toBeDefined();
+        //         expect(s.columns['a2']).toBeDefined();
+        //         expect(s.columns['a3']).toBeDefined();
+        //         expect(s.columns[0] === s.columns['a1']).toBe(true);
+        //         expect(s.columns[1] === s.columns['a2']).toBe(true);
+        //         expect(s.columns[2] === s.columns['a3']).toBe(true);
+        //         expect(s.columns.indexOf('a1', 1)).toBe(0);  // 바뀐 idx 확인
+        //         expect(s.columns.indexOf('a2', 1)).toBe(1);  // 바뀐 idx 확인
+        //         expect(s.columns.indexOf('a3', 1)).toBe(2);  // 바뀐 idx 확인
+        //         expect(s.columns.count).toBe(3);
+        //         expect(s.columns.list.length).toBe(3);
+        //         expect(result).toBeTruthy();
+        //     });
+        //     it("- insertAt(idx) : 마지막 요소 추가 후 add()", () => {
+        //         let s = new Student();
+        //         s.columns.add('a1', 'A1');
+        //         s.columns.add('a2', 'A2');
+        //         const result = s.columns.insertAt(2, 'a3', 'A3');
+        //         s.columns.add('a4', 'A4');
     
-                expect(s.columns['a1']).toBeDefined();
-                expect(s.columns['a2']).toBeDefined();
-                expect(s.columns['a3']).toBeDefined();
-                expect(s.columns['a4']).toBeDefined();
-                expect(s.columns[0] === s.columns['a1']).toBe(true);
-                expect(s.columns[1] === s.columns['a2']).toBe(true);
-                expect(s.columns[2] === s.columns['a3']).toBe(true);
-                expect(s.columns[3] === s.columns['a4']).toBe(true);
-                expect(s.columns.indexOf('a1', 1)).toBe(0);  
-                expect(s.columns.indexOf('a2', 1)).toBe(1);
-                expect(s.columns.indexOf('a3', 1)).toBe(2);
-                expect(s.columns.indexOf('a4', 1)).toBe(3);
-                expect(s.columns.count).toBe(4);
-                expect(s.columns.list.length).toBe(4);
-                expect(result).toBeTruthy();
-            });
-            it("- insertAt(pos) : 예외 : 사이즈 초과", () => {
-                let s = new Student();
-                s.columns.add('a0', 'A0');
-                s.columns.add('a1', 'A1');
+        //         expect(s.columns['a1']).toBeDefined();
+        //         expect(s.columns['a2']).toBeDefined();
+        //         expect(s.columns['a3']).toBeDefined();
+        //         expect(s.columns['a4']).toBeDefined();
+        //         expect(s.columns[0] === s.columns['a1']).toBe(true);
+        //         expect(s.columns[1] === s.columns['a2']).toBe(true);
+        //         expect(s.columns[2] === s.columns['a3']).toBe(true);
+        //         expect(s.columns[3] === s.columns['a4']).toBe(true);
+        //         expect(s.columns.indexOf('a1', 1)).toBe(0);  
+        //         expect(s.columns.indexOf('a2', 1)).toBe(1);
+        //         expect(s.columns.indexOf('a3', 1)).toBe(2);
+        //         expect(s.columns.indexOf('a4', 1)).toBe(3);
+        //         expect(s.columns.count).toBe(4);
+        //         expect(s.columns.list.length).toBe(4);
+        //         expect(result).toBeTruthy();
+        //     });
+        //     it("- insertAt(pos) : 예외 : 사이즈 초과", () => {
+        //         let s = new Student();
+        //         s.columns.add('a0', 'A0');
+        //         s.columns.add('a1', 'A1');
 
-                expect(()=> s.columns.insertAt(3, 'a2', 'A2')).toThrow(/pos.*size/);
-            });
-            it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
-                let s = new Student();
-                s.columns.add('a0', 'A0');
-                s.columns.add('a1', 'A1');
+        //         expect(()=> s.columns.insertAt(3, 'a2', 'A2')).toThrow(/pos.*size/);
+        //     });
+        //     it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
+        //         let s = new Student();
+        //         s.columns.add('a0', 'A0');
+        //         s.columns.add('a1', 'A1');
 
-                expect(()=> s.columns.insertAt(-1, 'a2', 'A2')).toThrow(/pos.*0/);
-            });
-        });
+        //         expect(()=> s.columns.insertAt(-1, 'a2', 'A2')).toThrow(/pos.*0/);
+        //     });
+        // });
         
         describe("BaseCollection.removeAt(this.indexOf(name, 1)): bool <이름으로 삭제> ", () => {
             // beforeAll(() => {
@@ -310,7 +311,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(i.columns.exist('0')).toBe(true);
                 expect(i.columns.exist('1')).toBe(true);
                 expect(i.columns.exist('2')).toBe(false);
-                expect(()=> i.columns.exist(true)).toThrow(/key.*number.*string/);
+                expect(()=> i.columns.exist(true)).toThrow(/ES021/);
             });
         });
 
@@ -504,11 +505,13 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 };
                 const result = s.columns.add('a1', null, desc);
     
-                expect(() => s.columns['a1'] = 1).toThrow(/a1/);
+                expect(() => s.columns['a1'] = 1).toThrow(/Cannot assign to read only property/);
+                expect(()=> s.columns.removeAt(0)).toThrow(/Cannot delete property/);
                 expect(s.columns['a1']).toBe('A1');
                 expect(s.columns.a1).toBe('A1');
                 expect(s.columns.count).toBe(1);
                 expect(result).toBeTruthy();
+                // expect(s.columns.count).toBe(0);
             });
             it("- add(name, value, desc) : set/get (제약조건 추가) ", () => {
                 let s = new Student();
@@ -518,7 +521,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                       return bValue;
                     },
                     set(newValue) {
-                        if (typeof newValue !== 'string') throw new Error('string 타입만')
+                        if (typeof newValue !== 'string') throw new Error('ES024 string 타입만')
                         bValue = newValue;
                     },
                     enumerable: true,
@@ -527,7 +530,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 const result = s.columns.add('a1', null, desc);
                 s.columns['a1'] = 'A1';
     
-                expect(() => s.columns['a1'] = 1).toThrow(/string/);
+                expect(() => s.columns['a1'] = 1).toThrow(/ES024/);
                 expect(s.columns['a1']).toBe('A1');
                 expect(s.columns.a1).toBe('A1');
                 expect(s.columns.count).toBe(1);
@@ -666,7 +669,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
         //     let s = new Student();
         //     s.columns.add('a1', 'A1');
     
-        //     expect(()=> s.columns._remove('str')).toThrow(/idx.*number/);
+        //     expect(()=> s.columns._remove('str')).toThrow(/ES021/);
         // });
     });
     describe("BaseCollection._elemTypes <전체 타입을 설정할 경우 : 클래스타입>", () => {
@@ -724,7 +727,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             const result1 = elem.columns.add('a1', c1);
             const result2 = elem.columns.add('a2', 'str');
             
-            expect(() => elem.columns.add('a3')).toThrow(/없습니다./);
+            expect(() => elem.columns.add('a3')).toThrow(/ES066/);
             expect(elem.columns[0].level).toBe(1);
             expect(elem.columns['a1'].level).toBe(1);
             elem.columns['a1'] = 'OVER';
@@ -804,9 +807,9 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             i.columns['a1'] = 'AA1';
             i.columns['a2'] = 'AA2';
     
-            expect(() => i.columns.add('a3')).toThrow(/string/);     // 공백 예외
-            expect(() => i.columns.add('a3', 10)).toThrow(/string/); // 타입 예외
-            expect(() => i.columns['a1'] = 10).toThrow(/string/);
+            expect(() => i.columns.add('a3')).toThrow(/ES024/);     // 공백 예외
+            expect(() => i.columns.add('a3', 10)).toThrow(/ES024/); // 타입 예외
+            expect(() => i.columns['a1'] = 10).toThrow(/ES024/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -815,10 +818,10 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             const result1 = i.columns.add('a1', 'A1');
             const result2 = i.columns.add('a2', true);
             
-            expect(() => i.columns.add('a3')).toThrow(/string/);     // 공백 예외
-            expect(() => i.columns.add('a3', 10)).toThrow(/boolean/); // 타입 예외
-            expect(() => i.columns.add('a3', {})).toThrow(/(boolean)|(string)/);
-            expect(() => i.columns['a1'] = 10).toThrow(/(boolean)|(string)/);
+            expect(() => i.columns.add('a3')).toThrow(/ES024/);     // 공백 예외
+            expect(() => i.columns.add('a3', 10)).toThrow(/ES024/); // 타입 예외
+            expect(() => i.columns.add('a3', {})).toThrow(/ES066(.|\s)*ES024/);
+            expect(() => i.columns['a1'] = 10).toThrow(/ES066(.|\s)*ES024/);
             expect(result1).toBeTruthy();
             expect(result2).toBeTruthy();
         });

@@ -67,7 +67,6 @@
              */
             this.name = p_name || 'CustomError';
             
-            // TODO:: 추후 [내부처리] 부분 구현
             this._execute();
         }
         Util.inherits(CustomError, _super);

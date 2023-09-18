@@ -51,7 +51,7 @@ describe("[target: meta-row.js]", () => {
             });
         });
         describe("MetaObject.equal() <객체 비교>", () => {
-            it("- equal() : __event ", () => {
+            it.only("- equal() : __event ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');
@@ -175,7 +175,7 @@ describe("[target: meta-row.js]", () => {
         
                 expect(table1.rows[0]['i1']).toBe('R1');
                 expect(table1.rows[0]['i2']).toBe(10);
-                expect(() => table1.rows.add(row2, true)).toThrow('숫자');
+                expect(() => table1.rows.add(row2, true)).toThrow(/ES054/);
                 expect(() => table1.rows.add(row3, true)).toThrow('ES054');
             });
             /**
@@ -184,7 +184,7 @@ describe("[target: meta-row.js]", () => {
             it("- add(row) : 예외(다른 엔티티) ", () => {
                 var table1 = new MetaTable('T1');
             
-                expect(() => table1.rows.add('ERR')).toThrow('MetaRow');
+                expect(() => table1.rows.add('ERR')).toThrow('ES032');
             });
             it("- add(row) : 예외(다른 객체) ", () => {
                 var table1 = new MetaTable('T1');
@@ -415,7 +415,7 @@ describe("[target: meta-row.js]", () => {
                 expect(table1.rows[0][0]).toBe('R1');
                 table1.rows[0] = row2;
                 expect(table1.rows[0][0]).toBe('R2');
-                expect(() => table1.rows[0] = row3).toThrow(/entity/);
+                expect(() => table1.rows[0] = row3).toThrow(/ES032/);
             });
         });
     
@@ -507,7 +507,7 @@ describe("[target: meta-row.js]", () => {
                 table1.rows.add(row0);
                 table1.rows.add(row1);
     
-                expect(()=> table1.rows.insertAt(3, row2)).toThrow(/pos.*size/);
+                expect(()=> table1.rows.insertAt(3, row2)).toThrow(/ES061/);
             });
             it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
                 var table1 = new MetaTable('T1');
@@ -522,7 +522,7 @@ describe("[target: meta-row.js]", () => {
                 table1.rows.add(row0);
                 table1.rows.add(row1);
     
-                expect(()=> table1.rows.insertAt(-1, row2)).toThrow(/pos.*0/);
+                expect(()=> table1.rows.insertAt(-1, row2)).toThrow(/ES062/);
             });
         });
     });

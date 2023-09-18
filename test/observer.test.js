@@ -15,7 +15,7 @@ describe("[target: observer.js]", () => {
         });
     
         it("- 생성자에 전달 없을 경우", () => {
-            expect(()=> new Observer()).toThrow(/caller/);
+            expect(()=> new Observer()).toThrow(/ES031/);
         });
     });
     describe("< 이벤트 직접 호출 >", () => {
@@ -135,7 +135,7 @@ describe("[target: observer.js]", () => {
             e._onAdd('P1', 'P2');    // 이벤트 강제 호출
     
             expect(result).toEqual(['ADD2']);
-            expect(()=> e._event.isSingleMode = 1).toThrow(/boolean/);
+            expect(()=> e._event.isSingleMode = 1).toThrow(/ES021/);
         });
         it("- 이벤트 onAdd 모두 해지 ", () => {
             const e = new EventClass();

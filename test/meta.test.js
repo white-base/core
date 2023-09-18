@@ -344,7 +344,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const i = new MetaElement('_name');
 
                 expect(()=> i._name = 10).toThrow('ES021');
-                expect(()=> i._guid = 10).toThrow(/set.*_guid/); // 직접 설정할 경우는 없음
+                expect(()=> i._guid = 10).toThrow(/Cannot set property _guid of/); // 직접 설정할 경우는 없음
             });
         });
     });

@@ -906,7 +906,7 @@ describe("[target: meta-table.js]", () => {
                 row['i2'] = 'R2';
                 table1.rows.add(row);
     
-                expect(() => table2.load(table1)).toThrow('MetaEntity');
+                expect(() => table2.load(table1)).toThrow('ES022');
             });
         });
         describe("MetaEntity.output(stringify?, space?, vOpt?): str <엔티티 출력>", () => {
@@ -983,7 +983,7 @@ describe("[target: meta-table.js]", () => {
                 };
                 table1.read(json1, 3);  // 스키마 + 데이터 가져오기
     
-                expect(() => table1.readSchema(json2)).toThrow('row');
+                expect(() => table1.readSchema(json2)).toThrow('ES045');
             });
             it("- readSchema(JSON, isReadRow) : column 가져오기(스키마) ", () => {
                 var table1 = new MetaTable('T1');
