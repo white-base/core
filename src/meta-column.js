@@ -718,7 +718,7 @@ const { MetaEntity } = require('./meta-entity');
         
         MetaColumnCollection._NS = 'Meta.Entity';          // namespace
         MetaColumnCollection._PARAMS = ['_owner', '_baseType'];         // creator parameter
-
+        MetaColumnCollection._ABSCRACT = true;
         /**
          * 객체 비교
          * @virtual
@@ -828,6 +828,11 @@ const { MetaEntity } = require('./meta-entity');
             }
         };
 
+        /** @abstract */
+        MetaColumnCollection.prototype.addValue = function() {
+            Message.error('ES013', ['addValue(name, value)']);
+        };
+
         return MetaColumnCollection;
     
     }(PropertyCollection));
@@ -894,7 +899,7 @@ const { MetaEntity } = require('./meta-entity');
 
             item = new this._baseType(p_name, this._owner, property);
 
-            return this.add(item);
+            return this[this.add(item)];
         };
 
         return MetaTableColumnCollection;
@@ -1125,7 +1130,7 @@ const { MetaEntity } = require('./meta-entity');
 
             item = new this._baseType(p_name, this._owner, property);
 
-            return this.add(item, p_refCollection);
+            return this[this.add(item, p_refCollection)];
         };
 
         /**
