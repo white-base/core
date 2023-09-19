@@ -692,7 +692,7 @@ describe("[target: meta-set.js]", () => {
             it("- getObect(0) vs getObject(1) 읽기 비교 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
-                const view2 = new MetaView('V2',view1); // 전체 참조
+                const view2 = new MetaView('V2', view1); // 전체 참조
                 view2.columns.add('c2');
                 const view3 = new MetaView('V3');
                 view3.columns.add('c3', view2.columns); // 일부 참조
@@ -756,7 +756,7 @@ describe("[target: meta-set.js]", () => {
                 // 참조도 가능하게
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
-                const view2 = new MetaView('V2',view1); // 전체 참조
+                const view2 = new MetaView('V2', view1); // 전체 참조
                 view2.columns.add('c2');
                 const view3 = new MetaView('V3');
                 view3.columns.add('c3', view2.columns); // 일부 참조

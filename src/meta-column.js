@@ -759,27 +759,27 @@ const { MetaEntity } = require('./meta-entity');
             return _super.prototype.removeAt.call(this, p_idx);
         };
 
-        /**
-         *  이름과 값으로 아이템 생성하여 컬렉션에 추가한다.
-         * @param {*} p_name 아이템명
-         * @param {String | Number | Boolean} p_value 
-         * @returns {MetaColumn}
-         */
-        MetaColumnCollection.prototype.addValue  = function(p_name, p_value) {
-            var item;
-            var property = {};
+        // /**
+        //  *  이름과 값으로 아이템 생성하여 컬렉션에 추가한다.
+        //  * @param {*} p_name 아이템명
+        //  * @param {String | Number | Boolean} p_value 
+        //  * @returns {MetaColumn}
+        //  */
+        // MetaColumnCollection.prototype.addValue  = function(p_name, p_value) {
+        //     var item;
+        //     var property = {};
 
-            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
-            if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
-                Message.error('ES021', ['value', 'number, string, boolean']);
-            }
+        //     if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+        //     if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
+        //         Message.error('ES021', ['value', 'number, string, boolean']);
+        //     }
             
-            property = { value: p_value };
+        //     property = { value: p_value };
 
-            item = new this._baseType(p_name, this._owner, property);
+        //     item = new this._baseType(p_name, this._owner, property);
 
-            return this.add(item);
-        };
+        //     return this.add(item);
+        // };
 
         /**
          *  이름과 값으로 아이템 생성하여 컬렉션에 추가한다.
@@ -873,6 +873,28 @@ const { MetaEntity } = require('./meta-entity');
             if (typeof key === 'undefined') Message.error('ES051', ['name | obj.columnName']);
 
             return _super.prototype.add.call(this, key, column);
+        };
+
+        /**
+         *  이름과 값으로 아이템 생성하여 컬렉션에 추가한다.
+         * @param {*} p_name 아이템명
+         * @param {String | Number | Boolean} p_value 
+         * @returns {MetaColumn}
+         */
+        MetaTableColumnCollection.prototype.addValue  = function(p_name, p_value) {
+            var item;
+            var property = {};
+
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
+                Message.error('ES021', ['value', 'number, string, boolean']);
+            }
+            
+            property = { value: p_value };
+
+            item = new this._baseType(p_name, this._owner, property);
+
+            return this.add(item);
         };
 
         return MetaTableColumnCollection;
@@ -1071,7 +1093,7 @@ const { MetaEntity } = require('./meta-entity');
                     column = collection[key];
                 }
                 // 소유객체에 참조 등록 (중복제거됨), 의존성을 낮추기 위해서 검사후 등록
-                if (this._registerRefer) this._registerRefer(collection._owner);
+                // if (this._registerRefer) this._registerRefer(collection._owner);
             }
             /**
              * - entity가 있는 컬럼을 추가할 경우 : 참조가 추가되는 것이다.
@@ -1081,6 +1103,29 @@ const { MetaEntity } = require('./meta-entity');
              */
             if (!column._entity) column._entity = this._owner;
             return _super.prototype.add.call(this, key, column);
+        };
+
+        /**
+         *  이름과 값으로 아이템 생성하여 컬렉션에 추가한다.
+         * @param {*} p_name 아이템명
+         * @param {String | Number | Boolean} p_value 
+         * @returns {MetaColumn}
+         */
+        MetaViewColumnCollection.prototype.addValue  = function(p_name, p_value, p_refCollection) {
+            var item;
+            var property = {};
+
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
+                Message.error('ES021', ['value', 'number, string, boolean']);
+            }
+            if (p_value instanceof MetaColumnCollection) Message.error('ES055', ['value', 'MetaColumnCollection instance']);
+
+            property = { value: p_value };
+
+            item = new this._baseType(p_name, this._owner, property);
+
+            return this.add(item, p_refCollection);
         };
 
         /**

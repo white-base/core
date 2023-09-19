@@ -189,6 +189,10 @@
                             msg: '[$1] is not a valid character in the [$2] test. ',
                             long: 'test result : $3'
                         },
+                        5: {
+                            msg: '[$2] cannot be registered with [$1].',
+                            long: ''
+                        },
                     },
                     S06: { // scope
                         1: {
@@ -370,6 +374,10 @@
                         4: {
                             msg: '[$1]는 [$2]검사에서 유효하지 않습니다. ',
                             long: '검사결과 : $3'
+                        },
+                        5: {
+                            msg: '[$1]에 [$2]은 등록할 수 없습니다.',
+                            long: ''
                         },
                     },
                     S06: {  // 범위

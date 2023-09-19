@@ -434,10 +434,10 @@ const { ISerialize } = require('./i-serialize');
         /**
          * 병합
          * @param {MetaEntity} p_target 
-         * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨
+         * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨 <**>
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨
          * @param {object} p_option.2 로우(idx) 기준 병합, 초과 컬럼은 채워짐
-         * @param {object} p_option.3 컬럼(key) 기준 병합, 초과 컬럼은 채워짐 
+         * @param {object} p_option.3 컬럼(key) 기준 병합, 초과 로우는 채워짐 
          * @param {boolean} p_checkValid 로우 유효성 검사 유무 (기본:false)
          */
         MetaEntity.prototype.merge  = function(p_target, p_option, p_checkValid) {
@@ -656,34 +656,56 @@ const { ISerialize } = require('./i-serialize');
          *  아이템명: { order: 100 }        // 속성 오버라이딩
          * }
          */
-        MetaEntity.prototype.select  = function(p_filter, p_args) {
-            var args = Array.prototype.slice.call(arguments);
+        // MetaEntity.prototype.select  = function(p_filter, p_args) {
+        //     var args = Array.prototype.slice.call(arguments);
+        //     var _this = this;
+        //     var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
+            
+        //     // var MetaView = require('./meta-view').MetaView;
+        //     if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
+
+        //     var view = new MetaView('select', this);
+        //     var items = [];
+        //     var callback = null;
+        //     var columnName;
+        //     var orignal = this.clone();
+
+        //     // 매개변수 구성
+        //     if (typeof p_filter === 'function') {
+        //         callback = p_filter;
+        //         if (Array.isArray(p_args)) items = p_args;
+        //         else if (args.length > 1) items = args.splice(1);
+        //     } else if (typeof p_filter === 'string') {
+        //         items = args;
+        //     } else if (Array.isArray(p_filter)) {
+        //         items = p_filter;
+        //     }
+
+        //     return this._buildEntity(view, callback, items);
+        // };
+        
+        /**
+         * 엔티티의 지정한 컬럼과 조건의 row 를 조회
+         * @param {array<string>?} p_names 
+         * @param {function?} p_filter function(row, idx, entity)
+         * @returns {MetaView}
+         */
+        MetaEntity.prototype.select  = function(p_names, p_filter) {
             var _this = this;
             var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
-            
-            // var MetaView = require('./meta-view').MetaView;
-            if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
-
+            var columnNames = Array.isArray(p_names) ? p_names : [];
+            var callback = p_filter;
             var view = new MetaView('select', this);
-            var items = [];
-            var callback = null;
-            var columnName;
-            var orignal = this.clone();
-
-            // 매개변수 구성
-            if (typeof p_filter === 'function') {
-                callback = p_filter;
-                if (Array.isArray(p_args)) items = p_args;
-                else if (args.length > 1) items = args.splice(1);
-            } else if (typeof p_filter === 'string') {
-                items = args;
-            } else if (Array.isArray(p_filter)) {
-                items = p_filter;
-            }
-
-            return this._buildEntity(view, callback, items);
-        };
             
+            if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
+            if (callback && typeof callback !== 'function') Message.error('ES021', ['filter', 'function']);
+            if (!Array.isArray(columnNames)) Message.error('ES021', ['names', 'array']);
+            
+            if (typeof p_names === 'string') columnNames.push(p_names);
+
+            return this._buildEntity(view, callback, columnNames);
+        };
+        
         /**
          * 불러오기/가져오기 (!! 병합용도가 아님)
          * 기존을 초기화 하고 불러오는 역활

@@ -356,6 +356,9 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.rows[2]['i2']).toBe(null);
                 expect(table1.rows[3]['i1']).toBe('R10');
                 expect(table1.rows[3]['i2']).toBe(null);
+                /**
+                 * MEMO: row 기준으로 병합할때, 나닌 컬럼은 무시되며, 없는 rows 는 null 확인
+                 */
             });
             it("- merge() : opt = 1 (다른 구조) ", () => {
                 var table1 = new MetaTable('T1');
@@ -767,7 +770,7 @@ describe("[target: meta-table.js]", () => {
                 table1.rows.add(row);
 
                 MetaRegistry.ns.register('Meta.Entity.MetaView', MetaView);
-                var table2 = table1.select(row => row['i1'] < 10);
+                var table2 = table1.select([], row => row['i1'] < 10);
                 
                 expect(table2.columns.count).toBe(2);
                 expect(table2.rows.count).toBe(1);
@@ -910,12 +913,17 @@ describe("[target: meta-table.js]", () => {
             });
         });
         describe("MetaEntity.output(stringify?, space?, vOpt?): str <엔티티 출력>", () => {
-            it("- output() : 출력 ", () => {
-                // TODO: 내부적으로 사용함!!
+            it("- output() : getObject() 결과 비교  ", () => {
+                const table1 = new MetaTable('T1');
+                table1.columns.add('c1');
+                const c1 = table1.columns['c1'];
+                const str1 = table1.output();
+                const rObj = table1.getObject();
+                const str2 = JSON.stringify(rObj);
+
+                expect(str1).toBe(str2);
             });
         });
-    
-        
 
         describe("MetaEntity.readSchema(obj) <column 가져오기(스키마)>", () => {
             it("- readSchema(obj) : column 가져오기(스키마) ", () => {
