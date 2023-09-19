@@ -211,7 +211,6 @@
         MetaView.prototype.clone  = function() {
             var clone = new MetaView(this.viewName, this._baseEntity);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
 
-            // 참조 복제 REVIEW::  필요성 검토 필요 >> 빼고, getter 방식으로 변경
             // if (this.columns._baseCollection) {
             //     clone.columns.__SET$_baseCollection(this.columns._baseCollection, clone.columns);
             // }

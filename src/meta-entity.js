@@ -433,7 +433,6 @@ const { ISerialize } = require('./i-serialize');
 
         /**
          * 병합
-         * TODO: 컬럼 추가시 row 존재시 오류 발생 추가
          * @param {MetaEntity} p_target 
          * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨

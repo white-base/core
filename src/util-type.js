@@ -28,26 +28,6 @@
     // 4. module implementation 
     
     /**
-     * 전체 프로퍼티 조회
-     * @param {object} obj Object를 제외한 프로터피 리턴
-     * @param {boolean?} isObj Object를 포함 여부
-     * @returns {array}  
-     */
-    var getAllProperties = function(obj, isObj) {
-        var allProps = [], curr = obj;
-        var is = isObj || false;
-
-        do {
-            var props = Object.getOwnPropertyNames(curr);
-            props.forEach(function(prop) {
-                if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
-                    allProps.push(prop);
-            });
-        } while (curr = Object.getPrototypeOf(curr))
-        return allProps;
-    }
-
-    /**
      * 최상위 object 이거나 사용자 함수에서 생성한 객체 여부
      * @param {*} obj 
      * @returns 
@@ -78,7 +58,7 @@
      */
     function _isFillObj(obj)  {
         // if(typeof obj === 'object' && getAllProperties(obj).length > 0 && !(obj instanceof RegExp)) {
-        if(_isObject(obj) && getAllProperties(obj).length > 0) {   // REVIEW: RegExp 빠져야 할듯!!
+        if(_isObject(obj) && getAllProperties(obj).length > 0) {
           return true;
         }
         return false;
@@ -109,6 +89,31 @@
         )) return true;
         return false;
     }
+
+    /**
+     * 전체 프로퍼티 조회
+     * @param {object} obj Object를 제외한 프로터피 리턴
+     * @param {boolean?} isObj Object를 포함 여부
+     * @returns {array}  
+     */
+    var getAllProperties = function(obj, isObj) {
+        var allProps = [], curr = obj;
+        var is = isObj || false;
+        do {
+            var props = Object.getOwnPropertyNames(curr);
+            
+            // props.forEach(function(prop) {
+            //     if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
+            //         allProps.push(prop);
+            // });
+            for (var i = 0; i < props.length; i++) {
+                var prop = props[i];
+                if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
+                    allProps.push(prop);
+            }
+        } while (curr = Object.getPrototypeOf(curr))
+        return allProps;
+    };
 
     /**
      * js 의 타입을 객체로 리턴한다.
