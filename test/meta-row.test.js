@@ -51,7 +51,7 @@ describe("[target: meta-row.js]", () => {
             });
         });
         describe("MetaObject.equal() <객체 비교>", () => {
-            it.only("- equal() : __event ", () => {
+            it("- equal() : __event ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');

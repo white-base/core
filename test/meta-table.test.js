@@ -925,8 +925,138 @@ describe("[target: meta-table.js]", () => {
             });
         });
 
-        describe("MetaEntity.readSchema(obj) <column 가져오기(스키마)>", () => {
-            it("- readSchema(obj) : column 가져오기(스키마) ", () => {
+        describe("MetaEntity.read(obj | rObj, opt) <JSON 읽기>", () => {
+            it("- read(obj, opt) : obj 읽기", () => {
+                var table1 = new MetaTable('T1');
+                var table2 = new MetaTable('T2');
+                var table3 = new MetaTable('T3');
+                var table4 = new MetaTable('T4');
+                var table5 = new MetaTable('T5');
+                var json1 = { 
+                    columns: {
+                        i1: { caption: 'C1'},
+                        i2: { caption: 'C2'},
+                    },
+                    rows: [
+                        { i1: 'R1', i2: 'R2' },
+                        { i1: 'R10', i2: 'R20' },
+                        { i1: 'R100', i2: 'R200' },
+                    ]
+                };
+                var json2 = { 
+                    columns: {
+                        i1: { caption: 'C1'},
+                    },
+                };
+                expect(()=> table1.read(json1, 0)).toThrow('ES067')
+                table2.read(json1, 1);  // 스키마 가져오기
+                table3.read(json1, 2);  // 데이터 가져오기
+                table4.read(json1, 3);  // 스키마 + 데이터 가져오기
+                table5.read(json2, 1);  // 스키마 가져오기
+                table5.read(json1, 2);  // 스키마 + 데이터 가져오기
+        
+                // table1
+                expect(table1.columns.count).toBe(0);
+                expect(table1.rows.count).toBe(0);
+                // table2
+                expect(table2.columns.count).toBe(2);
+                expect(table2.columns['i1'].caption).toBe('C1');
+                expect(table2.columns['i2'].caption).toBe('C2');
+                expect(table2.rows.count).toBe(0);
+                // table3
+                expect(table3.columns.count).toBe(0);
+                expect(table3.rows.count).toBe(0);
+                // table4
+                expect(table4.columns.count).toBe(2);
+                expect(table4.columns['i1'].caption).toBe('C1');
+                expect(table4.columns['i2'].caption).toBe('C2');
+                expect(table4.rows.count).toBe(3);
+                expect(table4.rows[0]['i1']).toBe('R1');
+                expect(table4.rows[0]['i2']).toBe('R2');
+                expect(table4.rows[1]['i1']).toBe('R10');
+                expect(table4.rows[1]['i2']).toBe('R20');
+                expect(table4.rows[2]['i1']).toBe('R100');
+                expect(table4.rows[2]['i2']).toBe('R200');
+                // table5
+                expect(table5.columns.count).toBe(1);
+                expect(table5.columns['i1'].caption).toBe('C1');
+                expect(table5.rows.count).toBe(3);
+                expect(table5.rows[0]['i1']).toBe('R1');
+                expect(table5.rows[0]['i2']).toBe(undefined);
+                expect(table5.rows[1]['i1']).toBe('R10');
+                expect(table5.rows[1]['i2']).toBe(undefined);
+                expect(table5.rows[2]['i1']).toBe('R100');
+                expect(table5.rows[2]['i2']).toBe(undefined);
+            });
+            it("- read(rObj, opt) : obj<ref> 가져오기", () => {
+                var table0 = new MetaTable('T0');
+                var table1 = new MetaTable('T1');
+                var table2 = new MetaTable('T2');
+                var table3 = new MetaTable('T3');
+                var table4 = new MetaTable('T4');
+                var table5 = new MetaTable('T5');
+                var json1 = { 
+                    columns: {
+                        i1: { caption: 'C1'},
+                        i2: { caption: 'C2'},
+                    },
+                    rows: [
+                        { i1: 'R1', i2: 'R2' },
+                        { i1: 'R10', i2: 'R20' },
+                        { i1: 'R100', i2: 'R200' },
+                    ]
+                };
+                var json2 = { 
+                    columns: {
+                        i1: { caption: 'C1'},
+                    },
+                };
+                table0.read(json1);  // 아무 동작 안함
+                const rObj = table0.getObject();
+                expect(()=> table1.read(rObj, 0)).toThrow('ES067')
+                table2.read(rObj, 1);  // 스키마 가져오기
+                table3.read(rObj, 2);  // 데이터 가져오기
+                table4.read(rObj, 3);  // 스키마 + 데이터 가져오기
+                table5.read(json2, 1);  // 스키마 가져오기
+                table5.read(rObj, 2);  // 데이터 가져오기
+        
+                // table1
+                expect(table1.columns.count).toBe(0);
+                expect(table1.rows.count).toBe(0);
+                // table2
+                expect(table2.columns.count).toBe(2);
+                expect(table2.columns['i1'].caption).toBe('C1');
+                expect(table2.columns['i2'].caption).toBe('C2');
+                expect(table2.rows.count).toBe(0);
+                // table3
+                expect(table3.columns.count).toBe(0);
+                expect(table3.rows.count).toBe(0);
+                // table4
+                expect(table4.columns.count).toBe(2);
+                expect(table4.columns['i1'].caption).toBe('C1');
+                expect(table4.columns['i2'].caption).toBe('C2');
+                expect(table4.rows.count).toBe(3);
+                expect(table4.rows[0]['i1']).toBe('R1');
+                expect(table4.rows[0]['i2']).toBe('R2');
+                expect(table4.rows[1]['i1']).toBe('R10');
+                expect(table4.rows[1]['i2']).toBe('R20');
+                expect(table4.rows[2]['i1']).toBe('R100');
+                expect(table4.rows[2]['i2']).toBe('R200');
+                // table5
+                expect(table5.columns.count).toBe(1);
+                expect(table5.columns['i1'].caption).toBe('C1');
+                expect(table5.rows.count).toBe(3);
+                expect(table5.rows[0]['i1']).toBe('R1');
+                expect(table5.rows[0]['i2']).toBe(undefined);
+                expect(table5.rows[1]['i1']).toBe('R10');
+                expect(table5.rows[1]['i2']).toBe(undefined);
+                expect(table5.rows[2]['i1']).toBe('R100');
+                expect(table5.rows[2]['i2']).toBe(undefined);
+            });
+        });
+
+        describe("MetaEntity.readSchema(obj) <column 읽기(스키마)>", () => {
+            it("- readSchema(obj) : column 읽기(스키마) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
                     name: 'T1',
@@ -993,7 +1123,7 @@ describe("[target: meta-table.js]", () => {
     
                 expect(() => table1.readSchema(json2)).toThrow('ES045');
             });
-            it("- readSchema(JSON, isReadRow) : column 가져오기(스키마) ", () => {
+            it("- readSchema(JSON, isReadRow) : column 읽기(스키마) ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T2');
                 var table3 = new MetaTable('T3');
@@ -1031,7 +1161,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
         
-        describe("MetaEntity.readData() : <row 가져오기(데이터)>", () => {
+        describe("MetaEntity.readData() : <row 읽기(데이터)>", () => {
             it("- readData() : row 가져오기(데이터) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
@@ -1061,136 +1191,47 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.rows[2]['i2']).toBe('R200');
             });
         });
-        describe("MetaEntity.read(obj | rObj, opt) <JSON 가져오기>", () => {
-            it("- read(obj, opt) : obj 가져오기", () => {
+        describe("MetaEntity.write(): obj <쓰기>", () => {
+            it("- 스키마/데이터 내보내기 (columns/rows) ", () => {
                 var table1 = new MetaTable('T1');
-                var table2 = new MetaTable('T2');
-                var table3 = new MetaTable('T3');
-                var table4 = new MetaTable('T4');
-                var table5 = new MetaTable('T5');
                 var json1 = { 
                     columns: {
-                        i1: { caption: 'C1'},
+                        i1: { 
+                            caption: 'C1', alias: 'ii1'},
                         i2: { caption: 'C2'},
                     },
                     rows: [
-                        { i1: 'R1', i2: 'R2' },
-                        { i1: 'R10', i2: 'R20' },
-                        { i1: 'R100', i2: 'R200' },
+                        { ii1: 'R1', i2: 'R2' },
+                        { ii1: 'R10', i2: 'R20' },
                     ]
                 };
-                var json2 = { 
+                table1.read(json1, 3);
+                const json2 = {
+                    _guid: table1._guid,
+                    // name: 'T1',
                     columns: {
-                        i1: { caption: 'C1'},
-                    },
-                };
-                table1.read(json1, 0);  // 아무 동작 안함
-                table2.read(json1, 1);  // 스키마 가져오기
-                table3.read(json1, 2);  // 데이터 가져오기
-                table4.read(json1, 3);  // 스키마 + 데이터 가져오기
-                table5.read(json2, 1);  // 스키마 가져오기
-                table5.read(json1, 2);  // 스키마 + 데이터 가져오기
-        
-                // table1
-                expect(table1.columns.count).toBe(0);
-                expect(table1.rows.count).toBe(0);
-                // table2
-                expect(table2.columns.count).toBe(2);
-                expect(table2.columns['i1'].caption).toBe('C1');
-                expect(table2.columns['i2'].caption).toBe('C2');
-                expect(table2.rows.count).toBe(0);
-                // table3
-                expect(table3.columns.count).toBe(0);
-                expect(table3.rows.count).toBe(0);
-                // table4
-                expect(table4.columns.count).toBe(2);
-                expect(table4.columns['i1'].caption).toBe('C1');
-                expect(table4.columns['i2'].caption).toBe('C2');
-                expect(table4.rows.count).toBe(3);
-                expect(table4.rows[0]['i1']).toBe('R1');
-                expect(table4.rows[0]['i2']).toBe('R2');
-                expect(table4.rows[1]['i1']).toBe('R10');
-                expect(table4.rows[1]['i2']).toBe('R20');
-                expect(table4.rows[2]['i1']).toBe('R100');
-                expect(table4.rows[2]['i2']).toBe('R200');
-                // table5
-                expect(table5.columns.count).toBe(1);
-                expect(table5.columns['i1'].caption).toBe('C1');
-                expect(table5.rows.count).toBe(3);
-                expect(table5.rows[0]['i1']).toBe('R1');
-                expect(table5.rows[0]['i2']).toBe(undefined);
-                expect(table5.rows[1]['i1']).toBe('R10');
-                expect(table5.rows[1]['i2']).toBe(undefined);
-                expect(table5.rows[2]['i1']).toBe('R100');
-                expect(table5.rows[2]['i2']).toBe(undefined);
-            });
-            it("- read(rObj, opt) : obj<ref> 가져오기", () => {
-                var table0 = new MetaTable('T0');
-                var table1 = new MetaTable('T1');
-                var table2 = new MetaTable('T2');
-                var table3 = new MetaTable('T3');
-                var table4 = new MetaTable('T4');
-                var table5 = new MetaTable('T5');
-                var json1 = { 
-                    columns: {
-                        i1: { caption: 'C1'},
-                        i2: { caption: 'C2'},
+                        $key: ['i1', 'i2'],
+                        i1: { 
+                            _guid: table1.columns.i1._guid,
+                            caption: 'C1', alias: 'ii1'
+                        },
+                        i2: { 
+                            _guid: table1.columns.i2._guid,
+                            caption: 'C2'
+                        },
                     },
                     rows: [
-                        { i1: 'R1', i2: 'R2' },
-                        { i1: 'R10', i2: 'R20' },
-                        { i1: 'R100', i2: 'R200' },
+                        { ii1: 'R1', i2: 'R2' },
+                        { ii1: 'R10', i2: 'R20' },
                     ]
-                };
-                var json2 = { 
-                    columns: {
-                        i1: { caption: 'C1'},
-                    },
-                };
-                table0.read(json1);  // 아무 동작 안함
-                const rObj = table0.getObject();
-                table1.read(rObj, 0);  // 아무 동작 안함
-                table2.read(rObj, 1);  // 스키마 가져오기
-                table3.read(rObj, 2);  // 데이터 가져오기
-                table4.read(rObj, 3);  // 스키마 + 데이터 가져오기
-                table5.read(json2, 1);  // 스키마 가져오기
-                table5.read(rObj, 2);  // 데이터 가져오기
-        
-                // table1
-                expect(table1.columns.count).toBe(0);
-                expect(table1.rows.count).toBe(0);
-                // table2
-                expect(table2.columns.count).toBe(2);
-                expect(table2.columns['i1'].caption).toBe('C1');
-                expect(table2.columns['i2'].caption).toBe('C2');
-                expect(table2.rows.count).toBe(0);
-                // table3
-                expect(table3.columns.count).toBe(0);
-                expect(table3.rows.count).toBe(0);
-                // table4
-                expect(table4.columns.count).toBe(2);
-                expect(table4.columns['i1'].caption).toBe('C1');
-                expect(table4.columns['i2'].caption).toBe('C2');
-                expect(table4.rows.count).toBe(3);
-                expect(table4.rows[0]['i1']).toBe('R1');
-                expect(table4.rows[0]['i2']).toBe('R2');
-                expect(table4.rows[1]['i1']).toBe('R10');
-                expect(table4.rows[1]['i2']).toBe('R20');
-                expect(table4.rows[2]['i1']).toBe('R100');
-                expect(table4.rows[2]['i2']).toBe('R200');
-                // table5
-                expect(table5.columns.count).toBe(1);
-                expect(table5.columns['i1'].caption).toBe('C1');
-                expect(table5.rows.count).toBe(3);
-                expect(table5.rows[0]['i1']).toBe('R1');
-                expect(table5.rows[0]['i2']).toBe(undefined);
-                expect(table5.rows[1]['i1']).toBe('R10');
-                expect(table5.rows[1]['i2']).toBe(undefined);
-                expect(table5.rows[2]['i1']).toBe('R100');
-                expect(table5.rows[2]['i2']).toBe(undefined);
+                }
+                const obj = table1.write(0);
+
+                expect(obj).toEqual(json2);
             });
         });
-        describe("MetaEntity.writeSchema(): obj <내보내기>", () => {
+        
+        describe("MetaEntity.writeSchema(): obj <쓰기>", () => {
             it("- 스키마 내보내기 (columns) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
@@ -1226,7 +1267,7 @@ describe("[target: meta-table.js]", () => {
                 expect(obj).toEqual(json2);
             });
         });
-        describe("MetaEntity.writeData(): obj <내보내기>", () => {
+        describe("MetaEntity.writeData(): obj <쓰기>", () => {
             it("- 스키마 내보내기 (columns) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 

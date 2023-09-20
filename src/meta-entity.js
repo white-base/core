@@ -146,6 +146,7 @@ const { ISerialize } = require('./i-serialize');
 
         // 3가지 타입 입력
         MetaEntity._transformSchema  = function(p_oGuid) {
+            var _this = this;
             var obj  = {
                 columns: null,
                 rows: null
@@ -164,7 +165,7 @@ const { ISerialize } = require('./i-serialize');
                 if (oGuid['rows']) obj['rows'] = transformRow(oGuid['rows'], oGuid);
                 return obj;
             }
-            function transformColumn(oGuid) {
+            function transformColumn(oGuid, origin) {
                 var obj = {};
                 
                 // if (oGuid['$ref']) {
@@ -183,6 +184,12 @@ const { ISerialize } = require('./i-serialize');
                     } else {
                         // if (column['_entity']['$ref']) obj[key]['_entity'] = MetaRegistry.find(column['_entity']['$ref']);
                         // if (column['_entity']['$ref'] !== mEntity['_guid']) obj[key]['_entity'] = column['_entity']['$ref'];
+                        
+                        if (column._entity && column._entity['$ref'] !== origin['_guid']) {
+                            obj[key]._entity = {};
+                            obj[key]._entity['$ref'] = column._entity['$ref'];
+                        } 
+
                         if (column._guid) obj[key]._guid = column['_guid'];
                         if (column.default) obj[key].default = column.default;
                         if (column.caption) obj[key].caption = column.caption;            
@@ -213,6 +220,11 @@ const { ISerialize } = require('./i-serialize');
                 }
                 return arr;
             }
+        };
+        MetaEntity._isSchema  = function(p_oSch) {
+            if (p_oSch === null || typeof p_oSch !== 'object') return false;
+            if (p_oSch['columns'] || p_oSch['rows']) return true;
+            return false;
         };
 
         /**
@@ -309,6 +321,10 @@ const { ISerialize } = require('./i-serialize');
             var Column = this.columns._baseType;
             var origin = p_origin ? p_origin : p_obj;
 
+            if (p_obj._baseEntity && p_obj._baseEntity['$ref']) {
+                p_obj['_baseEntity'] = MetaRegistry.findSetObject(origin, p_obj._baseEntity['$ref']);
+                if (!p_obj['_baseEntity']) Message.error('ES015', [key, '_baseEntity']);
+            }
             columns = obj['columns'];
             if (columns) {
                 // 키 추출방식 2가지
@@ -327,18 +343,23 @@ const { ISerialize } = require('./i-serialize');
                         if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
                         var prop = columns[key];
                         var obj = {};
-                        if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
-                            obj['_entity'] = MetaRegistry.find(prop['_entity']);
-                        }
-                        for (var p in prop) {
-                            obj[p] = prop[p];
-                        }
-                        
-                        // POINT:
+                        // if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
+                        //     obj['_entity'] = MetaRegistry.find(prop['_entity']);
+                        // }
                         if (typeof prop === 'object' && prop['$ref']) {
                             column = MetaRegistry.findSetObject(origin, prop['$ref']);
                             if (!column) Message.error('ES015', [key, 'column']);
-                        } else column = new Column(key, _this, obj);
+                        } else {
+                            if (prop['_entity'] && prop['_entity']['$ref']) {
+                                prop['_entity'] = MetaRegistry.findSetObject(origin, prop['_entity']['$ref']);
+                                if (!prop['_entity']) Message.error('ES015', [key, '_entity']);
+                            }
+                            for (var p in prop) {
+                                obj[p] = prop[p];
+                            }
+                            column = new Column(key, null, obj);
+                        }
+                        // } else column = new Column(key, _this, obj);
                         MetaRegistry.createSetObject(prop, column); 
                         // column = new Column(key, _this, obj);
 
@@ -353,7 +374,7 @@ const { ISerialize } = require('./i-serialize');
                 rows = obj['rows'];
                 if (Array.isArray(rows) && rows.length > 0)
                 for (var key in rows[0]) {    // rows[0] 기준
-                    if (Object.hasOwnProperty.call(rows[0], key)) {
+                    if (Object.hasOwnProperty.call(rows[0], key) && !this.columns.existAlias(key)) {
                         var prop = rows[0][key];
                         if (!this.columns.exist(key)) {
                             var column = new Column(key, this);
@@ -764,9 +785,9 @@ const { ISerialize } = require('./i-serialize');
          * { columns: {...}, rows: {} }
          * @param {object} p_obj mObject 또는 rObject 또는 entity
          * @param {Number} p_option 
-         * @param {Number} p_option.1 컬럼(구조)만 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다.
+         * @param {Number} p_option.1 컬럼(구조)만 가져온다. 
          * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
-         * @param {Number} p_option.3 컬럼/로우를 가져온다 <*기본값>
+         * @param {Number} p_option.3 <*기본값> 컬럼/로우를 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다. 
          */
         MetaEntity.prototype.read  = function(p_obj, p_option) {
             var entity = null;
@@ -774,9 +795,11 @@ const { ISerialize } = require('./i-serialize');
 
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
             if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
-            
+            if (opt <= 0 || opt > 3) Message.error('ES067', ['option', '1', '3']);
+
             // if (p_obj instanceof MetaObject) throw new Error('[p_obj] MetaObject 인스턴스는 읽을 수 없습니다.');
             // if (MetaRegistry.hasRefer(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
+
 
             if (p_obj instanceof MetaEntity) {
                 this._readEntity(p_obj, 3);
@@ -788,27 +811,24 @@ const { ISerialize } = require('./i-serialize');
                 if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
             }
         };
-
-        
         
         /**
          * 없으면 빈 컬럼을 생성해야 하는지?
          * 이경우에 대해서 명료하게 처리햐야함 !!
-         * @param {object} p_obj gObj | obj   
+         * @param {object} p_obj object<Schema> | object<Guid>
          * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
         MetaEntity.prototype.readSchema  = function(p_obj, p_createRow) {
             var obj = p_obj;
             
-
-
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 else obj = p_obj;
                 obj = MetaEntity._transformSchema(obj); // gObj >> sObj<요약>
-            }
+            } else if (!MetaEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+
             // obj = MetaEntity._transformSchema(p_obj); // gObj >> sObj<요약>
 
             // table <-> view 서로 호환됨
@@ -833,7 +853,7 @@ const { ISerialize } = require('./i-serialize');
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 obj = MetaEntity._transformSchema(p_obj);
-            }
+            } else if (!MetaEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
             // obj = MetaEntity._transformSchema(p_obj);
 
             // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasRefer(p_obj)) {

@@ -898,6 +898,7 @@ const { MetaEntity } = require('./meta-entity');
             property = { value: p_value };
 
             item = new this._baseType(p_name, this._owner, property);
+            // item = new this._baseType(p_name, null, property);
 
             return this[this.add(item)];
         };
@@ -1079,6 +1080,7 @@ const { MetaEntity } = require('./meta-entity');
             } else if (typeof p_any === 'string') {
                 key = p_any;
                 column = new this._baseType(key, this._owner);
+                // column = new this._baseType(key);
             } else Message.error('ES022', ['object '+ typeof p_any]);
             
 
@@ -1128,7 +1130,8 @@ const { MetaEntity } = require('./meta-entity');
 
             property = { value: p_value };
 
-            item = new this._baseType(p_name, this._owner, property);
+            // item = new this._baseType(p_name, this._owner, property);
+            item = new this._baseType(p_name, null, property);
 
             return this[this.add(item, p_refCollection)];
         };

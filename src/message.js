@@ -231,6 +231,10 @@
                             msg: 'or(||) condition check failed. ',
                             long: '$1'
                         },
+                        7: {
+                            msg: '[$1] ranges from [$2] to [$3].',
+                            long: ''
+                        },
                     },
                 },
                 W: { // warning
@@ -436,6 +440,10 @@
                         6: {
                             msg: 'or(||) 조건 검사에 실패하였습니다. ',
                             long: '$1'
+                        },
+                        7: {
+                            msg: '[$1]의 범위는 [$2]에서 [$3]까지 입니다.',
+                            long: ''
                         },
                     },
                 },

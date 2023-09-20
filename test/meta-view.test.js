@@ -667,8 +667,66 @@ describe("[target: meta-view.js]", () => {
                 expect(str1).toBe(str2);
             });
         });
-        describe("MetaEntity.read() <읽기>", () => {
-            it("- getObect(0) vs getObject(1) 읽기 비교 ", () => {
+        describe("MetaEntity.read(view | oGuid | oSch, rOpt) <읽기>", () => {
+            it("- read(view, 3) : 엔티티 읽기 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2', view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const v1 = new MetaView('V1')
+                const v2 = new MetaView('V2')
+                const v3 = new MetaView('V3')
+                v1.read(view1);
+                v2.read(view2);
+                v3.read(view3);
+
+                expect(v1.columns.count).toBe(3)
+                expect(v2.columns.count).toBe(2)
+                expect(v3.columns.count).toBe(1)
+                expect(v1.columns['c1']._entity === view1).toBe(true);
+                expect(v2.columns['c2']._entity === view1).toBe(true);
+                expect(v3.columns['c3']._entity === view1).toBe(true);
+                /**
+                 * MEMO: 
+                 * - entity 를 read 할 경우, _entity 는 원본 참조 확인
+                 * - 즉, 뷰에 뷰가 되는 경우
+                 */
+            });
+            it("- read(view, 3) : 엔티티 읽기 (기존 존재시) ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2', view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const v1 = new MetaView('V1')
+                v1.columns.add('cc1');
+                const v2 = new MetaView('V2', v1)
+                v2.columns.add('cc2');
+                const v3 = new MetaView('V3')
+                v3.columns.add('cc3', v2.columns); // 일부 참조
+                v1.read(view1);
+                v2.read(view2);
+                v3.read(view3);
+
+                expect(v1.columns.count).toBe(6)
+                expect(v2.columns.count).toBe(4)
+                expect(v3.columns.count).toBe(2)
+                expect(v1.columns['c1']._entity === view1).toBe(true);
+                expect(v2.columns['c2']._entity === view1).toBe(true);
+                expect(v3.columns['c3']._entity === view1).toBe(true);
+                expect(v1.columns['cc1']._entity === v1).toBe(true);
+                expect(v2.columns['cc2']._entity === v1).toBe(true);
+                expect(v3.columns['cc3']._entity === v1).toBe(true);
+                /**
+                 * MEMO: 
+                 * - 기존에 잘 내용에 추가여부 확인
+                 * - v1 의 참조와 view1 참조가 독립적인지 확인
+                 */
+            });
+            it("- read(oGuid, 3) : oGuid 읽기 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
                 const view2 = new MetaView('V2', view1); // 전체 참조
@@ -679,105 +737,490 @@ describe("[target: meta-view.js]", () => {
                 const v2 = new MetaView('V2')
                 const v3 = new MetaView('V3')
                 const vv1 = new MetaView('V1')
-                const vv2 = new MetaView('V2')
-                const vv3 = new MetaView('V3')
                 v1.read(view1.getObject(0));
-                // REVIEW 참조가 연결되어 로딩 안됨
-                // v2.read(view2.getObject(0));
-                // v3.read(view3.getObject(0));
                 vv1.read(view1.getObject(1));
-                // vv2.read(view2.getObject(1));
-                // vv3.read(view3.getObject(1));
-                
-                expect(v1.getObject(2)).toEqual(vv1.getObject(2));
-                // expect(v2.getObject()).toEqual(vv2);
-                // expect(v3.getObject()).toEqual(vv3);
-            });
-            // 빈곳이 아닌곳에 read 할 경우
-        });
-        describe("MetaEntity.readSchema() <스카마 읽기>", () => {
-            it("- readSchema() : getObject()로 읽기 ", () => {
-                // TODO:  MetaTable과 중복됨!!
-                // 참조도 가능하게
-                const view1 = new MetaView('V1');
-                view1.columns.add('c1');
-                const view2 = new MetaView('V2', view1); // 전체 참조
-                view2.columns.add('c2');
-                const view3 = new MetaView('V3');
-                view3.columns.add('c3', view2.columns); // 일부 참조
-                const gObj1 = view1.getObject()
-                const gObj2 = view2.getObject()
-                const gObj3 = view3.getObject()
-                const v1 = new MetaView('VV1');
-                const v2 = new MetaView('VV2');
-                const v3 = new MetaView('VV3');
-                v1.readSchema(gObj1);
 
-                expect(v1.viewName).toBe('VV1');    // 기존유지
-                expect(v1.columns.count).toBe(3);
+                expect(v1.columns.count).toBe(3)
                 expect(v1.columns['c1']._entity === v1).toBe(true);
                 expect(v1.columns['c2']._entity === v1).toBe(true);
                 expect(v1.columns['c3']._entity === v1).toBe(true);
-                expect(()=> v2.readSchema(gObj2)).toThrow('ES015')
-                expect(()=> v3.readSchema(gObj3)).toThrow('ES015')
+                expect(v1.getObject(2)).toEqual(vv1.getObject(2));
+                expect(()=> v2.read(view2.getObject())).toThrow(/ES015/)
+                expect(()=> v3.read(view3.getObject())).toThrow(/ES015/)
+                /**
+                 * MEMO:
+                 * - oGuid 를 read 할 경우, _entity 는 자신을 참조 확인
+                 * - getObject(0) 과 getObject(1) equal() 비교하면 같은 객체 확인
+                 * - 참조 연결이 실패해는 v2, v3 는 read() 실패 확인
+                 */
             });
-            it("- readSchema() : getObject()로 읽기 ", () => {
-            });
-        });
-        describe("MetaEntity.readSchema() <데이터 읽기>", () => {
-            it("- readSchema() :  ", () => {
-                // TODO:  MetaTable과 중복됨!!
+            it("- read(oGuid, 3) : oGuid 읽기 (기존 존재시)", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
                 const view2 = new MetaView('V2', view1); // 전체 참조
                 view2.columns.add('c2');
                 const view3 = new MetaView('V3');
                 view3.columns.add('c3', view2.columns); // 일부 참조
-                const c1 = view1.columns['c1'];
-                const c2 = view2.columns['c2'];
-                const c3 = view3.columns['c3'];
+                const v1 = new MetaView('V1')
+                v1.columns.add('cc1');
+                const v2 = new MetaView('V2', v1)
+                v2.columns.add('cc2');
+                const v3 = new MetaView('V3')
+                v3.columns.add('cc3', v2.columns); // 일부 참조
+                v1.read(view1.getObject(0));
+
+                expect(v1.columns.count).toBe(6)
+                expect(v1.columns['c1']._entity === v1).toBe(true);
+                expect(v1.columns['c2']._entity === v1).toBe(true);
+                expect(v1.columns['c3']._entity === v1).toBe(true);
+                expect(v1.columns['cc1']._entity === v1).toBe(true);
+                expect(v1.columns['cc2']._entity === v1).toBe(true);
+                expect(v1.columns['cc3']._entity === v1).toBe(true);
+                expect(()=> v2.read(view2.getObject())).toThrow(/ES015/)
+                expect(()=> v3.read(view3.getObject())).toThrow(/ES015/)
+                /**
+                 * MEMO:
+                 * - oGuid 를 read 할 경우, _entity 는 자신을 참조 확인
+                 * - 기존의 컬럼은 유지 확인
+                 * - 참조 연결이 실패해는 v2, v3 는 read() 실패 확인
+                 */
+            });
+            it("- read(oSchema, 3) : 스키마 읽기 ", () => {
+                var sch1 = { 
+                    columns: {
+                        c1: { caption: 'C1'},
+                    },
+                    rows: [
+                        { c1: 'R1' },
+                    ]
+                };
+                const v1 = new MetaView('V1')
+                v1.read(sch1);
+
+                expect(v1.columns.count).toBe(1)
+                expect(v1.rows.count).toBe(1)
+                /**
+                 * MEMO: 스키마 로드 확인
+                 */
+            });
+            it("- read(oSchema, 3) : 스키마 읽기 (로우만 존재시)", () => {
+                var sch1 = { 
+                    rows: [
+                        { c1: 'R1', c2: 'R2', c3: 'R3' },
+                    ]
+                };
+                const v1 = new MetaView('V1')
+                v1.read(sch1);
+
+                expect(v1.columns.count).toBe(3)
+                expect(v1.rows.count).toBe(1)
+                expect(v1.columns['c1']._entity === v1).toBe(true);
+                expect(v1.columns['c2']._entity === v1).toBe(true);
+                expect(v1.columns['c3']._entity === v1).toBe(true);
+                /**
+                 * MEMO: 컬럼과 로우 로드 확인
+                 */
+            });
+            it("- read(oSchema, 3) : 존재하는 컬럼의 로우만 읽기", () => {
+                var sch1 = { 
+                    columns: {
+                        c1: { caption: 'C1'},
+                        c2: { caption: 'C2'},
+                    },
+                    rows: [
+                        { c1: 'R1', c2: 'R2', c3: 'R3' },
+                    ]
+                };
+                var sch2 = { 
+                    rows: [
+                        { c1: 'R1', c2: 'R2', c3: 'R3' },
+                    ]
+                };
+                const v1 = new MetaView('V1')
+                v1.read(sch1, 1);
+                v1.read(sch1, 2);
+                const v2 = new MetaView('V2')
+                v2.read(sch2, 1);
+                v2.read(sch2, 2);
+                const v3 = new MetaView('V3')
+                v3.readSchema(sch1);
+                v3.readData(sch1);
+                const v4 = new MetaView('V4')
+                v4.readSchema(sch2);
+                v4.readData(sch2);
+
+                expect(v1.columns.count).toBe(2)
+                expect(v1.rows.count).toBe(1)
+                expect(v2.columns.count).toBe(0)
+                expect(v2.rows.count).toBe(0)
+                expect(v3.columns.count).toBe(2)
+                expect(v3.rows.count).toBe(1)
+                expect(v4.columns.count).toBe(0)
+                expect(v4.rows.count).toBe(0)
+                /**
+                 * MEMO: 존재하는 컬럼의 로우만 가져오기 확인
+                 *  + 방법1> read(1), read(2)
+                 *  + 방법2> readSchema(o), readData(o)
+                 */
+            });
+            it("- read() : 예외", () => {
+                const v1 = new MetaView('V1')
+
+                expect(()=>v1.read({}, 0)).toThrow(/ES067/)
+                expect(()=>v1.read({}, 4)).toThrow(/ES067/)
+                expect(()=>v1.read({})).toThrow(/ES021/)
+                expect(()=>v1.read([])).toThrow(/ES021/)
+                expect(()=>v1.read()).toThrow(/ES021/)
+                /**
+                 * MEMO: 
+                 * - opt 예외 확인
+                 * - 입력객체 예외 확인
+                 */
+            });
+            /**
+             * - 참조형 스키마 로딩 => metaSet에서 의미있음 TODO: metaSet test 에 추가
+             */
+        });
+        describe("MetaEntity.readSchema() <스카마 읽기>", () => {
+            it("- readSchema() : 예외 ", () => {
+                const v1 = new MetaView('V1')
+
+                expect(()=>v1.readSchema({})).toThrow(/ES021/)
+                expect(()=>v1.readSchema([])).toThrow(/ES021/)
+                expect(()=>v1.readSchema()).toThrow(/ES021/)
+                /**
+                 * MEMO: read() 테스트와 중복
+                 */
+            });
+        });
+        describe("MetaEntity.readData() <데이터 읽기>", () => {
+            it("- readData() :  예외", () => {
+                const v1 = new MetaView('V1')
+
+                expect(()=>v1.readData({})).toThrow(/ES021/)
+                expect(()=>v1.readData([])).toThrow(/ES021/)
+                expect(()=>v1.readData()).toThrow(/ES021/)
+                /**
+                 * MEMO: read() 테스트와 중복
+                 */
             });
         });
         describe("MetaEntity.write() <쓰기>", () => {
-            it("- write() :  ", () => {
-                // TODO:  MetaTable과 중복됨!!
+            it("- write(0) : 기본값 ", () => {
                 const view1 = new MetaView('V1');
-                view1.columns.add('c1');
+                view1.columns.addValue('c1', 'V1');
                 const view2 = new MetaView('V2', view1); // 전체 참조
-                view2.columns.add('c2');
+                view2.columns.addValue('c2', 'V2');
                 const view3 = new MetaView('V3');
-                view3.columns.add('c3', view2.columns); // 일부 참조
-                const c1 = view1.columns['c1'];
-                const c2 = view2.columns['c2'];
-                const c3 = view3.columns['c3'];
+                view3.columns.addValue('c3', 'V3', view2.columns); // 일부 참조
+                view3.columns['c3'].alias = 'cc3';
+                view1.rows.add(view1.getValue());
+                view2.rows.add(view2.getValue());
+                view3.rows.add(view3.getValue());
+                const json1 = {
+                    _guid: view1._guid,
+                    columns: {
+                        $key: ['c1', 'c2', 'c3'],
+                        c1: { 
+                            _guid: view1.columns.c1._guid, value: 'V1',
+                        },
+                        c2: { 
+                            _guid: view1.columns.c2._guid, value: 'V2',
+                        },
+                        c3: { 
+                            _guid: view1.columns.c3._guid, value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: [
+                        { c1: 'V1', c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json2 = {
+                    _guid: view2._guid,
+                    _baseEntity: {$ref: view1._guid},
+                    columns: {
+                        $key: ['c2', 'c3'],
+                        c2: {$ref: view1.columns.c2._guid},
+                        c3: {$ref: view1.columns.c3._guid},
+                    },
+                    rows: [
+                        { c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json3 = {
+                    _guid: view3._guid,
+                    columns: {
+                        $key: ['c3'],
+                        c3: {$ref: view1.columns.c3._guid},
+                    },
+                    rows: [
+                        { cc3: 'V3' },
+                    ]
+                }
+                const obj1 = view1.write(); // 0
+                const obj2 = view2.write();
+                const obj3 = view3.write();
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+                /**
+                 * MEMO: 기본옵셥으로 쓰기할 경우 모든 참조 표현 확인
+                 */
+            });
+            it("- write(1) :  ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.addValue('c1', 'V1');
+                const view2 = new MetaView('V2', view1); // 전체 참조
+                view2.columns.addValue('c2', 'V2');
+                const view3 = new MetaView('V3');
+                view3.columns.addValue('c3', 'V3', view2.columns); // 일부 참조
+                view3.columns['c3'].alias = 'cc3';
+                view1.rows.add(view1.getValue());
+                view2.rows.add(view2.getValue());
+                view3.rows.add(view3.getValue());
+                const json1 = {
+                    _guid: view1._guid,
+                    columns: {
+                        $key: ['c1', 'c2', 'c3'],
+                        c1: { 
+                            _guid: view1.columns.c1._guid, value: 'V1',
+                        },
+                        c2: { 
+                            _guid: view1.columns.c2._guid, value: 'V2',
+                        },
+                        c3: { 
+                            _guid: view1.columns.c3._guid, value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: [
+                        { c1: 'V1', c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json2 = {
+                    _guid: view2._guid,
+                    _baseEntity: {$ref: view1._guid},
+                    columns: {
+                        $key: ['c2', 'c3'],
+                        c2: { 
+                            _entity: {$ref: view1._guid},
+                            _guid: view2.columns.c2._guid, value: 'V2',
+                        },
+                        c3: { 
+                            _entity: {$ref: view1._guid},
+                            _guid: view2.columns.c3._guid, value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: [
+                        { c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json3 = {
+                    _guid: view3._guid,
+                    // _baseEntity: {$ref: view1._guid},
+                    columns: {
+                        $key: ['c3'],
+                        c3: { 
+                            _entity: {$ref: view1._guid},
+                            _guid: view2.columns.c3._guid, value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: [
+                        { cc3: 'V3' },
+                    ]
+                }
+                const obj1 = view1.write(1);
+                const obj2 = view2.write(1);
+                const obj3 = view3.write(1);
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+                /**
+                 * MEMO :별칭을 사용해서 쓰기, 옵션 = 1 소유자 기준 나열 확인
+                 */
+            });
+            it("- write(3) : guid, ref 제거 쓰기 ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.addValue('c1', 'V1');
+                const view2 = new MetaView('V2', view1); // 전체 참조
+                view2.columns.addValue('c2', 'V2');
+                const view3 = new MetaView('V3');
+                view3.columns.addValue('c3', 'V3', view2.columns); // 일부 참조
+                view3.columns['c3'].alias = 'cc3';
+                view1.rows.add(view1.getValue());
+                view2.rows.add(view2.getValue());
+                view3.rows.add(view3.getValue());
+                const json1 = {
+                    columns: {
+                        $key: ['c1', 'c2', 'c3'],
+                        c1: { 
+                            value: 'V1',
+                        },
+                        c2: { 
+                            value: 'V2',
+                        },
+                        c3: { 
+                            value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: [
+                        { c1: 'V1', c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json2 = {
+                    columns: {
+                        $key: ['c2', 'c3'],
+                        c2: { 
+                            value: 'V2',
+                        },
+                        c3: { 
+                            value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: [
+                        { c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json3 = {
+                    columns: {
+                        $key: ['c3'],
+                        c3: { 
+                            value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: [
+                        { cc3: 'V3' },
+                    ]
+                }
+                const obj1 = view1.write(2);
+                const obj2 = view2.write(2);
+                const obj3 = view3.write(2);
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+                /**
+                 * MEMO :
+                 * - 별칭을 사용해서 쓰기, 옵션 = 2 guid, ref 제거한 쓰기 확인
+                 * - 뷰에서 참조관계를 자르고 만들때 활용
+                 */
             });
         });
         describe("MetaEntity.writeSchema() <스키마 쓰기>", () => {
             it("- writeSchema() :  ", () => {
-                // TODO:  MetaTable과 중복됨!!
                 const view1 = new MetaView('V1');
-                view1.columns.add('c1');
+                view1.columns.addValue('c1', 'V1');
                 const view2 = new MetaView('V2', view1); // 전체 참조
-                view2.columns.add('c2');
+                view2.columns.addValue('c2', 'V2');
                 const view3 = new MetaView('V3');
-                view3.columns.add('c3', view2.columns); // 일부 참조
-                const c1 = view1.columns['c1'];
-                const c2 = view2.columns['c2'];
-                const c3 = view3.columns['c3'];
+                view3.columns.addValue('c3', 'V3', view2.columns); // 일부 참조
+                view3.columns['c3'].alias = 'cc3';
+                view1.rows.add(view1.getValue());
+                view2.rows.add(view2.getValue());
+                view3.rows.add(view3.getValue());
+                const json1 = {
+                    _guid: view1._guid,
+                    columns: {
+                        $key: ['c1', 'c2', 'c3'],
+                        c1: { 
+                            _guid: view1.columns.c1._guid, value: 'V1',
+                        },
+                        c2: { 
+                            _guid: view1.columns.c2._guid, value: 'V2',
+                        },
+                        c3: { 
+                            _guid: view1.columns.c3._guid, value: 'V3',
+                            alias: 'cc3'
+                        },
+                    },
+                    rows: []
+                }
+                const json2 = {
+                    _guid: view2._guid,
+                    _baseEntity: {$ref: view1._guid},
+                    columns: {
+                        $key: ['c2', 'c3'],
+                        c2: {$ref: view1.columns.c2._guid},
+                        c3: {$ref: view1.columns.c3._guid},
+                    },
+                    rows: []
+                }
+                const json3 = {
+                    _guid: view3._guid,
+                    columns: {
+                        $key: ['c3'],
+                        c3: {$ref: view1.columns.c3._guid},
+                    },
+                    rows: []
+                }
+                const obj1 = view1.writeSchema(); // 0
+                const obj2 = view2.writeSchema();
+                const obj3 = view3.writeSchema();
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+                /**
+                 * MEMO: 
+                 * - column만 가져오는지 확인
+                 * - 옵션의 경우 write() 와 동일 예상
+                 */
             });
         });
         describe("MetaEntity.writeData() <데이터 쓰기>", () => {
             it("- writeData() :  ", () => {
-                // TODO:  MetaTable과 중복됨!!
                 const view1 = new MetaView('V1');
-                view1.columns.add('c1');
+                view1.columns.addValue('c1', 'V1');
                 const view2 = new MetaView('V2', view1); // 전체 참조
-                view2.columns.add('c2');
+                view2.columns.addValue('c2', 'V2');
                 const view3 = new MetaView('V3');
-                view3.columns.add('c3', view2.columns); // 일부 참조
-                const c1 = view1.columns['c1'];
-                const c2 = view2.columns['c2'];
-                const c3 = view3.columns['c3'];
+                view3.columns.addValue('c3', 'V3', view2.columns); // 일부 참조
+                view3.columns['c3'].alias = 'cc3';
+                view1.rows.add(view1.getValue());
+                view2.rows.add(view2.getValue());
+                view3.rows.add(view3.getValue());
+                const json1 = {
+                    _guid: view1._guid,
+                    columns: {},
+                    rows: [
+                        { c1: 'V1', c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json2 = {
+                    _guid: view2._guid,
+                    _baseEntity: {$ref: view1._guid},
+                    columns: {},
+                    rows: [
+                        { c2: 'V2', cc3: 'V3' },
+                    ]
+                }
+                const json3 = {
+                    _guid: view3._guid,
+                    columns: {},
+                    rows: [
+                        { cc3: 'V3' },
+                    ]
+                }
+                const obj1 = view1.writeData(); // 0
+                const obj2 = view2.writeData();
+                const obj3 = view3.writeData();
+
+                expect(obj1).toEqual(json1);
+                expect(obj2).toEqual(json2);
+                expect(obj3).toEqual(json3);
+                /**
+                 * MEMO: 
+                 * - rows 만 가져오는지 확인
+                 * - 옵션의 경우 write() 와 동일 예상
+                 */
             });
         });
 
@@ -795,6 +1238,9 @@ describe("[target: meta-view.js]", () => {
                 expect(table1._name).toBe('V2');
                 expect(table1.viewName).toBe('V2');
             });
+            /**
+             * MEMO: view 이름 수정과 메타명 수정 확인
+             */
         });
         describe("MetaView(name, baseEntity) <생성자>", () => {
             it("- new MetaView(name, baseEntity) ", () => {
@@ -877,110 +1323,7 @@ describe("[target: meta-view.js]", () => {
                 // expect(obj.rows._elem[0]._elem).toEqual(['R2', 'R3']);
                 // expect(obj.rows._elem[0]._key).toEqual(['a2', 'a3']);
             });
-            // 옵션제외됨
-            it.skip("- getObject(-1) : 옵션에 따른 값 비교 ", () => {
-                const view1 = new MetaView('V1');
-                view1.columns.add('c1');
-                const view2 = new MetaView('V2', view1); // 전체 참조
-                view2.columns.add('c2');
-                const view3 = new MetaView('V3');
-                view3.columns.add('c3', view2.columns); // 일부 참조
-                const obj1 = view1.getObject(-1);
-                const obj2 = view2.getObject(-1);
-                const obj3 = view3.getObject(-1);
-                const json1 = {
-                    "_type": "Meta.Entity.MetaView",
-                    "name": "V1",
-                    "viewName": "V1",
-                    "columns": {
-                        "_type": "Meta.Entity.MetaViewColumnCollection",
-                        "_owner": {"$ref": view1._guid},
-                        "_elemTypes": [],
-                        "_desc": [undefined,undefined,undefined],
-                        "_elem": [
-                            {
-                                "_type": "Meta.Entity.MetaColumn",
-                                "name": "c1",
-                                "_entity": {"$ref": view1._guid},
-                                "columnName": "c1"
-                            },
-                            {
-                                "_type": "Meta.Entity.MetaColumn",
-                                "name": "c2",
-                                "_entity": {"$ref": view1._guid},
-                                "columnName": "c2"
-                            },
-                            {
-                                "_type": "Meta.Entity.MetaColumn",
-                                "name": "c3",
-                                "_entity": {"$ref": view1._guid},
-                                "columnName": "c3"
-                            }
-                        ],
-                        "_key": ["c1","c2","c3"]
-                    },
-                    "rows": {
-                        "_type": "Meta.Entity.MetaRowCollection",
-                        "_owner": {"$ref":view1._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
-                        "_elem": [],
-                        "autoChanges": true
-                    },
-                };
-                const json2 = {
-                    "_type": "Meta.Entity.MetaView",
-                    "name": "V2",
-                    "viewName": "V2",
-                    _baseEntity:  {"$ref": view1._guid},
-                    "columns": {
-                        "_type": "Meta.Entity.MetaViewColumnCollection",
-                        "_owner": {"$ref": view2._guid},
-                        "_elemTypes": [],
-                        "_desc": [undefined,undefined],
-                        "_elem": [
-                            {"$ref": view1.columns[1]._guid},
-                            {"$ref": view1.columns[2]._guid}
-                        ],
-                        "_key": ["c2","c3"],
-                        // _refEntities: [{"$ref": view1._guid}],
-                    },
-                    "rows": {
-                        "_type": "Meta.Entity.MetaRowCollection",
-                        "_owner": {"$ref":view2._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
-                        "_elem": [],
-                        "autoChanges": true
-                    },
-                };
-                const json3 = {
-                    "_type": "Meta.Entity.MetaView",
-                    "name": "V3",
-                    "viewName": "V3",
-                    "columns": {
-                        "_type": "Meta.Entity.MetaViewColumnCollection",
-                        "_owner": {"$ref": view3._guid},
-                        "_elemTypes": [],
-                        "_desc": [undefined],
-                        "_elem": [
-                            {"$ref": view1.columns[2]._guid}
-                        ],
-                        "_key": ["c3"],
-                        // _refEntities: [{"$ref": view2._guid}],
-                    },
-                    "rows": {
-                        "_type": "Meta.Entity.MetaRowCollection",
-                        "_owner": {"$ref":view3._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
-                        "_elem": [],
-                        "autoChanges": true
-                    },
-                };
-
-                expect(obj1).toEqual(json1);
-                expect(obj2).toEqual(json2);
-                // expect(obj3).toEqual(json3);
-            });
-
+            
             it("- getObject(0) : 옵션에 따른 값 비교 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -1355,6 +1698,30 @@ describe("[target: meta-view.js]", () => {
                 const v3 = new MetaView('V3');
                 v3.setObject(mObj);
                 const obj = v3.getObject();
+            });
+            it("- setObject() : base, ref ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2', view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const v1 = new MetaView('VV1');
+                const v2 = new MetaView('VV2');
+                const v3 = new MetaView('VV3');
+                v1.setObject(view1.getObject());
+                // v2.setObject(view2.getObject());
+                // v3.setObject(view3.getObject());
+
+                expect(v1.viewName).toBe('V1');
+                expect(v1.columns.count).toBe(3);
+                expect(()=> v2.setObject(view2.getObject())).toThrow(/ES015/);
+                expect(()=> v3.setObject(view3.getObject())).toThrow(/ES015/);
+                /**
+                 * MEMO: 
+                 * - 참조가 없는 뷰 설정 확인
+                 * - 참조가 있는 뷰는 setObject() 시점에 참조 예외 확인
+                 */
             });
             it("- setObject() : 다른 타입에 setObject() 경우 <예외>", () => {
                 const v1 = new MetaView('V1');

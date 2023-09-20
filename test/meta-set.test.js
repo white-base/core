@@ -184,6 +184,29 @@ describe("[target: meta-set.js]", () => {
                 expect(obj2.views._elem[0].rows._elem[0]._type === 'Meta.Entity.MetaRow').toBe(true);
                 expect(obj2.views._elem[0].rows._elem[0]._elem).toEqual(['R3']);
             });
+            it("- setObject() : base, ref ", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.add('c1');
+                const view2 = new MetaView('V2', view1); // 전체 참조
+                view2.columns.add('c2');
+                const view3 = new MetaView('V3');
+                view3.columns.add('c3', view2.columns); // 일부 참조
+                const s1 = new MetaSet('S1')
+                s1.views.add(view1)
+                s1.views.add(view2)
+                s1.views.add(view3)
+                const s2 = new MetaSet('VV3');
+                s2.setObject(s1.getObject());
+                const v1 = s2.views.V1;
+                const v2 = s2.views.V1;
+                const v3 = s2.views.V1;
+
+                expect(v1.viewName).toBe('V1');
+                expect(v1.columns.count).toBe(3);
+                expect(v1.columns['c1']._entity === v1).toBe(true);
+                expect(v2.columns['c2']._entity === v1).toBe(true);
+                expect(v3.columns['c3']._entity === v1).toBe(true);
+            });
         });
         describe("MetaSet.clone() <복제>", () => {
             it("- clone() : 복제 ", () => {
@@ -705,13 +728,78 @@ describe("[target: meta-set.js]", () => {
                 s1.read(set1.getObject(0));
                 ss1.read(set1.getObject(1));
                 
-                
                 // s1.equal(ss1) 와 동일
                 expect(s1.equal(ss1)).toBe(true);
                 expect(s1.getObject(2)).toEqual(ss1.getObject(2));
             });
+            it("- read(oSchema) :  스키마로 참조 읽기 ", () => {
+                const sch1 = {
+                    name: "S1",
+                    tables: {
+                        $key: []
+                    },
+                    views: {
+                        V1: {
+                            _guid: "_V1",
+                            columns: {
+                                c1: {
+                                    _guid: "_C1",
+                                    value: "V1"
+                                },
+                                c2: {
+                                    _guid: "_C2",
+                                    value: "V2"
+                                },
+                                c3: {
+                                    _guid: "_C3",
+                                    alias: "cc3",
+                                    value: "V3"
+                                },
+                                $key: ["c1","c2","c3"]
+                            },
+                            rows: [{c1: "V1", c2: "V2", cc3: "V3"}]
+                        },
+                        V2: {
+                            _guid: "_V2",
+                            _baseEntity: {
+                                $ref: "_V1"
+                            },
+                            columns: {
+                                c2: {$ref: "_C2"},
+                                c3: {$ref: "_C3"},
+                                $key: ["c2", "c3"]
+                            },
+                            rows: [{c2: "V2", cc3: "V3"}]
+                        },
+                        V3: {
+                            _guid: "_V3",
+                            columns: {
+                                "c3": {$ref: "_C3"},
+                                $key: ["c3"]
+                            },
+                            rows: [{cc3: "V3"}]
+                        },
+                        $key: ["V1","V2","V3"]
+                    }
+                };
+                const s2 = new MetaSet('S2')
+                s2.read(sch1);
+                const v1 = s2.views.V1
+                const v2 = s2.views.V2
+                const v3 = s2.views.V3
+
+                expect(v1.columns.count).toBe(3)
+                expect(v2.columns.count).toBe(2)
+                expect(v3.columns.count).toBe(1)
+                expect(v1.columns['c1']._entity === v1).toBe(true);
+                expect(v2.columns['c2']._entity === v1).toBe(true);
+                expect(v3.columns['c3']._entity === v1).toBe(true);
+                expect(v1.rows.count).toBe(1);
+                expect(v1.rows[0]['c1']).toBe('V1');
+                expect(v1.rows[0]['c2']).toBe('V2');
+                expect(v1.rows[0]['cc3']).toBe('V3');
+            });
         });
-        
         describe("MetaSet.readSchema() <스키마 가져오기>", () => {
             it("- readSchema() : 기본 로딩 ", () => {
                 var set1 = new MetaSet('S1');
@@ -845,6 +933,118 @@ describe("[target: meta-set.js]", () => {
                 // TODO:
             });
         });
+        describe("MetaSet.write() <내보내기>", () => {
+            it("- write() : 스키마/데이터 내보내기 ", () => {
+                var set1 = new MetaSet('S1');
+                var json1 = { 
+                    tables: {
+                        T1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                                i2: { caption: 'C2'},
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        V1: {
+                            columns: {
+                                i1: { caption: 'C1'},
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+                set1.read(json1);
+                const obj = set1.write();
+                const json2 = { 
+                    name: 'S1',
+                    tables: {
+                        $key: ['T1'],
+                        T1: {
+                            _guid: set1.tables.T1._guid,
+                            columns: {
+                                $key: ['i1', 'i2'],
+                                i1: { 
+                                    _guid: set1.tables.T1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
+                                i2: { 
+                                    _guid: set1.tables.T1.columns.i2._guid,
+                                    caption: 'C2'
+                                },
+                            },
+                            rows: [
+                                { i1: 'R1', i2: 'R2' },
+                            ]
+                        },
+                    },
+                    views: {
+                        $key: ['V1'],
+                        V1: {
+                            _guid: set1.views.V1._guid,
+                            columns: {
+                                $key: ['i1'],
+                                i1: { 
+                                    _guid: set1.views.V1.columns.i1._guid,
+                                    caption: 'C1'
+                                },
+                            },
+                            rows: [
+                                { i1: 'R1' },
+                            ]
+                        },
+                    },
+                };
+
+                expect(obj).toEqual(json2); 
+            });
+            it("- write() :  참조뷰 쓰기 후 읽기", () => {
+                const view1 = new MetaView('V1');
+                view1.columns.addValue('c1', 'V1');
+                const view2 = new MetaView('V2', view1); // 전체 참조
+                view2.columns.addValue('c2', 'V2');
+                const view3 = new MetaView('V3');
+                view3.columns.addValue('c3', 'V3', view2.columns); // 일부 참조
+                view3.columns['c3'].alias = 'cc3';
+                view1.rows.add(view1.getValue());
+                view2.rows.add(view2.getValue());
+                view3.rows.add(view3.getValue());
+                const s1 = new MetaSet('S1')
+                s1.views.add(view1)
+                s1.views.add(view2)
+                s1.views.add(view3)
+                const obj1 = s1.write(); // p_vOpt = 0
+                const s2 = new MetaSet('S2')
+                s2.read(obj1);
+                const v1 = s2.views.V1
+                const v2 = s2.views.V2
+                const v3 = s2.views.V3
+
+                expect(v1.columns.count).toBe(3)
+                expect(v2.columns.count).toBe(2)
+                expect(v3.columns.count).toBe(1)
+                expect(v1.columns['c1']._entity === v1).toBe(true);
+                expect(v2.columns['c2']._entity === v1).toBe(true);
+                expect(v3.columns['c3']._entity === v1).toBe(true);
+                expect(v1.rows.count).toBe(1);
+                expect(v1.rows[0]['c1']).toBe('V1');
+                expect(v1.rows[0]['c2']).toBe('V2');
+                expect(v1.rows[0]['cc3']).toBe('V3');
+                /**
+                 * MEMO:
+                 * - write() 로 생성한 스키마를 로딩시 구조가 그대로 가져오는지 확인
+                 */
+            });
+
+            
+
+
+        });
         describe("MetaSet.writeSchema() <스키마 내보내기>", () => {
             it("- writeSchema() : 스키마 내보내기 ", () => {
                 var set1 = new MetaSet('S1');
@@ -971,78 +1171,7 @@ describe("[target: meta-set.js]", () => {
                 expect(obj).toEqual(json2); 
             });
         });
-        describe("MetaSet.write() <내보내기>", () => {
-            it("- write() : 스키마/데이터 내보내기 ", () => {
-                var set1 = new MetaSet('S1');
-                var json1 = { 
-                    tables: {
-                        T1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                                i2: { caption: 'C2'},
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        V1: {
-                            columns: {
-                                i1: { caption: 'C1'},
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-                set1.read(json1);
-                const obj = set1.write();
-                const json2 = { 
-                    name: 'S1',
-                    tables: {
-                        $key: ['T1'],
-                        T1: {
-                            _guid: set1.tables.T1._guid,
-                            columns: {
-                                $key: ['i1', 'i2'],
-                                i1: { 
-                                    _guid: set1.tables.T1.columns.i1._guid,
-                                    caption: 'C1'
-                                },
-                                i2: { 
-                                    _guid: set1.tables.T1.columns.i2._guid,
-                                    caption: 'C2'
-                                },
-                            },
-                            rows: [
-                                { i1: 'R1', i2: 'R2' },
-                            ]
-                        },
-                    },
-                    views: {
-                        $key: ['V1'],
-                        V1: {
-                            _guid: set1.views.V1._guid,
-                            columns: {
-                                $key: ['i1'],
-                                i1: { 
-                                    _guid: set1.views.V1.columns.i1._guid,
-                                    caption: 'C1'
-                                },
-                            },
-                            rows: [
-                                { i1: 'R1' },
-                            ]
-                        },
-                    },
-                };
-
-
-                expect(obj).toEqual(json2); 
-            });
-        });
+        
         
         describe("MetaSet.acceptChanges() <커밋>", () => {
             it("- autoChanges : 전체 트랜젝션 모드 변경후 커밋", () => {

@@ -191,6 +191,11 @@
                 return obj;
             }
         };
+        MetaSet._isSchema  = function(p_oSch) {
+            if (p_oSch === null || typeof p_oSch !== 'object') return false;
+            if (p_oSch['tables'] || p_oSch['views']) return true;
+            return false;
+        };
         
         MetaSet.prototype._loadMetaSet = function(p_metaSet, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
@@ -324,11 +329,12 @@
             var entity;
 
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
+            obj = metaSet;
 
             if (MetaRegistry.isGuidObject(metaSet)) {
                 if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformSchema(metaSet);
-            } else obj = metaSet;
+            } else if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
 
             if (obj['tables']) {
@@ -355,9 +361,9 @@
 
                 if (Object.hasOwnProperty.call(p_collec, key) && typeof p_collec[key] === 'object') {
                     prop = p_collec[key];
-                    if (prop['_metaSet'] && MetaRegistry.has(prop['_metaSet'])) {
-                        prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']);
-                    }
+                    // if (prop['_metaSet'] && MetaRegistry.has(prop['_metaSet'])) {
+                    //     prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']);
+                    // }
                     if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
                     p_baseCollec.add(key);
                     
@@ -383,12 +389,13 @@
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
             
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
-
+            obj = metaSet;
 
             if (MetaRegistry.isGuidObject(metaSet)) {
                 if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformSchema(metaSet);
-            } else obj = metaSet;
+            } else if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+
 
             // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             

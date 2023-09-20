@@ -340,6 +340,7 @@
 
        /**
          * 로우를 복제한다.
+         * TODO: getObject() 가져오는 방식으로 수정
          * @param {MetaEntity?} p_entity 대상의 엔티티
          * @returns 
          */
