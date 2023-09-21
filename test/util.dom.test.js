@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe.skip("load: util-type.js <Util.type >", () => {
+describe("load: util-type.js <Util.type >", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -24,12 +24,13 @@ describe.skip("load: util-type.js <Util.type >", () => {
     });
 });
 
-describe.skip("load: util.js <Util>", () => {
+describe("load: util.js <Util>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
      });
     it("- namespace : util.js ", () => {
+        require('../src/message');
         require('../src/util-type');
         require('../src/util');
         
@@ -47,29 +48,35 @@ describe.skip("load: util.js <Util>", () => {
         expect(global._L.Common.Util.implements).toBeDefined();
     });
     it("- 예외 : util-type.js 로딩이 인된경우", () => {
+        require('../src/message');
         expect(() => require('../src/util')).toThrow(/Cannot read properties/);
     });
     it("- 예외 : util-type.js : getAllProperties 제거", () => {
+        require('../src/message');
         require('../src/util-type');
         delete global._L.Common.Util.getAllProperties;
         expect(() => require('../src/util')).toThrow(/getAllProperties/);
     });
     it("- 예외 : util-type.js : checkType 제거", () => {
+        require('../src/message');
         require('../src/util-type');
         delete global._L.Common.Util.checkType;
         expect(() => require('../src/util')).toThrow(/checkType/);
     });
     it("- 예외 : util-type.js : checkUnionType 제거", () => {
+        require('../src/message');
         require('../src/util-type');
         delete global._L.Common.Util.checkUnionType;
         expect(() => require('../src/util')).toThrow(/checkUnionType/);
     });
     it("- 예외 : util-type.js : validType 제거", () => {
+        require('../src/message');
         require('../src/util-type');
         delete global._L.Common.Util.validType;
         expect(() => require('../src/util')).toThrow(/validType/);
     });
     it("- 예외 : util-type.js : validUnionType 제거", () => {
+        require('../src/message');
         require('../src/util-type');
         delete global._L.Common.Util.validUnionType;
         expect(() => require('../src/util')).toThrow(/validUnionType/);

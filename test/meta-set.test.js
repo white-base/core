@@ -319,7 +319,7 @@ describe("[target: meta-set.js]", () => {
         });
         
         // describe.skip("this.merge() <병합>", () => {
-        //     it("- TODO: ", () => {
+        //     it("-  ", () => {
         //     });
         // });
         describe("MetaSet.load(str | rObj) 출력", () => {

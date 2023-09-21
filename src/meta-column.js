@@ -1,5 +1,3 @@
-const { MetaEntity } = require('./meta-entity');
-
 /**
  * namespace _L.Meta.Entity.MetaColumn
  * namespace _L.Meta.Entity.MetaColumnCollection
@@ -30,7 +28,7 @@ const { MetaEntity } = require('./meta-entity');
         Message                     = require('./message').Message;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
-        CustomError                 = require('./custom-error').CustomError;
+        // CustomError                 = require('./custom-error').CustomError;
         MetaElement                 = require('./meta-element').MetaElement;
         // MetaEntity                  = require('./meta-entity').MetaEntity;
         PropertyCollection          = require('./collection-property').PropertyCollection;
@@ -50,7 +48,7 @@ const { MetaEntity } = require('./meta-entity');
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
-    if (typeof CustomError === 'undefined') Message.error('ES011', ['CustomError', 'custom-error']);
+    // if (typeof CustomError === 'undefined') Message.error('ES011', ['CustomError', 'custom-error']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     // if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
     if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
@@ -582,10 +580,10 @@ const { MetaEntity } = require('./meta-entity');
          * @param {*} p_regex 
          * @param {*} p_msg 
          * @param {*} p_code 
-         * @param {*} p_return 
+         * @param {*} p_condition 
          */
-        MetaColumn.prototype.addConstraint = function(p_regex, p_msg, p_code, p_return) {
-            p_return = p_return || false;
+        MetaColumn.prototype.addConstraint = function(p_regex, p_msg, p_code, p_condition) {
+            p_condition = p_condition || false;
 
             var constraint = {};
 
@@ -595,7 +593,7 @@ const { MetaEntity } = require('./meta-entity');
             constraint.regex = p_regex;
             constraint.msg = p_msg;
             constraint.code = p_code;
-            constraint.return = p_return;
+            constraint.condition = p_condition;
             
             this.constraints.push(constraint);
         };
@@ -652,8 +650,8 @@ const { MetaEntity } = require('./meta-entity');
                 } else {
                     match = p_value.match(this.constraints[i].regex);
     
-                    if ((this.constraints[i].return === false && match !== null) ||    // 실패 조건
-                        (this.constraints[i].return === true && match === null)) {     // 성공 조건
+                    if ((this.constraints[i].condition === false && match !== null) ||    // 실패 조건
+                        (this.constraints[i].condition === true && match === null)) {     // 성공 조건
        
                         result.msg   = Message.get('ES056', [this.name, this.constraints[i].msg]);
                         // result.msg   = this.constraints[i].msg;

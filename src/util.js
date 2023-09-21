@@ -232,6 +232,8 @@
         if (object === null || typeof object !== "object") {
           return object;
         }
+        if (object instanceof RegExp) return object;
+
         // 객체인지 배열인지 판단
         var copy = Array.isArray(object) ? [] : {};
        

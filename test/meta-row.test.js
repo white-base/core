@@ -94,14 +94,96 @@ describe("[target: meta-row.js]", () => {
                 expect(row1.equal(row2)).toBe(false);
             });            
         });
-        // TODO: getObject()
-        // TODO: setObject()
+        describe("MetaRow.getObject(): obj<ref> <객체 얻기>", () => {
+            it("- getObject() : 직렬화 객체 얻기 ", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.add('a1');
+                a1.columns.add('a2');
+                var row = a1.newRow();
+                row['a1'] = 'R1';
+                row['a2'] = 'R2';
+                a1.rows.add(row);
+                const obj = a1.rows[0].getObject();
+
+                expect(obj._guid).toBe(a1.rows[0]._guid);
+                expect(obj._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj._elem).toEqual(['R1','R2']);
+                expect(obj._key).toEqual(['a1','a2']);
+                expect(obj._entity.$ref).toBe(a1._guid);
+                /**
+                 * MEMO: 기본값 확인
+                 */
+            });
+            it("- getObject(1) : 직렬화 객체 얻기 (소유구조) ", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.add('a1');
+                a1.columns.add('a2');
+                var row = a1.newRow();
+                row['a1'] = 'R1';
+                row['a2'] = 'R2';
+                a1.rows.add(row);
+                const obj = a1.rows[0].getObject(1);
+
+                expect(obj._guid).toBe(a1.rows[0]._guid);
+                expect(obj._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj._elem).toEqual(['R1','R2']);
+                expect(obj._key).toEqual(['a1','a2']);
+                expect(obj._entity.$ref).toBe(a1._guid);
+                /**
+                 * MEMO: 기본값 확인, opt = 0 과 동일한 결과
+                 */
+            });
+            it("- getObject(2) : 직렬화 객체 얻기 (참조없음) ", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.add('a1');
+                a1.columns.add('a2');
+                var row = a1.newRow();
+                row['a1'] = 'R1';
+                row['a2'] = 'R2';
+                a1.rows.add(row);
+                const obj = a1.rows[0].getObject(2);
+
+                expect(obj._guid).toBe(undefined);
+                expect(obj._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj._elem).toEqual(['R1','R2']);
+                expect(obj._key).toEqual(['a1','a2']);
+                expect(obj._entity).toBe(undefined);
+                /**
+                 * MEMO: 참조 없는 자료 리턴 확인
+                 */
+            });
+        });
+        describe("MetaRow.setObject(mObj) <객체 설정>", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.add('a1');
+                a1.columns.add('a2');
+                var row = a1.newRow();
+                row['a1'] = 'R1';
+                row['a2'] = 'R2';
+                a1.rows.add(row);
+                const obj1 = a1.rows.getObject();
+                const obj2 = a1.getObject();
+                const a2 = new MetaTable('T2');
+                a2.setObject(obj2);
+
+                expect(a2.equal(a1)).toBe(true);
+                expect(()=>a2.rows.setObject(obj1)).toThrow(/ES015/);
+                /**
+                 * MEMO:
+                 * - 소유하는 entity에서 setObject() 확인
+                 * - entity 참조가 존재해서 getObject(0) 으로 설정시 참조 오류 확인
+                 */
+            });
+        });
         describe("MetaRow.clone(): Row <복제>", () => {
             it("- clone() : 복사 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');
                 table1.columns.addValue('i2', 'V2');
                 var row1 = new MetaRow(table1);
+                const fun1 = function(){return 'F1'};
+                row1.onChanged = fun1;
                 row1['i1'] = 'R1';
                 row1['i2'] = 'R2';
                 table1.rows.add(row1);
@@ -116,6 +198,7 @@ describe("[target: meta-row.js]", () => {
                 expect(row2.count).toBe(2);
                 expect(row2['i1']).toBe('R1');
                 expect(row2['i2']).toBe('R2');
+                expect(row1.equal(row2)).toBe(true);
                 // 비교 : 
                 // REVIEW: new 일반 new 생성으로 guid 의 차이점가 있음
                 // table1.rows[0].setObject({_guid: 'ID'});
@@ -124,8 +207,9 @@ describe("[target: meta-row.js]", () => {
                 // const row1 = table1.rows[1].getObject(p_vOpt);
                 // table1.rows[0].__SET_guid('ID', table1.rows[0]);
                 // table1.rows[1].__SET_guid('ID', table1.rows[1]);
-                
-                // expect(row0).toEqual(row1);
+                /**
+                 * MEMO: 로우 복사후 비교 확인
+                 */
             });
         });
     });
@@ -178,9 +262,6 @@ describe("[target: meta-row.js]", () => {
                 expect(() => table1.rows.add(row2, true)).toThrow(/ES054/);
                 expect(() => table1.rows.add(row3, true)).toThrow('ES054');
             });
-            /**
-             * TODO: 많은 조건이 있음
-             */
             it("- add(row) : 예외(다른 엔티티) ", () => {
                 var table1 = new MetaTable('T1');
             

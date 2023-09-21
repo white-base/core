@@ -118,6 +118,6 @@ describe('Util.*', () => {
         expect(obj1).toEqual(obj2);
         expect(fun1).toEqual(fun2);
         expect(str1).toEqual(str2);
-        expect(reg1).toEqual(reg1);
+        expect(reg1).toEqual(reg2);
     });
 });

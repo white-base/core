@@ -347,9 +347,134 @@ describe("[target: meta-column.js ]", () => {
                 expect(c1.equal(c4)).toBe(false);
             });
         });
-        
-        // TODO: getObject()
-        // TODO: setObject()
+        describe("MetaColumn.MetaColumn(): obj<Guid> <객체 얻기>", () => {
+            it("- getObject(1 | 2) : 직렬화 객체 얻기 ", () => {
+                const prop1 = {
+                    default: 'D1',
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                const c1 = new MetaColumn('c1', null, prop1);
+                const obj1 = c1.getObject();
+                const obj2 = c1.getObject(1);
+
+                expect(obj1).toEqual(obj2);
+                expect(obj1._guid).toBe(c1._guid);
+                expect(obj1._type).toBe('Meta.Entity.MetaColumn');
+                expect(obj1.caption).toBe('C1');
+                expect(obj1.columnName).toBe('c1');
+                expect(obj1.constraints).toEqual(prop1.constraints);
+                expect(obj1.default).toBe('D1');
+                expect(obj1.isNotNull).toBe(true);
+                expect(obj1.name).toBe('c1');
+                expect(obj1.value).toBe('V1');
+                expect(obj1._entity).toBe(undefined);
+                /**
+                 * MEMO:
+                 * - 컬럼 getObject() 객체 확인
+                 * - 참조가 없으면, getObject(1) 과 동일 확임
+                 */
+            });
+            it("- getObject(1 | 2) : 직렬화 객체 얻기, 엔티티 참조 ", () => {
+                const t1 = new MetaTable('T1')
+                const prop1 = {
+                    default: 'D1',
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                const c1 = new MetaColumn('c1', t1, prop1);
+                const obj1 = c1.getObject();
+                const obj2 = c1.getObject(1);
+
+                expect(obj1).toEqual(obj2);
+                expect(obj1._guid).toBe(c1._guid);
+                expect(obj1._type).toBe('Meta.Entity.MetaColumn');
+                expect(obj1.caption).toBe('C1');
+                expect(obj1.columnName).toBe('c1');
+                expect(obj1.constraints).toEqual(prop1.constraints);
+                expect(obj1.default).toBe('D1');
+                expect(obj1.isNotNull).toBe(true);
+                expect(obj1.name).toBe('c1');
+                expect(obj1.value).toBe('V1');
+                expect(obj1._entity.$ref).toBe(t1._guid);
+                /**
+                 * MEMO:
+                 * - entity 참조가 있어도 getObject(0), getObject(1) 은 동일함
+                 */
+            });
+            it("- getObject(2) : 직렬화 객체 얻기, 엔티티 참조 ", () => {
+                const t1 = new MetaTable('T1')
+                const prop1 = {
+                    default: 'D1',
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                const c1 = new MetaColumn('c1', t1, prop1);
+                const obj1 = c1.getObject(2);
+
+                expect(obj1._type).toBe('Meta.Entity.MetaColumn');
+                expect(obj1.caption).toBe('C1');
+                expect(obj1.columnName).toBe('c1');
+                expect(obj1.constraints).toEqual(prop1.constraints);
+                expect(obj1.default).toBe('D1');
+                expect(obj1.isNotNull).toBe(true);
+                expect(obj1.name).toBe('c1');
+                expect(obj1.value).toBe('V1');
+                /**
+                 * MEMO:
+                 * - _entity, _guid 가 없는 개체 확인
+                 */
+            });
+        });
+        describe("MetaColumn.setObject(mObj) <객체 설정>", () => {
+            it("- setObject() : 직렬화 객체 설정 ", () => {
+                const t1 = new MetaTable('T1')
+                const prop1 = {
+                    default: 'D1',
+                    caption: 'C1',
+                    isNotNull: true,
+                    constraints: [
+                        { regex: /\D/, msg: 'message', code: 'C1', return: true },
+                    ],   
+                    value: 'V1'
+                };
+                const c1 = new MetaColumn('c1', null, prop1);
+                const c2 = new MetaColumn('c2', t1, prop1);
+                const obj1 = c1.getObject();
+                const obj2 = c2.getObject();
+                const cc1 = new MetaColumn();
+                const cc2 = new MetaColumn();
+                cc1.setObject(obj1);
+
+                expect(()=>cc2.setObject(obj2)).toThrow(/ES015/);
+                expect(cc1.equal(c1)).toBe(true);
+                expect(cc1._type).toBe(c1._type);
+                expect(cc1.caption).toBe(c1.caption);
+                expect(cc1.columnName).toBe(c1.columnName);
+                expect(cc1.constraints).toEqual(c1.constraints);
+                expect(cc1.default).toBe(c1.default);
+                expect(cc1.isNotNull).toBe(c1.isNotNull);
+                expect(cc1.name).toBe(c1.name);
+                expect(cc1.value).toBe(c1.value);
+                /**
+                 * MEMO:
+                 * - equal() 및 세부 내용 확인
+                 * - 참조가 있는 column 예외 확인
+                 */
+            });
+        });
 
         describe("MetaColumn.clone() <복제>", () => {
             it("- clone() : 복제 ", () => {
@@ -396,11 +521,25 @@ describe("[target: meta-column.js ]", () => {
                 expect(item1 === item2).toBe(false);
             });
         });
-
-        // TODO:: setContraint()
+        describe("MetaColumn.addContraint(regex, msg, code, condition) <제약조건 추가>", () => {
+            it("- addContraint(value, mss, code) : 제약조건 추가 ", () => {
+                var c1 = new MetaColumn('i1');
+                c1.addConstraint(/10/, '10 시작...', 100, true);
+                c1.addConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
+                c1.addConstraint(/\D/, '숫자만...', 300);   // return 기본값 = false
+        
+                expect(c1.constraints.length).toBe(3);
+                c1.constraints = {regex:/10/, msg: 'sss'};
+                expect(c1.constraints.length).toBe(1);
+                /**
+                 * MEMO:
+                 * - addContraint() 통해서 추가하면 추가되고, constraints 직접 설정하면 갱신한다(기존 지워짐).
+                 */
+            });
+        });
 
         describe("MetaColumn.valid(value, r_result) <제약조건 검사>", () => {
-            it("- valid(value, r_result) : 제약조건 검사 ", () => {     // REVIEW: r_result => 존재시 object 이어야함, 검사 추가
+            it("- valid(value): return  <제약조건 검사> ", () => {     // REVIEW: r_result => 존재시 object 이어야함, 검사 추가
                 var item1 = new MetaColumn('i1');
                 item1.isNotNull = false;
                 item1.addConstraint(/10/, '10 시작...', 100, true);

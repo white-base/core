@@ -340,17 +340,24 @@
 
        /**
          * 로우를 복제한다.
-         * TODO: getObject() 가져오는 방식으로 수정
          * @param {MetaEntity?} p_entity 대상의 엔티티
          * @returns 
          */
         MetaRow.prototype.clone  = function(p_entity) {
             var entity = p_entity || this._entity;
             var clone = new MetaRow(entity);
+            var obj = this.getObject();
 
-            for (var i = 0; i < this.count; i++) {
-                clone._elements[i] = this._elements[i];   // 내부 복사
+            if (obj.__subscribers) {
+                clone.__event.__SET$__subscribers(obj.__subscribers, this.__event);
             }
+            // clone._entity = p_entity ? p_entity : this._entity;
+            clone.__SET$_elements(Util.deepCopy(obj._elem), this);
+            clone.__SET$_keys(Util.deepCopy(obj._key), this);
+
+            // for (var i = 0; i < this.count; i++) {
+            //     clone._elements[i] = this._elements[i];   // 내부 복사
+            // }
             return clone;
         };
         
