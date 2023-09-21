@@ -450,19 +450,25 @@ describe("[target: meta-column.js ]", () => {
         describe("MetaColumn.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
                 const t1 = new MetaTable('T1')
+                const fun1 = function() { /** */}
+                const fun2 = function() { /** */}
                 const prop1 = {
                     default: 'D1',
                     caption: 'C1',
+                    alias: 'cc1',
                     isNotNull: true,
+                    isNullPass: true,
                     constraints: [
                         { regex: /\D/, msg: 'message', code: 'C1', return: true },
                     ],   
-                    value: 'V1'
+                    value: 'V1',
+                    getter: fun1,
+                    setter: fun2,
                 };
                 const c1 = new MetaColumn('c1', null, prop1);
                 const c2 = new MetaColumn('c2', t1, prop1);
-                const fun1 = function(){return 'F1'}
-                c1.onChanged = fun1;
+                const fun3 = function(){return 'F1'}
+                c1.onChanged = fun3;
                 const obj1 = c1.getObject();
                 const obj2 = c2.getObject();
                 const cc1 = new MetaColumn();
@@ -473,12 +479,16 @@ describe("[target: meta-column.js ]", () => {
                 expect(cc1.equal(c1)).toBe(true);
                 expect(cc1._type).toBe(c1._type);
                 expect(cc1.caption).toBe(c1.caption);
+                expect(cc1.alias).toBe(c1.alias);
                 expect(cc1.columnName).toBe(c1.columnName);
                 expect(cc1.constraints).toEqual(c1.constraints);
                 expect(cc1.default).toBe(c1.default);
                 expect(cc1.isNotNull).toBe(c1.isNotNull);
+                expect(cc1.isNullPass).toBe(c1.isNullPass);
                 expect(cc1.name).toBe(c1.name);
                 expect(cc1.value).toBe(c1.value);
+                expect(cc1.getter).toBe(c1.getter);
+                expect(cc1.setter).toBe(c1.setter);
                 expect(cc1.__event.__subscribers.onChanged).toBeDefined()
                 /**
                  * MEMO:
@@ -491,46 +501,47 @@ describe("[target: meta-column.js ]", () => {
         describe("MetaColumn.clone() <복제>", () => {
             it("- clone() : 복제 ", () => {
                 var table = new MetaTable('T1');
+                var fun1 = function() {return 'F1'}
+                var fun2 = function() {return 'F2'}
                 var item1 = new MetaColumn('i1', table, {
                     // type: 'text',
                     // size: 100,
                     default: 'D1',
                     caption: 'C1',
                     isNotNull: true,
+                    isNullPass: true,
                     constraints: [
                         { regex: /\D/, msg: 'message', code: 'C1', return: true },         // true : 충족조건
                         { regex: /[0-9]{5}/, msg: 'message', code: 'C2', return: false }   // false : 통과조건
                     ],   
                     // order: 1000,
                     // increase: 10,
-                    value: 'V1'
+                    value: 'V1',
+                    getter: fun1,
+                    setter: fun2,
                 });            
                 var item2 = item1.clone();
         
                 // item1
                 expect(item1._entity.tableName).toBe('T1');
-                // expect(item1.type).toBe('text');
-                // expect(item1.size).toBe(100);
                 expect(item1.default).toBe('D1');
                 expect(item1.caption).toBe('C1');
                 expect(item1.isNotNull).toBe(true);
+                expect(item1.isNullPass).toBe(true);
                 expect(item1.constraints.length).toBe(2);
-                // expect(item1.order).toBe(1000);
-                // expect(item1.increase).toBe(10);
-                expect(item1.value).toBe('V1');
+                expect(item1.value).toBe('F1');
                 // item2
                 expect(item2._entity.tableName).toBe('T1');
-                // expect(item2.type).toBe('text');
-                // expect(item2.size).toBe(100);
                 expect(item2.default).toBe('D1');
                 expect(item2.caption).toBe('C1');
                 expect(item2.isNotNull).toBe(true);
                 expect(item2.constraints.length).toBe(2);
-                // expect(item2.order).toBe(1000);
-                // expect(item2.increase).toBe(10);
-                expect(item2.value).toBe('V1');
+                expect(item2.value).toBe('F1');
+                expect(item2.getter).toBe(fun1);
+                expect(item2.setter).toBe(fun2);
                 // 비교
                 expect(item1 === item2).toBe(false);
+                expect(item1.equal(item2)).toBe(true);
             });
         });
         describe("MetaColumn.addContraint(regex, msg, code, condition) <제약조건 추가>", () => {
@@ -544,6 +555,8 @@ describe("[target: meta-column.js ]", () => {
                 c1.constraints = {regex:/10/, msg: 'sss'};
                 expect(c1.constraints.length).toBe(1);
                 expect(()=> c1.constraints = {reg:/10/, msg: 'sss'}).toThrow(/ES021/);
+                expect(()=> c1.addConstraint('str', 'sss')).toThrow(/ES021/);
+                expect(()=> c1.addConstraint(/reg/,  10)).toThrow(/ES021/);
 
                 /**
                  * MEMO:
@@ -624,7 +637,19 @@ describe("[target: meta-column.js ]", () => {
 
             it("- 조회 : COVER", () => {   
                 const c1 = new MetaColumn('c1');
-                expect(c1.__key).toBe('c1')
+                
+                c1.__SET$__key('cc1', c1);
+                c1.__SET$__key('cc2');      // 무시됨
+                expect(c1.__key).toBe('cc1')
+                
+                c1.__SET$__value('VV', c1);
+                c1.__SET$__value('VV');     // 무시됨
+                expect(c1.__GET$__value(c1)).toBe('VV')
+                expect(c1.__GET$__value()).toBe(undefined)
+
+                expect(c1.alias).toBe('c1')
+                expect(c1.__GET$alias()).toBe(undefined)
+                expect(c1.__GET$alias(c1)).toBe(null)
 
             });
         });

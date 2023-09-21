@@ -405,7 +405,7 @@
                 if (call instanceof MetaColumn) __value = val;
             }
             this.__SET$__key = function(val, call) {
-                if (call instanceof MetaColumn) __key = val;    // ~ Branch:
+                if (call instanceof MetaColumn) __key = val;
             }
 
             // MetaEntity 등록 & order(순서) 값 계산
@@ -445,7 +445,8 @@
                         this[prop] = p_property[prop];
                     }
                 }
-            } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {   // Branch:
+            } 
+            if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {  
                 this['value'] = p_property; 
             }
         };
@@ -502,7 +503,7 @@
             if (this.default !== null) obj.default = this.default;
             if (this.caption !== null) obj.caption = this.caption;            
             if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
-            if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;    // Branch:
+            if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;
             if (this.constraints.length > 0) obj.constraints = Util.deepCopy(this.constraints);
             if (this.getter !== null) obj.getter = this.getter;
             if (this.setter !== null) obj.setter = this.setter;
@@ -537,11 +538,11 @@
             if (p_oGuid.default) this.default = p_oGuid.default;
             if (p_oGuid.caption) this.caption = p_oGuid.caption;
             if (p_oGuid.isNotNull) this.isNotNull = p_oGuid.isNotNull;
-            if (p_oGuid.isNullPass) this.isNullPass = p_oGuid.isNullPass;   // Branch:
+            if (p_oGuid.isNullPass) this.isNullPass = p_oGuid.isNullPass;
             if (p_oGuid.constraints) this.constraints = p_oGuid.constraints;
-            if (p_oGuid.getter) this.getter = p_oGuid.getter;       // Branch:
-            if (p_oGuid.setter) this.setter = p_oGuid.setter;       // Branch:
-            if (p_oGuid.alias) this.alias = p_oGuid.alias;          // Branch:
+            if (p_oGuid.getter) this.getter = p_oGuid.getter;
+            if (p_oGuid.setter) this.setter = p_oGuid.setter;
+            if (p_oGuid.alias) this.alias = p_oGuid.alias;
             if (p_oGuid.value) this.value = p_oGuid.value;
         };
 
@@ -559,10 +560,10 @@
             if (rObj.default) clone.default = rObj.default;
             if (rObj.caption) clone.caption = rObj.caption;
             if (rObj.isNotNull) clone.isNotNull = rObj.isNotNull;
-            if (rObj.isNullPass) clone.isNullPass = rObj.isNullPass;    // Branch:
+            if (rObj.isNullPass) clone.isNullPass = rObj.isNullPass;
             if (rObj.constraints) clone.constraints = rObj.constraints;
-            if (rObj.getter) clone.getter = rObj.getter;    // Branch:
-            if (rObj.setter) clone.setter = rObj.setter;    // Branch:
+            if (rObj.getter) clone.getter = rObj.getter;
+            if (rObj.setter) clone.setter = rObj.setter;
             if (rObj.alias) clone.alias = rObj.alias;
             if (rObj.value) clone.value = rObj.value;
 
@@ -584,8 +585,8 @@
                 this.constraints.push(p_regex);
                 return;
             }
-            if (!(p_regex instanceof RegExp)) Message.error('ES021', ['regex', 'RegExp']);  // Branch:
-            if (!(typeof p_msg === 'string')) Message.error('ES021', ['msg', 'string']);    // Branch:
+            if (!(p_regex instanceof RegExp)) Message.error('ES021', ['regex', 'RegExp']);
+            if (!(typeof p_msg === 'string')) Message.error('ES021', ['msg', 'string']);    
 
             constraint.regex = p_regex;
             constraint.msg = p_msg;
@@ -618,7 +619,7 @@
             p_value = typeof p_value === 'number' ? String(p_value) : p_value;  // number 형 변환
 
             // 1. 기본값 얻기
-            value = p_value === null || typeof p_value === 'undefined' ? this.default : p_value;    // Branch:
+            value = p_value === null || typeof p_value === 'undefined' ? this.default : p_value;    // Branch: REVIEW: 필요한 로직인가?
             value = value.trim();
 
             // 2-1. 통과조건 검사
@@ -699,8 +700,8 @@
                     return _baseType; 
                 },
                 set: function(newValue) { 
-                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);   // Branch:
-                    if (!(new newValue() instanceof MetaColumn)) Message.error('ES032', ['_baseType', 'MetaColumn']);   // Branch:
+                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
+                    if (!(new newValue() instanceof MetaColumn)) Message.error('ES032', ['_baseType', 'MetaColumn']);
                     _baseType = newValue;
                 },
                 enumerable: false,
@@ -744,7 +745,7 @@
             
             if (this._owner.rows.count > 0) Message.error('ES045', ['_owner.rows', 'column']);
             if (this.existColumnName(p_name)) Message.error('ES042', ['name', 'columnName']);
-            if (this.existAlias(p_name)) Message.error('ES042', ['name', 'alias']); // Branch:
+            if (this.existAlias(p_name)) Message.error('ES042', ['name', 'alias']); 
             
             return _super.prototype.add.call(this, p_name, p_value);
         };
@@ -870,7 +871,7 @@
                 Message.error('ES022', ['object']); 
             }
 
-            if (typeof key === 'undefined') Message.error('ES051', ['name | obj.columnName']);  // Branch:
+            if (key.length === 0) Message.error('ES051', ['name | obj.columnName']);
 
             return _super.prototype.add.call(this, key, column);
         };
@@ -885,7 +886,7 @@
             var item;
             var property = {};
 
-            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);         // Branch:
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
                 Message.error('ES021', ['value', 'number, string, boolean']);
             }
@@ -1117,7 +1118,7 @@
             var item;
             var property = {};
 
-            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']); // Branch:
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
                 Message.error('ES021', ['value', 'number, string, boolean']);
             }

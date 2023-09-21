@@ -114,32 +114,35 @@ describe("[target: meta-column.js]", () => {
                 var temp1  = new TempCollection();
 
                 expect(()=> temp1.addValue('i1', 'V1')).toThrow(/ES013/)
-                // view1.columns.addValue('i2', 'V2');
-                // view1.columns['i1'].alias = 'a1';
-                // view1.columns['i2'].alias = 'a2';
-        
-                // expect(view1.columns.count).toBe(2);
-                // expect(view1.columns['i1'].alias).toBe('a1');
-                // expect(view1.columns['i2'].alias).toBe('a2');
-                // expect(view1.columns.existAlias('a1')).toBe(true);
-                // expect(view1.columns.existAlias('a2')).toBe(true);
-                // expect(view1.columns.existAlias('a3')).toBe(false);
-                
-                // expect(view1.columns['i1'] === view1.columns.alias('a1')).toBe(true);
-                // expect(view1.columns['i2'] === view1.columns.alias('a2')).toBe(true)
+            });
+            it("- _baseType 설정 : 예외  ", () => {
+                const t1 = new MetaTable();
 
+                expect(()=> t1.columns._baseType = 10).toThrow(/ES021/)
+                expect(()=> t1.columns._baseType = MetaElement).toThrow(/ES032/)
             });
         });
 
     });
     describe("MetaTableColumnCollection :: 클래스", () => {
         describe("MetaColumnCollection.removeAt(idx) <컬럼 삭제>", () => {
-            it("- add(name) : 아이템명으로 추가 ", () => {
+            it("- removeAt(name) : 아이템명으로 삭제 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
                 table1.columns.add('i2');
-                table1.columns.removeAt(2)
-                // expect(()=> table1.columns.removeAt(2)).toThrow(/ded/)
+                table1.columns.removeAt(1)
+
+                expect(table1.columns.count).toBe(1);
+            });
+            it("- removeAt(name) : 예외 <rows 존재시> ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1');
+                table1.columns.add('i2');
+                table1.rows.add(table1.newRow());
+
+                expect(table1.columns.count).toBe(2);
+                expect(table1.rows.count).toBe(1);
+                expect(()=>table1.columns.removeAt(1)).toThrow(/ES044/)
             });
         });
         describe("MetaColumnCollection.addValue(name, value) <이름과 값으로 컬럼 추가>", () => {
@@ -152,11 +155,13 @@ describe("[target: meta-column.js]", () => {
                 expect(table1.columns['i1'].value).toBe('V1');
                 expect(table1.columns['i2'].value).toBe('V2');
             });
-            it("- addValue(?) : 예외 ", () => {
+            it("- addValue(?, ?) : 예외 ", () => {
                 var table1 = new MetaTable('T1');
 
                 expect(() => table1.columns.addValue('c1', {})).toThrow(/ES021/);
                 expect(() => table1.columns.addValue('c1', /reg/)).toThrow(/ES021/);
+                expect(()=> table1.columns.addValue(10)).toThrow(/ES021/)
+                expect(()=> table1.columns.addValue({})).toThrow(/ES021/)
             });
         });
         describe("MetaTableColumnCollection.add(name | column) <컬럼 추가>", () => {
@@ -205,6 +210,16 @@ describe("[target: meta-column.js]", () => {
                 expect(() => table1.columns.add({})).toThrow(/ES022/);
                 expect(() => table1.columns.add(/err/)).toThrow(/ES022/);
             });
+            it("- add(?) : 예외 <별칭과 중복> ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('c1');
+                table1.columns.add('c2');
+                table1.columns['c2'].alias = 'cc2'
+
+                expect(() => table1.columns.add('cc2')).toThrow(/ES042/);
+                expect(() => table1.columns.add('')).toThrow(/ES051/);
+            });
+
         });
         
 
@@ -330,7 +345,7 @@ describe("[target: meta-column.js]", () => {
                 view1.columns.add('c1');
                 view1.columns.add('c2');
                 view1.columns['c1'].alias = 'cc1'
-
+                
                 expect(()=> view1.columns['c2'].columnName = 'cc1').toThrow(/ES042/)
                 expect(()=> view1.columns['c1'].columnName = 10).toThrow(/ES021/)
                 expect(()=> view1.columns['c1'].columnName = {}).toThrow(/ES021/)
