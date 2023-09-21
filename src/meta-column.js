@@ -12,15 +12,14 @@
     var Observer;
     var CustomError;
     var MetaElement;
-    // var MetaEntity;
     var PropertyCollection;
     var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                      = _global._L || {};
+    _global._L                      = _global._L || {};             // Branch: ~
     _global._L.Meta                 = _global._L.Meta || {};
-    _global._L.Meta.Entity          = _global._L.Meta.Entity || {};
+    _global._L.Meta.Entity          = _global._L.Meta.Entity || {}; // ~Branch:
 
     //==============================================================
     // 2. import module
@@ -28,9 +27,7 @@
         Message                     = require('./message').Message;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
-        // CustomError                 = require('./custom-error').CustomError;
         MetaElement                 = require('./meta-element').MetaElement;
-        // MetaEntity                  = require('./meta-entity').MetaEntity;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
@@ -39,20 +36,17 @@
         Observer                    = _global._L.Observer;
         CustomError                 = _global._L.CustomError;
         MetaElement                 = _global._L.MetaElement;
-        // MetaEntity                  = _global._L.MetaEntity;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);  // Branch: ~
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
-    // if (typeof CustomError === 'undefined') Message.error('ES011', ['CustomError', 'custom-error']);
-    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
-    // if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
-    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
+    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);   // ~ Branch:
 
     //==============================================================
     // 4. module implementation
@@ -141,7 +135,7 @@
             {
                 get: function() { return _entity; },
                 set: function(newValue) { 
-                    if (newValue && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
+                    if (typeof newValue !== 'undefined' && !(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
                         Message.error('ES032', ['_entity', 'MetaEntity']);
                     }
                     _entity = newValue;
@@ -162,7 +156,7 @@
                 get: function() { return this._name; },
                 set: function(newValue) { 
                     if (newValue === this.columnName) return;
-                    if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
+                    if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']); 
                     if (_entity && _entity.columns.existColumnName(newValue)) Message.error('ES042', [newValue, 'columnName']);
                     if (_entity && _entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
                     // columnName = newValue;
@@ -206,7 +200,7 @@
                 set: function(newValue) { 
                     if(typeof newValue !== 'undefined' && newValue !== null 
                         &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
-                            Message.error('ES021', ['default', 'string | boolea | number']);
+                            Message.error('ES021', ['default', 'string | boolean | number']);
                         }
                     defaultValue = newValue; 
                 },
@@ -222,7 +216,7 @@
             {
                 get: function() { return caption; },
                 set: function(newValue) { 
-                    if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']);
+                    if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']); 
                     caption = newValue; 
                 },
                 configurable: false,
@@ -285,7 +279,7 @@
                     
                     // 배열로 일반화
                     if (Array.isArray(newValue))  list = newValue;
-                    else list.push(newValue);   // COVER:
+                    else list.push(newValue);
 
                     // 유효성 검사
                     for(var i = 0; list.length > i; i++) {
@@ -411,7 +405,7 @@
                 if (call instanceof MetaColumn) __value = val;
             }
             this.__SET$__key = function(val, call) {
-                if (call instanceof MetaColumn) __key = val;
+                if (call instanceof MetaColumn) __key = val;    // ~ Branch:
             }
 
             // MetaEntity 등록 & order(순서) 값 계산
@@ -451,8 +445,8 @@
                         this[prop] = p_property[prop];
                     }
                 }
-            } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {
-                this['value'] = p_property; // COVER:
+            } else if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {   // Branch:
+                this['value'] = p_property; 
             }
         };
 
@@ -508,7 +502,7 @@
             if (this.default !== null) obj.default = this.default;
             if (this.caption !== null) obj.caption = this.caption;            
             if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
-            if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;
+            if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;    // Branch:
             if (this.constraints.length > 0) obj.constraints = Util.deepCopy(this.constraints);
             if (this.getter !== null) obj.getter = this.getter;
             if (this.setter !== null) obj.setter = this.setter;
@@ -539,15 +533,15 @@
                 if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
                 this._entity = entity;
             } 
-            if (p_oGuid.columnName) this.columnName = p_oGuid.columnName;
+            if (p_oGuid.columnName) this.columnName = p_oGuid.columnName;   // Branch:
             if (p_oGuid.default) this.default = p_oGuid.default;
             if (p_oGuid.caption) this.caption = p_oGuid.caption;
             if (p_oGuid.isNotNull) this.isNotNull = p_oGuid.isNotNull;
-            if (p_oGuid.isNullPass) this.isNullPass = p_oGuid.isNullPass;
+            if (p_oGuid.isNullPass) this.isNullPass = p_oGuid.isNullPass;   // Branch:
             if (p_oGuid.constraints) this.constraints = p_oGuid.constraints;
-            if (p_oGuid.getter) this.getter = p_oGuid.getter;
-            if (p_oGuid.setter) this.setter = p_oGuid.setter;
-            if (p_oGuid.alias) this.alias = p_oGuid.alias;
+            if (p_oGuid.getter) this.getter = p_oGuid.getter;       // Branch:
+            if (p_oGuid.setter) this.setter = p_oGuid.setter;       // Branch:
+            if (p_oGuid.alias) this.alias = p_oGuid.alias;          // Branch:
             if (p_oGuid.value) this.value = p_oGuid.value;
         };
 
@@ -560,15 +554,15 @@
             var clone = new MetaColumn(this.columnName);
             var rObj = this.getObject();
 
-            if (rObj.columnName) clone.columnName = rObj.columnName;
+            if (rObj.columnName) clone.columnName = rObj.columnName;    // Branch:
             clone._entity = p_entity ? p_entity : this._entity;
             if (rObj.default) clone.default = rObj.default;
             if (rObj.caption) clone.caption = rObj.caption;
             if (rObj.isNotNull) clone.isNotNull = rObj.isNotNull;
-            if (rObj.isNullPass) clone.isNullPass = rObj.isNullPass;
+            if (rObj.isNullPass) clone.isNullPass = rObj.isNullPass;    // Branch:
             if (rObj.constraints) clone.constraints = rObj.constraints;
-            if (rObj.getter) clone.getter = rObj.getter;
-            if (rObj.setter) clone.setter = rObj.setter;
+            if (rObj.getter) clone.getter = rObj.getter;    // Branch:
+            if (rObj.setter) clone.setter = rObj.setter;    // Branch:
             if (rObj.alias) clone.alias = rObj.alias;
             if (rObj.value) clone.value = rObj.value;
 
@@ -586,9 +580,12 @@
             p_condition = p_condition || false;
 
             var constraint = {};
-
-            if (!(p_regex instanceof RegExp)) Message.error('ES021', ['regex', 'RegExp']);
-            if (!(typeof p_msg === 'string')) Message.error('ES021', ['msg', 'string']);
+            if (typeof p_regex === 'function') {
+                this.constraints.push(p_regex);
+                return;
+            }
+            if (!(p_regex instanceof RegExp)) Message.error('ES021', ['regex', 'RegExp']);  // Branch:
+            if (!(typeof p_msg === 'string')) Message.error('ES021', ['msg', 'string']);    // Branch:
 
             constraint.regex = p_regex;
             constraint.msg = p_msg;
@@ -621,11 +618,11 @@
             p_value = typeof p_value === 'number' ? String(p_value) : p_value;  // number 형 변환
 
             // 1. 기본값 얻기
-            value = p_value === null || typeof p_value === 'undefined' ? this.default : p_value;
+            value = p_value === null || typeof p_value === 'undefined' ? this.default : p_value;    // Branch:
             value = value.trim();
 
             // 2-1. 통과조건 검사
-            if (false
+            if (false   // Branch:
                 || (this.isNotNull === false && this.constraints.length === 0 ) 
                 || (this.isNotNull === false && this.isNullPass === true && value.length === 0)
                 || (this.isNotNull === true && this.constraints.length === 0 && value.length > 0)
@@ -646,7 +643,7 @@
             for(var i = 0; this.constraints.length > i; i++) {
 
                 if (typeof this.constraints[i] === 'function') {
-                    return this.constraints[i].call(this, this, p_value, result);     // 함수형 제약조건  // COVER:
+                    return this.constraints[i].call(this, this, p_value);     // 함수형 제약조건  
                 } else {
                     match = p_value.match(this.constraints[i].regex);
     
@@ -702,8 +699,8 @@
                     return _baseType; 
                 },
                 set: function(newValue) { 
-                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    if (!(new newValue() instanceof MetaColumn)) Message.error('ES032', ['_baseType', 'MetaColumn']);
+                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);   // Branch:
+                    if (!(new newValue() instanceof MetaColumn)) Message.error('ES032', ['_baseType', 'MetaColumn']);   // Branch:
                     _baseType = newValue;
                 },
                 enumerable: false,
@@ -747,14 +744,14 @@
             
             if (this._owner.rows.count > 0) Message.error('ES045', ['_owner.rows', 'column']);
             if (this.existColumnName(p_name)) Message.error('ES042', ['name', 'columnName']);
-            if (this.existAlias(p_name)) Message.error('ES042', ['name', 'alias']);
+            if (this.existAlias(p_name)) Message.error('ES042', ['name', 'alias']); // Branch:
             
             return _super.prototype.add.call(this, p_name, p_value);
         };
 
         MetaColumnCollection.prototype.removeAt = function(p_idx) {
             if (this._owner.rows.count > 0) Message.error('ES044', ['_owner.rows', 'idx']);
-            return _super.prototype.removeAt.call(this, p_idx);
+            return _super.prototype.removeAt.call(this, p_idx); 
         };
 
         // /**
@@ -870,10 +867,10 @@
                 column = p_any.clone(this._owner);
                 // column._entity = this._owner;
             } else {
-                Message.error('ES022', ['object']);
+                Message.error('ES022', ['object']); 
             }
 
-            if (typeof key === 'undefined') Message.error('ES051', ['name | obj.columnName']);
+            if (typeof key === 'undefined') Message.error('ES051', ['name | obj.columnName']);  // Branch:
 
             return _super.prototype.add.call(this, key, column);
         };
@@ -888,7 +885,7 @@
             var item;
             var property = {};
 
-            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);         // Branch:
             if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
                 Message.error('ES021', ['value', 'number, string, boolean']);
             }
@@ -924,7 +921,7 @@
             // if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) Message.error('ES032', ['_baseCollection', 'MetaColumnCollection']);
 
             // if (p_baseCollection && !(p_baseCollection instanceof MetaColumnCollection)) {
-            //     throw new Error('Error!! MetaColumnCollection object [p_baseCollection].');   // COVER:
+            //     throw new Error('Error!! MetaColumnCollection object [p_baseCollection].');
             // }
             /**
              * 엔티티의 아이템(속성) 컬렉션
@@ -1120,11 +1117,11 @@
             var item;
             var property = {};
 
-            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']); // Branch:
             if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
                 Message.error('ES021', ['value', 'number, string, boolean']);
             }
-            if (p_value instanceof MetaColumnCollection) Message.error('ES055', ['value', 'MetaColumnCollection instance']);
+            // if (p_value instanceof MetaColumnCollection) Message.error('ES055', ['value', 'MetaColumnCollection instance']);    // Branch:
 
             property = { value: p_value };
 
@@ -1139,7 +1136,7 @@
          * @param {MetaEntity} p_entity 
          */
         MetaViewColumnCollection.prototype.addEntity  = function(p_entity) {
-            if (typeof p_entity === 'undefined' && !(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
+            if (typeof p_entity !== 'undefined' && !(p_entity instanceof MetaElement && p_entity.instanceOf('MetaEntity'))) {
                 Message.error('ES032', ['entity', 'MetaEntity']);
             }
 

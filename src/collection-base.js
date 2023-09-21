@@ -41,11 +41,11 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof ICollection === 'undefined') throw Message.error('ES011', ['ICollection', 'i-collection']);
     if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
 
     //==============================================================
     // 4. module implementation

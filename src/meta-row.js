@@ -45,11 +45,11 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof TransactionCollection === 'undefined') Message.error('ES011', ['TransactionCollection', 'collection-transaction']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   
@@ -91,7 +91,7 @@
                 get: function() { return _entity; },
                 set: function(newValue) {
                     if (newValue === null) return _entity = null;
-                    if (newValue && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
+                    if (typeof newValue !== 'undefined' && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
                         Message.error('ES032', ['_entity', 'MetaEntity']);
                     }
                     if (this.count > 0) Message.error('ES045', ['MetaRow', '_entity']);

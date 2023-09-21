@@ -8,7 +8,7 @@
 //==============================================================
 // test
 
-describe.skip("load: meta-entity.js <MetaEntity>", () => {
+describe("load: meta-entity.js <MetaEntity>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -23,51 +23,207 @@ describe.skip("load: meta-entity.js <MetaEntity>", () => {
 
         expect(() => require('../src/meta-entity')).toThrow(/Util/);
     });
-    it("- 예외 : IGroupControl 로딩이 안 된 경우", () => {
+    it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
         require('../src/message');
-        require('../src/util-type'); 
+        require('../src/util-type');
         require('../src/util');
-        
-        require('../src/i-object');
-        require('../src/i-marshal');
 
-        require('../src/observer');
-        require('../src/custom-error');
-        
-        // require('../src/i-control-all');
-
-        expect(() => require('../src/meta-entity')).toThrow(/IGroupControl/);
+        expect(() => require('../src/meta-entity')).toThrow(/MetaRegistry/);
     });
-    it("- 예외 : IAllControl 로딩이 안 된 경우", () => {
+    it("- 예외 : IGroupControl 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
 
         require('../src/i-object');
         require('../src/i-marshal');
-        require('../src/i-control-group');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
+        // require('../src/i-control-group');
+        // require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        // require('../src/i-control-import');
+        // require('../src/i-serialize');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
 
         require('../src/observer');
-        require('../src/custom-error');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');  
 
-        expect(() => require('../src/meta-entity')).toThrow(/IAllControl/);
+        expect(() => require('../src/meta-entity')).toThrow(/IGroupControl/);
+    });
+    
+    it("- 예외 : ISchemaControl 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
+        require('../src/i-control-group');
+        // require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        // require('../src/i-control-import');
+        // require('../src/i-serialize');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');  
+
+        expect(() => require('../src/meta-entity')).toThrow(/ISchemaControl/);
+    });
+    it("- 예외 : IImportControl 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        // require('../src/i-control-import');
+        // require('../src/i-serialize');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');  
+
+        expect(() => require('../src/meta-entity')).toThrow(/IImportControl/);
+    });
+    it("- 예외 : IExportControl 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        require('../src/i-control-import');
+        // require('../src/i-serialize');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');  
+
+        expect(() => require('../src/meta-entity')).toThrow(/IExportControl/);
+    });
+    it("- 예외 : ISerialize 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        // require('../src/i-serialize');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');  
+        // require('../src/meta-object');
+
+        expect(() => require('../src/meta-entity')).toThrow(/ISerialize/);
+    });
+    it("- 예외 : MetaObject 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        // require('../src/meta-object');
+        // require('../src/collection-base');
+        // require('../src/collection-array');
+        // require('../src/trans-queue');
+        // require('../src/collection-transaction');
+        // require('../src/collection-property');
+
+        expect(() => require('../src/meta-entity')).toThrow(/MetaObject/);
     });
     it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
-        require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
         require('../src/meta-object');
+        require('../src/collection-base');
+        require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
+        // require('../src/meta-element');
 
         expect(() => require('../src/meta-entity')).toThrow(/MetaElement/);
     });
@@ -75,19 +231,36 @@ describe.skip("load: meta-entity.js <MetaEntity>", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
-        require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
         require('../src/meta-object');
+        require('../src/collection-base');
+        require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
+        // require('../src/meta-row');
+
+        // global._L.MetaRow = undefined;
+        // global._L.Meta.Entity.MetaRow = undefined;
         
         expect(() => require('../src/meta-entity')).toThrow(/MetaRowCollection/);
     });
@@ -95,29 +268,36 @@ describe.skip("load: meta-entity.js <MetaEntity>", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
-        require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
 
         global._L.MetaRow = undefined;
-        global._L.Meta.Entity.MetaRow = undefined;
+        // global._L.Meta.Entity.MetaRow = undefined;
 
         expect(() => require('../src/meta-entity')).toThrow(/MetaRow/);
     });
@@ -125,32 +305,41 @@ describe.skip("load: meta-entity.js <MetaEntity>", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
-        require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/observer');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
-        require('../src/meta-column');
-        global._L.MetaColumnCollection = undefined;
-        global._L.Meta.Entity.MetaColumnCollection = undefined;
+        // require('../src/meta-column');
+
+        // global._L.MetaRow = undefined;
+        // global._L.Meta.Entity.MetaRow = undefined;
 
         expect(() => require('../src/meta-entity')).toThrow(/MetaColumnCollection/);
     });
+    
     it("- 로딩 성공 ", () => {
         require('../src/message');
         require('../src/util-type');
@@ -191,7 +380,7 @@ describe.skip("load: meta-entity.js <MetaEntity>", () => {
     });
     
 });
-describe.skip("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
+describe("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -199,7 +388,7 @@ describe.skip("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
     it("- 예외 : 전체 로딩 안할 때", () => {
         require('../src/message');
 
-        expect(() => require('../src/meta-table')).toThrow(/module load/);
+        expect(() => require('../src/meta-table')).toThrow(/ES011/);
     });
     it("- 예외 : Util 로딩이 안 된 경우", () => {
         require('../src/message');
@@ -210,18 +399,34 @@ describe.skip("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
+        require('../src/observer');
 
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
 
-        require('../src/observer');
-        require('../src/custom-error');
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
+        // require('../src/collection-property');
+        // require('../src/meta-element');
+        // require('../src/meta-row');
+        // require('../src/meta-column');
 
         expect(() => require('../src/meta-table')).toThrow(/PropertyCollection/);
     });
@@ -230,20 +435,34 @@ describe.skip("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
         require('../src/collection-property');
+        require('../src/meta-element');
+        require('../src/meta-row');
+        require('../src/meta-column');
+        // require('../src/meta-entity');
 
         expect(() => require('../src/meta-table')).toThrow(/MetaEntity/);
     });
@@ -252,27 +471,35 @@ describe.skip("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
         require('../src/meta-column');
         require('../src/meta-entity');
+        // require('../src/meta-table');
         global._L.MetaTableColumnCollection = undefined;
         global._L.Meta.Entity.MetaTableColumnCollection = undefined;
 
@@ -283,23 +510,30 @@ describe.skip("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
         require('../src/meta-column');
@@ -310,7 +544,7 @@ describe.skip("load: meta-table.js <MetaTable, MetaTableCollection>", () => {
         expect(global._L.Meta.Entity.MetaTable).toBeDefined();
     });
 });
-describe.skip("load: meta-view.js <MetaView, MetaViewCollection>", () => {
+describe("load: meta-view.js <MetaView, MetaViewCollection>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -318,76 +552,139 @@ describe.skip("load: meta-view.js <MetaView, MetaViewCollection>", () => {
     it("- 예외 : 전체 로딩 안할 때", () => {
         require('../src/message');
 
-        expect(() => require('../src/meta-view')).toThrow(/module load/);
+        expect(() => require('../src/meta-view')).toThrow(/ES011/);
     });
     it("- 예외 : Util 로딩이 안 된 경우", () => {
         require('../src/message');
 
         expect(() => require('../src/meta-view')).toThrow(/Util/);
     });
-    it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
+    it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
-        require('../src/i-object');
-        require('../src/i-marshal');
-        require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
-        require('../src/i-collection');
-        require('../src/i-collection-property');
-        require('../src/i-collection-array');
-        require('../src/collection-base');
-        require('../src/collection-array');
 
-        expect(() => require('../src/meta-view')).toThrow(/PropertyCollection/);
+        // require('../src/i-object');
+        // require('../src/i-marshal');
+        // require('../src/i-list');
+        // require('../src/i-control-list');
+
+        // require('../src/i-element');
+        // require('../src/i-control-group');
+        // require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        // require('../src/i-control-import');
+        // require('../src/i-serialize');
+        // require('../src/i-collection');
+        // require('../src/i-collection-property');
+        // require('../src/i-collection-array');
+
+        // require('../src/namespace-manager');
+        // require('../src/meta-registry');    
+
+        expect(() => require('../src/meta-view')).toThrow(/MetaRegistry/);
     });
     it("- 예외 : MetaObject 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
-        require('../src/collection-base');
-        require('../src/collection-array');
-        require('../src/collection-property');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        // require('../src/meta-object');
+        // require('../src/collection-base');
+        // require('../src/collection-array');
+        // require('../src/trans-queue');
+        // require('../src/collection-transaction');
 
         expect(() => require('../src/meta-view')).toThrow(/MetaObject/);
     });
+    it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+        require('../src/observer');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
+        require('../src/collection-base');
+        require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
+        // require('../src/collection-property');
+        require('../src/meta-element');
+        require('../src/meta-row');
+        // require('../src/meta-column');
+
+        expect(() => require('../src/meta-view')).toThrow(/PropertyCollection/);
+    });
+    
     it("- 예외 : MetaEntity 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
         require('../src/collection-property');
-        require('../src/meta-object');
+        require('../src/meta-element');
+        require('../src/meta-row');
+        require('../src/meta-column');
+        // require('../src/meta-entity');
 
         expect(() => require('../src/meta-view')).toThrow(/MetaEntity/);
     });
@@ -396,27 +693,36 @@ describe.skip("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/i-element');
         require('../src/i-control-group');
-        // // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
         require('../src/meta-column');
         require('../src/meta-entity');
+        // require('../src/meta-view');
+
         global._L.MetaViewColumnCollection = undefined;
         global._L.Meta.Entity.MetaViewColumnCollection = undefined;
 
@@ -427,23 +733,29 @@ describe.skip("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
         require('../src/i-control-group');
-        // require('../src/i-control-all');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
         require('../src/meta-column');
@@ -454,7 +766,7 @@ describe.skip("load: meta-view.js <MetaView, MetaViewCollection>", () => {
         expect(global._L.Meta.Entity.MetaView).toBeDefined();
     });
 });
-describe.skip("load: meta-set.js <MetaSet>", () => {
+describe("load: meta-set.js <MetaSet>", () => {
     beforeEach(() => {
         jest.resetModules();
         global._L = null;
@@ -462,40 +774,148 @@ describe.skip("load: meta-set.js <MetaSet>", () => {
     it("- 예외 : 전체 로딩 안할 때", () => {
         require('../src/message');
         
-        expect(() => require('../src/meta-set')).toThrow(/module load/);
+        expect(() => require('../src/meta-set')).toThrow(/ES011/);
     });
     it("- 예외 : Util 로딩이 안 된 경우", () => {
         require('../src/message');
         
         expect(() => require('../src/meta-set')).toThrow(/Util/);
     });
+    it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+        require('../src/observer');
+
+        expect(() => require('../src/meta-set')).toThrow(/MetaRegistry/);
+    });
     it("- 예외 : ISchemaControl 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
+        require('../src/observer');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
+        require('../src/i-control-group');
+        // require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        // require('../src/i-control-import');
+        // require('../src/i-serialize');
+        // require('../src/i-transaction');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry'); 
 
         expect(() => require('../src/meta-set')).toThrow(/ISchemaControl/);
     });
-    it("- 예외 : IAllControl 로딩이 안 된 경우", () => {
+    it("- 예외 : IImportControl 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
-        require('../src/i-control-schema');
+        require('../src/observer');
 
-        expect(() => require('../src/meta-set')).toThrow(/IAllControl/);
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        // require('../src/i-control-import');
+        // require('../src/i-serialize');
+        // require('../src/i-transaction');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry'); 
+
+        expect(() => require('../src/meta-set')).toThrow(/IImportControl/);
+    });
+    it("- 예외 : IExportControl 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+        require('../src/observer');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        // require('../src/i-control-export');
+        require('../src/i-control-import');
+        // require('../src/i-serialize');
+        // require('../src/i-transaction');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');  
+
+        expect(() => require('../src/meta-set')).toThrow(/IExportControl/);
+    });
+    it("- 예외 : ISerialize 로딩이 안 된 경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+        require('../src/observer');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
+        require('../src/i-control-group');
+        require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        // require('../src/i-serialize');
+        // require('../src/i-transaction');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+
+        expect(() => require('../src/meta-set')).toThrow(/ISerialize/);
     });
     it("- 예외 : ITransaction 로딩이 안 된 경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
+        require('../src/observer');
+
+        require('../src/i-object');
+        require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
+        require('../src/i-control-group');
         require('../src/i-control-schema');
-        // require('../src/i-control-all');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
+        // require('../src/i-transaction');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
 
         expect(() => require('../src/meta-set')).toThrow(/ITransaction/);
     });
@@ -505,15 +925,33 @@ describe.skip("load: meta-set.js <MetaSet>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
-        // require('../src/i-control-all');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
+        require('../src/i-control-group');
         require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-transaction');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
         require('../src/meta-object');
+        require('../src/collection-base');
+        require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
+        // require('../src/meta-element');
+        // require('../src/meta-row');
+        // require('../src/meta-column');
 
         expect(() => require('../src/meta-set')).toThrow(/MetaElement/);
     });
@@ -522,16 +960,34 @@ describe.skip("load: meta-set.js <MetaSet>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
-        // require('../src/i-control-all');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
+        require('../src/i-control-group');
         require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-transaction');
+        require('../src/i-collection');
+        require('../src/i-collection-property');
+        require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
         require('../src/meta-object');
+        require('../src/collection-base');
+        require('../src/collection-array');
+        require('../src/trans-queue');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
+        require('../src/meta-row');
+        require('../src/meta-column');
+        // require('../src/meta-entity');
 
         expect(() => require('../src/meta-set')).toThrow(/MetaEntity/);
     });
@@ -540,32 +996,36 @@ describe.skip("load: meta-set.js <MetaSet>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
         require('../src/i-control-group');
-        // require('../src/i-control-all');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
         require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-transaction');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
         require('../src/meta-column');
         require('../src/meta-entity');
-        require('../src/meta-view');
+        // require('../src/meta-table');
+        // require('../src/meta-view');
 
         expect(() => require('../src/meta-set')).toThrow(/MetaTableCollection/);
     });
@@ -574,32 +1034,36 @@ describe.skip("load: meta-set.js <MetaSet>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
         require('../src/i-control-group');
-        // require('../src/i-control-all');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
         require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-transaction');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
         require('../src/meta-column');
         require('../src/meta-entity');
         require('../src/meta-table');
+        // require('../src/meta-view');
 
         expect(() => require('../src/meta-set')).toThrow(/MetaViewCollection/);
     });
@@ -608,27 +1072,30 @@ describe.skip("load: meta-set.js <MetaSet>", () => {
         require('../src/util-type');
         require('../src/util');
         require('../src/observer');
-        require('../src/custom-error');
+
         require('../src/i-object');
         require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+        require('../src/i-element');
         require('../src/i-control-group');
-        // require('../src/i-control-all');
-        require('../src/i-control-import');
-        require('../src/i-control-export');
         require('../src/i-control-schema');
+        require('../src/i-control-export');
+        require('../src/i-control-import');
+        require('../src/i-serialize');
         require('../src/i-transaction');
-        // require('../src/i-control-part');
-        // require('../src/i-control-lookup');
-        // require('../src/i-collection-base');
         require('../src/i-collection');
         require('../src/i-collection-property');
         require('../src/i-collection-array');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');        
+        require('../src/meta-object');
         require('../src/collection-base');
         require('../src/collection-array');
-        require('../src/collection-property');
-        require('../src/meta-object');
         require('../src/trans-queue');
-        require('../src/collection-trans');
+        require('../src/collection-transaction');
+        require('../src/collection-property');
         require('../src/meta-element');
         require('../src/meta-row');
         require('../src/meta-column');

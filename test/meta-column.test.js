@@ -61,6 +61,15 @@ describe("[target: meta-column.js ]", () => {
                 // expect(item1.increase).toBe(10);
                 expect(item1.value).toBe('V1');
             });
+            it("- new MetaColumn(name, null, ) : 생성시 value 등록 ", () => {
+                var c1 = new MetaColumn('c1', null, 1);
+                var c2 = new MetaColumn('c2', null, 'str');
+                var c3 = new MetaColumn('c2', null, true);
+
+                expect(c1.value).toBe(1);
+                expect(c2.value).toBe('str');
+                expect(c3.value).toBe(true);
+            });
         });
         describe("MetaObject.getTypes() : arr<fun> <타입 얻기>", () => {
             it("- getTypes() : array<function> ", () => {
@@ -452,6 +461,8 @@ describe("[target: meta-column.js ]", () => {
                 };
                 const c1 = new MetaColumn('c1', null, prop1);
                 const c2 = new MetaColumn('c2', t1, prop1);
+                const fun1 = function(){return 'F1'}
+                c1.onChanged = fun1;
                 const obj1 = c1.getObject();
                 const obj2 = c2.getObject();
                 const cc1 = new MetaColumn();
@@ -468,6 +479,7 @@ describe("[target: meta-column.js ]", () => {
                 expect(cc1.isNotNull).toBe(c1.isNotNull);
                 expect(cc1.name).toBe(c1.name);
                 expect(cc1.value).toBe(c1.value);
+                expect(cc1.__event.__subscribers.onChanged).toBeDefined()
                 /**
                  * MEMO:
                  * - equal() 및 세부 내용 확인
@@ -531,9 +543,12 @@ describe("[target: meta-column.js ]", () => {
                 expect(c1.constraints.length).toBe(3);
                 c1.constraints = {regex:/10/, msg: 'sss'};
                 expect(c1.constraints.length).toBe(1);
+                expect(()=> c1.constraints = {reg:/10/, msg: 'sss'}).toThrow(/ES021/);
+
                 /**
                  * MEMO:
                  * - addContraint() 통해서 추가하면 추가되고, constraints 직접 설정하면 갱신한다(기존 지워짐).
+                 * - 잘못된 필수 속성 없을시 예외 확인
                  */
             });
         });
@@ -542,20 +557,20 @@ describe("[target: meta-column.js ]", () => {
             it("- valid(value): return  <제약조건 검사> ", () => {     // REVIEW: r_result => 존재시 object 이어야함, 검사 추가
                 var item1 = new MetaColumn('i1');
                 item1.isNotNull = false;
+
                 item1.addConstraint(/10/, '10 시작...', 100, true);
                 item1.addConstraint(/[0-9]{5}/, '5자리 이하만...', 200, false);
                 item1.addConstraint(/\D/, '숫자만...', 300);   // return 기본값 = false
-                var result = {};
-        
+                item1.addConstraint(/\D/, '숫자만...', 300);
                 // true
-                expect(item1.valid('10')).not.toBeDefined();
-                expect(item1.valid('1000')).not.toBeDefined();
+                expect(item1.valid('10')).not.toBeDefined(); 
+                expect(item1.valid('1000')).not.toBeDefined(); 
                 // false
                 expect(item1.valid('')).toBeDefined();        // 실패 : 10로 시작을 안해서
                 expect(item1.valid('10000')).toBeDefined();   // 실패 : 5자리 이상
                 expect(item1.valid('100a')).toBeDefined();    // 실패 : 문자가 들어가서
             });
-            it("- valid(value, r_result) : isNotNull 여부 ", () => {
+            it("- valid(value) : isNotNull 여부 ", () => {
                 var item1 = new MetaColumn('i1');
                 item1.isNotNull = false;
                 var item2 = new MetaColumn('i2');
@@ -563,8 +578,8 @@ describe("[target: meta-column.js ]", () => {
                 var result1 = {};
                 var result2 = {};
         
-                expect(item1.valid('', result1)).not.toBeDefined();
-                expect(item2.valid('', result2)).toBeDefined();
+                expect(item1.valid('')).not.toBeDefined();
+                expect(item2.valid('')).toBeDefined();
             });
             it("- valid(value, r_result) : isNotNull, isNullPass ", () => {
                 var item1 = new MetaColumn('i1');
@@ -578,6 +593,39 @@ describe("[target: meta-column.js ]", () => {
         
                 expect(item1.valid('', result1)).not.toBeDefined();
                 expect(item2.valid('', result2)).toBeDefined();
+            });
+            it("- valid(value, r_result) : isNotNull, isNullPass ", () => {
+                var item1 = new MetaColumn('i1');
+                item1.isNotNull = false;
+                var result;
+                var fun1 = function(c, v) { 
+                    result = v;
+                    return true 
+                }
+                item1.addConstraint(fun1);
+        
+                expect(item1.valid('10')).toBe(true);
+            });
+        });
+        describe("에외 및 COVER", () => {
+            it("- 예외", () => {   
+                const c1 = new MetaColumn('c1');
+
+                expect(()=>c1._entity = 0).toThrow(/ES032/)
+                expect(()=>c1.default = {}).toThrow(/ES021/)
+                expect(()=>c1.value = {}).toThrow(/ES021/)
+
+            });
+            it("- 예외 : 설정 1", () => {   
+                const c1 = new MetaColumn('c1');
+                c1.__SET$__value('INNER', c1);
+                expect(c1.__GET$__value(c1)).toBe('INNER')
+            });
+
+            it("- 조회 : COVER", () => {   
+                const c1 = new MetaColumn('c1');
+                expect(c1.__key).toBe('c1')
+
             });
         });
 

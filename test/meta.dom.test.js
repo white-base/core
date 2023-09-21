@@ -22,10 +22,33 @@ describe("load: meta-object.js <MetaObject>", () => {
         
         expect(() => require('../src/meta-object')).toThrow(/Util/);
     });
+    it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
+        require('../src/message');
+        require('../src/util-type');
+        require('../src/util');
+
+        // require('../src/i-object');
+        // require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        // require('../src/namespace-manager');
+        // require('../src/meta-registry');
+
+        expect(() => require('../src/meta-object')).toThrow(/MetaRegistry/);
+    });
     it("- 예외 : IObject 로딩이 인된경우", () => {
         require('../src/message');
         require('../src/util-type');
         require('../src/util');
+
+        // require('../src/i-object');
+        // require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');
 
         expect(() => require('../src/meta-object')).toThrow(/IObject/);
     });
@@ -35,19 +58,16 @@ describe("load: meta-object.js <MetaObject>", () => {
         require('../src/util');
 
         require('../src/i-object');
+        // require('../src/i-marshal');
+        require('../src/i-list');
+        require('../src/i-control-list');
+
+        require('../src/namespace-manager');
+        require('../src/meta-registry');
 
         expect(() => require('../src/meta-object')).toThrow(/IMarshal/);
     });
-    it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
-        require('../src/message');
-        require('../src/util-type');
-        require('../src/util');
-        
-        require('../src/i-object');
-        require('../src/i-marshal');
-
-        expect(() => require('../src/meta-object')).toThrow(/MetaRegistry/);
-    });
+    
     it("- 로딩 성공 ", () => {
         require('../src/message');
         require('../src/util-type');
@@ -55,12 +75,11 @@ describe("load: meta-object.js <MetaObject>", () => {
 
         require('../src/i-object');
         require('../src/i-marshal');
-
         require('../src/i-list');
         require('../src/i-control-list');
+
         require('../src/namespace-manager');
         require('../src/meta-registry');
-        
         require('../src/meta-object');
 
         expect(global._L.MetaObject).toBeDefined();

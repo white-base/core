@@ -1,5 +1,3 @@
-const { ISerialize } = require('./i-serialize');
-
 /**
  * namespace _L.Meta.Entity.Entity
  */
@@ -62,6 +60,7 @@ const { ISerialize } = require('./i-serialize');
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof IGroupControl === 'undefined') Message.error('ES011', ['IGroupControl', 'i-control-group']);
     if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
     if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
@@ -72,7 +71,6 @@ const { ISerialize } = require('./i-serialize');
     if (typeof MetaRowCollection === 'undefined') Message.error('ES011', ['MetaRowCollection', 'meta-row']);
     if (typeof MetaRow === 'undefined') Message.error('ES011', ['MetaRow', 'meta-row']);
     if (typeof MetaColumnCollection === 'undefined') Message.error('ES011', ['MetaColumnCollection', 'meta-column']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   
