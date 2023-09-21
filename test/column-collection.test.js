@@ -108,7 +108,7 @@ describe("[target: meta-column.js]", () => {
             it("- 강제로  addValue() 제거  ", () => {
                 class TempCollection extends MetaColumnCollection {
                     constructor(p_owner){
-                        super(p_owner)
+                        super(p_owner) 
                     }
                 }
                 var temp1  = new TempCollection();

@@ -29,7 +29,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof ICollection === 'undefined') Message.error('ES011', ['Util', 'i-collection']);
+    if (typeof ICollection === 'undefined') Message.error('ES011', ['ICollection', 'i-collection']);
 
     //==============================================================
     // 4. module implementation   

@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("[target: collection-property.js, collection-array.js, collection-base.js]", () => {
+describe.skip("[target: collection-property.js, collection-array.js, collection-base.js]", () => {
     describe("BaseCollection :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();

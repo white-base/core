@@ -534,7 +534,8 @@
                 if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
                 this._entity = entity;
             } 
-            if (p_oGuid.columnName) this.columnName = p_oGuid.columnName;   // Branch:
+            // if (p_oGuid.columnName) this.columnName = p_oGuid.columnName;
+            this.columnName = p_oGuid.columnName;
             if (p_oGuid.default) this.default = p_oGuid.default;
             if (p_oGuid.caption) this.caption = p_oGuid.caption;
             if (p_oGuid.isNotNull) this.isNotNull = p_oGuid.isNotNull;
@@ -555,7 +556,8 @@
             var clone = new MetaColumn(this.columnName);
             var rObj = this.getObject();
 
-            if (rObj.columnName) clone.columnName = rObj.columnName;    // Branch:
+            // if (rObj.columnName) clone.columnName = rObj.columnName;
+            clone.columnName = rObj.columnName;
             clone._entity = p_entity ? p_entity : this._entity;
             if (rObj.default) clone.default = rObj.default;
             if (rObj.caption) clone.caption = rObj.caption;
@@ -623,11 +625,9 @@
             value = value.trim();
 
             // 2-1. 통과조건 검사
-            if (false   // Branch:
-                || (this.isNotNull === false && this.constraints.length === 0 ) 
+            if ((this.isNotNull === false && this.constraints.length === 0 ) 
                 || (this.isNotNull === false && this.isNullPass === true && value.length === 0)
-                || (this.isNotNull === true && this.constraints.length === 0 && value.length > 0)
-            ){
+                || (this.isNotNull === true && this.constraints.length === 0 && value.length > 0)){
                 return;
                 // return true;
             }
