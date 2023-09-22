@@ -246,10 +246,20 @@
                     }
                 },
                 W: {    // warning
-    
+                    S01: { // range
+                        1: {
+                            msg: '',
+                            long: ''
+                        },
+                    }
                 },
                 I: {    // Information
-    
+                    S01: {  // 범위
+                            1: {
+                            msg: '[$2] [$1]',
+                            long: ''
+                        },
+                    },
                 }
             },
             kor: { // 구분 코드 : 중복, 필수, 타입, 범위, 객체
@@ -456,7 +466,12 @@
                     }
                 },
                 I: {    // Information
-    
+                    S01: {  // 범위
+                            1: {
+                            msg: '[$2] [$1]',
+                            long: ''
+                        },
+                    },
                 }
             }
         };
@@ -515,7 +530,7 @@
                 long = _build(obj.long);
                 if (long.length > 0) msg += '\n' + long;
             }
-            return   _intro(code) + msg;
+            return _intro(code) + msg;
 
             // inner function
             function _build(p_msg) {
@@ -539,12 +554,16 @@
                 return msg;
             }
             function _intro(code) {
-                var div = code.substring(0, 1);
-                var intro;
-                if (div === 'E') intro = '[Err:'+code+'] ';
-                else if (div === 'W') intro = '[Warn:'+code+'] ';
-                else if (div === 'I') intro = '[Info:'+code+'] ';
-                else intro = '['+code+'] ';
+                var div;
+                var intro = '';
+
+                if (typeof code === 'string' && code.length > 0) {
+                    div = code.substring(0, 1);
+                    if (div === 'E') intro = '[Err:'+code+'] ';
+                    else if (div === 'W') intro = '[Warn:'+code+'] ';
+                    else if (div === 'I') intro = '[Info:'+code+'] ';
+                    else intro = '['+code+'] ';
+                }
                 return intro;
             }
         }

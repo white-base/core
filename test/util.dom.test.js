@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe.skip("[ GROUP]", () => {
+describe("[ GROUP]", () => {
     describe("load: util-type.js <Util.type >", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -84,6 +84,7 @@ describe.skip("[ GROUP]", () => {
         });
         
     });
+    
     // describe("< util.js 정상 로딩 >", () => {
     //     beforeEach(() => {
     //         jest.resetModules();

@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe.skip("[ GROUP]", () => {
+describe("[ GROUP]", () => {
     describe("load: meta-entity.js <MetaEntity>", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -1106,6 +1106,112 @@ describe.skip("[ GROUP]", () => {
     
             expect(global._L.MetaSet).toBeDefined();  
             expect(global._L.Meta.Entity.MetaSet).toBeDefined();
+        });
+    });
+
+    describe("load: meta-column.js <MetaColumn>", () => {
+        beforeEach(() => {
+            jest.resetModules();
+            global._L = null;
+            });
+        it("- 예외 : 전체 로딩 안할 때", () => {
+            // require('../src/message');
+            
+            expect(() => require('../src/meta-column')).toThrow(/Cannot read properties/);
+        });
+        it("- 예외 : Util 로딩이 안 된 경우", () => {
+            require('../src/message');
+            
+            expect(() => require('../src/meta-column')).toThrow(/Util/);
+        });
+        it("- 예외 : Observer 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            // require('../src/observer');
+    
+            expect(() => require('../src/meta-column')).toThrow(/Observer/);
+        });
+        it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            expect(() => require('../src/meta-column')).toThrow(/MetaRegistry/);
+        });
+
+        it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            // require('../src/i-element');
+            // require('../src/i-collection');
+            // require('../src/i-collection-property');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            require('../src/meta-object');
+            // require('../src/collection-base');
+            // require('../src/collection-property');
+            // require('../src/meta-element');
+    
+            expect(() => require('../src/meta-column')).toThrow(/MetaElement/);
+        });
+        it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            require('../src/i-element');
+            require('../src/i-collection');
+            // require('../src/i-collection-property');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            require('../src/meta-object');
+            require('../src/collection-base');
+            // require('../src/collection-property');
+            require('../src/meta-element');
+    
+            expect(() => require('../src/meta-column')).toThrow(/PropertyCollection/);
+        });
+        
+        it("- 로딩 성공 ", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            require('../src/i-element');
+            require('../src/i-collection');
+            require('../src/i-collection-property');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            require('../src/meta-object');
+            require('../src/collection-base');
+            require('../src/collection-property');
+            require('../src/meta-element');
+            require('../src/meta-column');
+    
+            expect(global._L.MetaColumn).toBeDefined();  
+            expect(global._L.Meta.Entity.MetaColumn).toBeDefined();
         });
     });
     

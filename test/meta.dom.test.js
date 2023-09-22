@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe.skip("[ GROUP]", () => {
+describe("[ GROUP]", () => {
     describe("load: meta-object.js <MetaObject>", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -148,6 +148,47 @@ describe.skip("[ GROUP]", () => {
     
             expect(global._L.MetaElement).toBeDefined();
             expect(global._L.Meta.MetaElement).toBeDefined();
+        });
+        
+    });
+    describe("load: meta-registry.js <MetaRegistry>", () => {
+        beforeEach(() => {
+            jest.resetModules();
+            global._L = null;
+         });
+        it("- 예외 : 전체 로딩 안할 때", () => {
+            // require('../src/message');
+    
+            expect(() => require('../src/meta-registry')).toThrow(/Cannot read properties/);
+        });
+        it("- 예외 : Util 로딩이 인된경우", () => {
+            require('../src/message');
+    
+            expect(() => require('../src/meta-registry')).toThrow(/Util/);
+        });
+        it("- 예외 : NamespaceManager 로딩이 인된경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+    
+            require('../src/i-list');
+            require('../src/i-control-list');
+            // require('../src/namespace-manager');
+    
+            expect(() => require('../src/meta-registry')).toThrow(/NamespaceManager/);
+        });
+        it("- 로딩 성공 ", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+    
+            require('../src/i-list');
+            require('../src/i-control-list');
+            require('../src/namespace-manager');
+            require('../src/meta-registry');
+    
+            expect(global._L.MetaRegistry).toBeDefined();
+            expect(global._L.Meta.MetaRegistry).toBeDefined();
         });
         
     });

@@ -17,9 +17,9 @@
 
     //==============================================================
     // 1. namespace declaration
-    _global._L                      = _global._L || {};             // Branch: ~
+    _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
-    _global._L.Meta.Entity          = _global._L.Meta.Entity || {}; // ~Branch:
+    _global._L.Meta.Entity          = _global._L.Meta.Entity || {};
 
     //==============================================================
     // 2. import module
@@ -42,7 +42,7 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);  // Branch: ~
+    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);

@@ -90,11 +90,6 @@
         });
 
         // local function
-        function findGuid(guid, arr) {
-            for(var i = 0; i < arr.length; i++) {
-                if (arr[i]['_guid'] === guid) return arr[i];
-            }
-        }
         function _isBuiltFunction(obj) {
             if (typeof obj === 'function' && (false 
                 || obj === Number || obj === String 
@@ -173,7 +168,12 @@
          * @returns {boolean}
          */
         MetaRegistry.release = function(p_target) {
-            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
+            var guid;
+
+            if (typeof p_target !== 'object' && typeof p_target !== 'string') {
+                Message.error('ES021', ['target', 'object | string']);
+            }
+            guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
 
             if (typeof guid !== 'string') return false;
             for(var i = 0; i < list.length; i++) {
@@ -182,6 +182,7 @@
                     return true;
                 }
             }
+            return false;
         };
 
         /**
@@ -194,15 +195,16 @@
 
         /**
          * 메타객체 여부 검사
-         * @param {object | string} obj  
+         * @param {object | string} p_target  
          * @returns 
          */
         MetaRegistry.has = function(p_target) {
-            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
-            
-            if (!MetaRegistry.isMetaObject(p_target)) return false;
+            var guid;
 
-            if (typeof guid !== 'string') return;
+            if (typeof p_target !== 'object' && typeof p_target !== 'string') return false;
+            guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
+
+            if (typeof guid !== 'string') return false;
             for(var i = 0; i < list.length; i++) {
                 if (list[i]._guid === guid) return true;
             }
@@ -211,11 +213,14 @@
         
         /**
          * 메타 객체 조회
-         * @param {*} guid 
+         * @param {object | string} p_target 
          * @returns 
          */
         MetaRegistry.find = function(p_target) {
-            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
+            var guid;
+
+            if (typeof p_target !== 'object' && typeof p_target !== 'string') return;
+            guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
 
             if (typeof guid !== 'string') return;
             for(var i = 0; i < list.length; i++) {
@@ -284,11 +289,14 @@
             }
 
             fullName = this.findClass(p_fun);
-            if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
-            else Message.error('ES053', ['ns', p_fun.name]);
+            return { $ns: fullName };
+            // if (typeof fullName === 'string' && fullName.length > 0) return { $ns: fullName };
+            // else Message.error('ES053', ['ns', p_fun.name]);
         };
 
         MetaRegistry.createSetObject = function(p_target, p_meta) {
+            if (p_target === null || typeof p_target !== 'object') Message.error('ES021', ['target', 'object']);
+
             if (p_meta && p_meta._guid && p_meta._guid.length > 0 ) {
                 p_target['$set'] = p_meta._guid;
                 return p_target;
@@ -304,40 +312,49 @@
             var _this = this;
             var arrObj = this.__getObjectList(p_oGuid);
 
-            if (validReference(p_oGuid) == false) return false;
-            if (validCollection(p_oGuid) == false) return false;
-            if (validUniqueGuid(p_oGuid)== false) return false;
+            if (typeof p_oGuid !== 'object') Message.error('ES021', ['oGuid', 'object']);
+
+            // if (validReference(p_oGuid) == false) return false;
+            // if (validCollection(p_oGuid) == false) return false;
+            // if (validUniqueGuid(p_oGuid) == false) return false;
+            if (!validUniqueGuid() || !validReference(p_oGuid) || !validCollection(p_oGuid)) return false;
             return true;
 
             // inner function
-            function validReference(oGuid) {
-                if (typeof oGuid === 'object') {
-                    if (oGuid['$ref']) if (!findGuid(oGuid['$ref'], arrObj)) return false;
-                    if (oGuid['$set']) if (!findGuid(oGuid['$set'], arrObj)) return false;
-                    if (oGuid['$ns']) if (!_this.getClass(oGuid['$ns'])) return false;
-            
-                    // for(var prop in oGuid) {
-                    //     if (typeof oGuid[prop] === 'object') {
-                    //         if (validReference(oGuid[prop]) === false) return false
-                    //     } else if (Array.isArray(oGuid[prop])){
-                    //       for(var i = 0; i < oGuid[prop].length; i++) {
-                    //         if (typeof oGuid[prop][i] === 'object') {
-                    //             if (validReference(oGuid[prop][i]) === false) return false;
-                    //         }
-                    //       }  
-                    //     }
-                    // }
-                    if (Array.isArray(oGuid)){
-                        for(var i = 0; i < oGuid.length; i++) {
-                            if (typeof oGuid[i] === 'object' && !validReference(oGuid[i])) return false
-                        }
-                    } else if (typeof oGuid === 'object') {
-                        for(var prop in oGuid) {
-                            if (typeof oGuid[prop] === 'object' && !validReference(oGuid[prop])) return false;
-                        }
-                    }
-
+            function findGuid(guid, arr) {
+                for(var i = 0; i < arr.length; i++) {
+                    if (arr[i]['_guid'] === guid) return arr[i];
                 }
+            }
+            function validReference(oGuid) {
+                // if (typeof oGuid === 'object') {
+                // if (oGuid['$ref']) if (!findGuid(oGuid['$ref'], arrObj)) return false;
+                if (oGuid['$ref'] && !findGuid(oGuid['$ref'], arrObj)) return false;
+                if (oGuid['$set'] && !findGuid(oGuid['$set'], arrObj)) return false;
+                if (oGuid['$ns'] && !_this.getClass(oGuid['$ns'])) return false;
+        
+                // for(var prop in oGuid) {
+                //     if (typeof oGuid[prop] === 'object') {
+                //         if (validReference(oGuid[prop]) === false) return false
+                //     } else if (Array.isArray(oGuid[prop])){
+                //       for(var i = 0; i < oGuid[prop].length; i++) {
+                //         if (typeof oGuid[prop][i] === 'object') {
+                //             if (validReference(oGuid[prop][i]) === false) return false;
+                //         }
+                //       }  
+                //     }
+                // }
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object' && !validReference(oGuid[i])) return false
+                    }
+                } else {
+                    for(var prop in oGuid) {
+                        if (typeof oGuid[prop] === 'object' && !validReference(oGuid[prop])) return false;
+                    }
+                }
+
+                // }
                 return true;
             }
             function validCollection(oGuid) {
@@ -363,20 +380,20 @@
                     for(var i = 0; i < oGuid.length; i++) {
                         if (typeof oGuid[i] === 'object' && !validCollection(oGuid[i])) return false;
                     }
-                } else if (typeof p_oGuid === 'object') {
+                } else {
                     for(var prop in p_oGuid) {
                         if (typeof oGuid[prop] === 'object' && !validCollection(oGuid[prop])) return false;
                     }
                 }
                 return true;
             }
-            function validUniqueGuid(oGuid) {
+            function validUniqueGuid() {
                 for (var i = 0; i < arrObj.length; i++) {
-                    if(typeof arrObj[i]._guid === 'string' && arrObj[i]._guid.length > 0) {
+                    // if(typeof arrObj[i]._guid === 'string' && arrObj[i]._guid.length > 0) {
                         for (var ii = 0; ii < arrObj.length; ii++) {
-                            if (arrObj[i]._guid === arrObj[ii]._guid) return true;
-                        } 
-                    }
+                            if (arrObj[i]._guid === arrObj[ii]._guid && i !== ii) return false; // 중복
+                        }
+                    // }
                 }
                 return true;
             }
@@ -436,7 +453,7 @@
                             if(result) return result;
                         }
                     }
-                } else if (typeof oGuid === 'object') {
+                } else {
                     if (oGuid['_guid'] && oGuid['_guid'] === guid) {
                         result = oGuid['$set'] ? MetaRegistry.find(oGuid['$set']) : undefined;
                         return result;
@@ -453,12 +470,12 @@
         };
 
         /**
-         * 참조 객체 여부 검사
+         * 참조 객체 여부 검사 ($ref, $ns)
          * @param {*} obj 
          * @returns 
          */
         MetaRegistry.hasRefer = function(p_target) {
-            if (typeof p_target !== 'object') Message.error('ES024', ['target', 'object']);
+            if (p_target == null || typeof p_target !== 'object') Message.error('ES024', ['target', 'object']);
             if (!this.isGuidObject(p_target)) Message.error('ES024', ['target', 'guid']);
 
             return hasRefer(p_target);
@@ -484,7 +501,7 @@
                     for(var i = 0; i < oGuid.length; i++) {
                         if (typeof oGuid[i] === 'object' && hasRefer(oGuid[i])) return true;
                     }
-                } else if (typeof oGuid === 'object') {
+                } else {
                     if (oGuid['$ref'] && typeof oGuid['$ref'] === 'string') return true;
                     if (oGuid['$ns'] && typeof oGuid['$ns'] === 'string') return true;
                     for(var prop in oGuid) {
@@ -496,11 +513,40 @@
             }
         };       
 
+        
+
         /**
-         * 메타 객체 참조 변환 : $ref, $ns
+         * 메타 객체 참조 변환 : $ns
          * @param {*} rObj 
          * @returns 
          */
+        MetaRegistry.transformRefer = function(p_oGuid) {
+            var _this = this;
+            var arrObj = this.__getObjectList(p_oGuid);
+            var clone = Util.deepCopy(p_oGuid);
+
+            linkReference(clone, arrObj);
+            return clone;
+
+            // inner function
+            function linkReference(oGuid, arr) {
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object') linkReference(oGuid[i], arr);
+                    }
+                } else {
+                    for(var prop in oGuid) {
+                        if (typeof oGuid[prop] === 'object' && oGuid[prop] !== null) {
+                            if (oGuid[prop]['$ns']) {
+                                var ns = _this.getClass(oGuid[prop]['$ns']);
+                                if (typeof ns !== 'function') Message.error('ES015', ['$ns', oGuid[prop]['$ns']]);
+                                oGuid[prop] = ns; // function 타입 연결
+                            } else linkReference(oGuid[prop], arr);
+                        }
+                    }
+                }
+            }
+        };
         // MetaRegistry.transformRefer = function(rObj) {
         //     var _this = this;
         //     var arrObj = this.__getObjectList(rObj);
@@ -546,49 +592,6 @@
         //       }
     
         // };
-        MetaRegistry.transformRefer = function(p_oGuid) {
-            var _this = this;
-            var arrObj = this.__getObjectList(p_oGuid);
-            var clone = Util.deepCopy(p_oGuid);
-
-            linkReference(clone, arrObj);
-            return clone;
-
-            // inner function
-            function linkReference(oGuid, arr) {
-                // for(var prop in obj) {
-                //     if (obj[prop] === null) continue;
-                //     if (typeof obj[prop] === 'object') {
-                //         if (obj[prop]['$ns']) {
-                //             var ns = _this.getClass(obj[prop]['$ns']);
-                //             if (typeof ns !== 'function') Message.error('ES015', ['$ns', obj[prop]['$ns']]);
-                //             obj[prop] = ns; // function 타입 연결
-                //         } else linkReference(obj[prop], arr);
-                //     } else if (Array.isArray(obj[prop])){
-                //         for(var i = 0; i < obj[prop].length; i++) {
-                //             if (typeof obj[prop][i] === 'object') linkReference(obj[prop][i], arr);
-                //         }  
-                //     } 
-                // }
-                ////
-                if (Array.isArray(oGuid)){
-                    for(var i = 0; i < oGuid.length; i++) {
-                        if (typeof oGuid[i] === 'object') linkReference(oGuid[i], arr);
-                    }
-                } else if (typeof oGuid === 'object') {
-                    for(var prop in oGuid) {
-                        if (oGuid[prop] === null) continue;
-                        if (typeof oGuid[prop] === 'object') {
-                            if (oGuid[prop]['$ns']) {
-                                var ns = _this.getClass(oGuid[prop]['$ns']);
-                                if (typeof ns !== 'function') Message.error('ES015', ['$ns', oGuid[prop]['$ns']]);
-                                oGuid[prop] = ns; // function 타입 연결
-                            } else linkReference(oGuid[prop], arr);
-                        }
-                    }
-                }
-            }
-        };
 
         /**
          * 클래스(함수) 등록
@@ -609,7 +612,7 @@
             if (typeof _global[fullName] === 'function') return;
             // 중복 검사 
             // if (!this.ns.get(fullName)) this.ns.set(p_ns, p_key, p_fun);
-            if (!this.ns.find(fullName)) this.ns.register(fullName, p_fun);
+            if (!this.ns.find(fullName)) this.ns.add(fullName, p_fun);
         };
         
         /**
@@ -621,7 +624,7 @@
             // 내장함수 & 전역 함수
             if (typeof _global[p_fullName] === 'function') return true;
 
-            return this.ns.release(p_fullName);
+            return this.ns.del(p_fullName);
         };
         
         /**
@@ -666,8 +669,9 @@
 
             if (this.has(obj)) return this.find(obj['_guid']);
 
-            if (this.isGuidObject(obj)) {
-                oGuid = this.hasRefer(obj) ? this.transformRefer(obj) : p_str;
+            if (this.isGuidObject(obj)) {   
+                // oGuid = this.hasRefer(obj) ? this.transformRefer(obj) : p_str;
+                oGuid = this.transformRefer(obj);
                 
                 meta = this.createMetaObject(oGuid);
                 meta.setObject(oGuid);

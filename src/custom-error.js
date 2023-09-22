@@ -32,6 +32,7 @@
     var CustomError = (function (_super) {
         /**
          * 구독자 클래스 (이벤트에 활용)
+         * TODO: 필요시 구현
          * @constructs _L.Common.CustomError
          * @param {String} p_message 사용자 메세지 내용
          * @param {?String} p_target 대상(값)
@@ -45,9 +46,9 @@
              * 에러 스텍
              * @member {String} _L.Common.CustomError#stack
              */
-            if (Error.captureStackTrace) {
-                Error.captureStackTrace(this, CustomError);
-            }
+            // if (Error.captureStackTrace) {
+            //     Error.captureStackTrace(this, CustomError);
+            // }
 
             /**
              * 에러 메세지
@@ -59,7 +60,7 @@
              * 에러 구분자
              * @member {Object} 
              */
-            this.target = { value: p_target || ''};
+            // this.target = { value: p_target || ''};
 
             /**
              * 에러명

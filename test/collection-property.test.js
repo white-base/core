@@ -20,6 +20,51 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 columns = new PropertyCollection(this);
             }
         });
+        describe("MetaObject.equal() <객체 비교>", () => {
+            it("- equal() : 생성 후 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const c3 = new PropertyCollection();
+                c1.add('a1');
+                c2.add('a1');
+                c3.add('a2');
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+                expect(c1._guid === c2._guid).toBe(false);
+            });
+            it("- equal() : event 추가 후 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const fun1 = function(){return 'F1'};
+                c1.__event.subscribe(fun1, 'fun1');
+                
+                expect(c1.equal(c2)).toBe(false);
+            });
+            it("- equal() : _descriptors 추가 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const c3 = new PropertyCollection();
+                c1._descriptors.push({aa: 1});
+                c2._descriptors.push({aa: 1});
+                c3._descriptors.push({aa: 2});
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+            });
+            it("- equal() : _elemType 추가 비교 ", () => {
+                const c1 = new PropertyCollection();
+                const c2 = new PropertyCollection();
+                const c3 = new PropertyCollection();
+                c1._elemTypes.push(String);
+                c2._elemTypes.push(String);
+                const fun1 = function(){return 'F1'};
+                c3._elemTypes.push(fun1);
+                
+                expect(c1.equal(c2)).toBe(true);
+                expect(c1.equal(c3)).toBe(false);
+            });
+        });
 
         describe("BaseCollection.remove(elem): bool <삭제>", () => {
             // beforeAll(() => {
@@ -325,51 +370,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(s.columns.count).toBe(0);
             });
         });
-        describe("MetaObject.equal() <객체 비교>", () => {
-            it("- equal() : 생성 후 비교 ", () => {
-                const c1 = new PropertyCollection();
-                const c2 = new PropertyCollection();
-                const c3 = new PropertyCollection();
-                c1.add('a1');
-                c2.add('a1');
-                c3.add('a2');
-                
-                expect(c1.equal(c2)).toBe(true);
-                expect(c1.equal(c3)).toBe(false);
-                expect(c1._guid === c2._guid).toBe(false);
-            });
-            it("- equal() : event 추가 후 비교 ", () => {
-                const c1 = new PropertyCollection();
-                const c2 = new PropertyCollection();
-                const fun1 = function(){return 'F1'};
-                c1.__event.subscribe(fun1, 'fun1');
-                
-                expect(c1.equal(c2)).toBe(false);
-            });
-            it("- equal() : _descriptors 추가 비교 ", () => {
-                const c1 = new PropertyCollection();
-                const c2 = new PropertyCollection();
-                const c3 = new PropertyCollection();
-                c1._descriptors.push({aa: 1});
-                c2._descriptors.push({aa: 1});
-                c3._descriptors.push({aa: 2});
-                
-                expect(c1.equal(c2)).toBe(true);
-                expect(c1.equal(c3)).toBe(false);
-            });
-            it("- equal() : _elemType 추가 비교 ", () => {
-                const c1 = new PropertyCollection();
-                const c2 = new PropertyCollection();
-                const c3 = new PropertyCollection();
-                c1._elemTypes.push(String);
-                c2._elemTypes.push(String);
-                const fun1 = function(){return 'F1'};
-                c3._elemTypes.push(fun1);
-                
-                expect(c1.equal(c2)).toBe(true);
-                expect(c1.equal(c3)).toBe(false);
-            });
-        });
+        
         describe("PropertyCollection.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {
                 const a1 = new PropertyCollection();
@@ -422,6 +423,20 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(a2[1]).toBe(20);
                 expect(a2['a1']).toBe(10);
                 expect(a2['a2']).toBe(20);
+            });
+            it("- setObject() : 예외 <_key, _dest 크기다름> ", () => {
+                const a1 = new PropertyCollection();
+                a1.add('a1', 10);
+                a1.add('a2', 20);
+                const a2 = new PropertyCollection();
+                const obj1 = a1.getObject();
+                const obj2 = a1.getObject();
+                obj1._desc.pop()
+                obj2._key.pop()
+                
+                expect(()=> a2.setObject(obj1)).toThrow(/ES063/)
+                expect(()=> a2.setObject(obj2)).toThrow(/ES063/)
+        
             });
         });
         describe("PropertyCollection.indexOf(obj | str | num): num <인덱스 조회> ", () => {
@@ -663,6 +678,15 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 s.columns.add('a1', 'A1');
         
                 expect(()=> s.columns.keyOf('a1')).toThrow('ES021');
+            });
+        });
+        describe("예외, 커버리지 ", () => {
+            it("- this.__SET$_keys() : 커버리지 ", () => {
+                let s = new Student();
+                s.columns.add('a1', 'A1');
+                s.columns.__SET$_keys('aa2', {}) // 접근 금지됨
+
+                expect(s.columns._keys).toEqual(['a1'])
             });
         });
         // it("- _remove(not idx) : 예외 ", () => {

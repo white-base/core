@@ -43,8 +43,8 @@
          * 등록
          * @abstract
          */
-        IListControl.prototype.register = function() {
-            Message.error('ES013', ['register(any)']);
+        IListControl.prototype.add = function() {
+            Message.error('ES013', ['add(any)']);
         };
 
         /**
@@ -52,8 +52,8 @@
          * @abstract
          * @returns {boolean}
          */
-        IListControl.prototype.release  = function() {
-            Message.error('ES013', ['release(key)']);
+        IListControl.prototype.del  = function() {
+            Message.error('ES013', ['del(key)']);
         };
 
         /**

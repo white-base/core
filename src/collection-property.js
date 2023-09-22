@@ -169,7 +169,7 @@
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
 
-            if (p_oGuid._key.length !== p_oGuid._elem.length) Message.error('ES063', ['_elem', '_key']);
+            if (p_oGuid._elem.length !== p_oGuid._key.length) Message.error('ES063', ['_elem', '_key']);
             
             if (Array.isArray(p_oGuid._desc) && p_oGuid._desc.length > 0) {
                 if (p_oGuid._elem.length !== p_oGuid._desc.length) Message.error('ES063', ['_elem', '_desc']);

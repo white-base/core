@@ -226,7 +226,14 @@ describe("[target: observer.js]", () => {
     
             expect(e._event._caller).toEqual(e);
         });
-    
+        it("- 커버리지 ", () => {
+            const e = new EventClass();
+            var sub = e._event.__subscribers;
+            e._event.__SET$__subscribers(10, {});
+
+            expect(e._event.__subscribers).toEqual(sub);
+        });
     
     });
+
 });

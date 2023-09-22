@@ -50,7 +50,7 @@
     // 1. namespace declaration
     _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
-    _global._L.Common.Util          = _global._L.Common.Util || {};
+    // _global._L.Common.Util          = _global._L.Common.Util || {};
 
     //==============================================================
     // 2. import module
@@ -195,8 +195,8 @@
     if (isNode) {     
         exports.loadNamespace = loadNamespace;
     } else {
-        _global._L = loadNamespace;
-        _global._L.Common.Util.loadNamespace = loadNamespace;   // namespace
+        _global._L.loadNamespace = loadNamespace;
+        _global._L.Common.loadNamespace = loadNamespace;   // namespace
     }
 
 }(typeof window !== 'undefined' ? window : global));

@@ -307,7 +307,7 @@
          * 네임스피이스 
          */
         // NamespaceManager.prototype.set = function(p_ns, p_key, p_elem) {
-        NamespaceManager.prototype.register = function(p_fullName, p_elem) {
+        NamespaceManager.prototype.add = function(p_fullName, p_elem) {
             var parent = this.__storage;
             var sections;
             var key = this._getPathObject(p_fullName).key;
@@ -335,7 +335,7 @@
             }
         };
 
-        NamespaceManager.prototype.release = function(p_fullName) {
+        NamespaceManager.prototype.del = function(p_fullName) {
             var parent = this.__storage;
             var sections;
 
@@ -456,7 +456,7 @@
                     var o = arr.arr[i];
                     var fun = o.f;
                     // this.set(o.ns, o.key, fun);
-                    this.register(o.full, fun);
+                    this.add(o.full, fun);
                 }
             }
         };

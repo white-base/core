@@ -23,6 +23,16 @@ describe("[target: meta-registry.js]", () => {
         it("- 초기값 조회 ", () => {
             expect(MetaRegistry.count).toBe(0);
         });
+        describe("MetaRegistry.list <객체 목록>", () => {
+            it("- list()  ", () => {
+                let i1 = new MetaObject();
+                let i2 = new MetaObject();
+
+                expect(MetaRegistry.list.length).toBe(2);
+                expect(MetaRegistry.list[0]).toBe(i1)
+                expect(MetaRegistry.list[1]).toBe(i2)
+            });
+        });
         describe("MetaRegistry.init() <초기화>", () => {
             it("- init() : 초기화 ", () => {
                 let i = new MetaObject();
@@ -64,18 +74,32 @@ describe("[target: meta-registry.js]", () => {
 
                 expect(()=> MetaRegistry.register(c1)).toThrow(/ES052/);                
             });
+            it("- register() : 예외 <중복> ", () => {
+                const e1 = new MetaObject();
+
+                expect(()=> MetaRegistry.register(e1)).toThrow(/ES042/);
+                /**
+                 * MEMO: 자동 등록 되므로 추가도 등록하면 예외 발생
+                 */
+            });
         });
         describe("MetaRegistry.release() <해제>", () => {
             it("- release() : 해제(자동등록) ", () => {
                 let m1 = new MetaObject();
                 let m2 = new MetaObject();
+                let m3 = new MetaObject();
+                let m4 = new MetaObject();
                 
                 // 등록 [자동]
-                expect(MetaRegistry.count).toBe(2);
+                expect(MetaRegistry.count).toBe(4);
                 // 해제
                 MetaRegistry.release(m1);
                 MetaRegistry.release(m2._guid);
-                expect(MetaRegistry.count).toBe(0);
+                expect(MetaRegistry.count).toBe(2);
+                // 예외 및 실패
+                expect(MetaRegistry.release('NOT')).toBe(false);
+                expect(MetaRegistry.release({})).toBe(false);
+                expect(()=> MetaRegistry.release(10)).toThrow(/ES021/);
             });
         });
         
@@ -91,6 +115,8 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.has(m1)).toBe(true);
                 expect(MetaRegistry.has(m2)).toBe(true);
                 expect(MetaRegistry.has(c1)).toBe(false);
+                expect(MetaRegistry.has()).toBe(false);
+                expect(MetaRegistry.has('NOT')).toBe(false);
             });
         });
         describe("MetaRegistry.find() <메타객체 조회>", () => {
@@ -103,6 +129,10 @@ describe("[target: meta-registry.js]", () => {
                 expect(f1 === m1).toBe(true);
                 expect(f2 === m2).toBe(true);
                 expect(MetaRegistry.count).toBe(2);
+                // 실패 조건
+                expect(MetaRegistry.find()).toBe(undefined);
+                expect(MetaRegistry.find({_guid: {}})).toBe(undefined);
+
             });
         });
         describe("MetaRegistry.isMetaObject() <메타객체 여부>", () => {
@@ -122,6 +152,7 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.isMetaObject(m1)).toBe(true);
                 expect(MetaRegistry.isMetaObject(c1)).toBe(true);
                 expect(MetaRegistry.isMetaObject(c2)).toBe(false);
+                expect(MetaRegistry.isMetaObject(null)).toBe(false);
             });
         });
         describe("MetaRegistry.createMetaObject() <메타객체 생성>", () => {
@@ -146,6 +177,20 @@ describe("[target: meta-registry.js]", () => {
                 expect(table1.columns._owner).toBe(table1);
                 expect(col1._owner).toBe(null);
             });
+            it("- createMetaObject() : PARAM 없는 클래스", () => {
+                const Member = function() {};
+                MetaRegistry.ns.add('Member', Member)
+                const mObj1 = {_type: 'Member', _ns: ''};
+                const obj1 = MetaRegistry.createMetaObject(mObj1);
+                
+                expect(obj1 instanceof Member).toBe(true);
+            });
+            it("- createMetaObject() : 예외", () => {
+                loadNamespace();    // 클래스 로딩
+                const mObj1 = {_type: 'MetaTable2', _ns: 'Meta.Entity', name: 'T1'};
+                
+                expect(()=> MetaRegistry.createMetaObject(mObj1)).toThrow(/ES053/);
+            });
         });
         describe("MetaRegistry.createReferObject() <참조객체 생성>", () => {
             it("- createReferObject() : 일반객체에 생성 ", () => {
@@ -160,10 +205,11 @@ describe("[target: meta-registry.js]", () => {
                 };
 
                 expect(obj1).toEqual(obj2);
+                expect(MetaRegistry.createReferObject('NOT')).toBe(undefined);
             });
         });
         describe("MetaRegistry.createNsReferObject() <네임스페이스 속성 생성>", () => {
-            it("- createNsRefer() : 네임스페이스 객체 생성", () => {
+            it("- createNsReferObject() : 네임스페이스 객체 생성", () => {
                 loadNamespace();    // 클래스 로딩
                 const class1 = MetaRegistry.ns.find('Meta.Entity.MetaTable');
                 const obj1 = {
@@ -176,6 +222,9 @@ describe("[target: meta-registry.js]", () => {
                 };
                 
                 expect(obj1).toEqual(obj2);
+            });
+            it("- createNsReferObject() : 예외 없을 경우", () => {
+                expect(()=> MetaRegistry.createNsReferObject({aa:1}) ).toThrow(/ES054/)
             });
         });
         describe("MetaRegistry.createSetObject() <setObject 설정 속성 생성>", () => {
@@ -193,9 +242,19 @@ describe("[target: meta-registry.js]", () => {
 
                 expect(obj1).toEqual(obj2);
             });
+            it("- createSetObject() : 예외", () => {
+                const m1 = new MetaObject('M1');
+                const obj1 = {
+                    cls1: {},
+                    name: 'OBJ'
+                };
+
+                expect(()=> MetaRegistry.createSetObject(obj1.name, m1)).toThrow(/ES021/)
+                expect(()=> MetaRegistry.createSetObject(obj1.cls1, {})).toThrow(/ES031/)
+            });
         });
         describe("MetaRegistry.validObject() <메태객체 유효성 검사>", () => {
-            it("- validObject() : 일반객체로 검사 ($ref, $set, $ns)", () => {
+            it("- validObject() : 참조 검사 ($ref, $set, $ns)", () => {
                 const a = new MetaObject();
                 const obj1 = {
                     _guid: 'KEY1',
@@ -216,7 +275,8 @@ describe("[target: meta-registry.js]", () => {
 
                 expect(MetaRegistry.validObject(obj1)).toBe(true);
             });
-            it("- validObject() : 실패 검사 1 ($ref, $set, $ns)", () => {
+            it("- validObject() : 참조 실패 검사 1 ($set)", () => {
+                const a = new MetaObject();
                 const obj1 = {
                     _guid: 'KEY1',
                     _type: 'T1',
@@ -229,14 +289,15 @@ describe("[target: meta-registry.js]", () => {
                         { _guid: 'KEY3', _type: 'T3', $set: 'KEY1'},
                         10
                     ],
-                    type: {$ns: 'Meta.MetaElement'},
+                    type: {$ns: 'Meta.MetaObject'},
                     onwer: {$ref: 'KEY2'},
-                    $set: 'KEY4'
+                    $set: 'ERR' // 실패
                 };
 
                 expect(MetaRegistry.validObject(obj1)).toBe(false);
             });
-            it("- validObject() : 실패 검사 2 ($ref, $set, $ns)", () => {
+            it("- validObject() : 참조 실패 검사 2 ( $set)", () => {
+                const a = new MetaObject();
                 const obj1 = {
                     _guid: 'KEY1',
                     _type: 'T1',
@@ -246,17 +307,59 @@ describe("[target: meta-registry.js]", () => {
                         _type: 'T2',
                     },
                     subArr: [
-                        { _guid: 'KEY3', _type: 'T3', $set: 'KEY4'},
+                        { _guid: 'KEY3', _type: 'T3', $set: 'ERR'}, // 실패
                         10
                     ],
-                    type: {$ns: 'Meta.MetaElement'},
+                    type: {$ns: 'Meta.MetaObject'},
                     onwer: {$ref: 'KEY2'},
                     $set: 'KEY3'
                 };
 
                 expect(MetaRegistry.validObject(obj1)).toBe(false);
             });
-            it("- validObject() : 성공 (컬렉션 key 검사)", () => {
+            it("- validObject() : 참조 실패 검사 3 ( $ref)", () => {
+                const a = new MetaObject();
+                const obj1 = {
+                    _guid: 'KEY1',
+                    _type: 'T1',
+                    name: 'a1',
+                    subObj: {
+                        _guid: 'KEY2',
+                        _type: 'T2',
+                    },
+                    subArr: [
+                        { _guid: 'KEY3', _type: 'T3', $set: 'KEY1'},
+                        10
+                    ],
+                    type: {$ns: 'Meta.MetaObject'},
+                    onwer: {$ref: 'ERR'},   // 실패
+                    $set: 'KEY3'
+                };
+
+                expect(MetaRegistry.validObject(obj1)).toBe(false);
+            });
+            it("- validObject() : 참조 실패 검사 4 ( $ns)", () => {
+                const a = new MetaObject();
+                const obj1 = {
+                    _guid: 'KEY1',
+                    _type: 'T1',
+                    name: 'a1',
+                    subObj: {
+                        _guid: 'KEY2',
+                        _type: 'T2',
+                    },
+                    subArr: [
+                        { _guid: 'KEY3', _type: 'T3', $set: 'KEY1'},
+                        10
+                    ],
+                    type: {$ns: 'ERR'}, // 실패
+                    onwer: {$ref: 'KEY2'},
+                    $set: 'KEY3'
+                };
+
+                expect(MetaRegistry.validObject(obj1)).toBe(false);
+            });
+            it("- validObject() : 컬럼션 검사", () => {
                 const obj1 = {
                     _elem: [
                         {
@@ -273,7 +376,7 @@ describe("[target: meta-registry.js]", () => {
 
                 expect(MetaRegistry.validObject(obj1)).toBe(true);
             });
-            it("- validObject() : 실패 1 (컬렉션 key 검사)", () => {
+            it("- validObject() : 컬렉션 검사 실패 1", () => {
                 const obj1 = {
                     _elem: [
                         {
@@ -290,7 +393,7 @@ describe("[target: meta-registry.js]", () => {
 
                 expect(MetaRegistry.validObject(obj1)).toBe(false);
             });
-            it("- validObject() : 실패 2 (컬렉션 key 검사)", () => {
+            it("- validObject() : 컬렉션 검사 실패 2", () => {
                 const obj1 = {
                     _elem: [
                         {
@@ -307,7 +410,7 @@ describe("[target: meta-registry.js]", () => {
 
                 expect(MetaRegistry.validObject(obj1)).toBe(false);
             });
-            it("- validObject() : 실패 3 (컬렉션 key 검사)", () => {
+            it("- validObject() : 컬렉션 검사 실패 3", () => {
                 const obj1 = {
                     _elem: [
                         {
@@ -324,7 +427,7 @@ describe("[target: meta-registry.js]", () => {
 
                 expect(MetaRegistry.validObject(obj1)).toBe(false);
             });
-            it("- validObject() : 실패 4 (유일한 키)", () => {
+            it("- validObject() : 키 검사 실패 1 ", () => {
                 const a = new MetaObject();
                 const obj1 = {
                     _guid: 'KEY1',
@@ -340,10 +443,16 @@ describe("[target: meta-registry.js]", () => {
                     ],
                     type: {$ns: 'Meta.MetaObject'},
                     onwer: {$ref: 'KEY2'},
-                    $set: 'KEY3'
+                    $set: 'KEY2'
                 };
 
                 expect(MetaRegistry.validObject(obj1)).toBe(false);
+            });
+            it("- validObject() :  키 검사 실패 2 ", () => {
+                const a = new MetaObject();
+                const obj1 = 10;
+
+                expect(()=> MetaRegistry.validObject(obj1)).toThrow(/ES021/)
             });
         });
         describe("MetaRegistry.isGuidObject() <guid 객체 여부 감사>", () => {
@@ -369,7 +478,14 @@ describe("[target: meta-registry.js]", () => {
                 // $set 설정한 객체가 있는 경우                
                 rObj.$set = m2._guid;
                 var obj = MetaRegistry.findSetObject(rObj, m1.getObject());
-                expect(obj === m2).toBe(true);
+                expect(obj).toBe(m2);
+
+            });
+            it("- findSetObject() : 예외", () => {
+                let m1 = new MetaObject('M1');
+                var rObj = m1.getObject();
+
+                expect(()=> MetaRegistry.findSetObject('ERR', m1.getObject())).toThrow(/ES024/)
             });
         });
         describe("MetaRegistry.hasRefer(obj) <참조객체 여부>", () => {
@@ -410,14 +526,33 @@ describe("[target: meta-registry.js]", () => {
                     _type: 'T1',
                     subObj: { _guid: 'KEY1',  _type: 'T1', }
                 };
+                const obj6 = {
+                    _guid: 'KEY1',
+                    _type: 'T1',
+                    subArr: [{}, 1]
+                };
     
                 expect(MetaRegistry.hasRefer(obj1)).toBe(true);
                 expect(MetaRegistry.hasRefer(obj2)).toBe(true);
                 expect(MetaRegistry.hasRefer(obj3)).toBe(true);
                 expect(MetaRegistry.hasRefer(obj4)).toBe(true);
                 expect(MetaRegistry.hasRefer(obj5)).toBe(false);
+                expect(MetaRegistry.hasRefer(obj6)).toBe(false);
                 // expect(MetaRegistry.hasRefer(obj2)).toBe(false);
             });
+            it("- hasRefer() : 예외 1 ", () => {
+                expect(()=> MetaRegistry.hasRefer('ERR')).toThrow(/ES024/)
+                expect(()=> MetaRegistry.hasRefer({})).toThrow(/ES024/)
+            });
+            // it("- hasRefer() : 예외 2 ", () => {
+            //     const obj3 = {
+            //         _guid: 'KEY1',
+            //         _type: 'T1',
+            //         subArr: [{$ns: 'NS'}]
+            //     };    
+            //     expect(()=> MetaRegistry.hasRefer('ERR')).toThrow(/ES024/)
+            //     expect(()=> MetaRegistry.hasRefer({})).toThrow(/ES024/)
+            // });
         });
         describe("MetaRegistry.transformRefer() <참조 객체 변환>", () => {
             it("- transformRefer() : $ns 참조로 변환", () => {
@@ -445,6 +580,17 @@ describe("[target: meta-registry.js]", () => {
                 
                 expect(obj2.oType).toBe(MetaObject);
                 expect(obj2.subArr[0].oType).toBe(MetaObject);
+            });
+            it("- transformRefer() : 예외 ($ns) ", () => {
+                const a = new MetaObject();
+                const obj1 = {
+                    _guid: 'KEY1',
+                    _type: 'T1',
+                    oType: {$ns: 'Meta.Error'},
+                    owner: {$ref: 'KEY2'}
+                };
+
+                expect(()=> MetaRegistry.transformRefer(obj1)).toThrow(/ES015/)
             });
         });
         describe("MetaRegistry.registerClass() <클래스 등록>", () => {
@@ -503,6 +649,7 @@ describe("[target: meta-registry.js]", () => {
                 MetaRegistry.releaseClass('fun1');
                 MetaRegistry.releaseClass('a1.fun1');
                 MetaRegistry.releaseClass('a1.b1.fun1');
+                MetaRegistry.releaseClass('String');
                 expect(MetaRegistry.ns.count).toBe(0);
             });
         });
@@ -512,9 +659,11 @@ describe("[target: meta-registry.js]", () => {
                 MetaRegistry.ns.isOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
-                const fullName = MetaRegistry.findClass(fun1);
+                const fullName1 = MetaRegistry.findClass(fun1);
+                const fullName2 = MetaRegistry.findClass(String);
                 // 첫번째 요소 리턴
-                expect(fullName).toBe('fun1');
+                expect(fullName1).toBe('fun1');
+                expect(fullName2).toBe('String');
             });
         });
         describe("MetaRegistry.getClass() <클래스 얻기>", () => {
@@ -523,13 +672,43 @@ describe("[target: meta-registry.js]", () => {
                 MetaRegistry.ns.isOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
-                const elem = MetaRegistry.getClass('a1.fun1');
+                const elem1 = MetaRegistry.getClass('a1.fun1');
+                const elem2 = MetaRegistry.getClass('String');
                 // 첫번째 요소 리턴
-                expect(elem).toBe(fun1);
+                expect(elem1).toBe(fun1);
+                expect(elem2).toBe(String);
             });
         });
         describe("MetaRegistry.loadMetaObject() <로드>", () => {
-            it("- loadMetaObject() : output 통해서 로딩하는 경우", () => {
+            it("- loadMetaObject() : ", () => {
+                const t1 = new MetaTable('T1');
+                t1.columns.add('i1');
+                t1.columns.add('i2');
+                const str = t1.output(null, '\t');
+                const t2 = MetaRegistry.loadMetaObject(str);
+
+                expect(t2.tableName).toBe('T1');
+                expect(t2.columns.count).toBe(2);
+                expect(t2.columns['i1']).toBeDefined();
+                expect(t2.columns['i2']).toBeDefined();
+                expect(t2.columns['i3']).not.toBeDefined();
+            });
+            it("- loadMetaObject() : 객체 초기화 ", () => {
+                const t1 = new MetaTable('T1');
+                t1.columns.add('i1');
+                t1.columns.add('i2');
+                const str = t1.output(null, '\t');
+                MetaRegistry.init()
+                loadNamespace();
+                const t2 = MetaRegistry.loadMetaObject(str);
+
+                expect(t2.tableName).toBe('T1');
+                expect(t2.columns.count).toBe(2);
+                expect(t2.columns['i1']).toBeDefined();
+                expect(t2.columns['i2']).toBeDefined();
+                expect(t2.columns['i3']).not.toBeDefined();
+            });
+            it("- loadMetaObject() : 외부 parse 사용", () => {
                 const t1 = new MetaTable('T1');
                 t1.columns.add('i1');
                 t1.columns.add('i2');
@@ -541,6 +720,17 @@ describe("[target: meta-registry.js]", () => {
                 expect(t2.columns['i1']).toBeDefined();
                 expect(t2.columns['i2']).toBeDefined();
                 expect(t2.columns['i3']).not.toBeDefined();
+            });
+
+            it("- loadMetaObject() : 예외 ", () => {
+                expect(()=>  MetaRegistry.loadMetaObject(10, parse)).toThrow(/ES021/)
+                expect(()=>  MetaRegistry.loadMetaObject("10")).toThrow(/ES022/)
+            });
+        });
+        describe("예외, cover", () => {
+            it("- cover ", () => {
+                MetaRegistry();
+                
             });
         });
     });

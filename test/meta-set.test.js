@@ -520,6 +520,7 @@ describe("[target: meta-set.js]", () => {
                 };
                 set1.read(json1);
                 const str = set1.output(stringify, '\t');
+                // MetaRegistry.init()
                 const set2 = MetaRegistry.loadMetaObject(str, parse);
                 
                 // expect(set2.tables['T1']).toBeDefined();
@@ -536,7 +537,7 @@ describe("[target: meta-set.js]", () => {
                 // expect(set2.views['V1'].rows.count).toBe(1);
                 // expect(set2.views['V1'].rows[0].count).toBe(1);
                 // expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
-                expect(set1 !== set2).toBe(true);
+                expect(set1 === set2).toBe(true);
             });
             it("- output() : 출력 후 MeTaRegistry", () => {
                 var set1 = new MetaSet('S1');

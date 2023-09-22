@@ -12,7 +12,7 @@
 
 //==============================================================
 // test
-describe.skip("[ GROUP]", () => {
+describe("[ GROUP]", () => {
     describe("load: i-object.js <IObject >", () => {
         beforeEach(() => {
             jest.resetModules();

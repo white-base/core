@@ -125,13 +125,13 @@ describe("[target: i-* ]", () => {
             const i = new IListControl();
 
             // extends
-            expect(()=> s.register()).toThrow(/ES013/);
-            expect(()=> s.release()).toThrow(/ES013/);
+            expect(()=> s.add()).toThrow(/ES013/);
+            expect(()=> s.del()).toThrow(/ES013/);
             expect(()=> s.has()).toThrow(/ES013/);
             expect(()=> s.find()).toThrow(/ES013/);
             // create
-            expect(()=> i.register()).toThrow(/ES013/);
-            expect(()=> i.release()).toThrow(/ES013/);
+            expect(()=> i.add()).toThrow(/ES013/);
+            expect(()=> i.del()).toThrow(/ES013/);
             expect(()=> i.has()).toThrow(/ES013/);
             expect(()=> i.find()).toThrow(/ES013/);
         });

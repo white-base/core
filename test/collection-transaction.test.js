@@ -315,6 +315,19 @@ describe("[target: collection-trans.js]", () => {
                 expect(s.rows.list.length).toBe(3);
                 expect(result).toBeTruthy();
             });
+            it("- removeAt(idx) : autoChanges = true 설정", () => {
+                let s = new Student();
+                s.rows.autoChanges = true;  // 자동 커밋
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                const result = s.rows.removeAt(2);
+                s.rows.add('A4');
+                
+                expect(s.rows.count).toBe(3);
+                s.rows.rollback();
+                expect(s.rows.count).toBe(3);
+            });
             it("- removeAt(str) : 예외 ", () => {
                 let s = new Student();
     
@@ -491,6 +504,12 @@ describe("[target: collection-trans.js]", () => {
                 expect(s.rows._transQueue.queue.length).toBe(0);
                 expect(s.rows.count).toBe(0);
                 expect(s.rows.list.length).toBe(0);
+            });
+        });
+        describe("예외, 커버리지", () => {
+            it("- this.autoChanges 예외 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.autoChanges = 1).toThrow(/ES021/)
             });
         });
     });
