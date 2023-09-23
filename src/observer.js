@@ -64,6 +64,56 @@
                 }
             });
 
+            /**
+             * 목록 
+             * @member {Array}  _L.Meta.NamespaceManager#list  
+             */
+            Object.defineProperty(this, 'list', {
+                get: function() {
+                    var arr = [];
+                    for (var prop in this.__subscribers) {
+                        var elem = this.__subscribers[prop];
+                        for (var i = 0; i < elem.length; i++) {
+                            var obj = {};
+                            obj[prop] = {};
+                            obj[prop][i] = elem[i];
+                            arr.push(obj);
+                        }
+                    }
+                    return arr;
+                    // var storage = this.__storage;
+                    // var arr = [];
+                    // var stack = [];
+
+                    // findElement(storage);
+                    // return arr;
+
+                    // // inner function
+                    // function findElement(target) { 
+                    //     // if (target !== null && typeof target !== 'object') return;
+                    //     for (var prop in target) {
+                    //         if (prop === '_type') continue;
+                    //         var ns = target[prop];
+                    //         stack.push(prop);
+                            
+                    //         if (!ns['_type']) {
+                    //             // for (var key in ns) {
+                    //             //     arr.push([stack.join('.'), key].join('.'));
+                    //             // }
+                    //             // arr.push([stack.join('.'), prop].join('.'));
+                    //             arr.push(stack.join('.'));
+                    //         // } else if (typeof ns === 'object') findElement(ns);
+                    //         } else findElement(ns);
+
+                    //         stack.pop();
+                    //     }
+                    // }
+                },
+                configurable: false,
+                enumerable: true,
+            });
+
+
             Object.defineProperty(this, 'isLog', 
             {
                 get: function() { return isLog; },

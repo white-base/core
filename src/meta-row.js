@@ -266,6 +266,51 @@
         // };
 
         /**
+         * 프로퍼티 기술자 설정
+         * @override
+         * @protected
+         * @param {Number} p_idx 인덱스
+         */
+        // MetaRow.prototype._getPropDescriptor = function(p_idx) {
+        //     // return {
+        //     //     get: function() { return this._elements[p_idx]; },
+        //     //     set: function(newValue) {
+        //     //         var typeName;
+        //     //         if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
+        //     //         if (newValue._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
+        //     //         this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
+        //     //         this._elements[p_idx] = newValue;
+        //     //     },
+        //     //     configurable: true,
+        //     //     enumerable: true,
+        //     // };
+
+        //     var _this = this;
+        //     return {
+        //         get: function() { return this._elements[p_idx]; },
+        //         set: function(newValue) { 
+        //             var oldValue = this._elements[p_idx];
+        //             // 트렌젹션 처리 => 함수로 추출 검토
+        //             if (this._entity && !this._entity.rows.autoChanges) {
+        //                 var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
+        //                 var pos = this._entity.rows.indexOf(this);
+        //                 if (pos > -1) { // 컬력션에 포힘됬을때만
+        //                     this._entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
+        //                 }
+        //             }
+        //             // 이벤트 및 처리
+        //             _this._onChanging(p_idx, newValue, oldValue);
+        //             this._elements[p_idx] = newValue;
+        //             _this._onChanged(p_idx, newValue, oldValue);
+
+        //         },
+        //         enumerable: true,
+        //         configurable: false
+        //     };
+        // };
+
+
+        /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
@@ -308,36 +353,50 @@
             
             if (p_oGuid._elem.length !== p_oGuid._key.length) Message.error('ES063', ['_elem', '_key']);
 
-            this.init();
+            // this.init();
             
             if (p_oGuid.__subscribers) {
                 this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             }
             // this._entity = p_oGuid._entity;
-            if (p_oGuid._entity) {
-                entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
-                if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
-                // this._entity = entity;
-                this.__SET$_entity(entity. this);
-            } 
+            // if (p_oGuid._entity) {
+            //     entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
+            //     if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
+            //     // this._entity = entity;
+            //     this.__SET$_entity(entity. this);
+            // }
+
+            // this._keys.length = 0;
+            // for(var i = 0; i < p_oGuid._key.length; i++) {
+            //     var key = p_oGuid._key[i];
+            //     this._keys.push(key);
+            // }
+
             for(var i = 0; i < p_oGuid._elem.length; i++) {
                 var elem = p_oGuid._elem[i];
-                if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem, origin);
-                else this._elements[i] = elem;
-                this._keys[i] = p_oGuid._key[i];
+                if (MetaRegistry.isGuidObject(elem)) {
+                    // this._elements[i].setObject(elem, origin);
+                    var obj = MetaRegistry.createMetaObject(elem, origin);
+                    obj.setObject(elem, origin);
+                    this._elements[i] = obj;
+                } else if (elem['$ref']) {
+                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
+                    this._elements[i] = meta;        
+                } else this._elements[i] = elem;
             }
         };
 
         /**
          * 배열속성 컬렉션을 전체삭제한다. [구현]
          */
-        MetaRow.prototype.init = function() {
-            this.__event.init();
-            // this._entity = null;
-            this.__SET$_entity(null, this);
-            this.__SET$_elements([], this);
-            this.__SET$_keys([], this);
-        };
+        // MetaRow.prototype.init = function() {
+        //     this.__event.init();
+        //     // this._entity = null;
+        //     this.__SET$_entity(null, this);
+        //     this.__SET$_elements([], this);
+        //     this.__SET$_keys([], this);
+        // };
 
        /**
          * 로우를 복제한다.
@@ -463,3 +522,4 @@
     }
 
 }(typeof window !== 'undefined' ? window : global));
+// TODO: 모든 입력에 대한 제한 검토

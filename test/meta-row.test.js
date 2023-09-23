@@ -181,13 +181,35 @@ describe("[target: meta-row.js]", () => {
                  * MEMO: 참조 없는 자료 리턴 확인
                  */
             });
+            it("- getObject() : Element 객체 ", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.add('a1');
+                a1.columns.add('a2');
+                var row = a1.newRow();
+                var e1 = new MetaElement('E1')
+                row['a1'] = e1;
+                row['a2'] = 'R2';
+                a1.rows.add(row);
+                const obj = a1.rows[0].getObject();
+
+                expect(obj._guid).toBe(a1.rows[0]._guid);
+                expect(obj._type === 'Meta.Entity.MetaRow').toBe(true);
+                expect(obj._elem).toEqual([e1.getObject(),'R2']);
+                expect(obj._key).toEqual(['a1','a2']);
+                expect(obj._entity.$ref).toBe(a1._guid);
+                /**
+                 * MEMO: 기본값 확인
+                 */
+            });
         });
         describe("MetaRow.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
                 const a1 = new MetaTable('T1');
                 a1.columns.add('a1');
                 a1.columns.add('a2');
+                const fun1 = function(){}
                 var row = a1.newRow();
+                row.onChanged = fun1;
                 row['a1'] = 'R1';
                 row['a2'] = 'R2';
                 a1.rows.add(row);
@@ -197,6 +219,7 @@ describe("[target: meta-row.js]", () => {
                 a2.setObject(obj2);
 
                 expect(a2.equal(a1)).toBe(true);
+                expect(a2.rows[0].__event.list.length).toBe(1)
                 expect(()=>a2.rows.setObject(obj1)).toThrow(/ES015/);
                 /**
                  * MEMO:
@@ -204,6 +227,33 @@ describe("[target: meta-row.js]", () => {
                  * - entity 참조가 존재해서 getObject(0) 으로 설정시 참조 오류 확인
                  */
             });
+            it("- setObject() : Element값", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.add('a1');
+                a1.columns.add('a2');
+                const fun1 = function(){}
+                var e1 = new MetaElement('E1')
+                var row = a1.newRow();
+                row.onChanged = fun1;
+                row['a1'] = e1;
+                row['a2'] = 'R2';
+                a1.rows.add(row);
+                const obj1 = a1.rows.getObject();
+                const obj2 = a1.getObject();
+                const a2 = new MetaTable('T2');
+                a2.setObject(obj2);
+
+                expect(a2.equal(a1)).toBe(true);
+                expect(a2.rows[0].__event.list.length).toBe(1)
+                expect(()=>a2.rows.setObject(obj1)).toThrow(/ES015/);
+                /**
+                 * MEMO:
+                 */
+            });
+            /**
+             * 예외
+             * 참조삽입
+             */
         });
         describe("MetaRow.clone(): Row <복제>", () => {
             it("- clone() : 복사 ", () => {
