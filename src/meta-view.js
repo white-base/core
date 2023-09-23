@@ -164,9 +164,10 @@
          * @virtual
          * @returns {object}
          */
-        MetaView.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt);
+        MetaView.prototype.getObject = function(p_vOpt, p_origin) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
+            var origin = p_origin ? p_origin : obj;
 
             obj.viewName = this.viewName;
             if (vOpt < 2 && vOpt > -1 && this._baseEntity) {

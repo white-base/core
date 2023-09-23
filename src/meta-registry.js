@@ -413,6 +413,38 @@
             return false;
         };
 
+        MetaRegistry.isCycleObject = function(p_target, p_origin) {
+            var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
+            var origin = p_origin;
+
+            // TODO: origin 필수 검사
+            // if (typeof origin !== 'object') Message.error('ES024', ['object', 'object']);
+            if (!this.isGuidObject(p_target)) Message.error('ES024', ['p_target', 'object<guid>']);
+            if (!this.isGuidObject(p_origin)) Message.error('ES024', ['p_origin', 'object<guid>']);
+            return findCycleObject(origin);
+            
+            // inner function
+            function findCycleObject(oGuid) {
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object' && oGuid[i] !== null) {
+                            if (findCycleObject(oGuid[i])) return true;
+                        }
+                    }
+                } else {
+                    if (oGuid['_guid'] && oGuid['_guid'] === guid && origin['_guid'] !== guid) {
+                        return true;
+                    }
+                    for(var prop in oGuid) {
+                        if (typeof oGuid[prop] === 'object' && oGuid[prop] !== null) {
+                            if(findCycleObject(oGuid[prop])) return true;
+                        } 
+                    }
+                }
+                return false;
+            }
+        };
+
 
 
         /**
@@ -422,7 +454,7 @@
          * @param {string | object<Guid>} p_target 검색 대상
          * @returns {MetaObject}
          */
-        MetaRegistry.findSetObject = function(p_origin, p_target) {
+        MetaRegistry.findSetObject = function(p_origin, p_target) { // TODO: 오리진과 타겟 위치 변경
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
             var origin = p_origin;
 

@@ -207,9 +207,10 @@
          * @param {number} p_vOpt 레벨 옵션
          * @returns {object}
          */
-        MetaObject.prototype.getObject = function(p_vOpt) {
-            var obj = {};
+        MetaObject.prototype.getObject = function(p_vOpt, p_origin) {
             var vOpt = p_vOpt || 0;
+            var origin = p_origin ? p_origin : obj;
+            var obj = {};
 
             if (vOpt < 2 && vOpt > -1) obj._guid = this._guid;
             obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;

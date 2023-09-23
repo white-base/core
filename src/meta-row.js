@@ -315,9 +315,10 @@
          * @virtual
          * @returns {object}
          */
-        MetaRow.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt);
+        MetaRow.prototype.getObject = function(p_vOpt, p_origin) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
+            var origin = p_origin ? p_origin : obj;
 
             if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
                 obj.__subscribers = this.__event.__subscribers;
@@ -328,7 +329,7 @@
             obj._elem = [];
             for (var i = 0; i < this.list.length; i++) {
                 var elem = this.list[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
                 else obj._elem.push(elem);
             }
 

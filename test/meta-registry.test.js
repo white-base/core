@@ -465,6 +465,58 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.isGuidObject(a)).toBe(false);
             });
         });
+        describe("MetaRegistry.isCycleObject(target, origin) <순환참조 여부>", () => {
+            it("- isCycleObject() : getObject(0) 검사", () => {
+                const elem1 = new MetaElement();
+                const table1 = new MetaTable();
+                table1.columns.add('c1');
+                table1.rows.add(table1.newRow());
+                const e1 = elem1.getObject();
+                const t1 = table1.getObject();
+                const col1 = table1.columns.getObject();
+                const r1 = table1.rows[0].getObject();
+                const c1 = table1.columns[0].getObject();
+
+                expect(MetaRegistry.isCycleObject(e1, e1)).toBe(false);
+                expect(MetaRegistry.isCycleObject(t1, t1)).toBe(false);
+                expect(MetaRegistry.isCycleObject(col1, t1)).toBe(true);
+                expect(MetaRegistry.isCycleObject(r1, t1)).toBe(true);
+                expect(MetaRegistry.isCycleObject(c1, t1)).toBe(true);
+            });
+            it("- isCycleObject() : getObject(1) 검사", () => {
+                const elem1 = new MetaElement();
+                const table1 = new MetaTable();
+                table1.columns.add('c1');
+                table1.rows.add(table1.newRow());
+                const e1 = elem1.getObject(1);
+                const t1 = table1.getObject(1);
+                const col1 = table1.columns.getObject(1);
+                const r1 = table1.rows[0].getObject(1);
+                const c1 = table1.columns[0].getObject(1);
+
+                expect(MetaRegistry.isCycleObject(e1, e1)).toBe(false);
+                expect(MetaRegistry.isCycleObject(t1, t1)).toBe(false);
+                expect(MetaRegistry.isCycleObject(col1, t1)).toBe(true);
+                expect(MetaRegistry.isCycleObject(r1, t1)).toBe(true);
+                expect(MetaRegistry.isCycleObject(c1, t1)).toBe(true);
+            });
+            it("- isCycleObject() : getObject(2) 검사", () => {
+                const elem1 = new MetaElement();
+                const table1 = new MetaTable();
+                table1.columns.add('c1');
+                table1.rows.add(table1.newRow());
+                const e1 = elem1.getObject(2);
+                const t1 = table1.getObject(2);
+                const col1 = table1.columns.getObject(2);
+                const r1 = table1.rows[0].getObject(2);
+                const c1 = table1.columns[0].getObject(2);
+
+                expect(()=> MetaRegistry.isCycleObject(e1, e1)).toThrow(/ES024/)
+                /**
+                 * MEMO: getObject(2) 는 _guid, _ref 가 존재하지 않는다.
+                 */
+            });
+        });
         describe("MetaRegistry.findSetObject(mObj, target) <guid로 생성한 객체 조회>", () => {
             it("- findSetObject() : 객체 검색", () => {
                 let m1 = new MetaObject('M1');

@@ -94,8 +94,10 @@
          * @virtual
          * @returns {object}
          */
-        ArrayCollection.prototype.getObject = function(p_vOpt) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt);
+        ArrayCollection.prototype.getObject = function(p_vOpt, p_origin) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+            var vOpt = p_vOpt || 0;
+            var origin = p_origin ? p_origin : obj;
             // var _elems = [];
 
             // obj._owner = MetaRegistry.createReferObject(this._owner);
@@ -114,7 +116,7 @@
             obj._elem = [];
             for (var i = 0; i < this._elements.length; i++) {
                 var elem = this._elements[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
+                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
                 else obj._elem.push(elem);
             }
             return obj;                        
