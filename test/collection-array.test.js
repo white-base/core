@@ -6,6 +6,11 @@
 'use strict';
 
 const {ArrayCollection}          = require('../src/collection-array');
+const { MetaElement } = require('../src/meta-element');
+const { replacer, reviver, stringify, parse }              = require('telejson');
+const {MetaRegistry}        = require('../src/meta-registry');
+const { loadNamespace } = require('../src/load-namespace');
+const { BaseCollection } = require('../src/collection-base');
 let Student, School, Corp, Member, House, Space;
 
 //==============================================================
@@ -222,6 +227,21 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 expect(s.rows.list.length).toBe(3);
                 expect(result).toBeTruthy();
             });
+            it("- _remve() 추상클래스를 잘못 구현한 경우 ", () => { // TODO: array test 이동 요망
+                class SubCollection extends ArrayCollection {
+                    constructor(){ super()}
+                    _remove(idx) {
+                        return false;   // 강제 실페
+                    }
+                }
+                const s1 = new SubCollection();
+                s1.add(10)
+                s1.add(20)
+
+                expect(s1.count).toBe(2)
+                s1.removeAt(1);
+                expect(s1.count).toBe(2)
+            });
             it("- removeAt(str) : 예외 ", () => {
                 let s = new Student();
     
@@ -314,6 +334,8 @@ describe("[target: collection-array.js, collection-base.js]", () => {
         describe("ArrayCollection.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
                 const a1 = new ArrayCollection();
+                const fun1 = function() {}
+                a1.onAdd = fun1;
                 a1.add(10);
                 a1.add(20);
                 const obj = a1.getObject();
@@ -326,6 +348,50 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 expect(a2.count).toBe(2);
                 expect(a2[0]).toBe(10);
                 expect(a2[1]).toBe(20);
+                expect(a2.__event.__subscribers.add).toBeDefined()
+            });
+            it("- setObject() : MetaElment 삽입 ", () => {
+                const a1 = new ArrayCollection();
+                const m1 = new MetaElement();
+                a1.add(10);
+                a1.add(m1);
+                const obj = a1.getObject();
+                const a2 = new ArrayCollection();
+                a2.setObject(obj);
+        
+                expect(a1 !== a2).toBe(true);
+                expect(a1._guid !== a2._guid).toBe(true);
+                expect(a1.count).toBe(2);
+                expect(a2.count).toBe(2);
+                expect(a2[0]).toBe(10);
+                expect(m1.equal(a2[1])).toBe(true);
+            });
+            it("- setObject() : MetaElment $ref 삽입 ", () => {
+                const a1 = new ArrayCollection();
+                const m1 = new MetaElement();
+                const ref1 = MetaRegistry.createReferObject(m1);
+                a1.add(m1);
+                a1.add(ref1);
+                const obj = a1.getObject();
+                const a2 = new ArrayCollection();
+                a2.setObject(obj);
+        
+                expect(a1.count).toBe(2);
+                expect(a2.count).toBe(2);
+                expect(m1.equal(a2[0])).toBe(true);
+                expect(m1.equal(a2[1])).toBe(true);
+            });
+            it("- setObject() : 예외 : $ref 삽입 ", () => {
+                const a1 = new ArrayCollection();
+                const m1 = new MetaElement();
+                const ref1 = MetaRegistry.createReferObject(m1);
+                ref1.$ref = 'ERR'
+                a1.add(m1);
+                a1.add(ref1);
+                const obj = a1.getObject();
+                const a2 = new ArrayCollection();
+        
+                expect(()=> a2.setObject(obj)).toThrow(/ES015/)
             });
         });
         
@@ -349,6 +415,7 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 expect(result > -1).toBeTruthy();
             });
             it("- add(value, desc) : 읽기 전용", () => {
+                console.warn = jest.fn((val) => { expect(val).toMatch(/WS011/)});
                 let s = new Student();
                 const desc = {
                     value: 'A1',
@@ -414,6 +481,27 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 expect(s.rows._elements.length).toBe(3);
                 expect(s.rows._descriptors.length).toBe(3);
                 expect(s.rows.count).toBe(3);
+            });
+            it("- add(value, desc) : 기술자 정의 경고 ", () => {
+                let s = new Student();
+                let bValue;
+                const desc1 = {
+                    get() { return bValue; },
+                    enumerable: true,
+                    configurable: false,
+                }
+                const desc2 = {
+                    enumerable: true,
+                    writable: false,
+                }
+                let count = 0;
+                console.warn = jest.fn((val) => {
+                    expect(val).toMatch(/WS011/);
+                    count++;
+                });
+                s.rows.add(null, desc1);
+                s.rows.add(null, desc2);
+                expect(count).toBe(2)
             });
         });
         describe("ArrayCollection.clear() <초기화>", () => {
@@ -497,8 +585,44 @@ describe("[target: collection-array.js, collection-base.js]", () => {
 
                 expect(()=> s.rows.insertAt(-1, 'A2')).toThrow(/ES062/);
             });
+            it("- insertAt(pos) : 예외 :자료형", () => {
+                let s = new Student();
+                s.rows.add('A0');
+                s.rows.add('A1');
+
+                expect(()=> s.rows.insertAt('ERR', 'A2')).toThrow(/ES021/);
+            });
         });
-        
+        describe("예외 및 커버리지 ", () => {
+            // beforeAll(() => {
+            //     let s = new Student();
+            // });
+            it("- 커버리지 : __SET$ ", () => {
+                let s1 = new Student();
+                s1.rows.add('A0');
+                s1.rows.__SET$_elements([])
+                s1.rows.__SET$_descriptors([])
+                let s2 = new Student();
+                s2.rows.add('A0');
+                s2.rows.__SET$_elements([], s2.rows)
+                s2.rows.__SET$_descriptors([], s2.rows)
+
+                expect(s1.rows._elements.length).toBe(1)
+                expect(s1.rows._descriptors.length).toBe(1)
+                expect(s2.rows._elements.length).toBe(0)
+                expect(s2.rows._descriptors.length).toBe(0)
+            });
+            it("- 예외 ", () => {
+                class SubClass extends BaseCollection{
+                    constructor(){super()}
+                }
+                const s1 = new SubClass();
+
+                expect(()=> s1._remove()).toThrow(/ES013/)
+            });
+
+
+        });
         
     });
     describe("BaseCollection._elemTypes <전체 타입을 설정할 경우 : 클래스타입>", () => {

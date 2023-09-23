@@ -107,6 +107,23 @@ describe("[target: observer.js]", () => {
             e._onAdd('P1', 'P2');    // 이벤트 강제 호출
             expect(result).toEqual(['P1', 'P2', 'ADD1']);
         });
+        it("- 이벤트 등록 및 호출 : isLog 콘솔로드", () => {
+            const e = new EventClass();
+            const result = [];
+            e.onAdd = (p1) => { 
+                if (p1) result.push(p1)
+                result.push('ADD1') 
+            }
+            let count = 0;
+            global.console.log = jest.fn((val) => {
+                expect(val).toMatch(/publish/);
+                count++;
+            });
+            e._event.isLog = true; // 콘솔 로그 출력
+            e._onAdd('P1');
+            expect(count).toBe(1)
+            expect(result).toEqual(['P1', 'ADD1']);
+        });
         it("- 이벤트 등록 및 호출 : 복수 등록/호출", () => {
             // 이벤트 생성 및 등록
             const e = new EventClass();

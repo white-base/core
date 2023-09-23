@@ -132,6 +132,7 @@
 
                     // inner function
                     function findElement(target) { 
+                        // if (target !== null && typeof target !== 'object') return;
                         for (var prop in target) {
                             if (prop === '_type') continue;
                             var ns = target[prop];
@@ -143,7 +144,8 @@
                                 // }
                                 // arr.push([stack.join('.'), prop].join('.'));
                                 arr.push(stack.join('.'));
-                            } else if (typeof ns === 'object') findElement(ns);
+                            // } else if (typeof ns === 'object') findElement(ns);
+                            } else findElement(ns);
 
                             stack.pop();
                         }
@@ -314,7 +316,7 @@
             var ns = this._getPathObject(p_fullName).ns;
 
             sections = __getArray(ns);
-            
+            if (this._elemTypes.length > 0) Util.validType(p_elem, this._elemTypes);
             if (sections.length > 0) this.addNamespace(ns);
             if (!__validName(key)) Message.error('ES054', [key, '__validName()']);
             if (!this.isOverlap && this.getPath(p_elem)) {
@@ -328,7 +330,7 @@
 
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
-                if (typeof parent[sName] === "undefined") parent[sName] = this.__createNsRefer();
+                // if (typeof parent[sName] === "undefined") parent[sName] = this.__createNsRefer();
                 if (i === sections.length - 1) { 
                     parent[sName][key] = p_elem;
                 } else parent = parent[sName];
@@ -431,11 +433,12 @@
                 var fullName = this.list[i];
                 var fun = this.find(fullName);
                 var nObj = this._getPathObject(fullName);
-                obj = { ns: nObj.ns, key: nObj.key, full: fullName, f: fun};
+                obj = { ns: nObj.ns, key: nObj.key, full: fullName, elem: fun};
                 arr.push(obj);
             }
 
-            var temp ={ arr: arr};
+            var temp ={ list: arr};
+            // var temp = arr;
 
             if (typeof p_stringify === 'function') str = p_stringify(temp, {space: p_space} );
             else str = JSON.stringify(temp, null, p_space);
@@ -449,16 +452,22 @@
             if (typeof arr === 'string') {
                 // if (typeof p_parse === 'function') arr = p_parse(p_obj, {lazyEval: false});
                 if (typeof p_parse === 'function') arr = p_parse(p_obj);
-                else arr = JSON.parse(p_obj, null);
+                else {
+                    try {
+                        arr = JSON.parse(p_obj, null);
+                    } catch (error) {
+                        Message.error('ES0110', [typeof p_obj, 'parse(...)', error]);
+                    }
+                }
             }
-            if(Array.isArray(arr.arr)) {
-                for (var i = 0; i < arr.arr.length; i++) {
-                    var o = arr.arr[i];
-                    var fun = o.f;
+            if(Array.isArray(arr.list)) {
+                for (var i = 0; i < arr.list.length; i++) {
+                    var o = arr.list[i];
+                    var fun = o.elem;
                     // this.set(o.ns, o.key, fun);
                     this.add(o.full, fun);
                 }
-            }
+            } else Message.error('ES022', [typeof p_obj]);
         };
 
         return NamespaceManager;

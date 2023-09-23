@@ -229,12 +229,13 @@
     }
 
     function _typeName(obj) {
-        if (typeof obj === 'function') return obj.name;
-        if (typeof obj === 'object' && obj !== null) {
-            var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
-            return  proto.constructor.name;
-        }
-        return 'unknown';
+        return obj.name;
+        // if (typeof obj === 'function') return obj.name;
+        // if (typeof obj === 'object' && obj !== null) {
+        //     var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
+        //     return  proto.constructor.name;
+        // }
+        // return 'unknown';
     }
 
     /**

@@ -1214,7 +1214,130 @@ describe("[ GROUP]", () => {
             expect(global._L.Meta.Entity.MetaColumn).toBeDefined();
         });
     });
+    describe("load: meta-row.js <MetaRow>", () => {
+        beforeEach(() => {
+            jest.resetModules();
+            global._L = null;
+            });
+        it("- 예외 : 전체 로딩 안할 때", () => {
+            // require('../src/message');
+            
+            expect(() => require('../src/meta-row')).toThrow(/Cannot read properties/);
+        });
+        it("- 예외 : Util 로딩이 안 된 경우", () => {
+            require('../src/message');
+            
+            expect(() => require('../src/meta-row')).toThrow(/Util/);
+        });
+        it("- 예외 : Observer 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            // require('../src/observer');
     
+            expect(() => require('../src/meta-row')).toThrow(/Observer/);
+        });
+        
+        it("- 예외 : IList 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            // require('../src/i-list');
+            require('../src/i-control-list');
+    
+            expect(() => require('../src/meta-row')).toThrow(/IList/);
+        });
+        it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+    
+            require('../src/namespace-manager');
+            // require('../src/meta-registry');  
+    
+            expect(() => require('../src/meta-row')).toThrow(/MetaRegistry/);
+        });
+
+        it("- 예외 : MetaObject 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            // require('../src/meta-object');
+    
+            expect(() => require('../src/meta-row')).toThrow(/MetaObject/);
+        });
+        it("- 예외 : TransactionCollection 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            // require('../src/i-element');
+            // require('../src/i-collection');
+            // require('../src/i-collection-array');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            require('../src/meta-object');
+            // require('../src/collection-base');
+            // require('../src/collection-array');
+            // require('../src/trans-queue');
+            // require('../src/collection-transaction');
+    
+            expect(() => require('../src/meta-row')).toThrow(/TransactionCollection/);
+        });
+        
+        it("- 로딩 성공 ", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            // require('../src/i-element');
+            require('../src/i-collection');
+            require('../src/i-collection-array');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            require('../src/meta-object');
+            require('../src/collection-base');
+            require('../src/collection-array');
+            require('../src/trans-queue');
+            require('../src/collection-transaction');
+            // require('../src/meta-element');
+            require('../src/meta-row');
+    
+            expect(global._L.MetaRow).toBeDefined();  
+            expect(global._L.Meta.Entity.MetaRow).toBeDefined();
+        });
+    });
     
 });
 

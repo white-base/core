@@ -22,6 +22,24 @@ describe('Util.*', () => {
         
         expect(Array.isArray(arr)).toBe(true);
     });
+    it('- Object.keys() : polyfill', () => {
+        // polyfill 강제 지움
+        Object.keys = null;
+
+        // REVIEW: jest.fn 을 사용해서 강제 오류 처리
+        // Object.toString = null;
+        // Object.prototype.toString = null;
+        // Object.keys = jest.fn();
+        // Object.prototype.toString = jest.fn(()=> null);
+
+        const Util      = require('../src/util');
+        const arr = ['aa'];
+        const obj1 = {aa: {bb: 1}}
+        expect(Object.keys(arr)).toEqual(['0']);
+        expect(Object.keys(obj1)).toEqual(['aa']);
+        expect(()=> Object.keys(undefined)).toThrow(/Object.keys/)
+
+    });
     it('- Util.inherits : Object.create() 제거 ', () => {
         const temp = Object.create; // 임시 저장
         Object.create = undefined;  // 비우기
@@ -119,5 +137,9 @@ describe('Util.*', () => {
         expect(fun1).toEqual(fun2);
         expect(str1).toEqual(str2);
         expect(reg1).toEqual(reg2);
+    });
+    describe("예외, 커버리지 ", () => {
+        it("-  ", () => {
+        });
     });
 });

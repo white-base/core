@@ -58,6 +58,19 @@ describe("[ GROUP]", () => {
             delete global._L.Common.Util.getAllProperties;
             expect(() => require('../src/util')).toThrow(/getAllProperties/);
         });
+        it("- 예외 : util-type.js : checkTypeMessage 제거", () => {
+            require('../src/message');
+            require('../src/util-type');
+            delete global._L.Common.Util.checkTypeMessage;
+            expect(() => require('../src/util')).toThrow(/checkTypeMessage/);
+        });
+        it("- 예외 : util-type.js : getTypeMap 제거", () => {
+            require('../src/message');
+            require('../src/util-type');
+            delete global._L.Common.Util.getTypeMap;
+            expect(() => require('../src/util')).toThrow(/getTypeMap/);
+        });
+
         it("- 예외 : util-type.js : checkType 제거", () => {
             require('../src/message');
             require('../src/util-type');

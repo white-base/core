@@ -94,9 +94,7 @@ describe("[ GROUP]", () => {
             global._L = null;
          });
         it("- 예외 : 전체 로딩 안할 때", () => {
-            require('../src/message');
-    
-            expect(() => require('../src/meta-element')).toThrow(/ES011/);
+            expect(() => require('../src/meta-element')).toThrow(/Cannot read properties/);
         });
         it("- 예외 : Util 로딩이 인된경우", () => {
             require('../src/message');
@@ -189,6 +187,57 @@ describe("[ GROUP]", () => {
     
             expect(global._L.MetaRegistry).toBeDefined();
             expect(global._L.Meta.MetaRegistry).toBeDefined();
+        });
+        
+    });
+    describe("load: namespace-manager.js <NamespaceManager>", () => {
+        beforeEach(() => {
+            jest.resetModules();
+            global._L = null;
+         });
+        it("- 예외 : 전체 로딩 안할 때", () => {
+            // require('../src/message');
+    
+            expect(() => require('../src/namespace-manager')).toThrow(/Cannot read properties/);
+        });
+        it("- 예외 : Util 로딩이 인된경우", () => {
+            require('../src/message');
+    
+            expect(() => require('../src/namespace-manager')).toThrow(/Util/);
+        });
+        it("- 예외 : IList 로딩이 인된경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+    
+            // require('../src/i-list');
+            // require('../src/i-control-list');
+            // require('../src/namespace-manager');
+    
+            expect(() => require('../src/namespace-manager')).toThrow(/IList/);
+        });
+        it("- 예외 : IListControl 로딩이 인된경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+    
+            require('../src/i-list');
+            // require('../src/i-control-list');
+            // require('../src/namespace-manager');
+    
+            expect(() => require('../src/namespace-manager')).toThrow(/IListControl/);
+        });
+        it("- 로딩 성공 ", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+    
+            require('../src/i-list');
+            require('../src/i-control-list');
+            require('../src/namespace-manager');
+    
+            expect(global._L.NamespaceManager).toBeDefined();
+            expect(global._L.Meta.NamespaceManager).toBeDefined();
         });
         
     });

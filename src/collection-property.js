@@ -116,6 +116,7 @@
             } else {
                 delete this[p_idx];                     // idx 삭제 (끝일 경우)
             }
+            return true;
         };
 
         /**
@@ -228,10 +229,10 @@
                 // return false;
             }
             if (typeof p_desc === 'object' ) {
-                if (p_desc.configurable && p_desc.configurable === false ) {
-                    Message.warn('WS011', ['configurable = false', 'element']);
+                if (p_desc.configurable === false ) {
+                    Message.warn('WS011', ['configurable = true', 'element']);
                 }
-                if (p_desc.writable && p_desc.writable === false ) {
+                if (p_desc.writable === false ) {
                     Message.warn('WS011', ['writable = true', 'element']);
                 }
                 // console.warn('[configurable = false] 대상 [컬렉션 요소]는 삭제 할 수 없습니다.');

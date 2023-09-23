@@ -86,6 +86,7 @@
             } else {
                 delete this[p_idx];                      // idx 삭제 (끝일 경우)
             }
+            return true;
         };
 
         /**
@@ -148,7 +149,7 @@
                     // POINT:
                     var meta = MetaRegistry.findSetObject(origin, elem.$ref);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
-                    this._elements.push(meta);
+                    this._elements.push(meta);  
                 
                 } else this._elements.push(elem);
             }
@@ -163,8 +164,9 @@
         ArrayCollection.prototype.add = function(p_value, p_desc) {
             var pos = this._elements.length;
             try {
-                if (this.insertAt(pos, p_value, p_desc) === true) return pos;
-                return -1;
+                // if (this.insertAt(pos, p_value, p_desc) === true) return pos;
+                this.insertAt(pos, p_value, p_desc);
+                return pos;
             } catch (error) {
                 Message.error('ES019', ['add()', error.message]);
             }
@@ -185,11 +187,11 @@
             if (p_pos < 0) Message.error('ES062', ['pos', '0']);
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
             if (typeof p_desc === 'object' ) {
-                if (p_desc.configurable && p_desc.configurable === false ) {
-                    Message.warn('WS011', ['configurable = false', 'element']);
+                if (p_desc.configurable === false ) {
+                    Message.warn('WS011', ['configurable = false', 'element']); 
                 }
-                if (p_desc.writable && p_desc.writable === false ) {
-                    Message.warn('WS011', ['writable = true', 'element']);
+                if (p_desc.writable === false ) {
+                    Message.warn('WS011', ['writable = false', 'element']);
                 }
                 // console.warn('[configurable = false] 대상 [컬렉션 요소]는 삭제 할 수 없습니다.');
             }

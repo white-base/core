@@ -6,6 +6,7 @@
 'use strict';
 
 const {TransactionCollection}          = require('../src/collection-transaction');
+const { MetaObject } = require('../src/meta-object');
 let Student, School, Corp, Member, House, Space;
 
 //==============================================================
@@ -116,6 +117,7 @@ describe("[target: collection-trans.js]", () => {
                 expect(result > -1).toBeTruthy();
             });
             it("- add(value, desc) : 읽기 전용", () => {
+                console.warn = jest.fn((val) => { expect(val).toMatch(/WS011/)});
                 let s = new Student();
                 const desc = {
                     value: 'A1',
@@ -510,6 +512,11 @@ describe("[target: collection-trans.js]", () => {
             it("- this.autoChanges 예외 ", () => {
                 let s = new Student();
                 expect(()=> s.rows.autoChanges = 1).toThrow(/ES021/)
+            });
+            it("- this._transQueue.collection : 예외 ", () => {
+                let s = new Student();
+                expect(()=> s.rows._transQueue.collection = 1).toThrow(/ES032/)
+                expect(()=> s.rows._transQueue.collection = new MetaObject).toThrow(/ES033/)
             });
         });
     });

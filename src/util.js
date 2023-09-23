@@ -68,7 +68,7 @@
             var dontEnums = ['toString', 'toLocaleString', 'valueOf', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'constructor'];
             var dontEnumsLength = dontEnums.length;
             return function (obj) {
-                if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new TypeError('Object.keys called on non-object');
+                if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new Error('Object.keys called on non-object');
                 var result = [];
                 for (var prop in obj) if (hasOwnProperty.call(obj, prop)) result.push(prop);
                 if (hasDontEnumBug) {
@@ -258,7 +258,7 @@
     var deepEqual = function(obj1, obj2) {
 
         if (Array.isArray(obj1)) {
-            if (!Array.isArray(obj1)) return false;
+            // if (!Array.isArray(obj1)) return false;
             if (obj1.length !== obj2.length) return false;
             for (var i = 0; i < obj1.length; i++) {
                 var val1 = obj1[i];
@@ -315,7 +315,7 @@
         exports.createGuid = createGuid;
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
-        exports.checkTypeMessage = checkTypeMessage;
+        // exports.checkTypeMessage = checkTypeMessage;
         exports.getTypeMap = getTypeMap;
         exports.checkType = checkType;
         exports.checkUnionType = checkUnionType;
@@ -332,7 +332,7 @@
             createGuid: createGuid,
             implements: implement,
             getAllProperties: getAllProperties,
-            checkTypeMessage: checkTypeMessage,
+            // checkTypeMessage: checkTypeMessage,
             getTypeMap: getTypeMap,
             checkType: checkType,
             checkUnionType: checkUnionType,

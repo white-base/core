@@ -5,6 +5,7 @@
 // gobal defined
 'use strict';
 
+const { loadNamespace } = require('../src/load-namespace');
 const { NamespaceManager }      = require('../src/namespace-manager');
 const { replacer, reviver, stringify, parse }              = require('telejson');
 
@@ -14,6 +15,28 @@ describe("[target: namespace-manager.js]", () => {
     describe("NamespaceManager :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();
+        });
+        describe("NamespaceManager._elemTypes <허용 타입>", () => {
+            it("- this._elemTypes ", () => {
+                const ns1 = new NamespaceManager();
+                const ns2 = new NamespaceManager();
+                const ns3 = new NamespaceManager();
+                ns3._elemTypes = Function
+                ns3._elemTypes = [String, Number]
+                const fun1 = function() {return 'Fun1'};
+                ns1.add('fun1', fun1);
+                ns2.add('fun1', fun1);
+                ns3.add('str', 'STR');
+                ns3.add('num', 100);
+
+                expect(ns1.count).toBe(1);
+                expect(ns2.count).toBe(1);
+                expect(ns3.count).toBe(2);
+                expect(ns1.find('fun1')).toBe(fun1);
+                expect(ns2.find('fun1')).toBe(fun1);
+                expect(ns3.find('str')).toBe('STR');
+                expect(ns3.find('num')).toBe(100);
+            });
         });
         describe("NamespaceManager.isOverlap <중복 허용 여부>", () => {
             it("- this.isOverlap : 중복 허용 ", () => {
@@ -33,6 +56,10 @@ describe("[target: namespace-manager.js]", () => {
                 ns.add('fun1', fun1);
 
                 expect(()=> ns.add('a1.fun1', fun1)).toThrow(/ES041/);
+            });
+            it("- this.isOverlap : 예외 ", () => {
+                const ns = new NamespaceManager();
+                expect(()=> ns.isOverlap = 1).toThrow(/ES021/);
             });
         });
         describe("NamespaceManager.list <요소 목록>", () => {
@@ -200,6 +227,19 @@ describe("[target: namespace-manager.js]", () => {
                 expect(s.a1.b1.Fun).toBeDefined();
                 expect(typeof s.a1.b1.Fun).toBe('function');
             });
+            it("- add() : 다중 등록 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                const fun1 = function(){ return 'fun1' };
+                const fun2 = function(){ return 'fun2' };
+                const fun3 = function(){ return 'fun3' };
+                ns.add('a1.fun1', fun1);
+                ns.add('a1.b1.fun2', fun2);
+
+                expect(s.a1.b1).toBeDefined();
+                expect(s.a1.b1.fun2).toBeDefined();
+                expect(typeof s.a1.b1.fun2).toBe('function');
+            });
             it("- add() : 최상위에 등록 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
@@ -354,9 +394,20 @@ describe("[target: namespace-manager.js]", () => {
                 // var i = new n();
                 // console.log(0);
             });
+            it("- output() : 함수 출력 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                ns.add('str1', 'STR');
+                ns.add('a1.num1', 10);
+                const str = ns.output();
+                const obj = JSON.parse(str, null);
+
+                expect(obj.list[0]).toEqual({ns:'', key:'str1', full: 'str1', elem: 'STR'})
+                expect(obj.list[1]).toEqual({ns:'a1', key:'num1', full: 'a1.num1', elem: 10})
+            });
         });
         describe("NamespaceManager.load(str, parse?) <네임스페이스 불러오기>", () => {
-            it("- getPath(elem) : 객체로 얻기 ", () => {
+            it("- load(str) : 객체로 얻기 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
                 const fun1 = function(){ return 'fun1' };
@@ -373,6 +424,50 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns.getPath(fun2)).toBe('a1.b1.fun2');
                 expect(ns.getPath(fun3)).toBe('a1.b1.c1.fun3');
             });
+            it("- load(obj | str) : 객체로 얻기 ", () => {
+                const ns1 = new NamespaceManager();
+                const s = ns1.__storage;
+                ns1.add('str1', 'STR');
+                ns1.add('a1.num1', 10);
+                const str = ns1.output();
+                const obj = JSON.parse(str, null);
+                const ns2 = new NamespaceManager();
+                ns2.load(obj);
+                const ns3 = new NamespaceManager();
+                ns3.load(str);
+
+                expect(ns2.getPath('STR')).toBe('str1');
+                expect(ns2.getPath(10)).toBe('a1.num1');
+                expect(ns3.getPath('STR')).toBe('str1');
+                expect(ns3.getPath(10)).toBe('a1.num1');
+            });
+            it("- load(?) : 예외 ", () => {
+                const ns1 = new NamespaceManager();
+                const s = ns1.__storage;
+                ns1.add('str1', 'STR');
+                ns1.add('a1.num1', 10);
+                const str = ns1.output();
+                const obj = JSON.parse(str, null);
+                const ns2 = new NamespaceManager();
+            
+                expect(()=> ns2.load('STR')).toThrow(/ES0110/)
+                expect(()=> ns2.load({list: null})).toThrow(/ES022/)
+            });
+        });
+        describe("예외, 커버리지", () => {
+            it("- _getPathObject() 커버 ", () => {
+                const ns = new NamespaceManager();
+                const fun1 = function(){ return 'fun1' };
+                const fun2 = function(){ return 'fun2' };
+                const fun3 = function(){ return 'fun3' };
+                ns.add('fun1', fun1);
+                ns.add('aa.fun2', fun2);
+
+                expect(ns._getPathObject(fun1)).toEqual({ns: '', key:'fun1'})
+                expect(ns._getPathObject(fun2)).toEqual({ns: 'aa', key:'fun2'})
+                expect(ns._getPathObject(fun3)).toBe(undefined)
+            });
+            
         });
     });
     

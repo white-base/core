@@ -179,11 +179,11 @@
                 for (var i = 0; i < types.length; i++) {
                     if (fun === types[i]) return true;
                 }
-                if (_this._interface) {
-                    for (var i = 0; i < _this._interface.length; i++) {
-                        if (fun === _this._interface[i]) return true;
-                    }
+                // if (_this._interface) {
+                for (var i = 0; i < _this._interface.length; i++) {
+                    if (fun === _this._interface[i]) return true;
                 }
+                // }
                 return false;
             }
             function findFunctionName(funName) {
@@ -191,11 +191,11 @@
                 for (var i = 0; i < types.length; i++) {
                     if (funName === types[i].name) return true;
                 }
-                if (_this._interface) {
-                    for (var i = 0; i < _this._interface.length; i++) {
-                        if (funName === _this._interface[i].name) return true;
-                    }
+                // if (_this._interface) {
+                for (var i = 0; i < _this._interface.length; i++) {
+                    if (funName === _this._interface[i].name) return true;
                 }
+                // }
                 return false;
             }
         };
@@ -225,11 +225,12 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
-            if (typeof p_oGuid !== 'object') Message.error('ES021', ['mObj', 'object']);
+            if (typeof p_oGuid !== 'object') Message.error('ES021', ['oGuid', 'object']);
             if (p_oGuid._type !== fullName) Message.error('ES046', [p_oGuid._type, fullName]);
             
             if (MetaRegistry.isGuidObject(origin)) {
-                if (!origin['__TRANSFORM_REFER'] || MetaRegistry.hasRefer(origin)) {
+                // if (!origin['__TRANSFORM_REFER'] || MetaRegistry.hasRefer(origin)) {
+                if (!origin['__TRANSFORM_REFER']) {
                     origin = MetaRegistry.transformRefer(origin);
                     origin['__TRANSFORM_REFER'] = true;
                 }

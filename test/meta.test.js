@@ -26,6 +26,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             MetaObjectSub = class MetaObjectSub extends MetaObject {
                 constructor() { super() }
             }
+            MetaObjectSub._NS = ''
             EmpytClass = class EmpytClass {};
         });
         // it("- getTypeNames() : array<string> ", () => {
@@ -43,6 +44,12 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const type = c._type;
 
                 expect(type).toBe(MetaObjectSub);
+            });
+            it("- _type : 커버리지 ", () => {
+                const c = new MetaObjectSub();
+                c.__proto__ = null
+
+                expect(()=> c._type).toThrow(/constructor/)
             });
         });
         describe("MetaObject.guid: str <GUID 얻기>", () => {
@@ -110,6 +117,11 @@ describe("[target: meta-object.js, meta-element.js]", () => {
 
                 expect(()=> delete c._interface).toThrow(/Cannot delete property/);
             });
+            it("- instanceOf(?) : 커버리지  ", () => {
+                const c = new MetaObjectSub();
+
+                expect(c.instanceOf(10)).toBe(false)
+            });
         });
 
         describe("MetaObject.getObject(): obj<ref> <객체 얻기>", () => {
@@ -143,6 +155,30 @@ describe("[target: meta-object.js, meta-element.js]", () => {
 
                 expect(m1 !== m2).toBe(true);
             });
+            it("- setObject() : 예외 ", () => {
+                const m1 = new MetaObject();
+                const m2 = new MetaObject();
+                const m3 = new MetaElement();
+                const m4 = new MetaElement();
+                const m5 = new MetaObjectSub();
+                const m6 = new MetaObjectSub();
+                const obj1 = m1.getObject();
+                const obj3 = m3.getObject();
+                const obj5 = m5.getObject();
+                m6.setObject(obj5)
+
+                expect(()=> m2.setObject(-1)).toThrow(/ES021/)
+                expect(()=> m4.setObject(obj3, {})).toThrow(/ES022/)
+            });
+            it("- setObject() : 커버리지 ", () => {
+                const m1 = new MetaObject();
+                const m2 = new MetaObject();
+                const obj1 = m1.getObject();
+                obj1.__TRANSFORM_REFER = true;
+                m2.setObject(obj1)
+
+                expect(m1 !== m2).toBe(true);
+            });
         });
         
         describe("빈 검사", () => {
@@ -155,13 +191,21 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             });
         });
 
-        describe("기타", () => {
+        describe("예외 및 커버리지", () => {
             it("- MetaObject.__SET_guid : 내부 setter ", () => {
                 const i = new MetaObject();
-                i.__SET$_guid(10, i);    //
-                // i.__SET_guid(10);
-
+                
+                i.__SET$_guid(10, i);
                 expect(i._guid).toBe(10);
+                i.__SET$_guid(20);
+                expect(i._guid).toBe(10);
+            });
+            it("- MetaObject.__compare() : 내부 비교 ", () => {
+                const i = new MetaObject();
+                
+                expect(i.__compare(1, 10)).toBe(false);
+                expect(i.__compare({aa: 1}, {aa:1})).toBe(true);
+                expect(i.__compare({aa: 1}, {aa:2})).toBe(false);
             });
         });
     });
@@ -339,12 +383,31 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(m1._name === m2._name).toBe(true);
             });
         });
-        describe("예외", () => {
+        describe("MetaElement.clone() <객체 복제>", () => {
+            it("- setObject()  ", () => {
+                const m1 = new MetaElement();
+                const m2 = m1.clone();
+
+                expect(m1 !== m2).toBe(true);
+                expect(m1._guid !== m2._guid).toBe(true);
+                expect(m1._type === m2._type).toBe(true);
+                expect(m1._name === m2._name).toBe(true);
+            });
+        });
+        describe("예외 및 커버리지", () => {
             it("- 예외 : _name, guid ", () => {
                 const i = new MetaElement('_name');
 
                 expect(()=> i._name = 10).toThrow('ES021');
                 expect(()=> i._guid = 10).toThrow(/Cannot set property _guid of/); // 직접 설정할 경우는 없음
+            });
+            it("- 커버리지 : this.__SET$_name ", () => {
+                const i = new MetaElement('E1');
+                
+                i.__SET$_name('E2', i)
+                expect(i._name).toBe('E2');
+                i.__SET$_name('E3')  // 접근금지
+                expect(i._name).toBe('E2');
             });
         });
     });

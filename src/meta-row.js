@@ -45,9 +45,9 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof TransactionCollection === 'undefined') Message.error('ES011', ['TransactionCollection', 'collection-transaction']);
 
@@ -58,7 +58,7 @@
          * 메타 로우
          * @constructs _L.Meta.Entity.MetaRow
          * @extends _L.Meta.MetaObject
-         * @param {MetaEntity?} p_entity 메타엔티티
+         * @param {MetaEntity} p_entity 메타엔티티
          */
         function MetaRow(p_entity) {
             _super.call(this);
@@ -84,19 +84,20 @@
 
             /**
              * 로우의 소유 엔티티
+             * // REVIEW: 엔티티는 설정할 수 없어야함??
              * @member {MetaEntity} _L.Meta.Entity.MetaRow#_entity
              */
             Object.defineProperty(this, '_entity', 
             {
                 get: function() { return _entity; },
-                set: function(newValue) {
-                    if (newValue === null) return _entity = null;
-                    if (typeof newValue !== 'undefined' && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
-                        Message.error('ES032', ['_entity', 'MetaEntity']);
-                    }
-                    if (this.count > 0) Message.error('ES045', ['MetaRow', '_entity']);
-                    _entity = newValue;
-                },
+                // set: function(newValue) {
+                //     if (newValue === null) return _entity = null;
+                //     if (typeof newValue !== 'undefined' && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
+                //         Message.error('ES032', ['_entity', 'MetaEntity']);
+                //     }
+                //     if (this.count > 0) Message.error('ES045', ['MetaRow', '_entity']);
+                //     _entity = newValue;
+                // },
                 configurable: false,
                 enumerable: false
             });
@@ -180,7 +181,10 @@
             }
             this.__SET$_keys = function(val, call) {
                 if (call instanceof MetaRow) _keys = val;    // 상속접근 허용
-            }
+            };
+            this.__SET$_entity = function(val, call) {
+                if (call instanceof MetaRow) _entity = val;    // 상속접근 허용
+            };
             
             // MetaEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
@@ -188,18 +192,18 @@
             }
             
             // 설정
-            if (p_entity) {
-                this._entity = p_entity;
+            // if (p_entity) {
+            _entity = p_entity;
 
-                for (var i = 0; i < _entity.columns.count; i++) {
-                    var idx = _elements.length;
-                    var alias = _entity.columns[i].alias;
-                    _elements.push(_entity.columns[i].default);  // 기본값 등록
-                    _keys.push(alias);
-                    Object.defineProperty(this, [i], getPropDescriptor(idx));
-                    Object.defineProperty(this, alias, getPropDescriptor(idx));
-                }
+            for (var i = 0; i < _entity.columns.count; i++) {
+                var idx = _elements.length;
+                var alias = _entity.columns[i].alias;
+                _elements.push(_entity.columns[i].default);  // 기본값 등록
+                _keys.push(alias);
+                Object.defineProperty(this, [i], getPropDescriptor(idx));
+                Object.defineProperty(this, alias, getPropDescriptor(idx));
             }
+            // }
 
             function getPropDescriptor(p_idx) {
                 return {
@@ -207,11 +211,11 @@
                     set: function(newValue) { 
                         var oldValue = _elements[p_idx];
                         // 트렌젹션 처리 => 함수로 추출 검토
-                        if (this._entity && !this._entity.rows.autoChanges) {
+                        if (_entity && !_entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
-                            var pos = this._entity.rows.indexOf(this);
+                            var pos = _entity.rows.indexOf(this);
                             if (pos > -1) { // 컬력션에 포힘됬을때만
-                                this._entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
+                                _entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
                             }
                         }
                         // 이벤트 및 처리
@@ -242,11 +246,6 @@
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
-        MetaRow.prototype._onChanged = function(p_idx, p_nValue, p_oValue) {
-            this.__event.publish('onChanged', p_idx, p_nValue, p_oValue);
-        };
-
-        
         MetaRow.prototype._onChanged = function(p_idx, p_nValue, p_oValue) {
             this.__event.publish('onChanged', p_idx, p_nValue, p_oValue);
         };
@@ -318,7 +317,8 @@
             if (p_oGuid._entity) {
                 entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
                 if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
-                this._entity = entity;
+                // this._entity = entity;
+                this.__SET$_entity(entity. this);
             } 
             for(var i = 0; i < p_oGuid._elem.length; i++) {
                 var elem = p_oGuid._elem[i];
@@ -333,7 +333,8 @@
          */
         MetaRow.prototype.init = function() {
             this.__event.init();
-            this._entity = null;
+            // this._entity = null;
+            this.__SET$_entity(null, this);
             this.__SET$_elements([], this);
             this.__SET$_keys([], this);
         };

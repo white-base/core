@@ -94,7 +94,7 @@
                         },
                         10: {
                             msg: 'Failed to retrieve [$1] from [$2].',
-                            long: ''
+                            long: '$3'
                         },
                     },
                     S02: { // type
@@ -241,7 +241,7 @@
                     S01: { // range
                         1: {
                             msg: '[$1] target [$2] cannot be deleted.',
-                            long: 'If you set "configurable = true" you can delete it later. '
+                            long: 'If you set "configurable = true, writable = true" you can delete it later. '
                         },
                     }
                 },
@@ -310,7 +310,7 @@
                         },
                         10: {
                             msg: '[$1]을 [$2] 에서 가져오는데 실패하였습니다.',
-                            long: ''
+                            long: '$3'
                         },
                     },  
                     S02: {  // 타입
@@ -461,7 +461,7 @@
                     S01: {  // 범위
                         1: {
                             msg: '[$1] 대상 [$2]는 삭제 할 수 없습니다.',
-                            long: '"configurable = true" 로 설정하시면 이후 삭제 가능합니다. '
+                            long: '"configurable = true, writable = true" 로 설정하시면 이후 삭제 가능합니다. '
                         },
                     }
                 },

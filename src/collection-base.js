@@ -478,7 +478,8 @@
                 // before event
                 this._onChanging();
                 // process
-                if (this._remove(p_idx) > 0) return false;
+                // if (this._remove(p_idx) > 0) return false;
+                if (!this._remove(p_idx)) return false;
                 this._onRemove(p_idx, elem);
                 // after event
                 this._onChanged();

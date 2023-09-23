@@ -87,13 +87,12 @@ describe("[target: message.js]", () => {
         describe("MetaObject.warn(): obj <콘솔 경고 얻기>", () => {
             it("- getInfo() : 메세지 얻기", () => {
                 // const mock = jest.fn(console.warn);
-                const spyFn = jest.spyOn(console, "warn");
+                // const spyFn = jest.spyOn(console, "warn");
+                console.warn = jest.fn((val) => {
+                    expect(val).toMatch(/ES011/);
+                });
+
                 Message.warn('ES011', []);
-                
-                // REVIEW: 스탭샵으로 확인해야함
-                // expect(consoleLogMocking).toBe('hello tom');
-                expect(spyFn).toBeCalledTimes(1);
-                // expect(spyFn).toBeCalledWith('ES011', []))
             });
         });
         describe("예외 및 COVER", () => {

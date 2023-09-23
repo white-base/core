@@ -513,6 +513,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(result > -1).toBeTruthy();
             });
             it("- add(name, value, desc) : 읽기 전용", () => {
+                console.warn = jest.fn((val) => { expect(val).toMatch(/WS011/)});
                 let s = new Student();
                 const desc = {
                     value: 'A1',
@@ -552,6 +553,7 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(result > -1).toBeTruthy();
             });
             it("- add(name, value, desc) : 기술자, 0 삭제후 0에 삽입 ", () => {
+                console.warn = jest.fn((val) => { expect(val).toMatch(/WS011/)});
                 let s = new Student();
                 const desc1 = { value: 'A2', writable: false, configurable: true};   // REVIEW: config true 아니면 삭제 못함
                 const desc2 = { value: 'A1', writable: false, configurable: true};
@@ -642,6 +644,27 @@ describe("[target: collection-property.js, collection-base.js]", () => {
             it("- add(name) : 이름을 숫자로 사용할 경우 (예외)", () => {
                 let s = new Student();
                 expect(() => s.columns.add(10)).toThrow(/ES021/);
+            });
+            it("- add(value, desc) : 기술자 정의 경고 ", () => {
+                let s = new Student();
+                let bValue;
+                const desc1 = {
+                    get() { return bValue; },
+                    enumerable: true,
+                    configurable: false,
+                }
+                const desc2 = {
+                    enumerable: true,
+                    writable: false,
+                }
+                let count = 0;
+                console.warn = jest.fn((val) => {
+                    expect(val).toMatch(/WS011/);
+                    count++;
+                });
+                s.columns.add('p1', null, desc1);
+                s.columns.add('p2', null, desc2);
+                expect(count).toBe(2)
             });
         });
         describe("PropertyCollection.clear() <초기화> ", () => {

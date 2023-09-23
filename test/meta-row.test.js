@@ -22,6 +22,34 @@ describe("[target: meta-row.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
+        describe("MetaRow._entity <엔티티>", () => {
+            it.skip("- this._entity ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                table1.columns.addValue('i2', 'V2');
+                var row1 = new MetaRow(table1);
+                
+                expect(()=> row1._entity = {}).toThrow(/ES032/) 
+                expect(()=> row1._entity = table1).toThrow(/ES045/) // count 존재
+            });
+        });
+        describe("MetaRow.onChanging <변경 이벤트>", () => {
+            it("- this.onChanging ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.addValue('i1', 'V1');
+                table1.columns.addValue('i2', 'V2');
+                var row1 = new MetaRow(table1);
+                var count = 0
+                const fun1 = function() { count++}
+                row1.onChanging = fun1;
+                row1.onChanged = fun1;
+                row1['i1'] = 'R1';
+                row1['i2'] = 'R2';
+                expect(row1['i1']).toBe('R1')
+                expect(row1['i2']).toBe('R2')
+                expect(count).toBe(4)
+            });
+        });
         describe("MetaRow(entity) <생성자>", () => {
             it("- new Row(entity) : 생성 ", () => {
                 var table1 = new MetaTable('T1');
@@ -44,6 +72,7 @@ describe("[target: meta-row.js]", () => {
                 expect(row2['i2']).toBeDefined();
             });
             it("- new Row() : 예외(빈 엔티티) ", () => {
+                // var row = new MetaRow();
                 expect(() => new MetaRow()).toThrow('ES032');
             });
             it("- new Row() : 예외(빈 엔티티) ", () => {
@@ -210,6 +239,29 @@ describe("[target: meta-row.js]", () => {
                 /**
                  * MEMO: 로우 복사후 비교 확인
                  */
+            });
+        });
+        describe("예외 및 커버리지", () => {
+            
+            it("- 커버리지 : this.__SET$_keys() ", () => {
+                const table1 = new MetaTable('T1');
+                table1.columns.addValue('c1', 'V1');
+                const row1 = new MetaRow(table1);
+
+                row1.__SET$_keys(['cc1'], row1)
+                expect(row1._keys).toEqual(['cc1'])
+                row1.__SET$_keys(['ccc1'],)  // 접근금지
+                expect(row1._keys).toEqual(['cc1'])
+            });
+            it("- 커버리지 : this.__SET$_elements() ", () => {
+                const table1 = new MetaTable('T1');
+                table1.columns.addValue('c1', 'V1');
+                const row1 = new MetaRow(table1);
+
+                row1.__SET$_elements(['r1'], row1)
+                expect(row1._elements).toEqual(['r1'])
+                row1.__SET$_elements(['rr1'],)  // 접근금지
+                expect(row1._elements).toEqual(['r1'])
             });
         });
     });
