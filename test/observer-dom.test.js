@@ -15,7 +15,7 @@ describe("load: observer.js <Observer>", () => {
     //  it("- 예외 : 전체 로딩 안할 때", () => {
     //     require('../src/message');
 
-    //     expect(() => require('../src/meta-entity')).toThrow(/ES011/);
+    //     expect(() => require('../src/base-entity')).toThrow(/ES011/);
     // });
     it("- 예외 : Util 로딩이 안 된 경우", () => {
         require('../src/message');

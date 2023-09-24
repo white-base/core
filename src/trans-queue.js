@@ -41,7 +41,7 @@
         /**
          * 로우
          * @constructs _L.Collection.TransactionQueue
-         * @param {MetaEntity} p_entity 메타엔티티
+         * @param {BaseEntity} p_entity 메타엔티티
          */
         function TransactionQueue(p_collection) {
             
@@ -50,7 +50,7 @@
 
             /**
              * 로우의 소유 엔티티
-             * @member {MetaEntity} _L.Collection.TransactionQueue#queue
+             * @member {BaseEntity} _L.Collection.TransactionQueue#queue
              */
             Object.defineProperty(this, 'queue', 
             {

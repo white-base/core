@@ -6,7 +6,7 @@
 'use strict';
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}                = require('../src/meta-entity');
+const {BaseEntity}                = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const { MetaTable }       = require('../src/meta-table');
@@ -115,7 +115,7 @@ describe("[target: meta-table.js]", () => {
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaTable);
-                expect(types[1]).toBe(MetaEntity);
+                expect(types[1]).toBe(BaseEntity);
                 expect(types[2]).toBe(MetaElement);
                 expect(types[3]).toBe(MetaObject);
                 expect(types[4]).toBe(Object);
@@ -128,7 +128,7 @@ describe("[target: meta-table.js]", () => {
             //     expect(typeNames[4]).toBe('Object');
             //     expect(typeNames[3]).toBe('MetaObject');
             //     expect(typeNames[2]).toBe('MetaElement');
-            //     expect(typeNames[1]).toBe('MetaEntity');
+            //     expect(typeNames[1]).toBe('BaseEntity');
             //     expect(typeNames[0]).toBe('MetaTable');
             //     expect(typeNames.length).toBe(5);
             // });
@@ -142,7 +142,7 @@ describe("[target: meta-table.js]", () => {
                 expect(c.instanceOf('Object')).toBe(true);
                 expect(c.instanceOf('MetaObject')).toBe(true);
                 expect(c.instanceOf('MetaElement')).toBe(true);
-                expect(c.instanceOf('MetaEntity')).toBe(true);
+                expect(c.instanceOf('BaseEntity')).toBe(true);
                 expect(c.instanceOf('MetaTable')).toBe(true);
                 // false
                 expect(c.instanceOf('Array')).toBe(false);
@@ -156,14 +156,14 @@ describe("[target: meta-table.js]", () => {
                 expect(c.instanceOf(Object)).toBe(true);
                 expect(c.instanceOf(MetaObject)).toBe(true);
                 expect(c.instanceOf(MetaElement)).toBe(true);
-                expect(c.instanceOf(MetaEntity)).toBe(true);
+                expect(c.instanceOf(BaseEntity)).toBe(true);
                 expect(c.instanceOf(MetaTable)).toBe(true);
                 // false
                 expect(c.instanceOf(Array)).toBe(false);
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        describe("MetaEntity.clear() : <지우기 (rows)>", () => {
+        describe("BaseEntity.clear() : <지우기 (rows)>", () => {
             it("- clear() : 지우기 (rows) ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
@@ -178,7 +178,7 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.rows.count).toBe(0);
             });
         });
-        describe("MetaEntity.reset() <지우기 (rows, columns)>", () => {
+        describe("BaseEntity.reset() <지우기 (rows, columns)>", () => {
             it("- reset() : 지우기 (rows, columns) ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
@@ -193,7 +193,7 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.rows.count).toBe(0);
             });
         });        
-        describe("MetaEntity.newRow(): Row <MetaRow 생성>", () => {
+        describe("BaseEntity.newRow(): Row <MetaRow 생성>", () => {
             it("- newRow() : MetaRow 생성 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
@@ -213,7 +213,7 @@ describe("[target: meta-table.js]", () => {
                 expect(row['0']).toBe('R1');        
             });
         });
-        describe("MetaEntity.getValue(): row <value 얻기>", () => {
+        describe("BaseEntity.getValue(): row <value 얻기>", () => {
             it("- getValue() : row 얻기(단일) ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
@@ -251,7 +251,7 @@ describe("[target: meta-table.js]", () => {
                 expect(row[2]).toBe('R3');
             });
         });
-        describe("MetaEntity.setValue(row) <value 설정>", () => {
+        describe("BaseEntity.setValue(row) <value 설정>", () => {
             it("- setValue(row) : row 설정(단일) ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
@@ -286,7 +286,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
         
-        describe("MetaEntity.merge(entity, opt) <병합>", () => {
+        describe("BaseEntity.merge(entity, opt) <병합>", () => {
             it("- merge() : opt = 0 (같은 구조) ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T2');
@@ -698,7 +698,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
     
-        describe("MetaEntity.select(filter, args) <엔티티 조회>", () => {
+        describe("BaseEntity.select(filter, args) <엔티티 조회>", () => {
             it("- select() : 기본값 조회 ", () => {
                 var table1 = new MetaTable('T1');
                 // var json1 = { 
@@ -814,7 +814,7 @@ describe("[target: meta-table.js]", () => {
                 expect(table2.rows[1]['i1']).toBe(10);
             });
         });
-        describe("MetaEntity.load(rObj | mObj) <가져오기>", () => {
+        describe("BaseEntity.load(rObj | mObj) <가져오기>", () => {
             it("- load(rObj) : rObj 가져오기 ", () => {
                 var table1 = new MetaTable('TT1');
                 table1.columns.add('i1');
@@ -912,7 +912,7 @@ describe("[target: meta-table.js]", () => {
                 expect(() => table2.load(table1)).toThrow('ES022');
             });
         });
-        describe("MetaEntity.output(stringify?, space?, vOpt?): str <엔티티 출력>", () => {
+        describe("BaseEntity.output(stringify?, space?, vOpt?): str <엔티티 출력>", () => {
             it("- output() : getObject() 결과 비교  ", () => {
                 const table1 = new MetaTable('T1');
                 table1.columns.add('c1');
@@ -925,7 +925,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
 
-        describe("MetaEntity.read(obj | rObj, opt) <JSON 읽기>", () => {
+        describe("BaseEntity.read(obj | rObj, opt) <JSON 읽기>", () => {
             it("- read(obj, opt) : obj 읽기", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T2');
@@ -1055,7 +1055,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
 
-        describe("MetaEntity.readSchema(obj) <column 읽기(스키마)>", () => {
+        describe("BaseEntity.readSchema(obj) <column 읽기(스키마)>", () => {
             it("- readSchema(obj) : column 읽기(스키마) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
@@ -1161,7 +1161,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
         
-        describe("MetaEntity.readData() : <row 읽기(데이터)>", () => {
+        describe("BaseEntity.readData() : <row 읽기(데이터)>", () => {
             it("- readData() : row 가져오기(데이터) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
@@ -1191,7 +1191,7 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.rows[2]['i2']).toBe('R200');
             });
         });
-        describe("MetaEntity.write(): obj <쓰기>", () => {
+        describe("BaseEntity.write(): obj <쓰기>", () => {
             it("- 스키마/데이터 내보내기 (columns/rows) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
@@ -1231,7 +1231,7 @@ describe("[target: meta-table.js]", () => {
             });
         });
         
-        describe("MetaEntity.writeSchema(): obj <쓰기>", () => {
+        describe("BaseEntity.writeSchema(): obj <쓰기>", () => {
             it("- 스키마 내보내기 (columns) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 
@@ -1267,7 +1267,7 @@ describe("[target: meta-table.js]", () => {
                 expect(obj).toEqual(json2);
             });
         });
-        describe("MetaEntity.writeData(): obj <쓰기>", () => {
+        describe("BaseEntity.writeData(): obj <쓰기>", () => {
             it("- 스키마 내보내기 (columns) ", () => {
                 var table1 = new MetaTable('T1');
                 var json1 = { 

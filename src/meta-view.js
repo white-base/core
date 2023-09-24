@@ -9,7 +9,7 @@
     var Message;
     var Util;
     var MetaObject;
-    var MetaEntity;
+    var BaseEntity;
     var MetaViewColumnCollection;
     var PropertyCollection;
     var MetaRegistry;
@@ -27,7 +27,7 @@
         Util                        = require('./util');
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaObject                  = require('./meta-object').MetaObject;
-        MetaEntity                  = require('./meta-entity').MetaEntity;
+        BaseEntity                  = require('./base-entity').BaseEntity;
         MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
@@ -35,7 +35,7 @@
         Util                        = _global._L.Util;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaObject                  = _global._L.MetaObject;
-        MetaEntity                  = _global._L.MetaEntity;
+        BaseEntity                  = _global._L.BaseEntity;
         MetaViewColumnCollection    = _global._L.MetaViewColumnCollection;
         MetaRegistry                = _global._L.MetaRegistry;
     }
@@ -46,7 +46,7 @@
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
-    if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
+    if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
     if (typeof MetaViewColumnCollection === 'undefined') Message.error('ES011', ['MetaViewColumnCollection', 'meta-column']);
 
     //==============================================================
@@ -55,7 +55,7 @@
         /**
          * 뷰 엔티티
          * @constructs _L.Meta.Entity.MetaView
-         * @extends _L.Meta.Entity.MetaEntity
+         * @extends _L.Meta.Entity.BaseEntity
          * @param {*} p_name 
          * @param {*} p_baseEntity 
          */
@@ -69,7 +69,7 @@
             var columns;
             // var _baseEntity;
 
-            // if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('MetaEntity')) {
+            // if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('BaseEntity')) {
             //     baseCollection = p_baseEntity.columns;
             // }
 
@@ -111,7 +111,7 @@
             {
                 get: function() { return _baseEntity; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaEntity)) Message.error('ES032', ['_baseEntity', 'MetaEntity']);
+                    if (!(newValue instanceof BaseEntity)) Message.error('ES032', ['_baseEntity', 'BaseEntity']);
                     _baseEntity = newValue;
                 },
                 configurable: false,
@@ -137,10 +137,10 @@
 
         /**
          * 뷰 엔티티에 참조를 등록한다. (중복 제거후)
-         * @param {MetaEntity} p_entity 
+         * @param {BaseEntity} p_entity 
          */
         // MetaView.prototype._regRefer  = function(p_entity) {
-        //     if (!(p_entity instanceof MetaEntity)) Message.error('ES032', ['entity', 'MetaEntity']);
+        //     if (!(p_entity instanceof BaseEntity)) Message.error('ES032', ['entity', 'BaseEntity']);
         //     if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
         // };
         
@@ -268,7 +268,7 @@
         
         return MetaView;
     
-    }(MetaEntity));
+    }(BaseEntity));
     
     //--------------------------------------------------------------
     // implementation
@@ -285,14 +285,14 @@
             var _baseType = MetaView;
             /**
              * 기본 생성 타입
-             * @member {MetaColumnCollection} _L.Meta.Entity.MetaViewCollection#_baseType
+             * @member {BaseColumnCollection} _L.Meta.Entity.MetaViewCollection#_baseType
              */
             Object.defineProperty(this, '_baseType', 
             {
                 get: function() { return _baseType; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
-                        Message.error('ES032', ['_baseType', 'MetaEntity']);
+                    if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                        Message.error('ES032', ['_baseType', 'BaseEntity']);
                     }
                     _baseType = newValue;
                 },
@@ -323,7 +323,7 @@
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.
          * @param {string | MetaView} p_obj 
-         * @param {MetaColumnCollection?} p_baseEntity
+         * @param {BaseColumnCollection?} p_baseEntity
          * @returns {MetaView} 등록한 아이템
          * @example
          *  - string                    : 생성후   string      이름으로 등록 
@@ -335,8 +335,8 @@
             var view;
             var key;
 
-            if (p_baseEntity && !(p_baseEntity instanceof MetaEntity)) {
-                Message.error('ES032', ['baseEntity', 'MetaEntity']);
+            if (p_baseEntity && !(p_baseEntity instanceof BaseEntity)) {
+                Message.error('ES032', ['baseEntity', 'BaseEntity']);
             }
             if (p_obj instanceof MetaView && p_baseEntity) {
                 Message.error('ES016', ['baseEntity', 'MetaView']);

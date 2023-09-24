@@ -99,20 +99,20 @@ describe("[target: index.js]", () => {
             expect(typeof index.Meta.NamespaceManager).toBe('function');
         });
     });
-    describe(`MetaEntity, 
+    describe(`BaseEntity, 
     MetaView, MetaViewCollection, 
     MetaTable, MetaTableCollection,
-    MetaColumn, MetaColumnCollection, 
+    MetaColumn, BaseColumnCollection, 
     MetaViewColumnCollection, MetaTableColumnCollection,
     MetaRow, MetaRowCollection`, () => {
         it('- _L.* ', () => {
-            expect(typeof index.MetaEntity).toBe('function');
+            expect(typeof index.BaseEntity).toBe('function');
             expect(typeof index.MetaView).toBe('function');
             expect(typeof index.MetaViewCollection).toBe('function');
             expect(typeof index.MetaTable).toBe('function');
             expect(typeof index.MetaTableCollection).toBe('function');
             expect(typeof index.MetaColumn).toBe('function');
-            expect(typeof index.MetaColumnCollection).toBe('function');
+            expect(typeof index.BaseColumnCollection).toBe('function');
             expect(typeof index.MetaViewColumnCollection).toBe('function');
             expect(typeof index.MetaTableColumnCollection).toBe('function');
             expect(typeof index.MetaRow).toBe('function');
@@ -121,13 +121,13 @@ describe("[target: index.js]", () => {
         });
         it('- _L.Meta.Entity.* ', () => {
             expect(typeof index.Meta.Entity).toBe('object');
-            expect(typeof index.Meta.Entity.MetaEntity).toBe('function');
+            expect(typeof index.Meta.Entity.BaseEntity).toBe('function');
             expect(typeof index.Meta.Entity.MetaView).toBe('function');
             expect(typeof index.Meta.Entity.MetaViewCollection).toBe('function');
             expect(typeof index.Meta.Entity.MetaTable).toBe('function');
             expect(typeof index.Meta.Entity.MetaTableCollection).toBe('function');
             expect(typeof index.Meta.Entity.MetaColumn).toBe('function');
-            expect(typeof index.Meta.Entity.MetaColumnCollection).toBe('function');
+            expect(typeof index.Meta.Entity.BaseColumnCollection).toBe('function');
             expect(typeof index.Meta.Entity.MetaViewColumnCollection).toBe('function');
             expect(typeof index.Meta.Entity.MetaTableColumnCollection).toBe('function');
             expect(typeof index.Meta.Entity.MetaRow).toBe('function');

@@ -6,23 +6,23 @@
 'use strict';
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}                = require('../src/meta-entity');
+const {BaseEntity}                = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
 const { MetaTable }       = require('../src/meta-table');
 const { MetaView }        = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
-const { MetaColumn, MetaColumnCollection }              = require('../src/meta-column');
+const { MetaColumn, BaseColumnCollection }              = require('../src/meta-column');
 
 //==============================================================
 // test
 describe("[target: meta-column.js]", () => {
-    describe("MetaColumnCollection :: 클래스", () => {
+    describe("BaseColumnCollection :: 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
-        describe("MetaColumnCollection.initValue() <컬럼 value 초기화>", () => {
+        describe("BaseColumnCollection.initValue() <컬럼 value 초기화>", () => {
             it("- initValue(entity) : 컬렉션 전체값 초기화 ", () => {
                 var view1 = new MetaView('T1');
                 view1.columns.addValue('i1', 'V1');
@@ -37,7 +37,7 @@ describe("[target: meta-column.js]", () => {
             });
         });
 
-        describe("MetaColumnCollection.existAlias(key): bool <별칭 유무 검사>", () => {
+        describe("BaseColumnCollection.existAlias(key): bool <별칭 유무 검사>", () => {
             it("- existAlias(key) : 기본값 ", () => {
                 var view1 = new MetaView('T1');
                 view1.columns.addValue('i1', 'V1');
@@ -84,7 +84,7 @@ describe("[target: meta-column.js]", () => {
                 expect(view1.columns.existAlias('i3')).toBe(false);
             });
         });
-        describe("MetaColumnCollection.alias(key): MetaColumn <별칭으로 조회> ", () => {
+        describe("BaseColumnCollection.alias(key): MetaColumn <별칭으로 조회> ", () => {
             it("- alias(key) : 별칭으로 조회 하기 ", () => {
                 var view1 = new MetaView('T1');
                 view1.columns.addValue('i1', 'V1');
@@ -106,7 +106,7 @@ describe("[target: meta-column.js]", () => {
         });
         describe("예외, COVER ", () => {
             it("- 강제로  addValue() 제거  ", () => {
-                class TempCollection extends MetaColumnCollection {
+                class TempCollection extends BaseColumnCollection {
                     constructor(p_owner){
                         super(p_owner) 
                     }
@@ -125,7 +125,7 @@ describe("[target: meta-column.js]", () => {
 
     });
     describe("MetaTableColumnCollection :: 클래스", () => {
-        describe("MetaColumnCollection.removeAt(idx) <컬럼 삭제>", () => {
+        describe("BaseColumnCollection.removeAt(idx) <컬럼 삭제>", () => {
             it("- removeAt(name) : 아이템명으로 삭제 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.add('i1');
@@ -145,7 +145,7 @@ describe("[target: meta-column.js]", () => {
                 expect(()=>table1.columns.removeAt(1)).toThrow(/ES044/)
             });
         });
-        describe("MetaColumnCollection.addValue(name, value) <이름과 값으로 컬럼 추가>", () => {
+        describe("BaseColumnCollection.addValue(name, value) <이름과 값으로 컬럼 추가>", () => {
             it("- addValue(value, value) : 아이템명 + 값 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');
@@ -225,7 +225,7 @@ describe("[target: meta-column.js]", () => {
 
     });
     describe("MetaViewColumnCollection :: 테이블", () => {
-        describe("MetaColumnCollection.addValue(name, value) <이름과 값으로 컬럼 추가>", () => {
+        describe("BaseColumnCollection.addValue(name, value) <이름과 값으로 컬럼 추가>", () => {
             it("- addValue(name, value) : 아이템명 + 값 ", () => {
                 var view1 = new MetaView('T1');        // 독립형 생성
                 var view2 = new MetaView('T2', view1);    // 참조형 생성

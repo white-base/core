@@ -6,7 +6,7 @@
 'use strict';
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}                = require('../src/meta-entity');
+const {BaseEntity}                = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
@@ -14,6 +14,7 @@ const { MetaTable }       = require('../src/meta-table');
 const { MetaView }        = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
 const { MetaColumn }              = require('../src/meta-column');
+const { ObjectColumn }              = require('../src/object-column');
 
 //==============================================================
 // test
@@ -183,6 +184,7 @@ describe("[target: meta-row.js]", () => {
             });
             it("- getObject() : Element 객체 ", () => {
                 const a1 = new MetaTable('T1');
+                a1.columns._baseType = ObjectColumn;
                 a1.columns.add('a1');
                 a1.columns.add('a2');
                 var row = a1.newRow();
@@ -231,6 +233,7 @@ describe("[target: meta-row.js]", () => {
             });
             it("- setObject() : Element값", () => {
                 const a1 = new MetaTable('T1');
+                a1.columns._baseType = ObjectColumn;
                 a1.columns.add('a1');
                 a1.columns.add('a2');
                 const fun1 = function(){}

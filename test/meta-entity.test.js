@@ -6,7 +6,7 @@
 'use strict';
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}            = require('../src/meta-entity');
+const {BaseEntity}            = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
@@ -17,12 +17,12 @@ const { MetaColumn }        = require('../src/meta-column');
 
 //==============================================================
 // test
-describe("[target: meta-entity.js]", () => {
-    describe("MetaEntity :: 추상 클래스", () => {
+describe("[target: base-entity.js]", () => {
+    describe("BaseEntity :: 추상 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
-        describe("MetaEntity.rows <컬럼 속성>", () => {
+        describe("BaseEntity.rows <컬럼 속성>", () => {
             it("- this.rows : 타입 조회 ", () => {
                 var table1 = new MetaTable('T1');
         
@@ -35,7 +35,7 @@ describe("[target: meta-entity.js]", () => {
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaTable);
-                expect(types[1]).toBe(MetaEntity);
+                expect(types[1]).toBe(BaseEntity);
                 expect(types[2]).toBe(MetaElement);
                 expect(types[3]).toBe(MetaObject);
                 expect(types[4]).toBe(Object);
@@ -51,7 +51,7 @@ describe("[target: meta-entity.js]", () => {
                 expect(c.instanceOf('Object')).toBe(true);
                 expect(c.instanceOf('MetaObject')).toBe(true);
                 expect(c.instanceOf('MetaElement')).toBe(true);
-                expect(c.instanceOf('MetaEntity')).toBe(true);
+                expect(c.instanceOf('BaseEntity')).toBe(true);
                 // false
                 expect(c.instanceOf('MetaView')).toBe(false);
                 expect(c.instanceOf('Array')).toBe(false);
@@ -65,17 +65,17 @@ describe("[target: meta-entity.js]", () => {
                 expect(c.instanceOf(Object)).toBe(true);
                 expect(c.instanceOf(MetaObject)).toBe(true);
                 expect(c.instanceOf(MetaElement)).toBe(true);
-                expect(c.instanceOf(MetaEntity)).toBe(true);
+                expect(c.instanceOf(BaseEntity)).toBe(true);
                 // false
                 expect(c.instanceOf(MetaView)).toBe(false);
                 expect(c.instanceOf(Array)).toBe(false);
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        describe("MetaEntity.MetaEntity() <생성 : 추상클래스>", () => {
-            it("- new MetaEntity() : 예외 ", () => {
+        describe("BaseEntity.BaseEntity() <생성 : 추상클래스>", () => {
+            it("- new BaseEntity() : 예외 ", () => {
         
-                expect(()=> new MetaEntity('T1')).toThrow(/ES018/);
+                expect(()=> new BaseEntity('T1')).toThrow(/ES018/);
             });
         });
     });

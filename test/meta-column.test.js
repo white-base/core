@@ -6,13 +6,14 @@
 'use strict';
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}                = require('../src/meta-entity');
+const {BaseEntity}                = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
 const { MetaTable }       = require('../src/meta-table');
 const { MetaView }        = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
+const { BaseColumn }              = require('../src/base-column');
 const { MetaColumn }              = require('../src/meta-column');
 
 //==============================================================
@@ -77,10 +78,11 @@ describe("[target: meta-column.js ]", () => {
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaColumn);
-                expect(types[1]).toBe(MetaElement);
-                expect(types[2]).toBe(MetaObject);
-                expect(types[3]).toBe(Object);
-                expect(types.length).toBe(4);
+                expect(types[1]).toBe(BaseColumn);
+                expect(types[2]).toBe(MetaElement);
+                expect(types[3]).toBe(MetaObject);
+                expect(types[4]).toBe(Object);
+                expect(types.length).toBe(5);
             });
             // it("- getTypeNames() : array<string> ", () => {
             //     const c = new MetaColumn();
@@ -102,6 +104,7 @@ describe("[target: meta-column.js ]", () => {
                 expect(c.instanceOf('Object')).toBe(true);
                 expect(c.instanceOf('MetaObject')).toBe(true);
                 expect(c.instanceOf('MetaElement')).toBe(true);
+                expect(c.instanceOf('BaseColumn')).toBe(true);
                 expect(c.instanceOf('MetaColumn')).toBe(true);
                 // false
                 expect(c.instanceOf('Array')).toBe(false);
@@ -115,6 +118,7 @@ describe("[target: meta-column.js ]", () => {
                 expect(c.instanceOf(Object)).toBe(true);
                 expect(c.instanceOf(MetaObject)).toBe(true);
                 expect(c.instanceOf(MetaElement)).toBe(true);
+                expect(c.instanceOf(BaseColumn)).toBe(true);
                 expect(c.instanceOf(MetaColumn)).toBe(true);
                 // false
                 expect(c.instanceOf(Array)).toBe(false);
@@ -626,7 +630,7 @@ describe("[target: meta-column.js ]", () => {
 
                 expect(()=>c1._entity = 0).toThrow(/ES032/)
                 expect(()=>c1.default = {}).toThrow(/ES021/)
-                expect(()=>c1.value = {}).toThrow(/ES021/)
+                expect(()=>c1.value = {}).toThrow(/ES024/)
 
             });
             it("- 예외 : 설정 1", () => {   

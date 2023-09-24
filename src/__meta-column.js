@@ -11,10 +11,9 @@
     var Util;
     var Observer;
     var CustomError;
-    var MetaRegistry;
     var MetaElement;
-    var BaseColumn;
     var PropertyCollection;
+    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -29,7 +28,6 @@
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         MetaElement                 = require('./meta-element').MetaElement;
-        BaseColumn                  = require('./base-column').BaseColumn;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
@@ -38,7 +36,6 @@
         Observer                    = _global._L.Observer;
         CustomError                 = _global._L.CustomError;
         MetaElement                 = _global._L.MetaElement;
-        BaseColumn                  = _global._L.BaseColumn;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaRegistry                = _global._L.MetaRegistry;
     }
@@ -49,7 +46,6 @@
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
-    if (typeof BaseColumn === 'undefined') Message.error('ES011', ['BaseColumn', 'base-column']);
     if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);   // ~ Branch:
 
     //==============================================================
@@ -66,13 +62,13 @@
          * @param {Object} p_property 속성 객체
          */
         function MetaColumn(p_name, p_entity, p_property) {
-            _super.call(this, p_name, p_entity, [String, Number, Boolean]);
+            _super.call(this, p_name);
 
-            var __value       = null;   // 재정의
+            var __value       = null;
             var __event        = new Observer(this);
-            // var __key           = p_name;
+            var __key           = p_name;
             // var columnName;
-            // var _entity;
+            var _entity;
             var defaultValue  = null;
             var caption       = null;
             var isNotNull     = false;
@@ -115,117 +111,117 @@
                 enumerable: false,
             });        
             
-            // /**
-            //  * 컬렉션 키
-            //  * @member {BaseEntity} _L.Meta.Entity.MetaColumn#__key
-            //  */
-            // Object.defineProperty(this, '__key', 
-            // {
-            //     get: function() { return __key; },
-            //     // set: function(newValue) { 
-            //     //     if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
-            //     //     if (newValue.length <= 0) Message.error('ES062', ['__key.length', '0']);
-            //     //     __key = newValue;
-            //     // },
-            //     configurable: false,
-            //     enumerable: false,
-            // });
+            /**
+             * 컬렉션 키
+             * @member {BaseEntity} _L.Meta.Entity.MetaColumn#_entity
+             */
+            Object.defineProperty(this, '__key', 
+            {
+                get: function() { return __key; },
+                // set: function(newValue) { 
+                //     if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
+                //     if (newValue.length <= 0) Message.error('ES062', ['__key.length', '0']);
+                //     __key = newValue;
+                // },
+                configurable: false,
+                enumerable: false,
+            });
             
-            // /**
-            //  * 아이템 소유 엔티티
-            //  * @member {BaseEntity} _L.Meta.Entity.MetaColumn#_entity
-            //  */
-            // Object.defineProperty(this, '_entity', 
-            // {
-            //     get: function() { return _entity; },
-            //     set: function(newValue) { 
-            //         if (typeof newValue !== 'undefined' && !(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
-            //             Message.error('ES032', ['_entity', 'BaseEntity']);
-            //         }
-            //         _entity = newValue;
-            //     },
-            //     configurable: false,
-            //     enumerable: true
-            // });
+            /**
+             * 아이템 소유 엔티티
+             * @member {BaseEntity} _L.Meta.Entity.MetaColumn#_entity
+             */
+            Object.defineProperty(this, '_entity', 
+            {
+                get: function() { return _entity; },
+                set: function(newValue) { 
+                    if (typeof newValue !== 'undefined' && !(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                        Message.error('ES032', ['_entity', 'BaseEntity']);
+                    }
+                    _entity = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            });
 
 
 
 
-            // /**
-            //  * 엔티티의 아이템(속성) 컬렉션
-            //  * @member {string} _L.Meta.Entity.MetaColumn#columnName
-            //  */
-            // Object.defineProperty(this, 'columnName', 
-            // {
-            //     get: function() { return this._name; },
-            //     set: function(newValue) { 
-            //         if (newValue === this.columnName) return;
-            //         if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']); 
-            //         if (_entity && _entity.columns.existColumnName(newValue)) Message.error('ES042', [newValue, 'columnName']);
-            //         if (_entity && _entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
-            //         // columnName = newValue;
-            //         this.__SET$_name(newValue, this);
-            //     },
-            //     configurable: false,
-            //     enumerable: true
-            // });
+            /**
+             * 엔티티의 아이템(속성) 컬렉션
+             * @member {string} _L.Meta.Entity.MetaColumn#columnName
+             */
+            Object.defineProperty(this, 'columnName', 
+            {
+                get: function() { return this._name; },
+                set: function(newValue) { 
+                    if (newValue === this.columnName) return;
+                    if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']); 
+                    if (_entity && _entity.columns.existColumnName(newValue)) Message.error('ES042', [newValue, 'columnName']);
+                    if (_entity && _entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
+                    // columnName = newValue;
+                    this.__SET$_name(newValue, this);
+                },
+                configurable: false,
+                enumerable: true
+            });
 
-            // /**
-            //  * 아이템 별칭 (bind전송시, 데이터 수신후 설정시 활용함)
-            //  * 사용처 
-            //  * - Bind-command-ajax._execBind() : 데이터 전송시
-            //  * - BaseBind.setValue(row) : 로우값 을 엔티티에 설정시
-            //  * - getValue() : row 에 활용함
-            //  * 기본값 = name 값
-            //  * @member {String} _L.Meta.Entity.MetaColumn#alias
-            //  */
-            // Object.defineProperty(this, 'alias', 
-            // {
-            //     get: function() { return typeof alias === 'string' ? alias : this.columnName; },
-            //     set: function(newValue) { 
-            //        var entity = this._entity;
-            //        if(typeof newValue !== 'string') Message.error('ES021', ['alias', 'string']);
-            //        if (entity && entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
-            //        alias = newValue;
-            //     },
-            //     configurable: false,
-            //     enumerable: true
-            // }); 
+            /**
+             * 아이템 별칭 (bind전송시, 데이터 수신후 설정시 활용함)
+             * 사용처 
+             * - Bind-command-ajax._execBind() : 데이터 전송시
+             * - BaseBind.setValue(row) : 로우값 을 엔티티에 설정시
+             * - getValue() : row 에 활용함
+             * 기본값 = name 값
+             * @member {String} _L.Meta.Entity.MetaColumn#alias
+             */
+            Object.defineProperty(this, 'alias', 
+            {
+                get: function() { return typeof alias === 'string' ? alias : this.columnName; },
+                set: function(newValue) { 
+                   var entity = this._entity;
+                   if(typeof newValue !== 'string') Message.error('ES021', ['alias', 'string']);
+                   if (entity && entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
+                   alias = newValue;
+                },
+                configurable: false,
+                enumerable: true
+            }); 
 
 
 
-            // /**
-            //  * 아이템 기본값 (내부속성)
-            //  * @member {String | Number | Boolean} _L.Meta.Entity.MetaColumn#default
-            //  */
-            // Object.defineProperty(this, 'default', 
-            // {
-            //     get: function() { return defaultValue; },
-            //     set: function(newValue) { 
-            //         if(typeof newValue !== 'undefined' && newValue !== null 
-            //             &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
-            //                 Message.error('ES021', ['default', 'string | boolean | number']);
-            //             }
-            //         defaultValue = newValue; 
-            //     },
-            //     configurable: false,
-            //     enumerable: true
-            // });
+            /**
+             * 아이템 기본값 (내부속성)
+             * @member {String | Number | Boolean} _L.Meta.Entity.MetaColumn#default
+             */
+            Object.defineProperty(this, 'default', 
+            {
+                get: function() { return defaultValue; },
+                set: function(newValue) { 
+                    if(typeof newValue !== 'undefined' && newValue !== null 
+                        &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
+                            Message.error('ES021', ['default', 'string | boolean | number']);
+                        }
+                    defaultValue = newValue; 
+                },
+                configurable: false,
+                enumerable: true
+            });
 
-            // /**
-            //  * 아이템 설명 (내부속성)
-            //  * @member {String} _L.Meta.Entity.MetaColumn#caption
-            //  */
-            // Object.defineProperty(this, 'caption', 
-            // {
-            //     get: function() { return caption; },
-            //     set: function(newValue) { 
-            //         if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']); 
-            //         caption = newValue; 
-            //     },
-            //     configurable: false,
-            //     enumerable: true
-            // });
+            /**
+             * 아이템 설명 (내부속성)
+             * @member {String} _L.Meta.Entity.MetaColumn#caption
+             */
+            Object.defineProperty(this, 'caption', 
+            {
+                get: function() { return caption; },
+                set: function(newValue) { 
+                    if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']); 
+                    caption = newValue; 
+                },
+                configurable: false,
+                enumerable: true
+            });
 
             /**
              * 아이템 value의 Null 여부
@@ -299,7 +295,6 @@
             
             /**
              * 아이템 value
-             * @override 재정의함
              * @member {*} _L.Meta.Entity.MetaColumn#value
              */
             Object.defineProperty(this, 'value', 
@@ -344,13 +339,9 @@
                     else __val = val; 
 
                     __val = __val === null ? '' : __val;  // null 등록 오류 처리
-                    
-                    // POINT:
-                    // if(['number', 'string', 'boolean'].indexOf(typeof __val) < 0) {
-                    //     Message.error('ES021', ['value', 'number, string, boolean']);
-                    // }
-                    if (this._valueTypes.length > 0) Util.validType(__val, this._valueTypes);
-
+                    if(['number', 'string', 'boolean'].indexOf(typeof __val) < 0) {
+                        Message.error('ES021', ['value', 'number, string, boolean']);
+                    }
                     __value = __val;
                     // 검사 및 이벤트 발생
                     if (_oldVal !== __val && __val) this._onChanged(__val, _oldVal);
@@ -404,25 +395,25 @@
             
 
             // inner variable access
-            // this.__GET$alias = function(call) {
-            //     if (call instanceof MetaColumn) return alias;
-            // }
+            this.__GET$alias = function(call) {
+                if (call instanceof MetaColumn) return alias;
+            }
             this.__GET$__value = function(call) {
                 if (call instanceof MetaColumn) return __value;
             }
             this.__SET$__value = function(val, call) {
                 if (call instanceof MetaColumn) __value = val;
             }
-            // this.__SET$__key = function(val, call) {
-            //     if (call instanceof MetaColumn) __key = val;
-            // }
+            this.__SET$__key = function(val, call) {
+                if (call instanceof MetaColumn) __key = val;
+            }
 
             // BaseEntity 등록 & order(순서) 값 계산
-            // if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('BaseEntity')) {
-            //     _entity    = p_entity;
-            // }
+            if (p_entity && p_entity instanceof MetaElement && p_entity.instanceOf('BaseEntity')) {
+                _entity    = p_entity;
+            }
             
-            // this.columnName  = p_name || '';            
+            this.columnName  = p_name || '';            
             if (p_property) this._load(p_property);
         }
         Util.inherits(MetaColumn, _super);
@@ -447,8 +438,7 @@
             if (typeof p_property === 'object' ) {
                 for(var prop in p_property) {
                     if (p_property.hasOwnProperty(prop) &&
-                    [   '_entity', // REVIEW: _entity getObject/setObject 에서 한쪽으로 통일
-                    'default', 'caption', 
+                    [   '_entity', 'default', 'caption', 
                         'isNotNull', 'isNullPass', 'constraints', 
                         'value', 'getter', 'setter', 'alias', 'onChanged' 
                     ].indexOf(prop) > -1) {
@@ -506,19 +496,19 @@
                 obj.__subscribers = this.__event.__subscribers;
             }
             // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
-            // if (vOpt < 2 && vOpt > -1 && this._entity) {
-            //     obj._entity = MetaRegistry.createReferObject(this._entity);
-            // }
-            // obj.columnName = this.columnName;
-            // if (this.default !== null) obj.default = this.default;
-            // if (this.caption !== null) obj.caption = this.caption;            
+            if (vOpt < 2 && vOpt > -1 && this._entity) {
+                obj._entity = MetaRegistry.createReferObject(this._entity);
+            }
+            obj.columnName = this.columnName;
+            if (this.default !== null) obj.default = this.default;
+            if (this.caption !== null) obj.caption = this.caption;            
             if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
             if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;
             if (this.constraints.length > 0) obj.constraints = Util.deepCopy(this.constraints);
             if (this.getter !== null) obj.getter = this.getter;
             if (this.setter !== null) obj.setter = this.setter;
-            // if (this.__GET$alias(this) !== null) obj.alias = this.__GET$alias(this);
-            if (this.value !== null) obj.value = this.value;    // 오버라이딩
+            if (this.__GET$alias(this) !== null) obj.alias = this.__GET$alias(this);
+            if (this.value !== null) obj.value = this.value;
             return obj;                        
         };
 
@@ -536,21 +526,21 @@
             if (p_oGuid.__subscribers) {
                 this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             }
-            // if (p_oGuid._entity) {
-            //     entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
-            //     if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
-            //     this._entity = entity;
-            // } 
+            if (p_oGuid._entity) {
+                entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
+                if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
+                this._entity = entity;
+            } 
             // if (p_oGuid.columnName) this.columnName = p_oGuid.columnName;
-            // this.columnName = p_oGuid.columnName;
-            // if (p_oGuid.default) this.default = p_oGuid.default;
-            // if (p_oGuid.caption) this.caption = p_oGuid.caption;
+            this.columnName = p_oGuid.columnName;
+            if (p_oGuid.default) this.default = p_oGuid.default;
+            if (p_oGuid.caption) this.caption = p_oGuid.caption;
             if (p_oGuid.isNotNull) this.isNotNull = p_oGuid.isNotNull;
             if (p_oGuid.isNullPass) this.isNullPass = p_oGuid.isNullPass;
             if (p_oGuid.constraints) this.constraints = p_oGuid.constraints;
             if (p_oGuid.getter) this.getter = p_oGuid.getter;
             if (p_oGuid.setter) this.setter = p_oGuid.setter;
-            // if (p_oGuid.alias) this.alias = p_oGuid.alias;
+            if (p_oGuid.alias) this.alias = p_oGuid.alias;
             if (p_oGuid.value) this.value = p_oGuid.value;
         };
 
@@ -680,7 +670,7 @@
 
         return MetaColumn;
     
-    }(BaseColumn));
+    }(MetaElement));
 
     //--------------------------------------------------------------
     // implementation
@@ -708,7 +698,7 @@
                 },
                 set: function(newValue) { 
                     if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    if (!(new newValue() instanceof BaseColumn)) Message.error('ES032', ['_baseType', 'BaseColumn']);
+                    if (!(new newValue() instanceof MetaColumn)) Message.error('ES032', ['_baseType', 'MetaColumn']);
                     _baseType = newValue;
                 },
                 enumerable: false,

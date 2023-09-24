@@ -10,7 +10,7 @@ const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {MetaEntity}                            = require('../src/meta-entity');
+const {BaseEntity}                            = require('../src/base-entity');
 const { MetaTable, MetaTableCollection }    = require('../src/meta-table');
 const { MetaView, MetaViewCollection }      = require('../src/meta-view');
 const { MetaRow }           = require('../src/meta-row');
@@ -860,9 +860,9 @@ describe("[target: meta-set.js]", () => {
                 const v2 = set1.views.V2;
                 const v3 = set1.views.V3;
 
-                // const tObj1 = MetaEntity._transformObject(gObj1)
-                // const tObj2 = MetaEntity._transformObject(gObj2)
-                // const tObj3 = MetaEntity._transformObject(gObj3)
+                // const tObj1 = BaseEntity._transformObject(gObj1)
+                // const tObj2 = BaseEntity._transformObject(gObj2)
+                // const tObj3 = BaseEntity._transformObject(gObj3)
 
                 expect(set1.views.count).toBe(3);
                 expect(v1.viewName).toBe('V1');

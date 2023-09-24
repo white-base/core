@@ -8,7 +8,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var Util;
-    var MetaEntity;
+    var BaseEntity;
     var PropertyCollection;
     var MetaTableColumnCollection;
     var MetaRegistry;
@@ -25,14 +25,14 @@
         Message                     = require('./message').Message;
         Util                        = require('./util');
         PropertyCollection          = require('./collection-property').PropertyCollection;
-        MetaEntity                  = require('./meta-entity').MetaEntity;
+        BaseEntity                  = require('./base-entity').BaseEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
         Message                     = _global._L.Message;
         Util                        = _global._L.Util;
         PropertyCollection          = _global._L.PropertyCollection;
-        MetaEntity                  = _global._L.MetaEntity;
+        BaseEntity                  = _global._L.BaseEntity;
         MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
         MetaRegistry                = _global._L.MetaRegistry;
     }
@@ -42,7 +42,7 @@
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
-    if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
+    if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
     if (typeof MetaTableColumnCollection === 'undefined') Message.error('ES011', ['MetaTableColumnCollection', 'meta-column']);
 
     //==============================================================
@@ -53,7 +53,7 @@
         /**
          * 테이블 엔티티
          * @constructs _L.Meta.Entity.MetaTable
-         * @extends _L.Meta.Entity.MetaEntity
+         * @extends _L.Meta.Entity.BaseEntity
          * @param {*} p_name 
          */
         function MetaTable(p_name) {
@@ -227,7 +227,7 @@
 
         return MetaTable;
     
-    }(MetaEntity));
+    }(BaseEntity));
     
     //--------------------------------------------------------------
     // implementation
@@ -244,14 +244,14 @@
             var _baseType = MetaTable;
             /**
              * 기본 생성 타입
-             * @member {MetaColumnCollection} _L.Meta.Entity.MetaTableCollection#_baseType
+             * @member {BaseColumnCollection} _L.Meta.Entity.MetaTableCollection#_baseType
              */
             Object.defineProperty(this, '_baseType', 
             {
                 get: function() { return _baseType; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaEntity'))) {
-                        Message.error('ES032', ['_baseType', 'MetaEntity']);
+                    if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                        Message.error('ES032', ['_baseType', 'BaseEntity']);
                     }
                     _baseType = newValue;
                 },

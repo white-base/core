@@ -10,13 +10,13 @@ var ArrayCollection             = require("./src/collection-array").ArrayCollect
 var PropertyCollection          = require("./src/collection-property").PropertyCollection;
 var MetaObject                  = require("./src/meta-object").MetaObject;
 var MetaElement                 = require("./src/meta-element").MetaElement;
-var MetaEntity                  = require('./src/meta-entity').MetaEntity;
+var BaseEntity                  = require('./src/base-entity').BaseEntity;
 var MetaView                    = require('./src/meta-view').MetaView;
 var MetaViewCollection          = require('./src/meta-view').MetaViewCollection;
 var MetaTable                   = require('./src/meta-table').MetaTable;
 var MetaTableCollection         = require('./src/meta-table').MetaTableCollection;
 var MetaColumn                  = require('./src/meta-column').MetaColumn;
-var MetaColumnCollection        = require('./src/meta-column').MetaColumnCollection;
+var BaseColumnCollection        = require('./src/meta-column').BaseColumnCollection;
 var MetaViewColumnCollection    = require('./src/meta-column').MetaViewColumnCollection;
 var MetaTableColumnCollection   = require('./src/meta-column').MetaTableColumnCollection;
 var MetaRow                     = require('./src/meta-row').MetaRow;
@@ -48,13 +48,13 @@ module.exports = {
     PropertyCollection: PropertyCollection,
     MetaObject: MetaObject,
     MetaElement: MetaElement,
-    MetaEntity: MetaEntity,
+    BaseEntity: BaseEntity,
     MetaView: MetaView,
     MetaViewCollection: MetaViewCollection,
     MetaTable: MetaTable,
     MetaTableCollection: MetaTableCollection,
     MetaColumn: MetaColumn,
-    MetaColumnCollection: MetaColumnCollection,
+    BaseColumnCollection: BaseColumnCollection,
     MetaViewColumnCollection: MetaViewColumnCollection,
     MetaTableColumnCollection: MetaTableColumnCollection,
     MetaRow: MetaRow,
@@ -93,13 +93,13 @@ module.exports = {
         MetaRegistry: MetaRegistry,
         NamespaceManager: NamespaceManager,        
         Entity: {
-            MetaEntity: MetaEntity,
+            BaseEntity: BaseEntity,
             MetaView: MetaView,
             MetaViewCollection: MetaViewCollection,
             MetaTable: MetaTable,
             MetaTableCollection: MetaTableCollection,
             MetaColumn: MetaColumn,
-            MetaColumnCollection: MetaColumnCollection,
+            BaseColumnCollection: BaseColumnCollection,
             MetaViewColumnCollection: MetaViewColumnCollection,
             MetaTableColumnCollection: MetaTableColumnCollection,
             MetaRow: MetaRow,

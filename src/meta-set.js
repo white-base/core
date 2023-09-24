@@ -13,7 +13,7 @@
     var ISerialize;
     var ITransaction;
     var MetaElement;
-    var MetaEntity;
+    var BaseEntity;
     var MetaTableCollection;
     var MetaViewCollection;
     var MetaRegistry;
@@ -35,7 +35,7 @@
         ISerialize                  = require('./i-serialize').ISerialize;
         ITransaction                = require('./i-transaction').ITransaction;
         MetaElement                 = require('./meta-element').MetaElement;
-        MetaEntity                  = require('./meta-entity').MetaEntity;
+        BaseEntity                  = require('./base-entity').BaseEntity;
         MetaTableCollection         = require('./meta-table').MetaTableCollection;
         MetaViewCollection          = require('./meta-view').MetaViewCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
@@ -48,7 +48,7 @@
         ISerialize                  = _global._L.ISerialize;
         ITransaction                = _global._L.ITransaction;
         MetaElement                 = _global._L.MetaElement;
-        MetaEntity                  = _global._L.MetaEntity;
+        BaseEntity                  = _global._L.BaseEntity;
         MetaTableCollection         = _global._L.MetaTableCollection;
         MetaViewCollection          = _global._L.MetaViewCollection;
         MetaRegistry                = _global._L.MetaRegistry;
@@ -64,7 +64,7 @@
     if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
     if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
-    if (typeof MetaEntity === 'undefined') Message.error('ES011', ['MetaEntity', 'meta-entity']);
+    if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
     if (typeof MetaTableCollection === 'undefined') Message.error('ES011', ['MetaTableCollection', 'meta-table']);
     if (typeof MetaViewCollection === 'undefined') Message.error('ES011', ['MetaViewCollection', 'meta-view']);
 
@@ -175,7 +175,7 @@
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var table = p_oGuid['_elem'][i];
                     var key = p_oGuid['_key'][i] || table.name;
-                    obj[key] = MetaEntity._transformSchema(table);
+                    obj[key] = BaseEntity._transformSchema(table);
                 }
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
@@ -185,7 +185,7 @@
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var view = p_oGuid['_elem'][i];
                     var key = p_oGuid['_key'][i] || view.name;
-                    obj[key] = MetaEntity._transformSchema(view);
+                    obj[key] = BaseEntity._transformSchema(view);
                 }
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
@@ -201,7 +201,7 @@
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;
 
-            if (!(p_metaSet instanceof MetaEntity)) Message.error('ES032', ['metaSet', 'MetaSet']);
+            if (!(p_metaSet instanceof BaseEntity)) Message.error('ES032', ['metaSet', 'MetaSet']);
             if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
 
             if (p_metaSet.tables) loadEntity(p_metaSet.tables, this.tables); 

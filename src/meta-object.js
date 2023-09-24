@@ -219,6 +219,7 @@
 
         /**
          * 메타 객체를 설정한다
+         * REVIEW: setObject 시점에 복제해서 사용 검토
          * @virtual
          * @param {object} p_oGuid 레벨 옵션
          */

@@ -29,11 +29,11 @@
     var IObject;
     var ITransaction;
     var MetaColumn;
-    var MetaColumnCollection;
+    var BaseColumnCollection;
     var MetaViewColumnCollection;
     var MetaTableColumnCollection;
     var MetaElement;
-    var MetaEntity;
+    var BaseEntity;
     var MetaObject;
     var MetaRow;
     var MetaRowCollection;
@@ -79,11 +79,11 @@
         IObject                     = require('./i-object').IObject;
         ITransaction                = require('./i-transaction').ITransaction;
         MetaColumn                  = require('./meta-column').MetaColumn;
-        MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
+        BaseColumnCollection        = require('./meta-column').BaseColumnCollection;
         MetaViewColumnCollection    = require('./meta-column').MetaViewColumnCollection;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
         MetaElement                 = require('./meta-element').MetaElement;
-        MetaEntity                  = require('./meta-entity').MetaEntity;
+        BaseEntity                  = require('./base-entity').BaseEntity;
         MetaObject                  = require('./meta-object').MetaObject;
         MetaRow                     = require('./meta-row').MetaRow;
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
@@ -126,10 +126,10 @@
         MetaRegistry.registerClass(IObject, IObject._NS, IObject.name);
         MetaRegistry.registerClass(ITransaction, ITransaction._NS, ITransaction.name);
         MetaRegistry.registerClass(MetaColumn, MetaColumn._NS, MetaColumn.name);
-        MetaRegistry.registerClass(MetaColumnCollection, MetaColumnCollection._NS, MetaColumnCollection.name);
+        MetaRegistry.registerClass(BaseColumnCollection, BaseColumnCollection._NS, BaseColumnCollection.name);
         MetaRegistry.registerClass(MetaViewColumnCollection, MetaViewColumnCollection._NS, MetaViewColumnCollection.name);
         MetaRegistry.registerClass(MetaTableColumnCollection, MetaTableColumnCollection._NS, MetaTableColumnCollection.name);
-        MetaRegistry.registerClass(MetaEntity, MetaEntity._NS, MetaEntity.name);
+        MetaRegistry.registerClass(BaseEntity, BaseEntity._NS, BaseEntity.name);
         MetaRegistry.registerClass(MetaRow, MetaRow._NS, MetaRow.name, MetaRow);
         MetaRegistry.registerClass(MetaRowCollection, MetaRowCollection._NS, MetaRowCollection.name);
         MetaRegistry.registerClass(MetaSet, MetaSet._NS, MetaSet.name, MetaSet);
@@ -152,10 +152,10 @@
     Meta.MetaObject
     Meta.MetaElement
     Meta.Entity.MetaColumn
-    Meta.Entity.MetaColumnCollection
+    Meta.Entity.BaseColumnCollection
     Meta.Entity.MetaViewColumnCollection
     Meta.Entity.MetaTableColumnCollection
-    Meta.Entity.MetaEntity
+    Meta.Entity.BaseEntity
     Meta.Entity.MetaRow
     Meta.Entity.MetaRowCollection
     Meta.Entity.MetaSet

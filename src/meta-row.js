@@ -58,7 +58,7 @@
          * 메타 로우
          * @constructs _L.Meta.Entity.MetaRow
          * @extends _L.Meta.MetaObject
-         * @param {MetaEntity} p_entity 메타엔티티
+         * @param {BaseEntity} p_entity 메타엔티티
          */
         function MetaRow(p_entity) {
             _super.call(this);
@@ -85,15 +85,15 @@
             /**
              * 로우의 소유 엔티티
              * // REVIEW: 엔티티는 설정할 수 없어야함??
-             * @member {MetaEntity} _L.Meta.Entity.MetaRow#_entity
+             * @member {BaseEntity} _L.Meta.Entity.MetaRow#_entity
              */
             Object.defineProperty(this, '_entity', 
             {
                 get: function() { return _entity; },
                 // set: function(newValue) {
                 //     if (newValue === null) return _entity = null;
-                //     if (typeof newValue !== 'undefined' && !(newValue instanceof MetaObject && newValue.instanceOf('MetaEntity'))) {
-                //         Message.error('ES032', ['_entity', 'MetaEntity']);
+                //     if (typeof newValue !== 'undefined' && !(newValue instanceof MetaObject && newValue.instanceOf('BaseEntity'))) {
+                //         Message.error('ES032', ['_entity', 'BaseEntity']);
                 //     }
                 //     if (this.count > 0) Message.error('ES045', ['MetaRow', '_entity']);
                 //     _entity = newValue;
@@ -186,9 +186,9 @@
                 if (call instanceof MetaRow) _entity = val;    // 상속접근 허용
             };
             
-            // MetaEntity 등록 & order(순서) 값 계산
-            if (!(p_entity instanceof MetaObject && p_entity.instanceOf('MetaEntity'))) {
-                Message.error('ES032', ['entity', 'MetaEntity']);
+            // BaseEntity 등록 & order(순서) 값 계산
+            if (!(p_entity instanceof MetaObject && p_entity.instanceOf('BaseEntity'))) {
+                Message.error('ES032', ['entity', 'BaseEntity']);
             }
             
             // 설정
@@ -210,6 +210,11 @@
                     get: function() { return _elements[p_idx]; },
                     set: function(newValue) { 
                         var oldValue = _elements[p_idx];
+                        var column;
+                        
+                        if (_entity && _entity.columns[p_idx]) column = _entity.columns[p_idx];
+                        if (column && column._valueTypes.length > 0) Util.validType(newValue, column._valueTypes);
+
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (_entity && !_entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
@@ -407,7 +412,7 @@
 
        /**
          * 로우를 복제한다.
-         * @param {MetaEntity?} p_entity 대상의 엔티티
+         * @param {BaseEntity?} p_entity 대상의 엔티티
          * @returns 
          */
         MetaRow.prototype.clone  = function(p_entity) {

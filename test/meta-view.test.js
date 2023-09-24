@@ -6,7 +6,7 @@
 'use strict';
 const {MetaObject}              = require('../src/meta-object');
 const {MetaElement}             = require('../src/meta-element');
-const {MetaEntity}              = require('../src/meta-entity');
+const {BaseEntity}              = require('../src/base-entity');
 const {IObject}                 = require('../src/i-object');
 const {IMarshal}                = require('../src/i-marshal');
 const Util                      = require('../src/util');
@@ -93,7 +93,7 @@ describe("[target: meta-view.js]", () => {
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaView);
-                expect(types[1]).toBe(MetaEntity);
+                expect(types[1]).toBe(BaseEntity);
                 expect(types[2]).toBe(MetaElement);
                 expect(types[3]).toBe(MetaObject);
                 expect(types[4]).toBe(Object);
@@ -109,7 +109,7 @@ describe("[target: meta-view.js]", () => {
                 expect(c.instanceOf('Object')).toBe(true);
                 expect(c.instanceOf('MetaObject')).toBe(true);
                 expect(c.instanceOf('MetaElement')).toBe(true);
-                expect(c.instanceOf('MetaEntity')).toBe(true);
+                expect(c.instanceOf('BaseEntity')).toBe(true);
                 expect(c.instanceOf('MetaView')).toBe(true);
                 // false
                 expect(c.instanceOf('Array')).toBe(false);
@@ -123,14 +123,14 @@ describe("[target: meta-view.js]", () => {
                 expect(c.instanceOf(Object)).toBe(true);
                 expect(c.instanceOf(MetaObject)).toBe(true);
                 expect(c.instanceOf(MetaElement)).toBe(true);
-                expect(c.instanceOf(MetaEntity)).toBe(true);
+                expect(c.instanceOf(BaseEntity)).toBe(true);
                 expect(c.instanceOf(MetaView)).toBe(true);
                 // false
                 expect(c.instanceOf(Array)).toBe(false);
                 expect(c.instanceOf(String)).toBe(false);
             });
         });
-        describe("MetaEntity.clear() <데이터 지우기>", () => {
+        describe("BaseEntity.clear() <데이터 지우기>", () => {
             it("- clear() : 독립, base참조, ref 참조 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -167,7 +167,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.reset() <전체 초기화>", () => {
+        describe("BaseEntity.reset() <전체 초기화>", () => {
             it("- reset() : 독립, base참조, ref 참조 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -253,7 +253,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.newRow() <Metarow 생성>", () => {
+        describe("BaseEntity.newRow() <Metarow 생성>", () => {
             it("- newRow() : owner, base, ref ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -274,7 +274,7 @@ describe("[target: meta-view.js]", () => {
                 expect(view3.rows[0]['c3']).toBe('R3');
             });
         });
-        describe("MetaEntity.getValue() <value 얻기>", () => {
+        describe("BaseEntity.getValue() <value 얻기>", () => {
             it("- getValue() : add() 통해서 등록  ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -327,7 +327,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.setValue(row) <value 설정>", () => {
+        describe("BaseEntity.setValue(row) <value 설정>", () => {
             it("- setValue(row) : 소유처에 설정(단일) ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -400,7 +400,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.merge(entity, opt) <병합>", () => {
+        describe("BaseEntity.merge(entity, opt) <병합>", () => {
             it("- merge(view, 0) : 다른 구조 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.addValue('c1', 'R1');
@@ -536,7 +536,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.select(filter, args) <뷰 조회>", () => {
+        describe("BaseEntity.select(filter, args) <뷰 조회>", () => {
             it("- select() : 기본값 조회 ", () => {
                 var view1 = new MetaView('V1');
                 var json1 = { 
@@ -616,7 +616,7 @@ describe("[target: meta-view.js]", () => {
             });
         });
 
-        describe("MetaEntity.load() <가져오기>", () => {
+        describe("BaseEntity.load() <가져오기>", () => {
             it("- load(str) : str로 가져오기 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -655,7 +655,7 @@ describe("[target: meta-view.js]", () => {
             });
 
         });
-        describe("MetaEntity.output() <내보내기>", () => {
+        describe("BaseEntity.output() <내보내기>", () => {
             it("- output() : getObject() 결과 비교  ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -667,7 +667,7 @@ describe("[target: meta-view.js]", () => {
                 expect(str1).toBe(str2);
             });
         });
-        describe("MetaEntity.read(view | oGuid | oSch, rOpt) <읽기>", () => {
+        describe("BaseEntity.read(view | oGuid | oSch, rOpt) <읽기>", () => {
             it("- read(view, 3) : 엔티티 읽기 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.add('c1');
@@ -881,7 +881,7 @@ describe("[target: meta-view.js]", () => {
              * - 참조형 스키마 로딩 => metaSet에서 의미있음 TODO: metaSet test 에 추가
              */
         });
-        describe("MetaEntity.readSchema() <스카마 읽기>", () => {
+        describe("BaseEntity.readSchema() <스카마 읽기>", () => {
             it("- readSchema() : 예외 ", () => {
                 const v1 = new MetaView('V1')
 
@@ -893,7 +893,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.readData() <데이터 읽기>", () => {
+        describe("BaseEntity.readData() <데이터 읽기>", () => {
             it("- readData() :  예외", () => {
                 const v1 = new MetaView('V1')
 
@@ -905,7 +905,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.write() <쓰기>", () => {
+        describe("BaseEntity.write() <쓰기>", () => {
             it("- write(0) : 기본값 ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.addValue('c1', 'V1');
@@ -1114,7 +1114,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.writeSchema() <스키마 쓰기>", () => {
+        describe("BaseEntity.writeSchema() <스키마 쓰기>", () => {
             it("- writeSchema() :  ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.addValue('c1', 'V1');
@@ -1175,7 +1175,7 @@ describe("[target: meta-view.js]", () => {
                  */
             });
         });
-        describe("MetaEntity.writeData() <데이터 쓰기>", () => {
+        describe("BaseEntity.writeData() <데이터 쓰기>", () => {
             it("- writeData() :  ", () => {
                 const view1 = new MetaView('V1');
                 view1.columns.addValue('c1', 'V1');

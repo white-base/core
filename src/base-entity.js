@@ -16,7 +16,7 @@
     var ISerialize;
     var MetaRowCollection;
     var MetaRow;
-    var MetaColumnCollection;
+    var BaseColumnCollection;
     var MetaRegistry;
 
     //==============================================================
@@ -39,7 +39,7 @@
         MetaElement                 = require('./meta-element').MetaElement;
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
         MetaRow                     = require('./meta-row').MetaRow;
-        MetaColumnCollection        = require('./meta-column').MetaColumnCollection;
+        BaseColumnCollection        = require('./meta-column').BaseColumnCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
@@ -53,7 +53,7 @@
         MetaElement                 = _global._L.MetaElement;
         MetaRowCollection           = _global._L.MetaRowCollection;
         MetaRow                     = _global._L.MetaRow;
-        MetaColumnCollection        = _global._L.MetaColumnCollection;
+        BaseColumnCollection        = _global._L.BaseColumnCollection;
         MetaRegistry                = _global._L.MetaRegistry;
     }
 
@@ -70,21 +70,21 @@
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     if (typeof MetaRowCollection === 'undefined') Message.error('ES011', ['MetaRowCollection', 'meta-row']);
     if (typeof MetaRow === 'undefined') Message.error('ES011', ['MetaRow', 'meta-row']);
-    if (typeof MetaColumnCollection === 'undefined') Message.error('ES011', ['MetaColumnCollection', 'meta-column']);
+    if (typeof BaseColumnCollection === 'undefined') Message.error('ES011', ['BaseColumnCollection', 'meta-column']);
 
     //==============================================================
     // 4. module implementation   
-    var MetaEntity  = (function (_super) {
+    var BaseEntity  = (function (_super) {
         /**
          * 엔티티
-         * @constructs _L.Meta.Entity.MetaEntity
+         * @constructs _L.Meta.Entity.BaseEntity
          * @extends _L.Meta.MetaElement
          * @implements {_L.Interface.IGroupControl}
          * @implements {_L.Interface.IAllControl}
          * @param {*} p_name 
          * @param {*} p_metaSet 
          */
-        function MetaEntity(p_name) {
+        function BaseEntity(p_name) {
             _super.call(this, p_name);
 
             var _metaSet = null;
@@ -93,7 +93,7 @@
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
-             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#_metaSet
+             * @member {BaseColumnCollection} _L.Meta.Entity.BaseEntity#_metaSet
              */
             Object.defineProperty(this, '_metaSet', 
             {
@@ -110,13 +110,13 @@
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
-             * @member {MetaColumnCollection} _L.Meta.Entity.MetaEntity#columns
+             * @member {BaseColumnCollection} _L.Meta.Entity.BaseEntity#columns
              */
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { return columns; },
                 // set: function(newValue) { 
-                //     if (!(newValue instanceof MetaColumnCollection)) Message.error('ES032', ['columns', 'MetaColumnCollection']);
+                //     if (!(newValue instanceof BaseColumnCollection)) Message.error('ES032', ['columns', 'BaseColumnCollection']);
                 //     columns = newValue;
                 // },
                 configurable: true, // 하위에서 재정의 해야함
@@ -125,7 +125,7 @@
             
             /**
              * 엔티티의 데이터(로우) 컬렉션
-             * @member {MetaRowCollection} _L.Meta.Entity.MetaEntity#rows
+             * @member {MetaRowCollection} _L.Meta.Entity.BaseEntity#rows
              */
             Object.defineProperty(this, 'rows', 
             {
@@ -136,14 +136,14 @@
 
             Util.implements(this, IGroupControl, ISchemaControl, IImportControl, IExportControl, ISerialize);
         }
-        Util.inherits(MetaEntity, _super);
+        Util.inherits(BaseEntity, _super);
 
-        MetaEntity._NS = 'Meta.Entity';          // namespace
-        MetaEntity._PARAMS = ['name'];         // creator parameter
-        MetaEntity._ABSCRACT = true;
+        BaseEntity._NS = 'Meta.Entity';          // namespace
+        BaseEntity._PARAMS = ['name'];         // creator parameter
+        BaseEntity._ABSCRACT = true;
 
         // 3가지 타입 입력
-        MetaEntity._transformSchema  = function(p_oGuid) {
+        BaseEntity._transformSchema  = function(p_oGuid) {
             var _this = this;
             var obj  = {
                 columns: null,
@@ -218,23 +218,23 @@
                 return arr;
             }
         };
-        MetaEntity._isSchema  = function(p_oSch) {
+        BaseEntity._isSchema  = function(p_oSch) {
             if (p_oSch === null || typeof p_oSch !== 'object') return false;
             if (p_oSch['columns'] || p_oSch['rows']) return true;
             return false;
         };
 
         /**
-         * MetaEntity 를 불러(로드)온다.
+         * BaseEntity 를 불러(로드)온다.
          * @private
          * @param {*} p_object 대상 엔티티
          * @param {*} p_option 옵션
          */
-        MetaEntity.prototype._readEntity = function(p_entity, p_option) {
+        BaseEntity.prototype._readEntity = function(p_entity, p_option) {
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
             var _this = this;
 
-            if (!(p_entity instanceof MetaEntity)) Message.error('ES032', ['entity', 'MetaEntity']);
+            if (!(p_entity instanceof BaseEntity)) Message.error('ES032', ['entity', 'BaseEntity']);
             if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
             if (opt % 2 === 1) loadColumn(); // opt: 1, 3
             if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
@@ -264,7 +264,7 @@
             }
         };
 
-        MetaEntity.prototype._buildEntity = function(p_entity, p_callback, p_items) {
+        BaseEntity.prototype._buildEntity = function(p_entity, p_callback, p_items) {
             var orignal = this.clone();
             var columnName;
 
@@ -310,7 +310,7 @@
             }
         };
 
-        MetaEntity.prototype._readSchema  = function(p_obj, p_createRow, p_origin) {
+        BaseEntity.prototype._readSchema  = function(p_obj, p_createRow, p_origin) {
             var _this = this;
             var obj = p_obj;
             var columns;
@@ -388,7 +388,7 @@
          * @virtual
          * @returns {object}
          */
-        MetaEntity.prototype.getObject = function(p_vOpt, p_origin) {
+        BaseEntity.prototype.getObject = function(p_vOpt, p_origin) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
             var origin = p_origin ? p_origin : obj;
@@ -403,12 +403,12 @@
         /** 
          * 아이템과 로우를 초기화 한다.
          */
-        MetaEntity.prototype.clear = function() {
+        BaseEntity.prototype.clear = function() {
             // this.columns.clear();
             this.rows.clear();
         };
 
-        MetaEntity.prototype.reset = function() {
+        BaseEntity.prototype.reset = function() {
             this.rows.clear();
             this.columns.clear();
 
@@ -418,7 +418,7 @@
         /**
          * 새로운 MetaRow 를 추가한다.
          */
-        MetaEntity.prototype.newRow  = function() {
+        BaseEntity.prototype.newRow  = function() {
             return new MetaRow(this);
         };
 
@@ -426,7 +426,7 @@
          * 아아템의 value을 MetaRow 형식으로 얻는다.
          * @returns {MetaRow}
          */
-        MetaEntity.prototype.getValue  = function() {
+        BaseEntity.prototype.getValue  = function() {
             var row = this.newRow();
             
             for(var i = 0; this.columns.count > i; i++) {
@@ -439,7 +439,7 @@
          * MetaRow 의 값을 아이템의 value에 설정한다.
          * @param {*} p_row 
          */
-        MetaEntity.prototype.setValue  = function(p_row) {
+        BaseEntity.prototype.setValue  = function(p_row) {
             var alias = '';
 
             if (!(p_row instanceof MetaRow)) Message.error('ES032', ['row', 'MetaRow']);
@@ -452,21 +452,21 @@
 
         /**
          * 병합
-         * @param {MetaEntity} p_target 
+         * @param {BaseEntity} p_target 
          * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨 <**>
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨
          * @param {object} p_option.2 로우(idx) 기준 병합, 초과 컬럼은 채워짐
          * @param {object} p_option.3 컬럼(key) 기준 병합, 초과 로우는 채워짐 
          * @param {boolean} p_checkValid 로우 유효성 검사 유무 (기본:false)
          */
-        MetaEntity.prototype.merge  = function(p_target, p_option, p_checkValid) {
+        BaseEntity.prototype.merge  = function(p_target, p_option, p_checkValid) {
             var opt = p_option || 0;
             var key, alias, newRow, tarRow, oriRows, tarRows, tarColumns;
             var tempRows = [], clone;
             var target;
 
             // 1.유효성 검사
-            if (!(p_target instanceof MetaEntity)) Message.error('ES032', ['target', 'MetaEntity']);
+            if (!(p_target instanceof BaseEntity)) Message.error('ES032', ['target', 'BaseEntity']);
             if (typeof p_option !== 'number') Message.error('ES021', ['option', 'number']);
 
             // 타겟 복제본 만들기
@@ -666,7 +666,7 @@
          * @param {Object} p_filter 필터객체
          * @param {(Number | Array<Number>)?} p_index 인덱스 시작번호 또는 목록
          * @param {Number?} p_end 인덱스 종료번호
-         * @return {MetaEntity}
+         * @return {BaseEntity}
          * @example
          * // 상속기법을 이용함
          * filter = {
@@ -675,7 +675,7 @@
          *  아이템명: { order: 100 }        // 속성 오버라이딩
          * }
          */
-        // MetaEntity.prototype.select  = function(p_filter, p_args) {
+        // BaseEntity.prototype.select  = function(p_filter, p_args) {
         //     var args = Array.prototype.slice.call(arguments);
         //     var _this = this;
         //     var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
@@ -709,7 +709,7 @@
          * @param {function?} p_filter function(row, idx, entity)
          * @returns {MetaView}
          */
-        MetaEntity.prototype.select  = function(p_names, p_filter) {
+        BaseEntity.prototype.select  = function(p_names, p_filter) {
             var _this = this;
             var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
             var columnNames = Array.isArray(p_names) ? p_names : [];
@@ -731,11 +731,11 @@
          * @param {string} p_target 로드 대상
          * @param {function?} p_parse 파서
          */
-        MetaEntity.prototype.load = function(p_obj, p_parse) {
+        BaseEntity.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
             var mObj;
             
-            // if (p_obj instanceof MetaEntity) {
+            // if (p_obj instanceof BaseEntity) {
             //     this._readEntity(p_obj, 3);
             // } else if (typeof p_obj === 'object') {
             //     mObj = MetaRegistry.hasRefer(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
@@ -743,7 +743,7 @@
             // } else {
             //     throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
             // }
-            if (p_obj instanceof MetaEntity) Message.error('ES022', ['MetaEntity']);
+            if (p_obj instanceof BaseEntity) Message.error('ES022', ['BaseEntity']);
 
             // if (typeof obj === 'string') obj = JSON.parse(obj, p_reviver()); 
             if (typeof obj === 'string') {
@@ -762,12 +762,12 @@
         };
 
         
-        // MetaEntity.prototype.output = function(p_vOpt, p_replacer) {
+        // BaseEntity.prototype.output = function(p_vOpt, p_replacer) {
         //     var rObj = this.getObject(p_vOpt);
         //     var str = JSON.stringify(rObj, p_replacer(), 2);
         //     return str;
         // };
-        MetaEntity.prototype.output = function(p_stringify, p_space, p_vOpt) {
+        BaseEntity.prototype.output = function(p_stringify, p_space, p_vOpt) {
             var rObj = this.getObject(p_vOpt);
             var str;
             
@@ -787,7 +787,7 @@
          * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
          * @param {Number} p_option.3 <*기본값> 컬럼/로우를 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다. 
          */
-        MetaEntity.prototype.read  = function(p_obj, p_option) {
+        BaseEntity.prototype.read  = function(p_obj, p_option) {
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
@@ -799,7 +799,7 @@
             // if (MetaRegistry.hasRefer(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
 
 
-            if (p_obj instanceof MetaEntity) {
+            if (p_obj instanceof BaseEntity) {
                 this._readEntity(p_obj, 3);
             } else if (typeof p_obj === 'object') {
                 if (p_obj.viewName) this.viewName = p_obj.viewName;
@@ -816,7 +816,7 @@
          * @param {object} p_obj object<Schema> | object<Guid>
          * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
-        MetaEntity.prototype.readSchema  = function(p_obj, p_createRow) {
+        BaseEntity.prototype.readSchema  = function(p_obj, p_createRow) {
             var obj = p_obj;
             
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
@@ -824,10 +824,10 @@
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 else obj = p_obj;
-                obj = MetaEntity._transformSchema(obj); // gObj >> sObj<요약>
-            } else if (!MetaEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+                obj = BaseEntity._transformSchema(obj); // gObj >> sObj<요약>
+            } else if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
-            // obj = MetaEntity._transformSchema(p_obj); // gObj >> sObj<요약>
+            // obj = BaseEntity._transformSchema(p_obj); // gObj >> sObj<요약>
 
             // table <-> view 서로 호환됨
             // if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
@@ -842,7 +842,7 @@
          * 존재하는 로우만 가져온다.
          * @param {*} p_obj 
          */
-        MetaEntity.prototype.readData  = function(p_obj) {
+        BaseEntity.prototype.readData  = function(p_obj) {
             var obj = p_obj;
             var rows;
 
@@ -850,9 +850,9 @@
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = MetaEntity._transformSchema(p_obj);
-            } else if (!MetaEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
-            // obj = MetaEntity._transformSchema(p_obj);
+                obj = BaseEntity._transformSchema(p_obj);
+            } else if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            // obj = BaseEntity._transformSchema(p_obj);
 
             // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasRefer(p_obj)) {
             //     p_obj = MetaRegistry.transformRefer(p_obj);
@@ -872,22 +872,22 @@
             }
         };
 
-        // MetaEntity.prototype.write  = function(p_vOpt) {
+        // BaseEntity.prototype.write  = function(p_vOpt) {
         //     var vOpt = p_vOpt || 0;
         //     var obj = this.writeSchema(vOpt);
             
         //     obj.rows = this.writeData(vOpt).rows;
         //     return obj;
         // };
-        MetaEntity.prototype.write  = function(p_vOpt) {
+        BaseEntity.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var oSch;
             var oGuid = this.getObject(p_vOpt);
 
-            return MetaEntity._transformSchema(oGuid);
+            return BaseEntity._transformSchema(oGuid);
         };
 
-        // MetaEntity.prototype.writeSchema  = function(p_vOpt) {
+        // BaseEntity.prototype.writeSchema  = function(p_vOpt) {
         //     var vOpt = p_vOpt || 0;
         //     var obj = { columns: {}, rows: [] };
 
@@ -924,7 +924,7 @@
         //     }
         //     return obj;
         // };
-        MetaEntity.prototype.writeSchema  = function(p_vOpt) {
+        BaseEntity.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             
             var schema = this.write(vOpt);
@@ -933,7 +933,7 @@
             
         };
 
-        // MetaEntity.prototype.writeData  = function(p_vOpt) {
+        // BaseEntity.prototype.writeData  = function(p_vOpt) {
         //     var vOpt = p_vOpt || 0;
         //     var obj = { rows: [] };
             
@@ -949,7 +949,7 @@
         //     }
         //     return obj;
         // };
-        MetaEntity.prototype.writeData  = function(p_vOpt) {
+        BaseEntity.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var schema = this.write(vOpt);
             
@@ -958,16 +958,16 @@
         };
 
         /** @abstract */
-        MetaEntity.prototype.clone = function() {
+        BaseEntity.prototype.clone = function() {
             Message.error('ES013', ['clone()']);
         };
 
         /** @abstract */
-        MetaEntity.prototype.copy = function() {
+        BaseEntity.prototype.copy = function() {
             Message.error('ES013', ['copy()']);
         };
 
-        return MetaEntity;
+        return BaseEntity;
     
     }(MetaElement));
 
@@ -975,10 +975,10 @@
     //==============================================================
     // 5. module export
     if (isNode) {     
-        exports.MetaEntity = MetaEntity;
+        exports.BaseEntity = BaseEntity;
     } else {
-        _global._L.MetaEntity = MetaEntity;
-        _global._L.Meta.Entity.MetaEntity = MetaEntity;     // namespace
+        _global._L.BaseEntity = BaseEntity;
+        _global._L.Meta.Entity.BaseEntity = BaseEntity;     // namespace
     }
 
 }(typeof window !== 'undefined' ? window : global));
