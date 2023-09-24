@@ -330,6 +330,17 @@ describe("[target: collection-array.js, collection-base.js]", () => {
         
                 expect(obj._type === 'Etc.ArraySub').toBe(true);
             });
+            it("- getObject() : 메타객체와 참조객체 얻기 ", () => {
+                const a1 = new ArrayCollection();
+                const m1 = new MetaElement('E1')
+                a1.add(m1);
+                a1.add(m1);
+                const obj = a1.getObject();
+        
+                expect(obj._elem[0]._guid).toBe(m1._guid)
+                expect(obj._elem[1].$ref).toBe(m1._guid)
+                expect(obj._type === 'Collection.ArrayCollection').toBe(true);
+            });
         });
         describe("ArrayCollection.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
@@ -376,6 +387,23 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 const a2 = new ArrayCollection();
                 a2.setObject(obj);
         
+                expect(a1.count).toBe(2);
+                expect(a2.count).toBe(2);
+                expect(m1.equal(a2[0])).toBe(true);
+                expect(m1.equal(a2[1])).toBe(true);
+            });
+            it("- setObject() : 메타객체와 참조  ", () => {
+                const a1 = new ArrayCollection();
+                const fun1 = function() {}
+                const m1 = new MetaElement('E1')
+                a1.add(m1);
+                a1.add(m1);
+                const obj = a1.getObject();
+                const a2 = new ArrayCollection();
+                a2.setObject(obj);
+        
+                expect(a1 !== a2).toBe(true);
+                expect(a1._guid !== a2._guid).toBe(true);
                 expect(a1.count).toBe(2);
                 expect(a2.count).toBe(2);
                 expect(m1.equal(a2[0])).toBe(true);

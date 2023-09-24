@@ -151,8 +151,14 @@
             obj._elem = [];
             for (var i = 0; i < this._elements.length; i++) {
                 var elem = this._elements[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
-                else obj._elem.push(elem);
+                // POINT:
+                // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
+                // else obj._elem.push(elem)
+                if (elem instanceof MetaObject) {
+                    if (MetaRegistry.isCycleObject(elem, origin)) {
+                        obj._elem.push(MetaRegistry.createReferObject(elem));
+                    } else obj._elem.push(elem.getObject(vOpt, origin));
+                } else obj._elem.push(elem);
             }
 
             obj._key = [];
@@ -197,7 +203,6 @@
                     this._elements.push(obj);
                 
                 } else if (elem['$ref']) {
-                    // POINT:
                     var meta = MetaRegistry.findSetObject(origin, elem.$ref);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this._elements.push(meta);

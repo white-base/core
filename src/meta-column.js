@@ -487,7 +487,6 @@
             var vOpt = p_vOpt || 0;
             var origin = p_origin ? p_origin : obj;
             
-            // POINT:
             // if (vOpt > -2 && this._entity && this._entity.columns && this._entity.columns[this.__key]
             //     && this._entity.columns[this.__key] !== this) {
             //     return MetaRegistry.createReferObject(this); // 소유자가 아니면 참조 리턴
@@ -523,9 +522,6 @@
             
             var origin = p_origin ? p_origin : p_oGuid;
             var entity;
-
-            // POINT:
-            // 
 
             if (p_oGuid.__subscribers) {
                 this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
@@ -1016,7 +1012,6 @@
                 for (var i = 0; i < obj._elem.length; i++) {
                     var elem = obj._elem[i];
                     // if (MetaRegistry.isGuidObject(elem)) {
-                        // POINT:
                         if (vOpt < 2 && vOpt > -1 && elem._entity && elem._entity['$ref'] !== this._owner._guid) {
                             var rObj = MetaRegistry.createReferObject(elem); // 소유자가 아니면 참조 리턴
                             obj._elem[i] = rObj;

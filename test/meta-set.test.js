@@ -863,7 +863,6 @@ describe("[target: meta-set.js]", () => {
                 // const tObj1 = MetaEntity._transformObject(gObj1)
                 // const tObj2 = MetaEntity._transformObject(gObj2)
                 // const tObj3 = MetaEntity._transformObject(gObj3)
-                // POINT: gObj 스키마 변형 해야함
 
                 expect(set1.views.count).toBe(3);
                 expect(v1.viewName).toBe('V1');

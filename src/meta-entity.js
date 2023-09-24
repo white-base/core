@@ -176,7 +176,6 @@
                     
                     obj[key] = {};
 
-                    // POINT:
                     if (column['$ref']){
                         obj[key] = column;
                     } else {
@@ -880,7 +879,6 @@
         //     obj.rows = this.writeData(vOpt).rows;
         //     return obj;
         // };
-        // POINT:
         MetaEntity.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var oSch;
@@ -926,7 +924,6 @@
         //     }
         //     return obj;
         // };
-        // POINT:
         MetaEntity.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             
@@ -952,7 +949,6 @@
         //     }
         //     return obj;
         // };
-        // POINT:
         MetaEntity.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var schema = this.write(vOpt);

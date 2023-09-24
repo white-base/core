@@ -369,7 +369,6 @@
                     if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
                     p_baseCollec.add(key);
                     
-                    // POINT:
                     MetaRegistry.createSetObject(prop, p_baseCollec[key]); 
                     
                     p_baseCollec[key]._readSchema(p_collec[key], p_createRow, obj);                    
@@ -454,7 +453,6 @@
 
         //     return obj;
         // };
-        // POINT:
         MetaSet.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var oSch;
@@ -491,7 +489,6 @@
         //     }
         //     return obj;
         // };
-        // POINT:
         MetaSet.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var schema = this.write(vOpt);
@@ -523,7 +520,6 @@
         //     }
         //     return obj;
         // };
-        // POINT:
         MetaSet.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var schema = this.write(vOpt);

@@ -188,17 +188,19 @@ describe("[target: meta-row.js]", () => {
                 var row = a1.newRow();
                 var e1 = new MetaElement('E1')
                 row['a1'] = e1;
-                row['a2'] = 'R2';
+                row['a2'] = e1;
                 a1.rows.add(row);
                 const obj = a1.rows[0].getObject();
 
                 expect(obj._guid).toBe(a1.rows[0]._guid);
-                expect(obj._type === 'Meta.Entity.MetaRow').toBe(true);
-                expect(obj._elem).toEqual([e1.getObject(),'R2']);
+                expect(obj._elem[0]._guid).toBe(e1._guid)
+                expect(obj._elem[1].$ref).toBe(e1._guid)
+                expect(obj._elem[0]).toEqual(e1.getObject());
+                expect(obj._elem[1]).toEqual({$ref: e1._guid});
                 expect(obj._key).toEqual(['a1','a2']);
                 expect(obj._entity.$ref).toBe(a1._guid);
                 /**
-                 * MEMO: 기본값 확인
+                 * MEMO: 메타객체와 참조 객체 얻기 확인
                  */
             });
         });
@@ -234,9 +236,8 @@ describe("[target: meta-row.js]", () => {
                 const fun1 = function(){}
                 var e1 = new MetaElement('E1')
                 var row = a1.newRow();
-                row.onChanged = fun1;
                 row['a1'] = e1;
-                row['a2'] = 'R2';
+                row['a2'] = e1;
                 a1.rows.add(row);
                 const obj1 = a1.rows.getObject();
                 const obj2 = a1.getObject();
@@ -244,8 +245,12 @@ describe("[target: meta-row.js]", () => {
                 a2.setObject(obj2);
 
                 expect(a2.equal(a1)).toBe(true);
-                expect(a2.rows[0].__event.list.length).toBe(1)
-                expect(()=>a2.rows.setObject(obj1)).toThrow(/ES015/);
+                expect(a1 !== a2).toBe(true);
+                expect(a1._guid !== a2._guid).toBe(true);
+                expect(e1.equal(a2.rows[0][0])).toBe(true);
+                expect(e1.equal(a2.rows[0][1])).toBe(true);
+                expect(e1.equal(a2.rows[0]['a1'])).toBe(true);
+                expect(e1.equal(a2.rows[0]['a2'])).toBe(true);
                 /**
                  * MEMO:
                  */

@@ -4,7 +4,7 @@
 //==============================================================
 // gobal defined
 'use strict';
-
+const { MetaElement } = require('../src/meta-element');
 const {PropertyCollection}          = require('../src/collection-property');
 let Student, School, Member, Corp, House, Space;
 
@@ -405,6 +405,17 @@ describe("[target: collection-property.js, collection-base.js]", () => {
         
                 expect(obj._type === 'Etc.SubClass').toBe(true);
             });
+            it("- getObject() : 메타객체와 참조객체 얻기 ", () => {
+                const a1 = new PropertyCollection();
+                const m1 = new MetaElement('E1')
+                a1.add('p1', m1);
+                a1.add('p2', m1);
+                const obj = a1.getObject();
+        
+                expect(obj._elem[0]._guid).toBe(m1._guid)
+                expect(obj._elem[1].$ref).toBe(m1._guid)
+                expect(obj._type === 'Collection.PropertyCollection').toBe(true);
+            });
         });
         describe("PropertyCollection.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
@@ -423,6 +434,24 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(a2[1]).toBe(20);
                 expect(a2['a1']).toBe(10);
                 expect(a2['a2']).toBe(20);
+            });
+            it("- setObject() : 메타객체와 참조 ", () => {
+                const a1 = new PropertyCollection();
+                const m1 = new MetaElement('E1')
+                a1.add('a1', m1);
+                a1.add('a2', m1);
+                const obj = a1.getObject();
+                const a2 = new PropertyCollection();
+                a2.setObject(obj);
+        
+                expect(a1 !== a2).toBe(true);
+                expect(a1._guid !== a2._guid).toBe(true);
+                expect(a1.count).toBe(2);
+                expect(a2.count).toBe(2);
+                expect(m1.equal(a2[0])).toBe(true);
+                expect(m1.equal(a2[1])).toBe(true);
+                expect(m1.equal(a2['a1'])).toBe(true);
+                expect(m1.equal(a2['a2'])).toBe(true);
             });
             it("- setObject() : 예외 <_key, _dest 크기다름> ", () => {
                 const a1 = new PropertyCollection();

@@ -329,8 +329,14 @@
             obj._elem = [];
             for (var i = 0; i < this.list.length; i++) {
                 var elem = this.list[i];
-                if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
-                else obj._elem.push(elem);
+                // POINT:
+                // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
+                // else obj._elem.push(elem);
+                if (elem instanceof MetaObject) {
+                    if (MetaRegistry.isCycleObject(elem, origin)) {
+                        obj._elem.push(MetaRegistry.createReferObject(elem));
+                    } else obj._elem.push(elem.getObject(vOpt, origin));
+                } else obj._elem.push(elem);
             }
 
             obj._key = [];

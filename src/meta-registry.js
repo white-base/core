@@ -418,9 +418,10 @@
             var origin = p_origin;
 
             // TODO: origin 필수 검사
-            // if (typeof origin !== 'object') Message.error('ES024', ['object', 'object']);
-            if (!this.isGuidObject(p_target)) Message.error('ES024', ['p_target', 'object<guid>']);
-            if (!this.isGuidObject(p_origin)) Message.error('ES024', ['p_origin', 'object<guid>']);
+            if (typeof guid !== 'string' || guid.length == 0) Message.error('ES024', ['p_target', 'string | object<guid>']);
+            if (typeof origin !== 'object' || origin === null) Message.error('ES024', ['p_origin', 'object']);
+            // if (!this.isGuidObject(p_target)) Message.error('ES024', ['p_target', 'object<guid>']);
+            // if (!this.isGuidObject(p_origin)) Message.error('ES024', ['p_origin', 'object<guid>']);
             return findCycleObject(origin);
             
             // inner function
