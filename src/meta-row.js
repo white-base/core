@@ -338,7 +338,7 @@
                 // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
                 // else obj._elem.push(elem);
                 if (elem instanceof MetaObject) {
-                    if (MetaRegistry.isCycleObject(elem, origin)) {
+                    if (MetaRegistry.hasGuidObject(elem, origin)) {
                         obj._elem.push(MetaRegistry.createReferObject(elem));
                     } else obj._elem.push(elem.getObject(vOpt, origin));
                 } else obj._elem.push(elem);

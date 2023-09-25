@@ -119,7 +119,7 @@
             });
 
             // this.viewName      = p_name || '';
-            this.viewName = p_name || '';
+            // this.viewName = p_name || '';
             if (p_baseEntity) this._baseEntity = p_baseEntity;
             
             // this._refEntities   = [];
@@ -291,9 +291,11 @@
             {
                 get: function() { return _baseType; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
-                        Message.error('ES032', ['_baseType', 'BaseEntity']);
-                    }
+                    // if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                    //     Message.error('ES032', ['_baseType', 'BaseEntity']);
+                    // }
+                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
+                    if (!(new newValue('temp') instanceof MetaView)) Message.error('ES032', ['_baseType', 'MetaView']);
                     _baseType = newValue;
                 },
                 configurable: false,

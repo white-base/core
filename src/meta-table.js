@@ -97,7 +97,7 @@
             });
             
 
-            this.tableName  = p_name || '';
+            // this.tableName  = p_name || '';
             this.columns = new MetaTableColumnCollection(this);
 
         }
@@ -250,9 +250,11 @@
             {
                 get: function() { return _baseType; },
                 set: function(newValue) { 
-                    if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
-                        Message.error('ES032', ['_baseType', 'BaseEntity']);
-                    }
+                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
+                    if (!(new newValue('temp') instanceof MetaTable)) Message.error('ES032', ['_baseType', 'MetaTable']);
+                    // if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                    //     Message.error('ES032', ['_baseType', 'BaseEntity']);
+                    // }
                     _baseType = newValue;
                 },
                 configurable: false,

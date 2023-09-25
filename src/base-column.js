@@ -99,6 +99,10 @@
                     if (typeof newValue !== 'undefined' && !(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
                         Message.error('ES032', ['_entity', 'BaseEntity']);
                     }
+                    // var column = newValue.columns[this.columnName];
+                    // if (column && column._entity !== newValue) {
+                    //     newValue.columns.add(this);
+                    // }
                     _entity = newValue;
                 },
                 configurable: false,
@@ -112,12 +116,12 @@
             Object.defineProperty(this, '_valueTypes', 
             {
                 get: function() { return _valueTypes; },
-                // set: function(newValue) { 
-                //     if (typeof newValue !== 'undefined' && !(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
-                //         Message.error('ES032', ['_entity', 'BaseEntity']);
-                //     }
-                //     _entity = newValue;
-                // },
+                set: function(newValue) { 
+                    var arr = [];
+                    if (!Array.isArray(newValue)) arr.push(newValue);
+                    else arr = newValue;
+                    _valueTypes = arr;  
+                },
                 configurable: false,
                 enumerable: true
             });
@@ -176,10 +180,11 @@
             {
                 get: function() { return defaultValue; },
                 set: function(newValue) { 
-                    if(typeof newValue !== 'undefined' && newValue !== null 
-                        &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
-                            Message.error('ES021', ['default', 'string | boolean | number']);
-                        }
+                    if (this._valueTypes.length > 0) Util.validType(newValue, this._valueTypes);
+                    // if(typeof newValue !== 'undefined' && newValue !== null 
+                    //     &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
+                    //         Message.error('ES021', ['default', 'string | boolean | number']);
+                    //     }
                     defaultValue = newValue; 
                 },
                 configurable: false,
@@ -227,16 +232,16 @@
             this.__SET$__key = function(val, call) {
                 if (call instanceof BaseColumn) __key = val;
             }
-            this.__SET$_valueTypes = function(val, call) {
-                var arr = [];
-                if (call instanceof BaseColumn) {
-                    if (!Array.isArray(val)) arr.push(val);
-                    else arr = val;
-                    _valueTypes = arr;  
-                } 
-            }
+            // this.__SET$_valueTypes = function(val, call) {
+            //     var arr = [];
+            //     if (call instanceof BaseColumn) {
+            //         if (!Array.isArray(val)) arr.push(val);
+            //         else arr = val;
+            //         _valueTypes = arr;  
+            //     } 
+            // }
 
-            this.columnName  = p_name || '';   
+            // this.columnName  = p_name;   
             if (p_entity) _entity = p_entity;
             
             // if (property && property != {}) this._load(property);         

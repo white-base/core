@@ -75,16 +75,16 @@ describe("[target: meta-table.js]", () => {
         });
         describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : 생성 후 비교 ", () => {
-                const c1 = new MetaTable();
-                const c2 = new MetaTable();
+                const c1 = new MetaTable('T1');
+                const c2 = new MetaTable('T1');
                 
                 expect(c1.equal(c2)).toBe(true);
-                expect(c1._guid === c2._guid).toBe(false);
+                expect(c1._guid === c2._guid).toBe(false)
                 expect(c1 === c2).toBe(false);
             });
             it("- equal() : 이름이 다른 경우 ", () => {
                 const c1 = new MetaTable('T1');
-                const c2 = new MetaTable();
+                const c2 = new MetaTable('T2');
                 
                 expect(c1.equal(c2)).toBe(false);
             });
@@ -111,7 +111,7 @@ describe("[target: meta-table.js]", () => {
         });
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- getTypes() : array<function> ", () => {
-                const c = new MetaTable();
+                const c = new MetaTable('C');
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaTable);
@@ -135,7 +135,7 @@ describe("[target: meta-table.js]", () => {
         });
         describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaTable();
+                const c = new MetaTable('C');
         
                 expect(c.instanceOf('IObject')).toBe(true);
                 expect(c.instanceOf('IMarshal')).toBe(true);
@@ -149,7 +149,7 @@ describe("[target: meta-table.js]", () => {
                 expect(c.instanceOf('String')).toBe(false);
             });
             it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaTable();
+                const c = new MetaTable('C');
         
                 expect(c.instanceOf(IObject)).toBe(true);
                 expect(c.instanceOf(IMarshal)).toBe(true);
@@ -770,7 +770,9 @@ describe("[target: meta-table.js]", () => {
                 table1.rows.add(row);
 
                 MetaRegistry.ns.add('Meta.Entity.MetaView', MetaView);
-                var table2 = table1.select([], row => row['i1'] < 10);
+                var fun1 = function(row) { return row['i1'] < 10}
+                // var table2 = table1.select([], row => row['i1'] < 10);
+                var table2 = table1.select([], fun1);
                 
                 expect(table2.columns.count).toBe(2);
                 expect(table2.rows.count).toBe(1);
@@ -812,6 +814,21 @@ describe("[target: meta-table.js]", () => {
                 expect(table2.columns['i1'].caption).toBe('C1');
                 expect(table2.rows[0]['i1']).toBe(1);
                 expect(table2.rows[1]['i1']).toBe(10);
+            });
+            it("- select(itmms) : 예외 <초기화>", () => {
+                var table1 = new MetaTable('T1');
+                MetaRegistry.init();
+                expect(()=> table1.select('i1')).toThrow(/ES0110/)
+            });
+            it("- select(itmms) : 예외 <callback>", () => {
+                var table1 = new MetaTable('T1');
+                MetaRegistry.ns.add('Meta.Entity.MetaView', MetaView);
+                expect(()=> table1.select('i1', 'ERR')).toThrow(/ES021/)
+            });
+            it("- select(itmms) : 예외 <columnName>", () => {
+                var table1 = new MetaTable('T1');
+                MetaRegistry.ns.add('Meta.Entity.MetaView', MetaView);
+                expect(()=> table1.select(100)).toThrow(/ES021/)
             });
         });
         describe("BaseEntity.load(rObj | mObj) <가져오기>", () => {
@@ -949,6 +966,7 @@ describe("[target: meta-table.js]", () => {
                     },
                 };
                 expect(()=> table1.read(json1, 0)).toThrow('ES067')
+                expect(()=> table1.read(json1, 'ERR')).toThrow('ES021')
                 table2.read(json1, 1);  // 스키마 가져오기
                 table3.read(json1, 2);  // 데이터 가져오기
                 table4.read(json1, 3);  // 스키마 + 데이터 가져오기
@@ -1053,6 +1071,7 @@ describe("[target: meta-table.js]", () => {
                 expect(table5.rows[2]['i1']).toBe('R100');
                 expect(table5.rows[2]['i2']).toBe(undefined);
             });
+
         });
 
         describe("BaseEntity.readSchema(obj) <column 읽기(스키마)>", () => {
@@ -1073,6 +1092,13 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.columns['i2'].caption).toBe('C2');
                 expect(table1.columns[0].caption).toBe('C1');
                 expect(table1.columns[1].caption).toBe('C2');
+            });
+            it("- readSchema(obj) : entiry가 아닌 meta 객체 넣기 <예외>", () => {
+                var e1  = new MetaElement('E1')
+                var table1 = new MetaTable('T1');
+                const g1 = e1.getObject();
+                
+                expect(()=> table1.readSchema(g1)).toThrow(/ES021/)
             });
             it("- readSchema(obj) : 읽기 순서 변경 ", () => {
                 var table1 = new MetaTable('T1');
@@ -1159,6 +1185,7 @@ describe("[target: meta-table.js]", () => {
                 expect(table3.columns.count).toBe(2);
                 expect(table3.columns['i1'].caption).toBe('C1');
             });
+
         });
         
         describe("BaseEntity.readData() : <row 읽기(데이터)>", () => {
@@ -1189,6 +1216,13 @@ describe("[target: meta-table.js]", () => {
                 expect(table1.rows[1]['i2']).toBe('R20');
                 expect(table1.rows[2]['i1']).toBe('R100');
                 expect(table1.rows[2]['i2']).toBe('R200');
+            });
+            it("- readSchema(obj) : entiry가 아닌 meta 객체 넣기 <예외>", () => {
+                var e1  = new MetaElement('E1')
+                var table1 = new MetaTable('T1');
+                const g1 = e1.getObject();
+                
+                expect(()=> table1.readData(g1)).toThrow(/ES021/)
             });
         });
         describe("BaseEntity.write(): obj <쓰기>", () => {
@@ -1637,7 +1671,13 @@ describe("[target: meta-table.js]", () => {
             });
         });
 
-        
+        describe("예외 및 커버리지", () => {
+            it("- BaseEntity._metaSet : 예외 ", () => {
+                var table1 = new MetaTable('T1');
+
+            });
+
+        });
         
     });
 });

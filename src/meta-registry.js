@@ -413,37 +413,46 @@
             return false;
         };
 
-        MetaRegistry.isCycleObject = function(p_target, p_origin) {
+        MetaRegistry.hasGuidObject = function(p_target, p_origin) {
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
             var origin = p_origin;
+            var arrObj = this.__getObjectList(origin);
+            // var overCount = 0;
 
             // TODO: origin 필수 검사
             if (typeof guid !== 'string' || guid.length == 0) Message.error('ES024', ['p_target', 'string | object<guid>']);
             if (typeof origin !== 'object' || origin === null) Message.error('ES024', ['p_origin', 'object']);
             // if (!this.isGuidObject(p_target)) Message.error('ES024', ['p_target', 'object<guid>']);
             // if (!this.isGuidObject(p_origin)) Message.error('ES024', ['p_origin', 'object<guid>']);
-            return findCycleObject(origin);
             
-            // inner function
-            function findCycleObject(oGuid) {
-                if (Array.isArray(oGuid)){
-                    for(var i = 0; i < oGuid.length; i++) {
-                        if (typeof oGuid[i] === 'object' && oGuid[i] !== null) {
-                            if (findCycleObject(oGuid[i])) return true;
-                        }
-                    }
-                } else {
-                    if (oGuid['_guid'] && oGuid['_guid'] === guid && origin['_guid'] !== guid) {
-                        return true;
-                    }
-                    for(var prop in oGuid) {
-                        if (typeof oGuid[prop] === 'object' && oGuid[prop] !== null) {
-                            if(findCycleObject(oGuid[prop])) return true;
-                        } 
-                    }
-                }
-                return false;
+            for (var i = 0; i < arrObj.length; i++) {
+                if (arrObj[i]._guid === guid) return true;
+                // if (overCount > 0) return true;
             }
+            return false;
+
+            // return findCycleObject(origin);
+            
+            // // inner function
+            // function findCycleObject(oGuid) {
+            //     if (Array.isArray(oGuid)){
+            //         for(var i = 0; i < oGuid.length; i++) {
+            //             if (typeof oGuid[i] === 'object' && oGuid[i] !== null) {
+            //                 if (findCycleObject(oGuid[i])) return true;
+            //             }
+            //         }
+            //     } else {
+            //         if (oGuid['_guid'] && oGuid['_guid'] === guid && origin['_guid'] !== guid) {
+            //             return true;
+            //         }
+            //         for(var prop in oGuid) {
+            //             if (typeof oGuid[prop] === 'object' && oGuid[prop] !== null) {
+            //                 if(findCycleObject(oGuid[prop])) return true;
+            //             } 
+            //         }
+            //     }
+            //     return false;
+            // }
         };
 
 

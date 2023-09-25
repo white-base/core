@@ -1311,6 +1311,17 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.tables['T2'].rows.autoChanges).toBe(true);
             });
         });
+        describe("예외 및 커버리지", () => {
+            it("- BaseEntity._metaSet : 예외 ", () => {
+                var set1 = new MetaSet('S1');
+                var table1 = new MetaTable('T1');
+                table1._metaSet = set1;
+
+                expect(table1._metaSet === set1).toBe(true)
+                expect(()=> table1._metaSet = 'ERR').toThrow(/ES032/)
+            });
+
+        });
     });
     
 

@@ -22,16 +22,26 @@ describe("[target: base-entity.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
-        describe("BaseEntity.rows <컬럼 속성>", () => {
+        describe("BaseEntity.rows <로우 속성>", () => {
             it("- this.rows : 타입 조회 ", () => {
                 var table1 = new MetaTable('T1');
         
                 expect(table1.rows.instanceOf('MetaRowCollection')).toBe(true);
             });
         });
+        describe("BaseEntity.columns <컬럼 속성>", () => {
+            it("- this.columns : 예외 ", () => {
+                class SubClass extends BaseEntity {
+                    constructor(name) {super(name)}
+                }
+                const s1 = new SubClass('S1');
+
+                expect(()=> s1.columns).toThrow(/ES0111/)
+            });
+        });
         describe("MetaObject.getTypes(): arr<func> <타입 얻기> ", () => {
             it("- getTypes() : array<function> ", () => {
-                const c = new MetaTable();
+                const c = new MetaTable('C');
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaTable);
@@ -44,7 +54,7 @@ describe("[target: base-entity.js]", () => {
         });
         describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaTable();
+                const c = new MetaTable('C');
         
                 expect(c.instanceOf('IObject')).toBe(true);
                 expect(c.instanceOf('IMarshal')).toBe(true);
@@ -58,7 +68,7 @@ describe("[target: base-entity.js]", () => {
                 expect(c.instanceOf('String')).toBe(false);
             });
             it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaTable();
+                const c = new MetaTable('C');
         
                 expect(c.instanceOf(IObject)).toBe(true);
                 expect(c.instanceOf(IMarshal)).toBe(true);
@@ -76,6 +86,39 @@ describe("[target: base-entity.js]", () => {
             it("- new BaseEntity() : 예외 ", () => {
         
                 expect(()=> new BaseEntity('T1')).toThrow(/ES018/);
+            });
+        });
+        describe("BaseEntity.clone() <복제>", () => {
+            it("- clone() : 예외 ", () => {
+                class SubClass extends BaseEntity {
+                    constructor(name) {super(name)}
+                }
+                const s1 = new SubClass('S1');
+
+                expect(()=> s1.clone()).toThrow(/ES013/)
+            });
+        });
+        describe("BaseEntity.copy() <복사>", () => {
+            it("- copy() : 예외 ", () => {
+                class SubClass extends BaseEntity {
+                    constructor(name) {super(name)}
+                }
+                const s1 = new SubClass('S1');
+
+                expect(()=> s1.copy()).toThrow(/ES013/)
+            });
+        });
+        describe("커버리지 및 예외", () => {
+            it("- BaseEntity._isSchema() ", () => {
+                // class SubClass extends BaseEntity {
+                //     constructor(name) {super(name)}
+                // }
+                // const s1 = new SubClass('S1');
+
+                expect(BaseEntity._isSchema('ERR')).toBe(false);
+                expect(BaseEntity._isSchema(null)).toBe(false);
+                expect(BaseEntity._isSchema({columns: null})).toBe(true);
+                expect(BaseEntity._isSchema({rows: null})).toBe(true);
             });
         });
     });

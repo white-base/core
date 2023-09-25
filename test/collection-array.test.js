@@ -363,7 +363,7 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             });
             it("- setObject() : MetaElment 삽입 ", () => {
                 const a1 = new ArrayCollection();
-                const m1 = new MetaElement();
+                const m1 = new MetaElement('E1');
                 a1.add(10);
                 a1.add(m1);
                 const obj = a1.getObject();
@@ -379,7 +379,7 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             });
             it("- setObject() : MetaElment $ref 삽입 ", () => {
                 const a1 = new ArrayCollection();
-                const m1 = new MetaElement();
+                const m1 = new MetaElement('E1');
                 const ref1 = MetaRegistry.createReferObject(m1);
                 a1.add(m1);
                 a1.add(ref1);
@@ -411,7 +411,7 @@ describe("[target: collection-array.js, collection-base.js]", () => {
             });
             it("- setObject() : 예외 : $ref 삽입 ", () => {
                 const a1 = new ArrayCollection();
-                const m1 = new MetaElement();
+                const m1 = new MetaElement('E1');
                 const ref1 = MetaRegistry.createReferObject(m1);
                 ref1.$ref = 'ERR'
                 a1.add(m1);

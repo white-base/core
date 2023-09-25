@@ -40,16 +40,16 @@ describe("[target: meta-view.js]", () => {
 
         describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : 생성 후 비교 ", () => {
-                const c1 = new MetaView();
-                const c2 = new MetaView();
+                const c1 = new MetaView('V1');
+                const c2 = new MetaView('V1');
                 
                 expect(c1.equal(c2)).toBe(true);
                 expect(c1._guid === c2._guid).toBe(false);
                 expect(c1 === c2).toBe(false);
             });
             it("- equal() : 이름이 다른 경우 ", () => {
-                const c1 = new MetaView('T1');
-                const c2 = new MetaView();
+                const c1 = new MetaView('V1');
+                const c2 = new MetaView('V2');
                 
                 expect(c1.equal(c2)).toBe(false);
             });

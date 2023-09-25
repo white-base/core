@@ -12,6 +12,7 @@
     var Observer;
     var CustomError;
     var MetaRegistry;
+    var MetaObject;
     var MetaElement;
     var BaseColumn;
     var PropertyCollection;
@@ -28,6 +29,7 @@
         Message                     = require('./message').Message;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
+        MetaObject                  = require('./meta-object').MetaObject;
         MetaElement                 = require('./meta-element').MetaElement;
         BaseColumn                  = require('./base-column').BaseColumn;
         PropertyCollection          = require('./collection-property').PropertyCollection;
@@ -37,6 +39,7 @@
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         CustomError                 = _global._L.CustomError;
+        MetaObject                  = _global._L.MetaObject;
         MetaElement                 = _global._L.MetaElement;
         BaseColumn                  = _global._L.BaseColumn;
         PropertyCollection          = _global._L.PropertyCollection;
@@ -48,6 +51,7 @@
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
     if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     if (typeof BaseColumn === 'undefined') Message.error('ES011', ['BaseColumn', 'base-column']);
     if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);   // ~ Branch:
@@ -68,28 +72,28 @@
         function ObjectColumn(p_name, p_entity, p_property) {
             _super.call(this, p_name, p_entity, [Object]);
 
-            var __value       = null;   // 재정의
-            // var __event        = new Observer(this);
-            // var __key           = p_name;
-            // var columnName;
-            // var _entity;
-            var defaultValue  = null;
-            var caption       = null;
-            var isNotNull     = false;
-            var isNullPass    = false;
-            var constraints   = [];
-            var getter        = null;
-            var setter        = null;
-            var alias         = null;
+            // var __value       = null;   // 재정의
+            // // var __event        = new Observer(this);
+            // // var __key           = p_name;
+            // // var columnName;
+            // // var _entity;
+            // var defaultValue  = null;
+            // var caption       = null;
+            // var isNotNull     = false;
+            // var isNullPass    = false;
+            // var constraints   = [];
+            // var getter        = null;
+            // var setter        = null;
+            // var alias         = null;
 
             // if (typeof _key !== 'string') Message.error('ES021', ['name', 'string']);
             // if (_key.length <= 0) Message.error('ES062', ['name.length', '0']);
 
-            /**
-             * value 내부값 (필터 및 getter/setter 무시)
-             * @private
-             * @member {*} _L.Meta.Entity.ObjectColumn#__value
-             */
+            // /**
+            //  * value 내부값 (필터 및 getter/setter 무시)
+            //  * @private
+            //  * @member {*} _L.Meta.Entity.ObjectColumn#__value
+            //  */
             // Object.defineProperty(this, '__value', 
             // {
             //     get: function() { return __value; },
@@ -450,7 +454,7 @@
                         this[prop] = p_property[prop];
                     }
                 }
-            } 
+            } else Message.error('ES021', ['p_property', 'object']);
             // if (['number', 'string', 'boolean'].indexOf(typeof p_property) > -1) {  
             //     this['value'] = p_property; 
             // }
@@ -491,6 +495,21 @@
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
             var origin = p_origin ? p_origin : obj;
+            var defValue = this.default;
+            var value = this.value;
+
+            if (defValue instanceof MetaObject) {
+                if (MetaRegistry.hasGuidObject(defValue, origin)) {
+                    obj.default = MetaRegistry.createReferObject(defValue);
+                } else obj.default = defValue.getObject(vOpt, origin);
+            }
+
+            if (value instanceof MetaObject) {
+                if (MetaRegistry.hasGuidObject(value, origin)) {
+                    obj.value = MetaRegistry.createReferObject(value);
+                } else obj.value = value.getObject(vOpt, origin);
+            }
+            // } else obj.value = value;
             
             // if (vOpt > -2 && this._entity && this._entity.columns && this._entity.columns[this.__key]
             //     && this._entity.columns[this.__key] !== this) {
@@ -526,8 +545,38 @@
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
             var origin = p_origin ? p_origin : p_oGuid;
-            var entity;
+            var elem;
 
+            elem = p_oGuid.value;
+            if (typeof elem === 'object' && elem !== null) {
+                if (MetaRegistry.isGuidObject(elem)) {
+                    var obj = MetaRegistry.createMetaObject(elem, origin);
+                    obj.setObject(elem, origin);
+                    this.value = obj;
+                
+                } else if (elem['$ref']) {
+                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    if (!meta) Message.error('ES015', ['ObjectColumn.value', '$ref']);
+                    this.value = meta;
+                }
+            }
+            elem = p_oGuid.default;
+            if (typeof elem === 'object' && elem !== null) {
+                if (MetaRegistry.isGuidObject(elem)) {
+                    var obj = MetaRegistry.createMetaObject(elem, origin);
+                    obj.setObject(elem, origin);
+                    this.default = obj;
+                
+                } else if (elem['$ref']) {
+                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    if (!meta) Message.error('ES015', ['ObjectColumn.default', '$ref']);
+                    this.default = meta;
+                }
+            }
+
+                // }else if (elem !== null) this.value = elem;
+
+            // var entity;
             // if (p_oGuid.__subscribers) {
             //     this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             // }

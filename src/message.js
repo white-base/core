@@ -96,6 +96,10 @@
                             msg: 'Failed to retrieve [$1] from [$2].',
                             long: '$3'
                         },
+                        11: {
+                            msg: 'You need to redefine [$1].',
+                            long: 'Inherit and redefine [$2].'
+                        },
                     },
                     S02: { // type
                         1: {
@@ -311,6 +315,10 @@
                         10: {
                             msg: '[$1]을 [$2] 에서 가져오는데 실패하였습니다.',
                             long: '$3'
+                        },
+                        11: {
+                            msg: '[$1]을 재정의해야 합니다.',
+                            long: '[$2]을 상속해서 재정의 하세요.'
                         },
                     },  
                     S02: {  // 타입

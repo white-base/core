@@ -116,7 +116,7 @@ describe("[target: meta-column.js]", () => {
                 expect(()=> temp1.addValue('i1', 'V1')).toThrow(/ES013/)
             });
             it("- _baseType 설정 : 예외  ", () => {
-                const t1 = new MetaTable();
+                const t1 = new MetaTable('T1');
 
                 expect(()=> t1.columns._baseType = 10).toThrow(/ES021/)
                 expect(()=> t1.columns._baseType = MetaElement).toThrow(/ES032/)
@@ -217,7 +217,7 @@ describe("[target: meta-column.js]", () => {
                 table1.columns['c2'].alias = 'cc2'
 
                 expect(() => table1.columns.add('cc2')).toThrow(/ES042/);
-                expect(() => table1.columns.add('')).toThrow(/ES051/);
+                expect(() => table1.columns.add('')).toThrow(/ES055/);
             });
 
         });

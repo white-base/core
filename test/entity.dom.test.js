@@ -14,9 +14,9 @@ describe("[ GROUP]", () => {
             global._L = null;
             });
         it("- 예외 : 전체 로딩 안할 때", () => {
-            require('../src/message');
+            // require('../src/message');
     
-            expect(() => require('../src/base-entity')).toThrow(/ES011/);
+            expect(() => require('../src/base-entity')).toThrow(/Cannot read properties/);
         });
         it("- 예외 : Util 로딩이 안 된 경우", () => {
             require('../src/message');
@@ -1120,6 +1120,83 @@ describe("[ GROUP]", () => {
         });
     });
 
+    describe("load: meta-column.js <BaseColumn>", () => {
+        beforeEach(() => {
+            jest.resetModules();
+            global._L = null;
+            });
+        it("- 예외 : 전체 로딩 안할 때", () => {
+            // require('../src/message');
+            
+            expect(() => require('../src/base-column')).toThrow(/Cannot read properties/);
+        });
+        it("- 예외 : Util 로딩이 안 된 경우", () => {
+            require('../src/message');
+            
+            expect(() => require('../src/base-column')).toThrow(/Util/);
+        });
+        it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            expect(() => require('../src/base-column')).toThrow(/MetaRegistry/);
+        });
+
+        it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            require('../src/i-element');
+            // require('../src/i-collection');
+            // require('../src/i-collection-property');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            require('../src/meta-object');
+            // require('../src/collection-base');
+            // require('../src/collection-property');
+            // require('../src/meta-element');
+            // require('../src/base-column');
+    
+            expect(() => require('../src/base-column')).toThrow(/MetaElement/);
+        });
+        
+        it("- 로딩 성공 ", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            require('../src/i-element');
+            // require('../src/i-collection');
+            // require('../src/i-collection-property');
+    
+            require('../src/namespace-manager');
+            require('../src/meta-registry');        
+            require('../src/meta-object');
+            // require('../src/collection-base');
+            // require('../src/collection-property');
+            require('../src/meta-element');
+            require('../src/base-column');
+            // require('../src/meta-column');
+    
+            expect(global._L.BaseColumn).toBeDefined();  
+            expect(global._L.Meta.Entity.BaseColumn).toBeDefined();
+        });
+    });
+
     describe("load: meta-column.js <MetaColumn>", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -1379,3 +1456,4 @@ describe("[ GROUP]", () => {
 });
 
 
+// 

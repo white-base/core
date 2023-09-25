@@ -64,6 +64,7 @@
                 get: function() { return _name; },
                 set: function(newValue) { 
                     if (typeof newValue !== 'string') Message.error('ES021', ['_name', 'string']);
+                    if (newValue.length === 0) Message.error('ES055', ['_name']);
                     _name = newValue;
                 },
                 configurable: false,
@@ -112,6 +113,12 @@
             return obj;                        
         };
 
+        MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
+            _super.prototype.setObject.call(this, p_oGuid, p_origin);
+            
+            var origin = p_origin ? p_origin : p_oGuid;
+            this.__SET$_name(p_oGuid.name, this);
+        };
 
         // MetaElement.prototype.setObject  = function(mObj, oObj) {
         //     _super.prototype.setObject.call(this, mObj, oObj);

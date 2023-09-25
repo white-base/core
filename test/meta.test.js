@@ -158,10 +158,10 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             it("- setObject() : 예외 ", () => {
                 const m1 = new MetaObject();
                 const m2 = new MetaObject();
-                const m3 = new MetaElement();
-                const m4 = new MetaElement();
-                const m5 = new MetaObjectSub();
-                const m6 = new MetaObjectSub();
+                const m3 = new MetaElement('E3');
+                const m4 = new MetaElement('E4');
+                const m5 = new MetaObjectSub('E5');
+                const m6 = new MetaObjectSub('E6');
                 const obj1 = m1.getObject();
                 const obj3 = m3.getObject();
                 const obj5 = m5.getObject();
@@ -231,13 +231,13 @@ describe("[target: meta-object.js, meta-element.js]", () => {
 
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
             it("- _type : function ", () => {
-                const c = new MetaElementSub();
+                const c = new MetaElementSub('C');
                 const type = c._type;
 
                 expect(type).toBe(MetaElementSub);
             });
             it("- getTypes() : array<function> ", () => {
-                const c = new MetaElementSub();
+                const c = new MetaElementSub('C');
                 const types = c.getTypes();
 
                 expect(types[0]).toBe(MetaElementSub);
@@ -249,7 +249,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         });
         describe("MetaObject.instanceOf(string): bool <상위 함수(클래스, 인터페이스) 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaElement();
+                const c = new MetaElement('C');
 
                 expect(c.instanceOf('IObject')).toBe(true);
                 expect(c.instanceOf('IMarshal')).toBe(true);
@@ -261,7 +261,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c.instanceOf('String')).toBe(false);
             });
             it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaElement();
+                const c = new MetaElement('C');
 
                 expect(c.instanceOf(IObject)).toBe(true);
                 expect(c.instanceOf(IMarshal)).toBe(true);
@@ -287,7 +287,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             });
             it("- equal() : 타입 비교", () => {
                 const c1 = new MetaObject();
-                const c2 = new MetaElementSub();
+                const c2 = new MetaElementSub('C2');
 
                 expect(c1.equal(c2)).toBe(false);
                 expect(c2.equal(c1)).toBe(false);
@@ -347,11 +347,11 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             it("- getObject() : Meta 속성 ", () => {
                 class Bar extends MetaElement {
                     sub = true;
-                    constructor() { super() }
+                    constructor(name) { super(name) }
                 }
                 class Foo extends MetaElement {
                     str = 'STR';
-                    bar = new Bar();
+                    bar = new Bar('B1');
                     constructor(name) { super(name) }
                     getStr() {}
                     getObject() {
@@ -364,7 +364,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const c = new Foo('foo');
                 const obj = c.getObject();
                 const comp = { _guid: obj._guid, _type: 'Meta.Foo', str: 'STR', name: 'foo', bar: {
-                    _guid: obj.bar._guid, _type: 'Meta.Bar', name: ''
+                    _guid: obj.bar._guid, _type: 'Meta.Bar', name: 'B1'
                 } };
 
                 expect(obj).toEqual(comp);
@@ -372,9 +372,9 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         });
         describe("MetaElement.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
-                const m1 = new MetaElement();
+                const m1 = new MetaElement('E1');
                 const obj = m1.getObject();
-                const m2 = new MetaElement();
+                const m2 = new MetaElement('E2');
                 m2.setObject(obj);
 
                 expect(m1 !== m2).toBe(true);
@@ -385,7 +385,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         });
         describe("MetaElement.clone() <객체 복제>", () => {
             it("- setObject()  ", () => {
-                const m1 = new MetaElement();
+                const m1 = new MetaElement('E1');
                 const m2 = m1.clone();
 
                 expect(m1 !== m2).toBe(true);

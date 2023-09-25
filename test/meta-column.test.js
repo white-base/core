@@ -74,7 +74,7 @@ describe("[target: meta-column.js ]", () => {
         });
         describe("MetaObject.getTypes() : arr<fun> <타입 얻기>", () => {
             it("- getTypes() : array<function> ", () => {
-                const c = new MetaColumn();
+                const c = new MetaColumn('C1');
                 const types = c.getTypes();
         
                 expect(types[0]).toBe(MetaColumn);
@@ -97,7 +97,7 @@ describe("[target: meta-column.js ]", () => {
         });
         describe("MetaObject.instanceOf(str | fun) : arr<fun> <인스턴스 유무 검사>", () => {
             it("- instanceOf(string) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaColumn();
+                const c = new MetaColumn('C');
         
                 expect(c.instanceOf('IObject')).toBe(true);
                 expect(c.instanceOf('IMarshal')).toBe(true);
@@ -111,7 +111,7 @@ describe("[target: meta-column.js ]", () => {
                 expect(c.instanceOf('String')).toBe(false);
             });
             it("- instanceOf(function) : 상위 함수(클래스, 인터페이스) 검사 ", () => {
-                const c = new MetaColumn();
+                const c = new MetaColumn('C1');
         
                 expect(c.instanceOf(IObject)).toBe(true);
                 expect(c.instanceOf(IMarshal)).toBe(true);
@@ -209,8 +209,8 @@ describe("[target: meta-column.js ]", () => {
         
         describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : __event ", () => {
-                var c1 = new MetaColumn();
-                var c2 = new MetaColumn();
+                var c1 = new MetaColumn('C1');
+                var c2 = new MetaColumn('C1');
                 var fun1 = function(){return 'Fun1'};
 
                 expect(c1.equal(c2)).toBe(true);
@@ -474,9 +474,9 @@ describe("[target: meta-column.js ]", () => {
                 const fun3 = function(){return 'F1'}
                 c1.onChanged = fun3;
                 const obj1 = c1.getObject();
-                const obj2 = c2.getObject();
-                const cc1 = new MetaColumn();
-                const cc2 = new MetaColumn();
+                const obj2 = c2.getObject();    // 엔티티 존재함
+                const cc1 = new MetaColumn('CC2');
+                const cc2 = new MetaColumn('CC2');
                 cc1.setObject(obj1);
 
                 expect(()=>cc2.setObject(obj2)).toThrow(/ES015/);
@@ -629,7 +629,7 @@ describe("[target: meta-column.js ]", () => {
                 const c1 = new MetaColumn('c1');
 
                 expect(()=>c1._entity = 0).toThrow(/ES032/)
-                expect(()=>c1.default = {}).toThrow(/ES021/)
+                expect(()=>c1.default = {}).toThrow(/ES066/)
                 expect(()=>c1.value = {}).toThrow(/ES024/)
 
             });

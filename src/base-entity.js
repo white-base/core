@@ -103,6 +103,7 @@
                         Message.error('ES032', ['_metaSet', 'MetaSet']);
                     }
                     _metaSet = newValue;
+                    // if (this.getTypes().indexOf('MetaView')
                 },
                 configurable: false,
                 enumerable: true
@@ -114,7 +115,9 @@
              */
             Object.defineProperty(this, 'columns', 
             {
-                get: function() { return columns; },
+                get: function() { 
+                    Message.error('ES0111', ['columns', 'MetaEntity']);
+                },
                 // set: function(newValue) { 
                 //     if (!(newValue instanceof BaseColumnCollection)) Message.error('ES032', ['columns', 'BaseColumnCollection']);
                 //     columns = newValue;
@@ -220,7 +223,7 @@
         };
         BaseEntity._isSchema  = function(p_oSch) {
             if (p_oSch === null || typeof p_oSch !== 'object') return false;
-            if (p_oSch['columns'] || p_oSch['rows']) return true;
+            if (typeof p_oSch['columns'] === 'object' || typeof p_oSch['rows'] === 'object') return true;
             return false;
         };
 
@@ -712,15 +715,19 @@
         BaseEntity.prototype.select  = function(p_names, p_filter) {
             var _this = this;
             var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
-            var columnNames = Array.isArray(p_names) ? p_names : [];
-            var callback = p_filter;
-            var view = new MetaView('select', this);
+            var columnNames = [];
+            var callback ;
+            var view;
             
             if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
-            if (callback && typeof callback !== 'function') Message.error('ES021', ['filter', 'function']);
-            if (!Array.isArray(columnNames)) Message.error('ES021', ['names', 'array']);
+            if (p_filter && typeof p_filter !== 'function') Message.error('ES021', ['filter', 'function']);
+            // if (!Array.isArray(columnNames)) Message.error('ES021', ['names', 'array']);
+            callback = p_filter;
+            view = new MetaView('select', this);
             
-            if (typeof p_names === 'string') columnNames.push(p_names);
+            if (Array.isArray(p_names)) columnNames = p_names;
+            else if (typeof p_names === 'string') columnNames.push(p_names);
+            else if (typeof p_names !== 'undefined') Message.error('ES021', ['p_names', 'array<string> | string']);
 
             return this._buildEntity(view, callback, columnNames);
         };
@@ -791,7 +798,7 @@
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
-            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
+            if (typeof p_obj !== 'object' || p_obj === null) Message.error('ES021', ['obj', 'object']);
             if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
             if (opt <= 0 || opt > 3) Message.error('ES067', ['option', '1', '3']);
 
@@ -801,7 +808,7 @@
 
             if (p_obj instanceof BaseEntity) {
                 this._readEntity(p_obj, 3);
-            } else if (typeof p_obj === 'object') {
+            } else{
                 if (p_obj.viewName) this.viewName = p_obj.viewName;
                 if (p_obj.tableName) this.tableName = p_obj.tableName;
     
@@ -822,10 +829,12 @@
             if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
+                // obj = MetaRegistry.transformRefer(p_obj);
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                else obj = p_obj;
+                // else obj = p_obj;
                 obj = BaseEntity._transformSchema(obj); // gObj >> sObj<요약>
-            } else if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            }
+            if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
             // obj = BaseEntity._transformSchema(p_obj); // gObj >> sObj<요약>
 
@@ -851,14 +860,16 @@
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 obj = BaseEntity._transformSchema(p_obj);
-            } else if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            }
+            if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
             // obj = BaseEntity._transformSchema(p_obj);
 
             // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasRefer(p_obj)) {
             //     p_obj = MetaRegistry.transformRefer(p_obj);
             // }
 
-            rows = obj['rows'] || obj;
+            // rows = obj['rows'] || obj;
+            rows = obj['rows'];
             if (Array.isArray(rows) && this.columns.count > 0) {
                 for (var i = 0; i < rows.length; i++) {
                     var row = this.newRow(this);

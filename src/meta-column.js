@@ -708,7 +708,7 @@
                 },
                 set: function(newValue) { 
                     if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    if (!(new newValue() instanceof BaseColumn)) Message.error('ES032', ['_baseType', 'BaseColumn']);
+                    if (!(new newValue('temp') instanceof BaseColumn)) Message.error('ES032', ['_baseType', 'BaseColumn']);
                     _baseType = newValue;
                 },
                 enumerable: false,
