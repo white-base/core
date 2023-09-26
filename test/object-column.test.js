@@ -152,6 +152,27 @@ describe("[target: object-column.js]", () => {
                 expect(o2.caption).toBe(prop1.caption);
                 expect(o2.value).toBe(prop1.value);
             });
+            it("- default, value 가 같은 객체 일 경우 ", () => {
+                const t1 = new MetaTable('T1');
+                const e1 = new MetaElement('E1')
+                const prop1 = {
+                    default: e1,
+                    value: e1,
+                    alias: 'oo1',
+                    caption:'C1'
+                }
+                const o1 = new ObjectColumn('o1', null, prop1);
+                const g1 = o1.getObject();
+                const o2 = new ObjectColumn('o2');
+                o2.setObject(g1);
+
+                expect(o2._name).toBe('o1');
+                expect(o2.columnName).toBe('o1');
+                expect(o2.alias).toBe(prop1.alias);
+                expect(o2.default.equal(prop1.default)).toBe(true)
+                expect(o2.caption).toBe(prop1.caption);
+                expect(o2.value.equal(prop1.value)).toBe(true)
+            });
             it("- _entity 존재할 경우 : 예외 ", () => {
                 const t1 = new MetaTable('T1');
                 const obj1 = {aa: 1}

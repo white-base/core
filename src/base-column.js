@@ -252,6 +252,7 @@
         BaseColumn._NS = 'Meta.Entity';     // namespace
         BaseColumn._PARAMS = ['columnName', '_entity', '_property'];    // creator parameter
         BaseColumn._ABSCRACT = true;
+        BaseColumn._TYPES = [];
 
         /**
          * 프로퍼티 속성으로 로드한다.

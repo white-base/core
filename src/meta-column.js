@@ -894,6 +894,8 @@
             var property = {};
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            // POINT:
+            // if (this._valueTypes.length > 0) Util.validType(newValue, this._valueTypes);
             if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
                 Message.error('ES021', ['value', 'number, string, boolean']);
             }

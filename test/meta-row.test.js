@@ -15,6 +15,7 @@ const { MetaView }        = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
 const { MetaColumn }              = require('../src/meta-column');
 const { ObjectColumn }              = require('../src/object-column');
+const { BaseColumn } = require('../src/base-column');
 
 //==============================================================
 // test
@@ -52,7 +53,7 @@ describe("[target: meta-row.js]", () => {
             });
         });
         describe("MetaRow(entity) <생성자>", () => {
-            it("- new Row(entity) : 생성 ", () => {
+            it("- new MetaRow(entity) : 생성 ", () => {
                 var table1 = new MetaTable('T1');
                 table1.columns.addValue('i1', 'V1');
                 table1.columns.addValue('i2', 'V2');
@@ -72,12 +73,38 @@ describe("[target: meta-row.js]", () => {
                 expect(row2['i1']).toBeDefined();
                 expect(row2['i2']).toBeDefined();
             });
-            it("- new Row() : 예외(빈 엔티티) ", () => {
-                // var row = new MetaRow();
-                expect(() => new MetaRow()).toThrow('ES032');
+            it("- BaseColumn._valueTypes = [] 로우 생성 : 제한없음  ", () => {
+                class SubColumn extends BaseColumn {
+                    constructor(name, entity) { super(name, entity) }
+                    clone(p_entity) {
+                        var clone = new SubColumn(this.columnName);
+                        var rObj = this.getObject();
+                        clone.columnName = rObj.columnName;
+                        clone._entity = p_entity ? p_entity : this._entity;
+                        if (rObj.default) clone.default = rObj.default;
+                        if (rObj.caption) clone.caption = rObj.caption;
+                        if (rObj.alias) clone.alias = rObj.alias;
+                        if (rObj.value) clone.value = rObj.value;
+                        return clone;
+                    }
+                }
+                var table1 = new MetaTable('T1');
+                table1.columns._baseType = SubColumn;
+                table1.columns.addValue('c1', 'V1');
+                table1.columns.addValue('c2', 'V2');
+                table1.rows.add(table1.getValue());
+                table1.rows[0]['c1'] = 1
+                table1.rows[0]['c2'] = {}
+                table1.rows[0]['c1'] = true
+                table1.rows[0]['c2'] = /reg/
+
+                expect(table1.columns['c1']._type.name).toBe('SubColumn')
+                expect(table1.columns['c2']._type.name).toBe('SubColumn')
+                expect(table1.columns['c1']._entity === table1).toBe(true)
+                expect(table1.columns['c2']._entity === table1).toBe(true)
             });
-            it("- new Row() : 예외(빈 엔티티) ", () => {
-                expect(() => new MetaRow({})).toThrow('ES032');
+            it("- new MetaRow() : 예외(빈 엔티티) ", () => {
+                expect(() => new MetaRow()).toThrow('ES032');
             });
         });
         describe("MetaObject.equal() <객체 비교>", () => {
@@ -258,9 +285,72 @@ describe("[target: meta-row.js]", () => {
                  * MEMO:
                  */
             });
+            it("- setObject() : row별도 설정", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.addValue('a1', 'V1');
+                a1.columns.addValue('a2', 'V2');
+                var row = a1.getValue();
+                a1.rows.add(row);
+                const obj1 = a1.rows[0].getObject()
+                const row1 = new MetaRow(a1)
+
+                expect(a1.rows[0]['a1']).toBe('V1');
+                expect(a1.rows[0]['a2']).toBe('V2');
+                expect(row1['a1']).toBe(null);
+                expect(row1['a2']).toBe(null);
+                row1.setObject(obj1)
+                expect(row1['a1']).toBe('V1');
+                expect(row1['a2']).toBe('V2');
+            });
+            it("- setObject() : row별도 설정", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.addValue('a1', 'V1');
+                a1.columns.addValue('a2', 'V2');
+                var row = a1.getValue();
+                a1.rows.add(row);
+                const obj1 = a1.rows[0].getObject()
+                const row1 = new MetaRow(a1)
+
+                expect(a1.rows[0]['a1']).toBe('V1');
+                expect(a1.rows[0]['a2']).toBe('V2');
+                expect(row1['a1']).toBe(null);
+                expect(row1['a2']).toBe(null);
+                row1.setObject(obj1)
+                expect(row1['a1']).toBe('V1');
+                expect(row1['a2']).toBe('V2');
+            });
+            it("- 예외 : _elem, _kye 크기 다름", () => {
+                const a1 = new MetaTable('T1');
+                a1.columns.addValue('a1', 'V1');
+                a1.columns.addValue('a2', 'V2');
+                var row = a1.getValue();
+                a1.rows.add(row);
+                const obj1 = a1.rows[0].getObject()
+                const row1 = new MetaRow(a1)
+                obj1._key.pop() // 강제 키 제거
+                
+                expect(()=> row1.setObject(obj1)).toThrow(/ES063/)
+            });
+            it("- 예외 : $ref 가 없는 경우 ", () => {
+                var e1 = new MetaElement('E1')
+                const a1 = new MetaTable('T1');
+                a1.columns._baseType = ObjectColumn;
+                a1.columns.addValue('a1', e1);
+                a1.columns.addValue('a2', e1);
+                var row = a1.getValue();
+                a1.rows.add(row);
+                const obj1 = a1.rows[0].getObject()
+                const row1 = new MetaRow(a1)
+                row1.setObject(obj1)
+                
+                // obj1._key.pop() // 강제 키 제거
+                
+                // expect(()=> row1.setObject(obj1)).toThrow(/ES063/)
+            });
             /**
              * 예외
              * 참조삽입
+             * 다른 자료형의 로우를 복제하는 경우?
              */
         });
         describe("MetaRow.clone(): Row <복제>", () => {
@@ -301,16 +391,16 @@ describe("[target: meta-row.js]", () => {
         });
         describe("예외 및 커버리지", () => {
             
-            it("- 커버리지 : this.__SET$_keys() ", () => {
-                const table1 = new MetaTable('T1');
-                table1.columns.addValue('c1', 'V1');
-                const row1 = new MetaRow(table1);
+            // it("- 커버리지 : this.__SET$_keys() ", () => {
+            //     const table1 = new MetaTable('T1');
+            //     table1.columns.addValue('c1', 'V1');
+            //     const row1 = new MetaRow(table1);
 
-                row1.__SET$_keys(['cc1'], row1)
-                expect(row1._keys).toEqual(['cc1'])
-                row1.__SET$_keys(['ccc1'],)  // 접근금지
-                expect(row1._keys).toEqual(['cc1'])
-            });
+            //     row1.__SET$_keys(['cc1'], row1)
+            //     expect(row1._keys).toEqual(['cc1'])
+            //     row1.__SET$_keys(['ccc1'],)  // 접근금지
+            //     expect(row1._keys).toEqual(['cc1'])
+            // });
             it("- 커버리지 : this.__SET$_elements() ", () => {
                 const table1 = new MetaTable('T1');
                 table1.columns.addValue('c1', 'V1');
@@ -320,6 +410,16 @@ describe("[target: meta-row.js]", () => {
                 expect(row1._elements).toEqual(['r1'])
                 row1.__SET$_elements(['rr1'],)  // 접근금지
                 expect(row1._elements).toEqual(['r1'])
+            });
+            it("- 커버리지 : this.__GET$_elements() ", () => {
+                const table1 = new MetaTable('T1');
+                table1.columns.addValue('c1', 'V1');
+                const row1 = new MetaRow(table1);
+
+                var elem1 = row1.__GET$_elements(row1)
+                expect(elem1).toEqual(row1._elements)
+                var elem2 = row1.__GET$_elements()
+                expect(elem2).not.toEqual(row1._elements)
             });
         });
     });

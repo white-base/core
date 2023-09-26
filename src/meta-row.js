@@ -108,8 +108,11 @@
              * @member {Array} _L.Collection.BaseCollection#_elements  
              */
             Object.defineProperty(this, '_elements', {
+                // get: function() { return _elements; },
                 get: function() {
-                    return _elements;
+                    var arr = [];
+                    for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
+                    return arr;
                 },
                 // set: function(val) {
                 //     _elements = val;
@@ -120,7 +123,12 @@
 
             Object.defineProperty(this, '_keys',
             {
-                get: function() { return _keys; },
+                // get: function() { return _keys; },
+                get: function() {
+                    var arr = [];
+                    for (var i = 0; i < _keys.length; i++) arr.push(_keys[i]);
+                    return arr;
+                },
                 configurable: false,
                 enumerable: false,
             });
@@ -176,15 +184,21 @@
             });
 
             // inner variable access
+            this.__GET$_elements = function(call) {
+                if (call instanceof MetaRow) return _elements;
+            }
+            // this.__GET$_keys = function(call) {
+            //     if (call instanceof MetaRow) return _keys;
+            // };
             this.__SET$_elements = function(val, call) {
                 if (call instanceof MetaRow) _elements = val;    // 상속접근 허용
             }
-            this.__SET$_keys = function(val, call) {
-                if (call instanceof MetaRow) _keys = val;    // 상속접근 허용
-            };
-            this.__SET$_entity = function(val, call) {
-                if (call instanceof MetaRow) _entity = val;    // 상속접근 허용
-            };
+            // this.__SET$_keys = function(val, call) {
+            //     if (call instanceof MetaRow) _keys = val;    // 상속접근 허용
+            // };
+            // this.__SET$_entity = function(val, call) {
+            //     if (call instanceof MetaRow) _entity = val;    // 상속접근 허용
+            // };
             
             // BaseEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('BaseEntity'))) {
@@ -212,7 +226,9 @@
                         var oldValue = _elements[p_idx];
                         var column;
                         
-                        if (_entity && _entity.columns[p_idx]) column = _entity.columns[p_idx];
+                        // 엔티티 항상 존재함
+                        // if (_entity && _entity.columns[p_idx]) column = _entity.columns[p_idx];
+                        column = _entity.columns[p_idx];
                         if (column && column._valueTypes.length > 0) Util.validType(newValue, column._valueTypes);
 
                         // 트렌젹션 처리 => 함수로 추출 검토
@@ -338,7 +354,8 @@
                 // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
                 // else obj._elem.push(elem);
                 if (elem instanceof MetaObject) {
-                    if (MetaRegistry.hasGuidObject(elem, origin)) {
+                    // POINT:
+                    if (MetaRegistry.hasGuidObject(elem, origin) || MetaRegistry.hasGuidObject(elem, obj)) {
                         obj._elem.push(MetaRegistry.createReferObject(elem));
                     } else obj._elem.push(elem.getObject(vOpt, origin));
                 } else obj._elem.push(elem);
@@ -390,12 +407,15 @@
                     // this._elements[i].setObject(elem, origin);
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
-                    this._elements[i] = obj;
+                    this.__GET$_elements(this)[i] = obj;
+                    // this._elements[i] = obj;
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(origin, elem.$ref);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
-                    this._elements[i] = meta;        
-                } else this._elements[i] = elem;
+                    this.__GET$_elements(this)[i] = meta;   
+                    // this._elements[i] = meta;     
+                // } else this._elements[i] = elem;
+                } else this.__GET$_elements(this)[i] = elem;   
             }
         };
 
@@ -425,7 +445,7 @@
             }
             // clone._entity = p_entity ? p_entity : this._entity;
             clone.__SET$_elements(Util.deepCopy(obj._elem), this);
-            clone.__SET$_keys(Util.deepCopy(obj._key), this);
+            // clone.__SET$_keys(Util.deepCopy(obj._key), this);
 
             // for (var i = 0; i < this.count; i++) {
             //     clone._elements[i] = this._elements[i];   // 내부 복사

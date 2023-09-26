@@ -547,19 +547,7 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var elem;
 
-            elem = p_oGuid.value;
-            if (typeof elem === 'object' && elem !== null) {
-                if (MetaRegistry.isGuidObject(elem)) {
-                    var obj = MetaRegistry.createMetaObject(elem, origin);
-                    obj.setObject(elem, origin);
-                    this.value = obj;
-                
-                } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
-                    if (!meta) Message.error('ES015', ['ObjectColumn.value', '$ref']);
-                    this.value = meta;
-                }
-            }
+            // 주의! defuault 설정후 value 설정 :getObject() 와 동일
             elem = p_oGuid.default;
             if (typeof elem === 'object' && elem !== null) {
                 if (MetaRegistry.isGuidObject(elem)) {
@@ -573,6 +561,21 @@
                     this.default = meta;
                 }
             }
+
+            elem = p_oGuid.value;
+            if (typeof elem === 'object' && elem !== null) {
+                if (MetaRegistry.isGuidObject(elem)) {
+                    var obj = MetaRegistry.createMetaObject(elem, origin);
+                    obj.setObject(elem, origin);
+                    this.value = obj;
+                
+                } else if (elem['$ref']) {
+                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    if (!meta) Message.error('ES015', ['ObjectColumn.value', '$ref']);
+                    this.value = meta;
+                }
+            }
+            
 
                 // }else if (elem !== null) this.value = elem;
 
