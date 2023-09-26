@@ -284,10 +284,14 @@
                 for (var i = 0; i < p_items.length; i++) {
                     columnName = p_items[i];
                     if (typeof columnName !== 'string') Message.error('ES045', ['items', 'string']);
+                    var column = this.columns.alias(columnName)
                     // if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
                     // entity.columns.add(columnName);  // 참조로 등록
+                    // if (this.columns.existColumnName(columnName)) Message.error('ES042', [columnName, 'columnName']);
+                    // if (this.columns.existAlias(columnName)) Message.error('ES042', [columnName, 'alias']);
                     if (!this.columns.exist(columnName)) Message.error('ES053', ['items', 'column']);
-                    p_entity.columns.add(this.columns[i]);
+
+                    p_entity.columns.add(column);
                 }
             }
 

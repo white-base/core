@@ -83,7 +83,7 @@
                 set: function(newValue) { 
                     if (newValue === this.viewName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['viewName', 'string']);
-                    if (this._metaSet && this._metaSet.views.existViewName(newValue)) Message.error('ES041', [newValue]);
+                    // if (this._metaSet && this._metaSet.views.existViewName(newValue)) Message.error('ES041', [newValue]);
                     // viewName = newValue;
                     this.__SET$_name(newValue, this);
                 },
@@ -262,7 +262,7 @@
                 items = p_filter;
             }
 
-            return this._buildEntity(entity, callback, items).clone();
+            return this._buildEntity(entity, callback, items);
         };
 
         

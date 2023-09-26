@@ -165,23 +165,34 @@ describe("[target: object-column.js]", () => {
             it("- default, value 가 같은 객체 일 경우 ", () => {
                 const t1 = new MetaTable('T1');
                 const e1 = new MetaElement('E1')
-                const prop1 = {
-                    default: e1,
-                    value: e1,
-                    alias: 'oo1',
-                    caption:'C1'
-                }
-                const o1 = new ObjectColumn('o1', null, prop1);
-                const g1 = o1.getObject();
+                const o1 = new ObjectColumn('o1');
                 const o2 = new ObjectColumn('o2');
-                o2.setObject(g1);
+                const o3 = new ObjectColumn('o3');
+                t1.columns._baseType = ObjectColumn
+                o1.default = e1;
+                o2.value = e1;
+                o3.default = e1;
+                o3.value = e1;
+                t1.columns.add(o3)
+                t1.columns.add(o2)
+                t1.columns.add(o1)
+                const gt1 = t1.getObject();
+                const g1 = o1.getObject();
+                const g2 = o2.getObject();
+                const g3 = o3.getObject();
+                const tt1 = new MetaTable('TT1');
+                const ot1 = new ObjectColumn('ot1');
+                const ot2 = new ObjectColumn('ot2');
+                const ot3 = new ObjectColumn('ot3');
+                tt1.setObject(gt1);
+                ot1.setObject(g1);
+                ot2.setObject(g2);
+                ot3.setObject(g3);
 
-                expect(o2._name).toBe('o1');
-                expect(o2.columnName).toBe('o1');
-                expect(o2.alias).toBe(prop1.alias);
-                expect(o2.default.equal(prop1.default)).toBe(true)
-                expect(o2.caption).toBe(prop1.caption);
-                expect(o2.value.equal(prop1.value)).toBe(true)
+                expect(tt1.equal(t1)).toBe(true);
+                expect(ot1.equal(o1)).toBe(true);
+                expect(ot2.equal(o2)).toBe(true);
+                expect(ot3.equal(o3)).toBe(true);
             });
             
             it("- _entity 존재할 경우 : 예외 ", () => {
@@ -198,6 +209,38 @@ describe("[target: object-column.js]", () => {
                 const o2 = new ObjectColumn('o2');
                 
                 expect(()=> o2.setObject(g1)).toThrow(/ES015/)
+            });
+            it("- 예외 : $ref 연결 실패", () => {
+                const t1 = new MetaTable('T1');
+                const t2 = new MetaTable('T2');
+                const e1 = new MetaElement('E1')
+                const o1 = new ObjectColumn('o1');
+                const o2 = new ObjectColumn('o2');
+                const o3 = new ObjectColumn('o3');
+                t1.columns._baseType = ObjectColumn
+                t2.columns._baseType = ObjectColumn
+                o1.default = e1;
+                o2.value = e1;
+                o3.default = e1;
+                o3.value = e1;
+                t1.columns.add(o3)
+                t1.columns.add(o2)
+                t2.columns.add(o3)
+                t2.columns.add(o1)
+                const gt1 = t1.getObject();
+                const gt2 = t2.getObject();
+                gt1.columns._elem[0].value = {} // 강제 삭제
+                gt1.columns._elem[0].default = {}
+                gt2.columns._elem[0].value = {}
+                gt2.columns._elem[0].default = {}
+                const tt1 = new MetaTable('TT1');
+                const tt2 = new MetaTable('TT2');
+
+                expect(()=> tt1.setObject(gt1)).toThrow(/ES015/)
+                expect(()=> tt2.setObject(gt2)).toThrow(/ES015/)
+                /**
+                 * MEMO: 상위컬럼을 강제로 삭제해서 예외 확인
+                 */
             });
             // 논리적으로 안되는 맞음
             // it("- _entity 존재할 값에 value 에 삽입 ", () => {

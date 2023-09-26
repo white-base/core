@@ -207,6 +207,7 @@ describe("[target: meta-set.js]", () => {
                 expect(v2.columns['c2']._entity === v1).toBe(true);
                 expect(v3.columns['c3']._entity === v1).toBe(true);
             });
+
         });
         describe("MetaSet.clone() <복제>", () => {
             it("- clone() : 복제 ", () => {
@@ -1330,24 +1331,47 @@ describe("[target: meta-set.js]", () => {
         beforeAll(() => {
             // jest.resetModules();
         });
+        describe("MetaTableCollection._baseType <테이블 타입>", () => {
+            it("- this._baseType ", () => {
+                class SubClass extends MetaTable {
+                    constructor(name) { super(name)}
+                }
+                const set1 = new MetaSet('S1');
+                set1.tables._baseType = SubClass
+                set1.tables.add('T1');
+                
+                expect(set1.tables['T1'].tableName).toBe('T1');
+                expect(set1.tables['T1']._type.name).toBe('SubClass');
+            });
+            it("- 예외 ", () => {
+                const set1 = new MetaSet('S1');
+                
+                expect(()=> set1.tables._baseType = {}).toThrow(/ES021/)
+                expect(()=> set1.tables._baseType = MetaView).toThrow(/ES032/)
+            });
+        });
         describe("MetaTableCollection.add() <테이블 추가>", () => {
-            it("- tables.add() ", () => {
+            it("- tables.add() : 테이블 추가", () => {
                 const set1 = new MetaSet('S1');
                 const table1 = new MetaTable('T1');
                 set1.tables.add(table1);
                 
                 expect(set1.tables.count).toBe(1);
             });
-        });
-    });
-    describe("MetaVieweCollection :: 클래스", () => {
-        describe("MetaTableCollection.add() <뷰 추가>", () => {
-            it("- add() ", () => {
+            it("- add() : 뷰 추가", () => {
                 const set1 = new MetaSet('S1');
                 const veiw1 = new MetaView('V1');
                 set1.views.add(veiw1);
                 
                 expect(set1.views.count).toBe(1);
+            });
+            it("- 예외 : 다른 타입", () => {
+                const set1 = new MetaSet('S1');
+                set1.tables.add('T1');
+                
+                expect(()=> set1.tables.add({})).toThrow(/ES021/)
+                // expect(()=> set1.tables.add()).toThrow(/ES051/)
+                expect(()=> set1.tables.add('T1')).toThrow(/ES042/)
             });
         });
         describe("output(), load()", () => {

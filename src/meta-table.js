@@ -72,7 +72,7 @@
                 set: function(newValue) { 
                     if (newValue === this.tableName) return;
                     if (typeof newValue !== 'string') Message.error('ES021', ['tableName', 'string']);
-                    if (this._metaSet && this._metaSet.tables.existTableName(newValue)) Message.error('ES042', ['tableName', newValue]);
+                    // if (this._metaSet && this._metaSet.tables.existTableName(newValue)) Message.error('ES042', ['tableName', newValue]);
                     // tableName = newValue;
                     this.__SET$_name(newValue, this);
                 },
@@ -175,9 +175,8 @@
 
         /**
          * 엔티티를 복사한다. (조회 후 복제)
-         * @param {*} p_filter 
-         * @param {*} p_index 
-         * @param {*} p_end 
+         * @param {function | string | array} p_filter 
+         * @param {*} p_args
          */
         MetaTable.prototype.copy  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
@@ -200,7 +199,7 @@
                 items = p_filter;
             }
 
-            return this._buildEntity(entity, callback, items).clone();
+            return this._buildEntity(entity, callback, items);
         };
 
         /**
@@ -291,9 +290,9 @@
             var table;
             var key;
 
-            if (typeof p_any === 'string') {      
+            if (typeof p_any === 'string' && p_any.length > 0) {      
                 key  = p_any;
-                table = new MetaTable(key);
+                table = new this._baseType(key);
                 table._metaSet = this._owner;
             } else if (p_any instanceof MetaTable) {
                 key  = p_any.tableName;
@@ -301,7 +300,7 @@
                 p_any._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaTable object']);
 
-            if (typeof key === 'undefined') Message.error('ES051', ['tableName']);
+            // if (typeof key === 'undefined') Message.error('ES051', ['tableName']);
             if (this.existTableName(key)) Message.error('ES042', ['tableName', key]);
 
             _super.prototype.add.call(this, key, table);

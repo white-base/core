@@ -416,6 +416,10 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 expect(obj._elem[1].$ref).toBe(m1._guid)
                 expect(obj._type === 'Collection.PropertyCollection').toBe(true);
             });
+            it("- 커버리지 ", () => {
+                const a1 = new PropertyCollection();
+                const obj = a1.getObject(0, {});
+            });
         });
         describe("PropertyCollection.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
