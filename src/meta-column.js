@@ -66,7 +66,7 @@
          * @param {Object} p_property 속성 객체
          */
         function MetaColumn(p_name, p_entity, p_property) {
-            _super.call(this, p_name, p_entity, [String, Number, Boolean]);
+            _super.call(this, p_name, p_entity);
 
             var __value       = null;   // 재정의
             var __event        = new Observer(this);
@@ -430,7 +430,7 @@
 
         MetaColumn._NS = 'Meta.Entity';     // namespace
         MetaColumn._PARAMS = ['columnName', '_entity', '_property'];    // creator parameter
-
+        MetaColumn._TYPES = [String, Number, Boolean];
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
@@ -892,13 +892,14 @@
         MetaTableColumnCollection.prototype.addValue  = function(p_name, p_value) {
             var item;
             var property = {};
+            var _valueTypes = this._baseType._TYPES;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             // POINT:
-            // if (this._valueTypes.length > 0) Util.validType(newValue, this._valueTypes);
-            if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
-                Message.error('ES021', ['value', 'number, string, boolean']);
-            }
+            if (_valueTypes.length > 0) Util.validType(p_value, _valueTypes);
+            // if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
+            //     Message.error('ES021', ['value', 'number, string, boolean']);
+            // }
             
             property = { value: p_value };
 
@@ -1009,7 +1010,8 @@
         MetaViewColumnCollection.prototype.getObject = function(p_vOpt, p_origin) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
-            var origin = p_origin ? p_origin : obj;
+            // var origin = p_origin ? p_origin : obj;
+            var origin = [];
 
             // if (this._baseCollection) obj._baseCollection = MetaRegistry.createReferObject(this._baseCollection);
             // if (vOpt < 2 && vOpt > -1 && this._refEntities.length > 0) {
@@ -1126,11 +1128,14 @@
         MetaViewColumnCollection.prototype.addValue  = function(p_name, p_value, p_refCollection) {
             var item;
             var property = {};
+            var _valueTypes = this._baseType._TYPES;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
-            if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
-                Message.error('ES021', ['value', 'number, string, boolean']);
-            }
+            if (_valueTypes.length > 0) Util.validType(p_value, _valueTypes);
+            
+            // if(['number', 'string', 'boolean'].indexOf(typeof p_value) < 0) {
+            //     Message.error('ES021', ['value', 'number, string, boolean']);
+            // }
             // if (p_value instanceof BaseColumnCollection) Message.error('ES055', ['value', 'BaseColumnCollection instance']);    // Branch:
 
             property = { value: p_value };

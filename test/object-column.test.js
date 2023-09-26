@@ -128,6 +128,16 @@ describe("[target: object-column.js]", () => {
                 expect(g1.value).toEqual({$ref: e1._guid});
                 expect(g1._entity).toEqual({$ref: t1._guid});
             });
+            it("- 커버리지 ", () => {
+                const t1 = new MetaTable('T1');
+                const e1 = new MetaElement('E1')
+                const o1 = new ObjectColumn('o1');
+                const g1 = o1.getObject(0, {});
+
+                expect(g1._guid).toBe(o1._guid);
+                expect(g1._type).toBe('Meta.Entity.ObjectColumn');
+                expect(g1.columnName).toBe('o1');
+            });
         });
         describe("ObjectColumn.setObject() <객체 설정>", () => {
             it("- _entity 없을 경우 ", () => {
@@ -173,6 +183,7 @@ describe("[target: object-column.js]", () => {
                 expect(o2.caption).toBe(prop1.caption);
                 expect(o2.value.equal(prop1.value)).toBe(true)
             });
+            
             it("- _entity 존재할 경우 : 예외 ", () => {
                 const t1 = new MetaTable('T1');
                 const obj1 = {aa: 1}
@@ -213,7 +224,27 @@ describe("[target: object-column.js]", () => {
             // });
         });
         describe("ObjectColumn.clone() <복제>", () => {
-            it("- _type : function ", () => {
+            it("- clone() : 복제 ", () => {
+                var table = new MetaTable('T1');
+                var prop = {
+                    default: {aa: 0},
+                    caption: 'C1',
+                    alias: 'ii1',
+                }
+                var item1 = new ObjectColumn('i1', table, prop);            
+                var item2 = item1.clone();
+        
+                // item1
+                expect(item1._entity.tableName).toBe('T1');
+                expect(item1.default).toBe(prop.default);
+                expect(item1.caption).toBe(prop.caption);
+                // item2
+                expect(item2._entity.tableName).toBe('T1');
+                expect(item2.default).toBe(prop.default);
+                expect(item2.caption).toBe(prop.caption);
+                // 비교
+                expect(item1 === item2).toBe(false);
+                expect(item1.equal(item2)).toBe(true);
             });
         });
         /**

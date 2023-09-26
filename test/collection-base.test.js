@@ -51,9 +51,17 @@ describe("[target: collection-base.js]", () => {
                     constructor(){ super()}
                 }
                 const s1 = new SubCollection();
-                
+               
                 expect(()=> s1.add()).toThrow(/ES013/)
                 expect(()=> s1.clear()).toThrow(/ES013/)
+            });
+
+            it("- getObject()  ", () => {
+                class SubCollection extends BaseCollection {
+                    constructor(){ super()}
+                }
+                const s1 = new SubCollection();
+               const obj1 = s1.getObject( 0, {})
             });
 
         });

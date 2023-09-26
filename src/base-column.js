@@ -59,7 +59,8 @@
          * @param {BaseEntity?} p_entity 소유 BaseEntity
          * @param {Object} p_property 속성 객체
          */
-        function BaseColumn(p_name, p_entity, p_valueTypes) {
+        function BaseColumn(p_name, p_entity) {
+        // function BaseColumn(p_name, p_entity, p_valueTypes) {
             _super.call(this, p_name);
 
             // var property      = p_property || {};
@@ -67,7 +68,8 @@
             // var columnName;
             var __key           = p_name;
             var _entity;
-            var _valueTypes     = Array.isArray(p_valueTypes) ? p_valueTypes : [];
+            // var _valueTypes     = Array.isArray(p_valueTypes) ? p_valueTypes : [];
+            var _valueTypes     = this._type._TYPES || [];
             var defaultValue    = null;
             var caption         = null;
             var alias           = null;
@@ -308,7 +310,12 @@
         BaseColumn.prototype.getObject = function(p_vOpt, p_origin) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
-            var origin = p_origin ? p_origin : obj;
+            var origin = [];
+            // var origin = p_origin ? p_origin : obj;
+
+            if (Array.isArray(p_origin)) origin = p_origin;
+            else if (p_origin) origin.push(p_origin);
+            origin.push(obj);
             
             // if (vOpt > -2 && this._entity && this._entity.columns && this._entity.columns[this.__key]
             //     && this._entity.columns[this.__key] !== this) {

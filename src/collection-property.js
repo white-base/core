@@ -137,10 +137,51 @@
          * @virtual
          * @returns {object}
          */
+        // PropertyCollection.prototype.getObject = function(p_vOpt, p_origin) {
+        //     var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        //     var vOpt = p_vOpt || 0;
+        //     var origin = [];
+        //     // var origin = p_origin ? p_origin : obj;
+
+        //     if (Array.isArray(p_origin)) origin = p_origin;
+        //     else if (p_origin) origin.push(p_origin);
+        //     origin.push(obj);
+            
+        //     if (this._descriptors.length > 0) {
+        //         obj._desc = [];
+        //         for (var i = 0; i < this._descriptors.length; i++) {
+        //             obj._desc.push(this._descriptors[i]);
+        //         }
+        //     }
+        //     obj._elem = [];
+        //     for (var i = 0; i < this._elements.length; i++) {
+        //         var elem = this._elements[i];
+        //         // POINT:
+        //         // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
+        //         // else obj._elem.push(elem)
+        //         if (elem instanceof MetaObject) {
+        //             if (MetaRegistry.hasGuidObject(elem, origin)) {
+        //                 obj._elem.push(MetaRegistry.createReferObject(elem));
+        //             } else obj._elem.push(elem.getObject(vOpt, origin));
+        //         } else obj._elem.push(elem);
+        //     }
+
+        //     obj._key = [];
+        //     for (var i = 0; i < this._keys.length; i++) {
+        //         var key = this._keys[i];
+        //         obj._key.push(key);
+        //     }
+        //     return obj;                        
+        // };
+        // POINT: 2
         PropertyCollection.prototype.getObject = function(p_vOpt, p_origin) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
-            var origin = p_origin ? p_origin : obj;
+            var origin = [];
+
+            if (Array.isArray(p_origin)) origin = p_origin;
+            else if (p_origin) origin.push(p_origin);
+            origin.push(obj);
 
             if (this._descriptors.length > 0) {
                 obj._desc = [];
@@ -223,8 +264,12 @@
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
             // p_value = typeof p_value === 'undefined' ? null : p_value;
             var index   = this._elements.length;;
+            var regex = /^[a-zA-Z_][a-zA-Z0-9_]*/;
             
+            
+
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            if(!regex.test(p_name)) Message.error('ES068', [p_name, 'Propery.name']);
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
             // 예약어 검사
             if (this._KEYWORD.indexOf(p_name) > -1) {

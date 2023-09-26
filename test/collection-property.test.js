@@ -695,6 +695,11 @@ describe("[target: collection-property.js, collection-base.js]", () => {
                 s.columns.add('p2', null, desc2);
                 expect(count).toBe(2)
             });
+            it("- add(name) : 이름규칙 (예외)", () => {
+                let s = new Student();
+                expect(() => s.columns.add('10')).toThrow(/ES068/);
+                expect(() => s.columns.add('0')).toThrow(/ES068/);
+            });
         });
         describe("PropertyCollection.clear() <초기화> ", () => {
             it("- clear() ", () => {

@@ -413,46 +413,41 @@
             return false;
         };
 
+        // MetaRegistry.hasGuidObject = function(p_target, p_origin) {
+        //     var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
+        //     var origin = p_origin;
+        //     var arrObj = this.__getObjectList(origin);
+
+        //     // TODO: origin 필수 검사
+        //     if (typeof guid !== 'string' || guid.length == 0) Message.error('ES024', ['p_target', 'string | object<guid>']);
+        //     if (typeof origin !== 'object' || origin === null) Message.error('ES024', ['p_origin', 'object']);
+            
+        //     for (var i = 0; i < arrObj.length; i++) {
+        //         if (arrObj[i]._guid === guid) return true;
+        //     }
+        //     return false;
+        // };
+        // // POINT:2
         MetaRegistry.hasGuidObject = function(p_target, p_origin) {
             var guid = typeof p_target === 'string' ? p_target : p_target['_guid'];
-            var origin = p_origin;
-            var arrObj = this.__getObjectList(origin);
-            // var overCount = 0;
+            var arrOrigin = [];
 
-            // TODO: origin 필수 검사
             if (typeof guid !== 'string' || guid.length == 0) Message.error('ES024', ['p_target', 'string | object<guid>']);
-            if (typeof origin !== 'object' || origin === null) Message.error('ES024', ['p_origin', 'object']);
-            // if (!this.isGuidObject(p_target)) Message.error('ES024', ['p_target', 'object<guid>']);
-            // if (!this.isGuidObject(p_origin)) Message.error('ES024', ['p_origin', 'object<guid>']);
-            
-            for (var i = 0; i < arrObj.length; i++) {
-                if (arrObj[i]._guid === guid) return true;
-                // if (overCount > 0) return true;
+            // TODO: p_origin 타입 검사 추가            
+
+            if (Array.isArray(p_origin)) arrOrigin = p_origin;
+            else arrOrigin.push(p_origin);
+
+
+            for (var i = 0; i < arrOrigin.length; i++) {
+                var origin = arrOrigin[i];
+                var arrObj = this.__getObjectList(origin);
+                if (typeof origin !== 'object' || origin === null) Message.error('ES024', ['p_origin', 'object']);
+                for (var ii = 0; ii < arrObj.length; ii++) {
+                    if (arrObj[ii]._guid === guid) return true;
+                }
             }
             return false;
-
-            // return findCycleObject(origin);
-            
-            // // inner function
-            // function findCycleObject(oGuid) {
-            //     if (Array.isArray(oGuid)){
-            //         for(var i = 0; i < oGuid.length; i++) {
-            //             if (typeof oGuid[i] === 'object' && oGuid[i] !== null) {
-            //                 if (findCycleObject(oGuid[i])) return true;
-            //             }
-            //         }
-            //     } else {
-            //         if (oGuid['_guid'] && oGuid['_guid'] === guid && origin['_guid'] !== guid) {
-            //             return true;
-            //         }
-            //         for(var prop in oGuid) {
-            //             if (typeof oGuid[prop] === 'object' && oGuid[prop] !== null) {
-            //                 if(findCycleObject(oGuid[prop])) return true;
-            //             } 
-            //         }
-            //     }
-            //     return false;
-            // }
         };
 
 

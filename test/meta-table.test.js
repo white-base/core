@@ -14,6 +14,7 @@ const { MetaView }              = require('../src/meta-view');
 const Util                  = require('../src/util');
 const { MetaRow }               = require('../src/meta-row');
 const { MetaColumn }              = require('../src/meta-column');
+const {ObjectColumn}           = require('../src/object-column');
 const { replacer, reviver, stringify, parse }              = require('telejson');
 const {MetaRegistry}        = require('../src/meta-registry');
 const { loadNamespace } = require('../src/load-namespace');
@@ -1356,6 +1357,29 @@ describe("[target: meta-table.js]", () => {
                 expect(obj.rows._elem[0]._elem).toEqual(['R1', 'R2']);
                 expect(obj.rows._elem[0]._key).toEqual(['a1', 'a2']);
             });
+            it("- getObject() : value, default 메타 객체 ", () => {
+                const e1 = new MetaElement('E1')
+                const a1 = new MetaTable('T1');
+                a1.columns._baseType = ObjectColumn
+                a1.columns.add('a1');
+                a1.columns.add('a2');
+                a1.columns['a1'].value = e1;
+                // a1.columns['a1'].default = e1;
+                a1.columns['a2'].value = e1;
+                a1.columns['a2'].default = e1;
+                const obj1 = a1.getObject();
+                const obj2 = a1.columns.getObject();
+
+                expect(obj1.columns).toEqual(obj2);
+                expect(obj1.columns._elem[0]._type === 'Meta.Entity.ObjectColumn').toBe(true);
+                expect(obj1.columns._elem[0].name === 'a1').toBe(true);
+                expect(obj1.columns._elem[0].value).toEqual(e1.getObject())
+                expect(obj1.columns._elem[1]._type === 'Meta.Entity.ObjectColumn').toBe(true);
+                expect(obj1.columns._elem[1].name === 'a2').toBe(true);
+                expect(obj1.columns._elem[1].value).toEqual({$ref: e1._guid})
+                expect(obj1.columns._elem[1].value).toEqual({$ref: e1._guid})
+                expect(obj1.columns._key).toEqual(['a1', 'a2']);
+            });
         });
         describe("MetaTable.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
@@ -1370,7 +1394,7 @@ describe("[target: meta-table.js]", () => {
                 // 참조 변환 > 객체 초기화 > 네임스페이스 로드
                 const mObj = MetaRegistry.transformRefer(rObj);  
                 // MetaRegistry.init();
-                // loadNamespace();
+                // loadNamespace(); 
                 const a2 = new MetaTable('T2');
                 a2.setObject(mObj);
                 const obj = a2.getObject();

@@ -228,7 +228,12 @@
         MetaSet.prototype.getObject = function(p_vOpt, p_origin) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
-            var origin = p_origin ? p_origin : obj;
+            var origin = [];
+            // var origin = p_origin ? p_origin : obj;
+            
+            if (Array.isArray(p_origin)) origin = p_origin;
+            else if (p_origin) origin.push(p_origin);
+            origin.push(obj);
 
             obj.setName = this.setName;
             obj.tables = this.tables.getObject(vOpt, origin);

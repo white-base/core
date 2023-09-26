@@ -341,6 +341,10 @@ describe("[target: collection-array.js, collection-base.js]", () => {
                 expect(obj._elem[1].$ref).toBe(m1._guid)
                 expect(obj._type === 'Collection.ArrayCollection').toBe(true);
             });
+            it("- 커버리지 ", () => {
+                const a1 = new ArrayCollection();
+                const obj = a1.getObject(0, {});
+            });
         });
         describe("ArrayCollection.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {

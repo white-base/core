@@ -430,6 +430,7 @@
 
         ObjectColumn._NS = 'Meta.Entity';     // namespace
         ObjectColumn._PARAMS = ['columnName', '_entity', '_property'];    // creator parameter
+        ObjectColumn._TYPES = [Object];
 
         // /**
         //  * @listens _L.Meta.Entity.ObjectColumn#_onChanged
@@ -486,6 +487,28 @@
         //     return true;
         // };
 
+        
+        // ObjectColumn.prototype.getObject = function(p_vOpt, p_origin) {
+        //     var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        //     var vOpt = p_vOpt || 0;
+        //     var origin = p_origin ? p_origin : obj;
+        //     var defValue = this.default;
+        //     var value = this.value;
+
+        //     if (defValue instanceof MetaObject) {
+        //         if (MetaRegistry.hasGuidObject(defValue, origin)) {
+        //             obj.default = MetaRegistry.createReferObject(defValue);
+        //         } else obj.default = defValue.getObject(vOpt, origin);
+        //     }
+
+        //     if (value instanceof MetaObject) {
+        //         if (MetaRegistry.hasGuidObject(value, origin)) {
+        //             obj.value = MetaRegistry.createReferObject(value);
+        //         } else obj.value = value.getObject(vOpt, origin);
+        //     }
+        //     return obj;                        
+        // };
+        // // POINT: 2
         /**
          * 메타 객체를 얻는다
          * @virtual
@@ -494,9 +517,13 @@
         ObjectColumn.prototype.getObject = function(p_vOpt, p_origin) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
-            var origin = p_origin ? p_origin : obj;
+            var origin = [];
             var defValue = this.default;
             var value = this.value;
+
+            if (Array.isArray(p_origin)) origin = p_origin;
+            else if (p_origin) origin.push(p_origin);
+            origin.push(obj);
 
             if (defValue instanceof MetaObject) {
                 if (MetaRegistry.hasGuidObject(defValue, origin)) {
@@ -509,30 +536,6 @@
                     obj.value = MetaRegistry.createReferObject(value);
                 } else obj.value = value.getObject(vOpt, origin);
             }
-            // } else obj.value = value;
-            
-            // if (vOpt > -2 && this._entity && this._entity.columns && this._entity.columns[this.__key]
-            //     && this._entity.columns[this.__key] !== this) {
-            //     return MetaRegistry.createReferObject(this); // 소유자가 아니면 참조 리턴
-            // }
-
-            // if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
-            //     obj.__subscribers = this.__event.__subscribers;
-            // }
-            // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
-            // if (vOpt < 2 && vOpt > -1 && this._entity) {
-            //     obj._entity = MetaRegistry.createReferObject(this._entity);
-            // }
-            // obj.columnName = this.columnName;
-            // if (this.default !== null) obj.default = this.default;
-            // if (this.caption !== null) obj.caption = this.caption;            
-            // if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
-            // if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;
-            // if (this.constraints.length > 0) obj.constraints = Util.deepCopy(this.constraints);
-            // if (this.getter !== null) obj.getter = this.getter;
-            // if (this.setter !== null) obj.setter = this.setter;
-            // if (this.__GET$alias(this) !== null) obj.alias = this.__GET$alias(this);
-            // if (this.value !== null) obj.value = this.value;    // 오버라이딩
             return obj;                        
         };
 
@@ -613,7 +616,7 @@
             // if (rObj.columnName) clone.columnName = rObj.columnName;
             clone.columnName = rObj.columnName;
             clone._entity = p_entity ? p_entity : this._entity;
-            if (rObj.default) clone.default = rObj.default;
+            if (rObj.default) clone.default = this.default;
             if (rObj.caption) clone.caption = rObj.caption;
             // if (rObj.isNotNull) clone.isNotNull = rObj.isNotNull;
             // if (rObj.isNullPass) clone.isNullPass = rObj.isNullPass;
@@ -621,7 +624,7 @@
             // if (rObj.getter) clone.getter = rObj.getter;
             // if (rObj.setter) clone.setter = rObj.setter;
             if (rObj.alias) clone.alias = rObj.alias;
-            if (rObj.value) clone.value = rObj.value;
+            if (rObj.value) clone.value = this.value;
 
             return clone;
         };
@@ -728,6 +731,8 @@
         return ObjectColumn;
     
     }(BaseColumn));
+    
+
 
     //==============================================================
     // 5. module export

@@ -232,6 +232,44 @@ describe("[target: meta-row.js]", () => {
                  * MEMO: 메타객체와 참조 객체 얻기 확인
                  */
             });
+            it("- 컬럼 value 에 값을 삽입한 경우 ", () => {
+                var e1 = new MetaElement('E1')
+                const a1 = new MetaTable('T1');
+                a1.columns._baseType = ObjectColumn;
+                a1.columns.addValue('a1', e1);
+                a1.columns.addValue('a2', e1);
+                var row = a1.getValue();
+                a1.rows.add(row);
+                const obj1 = a1.rows[0].getObject()
+                const obj2 = a1.getObject()
+                
+                expect(obj1._elem[0]).toEqual(e1.getObject());
+                expect(obj1._elem[1]).toEqual({$ref: e1._guid});
+                expect(obj2.rows._elem[0]._elem[0]).toEqual({$ref: e1._guid});
+                expect(obj2.rows._elem[0]._elem[1]).toEqual({$ref: e1._guid});
+                /**
+                 * MEMO:
+                 * - obj1 은 자신을 기준으로 가져오므로 guid, ref 존재 확인
+                 * - obj2 은 엔티티를 기준으로 가져오므로 ref 만 존재 확인
+                 */
+
+            });
+            it("- 커버리지 : getObject() ", () => {
+                var e1 = new MetaElement('E1')
+                const a1 = new MetaTable('T1');
+                a1.columns._baseType = ObjectColumn;
+                a1.columns.addValue('a1', e1);
+                a1.columns.addValue('a2', e1);
+                var row = a1.getValue();
+                a1.rows.add(row);
+                const obj1 = a1.rows[0].getObject(0, {})    // 커버리지
+                const obj2 = a1.getObject()
+                
+                expect(obj1._elem[0]).toEqual(e1.getObject());
+                expect(obj1._elem[1]).toEqual({$ref: e1._guid});
+                expect(obj2.rows._elem[0]._elem[0]).toEqual({$ref: e1._guid});
+                expect(obj2.rows._elem[0]._elem[1]).toEqual({$ref: e1._guid});
+            });
         });
         describe("MetaRow.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
@@ -340,12 +378,11 @@ describe("[target: meta-row.js]", () => {
                 var row = a1.getValue();
                 a1.rows.add(row);
                 const obj1 = a1.rows[0].getObject()
+                const obj2 = a1.getObject()
                 const row1 = new MetaRow(a1)
-                row1.setObject(obj1)
+                obj1._elem[0] = 'ERR' // 강제 guid 제거
                 
-                // obj1._key.pop() // 강제 키 제거
-                
-                // expect(()=> row1.setObject(obj1)).toThrow(/ES063/)
+                expect(()=> row1.setObject(obj1)).toThrow(/ES015/)
             });
             /**
              * 예외
@@ -816,6 +853,21 @@ describe("[target: meta-row.js]", () => {
                 expect(()=> table1.rows.insertAt(-1, row2)).toThrow(/ES062/);
             });
         });
+        describe("예외 및 커버리지", () => {
+            
+            it("- 커버리지 : _elemTypes = [] 제거 ", () => {
+                var table1 = new MetaTable('T1');
+                table1.columns.add('i1')
+                var row1 = table1.newRow();
+                table1.rows.add(row1);  // 정상 등록
+                
+                expect(()=> table1.rows[0] = {}).toThrow(/ES032/)
+                table1.rows._elemTypes.length = 0   // 강제 삭제
+                table1.rows[0] = row1;
+            });
+
+        });
+        
     });
 
     

@@ -386,16 +386,34 @@
         
         };
         
+        // BaseEntity.prototype.getObject = function(p_vOpt, p_origin) {
+        //     var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        //     var vOpt = p_vOpt || 0;
+        //     var origin = p_origin ? p_origin : obj;
+        //     var _metaSet;
+
+        //     if (vOpt < 2 && vOpt > -1 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
+        //     obj.columns = this.columns.getObject(vOpt, origin);
+        //     obj.rows = this.rows.getObject(vOpt, origin);
+        //     return obj;                        
+        // };
+        // POINT: 2
+
         /**
          * 메타 객체를 얻는다
          * @virtual
          * @returns {object}
          */
+
         BaseEntity.prototype.getObject = function(p_vOpt, p_origin) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
             var vOpt = p_vOpt || 0;
-            var origin = p_origin ? p_origin : obj;
+            var origin = [];
             var _metaSet;
+            
+            if (Array.isArray(p_origin)) origin = p_origin;
+            else if (p_origin) origin.push(p_origin);
+            origin.push(obj);
 
             if (vOpt < 2 && vOpt > -1 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
             obj.columns = this.columns.getObject(vOpt, origin);
