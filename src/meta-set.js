@@ -97,7 +97,8 @@
                 set: function(newValue) { 
                     if (typeof newValue !== 'string') Message.error('ES021', ['setName', 'string']);
                     // setName = newValue;
-                    this.__SET$_name(newValue, this);
+                    // this.__SET$_name(newValue, this);
+                    this._name = newValue;
                 },
                 configurable: false,
                 enumerable: true
@@ -142,7 +143,7 @@
                 enumerable: true
             });
 
-            this.setName  = p_name || '';
+            // this.setName  = p_name || '';
             
             // this._implements(ISchemaControl, IAllControl);
             Util.implements(this, ISchemaControl, IImportControl, IExportControl, ITransaction, ISerialize);
@@ -197,28 +198,28 @@
             return false;
         };
         
-        MetaSet.prototype._loadMetaSet = function(p_metaSet, p_option) {
-            var opt = typeof p_option === 'undefined' ? 3 : p_option;
-            var _this = this;
+        // MetaSet.prototype._loadMetaSet = function(p_metaSet, p_option) {
+        //     var opt = typeof p_option === 'undefined' ? 3 : p_option;
+        //     var _this = this;
 
-            if (!(p_metaSet instanceof BaseEntity)) Message.error('ES032', ['metaSet', 'MetaSet']);
-            if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
+        //     if (!(p_metaSet instanceof BaseEntity)) Message.error('ES032', ['metaSet', 'MetaSet']);
+        //     if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
 
-            if (p_metaSet.tables) loadEntity(p_metaSet.tables, this.tables); 
-            if (p_metaSet.views) loadEntity(p_metaSet.views, this.views); 
+        //     if (p_metaSet.tables) loadEntity(p_metaSet.tables, this.tables); 
+        //     if (p_metaSet.views) loadEntity(p_metaSet.views, this.views); 
 
 
-            function loadEntity(p_target, p_orignal) {
-                if (!(p_target instanceof MetaTableCollection || p_target instanceof MetaTableCollection )) {
-                    Message.error('ES032', ['target', 'MetaTableCollection, MetaTableCollection']);
-                }
-                for (var i = 0; i < p_target.count; i++) {
-                    var key = p_target.keyOf(i);
-                    if (p_orignal.exist(key)) Message.error('ES046', ['collection', key]);
-                    p_orignal._loadEntity(p_target[i], opt);
-                }
-            }
-        };
+        //     function loadEntity(p_target, p_orignal) {
+        //         if (!(p_target instanceof MetaTableCollection || p_target instanceof MetaTableCollection )) {
+        //             Message.error('ES032', ['target', 'MetaTableCollection, MetaTableCollection']);
+        //         }
+        //         for (var i = 0; i < p_target.count; i++) {
+        //             var key = p_target.keyOf(i);
+        //             if (p_orignal.exist(key)) Message.error('ES046', ['collection', key]);
+        //             p_orignal._loadEntity(p_target[i], opt);
+        //         }
+        //     }
+        // };
 
         /**
          * 메타 객체를 얻는다
@@ -288,6 +289,11 @@
                 if (typeof p_parse === 'function') obj = p_parse(obj);
                 else obj = JSON.parse(obj, null);
             }
+            
+            if (typeof obj !== 'object' || obj === null) Message.error('ES021', ['obj', 'object']);
+            
+            // REVIEW: 필요한지 검토
+            // if(!MetaRegistry.isGuidObject(obj)) Message.error('ES022', ['p_obj']);
 
             this.setObject(obj);
             // if (MetaRegistry.isGuidObject(obj)) {
@@ -306,25 +312,34 @@
         };
 
         MetaSet.prototype.read  = function(p_obj, p_opt) {
-            var opt = typeof p_option === 'undefined' ? 3 : p_option;
-            
-            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
+            var opt = typeof p_opt === 'undefined' ? 3 : p_opt;
+            var entity;
+
+            if (typeof p_obj !== 'object' || p_obj === null) Message.error('ES021', ['obj', 'object']);
             if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
 
             if (p_obj instanceof MetaSet) {
-                if (p_obj.setName && p_obj.setName.length > 0) this.setName = p_obj.setName;
-                for (var i = 0; i < this.tables.count; i++) {
-                    this.tables[i]._readEntity(p_obj, p_opt);
+                // if (p_obj.setName && p_obj.setName.length > 0) this.setName = p_obj.setName;
+                this.setName = p_obj.setName;
+
+                for (var i = 0; i < p_obj.tables.count; i++) {
+                    var key = p_obj.tables.keyOf(i);
+                    if (this.tables.indexOf(key, 1) < 0) this.tables.add(key);
+                    entity = this.tables[key];
+                    entity._readEntity(p_obj.tables[key], p_opt);
                 }
-                for (var i = 0; i < this.views.count; i++) {
-                    this.views[i]._readEntity(p_obj, p_opt);
+                for (var i = 0; i < p_obj.views.count; i++) {
+                    // this.views[i]._readEntity(p_obj, p_opt);
+                    var key = p_obj.views.keyOf(i);
+                    if (this.views.indexOf(key, 1) < 0) this.views.add(key);
+                    entity = this.views[key];
+                    entity._readEntity(p_obj.views[key], p_opt);
                 }
-            } else if (typeof p_obj === 'object') {
+            } else {
                 // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
                 if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
                 if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
             }
-            
         };
 
         
@@ -339,45 +354,47 @@
             obj = metaSet;
 
             if (MetaRegistry.isGuidObject(metaSet)) {
-                if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
+                // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);  // 참조가 기본 존재함
+                metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformSchema(metaSet);
             } else if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
 
-            if (obj['tables']) {
-                entity = obj['tables'];
-                if (entity['$key'] && Array.isArray(entity['$key'])) {
-                    for (var i = 0; i < entity['$key'].length; i++) {
-                        addEntity(entity['$key'][i], entity, this.tables);
-                    }
-                } else for (var key in entity) addEntity(key, entity, this.tables);
-            }
-            if (obj['views']) {
-                entity = obj['views'];
-                if (entity['$key'] && Array.isArray(entity['$key'])) {
-                    for (var i = 0; i < entity['$key'].length; i++) {
-                        addEntity(entity['$key'][i], entity, this.views);
-                    }
-                } else for (var key in entity) addEntity(key, entity, this.views);
-            }
+            // if (obj['tables']) {
+            entity = obj['tables'];
+            if (entity['$key'] && Array.isArray(entity['$key'])) {
+                for (var i = 0; i < entity['$key'].length; i++) {
+                    addEntity(entity['$key'][i], entity, this.tables);
+                }
+            } else for (var key in entity) addEntity(key, entity, this.tables);
+            // }
+            // if (obj['views']) {
+            entity = obj['views'];
+            if (entity['$key'] && Array.isArray(entity['$key'])) {
+                for (var i = 0; i < entity['$key'].length; i++) {
+                    addEntity(entity['$key'][i], entity, this.views);
+                }
+            } else for (var key in entity) addEntity(key, entity, this.views);
+            // }
             return;
 
             // inner funciton
             function addEntity(key, p_collec, p_baseCollec) {
-                var prop;
-
-                if (Object.hasOwnProperty.call(p_collec, key) && typeof p_collec[key] === 'object') {
-                    prop = p_collec[key];
+                var prop = p_collec[key];
+                var entity;
+                // if (Object.hasOwnProperty.call(p_collec, key) && typeof p_collec[key] === 'object') {
+                // if (prop) {
+                    // prop = p_collec[key];
                     // if (prop['_metaSet'] && MetaRegistry.has(prop['_metaSet'])) {
                     //     prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']);
                     // }
-                    if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
-                    p_baseCollec.add(key);
-                    
-                    MetaRegistry.createSetObject(prop, p_baseCollec[key]); 
-                    
-                    p_baseCollec[key]._readSchema(p_collec[key], p_createRow, obj);                    
-                }
+                // if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
+                if (!p_baseCollec.exist(key)) p_baseCollec.add(key);
+                
+                MetaRegistry.createSetObject(prop, p_baseCollec[key]); 
+                
+                p_baseCollec[key]._readSchema(p_collec[key], p_createRow, obj);                    
+                // }
             }
         };
 
@@ -392,21 +409,22 @@
             var obj;
             var rows;
 
-            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
+            if (typeof p_obj !== 'object' || p_obj === null) Message.error('ES021', ['obj', 'object']);
             
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             obj = metaSet;
 
             if (MetaRegistry.isGuidObject(metaSet)) {
-                if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
+                // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
+                metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformSchema(metaSet);
             } else if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
 
             // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             
-            if (obj['tables']) createRow(obj['tables'], this.tables);
-            if (obj['views']) createRow(obj['views'], this.views);
+            if (typeof obj['tables'] === 'object' && obj['tables'] !== null) createRow(obj['tables'], this.tables);
+            if (typeof obj['views'] === 'object' && obj['views'] !== null) createRow(obj['views'], this.views);
 
             function createRow(p_entity, p_collec) {
                 for (var key in p_entity) {

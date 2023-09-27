@@ -336,7 +336,7 @@
         /**
          * 
          * @param {string | any} p_obj key 또는 대상 객체
-         * @param {number} p_opt 옵션 :  0 = 요소로 조회, 1 = idx로 조회
+         * @param {number} p_opt 옵션 :  0 = 요소로 조회, 1 = idx로 조회    TODO: 숫자에서 변수명으로 변경 요망
          * @returns 
          */
         PropertyCollection.prototype.indexOf = function(p_obj, p_opt) {

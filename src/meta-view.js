@@ -126,9 +126,9 @@
             this.columns = new MetaViewColumnCollection(this);
 
             // inner variable access
-            this.__SET$_baseEntity = function(val, call) {
-                if (call instanceof MetaView) _baseEntity = val;
-            }
+            // this.__SET$_baseEntity = function(val, call) {
+            //     if (call instanceof MetaView) _baseEntity = val;
+            // }
         }
         Util.inherits(MetaView, _super);
 
@@ -197,7 +197,8 @@
             if (p_oGuid._baseEntity) {
                 baseEntity = MetaRegistry.findSetObject(origin, p_oGuid._baseEntity.$ref);
                 if (!baseEntity) Message.error('ES015', [p_oGuid.name, '_baseEntity']);
-                this.__SET$_baseEntity(baseEntity, this);
+                // this.__SET$_baseEntity(baseEntity, this);
+                this._baseEntity = baseEntity;
             } 
             this.columns.setObject(p_oGuid.columns, origin);
             this.rows.setObject(p_oGuid.rows, origin);
@@ -239,9 +240,8 @@
         
         /**
          * 엔티티를 복사한다. (조회 후 복제)
-         * @param {*} p_filter 
-         * @param {*} p_index 
-         * @param {*} p_end 
+         * @param {function | stirng | array | arguments} p_filter
+         * @param {arguments} p_args
          */
         MetaView.prototype.copy  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
@@ -256,10 +256,10 @@
                 callback = p_filter;
                 if (Array.isArray(p_args)) items = p_args;
                 else if (args.length > 1) items = args.splice(1);
-            } else if (typeof p_filter === 'string') {
-                items = args;
             } else if (Array.isArray(p_filter)) {
                 items = p_filter;
+            } else {
+                items = args.splice(0);
             }
 
             return this._buildEntity(entity, callback, items);
@@ -349,13 +349,13 @@
                 view = new this._baseType(key, p_baseEntity);
                 view._metaSet = this._owner;
             } else if (p_obj instanceof MetaView) {
-                if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
+                // if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
                 key  = p_obj.viewName;
                 view = p_obj;
                 p_obj._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaView object']);
 
-            if (typeof key === 'undefined') Message.error('ES051', ['viewName']);
+            // if (typeof key === 'undefined') Message.error('ES051', ['viewName']);
             if (this.existViewName(key)) Message.error('ES042', ['viewName', key]);
 
             return _super.prototype.add.call(this, key, view);

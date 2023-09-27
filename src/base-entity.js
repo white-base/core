@@ -175,7 +175,8 @@
                 // }
                 for (var i = 0; i < oGuid['_elem'].length; i++) {
                     var column = oGuid['_elem'][i];
-                    var key = oGuid['_key'][i] || column.name;
+                    // var key = oGuid['_key'][i] || column.name;
+                    var key = oGuid['_key'][i];
                     
                     obj[key] = {};
 
@@ -234,7 +235,7 @@
          * @param {*} p_option 옵션
          */
         BaseEntity.prototype._readEntity = function(p_entity, p_option) {
-            var opt = typeof p_option === 'undefined' ? 3 : p_option;
+            var opt = p_option || 3;
             var _this = this;
 
             if (!(p_entity instanceof BaseEntity)) Message.error('ES032', ['entity', 'BaseEntity']);
@@ -309,6 +310,7 @@
 
                 newRow = p_entity.newRow();
                 for (var ii = 0; ii < p_entity.columns.count; ii++) {
+                    
                     alias = p_entity.columns[ii].alias;
                     if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
                     newRow[alias] = row[alias];
@@ -731,25 +733,40 @@
         /**
          * 엔티티의 지정한 컬럼과 조건의 row 를 조회
          * @param {array<string>?} p_names 
-         * @param {function?} p_filter function(row, idx, entity)
+         * @param {function | string | array} p_filter 
          * @returns {MetaView}
          */
-        BaseEntity.prototype.select  = function(p_names, p_filter) {
+        BaseEntity.prototype.select  = function(p_filter, p_args) {
+            var args = Array.prototype.slice.call(arguments);
             var _this = this;
             var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
             var columnNames = [];
-            var callback ;
+            var callback;
             var view;
             
             if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
-            if (p_filter && typeof p_filter !== 'function') Message.error('ES021', ['filter', 'function']);
-            // if (!Array.isArray(columnNames)) Message.error('ES021', ['names', 'array']);
-            callback = p_filter;
-            view = new MetaView('select', this);
             
-            if (Array.isArray(p_names)) columnNames = p_names;
-            else if (typeof p_names === 'string') columnNames.push(p_names);
-            else if (typeof p_names !== 'undefined') Message.error('ES021', ['p_names', 'array<string> | string']);
+            view = new MetaView('select');
+
+            // 매개변수 구성
+            if (typeof p_filter === 'function') {
+                callback = p_filter;
+                if (Array.isArray(p_args)) columnNames = p_args;
+                else if (args.length > 1) columnNames = args.splice(1);
+            } else if (Array.isArray(p_filter)) {
+                columnNames = p_filter;
+            } else {
+                columnNames = args.splice(0);
+            }
+            
+            // if (p_filter && typeof p_filter !== 'function') Message.error('ES021', ['filter', 'function']);
+            // // if (!Array.isArray(columnNames)) Message.error('ES021', ['names', 'array']);
+            // callback = p_filter;
+            // view = new MetaView('select', this);
+            
+            // if (Array.isArray(p_names)) columnNames = p_names;
+            // else if (typeof p_names === 'string') columnNames.push(p_names);
+            // else if (typeof p_names !== 'undefined') Message.error('ES021', ['p_names', 'array<string> | string']);
 
             return this._buildEntity(view, callback, columnNames);
         };
@@ -782,6 +799,9 @@
 
             // 기존에 존재하면 기존 객체 리턴
             // if (MetaRegistry.has(obj)) return MetaRegistry.findSetObject(obj);
+            
+            // REVIEW: 필요한지 검토
+            // if(!MetaRegistry.isGuidObject(obj)) Message.error('ES022', ['p_obj']);
             
             this.setObject(obj);
             // if (MetaRegistry.isGuidObject(obj)) {
@@ -829,7 +849,7 @@
 
 
             if (p_obj instanceof BaseEntity) {
-                this._readEntity(p_obj, 3);
+                this._readEntity(p_obj, p_option);
             } else{
                 if (p_obj.viewName) this.viewName = p_obj.viewName;
                 if (p_obj.tableName) this.tableName = p_obj.tableName;

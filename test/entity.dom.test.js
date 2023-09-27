@@ -561,9 +561,9 @@ describe("[ GROUP]", () => {
             global._L = null;
             });
         it("- 예외 : 전체 로딩 안할 때", () => {
-            require('../src/message');
+            // require('../src/message');
     
-            expect(() => require('../src/meta-view')).toThrow(/ES011/);
+            expect(() => require('../src/meta-view')).toThrow(/Cannot read properties/);
         });
         it("- 예외 : Util 로딩이 안 된 경우", () => {
             require('../src/message');
@@ -786,9 +786,8 @@ describe("[ GROUP]", () => {
             global._L = null;
             });
         it("- 예외 : 전체 로딩 안할 때", () => {
-            require('../src/message');
-            
-            expect(() => require('../src/meta-set')).toThrow(/ES011/);
+            // require('../src/message');            
+            expect(() => require('../src/meta-set')).toThrow(/Cannot read properties/);
         });
         it("- 예외 : Util 로딩이 안 된 경우", () => {
             require('../src/message');

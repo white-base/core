@@ -13,7 +13,9 @@ const Util                      = require('../src/util');
 const { MetaTable }             = require('../src/meta-table');
 const { MetaView }              = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
-const { MetaColumn }            = require('../src/meta-column');  
+const  {MetaSet}              = require('../src/meta-set');
+const { MetaColumn, MetaViewColumnCollection } = require('../src/meta-column');  
+
 const { replacer, reviver, stringify, parse }              = require('telejson');
 const {MetaRegistry}        = require('../src/meta-registry');
 const { loadNamespace } = require('../src/load-namespace');
@@ -36,8 +38,50 @@ describe("[target: meta-view.js]", () => {
         //     view3.columns.add('c3', view2.columns); // 일부 참조
         // });
 
+        describe("MetaTable.viewName <테이블명>", () => {
+            it("- this.viewName : 조회 ", () => {
+                var view1 = new MetaView('T1');
         
+                expect(view1._name).toBe('T1');
+                expect(view1.viewName).toBe('T1');
+            });
+            it("- this.viewName : 수정 ", () => {
+                var view1 = new MetaView('T1');
+                view1.viewName = 'T2';
 
+                expect(view1._name).toBe('T2');
+                expect(view1.viewName).toBe('T2');
+            });
+            it("- 예외 : 자른자료형 ", () => {
+                var view1 = new MetaView('T1');
+                expect(()=> view1.viewName = {}).toThrow(/ES021/)
+            });
+        });
+        describe("MetaView.columns <컬럼 속성>", () => {
+            it("- this.columns : 타입 조회 ", () => {
+                var view1 = new MetaView('T1');
+        
+                expect(view1.columns.instanceOf('MetaViewColumnCollection')).toBe(true);
+            });
+            it("- 예외 : 다른타입 ", () => {
+                var view1 = new MetaView('T1');
+                expect(()=> view1.columns = {}).toThrow(/ES032/)
+            });
+            it("- 예외 : row 존재시 ", () => {
+                var view1 = new MetaView('T1');
+                view1.columns.add('i1');
+                view1.rows.add(view1.newRow())
+                var col = new MetaViewColumnCollection(view1);
+
+                expect(()=> view1.columns = col).toThrow(/ES047/)
+            });
+        });
+        describe("MetaView._baseEntity <기본 엔티티>", () => {
+            it("- 예외 : 타입이 다를 경우 ", () => {
+                var view1 = new MetaView('T1');
+                expect(()=> view1._baseEntity = {}).toThrow(/ES032/)
+            });
+        });
         describe("MetaObject.equal() <객체 비교>", () => {
             it("- equal() : 생성 후 비교 ", () => {
                 const c1 = new MetaView('V1');
@@ -578,7 +622,7 @@ describe("[target: meta-view.js]", () => {
                     ]
                 };
                 view1.read(json1, 3);
-                var view2 = view1.select([], row => row['i1'] < 10);
+                var view2 = view1.select(row => row['i1'] < 10);
     
                 expect(view2.columns.count).toBe(2);
                 expect(view2.rows.count).toBe(1);
@@ -1839,13 +1883,115 @@ describe("[target: meta-view.js]", () => {
                 expect(view2.rows[0]['i1']).toBe(1);
                 expect(view2.rows[1]['i1']).toBe(10);
             });
+            it("- copy(itmms) : 아이템 설정", () => {
+                const view1 = new MetaView('V1');
+                const view2 = new MetaView('V2', view1);
+                const view3 = new MetaView('V3');
+                view1.columns.add('c1');
+                view2.columns.add('c2');
+                view3.columns.add('c3', view2.columns);
+                view1.rows.add(view1.newRow());
+                view1.rows[0]['c1'] = 1
+                view1.rows[0]['c2'] = 2
+                view1.rows[0]['c3'] = 3
+                view1.rows.add(view1.newRow());
+                view1.rows[1]['c1'] = 10
+                view1.rows[1]['c2'] = 20
+                view1.rows[1]['c3'] = 30
+                view2.rows.add(view2.newRow());
+                view2.rows[0]['c2'] = 2
+                view2.rows[0]['c3'] = 3
+                view2.rows.add(view2.newRow());
+                view2.rows[1]['c2'] = 20
+                view2.rows[1]['c3'] = 30
+                view3.rows.add(view3.newRow());
+                view3.rows[0]['c3'] = 3
+                view3.rows.add(view3.newRow());
+                view3.rows[1]['c3'] = 30
+                var v1 = view1.copy(row => row['c1'] < 10, ['c1', 'c2', 'c3'])
+                var v2 = view2.copy(row => row['c2'] >= 2, 'c2', 'c3')
+                var v3 = view3.copy(['c3'])
+                var v4 = view3.copy('c3')
+
+                // v1
+                expect(v1.rows.count).toBe(1);
+                expect(v1.rows[0].count).toBe(3);
+                expect(v1.rows[0]['c1']).toBe(1);
+                expect(v1.rows[0]['c2']).toBe(2);
+                expect(v1.rows[0]['c3']).toBe(3);
+                // v2
+                expect(v2.rows.count).toBe(2);
+                expect(v2.rows[0].count).toBe(2);
+                expect(v2.rows[0]['c2']).toBe(2);
+                expect(v2.rows[0]['c3']).toBe(3);
+                expect(v2.rows[1]['c2']).toBe(20);
+                expect(v2.rows[1]['c3']).toBe(30);
+                // v3
+                expect(v3.rows.count).toBe(2);
+                expect(v3.rows[0].count).toBe(1);
+                // v4
+                expect(v4.rows.count).toBe(2);
+                expect(v4.rows[0].count).toBe(1);
+            });
         });
-        // describe("< setValue(row) >", () => {
-        //     it("- setValue(row) : row 설정(단일) ", () => {select
-                
-        //     });
-        // });
     });
+    describe("MetaViewCollection :: 클래스", () => {
+        beforeAll(() => {
+            // jest.resetModules();
+        });
+        describe("MetaViewCollection._baseType <테이블 타입>", () => {
+            it("- this._baseType ", () => {
+                class SubClass extends MetaView {
+                    constructor(name) { super(name)}
+                }
+                const set1 = new MetaSet('S1');
+                set1.views._baseType = SubClass
+                set1.views.add('V1');
+                
+                expect(set1.views['V1'].viewName).toBe('V1');
+                expect(set1.views['V1']._type.name).toBe('SubClass');
+            });
+            it("- 예외 ", () => {
+                const set1 = new MetaSet('S1');
+                
+                expect(()=> set1.views._baseType = {}).toThrow(/ES021/)
+                expect(()=> set1.views._baseType = MetaTable).toThrow(/ES032/)
+            });
+        });
+        describe("MetaViewCollection.add() <테이블 추가>", () => {
+            it("- views.add() : 테이블 추가", () => {
+                const set1 = new MetaSet('S1');
+                const view1 = new MetaView('V1');
+                set1.views.add(view1);
+                
+                expect(set1.views.count).toBe(1);
+            });
+            it("- add() : 뷰 추가", () => {
+                const set1 = new MetaSet('S1');
+                const veiw1 = new MetaView('V1');
+                set1.views.add(veiw1);
+                
+                expect(set1.views.count).toBe(1);
+            });
+            it("- 예외 : 다른 타입", () => {
+                const set1 = new MetaSet('S1');
+                set1.views.add('V1');
+                
+                expect(()=> set1.views.add({})).toThrow(/ES021/)
+                // expect(()=> set1.tables.add()).toThrow(/ES051/)
+                expect(()=> set1.views.add('V1')).toThrow(/ES042/)
+            });
+            it("- 예외 : baseEntity", () => {
+                const set1 = new MetaSet('S1');
+                const table1 = new MetaTable('T1')
+                const view1 = new MetaView('V1')
+                
+                expect(()=> set1.views.add('V1', {})).toThrow(/ES032/)
+                expect(()=> set1.views.add(view1, table1)).toThrow(/ES016/) // 동시삽입
+            });
+        });
+    });
+
     describe("뷰사용방식별 clone(), equal(), set/getObect()", () => {
         describe("일반뷰 : 모든컬럼 소유(참조 없음)", () => {
             it("- clone(), equal() ", () => {
@@ -2198,6 +2344,8 @@ describe("[target: meta-view.js]", () => {
         });
         });
     });
+
+
 });
 
 /**

@@ -182,7 +182,7 @@
             var args = Array.prototype.slice.call(arguments);
             var _this = this;
             // var MetaView                    = require('./meta-view').MetaView;
-            var items = [];
+            var columnNames = [];
             var callback = null;
             var columnName;
             var entity = new MetaTable(this.tableName, this);
@@ -191,15 +191,15 @@
             // 매개변수 구성
             if (typeof p_filter === 'function') {
                 callback = p_filter;
-                if (Array.isArray(p_args)) items = p_args;
-                else if (args.length > 1) items = args.splice(1);
-            } else if (typeof p_filter === 'string') {
-                items = args;
+                if (Array.isArray(p_args)) columnNames = p_args;
+                else if (args.length > 1) columnNames = args.splice(1);
             } else if (Array.isArray(p_filter)) {
-                items = p_filter;
+                columnNames = p_filter;
+            } else {
+                columnNames = args.splice(0);
             }
 
-            return this._buildEntity(entity, callback, items);
+            return this._buildEntity(entity, callback, columnNames);
         };
 
         /**

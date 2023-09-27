@@ -44,6 +44,18 @@ describe("[target: meta-set.js]", () => {
                 expect(set1._name).toBe('S2');
                 expect(set1.setName).toBe('S2');
             });
+            it("- 예외 : 다른자료형 ", () => {
+                var set1 = new MetaSet('S1');
+                expect(()=> set1.setName = 10).toThrow(/ES021/)
+                expect(()=> set1.setName = '').toThrow(/ES055/)
+            });
+        });
+        describe("MetaSet.autoChanges <자동 변경 설정>", () => {
+            it("- 예외 : 다른자료형 ", () => {
+                var set1 = new MetaSet('S1');
+                expect(()=> set1.autoChanges = 10).toThrow(/ES021/)
+                // expect(()=> set1.setName = '').toThrow(/ES055/)
+            });
         });
         describe("MetaTable.equal() <객체 비교>", () => {
             it("- equal() : 생성 후 비교 ", () => {
@@ -132,6 +144,11 @@ describe("[target: meta-set.js]", () => {
                 expect(obj.views._elem[0].rows._elem[0]._type === 'Meta.Entity.MetaRow').toBe(true);
                 expect(obj.views._elem[0].rows._elem[0]._elem).toEqual(['R3']);
             });
+            it("- 커버리지 : 다른 객체 전달 ", () => {
+                var set1 = new MetaSet('S1');
+                const obj1 = set1.getObject(0, {});
+                const obj2 = set1.getObject(0, [{}]);
+            });
         });
         describe("MetaTable.setObject(mObj) <객체 설정>", () => {
             it("- setObject() : 직렬화 객체 설정 ", () => {
@@ -207,7 +224,12 @@ describe("[target: meta-set.js]", () => {
                 expect(v2.columns['c2']._entity === v1).toBe(true);
                 expect(v3.columns['c3']._entity === v1).toBe(true);
             });
-
+            it("- 커버리지 : origin 전달 ", () => {
+                const s1 = new MetaSet('S1')
+                const s2 = new MetaSet('VV3');
+                const obj1 = s1.getObject()
+                s2.setObject(obj1, obj1);
+            });
         });
         describe("MetaSet.clone() <복제>", () => {
             it("- clone() : 복제 ", () => {
@@ -371,6 +393,15 @@ describe("[target: meta-set.js]", () => {
                 expect(set2.views['V1'].rows[0].count).toBe(1);
                 expect(set2.views['V1'].rows[0]['i1']).toBe('R1');
             });
+            it("- 예외 : MetaSet 로드 ", () => {
+                const set1 = new MetaSet('S1');
+                const set2 = new MetaSet('S2');
+
+                expect(()=> set2.load(set2)).toThrow(/ES022/)
+                expect(()=> set2.load(null)).toThrow(/ES021/)
+                // expect(()=> set2.load({})).toThrow(/ES022/)
+            });
+            
         });
         describe("MetaSet.output() 출력", () => {
             it("- output() : new 객체 비교 ", () => {
@@ -785,7 +816,11 @@ describe("[target: meta-set.js]", () => {
                     }
                 };
                 const s2 = new MetaSet('S2')
-                s2.read(sch1);
+                const s3 = new MetaSet('S3')
+                const s4 = new MetaSet('S4')
+                s2.read(sch1);  // 3
+                s3.read(sch1, 1);
+                s4.read(sch1, 2);
                 const v1 = s2.views.V1
                 const v2 = s2.views.V2
                 const v3 = s2.views.V3
@@ -800,6 +835,57 @@ describe("[target: meta-set.js]", () => {
                 expect(v1.rows[0]['c1']).toBe('V1');
                 expect(v1.rows[0]['c2']).toBe('V2');
                 expect(v1.rows[0]['cc3']).toBe('V3');
+            });
+            it("- read(oGuid) :  oGuid 로 읽기 ", () => {
+                const set1 = new MetaSet('S1')
+                const set2 = new MetaSet('S2')
+                set1.tables.add('T1')
+                set1.views.add('V1')
+                const table1 = set1.tables['T1']
+                const view1 = set1.views['V1']
+                table1.columns.addValue('c1', 1);
+                view1.columns.addValue('c1', 1);
+                table1.rows.add(table1.getValue());
+                view1.rows.add(view1.getValue());
+                set2.read(set1);
+
+                expect(set2.tables.count).toBe(1)
+                expect(set2.views.count).toBe(1)
+                expect(set2.tables['T1'].columns['c1'].value).toBe(1);
+                expect(set2.views['V1'].columns['c1'].value).toBe(1);
+                expect(set2.tables['T1'].rows.count).toBe(1);
+                expect(set2.views['V1'].rows.count).toBe(1);
+            });
+            it("- read(oGuid) :  읽는 메타셋에 뷰와 테이블 존재시 ", () => {
+                const set1 = new MetaSet('S1')
+                const set2 = new MetaSet('S2')
+                const set3 = new MetaSet('S3')
+                set1.tables.add('T1')
+                set1.views.add('V1')
+                set2.tables.add('T1')
+                set2.views.add('V1')
+                set3.tables.add('T1')
+                set3.views.add('V1')
+                const table1 = set1.tables['T1']
+                const view1 = set1.views['V1']
+                table1.columns.addValue('c1', 1);
+                view1.columns.addValue('c1', 1);
+                table1.rows.add(table1.getValue());
+                view1.rows.add(view1.getValue());
+                set2.read(set1);
+                set3.read(set1.getObject());
+
+                expect(set2.tables.count).toBe(1)
+                expect(set2.views.count).toBe(1)
+                expect(set2.tables['T1'].columns['c1'].value).toBe(1);
+                expect(set2.views['V1'].columns['c1'].value).toBe(1);
+                expect(set2.tables['T1'].rows.count).toBe(1);
+                expect(set2.views['V1'].rows.count).toBe(1);
+            });
+            it("- 예외 :  타입 다름 ", () => {
+                const set1 = new MetaSet('S1')
+                expect(()=> set1.read(null)).toThrow(/ES021/)
+                expect(()=> set1.read({}, 'ERR')).toThrow(/ES021/)
             });
         });
         describe("MetaSet.readSchema() <스키마 가져오기>", () => {
@@ -880,6 +966,17 @@ describe("[target: meta-set.js]", () => {
                 // V3
                 expect(v3.columns['c3']._entity === v1).toBe(true);
             });
+            it("- 커버리지 : 참조가 없는 메타셋 ", () => {
+                const set1 = new MetaSet('S1')
+                const set2 = new MetaSet('S2')
+                const obj2 = set2.getObject()
+                set1.readSchema(obj2)
+                // expect(()=> ).toThrow(/ES021/)
+            });
+            it("- 예외 : 스키마가 아닌 객체 ", () => {
+                const set1 = new MetaSet('S1')
+                expect(()=> set1.readSchema({})).toThrow(/ES021/)
+            });
             it("- 예외 : 기존에 중복 테이블/뷰가 존재할 경우 ", () => {
                 // TODO:
             });
@@ -929,6 +1026,20 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.tables['T1'].rows[0]['i2']).toBe('R2');
                 expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
                 expect(set1.views['V1'].rows.count).toBe(1);
+            });
+            it("- 예외 : 스키마가 아닌 객체 ", () => {
+                const set1 = new MetaSet('S1')
+                // expect(()=> set1.readData({})).toThrow(/ES021/)
+                expect(()=> set1.readData(null)).toThrow(/ES021/)
+                expect(()=> set1.readData({})).toThrow(/ES021/)
+            });
+            it("- 커버리지 : 객체가 아닌 스키마 ", () => {
+                const set1 = new MetaSet('S1')
+                const obj1 = {
+                    tables: 1,
+                    views: null
+                }
+                set1.readData(obj1)
             });
             it("- 테이블이 존재하지 않을 때", () => {
                 // TODO:
@@ -1171,6 +1282,12 @@ describe("[target: meta-set.js]", () => {
 
                 expect(obj).toEqual(json2); 
             });
+            it("- 커버리지 : opt 설정 ", () => {
+                var set1 = new MetaSet('S1');
+                const obj = set1.writeData();
+
+                // expect(obj).toEqual(json2); 
+            });
         });
         
         
@@ -1327,94 +1444,7 @@ describe("[target: meta-set.js]", () => {
     
 
     // REVIEW: 위치 테이블 쪽으로 이동하는게 적합할듯!
-    describe("MetaTableCollection :: 클래스", () => {
-        beforeAll(() => {
-            // jest.resetModules();
-        });
-        describe("MetaTableCollection._baseType <테이블 타입>", () => {
-            it("- this._baseType ", () => {
-                class SubClass extends MetaTable {
-                    constructor(name) { super(name)}
-                }
-                const set1 = new MetaSet('S1');
-                set1.tables._baseType = SubClass
-                set1.tables.add('T1');
-                
-                expect(set1.tables['T1'].tableName).toBe('T1');
-                expect(set1.tables['T1']._type.name).toBe('SubClass');
-            });
-            it("- 예외 ", () => {
-                const set1 = new MetaSet('S1');
-                
-                expect(()=> set1.tables._baseType = {}).toThrow(/ES021/)
-                expect(()=> set1.tables._baseType = MetaView).toThrow(/ES032/)
-            });
-        });
-        describe("MetaTableCollection.add() <테이블 추가>", () => {
-            it("- tables.add() : 테이블 추가", () => {
-                const set1 = new MetaSet('S1');
-                const table1 = new MetaTable('T1');
-                set1.tables.add(table1);
-                
-                expect(set1.tables.count).toBe(1);
-            });
-            it("- add() : 뷰 추가", () => {
-                const set1 = new MetaSet('S1');
-                const veiw1 = new MetaView('V1');
-                set1.views.add(veiw1);
-                
-                expect(set1.views.count).toBe(1);
-            });
-            it("- 예외 : 다른 타입", () => {
-                const set1 = new MetaSet('S1');
-                set1.tables.add('T1');
-                
-                expect(()=> set1.tables.add({})).toThrow(/ES021/)
-                // expect(()=> set1.tables.add()).toThrow(/ES051/)
-                expect(()=> set1.tables.add('T1')).toThrow(/ES042/)
-            });
-        });
-        describe("output(), load()", () => {
-            it("- 참조뷰 ", () => {
-                const set1  = new MetaSet('S1');
-                set1.views.add('V1');
-                set1.views.add('V2', set1.views['V1']);
-                set1.views.add('V3');
-                set1.views['V1'].columns.add('c1');
-                set1.views['V2'].columns.add('c2');
-                set1.views['V3'].columns.add('c3', set1.views['V2'].columns);
-                const v1 = set1.views['V1'];
-                const v2 = set1.views['V2'];
-                const v3 = set1.views['V3'];
-                const str = set1.output(stringify, '\t');
-                const set2 = new MetaSet('S2');
-                const view = new MetaView('V');
-                set2.load(str, parse);
-                const vv1 = set1.views['V1'];
-                const vv2 = set1.views['V2'];
-                const vv3 = set1.views['V3'];              
-
-                expect(()=> view.load(v1.output(stringify, '\t'))).toThrow('ES015')
-                expect(()=> view.load(v2.output(stringify, '\t'))).toThrow('ES015')
-                expect(()=> view.load(v3.output(stringify, '\t'))).toThrow('ES015')
-                expect(v1.columns.count).toBe(3)
-                expect(v2.columns.count).toBe(2)
-                expect(v3.columns.count).toBe(1)
-                expect(vv1.columns.count).toBe(3)
-                expect(vv2.columns.count).toBe(2)
-                expect(vv3.columns.count).toBe(1)
-                expect(vv1._metaSet === set1).toBe(true)
-                expect(vv2._metaSet === set1).toBe(true)
-                expect(vv3._metaSet === set1).toBe(true)
-                expect(vv1.columns['c1']._entity === vv1).toBe(true)
-                expect(vv2.columns['c2']._entity === vv1).toBe(true)
-                expect(vv3.columns['c3']._entity === vv1).toBe(true)
-                expect(vv1.equal(v1)).toBe(true)
-                expect(vv2.equal(v2)).toBe(true)
-                expect(vv3.equal(v3)).toBe(true)
-            });
-        });
-    });
+    
 
 });
 
