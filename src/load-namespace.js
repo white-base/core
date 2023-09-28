@@ -121,7 +121,7 @@
         MetaRegistry.registerClass(IImportControl, IImportControl._NS, IImportControl.name);
         // MetaRegistry.registerClass(ILookupControl, ILookupControl._NS, ILookupControl.name);
         // MetaRegistry.registerClass(IPartControl, IPartControl._NS, IPartControl.name);
-        MetaRegistry.registerClass(ISchemaControl._NS, ISchemaControl.name);
+        MetaRegistry.registerClass(ISchemaControl, ISchemaControl._NS, ISchemaControl.name);
         MetaRegistry.registerClass(IMarshal, IMarshal._NS, IMarshal.name);
         MetaRegistry.registerClass(IObject, IObject._NS, IObject.name);
         MetaRegistry.registerClass(ITransaction, ITransaction._NS, ITransaction.name);

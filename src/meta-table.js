@@ -145,7 +145,7 @@
             var metaSet;
 
             if(p_oGuid._metaSet) {
-                metaSet = MetaRegistry.findSetObject(origin, p_oGuid._metaSet.$ref);
+                metaSet = MetaRegistry.findSetObject(p_oGuid._metaSet.$ref, origin);
                 if (!metaSet) Message.error('ES015', [p_oGuid.name, 'metaSet']);
                 this._metaSet = metaSet;
             }

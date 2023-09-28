@@ -559,7 +559,7 @@
                     this.default = obj;
                 
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
                     if (!meta) Message.error('ES015', ['ObjectColumn.default', '$ref']);
                     this.default = meta;
                 }
@@ -573,7 +573,7 @@
                     this.value = obj;
                 
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
                     if (!meta) Message.error('ES015', ['ObjectColumn.value', '$ref']);
                     this.value = meta;
                 }

@@ -189,13 +189,13 @@
             var baseEntity;
 
             if(p_oGuid._metaSet) {
-                metaSet = MetaRegistry.findSetObject(origin, p_oGuid._metaSet.$ref);
+                metaSet = MetaRegistry.findSetObject(p_oGuid._metaSet.$ref, origin);
                 if (!metaSet) Message.error('ES015', [p_oGuid.name, '_metaSet']);
                 this._metaSet = metaSet;
             }
             // this.metaSet = mObj.metaSet;
             if (p_oGuid._baseEntity) {
-                baseEntity = MetaRegistry.findSetObject(origin, p_oGuid._baseEntity.$ref);
+                baseEntity = MetaRegistry.findSetObject(p_oGuid._baseEntity.$ref, origin);
                 if (!baseEntity) Message.error('ES015', [p_oGuid.name, '_baseEntity']);
                 // this.__SET$_baseEntity(baseEntity, this);
                 this._baseEntity = baseEntity;

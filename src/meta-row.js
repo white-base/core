@@ -415,7 +415,7 @@
                     this.__GET$_elements(this)[i] = obj;
                     // this._elements[i] = obj;
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this.__GET$_elements(this)[i] = meta;   
                     // this._elements[i] = meta;     

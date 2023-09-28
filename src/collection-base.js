@@ -445,7 +445,7 @@
                 this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             }
             if (p_oGuid._owner) {
-                owner = MetaRegistry.findSetObject(origin, p_oGuid._owner.$ref);
+                owner = MetaRegistry.findSetObject(p_oGuid._owner.$ref, origin);
                 if (!owner) Message.error('ES015', [p_oGuid.name, '_owner']);
                 this._owner = owner;
             }

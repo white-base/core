@@ -159,7 +159,7 @@
                     this._elements.push(obj);
                     
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(origin, elem.$ref);
+                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this._elements.push(meta);  
                 

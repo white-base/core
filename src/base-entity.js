@@ -337,7 +337,7 @@
             if (obj['_guid']) MetaRegistry.createSetObject(obj, this); 
 
             if (obj._baseEntity && obj._baseEntity['$ref']) {
-                obj['_baseEntity'] = MetaRegistry.findSetObject(origin, obj._baseEntity['$ref']);
+                obj['_baseEntity'] = MetaRegistry.findSetObject(obj._baseEntity['$ref'], origin);
                 if (!obj['_baseEntity']) Message.error('ES015', [key, '_baseEntity']);
             }
             columns = obj['columns'];
@@ -363,11 +363,11 @@
                         //     obj['_entity'] = MetaRegistry.find(prop['_entity']);
                         // }
                         if (isObject(prop) && prop['$ref']) {
-                            column = MetaRegistry.findSetObject(origin, prop['$ref']);
+                            column = MetaRegistry.findSetObject(prop['$ref'], origin);
                             if (!column) Message.error('ES015', [key, 'column']);
                         } else {
                             if (isObject(prop['_entity']) && prop['_entity']['$ref']) {
-                                prop['_entity'] = MetaRegistry.findSetObject(origin, prop['_entity']['$ref']);
+                                prop['_entity'] = MetaRegistry.findSetObject(prop['_entity']['$ref'], origin);
                                 if (!prop['_entity']) Message.error('ES015', [key, '_entity']);
                             }
                             for (var p in prop) {

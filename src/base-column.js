@@ -357,7 +357,7 @@
             //     this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             // }
             if (p_oGuid._entity) {
-                entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
+                entity = MetaRegistry.findSetObject(p_oGuid._entity.$ref, origin);
                 if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
                 this._entity = entity;
             } 
