@@ -145,6 +145,13 @@
         BaseEntity._PARAMS = ['name'];         // creator parameter
         BaseEntity._ABSCRACT = true;
 
+        
+        // local funciton
+        function isObject(obj) {
+            if (typeof obj === 'object' && obj !== null) return true;
+            return false;
+        }
+
         // 3가지 타입 입력
         BaseEntity._transformSchema  = function(p_oGuid) {
             var _this = this;
@@ -223,8 +230,8 @@
             }
         };
         BaseEntity._isSchema  = function(p_oSch) {
-            if (p_oSch === null || typeof p_oSch !== 'object') return false;
-            if (typeof p_oSch['columns'] === 'object' || typeof p_oSch['rows'] === 'object') return true;
+            if (!isObject(p_oSch)) return false;
+            if (isObject(p_oSch['columns']) || isObject(p_oSch['rows'])) return true;
             return false;
         };
 
@@ -310,9 +317,8 @@
 
                 newRow = p_entity.newRow();
                 for (var ii = 0; ii < p_entity.columns.count; ii++) {
-                    
                     alias = p_entity.columns[ii].alias;
-                    if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
+                    // if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
                     newRow[alias] = row[alias];
                 }
                 return newRow;
@@ -327,9 +333,12 @@
             var Column = this.columns._baseType;
             var origin = p_origin ? p_origin : p_obj;
 
-            if (p_obj._baseEntity && p_obj._baseEntity['$ref']) {
-                p_obj['_baseEntity'] = MetaRegistry.findSetObject(origin, p_obj._baseEntity['$ref']);
-                if (!p_obj['_baseEntity']) Message.error('ES015', [key, '_baseEntity']);
+            
+            if (obj['_guid']) MetaRegistry.createSetObject(obj, this); 
+
+            if (obj._baseEntity && obj._baseEntity['$ref']) {
+                obj['_baseEntity'] = MetaRegistry.findSetObject(origin, obj._baseEntity['$ref']);
+                if (!obj['_baseEntity']) Message.error('ES015', [key, '_baseEntity']);
             }
             columns = obj['columns'];
             if (columns) {
@@ -345,18 +354,19 @@
                 }
                 function addColumn(key, columns) {
                     var column;
-                    if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
+                    // if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
+                    if (isObject(columns[key])) {
                         if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
                         var prop = columns[key];
                         var obj = {};
                         // if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
                         //     obj['_entity'] = MetaRegistry.find(prop['_entity']);
                         // }
-                        if (typeof prop === 'object' && prop['$ref']) {
+                        if (isObject(prop) && prop['$ref']) {
                             column = MetaRegistry.findSetObject(origin, prop['$ref']);
                             if (!column) Message.error('ES015', [key, 'column']);
                         } else {
-                            if (prop['_entity'] && prop['_entity']['$ref']) {
+                            if (isObject(prop['_entity']) && prop['_entity']['$ref']) {
                                 prop['_entity'] = MetaRegistry.findSetObject(origin, prop['_entity']['$ref']);
                                 if (!prop['_entity']) Message.error('ES015', [key, '_entity']);
                             }
@@ -366,7 +376,7 @@
                             column = new Column(key, null, obj);
                         }
                         // } else column = new Column(key, _this, obj);
-                        MetaRegistry.createSetObject(prop, column); 
+                        if(prop['_guid']) MetaRegistry.createSetObject(prop, column); 
                         // column = new Column(key, _this, obj);
 
                         if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
@@ -564,8 +574,7 @@
                         if (tempRows[i][alias]) {                         // 원본 로우
                             newRow[alias] = tempRows[i][alias];
                             continue;
-                        }
-                        if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                        } else if (tarRows[i] && tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
                     }
                     this.rows.add(newRow, p_checkValid);
                 }                                
@@ -660,8 +669,8 @@
                         if (tempRows[i][alias]) {                         // 원본 로우
                             newRow[alias] = tempRows[i][alias];
                             continue;
-                        }
-                        if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                        }else newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                        // }else if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
 
                         // key = this.columns.keyOf(ii);
                         // if (tempRows[i][key]) {                         // 원본 로우

@@ -623,8 +623,43 @@ describe("[target: meta-column.js ]", () => {
         
                 expect(item1.valid('10')).toBe(true);
             });
+            it("- valid(value): return  <제약조건 검사> ", () => {
+                var item1 = new MetaColumn('i1');
+                item1.isNotNull = false;
+                item1.isNullPass = false;
+
+                var item2 = new MetaColumn('i2');
+                item2.isNotNull = false;
+                item2.isNullPass = true;
+
+                var item3 = new MetaColumn('i3');
+                item3.isNotNull = true;
+                item3.isNullPass = false;
+
+                var item4 = new MetaColumn('i4');
+                item4.isNotNull = true;
+                item4.isNullPass = true;
+
+                // item1.default = 10
+                // item1.addConstraint(/10/, '10 시작...', 100, true);
+
+                // expect(item1.valid()).toBe(undefined); 
+                expect(item1.valid('Yes')).toBe(undefined); 
+                expect(item1.valid()).toBe(undefined); 
+                expect(item2.valid('Yes')).toBe(undefined); 
+                expect(item2.valid('')).toBe(undefined); 
+                expect(item3.valid('Yes')).toBe(undefined); 
+                expect(item3.valid()).not.toBe(undefined); 
+                expect(item4.valid('Yes')).toBe(undefined); 
+                expect(item4.valid()).not.toBe(undefined); 
+                // expect(item5.valid('Yes')).toBe(undefined); 
+                // expect(item5.valid()).toBe(undefined); 
+                // expect(item6.valid('Yes')).toBe(undefined); 
+                // expect(item6.valid()).toBe(undefined); 
+            });
+
         });
-        describe("에외 및 COVER", () => {
+        describe("커버리지 및 예외 ", () => {
             it("- 예외", () => {   
                 const c1 = new MetaColumn('c1');
 
@@ -654,6 +689,12 @@ describe("[target: meta-column.js ]", () => {
                 expect(c1.alias).toBe('c1')
                 expect(c1.__GET$alias()).toBe(undefined)
                 expect(c1.__GET$alias(c1)).toBe(null)
+
+            });
+            it("- 커버리지 : 조건검사 ", () => {   
+                MetaColumn._TYPES = [];
+                const c1 = new MetaColumn('c1');
+                c1.value = {};
 
             });
         });

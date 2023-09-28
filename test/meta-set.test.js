@@ -658,7 +658,7 @@ describe("[target: meta-set.js]", () => {
             });
         });
         describe("MetaSet.read(json, opt) <가져오기>", () => {
-            it("- read(obj) object 가져오기 ", () => {
+            it("- read(oSchema) object 가져오기 ", () => {
                 var set1 = new MetaSet('S1');
                 var json1 = { 
                     tables: {
@@ -700,7 +700,7 @@ describe("[target: meta-set.js]", () => {
                 expect(set1.views['V1'].rows.count).toBe(1);
                 expect(set1.tables['T1'].rows[0]['i1']).toBe('R1');
             });
-            it("- read(rObj) object 가져오기 ", () => {
+            it("- read(oSchema) object 가져오기 ", () => {
                 var set0 = new MetaSet('S0');
                 var set1 = new MetaSet('S1');
                 var json1 = { 
@@ -887,6 +887,13 @@ describe("[target: meta-set.js]", () => {
                 expect(()=> set1.read(null)).toThrow(/ES021/)
                 expect(()=> set1.read({}, 'ERR')).toThrow(/ES021/)
             });
+            // it("- 커버리지 :  객체 타입 ", () => {
+            //     const set1 = new MetaSet('S1')
+            //     const set2 = new MetaSet('S2')
+            //     const obj1 = {}
+            //     set2.read({})
+                
+            // });
         });
         describe("MetaSet.readSchema() <스키마 가져오기>", () => {
             it("- readSchema() : 기본 로딩 ", () => {
@@ -973,9 +980,21 @@ describe("[target: meta-set.js]", () => {
                 set1.readSchema(obj2)
                 // expect(()=> ).toThrow(/ES021/)
             });
+            it("- 커버리지 : views, tables 한쪽만 존재 ", () => {
+                const set1 = new MetaSet('S1')
+                const obj1 = {
+                    tables: {}
+                }
+                const obj2 = {
+                    views: {}
+                }
+                set1.readSchema(obj1)
+                set1.readSchema(obj2)
+            });
             it("- 예외 : 스키마가 아닌 객체 ", () => {
                 const set1 = new MetaSet('S1')
                 expect(()=> set1.readSchema({})).toThrow(/ES021/)
+                expect(()=> set1.readSchema(null)).toThrow(/ES021/)
             });
             it("- 예외 : 기존에 중복 테이블/뷰가 존재할 경우 ", () => {
                 // TODO:
@@ -1033,13 +1052,24 @@ describe("[target: meta-set.js]", () => {
                 expect(()=> set1.readData(null)).toThrow(/ES021/)
                 expect(()=> set1.readData({})).toThrow(/ES021/)
             });
-            it("- 커버리지 : 객체가 아닌 스키마 ", () => {
+            it("- 예외 : 객체가 아닌 스키마 ", () => {
                 const set1 = new MetaSet('S1')
                 const obj1 = {
                     tables: 1,
                     views: null
                 }
+                expect(()=> set1.readData(obj1)).toThrow(/ES021/)
+            });
+            it("- 커버리지 : views, tables 한쪽만 존재 ", () => {
+                const set1 = new MetaSet('S1')
+                const obj1 = {
+                    tables: {}
+                }
+                const obj2 = {
+                    views: {}
+                }
                 set1.readData(obj1)
+                set1.readData(obj2)
             });
             it("- 테이블이 존재하지 않을 때", () => {
                 // TODO:
@@ -1430,13 +1460,24 @@ describe("[target: meta-set.js]", () => {
             });
         });
         describe("예외 및 커버리지", () => {
-            it("- BaseEntity._metaSet : 예외 ", () => {
+            it("- MetaSet._metaSet : 예외 ", () => {
                 var set1 = new MetaSet('S1');
                 var table1 = new MetaTable('T1');
                 table1._metaSet = set1;
 
                 expect(table1._metaSet === set1).toBe(true)
                 expect(()=> table1._metaSet = 'ERR').toThrow(/ES032/)
+            });
+            it("- MetaSet._isSchema() ", () => {
+                // class SubClass extends BaseEntity {
+                //     constructor(name) {super(name)}
+                // }
+                // const s1 = new SubClass('S1');
+    
+                expect(MetaSet._isSchema('ERR')).toBe(false);
+                expect(MetaSet._isSchema(null)).toBe(false);
+                expect(MetaSet._isSchema({tables: {}})).toBe(true);
+                expect(MetaSet._isSchema({views: {}})).toBe(true);
             });
 
         });

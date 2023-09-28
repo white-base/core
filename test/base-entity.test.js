@@ -117,8 +117,8 @@ describe("[target: base-entity.js]", () => {
 
                 expect(BaseEntity._isSchema('ERR')).toBe(false);
                 expect(BaseEntity._isSchema(null)).toBe(false);
-                expect(BaseEntity._isSchema({columns: null})).toBe(true);
-                expect(BaseEntity._isSchema({rows: null})).toBe(true);
+                expect(BaseEntity._isSchema({columns: {}})).toBe(true);
+                expect(BaseEntity._isSchema({rows: {}})).toBe(true);
             });
         });
     });

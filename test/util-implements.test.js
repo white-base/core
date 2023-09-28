@@ -471,16 +471,10 @@ describe("[target: util.js]", () => {
             expect(obj.isImplementOf(ISuper1)).toBe(true);
             expect(obj.isImplementOf('ISuper1')).toBe(true);
             expect(obj.isImplementOf(ISuper2)).toBe(false);
+            expect(obj.isImplementOf('ISuper2')).toBe(false);
             expect(() => obj.isImplementOf(-1)).toThrow('ES021');
         });
-        it('- implements() : 예외 ', () => {
-            function CoClass1() {
-                this.arr = [];
-                Util.implements(this, -1);
-            }
-    
-            expect(()=> new CoClass1()).toThrow('ES021');
-        });
+        
         it('- implements(any) : object 가 아닌 객체 ', () => {
             function CoClass1() {
                 this.arr = [];
@@ -491,6 +485,22 @@ describe("[target: util.js]", () => {
             expect(()=> Util.implements(function(){}, CoClass1)).toThrow(/ES024/);
             expect(()=> Util.implements('str', CoClass1)).toThrow(/ES024/);
             expect(()=> Util.implements(true, CoClass1)).toThrow(/ES024/);
+        });
+        it('- implements() : 예외 ', () => {
+            function CoClass1() {
+                this.arr = [];
+                Util.implements(this, -1);
+            }
+    
+            expect(()=> new CoClass1()).toThrow('ES021');
+        });
+        it('- implements() : 예외 ', () => {
+            function CoClass1() {
+                this.arr = [];
+                Util.implements(this, null);
+            }
+    
+            expect(()=> new CoClass1()).toThrow('ES021');
         });
         // it('- 속성 = null : 예외 및 검사', () => {
         // });

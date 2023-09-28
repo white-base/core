@@ -10,8 +10,10 @@ const {BaseEntity}                = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
+const { BaseColumn }       = require('../src/base-column');
+
 const { MetaTable }       = require('../src/meta-table');
-const { MetaView }        = require('../src/meta-view');
+const { MetaView, MetaViewCollection }        = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
 const { MetaColumn, BaseColumnCollection }              = require('../src/meta-column');
 
@@ -271,6 +273,22 @@ describe("[target: meta-column.js]", () => {
                 expect(view2.columns['i4']).toEqual(view3.columns['i4']);
                 // view3 기준 비교
                 expect(view3.columns['i4']).toEqual(view2.columns['i4']);
+            });
+            it("- addValue() : 켈렉션 교체로, 타입 제한 해지 ", () => {
+                class SubColumn extends BaseColumn {
+                    constructor(name, entity, prop) {
+                        super(name, entity);
+                        if (prop && prop['value']) this.value = prop['value']
+                    }
+                }
+                SubColumn._TYPES = [];
+                var view1 = new MetaView('T1');
+                view1.columns._baseType = SubColumn;
+                view1.columns.addValue('c1', /reg/)
+                view1.columns.addValue('c2', {})
+                
+                expect(view1.columns['c1'].value).toEqual(/reg/)
+                expect(view1.columns['c2'].value).toEqual({})
             });
             it("- addValue(?, ?) : 예외 ", () => {
                 var view1 = new MetaView('T1');

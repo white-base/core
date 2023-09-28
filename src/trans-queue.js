@@ -120,7 +120,7 @@
                     pos = obj.pos;
                     this.collection.removeAt(pos);
                     this.collection.insertAt(pos, obj.clone);
-                }
+                } else Message.error('ES022', ['cmd='+ obj.cmd]);
             }
             this.init();
         };

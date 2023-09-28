@@ -625,19 +625,24 @@
             
 
             // if (!(typeof p_value === 'string')) throw new Error('Only [p_value] type 'string' can be added');
-            p_value = typeof p_value === 'number' ? String(p_value) : p_value;  // number 형 변환
+            value = typeof p_value === 'number' ? String(p_value) : p_value;  // number 형 변환
 
             // 1. 기본값 얻기
-            value = p_value === null || typeof p_value === 'undefined' ? this.default : p_value;    // Branch: REVIEW: 필요한 로직인가?
+            // value = p_value === null || typeof p_value === 'undefined' ? this.default : p_value;REVIEW: 필요한 로직인가?
             value = value.trim();
 
             // 2-1. 통과조건 검사
-            if ((this.isNotNull === false && this.constraints.length === 0 ) 
-                || (this.isNotNull === false && this.isNullPass === true && value.length === 0)
-                || (this.isNotNull === true && this.constraints.length === 0 && value.length > 0)){
-                return;
-                // return true;
-            }
+            // if ((this.isNotNull === false && this.constraints.length === 0 ) // Branch:
+            //     || (this.isNotNull === false && this.isNullPass === true && value.length === 0)
+            //     || (this.isNotNull === true && this.constraints.length === 0 && value.length > 0)){
+            //     return;
+            //     // return true;
+            // }
+
+            if (this.isNotNull === false && this.isNullPass === true && value.length === 0) return;
+            if (this.isNotNull === false && this.constraints.length === 0 ) return;
+            if (this.isNotNull === true && this.constraints.length === 0 && value.length > 0) return;
+            
             // 2-2. 실패조건 검사
             if (this.isNotNull === true && this.constraints.length === 0 && value.length === 0) {
                 result.msg   = Message.get('ES055', [this.name]);
@@ -651,9 +656,9 @@
             for(var i = 0; this.constraints.length > i; i++) {
 
                 if (typeof this.constraints[i] === 'function') {
-                    return this.constraints[i].call(this, this, p_value);     // 함수형 제약조건  
+                    return this.constraints[i].call(this, this, value);     // 함수형 제약조건  
                 } else {
-                    match = p_value.match(this.constraints[i].regex);
+                    match = value.match(this.constraints[i].regex);
     
                     if ((this.constraints[i].condition === false && match !== null) ||    // 실패 조건
                         (this.constraints[i].condition === true && match === null)) {     // 성공 조건
@@ -699,6 +704,7 @@
 
             /**
              * 아이템의 타입
+             * REVIEW: new Value 변형 검토, 상속과 인터페이스 구현은 객체 보다는 클래스에 적합할듯, 차이점?
              * @member {Function} _L.Meta.Entity.BaseColumnCollection#_baseType
              */
             Object.defineProperty(this, '_baseType', 
@@ -741,7 +747,7 @@
          * @returns {*} 
          */
         BaseColumnCollection.prototype.contains = function(p_elem) {
-            if (p_elem instanceof MetaColumn) {
+            if (p_elem instanceof BaseColumn) {
                 return this.indexOf(p_elem.columnName, 1) > -1;
             } else {
                 return _super.prototype.contains.call(this, p_elem);
@@ -878,7 +884,7 @@
                 Message.error('ES022', ['object']); 
             }
 
-            if (key.length === 0) Message.error('ES051', ['name | obj.columnName']);
+            // if (key.length === 0) Message.error('ES051', ['name | obj.columnName']);
 
             return _super.prototype.add.call(this, key, column);
         };
@@ -1081,7 +1087,7 @@
                 Message.error('ES032', ['refCollection', 'BaseColumnCollection']);
             }
 
-            if (p_any instanceof MetaColumn) {
+            if (p_any instanceof BaseColumn) {
                 key = p_any.columnName;
                 column = p_any;
             } else if (typeof p_any === 'string') {

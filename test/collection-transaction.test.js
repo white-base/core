@@ -492,6 +492,22 @@ describe("[target: collection-trans.js]", () => {
                 expect(s.rows.count).toBe(1);
                 expect(s.rows[0]).toBe('A1');
             });
+            it("- add() : 수정 후 롤백", () => {
+                let s = new Student();
+                s.rows.add('A1');
+                s.rows.commit();
+                // 초기                
+                expect(s.rows.count).toBe(1);
+                
+                // 롤백 후
+                s.rows[0] = 'AA1'
+                expect(s.rows[0]).toBe('AA1');
+
+                s.rows.rollback();
+                expect(s.rows.count).toBe(1);
+                expect(s.rows[0]).toBe('A1');
+
+            });
         });
 
         
@@ -517,6 +533,13 @@ describe("[target: collection-trans.js]", () => {
                 let s = new Student();
                 expect(()=> s.rows._transQueue.collection = 1).toThrow(/ES032/)
                 expect(()=> s.rows._transQueue.collection = new MetaObject).toThrow(/ES033/)
+            });
+            it("- 커버리지 : this._transQueue.update ", () => {
+                let s = new Student();
+                s.rows._transQueue.queue.push({cmd: 'E', pos:null, ref: null, colne:null})
+                
+
+                expect(()=> s.rows.rollback()).toThrow(/ES022/)
             });
         });
     });

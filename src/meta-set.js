@@ -153,29 +153,41 @@
         MetaSet._NS = 'Meta.Entity';    // namespace
         MetaSet._PARAMS = ['name'];  // creator parameter
 
+        // local funciton
+        function isObject(obj) {
+            if (typeof obj === 'object' && obj !== null) return true;
+            return false;
+        }
+        // function isGuidObject(obj) {
+        //     if (!isObject(obj)) return false;
+        //     if (typeof obj['_guid'] === 'string' && typeof obj['_type'] === 'string') return true;
+        //     return false;
+        // }
+        
         // 3가지 타입 입력
         MetaSet._transformSchema  = function(p_oGuid) {
-            var obj  = {
-                tables: null,
-                views: null
-            };
+            // var obj  = {
+            //     tables: null,
+            //     views: null
+            // };
 
-            if (p_oGuid['tables'] || p_oGuid['views']) obj = p_oGuid;
-            return transformSet(obj);
+            // if (!isGuidObject(p_oGuid)) Message.error('ES021', ['p_oGuid', 'object<Guid>']);
+            // if (p_oGuid['tables'] || p_oGuid['views']) obj = p_oGuid;   // Line:
+            return transformSet(p_oGuid);
 
             // inner function
             function transformSet(p_oGuid) {
                 var obj = {};
-                if (p_oGuid['name']) obj['name'] = p_oGuid['name'];
-                if (p_oGuid['tables']) obj['tables'] = transformTable(p_oGuid['tables']);
-                if (p_oGuid['views']) obj['views'] = transformView(p_oGuid['views']);
+                obj['name'] = p_oGuid['name']; // Line:
+                obj['tables'] = transformTable(p_oGuid['tables']);   // Line:
+                obj['views'] = transformView(p_oGuid['views']);   // Line:
                 return obj;
             }
             function transformTable(p_oGuid) {
                 var obj = {};
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var table = p_oGuid['_elem'][i];
-                    var key = p_oGuid['_key'][i] || table.name;
+                    var key = p_oGuid['_key'][i]; // Line:
                     obj[key] = BaseEntity._transformSchema(table);
                 }
                 obj['$key'] = p_oGuid['_key'];
@@ -185,16 +197,20 @@
                 var obj = {};
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var view = p_oGuid['_elem'][i];
-                    var key = p_oGuid['_key'][i] || view.name;
+                    var key = p_oGuid['_key'][i];  // Line:
                     obj[key] = BaseEntity._transformSchema(view);
                 }
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
             }
         };
+        
+        // TODO: typeoof === 'object || !== null 함수로 상위함수 추출 => isObject()
         MetaSet._isSchema  = function(p_oSch) {
-            if (p_oSch === null || typeof p_oSch !== 'object') return false;
-            if (p_oSch['tables'] || p_oSch['views']) return true;
+            // if (p_oSch === null || typeof p_oSch !== 'object') return false;
+            // if (p_oSch['tables'] || p_oSch['views']) return true;
+            if (!isObject(p_oSch)) return false;
+            if (isObject(p_oSch['tables']) || isObject(p_oSch['views'])) return true;
             return false;
         };
         
@@ -350,32 +366,36 @@
             var obj;
             var entity;
 
+            if (!isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
+
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
-            obj = metaSet;
+            // obj = metaSet;
+            // metaSet = p_obj;
 
             if (MetaRegistry.isGuidObject(metaSet)) {
                 // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);  // 참조가 기본 존재함
                 metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformSchema(metaSet);
-            } else if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            } else obj = metaSet;
 
+            if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
-            // if (obj['tables']) {
-            entity = obj['tables'];
-            if (entity['$key'] && Array.isArray(entity['$key'])) {
-                for (var i = 0; i < entity['$key'].length; i++) {
-                    addEntity(entity['$key'][i], entity, this.tables);
-                }
-            } else for (var key in entity) addEntity(key, entity, this.tables);
-            // }
-            // if (obj['views']) {
-            entity = obj['views'];
-            if (entity['$key'] && Array.isArray(entity['$key'])) {
-                for (var i = 0; i < entity['$key'].length; i++) {
-                    addEntity(entity['$key'][i], entity, this.views);
-                }
-            } else for (var key in entity) addEntity(key, entity, this.views);
-            // }
+            if (obj['tables']) {
+                entity = obj['tables'];
+                if (entity['$key'] && Array.isArray(entity['$key'])) {
+                    for (var i = 0; i < entity['$key'].length; i++) {
+                        addEntity(entity['$key'][i], entity, this.tables);
+                    }
+                } else for (var key in entity) addEntity(key, entity, this.tables);
+            }
+            if (obj['views']) {
+                entity = obj['views'];
+                if (entity['$key'] && Array.isArray(entity['$key'])) {
+                    for (var i = 0; i < entity['$key'].length; i++) {
+                        addEntity(entity['$key'][i], entity, this.views);
+                    }
+                } else for (var key in entity) addEntity(key, entity, this.views);
+            }
             return;
 
             // inner funciton
@@ -409,22 +429,26 @@
             var obj;
             var rows;
 
-            if (typeof p_obj !== 'object' || p_obj === null) Message.error('ES021', ['obj', 'object']);
+            if (!isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
             
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
-            obj = metaSet;
-
+            // obj = metaSet;
+            // metaSet = p_obj;
+            
             if (MetaRegistry.isGuidObject(metaSet)) {
                 // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
                 metaSet = MetaRegistry.transformRefer(metaSet);
                 obj = MetaSet._transformSchema(metaSet);
-            } else if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            } else obj = metaSet;
 
+            if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
             // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             
-            if (typeof obj['tables'] === 'object' && obj['tables'] !== null) createRow(obj['tables'], this.tables);
-            if (typeof obj['views'] === 'object' && obj['views'] !== null) createRow(obj['views'], this.views);
+            // if (typeof obj['tables'] === 'object' && obj['tables'] !== null) createRow(obj['tables'], this.tables);
+            // if (typeof obj['views'] === 'object' && obj['views'] !== null) createRow(obj['views'], this.views);
+            if (isObject(obj['tables'])) createRow(obj['tables'], this.tables);
+            if (isObject(obj['views'])) createRow(obj['views'], this.views);
 
             function createRow(p_entity, p_collec) {
                 for (var key in p_entity) {

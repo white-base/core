@@ -108,6 +108,21 @@
         //     return true;
         // };
 
+        TransactionCollection.prototype._getPropDescriptor = function(p_idx) {
+            return {
+                get: function() { return this._elements[p_idx]; },
+                set: function(newValue) {
+                    var typeName;
+                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
+                    // if (newValue._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
+                    this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
+                    this._elements[p_idx] = newValue;
+                },
+                configurable: true,
+                enumerable: true,
+            };
+        };
+
         /**
          * 메타 객체를 얻는다
          * @virtual

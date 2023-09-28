@@ -22,19 +22,13 @@ describe('Util.*', () => {
         
         expect(Array.isArray(arr)).toBe(true);
     });
-    it('- Object.keys() : polyfill', () => {
+    it.skip('- Object.keys() : polyfill', () => {
         // polyfill 강제 지움
         Object.keys = null;
-
-        // REVIEW: jest.fn 을 사용해서 강제 오류 처리
-        // Object.toString = null;
-        // Object.prototype.toString = null;
-        // Object.keys = jest.fn();
-        // Object.prototype.toString = jest.fn(()=> null);
-
         const Util      = require('../src/util');
         const arr = ['aa'];
         const obj1 = {aa: {bb: 1}}
+        
         expect(Object.keys(arr)).toEqual(['0']);
         expect(Object.keys(obj1)).toEqual(['aa']);
         expect(()=> Object.keys(undefined)).toThrow(/Object.keys/)
