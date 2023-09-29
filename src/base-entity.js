@@ -421,19 +421,19 @@
          * @returns {object}
          */
 
-        BaseEntity.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        BaseEntity.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            var origin = [];
-            var _metaSet;
-            
-            if (Array.isArray(p_origin)) origin = p_origin;
-            else if (p_origin) origin.push(p_origin);
-            origin.push(obj);
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            // var _metaSet;
+
+            // if (Array.isArray(p_owned)) owned = p_owned;
+            // else if (p_owned) owned.push(p_owned);
+            // owned.push(obj);
 
             if (vOpt < 2 && vOpt > -1 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
-            obj.columns = this.columns.getObject(vOpt, origin);
-            obj.rows = this.rows.getObject(vOpt, origin);
+            obj.columns = this.columns.getObject(vOpt, owned);
+            obj.rows = this.rows.getObject(vOpt, owned);
             return obj;                        
         };
 

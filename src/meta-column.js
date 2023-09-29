@@ -492,10 +492,11 @@
          * @virtual
          * @returns {object}
          */
-        MetaColumn.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        MetaColumn.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            var origin = p_origin ? p_origin : obj;
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            // var origin = p_origin ? p_origin : obj;
             
             // if (vOpt > -2 && this._entity && this._entity.columns && this._entity.columns[this.__key]
             //     && this._entity.columns[this.__key] !== this) {
@@ -1013,11 +1014,12 @@
         // };
         
 
-        MetaViewColumnCollection.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        MetaViewColumnCollection.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            // var origin = p_origin ? p_origin : obj;
-            var origin = [];
+            // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            
+            
 
             // if (this._baseCollection) obj._baseCollection = MetaRegistry.createReferObject(this._baseCollection);
             // if (vOpt < 2 && vOpt > -1 && this._refEntities.length > 0) {

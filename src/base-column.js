@@ -307,15 +307,16 @@
          * @virtual
          * @returns {object}
          */
-        BaseColumn.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        BaseColumn.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            var origin = [];
-            // var origin = p_origin ? p_origin : obj;
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            // var origin = p_owned ? p_owned : obj;
 
-            if (Array.isArray(p_origin)) origin = p_origin;
-            else if (p_origin) origin.push(p_origin);
-            origin.push(obj);
+            // owned = owned.concat(p_owned, obj);
+            // if (Array.isArray(p_owned)) origin = p_owned;
+            // else if (p_owned) origin.push(p_owned);
+            // origin.push(obj);
             
             // if (vOpt > -2 && this._entity && this._entity.columns && this._entity.columns[this.__key]
             //     && this._entity.columns[this.__key] !== this) {

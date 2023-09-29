@@ -94,16 +94,17 @@
          * @virtual
          * @returns {object}
          */
-        ArrayCollection.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        ArrayCollection.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            var origin = [];
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            // var origin = [];
             // var origin = p_origin ? p_origin : obj;
             // var _elems = [];
 
-            if (Array.isArray(p_origin)) origin = p_origin;
-            else if (p_origin) origin.push(p_origin);
-            origin.push(obj);
+            // if (Array.isArray(p_origin)) origin = p_origin;
+            // else if (p_origin) origin.push(p_origin);
+            // origin.push(obj);
 
             // obj._owner = MetaRegistry.createReferObject(this._owner);
             // for (var i = 0; i < this._elemTypes.length; i++) {
@@ -125,9 +126,9 @@
                 // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
                 // else obj._elem.push(elem)
                 if (elem instanceof MetaObject) {
-                    if (MetaRegistry.hasGuidObject(elem, origin)) {
+                    if (MetaRegistry.hasGuidObject(elem, owned)) {
                         obj._elem.push(MetaRegistry.createReferObject(elem));
-                    } else obj._elem.push(elem.getObject(vOpt, origin));
+                    } else obj._elem.push(elem.getObject(vOpt, owned));
                 } else obj._elem.push(elem);
             }
             return obj;                        

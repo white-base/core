@@ -191,7 +191,6 @@
         /**
          * 객체 또는 문자열을 객체타입으로 얻기
          * @param {string | object} p_elem 
-         * @returns 
          */
         NamespaceManager.prototype._getPathObject = function(p_elem) {
             var fullName;
@@ -270,7 +269,6 @@
             sections = _getArray(p_ns);
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
-                // if (!_isString(sName)) Message.error('ES021', ['sName', 'string']);
                 if (parent[sName] && parent[sName]['_type'] === 'ns') {
                     if (i === sections.length - 1) return parent[sName];    
                     parent = parent[sName];

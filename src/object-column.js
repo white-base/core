@@ -514,27 +514,28 @@
          * @virtual
          * @returns {object}
          */
-        ObjectColumn.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        ObjectColumn.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            var origin = [];
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            // var origin = [];
             var defValue = this.default;
             var value = this.value;
 
-            if (Array.isArray(p_origin)) origin = p_origin;
-            else if (p_origin) origin.push(p_origin);
-            origin.push(obj);
+            // if (Array.isArray(p_origin)) origin = p_origin;
+            // else if (p_origin) origin.push(p_origin);
+            // origin.push(obj);
 
             if (defValue instanceof MetaObject) {
-                if (MetaRegistry.hasGuidObject(defValue, origin)) {
+                if (MetaRegistry.hasGuidObject(defValue, owned)) {
                     obj.default = MetaRegistry.createReferObject(defValue);
-                } else obj.default = defValue.getObject(vOpt, origin);
+                } else obj.default = defValue.getObject(vOpt, owned);
             }
 
             if (value instanceof MetaObject) {
-                if (MetaRegistry.hasGuidObject(value, origin)) {
+                if (MetaRegistry.hasGuidObject(value, owned)) {
                     obj.value = MetaRegistry.createReferObject(value);
-                } else obj.value = value.getObject(vOpt, origin);
+                } else obj.value = value.getObject(vOpt, owned);
             }
             return obj;                        
         };

@@ -124,9 +124,10 @@
          * @virtual
          * @returns {object}
          */
-        MetaTable.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        MetaTable.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             // var origin = p_origin ? p_origin : obj;
 
             obj.tableName = this.tableName;

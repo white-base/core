@@ -336,15 +336,16 @@
          * @virtual
          * @returns {object}
          */
-        MetaRow.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        MetaRow.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
             // var origin = p_origin ? p_origin : obj;
-            var origin = [];
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            // var origin = [];
 
-            if (Array.isArray(p_origin)) origin = p_origin;
-            else if (p_origin) origin.push(p_origin);
-            origin.push(obj);
+            // if (Array.isArray(p_origin)) origin = p_origin;
+            // else if (p_origin) origin.push(p_origin);
+            // origin.push(obj);
 
             if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
                 obj.__subscribers = this.__event.__subscribers;
@@ -360,9 +361,9 @@
                 // else obj._elem.push(elem);
                 if (elem instanceof MetaObject) {
                     // POINT:
-                    if (MetaRegistry.hasGuidObject(elem, origin)) {
+                    if (MetaRegistry.hasGuidObject(elem, owned)) {
                         obj._elem.push(MetaRegistry.createReferObject(elem));
-                    } else obj._elem.push(elem.getObject(vOpt, origin));
+                    } else obj._elem.push(elem.getObject(vOpt, owned));
                 } else obj._elem.push(elem);
             }
 

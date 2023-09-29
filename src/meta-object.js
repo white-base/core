@@ -45,16 +45,15 @@
         /**
          * 메타 최상위 클래스 (실체)
          * @constructs _L.Meta.MetaObject
-         * @abstract
          * @implements {_L.Interface.IObject}
          * @implements {_L.Interface.IMarshal}
          */
         function MetaObject() {
 
             var _guid;
-            // var _isAbstract = false;
+            
             /**
-             * _guid
+             * _guid 유일한 값
              * @member {array} _L.Meta.MetaObject#_guid 
              */
             Object.defineProperty(this, '_guid', 
@@ -65,7 +64,8 @@
                 },
                 configurable: false,
                 enumerable: true
-            });    
+            });
+
             /**
              * _type
              * @member {function} _L.Meta.MetaObject#_type 
@@ -73,7 +73,7 @@
             Object.defineProperty(this, '_type', 
             {
                 get: function() { 
-                    var proto = this.__proto__ || Object.getPrototypeOf(this);            // COVER: 2
+                    var proto = this.__proto__ || Object.getPrototypeOf(this);
                     return proto.constructor;
                 },
                 configurable: false,
@@ -101,15 +101,19 @@
         MetaObject._PARAMS = [];         // creator parameter
         
 
+        // local function
+        function _isObject(obj) {    // 객체 여부
+            if (typeof obj === 'object' && obj !== null) return true;
+            return false;
+        }
+
         /**
          * 단일 객체 비교
-         * getObject()
-         *  -1 >= : _guid 제외, $ref 또 빠져야함
+         * getObject(2) 하여 비교  
          * @param {*} p_obj1 
          * @param {*} p_obj2 
-         * @returns 
+         * @returns {boolean}
          */
-        
         MetaObject.prototype.__compare = function(p_obj1, p_obj2) {
             var _this = this;
             
@@ -119,24 +123,21 @@
                 var obj1 = p_obj1.getObject(2);    // _guid, $ref 제외 객체
                 var obj2 = p_obj2.getObject(2);
                 return Util.deepEqual(obj1, obj2);
-            } else if (typeof p_obj1 === 'object' && p_obj1 !== null) {
+            } else if (_isObject(p_obj1)) {
                 return Util.deepEqual(p_obj1, p_obj2);
             }
             return false;
         };
 
         /**
-         * 객체 비교
-         * === 연산자의 객체주소 비교가 아니고, 타입과 값에 대한 비교
-         * 단, _guid 는 비고 제외 
-         * @virtual
+         * 객체 비교  
+         * '===' 연산자의 객체 주소 비교가 아니고, 속성별 타입과 값에 대한 비교  
+         * _guid 는 비교에서 제외됨  
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
         MetaObject.prototype.equal = function(p_target) {
             if (!(p_target instanceof MetaObject)) return false;
-            // if (typeof p_target !== 'object') return false;
-            // return this._type === p_target._type ? true : false;
             return this.__compare(this, p_target);
         };
 
@@ -162,7 +163,7 @@
         };
 
         /**
-         * 상위 클래스 또는 인터페이스 구현 여부 검사
+         * 상위 클래스 또는 인터페이스 구현 여부
          * @param {string | function} p_fun 함수명으로 넣으면 이름만 검색, 클래스를 넣은면 클래스 검색
          * @returns {boolean}
          */
@@ -179,11 +180,9 @@
                 for (var i = 0; i < types.length; i++) {
                     if (fun === types[i]) return true;
                 }
-                // if (_this._interface) {
                 for (var i = 0; i < _this._interface.length; i++) {
                     if (fun === _this._interface[i]) return true;
                 }
-                // }
                 return false;
             }
             function findFunctionName(funName) {
@@ -191,28 +190,26 @@
                 for (var i = 0; i < types.length; i++) {
                     if (funName === types[i].name) return true;
                 }
-                // if (_this._interface) {
                 for (var i = 0; i < _this._interface.length; i++) {
                     if (funName === _this._interface[i].name) return true;
                 }
-                // }
                 return false;
             }
         };
 
         /**
-         * 메타 객체를 얻는다
-         * -1 : _guid 제외
-         * @virtual
+         * Guid 객체를 얻기 (순환 X, 참조 X)  
+         * - opt = 0 : <기본값> 참조 관점의 요약된 객체  
+         * - opt = 1 : 소유 관점의 구조의 객체, guid 관점의 중복 가능  
+         * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
          * @param {number} p_vOpt 레벨 옵션
-         * @returns {object}
+         * @param {object?} p_vOpt 레벨 옵션
+         * @returns {array<object>?} 
          */
-        MetaObject.prototype.getObject = function(p_vOpt, p_origin) {
+        MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
             var vOpt = p_vOpt || 0;
             var obj = {};
-            // var origin = p_origin ? p_origin : obj;
-            // var origin = [];
-
+            // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
             if (vOpt < 2 && vOpt > -1) obj._guid = this._guid;
             obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
@@ -220,40 +217,25 @@
         };
 
         /**
-         * 메타 객체를 설정한다
-         * REVIEW: setObject 시점에 복제해서 사용 검토
-         * @virtual
+         * 메타 객체를 설정(복원)
          * @param {object} p_oGuid 레벨 옵션
          */
         MetaObject.prototype.setObject  = function(p_oGuid, p_origin) {
             var origin = p_origin ? p_origin : p_oGuid;
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
-            if (typeof p_oGuid !== 'object') Message.error('ES021', ['oGuid', 'object']);
+            if (!_isObject(p_oGuid)) Message.error('ES021', ['oGuid', 'object']);
             if (p_oGuid._type !== fullName) Message.error('ES046', [p_oGuid._type, fullName]);
             
             if (MetaRegistry.isGuidObject(origin)) {
-                // if (!origin['__TRANSFORM_REFER'] || MetaRegistry.hasRefer(origin)) {
                 if (!origin['__TRANSFORM_REFER']) {
                     origin = MetaRegistry.transformRefer(origin);
                     origin['__TRANSFORM_REFER'] = true;
                 }
             } else Message.error('ES022', [typeof p_oGuid]);
             
-            MetaRegistry.createSetObject(p_oGuid, this); // $set 생성
+            MetaRegistry.createSetObject(p_oGuid, this); // $set attach
         };
-        // MetaObject.prototype.setObject  = function(p_mObj) {
-        //     var meta;
-
-        //     if (typeof p_mObj !== 'object') throw new Error('Only [p_mObj] type "object" can be added');
-        //     meta = MetaRegistry.find(p_mObj);
-        //     if (!meta) {
-        //         this.__SET$_guid(p_mObj._guid, this);
-        //     } else return meta;
-        // };
-
-
-        
 
         return MetaObject;
         
@@ -263,7 +245,7 @@
     // 5. module export
     if (isNode) {     
         exports.MetaObject = MetaObject;
-    } else {    // COVER:
+    } else {
         _global._L.MetaObject = MetaObject;
         _global._L.Meta.MetaObject = MetaObject;    // namespace
     }

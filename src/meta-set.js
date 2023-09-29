@@ -242,19 +242,20 @@
          * @virtual
          * @returns {object}
          */
-        MetaSet.prototype.getObject = function(p_vOpt, p_origin) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
+        MetaSet.prototype.getObject = function(p_vOpt, p_owned) {
+            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            var origin = [];
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            // var origin = [];
             // var origin = p_origin ? p_origin : obj;
             
-            if (Array.isArray(p_origin)) origin = p_origin;
-            else if (p_origin) origin.push(p_origin);
-            origin.push(obj);
+            // if (Array.isArray(p_origin)) origin = p_origin;
+            // else if (p_origin) origin.push(p_origin);
+            // origin.push(obj);
 
             obj.setName = this.setName;
-            obj.tables = this.tables.getObject(vOpt, origin);
-            obj.views = this.views.getObject(vOpt, origin);
+            obj.tables = this.tables.getObject(vOpt, owned);
+            obj.views = this.views.getObject(vOpt, owned);
             return obj;                        
         };
 
