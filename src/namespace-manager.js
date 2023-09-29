@@ -169,8 +169,14 @@
             if (typeof ns === 'string') {
                 if (!_validNamespace(ns)) Message.error('ES042', [ns, '_validNamespace()']);
                 sections = ns.split('.');
-            } else if (Array.isArray(ns)) sections = ns;
-            else Message.error('ES021', ['ns', 'string, array']);
+            } else if (Array.isArray(ns)) {
+                sections = ns;
+            } else Message.error('ES021', ['ns', 'string, array']);
+            for (var i = 0; i < sections.length; i++) {
+                var sName =sections[i];
+                if (!_isString(sName)) Message.error('ES021', ['ns<array>', 'string']);
+                if (!_validName(sName)) Message.error('ES054', [sName, '_validName()']);
+            }
             return sections;
         }
         
@@ -184,26 +190,26 @@
 
         /**
          * 객체 또는 문자열을 객체타입으로 얻기
-         * @param {string | object} p_any 
+         * @param {string | object} p_elem 
          * @returns 
          */
-        NamespaceManager.prototype._getPathObject = function(p_any) {
+        NamespaceManager.prototype._getPathObject = function(p_elem) {
             var fullName;
             var arr;
             var key;
             var nsPath;
             var obj = {};
 
-            if (_isString(p_any)) fullName = p_any;
-            else fullName = this.getPath(p_any); 
-
+            if (_isString(p_elem)) fullName = p_elem;
+            else fullName = this.getPath(p_elem);
+            
             if (typeof fullName !== 'string') return;
+
             arr = fullName.split('.');
             key = arr.pop();
             nsPath = arr.join('.');
             obj['ns'] = nsPath;
             obj['key'] = key;
-
             return obj;
         };
         
@@ -220,15 +226,12 @@
          */
         NamespaceManager.prototype.addNamespace = function(p_ns) {
             var parent = this.__storage;
-            var sections = Array.isArray(p_ns) ? p_ns : _getArray(p_ns);
+            var sections = _getArray(p_ns);
         
-            // 최상위 에약어 제거
-            if (this.__KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1);
+            if (this.__KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
         
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
-                if (!_isString(sName)) Message.error('ES021', ['sName', 'string']);
-                if (!_validName(sName)) Message.error('ES054', [sName, '_validName()']);
                 if (typeof parent[sections[i]] === 'undefined') {
                     parent[sections[i]] = this.__createNsRefer();
                 }
@@ -242,11 +245,10 @@
          */
         NamespaceManager.prototype.delNamespace = function(p_ns) {
             var parent = this.__storage;
-            var sections = Array.isArray(p_ns) ? p_ns : _getArray(p_ns);
+            var sections = _getArray(p_ns);
         
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
-                if (!_isString(sName)) Message.error('ES021', ['sName', 'string']);
                 if (parent[sName] && parent[sName]['_type'] === 'ns') {
                     if (i === sections.length - 1) delete parent[sName];
                     else parent = parent[sName];
@@ -256,8 +258,8 @@
 
         /**
          * 네임스페이스 경로 얻기
-         * @param {string} p_ns 
-         * @returns {object} 경로데 대한 객체
+         * @param {string, array<sting>} p_ns 
+         * @returns {object} 경로에 대한 객체
          */
         NamespaceManager.prototype.path = function(p_ns) {
             var parent = this.__storage;
@@ -268,6 +270,7 @@
             sections = _getArray(p_ns);
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
+                // if (!_isString(sName)) Message.error('ES021', ['sName', 'string']);
                 if (parent[sName] && parent[sName]['_type'] === 'ns') {
                     if (i === sections.length - 1) return parent[sName];    
                     parent = parent[sName];
@@ -276,10 +279,9 @@
         };
 
         /**
-         * 네임스페이스에 요소 추가
+         * 네임스페이스에 요소(함수/클래스) 추가
          * @param {string} p_fullName 
          * @param {any} p_elem 
-         * @returns 
          */
         NamespaceManager.prototype.add = function(p_fullName, p_elem) {
             var parent = this.__storage;
@@ -295,11 +297,10 @@
                 Message.error('ES041', ['elem', '[isOverlap=false]']);
             }
             
-            if (sections.length > 0) this.addNamespace(ns);
             if (sections.length === 0) {    // 최상위 등록
                 parent[key] = p_elem;
                 return;
-            }
+            } else this.addNamespace(ns);
 
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];
@@ -309,6 +310,11 @@
             }
         };
 
+        /**
+         * 네임스페이스에 등록된 요소(함수/클래스) 삭제
+         * @param {string} p_fullname 
+         * @returns {boolean}
+         */
         NamespaceManager.prototype.del = function(p_fullName) {
             var parent = this.__storage;
             var sections;
@@ -327,17 +333,19 @@
 
         /**
          * 요소로 네임스페이스 여부
-         * @param {string | array} p_ns 
+         * @param {string | any} p_elem 경로 | 객체
+         * @returns {boolean}
          */
-        NamespaceManager.prototype.has = function(p_obj) {
-            if (_isString(p_obj) && this.find(p_obj)) return true;
-            else if (typeof this.getPath(p_obj) === 'string') return true;
+        NamespaceManager.prototype.has = function(p_elem) {
+            if (_isString(p_elem) && this.find(p_elem)) return true;
+            else if (typeof this.getPath(p_elem) === 'string') return true;
             return false;
         };
 
         /**
          * 네임스페이스 요소 얻기
-         * @returns {*}
+         * @param {string | array<string>} p_fullName 
+         * @returns {any?}
          */
         NamespaceManager.prototype.find = function(p_fullName) {
             var parent = this.__storage;
@@ -354,14 +362,15 @@
         };
         
         /**
-         * 요소로 네임스페이스 조회 (중복시 첫요소 리턴)
-         * @param {string} p_ns
-         * @param {boolean?} p_isFullName^
-         * @returns {array} 네임스페이스 
+         * 요소로 네임스페이스 경로 조회 (중복시 첫요소 리턴)
+         * @param {any} p_elem 
+         * @returns {string?}
          */
         NamespaceManager.prototype.getPath = function(p_elem) {
             var namespace = this.__storage;
             var stack = [];
+
+            if (!p_elem) Message.error('ES051', ['p_elem']);
 
             if (findElement(namespace)) {
                 return stack.join('.');
@@ -387,11 +396,17 @@
             }
         };
 
+        /**
+         * 네임스페이스 문자열로 내보내기
+         * @param {function?} p_stringify 
+         * @param {string?} p_space 
+         * @returns {string}
+         */
         NamespaceManager.prototype.output = function(p_stringify, p_space) {
             var arr = [];
             var obj;
             var str;
-            var temp ={list: arr};
+            var temp = {list: arr};
 
             for (var i = 0; i < this.list.length; i++) {
                 var fullName    = this.list[i];
@@ -411,26 +426,29 @@
             return str;
         };
 
-        // string | arr<list>  ... 검사
-        NamespaceManager.prototype.load = function(p_obj, p_parse) {
-            var arr = p_obj;
+        /**
+         * 문자열 파싱해서 불러오기
+         * @param {string} p_str output문자열
+         * @param {function?} p_parse 
+         */
+        NamespaceManager.prototype.load = function(p_str, p_parse) {
+            var arr = [];
             
-            this.init();
-            if (typeof arr === 'string') {
-                try {
-                    if (typeof p_parse === 'function') arr = p_parse(p_obj);
-                    else arr = JSON.parse(p_obj, null);
-                } catch (error) {
-                    Message.error('ES0110', [typeof p_obj, 'parse(...)', error]);
-                }
+            if (!_isString(p_str)) Message.error('ES021', ['p_str', 'string']);
+            
+            try {
+                if (typeof p_parse === 'function') arr = p_parse(p_str);
+                else arr = JSON.parse(p_str, null);
+            } catch (error) {
+                Message.error('ES0110', [typeof p_str, 'parse(...)', error]);
             }
-            if(Array.isArray(arr['list'])) {
-                for (var i = 0; i < arr['list'].length; i++) {
-                    var o = arr['list'][i];
-                    var fun = o['elem'];
-                    this.add(o['full'], fun);
-                }
-            } else Message.error('ES022', [typeof p_obj]);
+
+            this.init();
+            for (var i = 0; i < arr['list'].length; i++) {
+                var o = arr['list'][i];
+                var fun = o['elem'];
+                this.add(o['full'], fun);
+            }
         };
 
         return NamespaceManager;

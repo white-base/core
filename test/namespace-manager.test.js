@@ -223,6 +223,11 @@ describe("[target: namespace-manager.js]", () => {
 
                 expect(p).not.toBeDefined();
             });
+            it("- 예외 : 타입 ", () => {
+                const ns = new NamespaceManager();
+                const s = ns.__storage;
+                expect(()=> ns.path([-1])).toThrow(/ES021/)
+            });
         });
         describe("NamespaceManager.add(fullName, elem) <네임스페이스에 요소 설정>", () => {
             it("- add() : Function 등록 ", () => {
@@ -316,6 +321,10 @@ describe("[target: namespace-manager.js]", () => {
                 const str = ns.getPath(Array);
 
                 expect(str).not.toBeDefined();
+            });
+            it("- 예외 : 타입 ", () => {
+                const ns = new NamespaceManager();
+                expect(()=> ns.getPath()).toThrow(/ES051/)
             });
         });
         describe("NamespaceManager.has(elem): bool <네임스페이스에 요소 유무>", () => {
@@ -438,13 +447,13 @@ describe("[target: namespace-manager.js]", () => {
                 ns1.add('a1.num1', 10);
                 const str = ns1.output();
                 const obj = JSON.parse(str, null);
-                const ns2 = new NamespaceManager();
-                ns2.load(obj);
+                // const ns2 = new NamespaceManager();
+                // ns2.load(obj);
                 const ns3 = new NamespaceManager();
                 ns3.load(str);
 
-                expect(ns2.getPath('STR')).toBe('str1');
-                expect(ns2.getPath(10)).toBe('a1.num1');
+                // expect(ns2.getPath('STR')).toBe('str1');
+                // expect(ns2.getPath(10)).toBe('a1.num1');
                 expect(ns3.getPath('STR')).toBe('str1');
                 expect(ns3.getPath(10)).toBe('a1.num1');
             });
@@ -458,7 +467,7 @@ describe("[target: namespace-manager.js]", () => {
                 const ns2 = new NamespaceManager();
             
                 expect(()=> ns2.load('STR')).toThrow(/ES0110/)
-                expect(()=> ns2.load({list: null})).toThrow(/ES022/)
+                expect(()=> ns2.load({list: null})).toThrow(/ES021/)
             });
         });
         describe("예외, 커버리지", () => {
