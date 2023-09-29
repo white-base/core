@@ -117,9 +117,11 @@ describe("[target: namespace-manager.js]", () => {
             it("- addNamespace() : 금지어 등록 ", () => {
                 const ns = new NamespaceManager();
                 ns.addNamespace('ns.aa');
+                ns.addNamespace(['ns', 'bb']);
                 const s = ns.__storage;
     
                 expect(s.aa).toBeDefined();
+                expect(s.bb).toBeDefined();
             });
             // it("- add() : namespace = {} 같이 등록 ", () => {
             //     const ns = new NamespaceManager();
@@ -132,6 +134,7 @@ describe("[target: namespace-manager.js]", () => {
             it("- addNamespace() : [예외] 자른 다료형 ", () => {
                 const ns = new NamespaceManager();
     
+                expect(() => ns.addNamespace(['aa', 10])).toThrow('ES021');
                 expect(() => ns.addNamespace(10)).toThrow('ES021');
                 expect(() => ns.addNamespace({})).toThrow('ES021');
                 expect(() => ns.addNamespace(true)).toThrow('ES021');
@@ -159,8 +162,10 @@ describe("[target: namespace-manager.js]", () => {
                 expect(s.a1.b2.c2).toBeDefined();
                 // 해제
                 ns.delNamespace('a1.b2.c2');
+                ns.delNamespace(['a1', 'b2', 'c1']);
+
                 expect(s.a1.b1).toBeDefined();
-                expect(s.a1.b2.c1).toBeDefined();
+                expect(s.a1.b2.c1).not.toBeDefined();
                 expect(s.a1.b2.c2).not.toBeDefined();
             });
             it("- delNamespace() : node 해제 ", () => {
@@ -179,12 +184,14 @@ describe("[target: namespace-manager.js]", () => {
                 ns.delNamespace('a1.b2');
                 expect(s.a1.b1).toBeDefined();
                 expect(s.a1.b2).not.toBeDefined();
+                expect(()=> ns.delNamespace(['a1', -1])).toThrow(/ES021/)
             });
             it("- delNamespace() : 없는 경우 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
                 ns.addNamespace('a1.b1');
                 ns.delNamespace('a1.b2');
+
                 expect(s.a1.b1).toBeDefined();
             });
         });
@@ -466,6 +473,11 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns._getPathObject(fun1)).toEqual({ns: '', key:'fun1'})
                 expect(ns._getPathObject(fun2)).toEqual({ns: 'aa', key:'fun2'})
                 expect(ns._getPathObject(fun3)).toBe(undefined)
+            });
+            it("- 커버리지 : this.__SET$__storage ", () => {
+                const ns = new NamespaceManager();
+                ns.__SET$__storage(1)
+                
             });
             
         });

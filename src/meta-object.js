@@ -35,9 +35,9 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof IObject === 'undefined') Message.error('ES011', ['IObject', 'i-object']);
     if (typeof IMarshal === 'undefined') Message.error('ES011', ['IMarshal', 'i-marshal']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   

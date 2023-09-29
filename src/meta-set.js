@@ -19,7 +19,7 @@
     var MetaRegistry;
 
     //==============================================================
-    // 1. 의존 모듈 선언
+    // 1. namespace declaration
     _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
     _global._L.Meta.Entity          = _global._L.Meta.Entity || {};
@@ -57,12 +57,12 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
     if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
     if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
     if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
     if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
+    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
     if (typeof MetaTableCollection === 'undefined') Message.error('ES011', ['MetaTableCollection', 'meta-table']);

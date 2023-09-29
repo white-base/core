@@ -23,13 +23,7 @@ describe("[ GROUP]", () => {
     
             expect(() => require('../src/base-entity')).toThrow(/Util/);
         });
-        it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
-            require('../src/message');
-            require('../src/util-type');
-            require('../src/util');
-    
-            expect(() => require('../src/base-entity')).toThrow(/MetaRegistry/);
-        });
+        
         it("- 예외 : IGroupControl 로딩이 안 된 경우", () => {
             require('../src/message');
             require('../src/util-type');
@@ -39,7 +33,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
-    
+            require('../src/i-serialize');
             require('../src/i-element');
             // require('../src/i-control-group');
             // require('../src/i-control-schema');
@@ -66,6 +60,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
     
             require('../src/i-element');
             require('../src/i-control-group');
@@ -78,8 +73,8 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-array');
     
             require('../src/observer');
-            require('../src/namespace-manager');
-            require('../src/meta-registry');  
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');  
     
             expect(() => require('../src/base-entity')).toThrow(/ISchemaControl/);
         });
@@ -92,6 +87,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
     
             require('../src/i-element');
             require('../src/i-control-group');
@@ -104,8 +100,8 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-array');
     
             require('../src/observer');
-            require('../src/namespace-manager');
-            require('../src/meta-registry');  
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');  
     
             expect(() => require('../src/base-entity')).toThrow(/IImportControl/);
         });
@@ -118,6 +114,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
     
             require('../src/i-element');
             require('../src/i-control-group');
@@ -130,12 +127,40 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-array');
     
             require('../src/observer');
-            require('../src/namespace-manager');
-            require('../src/meta-registry');  
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');  
     
             expect(() => require('../src/base-entity')).toThrow(/IExportControl/);
         });
         it("- 예외 : ISerialize 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+    
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            // require('../src/i-serialize');
+    
+            require('../src/i-element');
+            require('../src/i-control-group');
+            require('../src/i-control-schema');
+            require('../src/i-control-export');
+            require('../src/i-control-import');
+            // require('../src/i-serialize');
+            require('../src/i-collection');
+            require('../src/i-collection-property');
+            require('../src/i-collection-array');
+    
+            require('../src/observer');
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');  
+            // require('../src/meta-object');
+    
+            expect(() => require('../src/base-entity')).toThrow(/ISerialize/);
+        });
+        it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
             require('../src/message');
             require('../src/util-type');
             require('../src/util');
@@ -150,17 +175,16 @@ describe("[ GROUP]", () => {
             require('../src/i-control-schema');
             require('../src/i-control-export');
             require('../src/i-control-import');
-            // require('../src/i-serialize');
+            require('../src/i-serialize');
             require('../src/i-collection');
             require('../src/i-collection-property');
             require('../src/i-collection-array');
     
             require('../src/observer');
-            require('../src/namespace-manager');
-            require('../src/meta-registry');  
-            // require('../src/meta-object');
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');    
     
-            expect(() => require('../src/base-entity')).toThrow(/ISerialize/);
+            expect(() => require('../src/base-entity')).toThrow(/MetaRegistry/);
         });
         it("- 예외 : MetaObject 로딩이 안 된 경우", () => {
             require('../src/message');
@@ -794,14 +818,7 @@ describe("[ GROUP]", () => {
             
             expect(() => require('../src/meta-set')).toThrow(/Util/);
         });
-        it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
-            require('../src/message');
-            require('../src/util-type');
-            require('../src/util');
-            require('../src/observer');
-    
-            expect(() => require('../src/meta-set')).toThrow(/MetaRegistry/);
-        });
+        
         it("- 예외 : ISchemaControl 로딩이 안 된 경우", () => {
             require('../src/message');
             require('../src/util-type');
@@ -812,6 +829,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-control-group');
             // require('../src/i-control-schema');
@@ -823,8 +841,8 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-property');
             require('../src/i-collection-array');
     
-            require('../src/namespace-manager');
-            require('../src/meta-registry'); 
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry'); 
     
             expect(() => require('../src/meta-set')).toThrow(/ISchemaControl/);
         });
@@ -838,6 +856,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-control-group');
             require('../src/i-control-schema');
@@ -849,8 +868,8 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-property');
             require('../src/i-collection-array');
     
-            require('../src/namespace-manager');
-            require('../src/meta-registry'); 
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry'); 
     
             expect(() => require('../src/meta-set')).toThrow(/IImportControl/);
         });
@@ -864,6 +883,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-control-group');
             require('../src/i-control-schema');
@@ -875,8 +895,8 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-property');
             require('../src/i-collection-array');
     
-            require('../src/namespace-manager');
-            require('../src/meta-registry');  
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');  
     
             expect(() => require('../src/meta-set')).toThrow(/IExportControl/);
         });
@@ -901,8 +921,8 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-property');
             require('../src/i-collection-array');
     
-            require('../src/namespace-manager');
-            require('../src/meta-registry');        
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');        
     
             expect(() => require('../src/meta-set')).toThrow(/ISerialize/);
         });
@@ -927,12 +947,43 @@ describe("[ GROUP]", () => {
             require('../src/i-collection-property');
             require('../src/i-collection-array');
     
-            require('../src/namespace-manager');
-            require('../src/meta-registry');        
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');        
     
             expect(() => require('../src/meta-set')).toThrow(/ITransaction/);
         });
+        it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
+            require('../src/message');
+            require('../src/util-type');
+            require('../src/util');
+            require('../src/observer');
     
+            require('../src/i-object');
+            require('../src/i-marshal');
+            require('../src/i-list');
+            require('../src/i-control-list');
+            require('../src/i-element');
+            require('../src/i-control-group');
+            require('../src/i-control-schema');
+            require('../src/i-control-export');
+            require('../src/i-control-import');
+            require('../src/i-serialize');
+            require('../src/i-transaction');
+            require('../src/i-collection');
+            require('../src/i-collection-property');
+            require('../src/i-collection-array');
+    
+            // require('../src/namespace-manager');
+            // require('../src/meta-registry');        
+            // require('../src/meta-object');
+            // require('../src/collection-base');
+            // require('../src/collection-array');
+            // require('../src/trans-queue');
+            // require('../src/collection-transaction');
+            // require('../src/collection-property');
+    
+            expect(() => require('../src/meta-set')).toThrow(/MetaRegistry/);
+        });
         it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
             require('../src/message');
             require('../src/util-type');
@@ -1160,6 +1211,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             // require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1185,6 +1237,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             // require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1245,6 +1298,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             // require('../src/i-element');
             // require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1268,6 +1322,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1292,6 +1347,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1317,6 +1373,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-collection');
             require('../src/i-collection-property');
@@ -1376,6 +1433,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             // require('../src/i-element');
             // require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1400,6 +1458,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             // require('../src/i-element');
             // require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1423,6 +1482,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1447,6 +1507,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-collection');
             // require('../src/i-collection-property');
@@ -1472,6 +1533,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             require('../src/i-element');
             require('../src/i-collection');
             require('../src/i-collection-property');
@@ -1537,6 +1599,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
     
             require('../src/namespace-manager');
             // require('../src/meta-registry');  
@@ -1554,6 +1617,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
     
             require('../src/namespace-manager');
             require('../src/meta-registry');        
@@ -1571,6 +1635,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             // require('../src/i-element');
             // require('../src/i-collection');
             // require('../src/i-collection-array');
@@ -1596,6 +1661,7 @@ describe("[ GROUP]", () => {
             require('../src/i-marshal');
             require('../src/i-list');
             require('../src/i-control-list');
+            require('../src/i-serialize');
             // require('../src/i-element');
             require('../src/i-collection');
             require('../src/i-collection-array');

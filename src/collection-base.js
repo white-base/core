@@ -26,24 +26,24 @@
         Observer                    = require('./observer').Observer;
         ICollection                 = require('./i-collection').ICollection;
         IList                       = require('./i-list').IList;
-        MetaObject                  = require('./meta-object').MetaObject;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
+        MetaObject                  = require('./meta-object').MetaObject;
     } else {
         Message                     = _global._L.Message;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         ICollection                 = _global._L.ICollection;
         IList                       = _global._L.IList;
-        MetaObject                  = _global._L.MetaObject;
         MetaRegistry                = _global._L.MetaRegistry;
+        MetaObject                  = _global._L.MetaObject;
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof ICollection === 'undefined') throw Message.error('ES011', ['ICollection', 'i-collection']);
     if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
-    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
 
