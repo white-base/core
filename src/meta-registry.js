@@ -117,11 +117,11 @@
             if (this.isGuidObject(p_oGuid)) p_arr.push(p_oGuid);
             if (Array.isArray(p_oGuid)){
                 for(var i = 0; i < p_oGuid.length; i++) {
-                    if (typeof p_oGuid[i] === 'object') this.__getGuidList(p_oGuid[i], p_arr);
+                    if (_isObject(p_oGuid[i])) this.__getGuidList(p_oGuid[i], p_arr);
                 }
             } else if (_isObject(p_oGuid)) {
                 for(var prop in p_oGuid) {
-                    if (typeof p_oGuid[prop] === 'object') this.__getGuidList(p_oGuid[prop], p_arr);
+                    if (_isObject(p_oGuid[prop])) this.__getGuidList(p_oGuid[prop], p_arr);
                 }
             }
             return p_arr;
@@ -146,13 +146,14 @@
             var fullName;
 
             if (!this.isMetaObject(p_meta)) Message.error('ES052', ['meta', '{_type:function, _guid: string}']);
-
             if (this.has(p_meta)) Message.error('ES042', ['meta', '_guid']);
+
+            _ns         = p_meta['_ns'] || '';
+            type        = p_meta['_type'];
+            key         = type.name;
+            fullName    = p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
+
             list.push(p_meta);  // 객체 등록
-            _ns = p_meta['_ns'] || '';
-            type = p_meta['_type'];
-            key = type.name;
-            fullName = p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
             this.registerClass(type, _ns, key); // 클래스 등록
         };
 
@@ -167,9 +168,10 @@
             if (typeof p_meta !== 'object' && typeof p_meta !== 'string') {
                 Message.error('ES021', ['target', 'object | string']);
             }
-            guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
 
+            guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
             if (!_isString(guid)) return false;
+
             for(var i = 0; i < list.length; i++) {
                 if (list[i]['_guid'] === guid) {
                     list.splice(i, 1);
@@ -188,9 +190,10 @@
             var guid;
 
             if (typeof p_meta !== 'object' && typeof p_meta !== 'string') return false;
+            
             guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
-
             if (!_isString(guid)) return false;
+
             for(var i = 0; i < list.length; i++) {
                 if (list[i]['_guid'] === guid) return true;
             }
@@ -206,9 +209,10 @@
             var guid;
 
             if (typeof p_meta !== 'object' && typeof p_meta !== 'string') return;
+            
             guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
-
             if (!_isString(guid)) return;
+            
             for(var i = 0; i < list.length; i++) {
                 if (list[i]['_guid'] === guid) return list[i];
             }
@@ -221,8 +225,7 @@
          */
         MetaRegistry.isMetaObject = function(p_obj) {
             if (!_isObject(p_obj)) return false;
-            if (p_obj['_guid'] && _isString(p_obj['_guid']) 
-                && p_obj['_type'] && typeof p_obj['_type'] === 'function') return true;
+            if (_isString(p_obj['_guid']) && typeof p_obj['_type'] === 'function') return true;
             return false;
         };
         
@@ -245,20 +248,19 @@
             if (!_isString(p_oGuid['_type'])) Message.error('ES052', ['p_oGuid', '{_type:string }']);
             if (!_isObject(origin)) Message.error('ES021', ['origin', 'object']);
             
-            type = p_oGuid['_type'];
-            ns = p_oGuid['_ns'] || '';
-            fullName =  ns !== '' ? [ns, type].join('.') : type;
-            coClass = this.getClass(fullName);
+            type        = p_oGuid['_type'];
+            ns          = p_oGuid['_ns'] || '';
+            fullName    =  ns !== '' ? [ns, type].join('.') : type;
+            coClass     = this.getClass(fullName);
             
             if (typeof coClass !== 'function') Message.error('ES053', [fullName, 'function(class)']);
-            params = coClass.hasOwnProperty('_PARAMS') ? coClass['_PARAMS'] : []; // arr
             
+            params = coClass.hasOwnProperty('_PARAMS') ? coClass['_PARAMS'] : []; // arr
             for (var i = 0; i < params.length; i++) {
                 var argName = params[i];
                 var prop = p_oGuid[argName];
                 var obj;
-                if (_isObject(prop) && prop['$ref']) obj = this.findSetObject(prop['$ref'], origin);
-                else obj = prop;
+                obj = _isObject(prop) && prop['$ref'] ? this.findSetObject(prop['$ref'], origin) : prop;
                 if (p_oGuid[argName]) args.push(obj);
             }
             return new (Function.prototype.bind.apply(coClass, args));
@@ -288,7 +290,7 @@
             if (typeof p_fun !== 'function') Message.error('ES021', ['p_fun', 'function']);
             
             if (!this.findClass(p_fun)) {
-                ns = p_fun._NS || '';
+                ns  = p_fun['_NS'] || '';
                 key = p_fun.name;
                 this.registerClass(p_fun, ns, key);
             }
@@ -306,6 +308,7 @@
             if (!_isObject(p_oGuid)) Message.error('ES021', ['p_oGuid', 'object']);
             if (!_isObject(p_meta)) Message.error('ES021', ['p_meta', 'object']);
             if (!_isString(p_meta['_guid'])) Message.error('ES052', ['p_meta', '{_guid:string }'])
+            
             p_oGuid['$set'] = p_meta['_guid'];
             return p_oGuid;
         };
@@ -320,6 +323,7 @@
             var arrObj;
 
             if (!_isObject(p_oGuid)) Message.error('ES021', ['oGuid', 'object']);
+            
             arrObj = this.__getGuidList(p_oGuid);
             if (!validUniqueGuid() || !validReference(p_oGuid) || !validCollection(p_oGuid)) return false;
             return true;
@@ -364,7 +368,7 @@
             function validUniqueGuid() {    // guid 유일한 값인지 검사
                 for (var i = 0; i < arrObj.length; i++) {
                     for (var ii = 0; ii < arrObj.length; ii++) {
-                        if (arrObj[i]._guid === arrObj[ii]._guid && i !== ii) return false; // 중복
+                        if (arrObj[i]['_guid'] === arrObj[ii]['_guid'] && i !== ii) return false; // 중복
                     }
                 }
                 return true;
@@ -378,7 +382,7 @@
          */
         MetaRegistry.isGuidObject = function(p_obj) {
             if (!_isObject(p_obj)) return false;
-            if (p_obj['_guid'] && _isString(p_obj['_guid']) && p_obj['_type'] && _isString(p_obj['_type'])) return true;
+            if (_isString(p_obj['_guid']) && _isString(p_obj['_type'])) return true;
             return false;
         };
 
@@ -422,6 +426,7 @@
 
             if (!_isString(guid)) Message.error('ES024', ['guid', 'string']);
             if (!_isObject(origin)) Message.error('ES024', ['p_origin', 'object']);
+
             return findObject(origin);
             
             // inner finction
@@ -489,6 +494,7 @@
             var clone;
 
             if (!_isObject(p_oGuid)) Message.error('ES024', ['p_oGuid', 'object']);
+            
             arrObj = this.__getGuidList(p_oGuid);
             clone = Util.deepCopy(p_oGuid);
             linkReference(clone, arrObj);
@@ -542,6 +548,7 @@
          */
         MetaRegistry.releaseClass = function(p_fullName) {
             if (!_isString(p_fullName)) Message.error('ES024', ['p_fullName', 'string']);
+            
             if (typeof _global[p_fullName] === 'function') return true; // 내장함수 & 전역 함수
             return this.ns.del(p_fullName);
         };
@@ -555,6 +562,7 @@
             var fullName;
 
             if (typeof p_fun !== 'function') Message.error('ES024', ['p_fun', 'function']);
+            
             fullName = p_fun.name;
             if (typeof _global[fullName] === 'function') return fullName;   // 내장함수 & 전역 함수
             return this.ns.getPath(p_fun);
@@ -567,6 +575,7 @@
          */
         MetaRegistry.getClass = function(p_fullName) {
             if (!_isString(p_fullName)) Message.error('ES024', ['p_fullName', 'string']);
+            
             if (typeof _global[p_fullName] === 'function') return _global[p_fullName];  // 내장함수 & 전역 함수
             return this.ns.find(p_fullName);
         };
@@ -584,17 +593,14 @@
 
             if (typeof p_str !== 'string') Message.error('ES021', ['str', 'string']);
 
-            if (typeof p_parse === 'function') obj = p_parse(obj);
-            else obj = JSON.parse(obj, null);
+            obj = (typeof p_parse === 'function') ? p_parse(obj) : JSON.parse(obj, null);
+            if (this.has(obj)) return this.find(obj['_guid']);  // 객체가 존재할 경우
+            if (!this.isGuidObject(obj)) Message.error('ES022', ['obj']);
 
-            if (this.has(obj)) return this.find(obj['_guid']);
-
-            if (this.isGuidObject(obj)) {   
-                oGuid = this.transformRefer(obj);
-                meta = this.createMetaObject(oGuid);
-                meta.setObject(oGuid);
-                return meta;
-            } else Message.error('ES022', ['obj']);
+            oGuid = this.transformRefer(obj);
+            meta = this.createMetaObject(oGuid);
+            meta.setObject(oGuid);
+            return meta;
         };
         return MetaRegistry;
     }());
