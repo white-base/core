@@ -30,7 +30,7 @@
     // 4. module implementation   
     var IListControl  = (function () {
         /**
-         * 최상위 객체
+         * 리스트 컨트롤 인터페이스
          * @constructs _L.Interface.IListControl
          * @interface
          */
@@ -50,7 +50,6 @@
         /**
          * 해제
          * @abstract
-         * @returns {boolean}
          */
         IListControl.prototype.del  = function() {
             Message.error('ES013', ['del(key)']);
@@ -59,7 +58,6 @@
         /**
          * 존재 여부
          * @abstract
-         * @returns {boolean}
          */
         IListControl.prototype.has  = function() {
             Message.error('ES013', ['has(any)']);
@@ -68,7 +66,6 @@
         /**
          * 조회
          * @abstract
-         * @returns {any}
          */
         IListControl.prototype.find  = function() {
             Message.error('ES013', ['has(any)']);

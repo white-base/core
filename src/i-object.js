@@ -37,6 +37,7 @@
 
         /**
          * 객체타입 얻기
+         * @abstract
          */
         IObject.prototype.getTypes  = function() {
             Message.error('ES013', ['getTypes(): array<function>']);
@@ -44,14 +45,15 @@
         
         /**
          * 인스턴스 여부 검사
-         * @returns {Boolean}
+         * @abstract
          */
         IObject.prototype.instanceOf  = function() {
             Message.error('ES013', ['instanceOf(function | string): boolean']);
         };
 
         /**
-         * 객체타입 얻기
+         * 객체 비교
+         * @abstract
          */
         IObject.prototype.equal  = function() {
             Message.error('ES013', ['equal(meta): boolean']);

@@ -26,6 +26,7 @@
     // 4. module implementation   
     var IImportControl  = (function () {
         /**
+         * 입력 컨트롤 인터페이스
          * @constructs _L.Interface.IImportControl
          * @interface
          */

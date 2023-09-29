@@ -30,7 +30,7 @@
     // 4. module implementation   
     var IMarshal  = (function () {
         /**
-         * 최상위 객체
+         * 내부 제어 인터페이스
          * @constructs _L.Interface.IMarshal
          * @interface
          */
@@ -53,7 +53,7 @@
         
         /**
          * 객체 얻기
-         * @returns {Object}
+         * @abstract
          */
         IMarshal.prototype.getObject = function() {
             Message.error('ES013', ['getObject(p_vOpt, p_origin?): object']);
@@ -62,7 +62,6 @@
         /**
          * 객체 설정
          * @abstract
-         * @returns {Stirng}
          */
         IMarshal.prototype.setObject  = function() {
             Message.error('ES013', ['setObject(mObj)']);

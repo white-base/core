@@ -35,6 +35,7 @@
     // 4. module implementation   
     var IArrayCollection  = (function (_super) {
         /**
+         * 배열 컬렉션 인터페이스
          * @constructs _L.Interface.IArrayCollection
          * @interface
          * @extends  _L.Interface.ICollection
@@ -48,6 +49,7 @@
 
         /**
          * 조회 : 인덱스로 이름 조회
+         * @abstract
          */
         IArrayCollection.prototype.insertAt  = function() {
             Message.error('ES013', ['insertAt(pos, val, ...): bool']);

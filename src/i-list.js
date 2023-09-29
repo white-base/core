@@ -30,7 +30,7 @@
     // 4. module implementation   
     var IList  = (function () {
         /**
-         * 최상위 객체
+         * 목록 인터페이스
          * @constructs _L.Interface.IList
          * @interface
          */

@@ -30,7 +30,7 @@
     // 4. module implementation   
     var ISerialize  = (function () {
         /**
-         * 최상위 객체
+         * 직렬화 인터페이스
          * @constructs _L.Interface.ISerialize
          * @interface
          */
@@ -42,7 +42,6 @@
         /**
          * 출력 (내보내기)
          * @abstract
-         * @returns {Stirng}
          */
         ISerialize.prototype.output  = function() {
             Message.error('ES013', ['output(...)']);
@@ -51,7 +50,6 @@
         /**
          * 로드 (가져오기)
          * @abstract
-         * @returns {Stirng}
          */
         ISerialize.prototype.load  = function() {
             Message.error('ES013', ['load(...)']);

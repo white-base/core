@@ -22,9 +22,6 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         Util                        = require('./util');
-        // IPartControl            = require('./i-control-part').IPartControl;
-        // ILookupControl          = require('./i-control-lookup').ILookupControl;
-        // IBaseCollection         = require('./i-collection-base').IBaseCollection;
     } else {
         Message                     = _global._L.Message;
         Util                        = _global._L.Util
@@ -36,16 +33,12 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    // if (typeof IPartControl === 'undefined') Message.error('ES011', ['IPartControl', 'i-control-part']);
-    // if (typeof ILookupControl === 'undefined') Message.error('ES011', ['ILookupControl', 'i-control-lookup']);
-    // if (typeof IBaseCollection === 'undefined') Message.error('ES011', ['IBaseCollection', 'i-collection-base']);
 
     //==============================================================
     // 4. module implementation
     var ICollection  = (function () {
         /**
-         * 컬렉션 최상위
-         * @classdesc 컬렉션 최상위 컬렉션 인터페이스
+         * 컬렉션 최상위 인터페이스
          * @constructs _L.Interface.ICollection
          * @interface
          */

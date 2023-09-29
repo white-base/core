@@ -26,6 +26,7 @@
     // 4. module implementation   
     var IGroupControl  = (function () {
         /**
+         * 그룹 컨트롤 인터페이스
          * @constructs _L.Interface.IGroupControl
          * @interface
          */

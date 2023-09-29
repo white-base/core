@@ -27,6 +27,7 @@
     // 4. module implementation   
     var ITransaction  = (function () {
         /**
+         * 트랜젝션 인터페이스
          * @constructs _L.Interface.ITransaction
          * @interface
          */
@@ -34,8 +35,9 @@
         }
     
         ITransaction._NS = 'Interface';    // namespace
+        
         /**
-         * 병합 : 그룹
+         * 변경 수락 (commit)
          * @abstract
          */
         ITransaction.prototype.acceptChanges  = function() {
@@ -43,7 +45,7 @@
         };
 
         /**
-         * 복사 : 그룹
+         * 변경 거부 (rollback)
          * @abstract
          */
         ITransaction.prototype.rejectChanges  = function() {

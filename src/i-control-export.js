@@ -26,6 +26,7 @@
     // 4. module implementation   
     var IExportControl  = (function () {
         /**
+         * 내보내기 컨트롤 인터페이스
          * @constructs _L.Interface.IExportControl
          * @interface
          */

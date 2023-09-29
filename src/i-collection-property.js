@@ -35,6 +35,7 @@
     // 4. module implementation   
     var IPropertyCollection  = (function (_super) {
         /**
+         * 프로퍼티 컬렉션 인터페이스 
          * @constructs _L.Interface.IPropertyCollection
          * @interface
          * @extends  _L.Interface.ICollection
@@ -48,6 +49,7 @@
 
         /**
          * 조회 : 인덱스로 이름 조회
+         * @abstract
          */
         IPropertyCollection.prototype.keyOf  = function() {
             Message.error('ES013', ['keyOf(idx): str']);

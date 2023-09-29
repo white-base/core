@@ -30,7 +30,7 @@
     // 4. module implementation   
     var IElement  = (function () {
         /**
-         * 최상위 객체
+         * 독립 요소 클래스
          * @constructs _L.Interface.IElement
          * @interface
          */
@@ -47,7 +47,6 @@
         /**
          * 복제
          * @abstract
-         * @returns {Stirng}
          */
         IElement.prototype.clone  = function() {
             Message.error('ES013', ['clone()']);
