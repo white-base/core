@@ -393,7 +393,7 @@
             
             if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
             elem = this._elements[p_idx];
-            if (this.exist(p_idx)) {
+            if (elem) {
                 // before event
                 this._onChanging();
                 // process
@@ -426,15 +426,16 @@
 
         /**
          * 키 유무
+         * REVIEW: 프로퍼티 컬렉션으로 이동 검토
          * @param {number | string} p_key index, key
          * @returns {boolean}
          */
-        BaseCollection.prototype.exist = function(p_key) {
-            if (typeof p_key === 'number' || typeof p_key === 'string') {
-                return this.hasOwnProperty(p_key);
-            }
-            Message.error('ES021', ['key', 'number, string']);
-        };
+        // BaseCollection.prototype.exist = function(p_key) {
+        //     if (typeof p_key === 'number' || typeof p_key === 'string') {
+        //         return this.hasOwnProperty(p_key);
+        //     }
+        //     Message.error('ES021', ['key', 'number, string']);
+        // };
 
         /** 
          * 컬렉션에 요소를 추가

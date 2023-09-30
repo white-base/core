@@ -51,7 +51,7 @@
          * @constructs _L.Collection.PropertyCollection
          * @implements {_L.Interface.IPropertyCollection}
          * @extends _L.Collection.BaseCollection
-         * @param {Object} p_owner 소유 객체
+         * @param {object} p_owner 소유 객체
          */
         function PropertyCollection(p_owner) {
             _super.call(this, p_owner); 
@@ -87,6 +87,10 @@
         // local function
         function _isObject(obj) {    // 객체 여부
             if (typeof obj === 'object' && obj !== null) return true;
+            return false;
+        }
+        function _isString(obj) {    // 공백아닌 문자 여부
+            if (typeof obj === 'string' && obj.length > 0) return true;
             return false;
         }
 
@@ -190,7 +194,7 @@
                     this._elements.push(obj);
                 
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
+                    var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this._elements.push(meta);
                     
@@ -202,7 +206,7 @@
          * 요소 또는 키를 인덱스 조회
          * @override
          * @param {string | any} p_obj key 또는 대상 객체
-         * @param {number} p_opt 옵션 :  0 = 요소로 조회, 1 = idx로 조회    TODO: 숫자에서 변수명으로 변경 요망
+         * @param {number} p_isKey 옵션 :  0 = 요소로 조회, 1 = idx로 조회    TODO: 숫자에서 변수명으로 변경 요망
          * @returns {number} 없을시 -1
          */
         PropertyCollection.prototype.indexOf = function(p_obj, p_opt) {
@@ -210,7 +214,7 @@
             
             if (opt === 0) return this._elements.indexOf(p_obj);
             if (opt === 1) {    
-                if (typeof p_obj !== 'string')  Message.error('ES021', ['opt=1', 'string']);
+                if (!_isString(p_obj))  Message.error('ES021', ['opt=1', 'string']);
                 for (var i = 0; i < this._keys.length; i++) {
                     if (this._keys[i] === p_obj) return i;
                  }
@@ -229,7 +233,7 @@
                 var index   = this._elements.length;;
                 var regex = /^[a-zA-Z_][a-zA-Z0-9_]*/;
 
-                if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+                if (!_isString(p_name)) Message.error('ES021', ['name', 'string']);
                 if(!regex.test(p_name)) Message.error('ES068', [p_name, 'Propery.name']);
                 if (this._KEYWORD.indexOf(p_name) > -1) Message.error('ES048', [p_name, 'Symbol word']);
                 if (this.exist(p_name)) Message.error('ES042', [p_name, 'property._keys']);
@@ -293,6 +297,17 @@
         PropertyCollection.prototype.keyOf = function(p_idx) {
             if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
             return this._keys[p_idx];
+        };
+
+        /**
+         * 키 유무
+         * REVIEW: 프로퍼티 컬렉션으로 이동 검토
+         * @param {number | string} p_key index, key
+         * @returns {boolean}
+         */
+        PropertyCollection.prototype.exist = function(p_key) {
+            if (!_isString(p_key)) Message.error('ES021', ['key', 'string']);
+            return this.hasOwnProperty(p_key);
         };
 
         return PropertyCollection;

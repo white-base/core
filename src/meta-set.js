@@ -172,22 +172,22 @@
             // };
 
             // if (!isGuidObject(p_oGuid)) Message.error('ES021', ['p_oGuid', 'object<Guid>']);
-            // if (p_oGuid['tables'] || p_oGuid['views']) obj = p_oGuid;   // Line:
+            // if (p_oGuid['tables'] || p_oGuid['views']) obj = p_oGuid;
             return transformSet(p_oGuid);
 
             // inner function
             function transformSet(p_oGuid) {
                 var obj = {};
-                obj['name'] = p_oGuid['name']; // Line:
-                obj['tables'] = transformTable(p_oGuid['tables']);   // Line:
-                obj['views'] = transformView(p_oGuid['views']);   // Line:
+                obj['name'] = p_oGuid['name']; 
+                obj['tables'] = transformTable(p_oGuid['tables']);
+                obj['views'] = transformView(p_oGuid['views']);   
                 return obj;
             }
             function transformTable(p_oGuid) {
                 var obj = {};
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var table = p_oGuid['_elem'][i];
-                    var key = p_oGuid['_key'][i]; // Line:
+                    var key = p_oGuid['_key'][i]; 
                     obj[key] = BaseEntity._transformSchema(table);
                 }
                 obj['$key'] = p_oGuid['_key'];
@@ -197,7 +197,7 @@
                 var obj = {};
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var view = p_oGuid['_elem'][i];
-                    var key = p_oGuid['_key'][i];  // Line:
+                    var key = p_oGuid['_key'][i]; 
                     obj[key] = BaseEntity._transformSchema(view);
                 }
                 obj['$key'] = p_oGuid['_key'];

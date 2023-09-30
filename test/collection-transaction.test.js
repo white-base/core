@@ -692,7 +692,7 @@ describe("[target: collection-trans.js]", () => {
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
-        it("- 유무 검사 : exist(key) ", () => {
+        it.skip("- 유무 검사 : exist(key) ", () => {
             const i = new Corp();
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);

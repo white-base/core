@@ -281,7 +281,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             });
         });
         describe("BaseCollection.exist(key): bool <키 여부 조회>", () => {
-            it("- exist(key) : number, string 타입으로 키 여부 조회 ", () => {
+            it.skip("- exist(key) : number, string 타입으로 키 여부 조회 ", () => {
                 let s = new Student();
                 const a2 = { style: 1};
                 s.rows.add('A1');
@@ -806,7 +806,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
-        it("- 유무 검사 : exist(key) ", () => {
+        it.skip("- 유무 검사 : exist(key) ", () => {
             const i = new Corp();
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);

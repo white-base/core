@@ -42,7 +42,7 @@
          * 트랜젝션 컬렉션 클래스
          * @constructs _L.Collection.TransactionCollection
          * @extends _L.Collection.ArrayCollection
-         * @param {Object} p_owner 소유객체
+         * @param {object} p_owner 소유객체
          */
         function TransactionCollection(p_owner) {
             _super.call(this, p_owner);
@@ -145,7 +145,7 @@
         /**
          * 지정 위치에 요소 삭제
          * @ovrride
-         * @param {*} p_pos 
+         * @param {number} p_pos 
          * @returns {boolean}
          */
         TransactionCollection.prototype.removeAt = function(p_pos) {
