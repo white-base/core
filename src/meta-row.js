@@ -499,7 +499,7 @@
                     if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
                     if (nVal._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
-                    this._elements[p_idx] = nVal;
+                    this.__GET$_elements(this)[p_idx] = nVal;
                 },
                 configurable: true,
                 enumerable: true,

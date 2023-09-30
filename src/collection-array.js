@@ -76,10 +76,10 @@
          * @returns {boolean}
          */
         ArrayCollection.prototype._remove = function(p_idx) {
-            var count = this._elements.length - 1;   // [idx] 포인트 이동
+            var count = this.count - 1;   // [idx] 포인트 이동
             
-            this._elements.splice(p_idx, 1);
-            this._descriptors.splice(p_idx, 1);
+            this.__GET$_elements(this).splice(p_idx, 1);
+            this.__GET$_descriptors(this).splice(p_idx, 1);
             
             if (p_idx < count) {
                 for (var i = p_idx; i < count; i++) {   // 참조 변경(이동)
@@ -135,7 +135,7 @@
 
             if (Array.isArray(p_oGuid._desc) && p_oGuid._desc.length > 0) {
                 for (var i = 0; i < p_oGuid._desc.length; i++) {
-                    this._descriptors.push(p_oGuid._desc[i]);
+                    this.__GET$_descriptors(this).push(p_oGuid._desc[i]);
                 }
             }
             for(var i = 0; i < p_oGuid._elem.length; i++) {
@@ -147,14 +147,14 @@
                 if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
-                    this._elements.push(obj);
+                    this.__GET$_elements(this).push(obj);
                     
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem.$ref, origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
-                    this._elements.push(meta);  
+                    this.__GET$_elements(this).push(meta);  
                 
-                } else this._elements.push(elem);
+                } else this.__GET$_elements(this).push(elem);
             }
 
         };        
@@ -166,7 +166,7 @@
          * @returns {number} 추가한 인덱스
          */
         ArrayCollection.prototype.add = function(p_value, p_desc) {
-            var pos = this._elements.length;
+            var pos = this.count;
             this.insertAt(pos, p_value, p_desc);
             return pos;
         };
@@ -178,7 +178,7 @@
             // before evnet
             this._onChanging();
             // data process
-            for (var i = 0; i < this._elements.length; i++) delete this[i];
+            for (var i = 0; i < this.count; i++) delete this[i];
             this.__SET$_elements([], this);
             this.__SET$_descriptors([], this);
             // after event
@@ -195,7 +195,7 @@
          */
         ArrayCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
             try {
-                var index   = this._elements.length;
+                var index   = this.count;
 
                 if (typeof p_pos !== 'number') Message.error('ES021', ['pos', 'number']);
                 if (index < p_pos) Message.error('ES061', ['pos']);
@@ -212,8 +212,8 @@
                 this._onChanging();
                 this._onAdd(p_pos, p_value);
                 // data process
-                this._elements.splice(p_pos, 0, p_value);            
-                this._descriptors.splice(p_pos, 0, p_desc);
+                this.__GET$_elements(this).splice(p_pos, 0, p_value);            
+                this.__GET$_descriptors(this).splice(p_pos, 0, p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [p_pos], p_desc);
@@ -221,7 +221,7 @@
                     Object.defineProperty(this, [p_pos], this._getPropDescriptor(p_pos));
                 }
                 // reindexing
-                for (var i = p_pos + 1; i < this._elements.length; i++) {
+                for (var i = p_pos + 1; i < this.count; i++) {
                     var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }

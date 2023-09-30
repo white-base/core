@@ -64,15 +64,23 @@
              */
             Object.defineProperty(this, '_keys',
             {
-                get: function() { return _keys; },
+                get: function() {
+                    var arr = [];
+                    for (var i = 0; i < _keys.length; i++) arr.push(_keys[i]);
+                    return arr;
+                },
                 configurable: false,
                 enumerable: false
             });
 
             // inner variable access
-            this.__SET$_keys = function(val, call) {
-                if (call instanceof PropertyCollection) _keys = val;    // 상속접근 허용
+            this.__GET$_keys = function(call) {
+                if (call instanceof PropertyCollection) return _keys;
             }
+            this.__SET$_keys = function(val, call) {
+                if (call instanceof PropertyCollection) _keys = val;
+            }
+
 
             // 예약어 등록 
             this._KEYWORD = this._KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
@@ -101,14 +109,14 @@
          * @returns {boolean} 
          */
         PropertyCollection.prototype._remove = function(p_idx) {
-            var count = this._elements.length - 1;
+            var count = this.count - 1;
             var propName = this.keyOf(p_idx);   // number 검사함
             
             delete this[propName];      // 프로퍼티 삭제
 
-            this._elements.splice(p_idx, 1);
-            this._keys.splice(p_idx, 1);
-            this._descriptors.splice(p_idx, 1);
+            this.__GET$_elements(this).splice(p_idx, 1);
+            this.__GET$_keys(this).splice(p_idx, 1);
+            this.__GET$_descriptors(this).splice(p_idx, 1);
             
             if (p_idx < count) {        // 참조 자료 변경
                 for (var i = p_idx; i < count; i++) {
@@ -143,7 +151,7 @@
                 }
             }
             obj._elem = [];
-            for (var i = 0; i < this._elements.length; i++) {
+            for (var i = 0; i < this.count; i++) {
                 var elem = this._elements[i];
                 if (elem instanceof MetaObject) {
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
@@ -174,14 +182,14 @@
             if (Array.isArray(p_oGuid._desc) && p_oGuid._desc.length > 0) {
                 if (p_oGuid._elem.length !== p_oGuid._desc.length) Message.error('ES063', ['_elem', '_desc']);
                 for (var i = 0; i < p_oGuid._desc.length; i++) {
-                    this._descriptors.push(p_oGuid._desc[i]);
+                    this.__GET$_descriptors(this).push(p_oGuid._desc[i]);
                 }
             }
 
             this._keys.length = 0;
             for(var i = 0; i < p_oGuid._key.length; i++) {
                 var key = p_oGuid._key[i];
-                this._keys.push(key);
+                this.__GET$_keys(this).push(key);
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
                 Object.defineProperty(this, key, this._getPropDescriptor(i));
             }
@@ -191,35 +199,33 @@
                 if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
-                    this._elements.push(obj);
+                    this.__GET$_elements(this).push(obj);
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
-                    this._elements.push(meta);
+                    this.__GET$_elements(this).push(meta);
                     
-                } else this._elements.push(elem);
+                } else this.__GET$_elements(this).push(elem);
             }
         };
 
         /**
-         * 요소 또는 키를 인덱스 조회
+         * 요소 또는 키를 인덱스 조회  
+         * - 키 의 인덱스는 ABC._keys.indexOf('aaa') 로 조회 할수 있다.
          * @override
          * @param {string | any} p_obj key 또는 대상 객체
-         * @param {number} p_isKey 옵션 :  0 = 요소로 조회, 1 = idx로 조회    TODO: 숫자에서 변수명으로 변경 요망
+         * @param {number} p_isKey 옵션
          * @returns {number} 없을시 -1
          */
-        PropertyCollection.prototype.indexOf = function(p_obj, p_opt) {
-            var opt = p_opt || 0;
+        PropertyCollection.prototype.indexOf = function(p_obj, p_isKey) {
+            var isKey = p_isKey || false;
             
-            if (opt === 0) return this._elements.indexOf(p_obj);
-            if (opt === 1) {    
-                if (!_isString(p_obj))  Message.error('ES021', ['opt=1', 'string']);
-                for (var i = 0; i < this._keys.length; i++) {
-                    if (this._keys[i] === p_obj) return i;
-                 }
-            }            
-            return -1;
+            if (!isKey) return this._elements.indexOf(p_obj);
+            else {
+                if (!_isString(p_obj))  Message.error('ES021', ['p_isKey = true', 'string']);
+                return this._keys.indexOf(p_obj);
+            }
         };
 
         /**
@@ -230,7 +236,7 @@
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
             try {
-                var index   = this._elements.length;;
+                var index   = this.count;
                 var regex = /^[a-zA-Z_][a-zA-Z0-9_]*/;
 
                 if (!_isString(p_name)) Message.error('ES021', ['name', 'string']);
@@ -249,9 +255,9 @@
                 this._onChanging();
                 this._onAdd(index, p_value);
                 // data process
-                this._elements.push(p_value);
-                this._keys.push(p_name);
-                this._descriptors.push(p_desc);
+                this.__GET$_elements(this).push(p_value);
+                this.__GET$_keys(this).push(p_name);
+                this.__GET$_descriptors(this).push(p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [index], p_desc);
@@ -277,7 +283,7 @@
             this._onChanging();
             this._onClear();
             // data process
-            for (var i = 0; i < this._elements.length; i++) {
+            for (var i = 0; i < this.count; i++) {
                 var propName = this.keyOf(i);
                 delete this[i];
                 delete this[propName];

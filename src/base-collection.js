@@ -96,25 +96,33 @@
             });
 
             /** 
-             * 컬랙선 내부값 
+             * 컬랙선 요소 [참조값]
              * @protected 
              * @member {array} _L.Collection.BaseCollection#_elements  
              */
             Object.defineProperty(this, '_elements', 
             {
-                get: function() { return _elements; },
+                get: function() {
+                    var arr = [];
+                    for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
+                    return arr;
+                },
                 configurable: false,
                 enumerable: false,
             });
 
             /** 
-             * 컬랙선 내부값 
+             * 컬렉션 기술자 [참조값] 
              * @protected 
              * @member {array} _L.Collection.BaseCollection#_descriptors  
              */
             Object.defineProperty(this, '_descriptors', 
             {
-                get: function() { return _descriptors; },
+                get: function() {
+                    var arr = [];
+                    for (var i = 0; i < _descriptors.length; i++) arr.push(_descriptors[i]);
+                    return arr;
+                },
                 configurable: false,
                 enumerable: false,
             });
@@ -135,7 +143,7 @@
             });
 
             /**
-             * 컬렉션 목록 
+             * 컬렉션 목록 [참조값]
              * @member {array}  _L.Collection.BaseCollection#list  
              */
             Object.defineProperty(this, 'list', 
@@ -229,11 +237,17 @@
             });
 
             // inner variable access
+            this.__GET$_elements = function(call) {
+                if (call instanceof BaseCollection) return _elements;
+            }
+            this.__GET$_descriptors = function(call) {
+                if (call instanceof BaseCollection) return _descriptors;
+            }
             this.__SET$_elements = function(val, call) {
-                if (call instanceof BaseCollection) _elements = val;    // 상속접근 허용
+                if (call instanceof BaseCollection) _elements = val;
             }
             this.__SET$_descriptors = function(val, call) {
-                if (call instanceof BaseCollection) _descriptors = val;    // 상속접근 허용
+                if (call instanceof BaseCollection) _descriptors = val;
             }
 
             // 예약어 등록
@@ -298,11 +312,11 @@
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this._elements[p_idx]; },
+                get: function() { return this.__GET$_elements(this)[p_idx]; },
                 set: function(nVal) {
                     var typeName;
                     if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
-                    this._elements[p_idx] = nVal; 
+                    this.__GET$_elements(this)[p_idx] = nVal; 
                 },
                 configurable: true,
                 enumerable: true,

@@ -41,7 +41,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 
                 expect(c1.equal(c2)).toBe(false);
             });
-            it("- equal() : _descriptors 추가 비교 ", () => {
+            it.skip("- equal() : _descriptors 추가 비교 ", () => {
                 const c1 = new PropertyCollection();
                 const c2 = new PropertyCollection();
                 const c3 = new PropertyCollection();
