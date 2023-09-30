@@ -321,7 +321,7 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object?} p_owned 소유한 객체
+         * @param {object? | array<object>?} p_owned 소유한 객체
          * @returns {object}
          */
         BaseCollection.prototype.getObject = function(p_vOpt, p_owned) {
@@ -418,7 +418,7 @@
         /**
          * 요소의 위치 조회
          * @param {any} p_elem 속성 객체
-         * @returns {number}
+         * @returns {number} 없을시 -1
          */
         BaseCollection.prototype.indexOf = function(p_elem) {
             return this._elements.indexOf(p_elem);

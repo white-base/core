@@ -51,7 +51,7 @@
          * @constructs _L.Collection.ArrayCollection
          * @implements {_L.Interface.IArrayCollection}
          * @extends _L.Collection.BaseCollection
-         * @param {Object} p_owner 소유객체
+         * @param {object} p_owner 소유 객체
          */
         function ArrayCollection(p_owner) {
             _super.call(this, p_owner);
@@ -63,10 +63,17 @@
         ArrayCollection._NS = 'Collection';     // namespace
         ArrayCollection._PARAMS = ['_owner'];   // creator parameter
 
+        // local function
+        function _isObject(obj) {    // 객체 여부
+            if (typeof obj === 'object' && obj !== null) return true;
+            return false;
+        }
+        
         /**
          * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]
          * @protected
-         * @param {*} p_idx 인덱스 번호
+         * @param {number} p_idx 인덱스 번호
+         * @returns {boolean}
          */
         ArrayCollection.prototype._remove = function(p_idx) {
             var count = this._elements.length - 1;   // [idx] 포인트 이동
@@ -75,16 +82,13 @@
             this._descriptors.splice(p_idx, 1);
             
             if (p_idx < count) {
-                // 참조 변경(이동)
-                for (var i = p_idx; i < count; i++) {
-                    // Object.defineProperty(this, [i], this._getPropDescriptor(i));
-                    // delete this[i];
+                for (var i = p_idx; i < count; i++) {   // 참조 변경(이동)
                     var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }
-                delete this[count];                      // 마지막 idx 삭제
+                delete this[count];     // 마지막 idx 삭제
             } else {
-                delete this[p_idx];                      // idx 삭제 (끝일 경우)
+                delete this[p_idx];     // idx 삭제 (끝일 경우)
             }
             return true;
         };
@@ -93,28 +97,14 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object?} p_owned 소유한 객체
+         * @param {object? | array<object>?} p_owned 소유한 객체
          * @returns {object}
          */
         ArrayCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
-            // var origin = [];
-            // var origin = p_origin ? p_origin : obj;
-            // var _elems = [];
 
-            // if (Array.isArray(p_origin)) origin = p_origin;
-            // else if (p_origin) origin.push(p_origin);
-            // origin.push(obj);
-
-            // obj._owner = MetaRegistry.createReferObject(this._owner);
-            // for (var i = 0; i < this._elemTypes.length; i++) {
-            //     var elem = this._elemTypes[i];
-            //     if (typeof elem === 'function') _elems.push(MetaRegistry.createNsReferObject(elem));
-            //     else _elems.push(elem);
-            // }
-            // obj._elemTypes = _elems;
             if (this._descriptors.length > 0) {
                 obj._desc = [];
                 for (var i = 0; i < this._descriptors.length; i++) {
@@ -124,9 +114,6 @@
             obj._elem = [];
             for (var i = 0; i < this._elements.length; i++) {
                 var elem = this._elements[i];
-                // POINT:
-                // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
-                // else obj._elem.push(elem)
                 if (elem instanceof MetaObject) {
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
                         obj._elem.push(MetaRegistry.createReferObject(elem));
@@ -174,64 +161,14 @@
 
         /**
          * 배열속성 컬렉션을 추가한다. [구현]
-         * @param {*} p_value [필수] 속성값
-         * @returns {boolean} 처리결과
+         * @param {any} p_value [필수] 요소값
+         * @param {object} p_desc 프로퍼티 기술 객체
+         * @returns {number} 추가한 인덱스
          */
         ArrayCollection.prototype.add = function(p_value, p_desc) {
             var pos = this._elements.length;
-            try {
-                // if (this.insertAt(pos, p_value, p_desc) === true) return pos;
-                this.insertAt(pos, p_value, p_desc);
-                return pos;
-            } catch (error) {
-                Message.error('ES019', ['add()', error.message]);
-            }
-        };
-
-        /**
-         * 지정 위치에 삽입
-         * @param {*} p_pos 
-         * @param {*} p_value 
-         * @param {*} p_desc 
-         * @returns 
-         */
-        ArrayCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
-            var index   = this._elements.length;
-
-            if (typeof p_pos !== 'number') Message.error('ES021', ['pos', 'number']);
-            if (index < p_pos) Message.error('ES061', ['pos']);
-            if (p_pos < 0) Message.error('ES062', ['pos', '0']);
-            if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
-            if (typeof p_desc === 'object' ) {
-                if (p_desc.configurable === false ) {
-                    Message.warn('WS011', ['configurable = false', 'element']); 
-                }
-                if (p_desc.writable === false ) {
-                    Message.warn('WS011', ['writable = false', 'element']);
-                }
-                // console.warn('[configurable = false] 대상 [컬렉션 요소]는 삭제 할 수 없습니다.');
-            }
-            // before event
-            this._onChanging();
-            this._onAdd(p_pos, p_value);
-            // data process
-            this._elements.splice(p_pos, 0, p_value);            
-            this._descriptors.splice(p_pos, 0, p_desc);
-            // property define
-            if (typeof p_desc === 'object') {
-                Object.defineProperty(this, [p_pos], p_desc);
-            } else {
-                Object.defineProperty(this, [p_pos], this._getPropDescriptor(p_pos));
-            }
-            // index 재정렬
-            for (var i = p_pos + 1; i < this._elements.length; i++) {
-                // Object.defineProperty(this, [i], this._getPropDescriptor(i));
-                var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
-                Object.defineProperty(this, [i], desc);
-            }
-            // after event
-            this._onChanged();
-            return true;
+            this.insertAt(pos, p_value, p_desc);
+            return pos;
         };
 
         /**
@@ -240,15 +177,61 @@
         ArrayCollection.prototype.clear = function() {
             // before evnet
             this._onChanging();
-            // process
+            // data process
             for (var i = 0; i < this._elements.length; i++) delete this[i];
             this.__SET$_elements([], this);
             this.__SET$_descriptors([], this);
-            // this._elements = [];
-            // this._descriptors = [];
             // after event
             this._onClear();
             this._onChanged();
+        };
+
+        /**
+         * 지정 위치에 삽입
+         * @param {number} p_pos 
+         * @param {any} p_value 
+         * @param {object} p_desc 
+         * @returns {boolean}
+         */
+        ArrayCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
+            try {
+                var index   = this._elements.length;
+
+                if (typeof p_pos !== 'number') Message.error('ES021', ['pos', 'number']);
+                if (index < p_pos) Message.error('ES061', ['pos']);
+                if (p_pos < 0) Message.error('ES062', ['pos', '0']);
+                if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
+                if (_isObject(p_desc) && p_desc.configurable === false) {
+                    Message.warn('WS011', ['configurable = false', 'element']); 
+                }
+                if (_isObject(p_desc) && p_desc.writable === false ) {
+                    Message.warn('WS011', ['writable = false', 'element']);
+                }
+
+                // before event
+                this._onChanging();
+                this._onAdd(p_pos, p_value);
+                // data process
+                this._elements.splice(p_pos, 0, p_value);            
+                this._descriptors.splice(p_pos, 0, p_desc);
+                // property define
+                if (_isObject(p_desc)) {
+                    Object.defineProperty(this, [p_pos], p_desc);
+                } else {
+                    Object.defineProperty(this, [p_pos], this._getPropDescriptor(p_pos));
+                }
+                // reindexing
+                for (var i = p_pos + 1; i < this._elements.length; i++) {
+                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
+                    Object.defineProperty(this, [i], desc);
+                }
+                // after event
+                this._onChanged();
+                return true;
+
+            } catch (error) {
+                Message.error('ES019', ['insertAt()', error.message]);
+            }
         };
 
         return ArrayCollection;

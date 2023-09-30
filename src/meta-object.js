@@ -192,7 +192,7 @@
          * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object?} p_owned 소유한 객체
+         * @param {object? | array<object>?} p_owned 소유한 객체
          * @returns {object}  
          */
         MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
