@@ -53,7 +53,7 @@
             var _guid;
             
             /**
-             * _guid 유일한 값
+             * 유일한 값
              * @member {array} _L.Meta.MetaObject#_guid 
              */
             Object.defineProperty(this, '_guid', 
@@ -67,7 +67,7 @@
             });
 
             /**
-             * _type
+             * 생성자(일급함수)
              * @member {function} _L.Meta.MetaObject#_type 
              */
             Object.defineProperty(this, '_type', 
@@ -87,7 +87,7 @@
 
             // 추상클래스 검사
             if (this._type.hasOwnProperty('_ABSCRACT')) {
-                Message.error('ES018', [this._type.name, 'clone()']);
+                Message.error('ES018', [this._type.name]);
             }
 
             // _NS 선언이 없으면 부모의 것을 기본으로 사용!
@@ -97,8 +97,8 @@
             Util.implements(this, IObject, IMarshal);
         }
         
-        MetaObject._NS = 'Meta';          // namespace
-        MetaObject._PARAMS = [];         // creator parameter
+        MetaObject._NS = 'Meta';        // namespace
+        MetaObject._PARAMS = [];        // creator parameter
         
 
         // local function
@@ -106,39 +106,28 @@
             if (typeof obj === 'object' && obj !== null) return true;
             return false;
         }
-
-        /**
-         * 단일 객체 비교
-         * getObject(2) 하여 비교  
-         * @param {*} p_obj1 
-         * @param {*} p_obj2 
-         * @returns {boolean}
-         */
-        MetaObject.prototype.__compare = function(p_obj1, p_obj2) {
-            var _this = this;
-            
+        function _compare(p_obj1, p_obj2) { // 객체 비교
             if (p_obj1 === p_obj2) return true;
-
-            if (p_obj1 instanceof MetaObject && p_obj2 instanceof MetaObject) {
+            else if (p_obj1 instanceof MetaObject && p_obj2 instanceof MetaObject) {
                 var obj1 = p_obj1.getObject(2);    // _guid, $ref 제외 객체
                 var obj2 = p_obj2.getObject(2);
                 return Util.deepEqual(obj1, obj2);
-            } else if (_isObject(p_obj1)) {
+            } else if (_isObject(p_obj1) && _isObject(p_obj2)) {
                 return Util.deepEqual(p_obj1, p_obj2);
-            }
-            return false;
-        };
+            } else return false;
+        }
 
         /**
          * 객체 비교  
          * '===' 연산자의 객체 주소 비교가 아니고, 속성별 타입과 값에 대한 비교  
          * _guid 는 비교에서 제외됨  
-         * @param {object} p_target 대상 MetaObject
+         * @param {any} p_target 대상 객체
+         * @param {any?} p_origin 비교 객체의 기본은 this 이며 입력시 다르객체와 비교한다.
          * @returns {boolean}
          */
-        MetaObject.prototype.equal = function(p_target) {
-            if (!(p_target instanceof MetaObject)) return false;
-            return this.__compare(this, p_target);
+        MetaObject.prototype.equal = function(p_target, p_origin) {
+            var origin = p_origin || this;
+            return _compare(origin, p_target);
         };
 
         /**
@@ -146,8 +135,6 @@
          * @returns {array<function>}
          */
         MetaObject.prototype.getTypes = function() {
-            var arr = [];
-            
             return parentFunction(this);
 
             // inner function
@@ -204,7 +191,7 @@
          * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
          * @param {number} p_vOpt 레벨 옵션
          * @param {object?} p_vOpt 레벨 옵션
-         * @returns {array<object>?} 
+         * @returns {array<object>?}  
          */
         MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
             var vOpt = p_vOpt || 0;

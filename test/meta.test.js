@@ -203,9 +203,12 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             it("- MetaObject.__compare() : 내부 비교 ", () => {
                 const i = new MetaObject();
                 
-                expect(i.__compare(1, 10)).toBe(false);
-                expect(i.__compare({aa: 1}, {aa:1})).toBe(true);
-                expect(i.__compare({aa: 1}, {aa:2})).toBe(false);
+                // expect(i.__compare(1, 10)).toBe(false);
+                // expect(i.__compare({aa: 1}, {aa:1})).toBe(true);
+                // expect(i.__compare({aa: 1}, {aa:2})).toBe(false);
+                expect(i.equal(10)).toBe(false);
+                expect(i.equal({aa: 1}, {aa:1})).toBe(true);
+                expect(i.equal({aa: 1}, {aa:2})).toBe(false);
             });
         });
     });

@@ -86,7 +86,7 @@
                         },
                         8: {
                             msg: '[$1] cannot create an abstract class.',
-                            long: '[$2]Implement the abstract method.'
+                            long: ''
                         },
                         9: {
                             msg: 'Failed to register collection [$1].',
@@ -310,7 +310,7 @@
                         },
                         8: {
                             msg: '[$1]는 추상클래스는 생성할 수 없습니다.',
-                            long: '[$2]추상 메소드를 구현하세요.'
+                            long: ''
                         },
                         9: {
                             msg: '[$1] 컬렉션 등록에 실패하였습니다.',

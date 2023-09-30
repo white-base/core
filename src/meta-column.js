@@ -1017,6 +1017,8 @@
         MetaViewColumnCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
+
+            
             // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             
             
