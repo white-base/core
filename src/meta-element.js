@@ -43,7 +43,7 @@
     var MetaElement  = (function (_super) {
 
         /**
-         * IMarshal 인터페이스 구현 및 ..
+         * 메타 요소, 독립적으로 사용가능한 단위
          * @constructs _L.Meta.MetaElement
          * @abstract
          * @extends _L.Meta.MetaObject
@@ -78,9 +78,6 @@
                 if (call instanceof MetaElement) _name = val;    // 상속접근 허용
             }
             
-            // 추상 클래스로 정의
-            // this.__SET$_isAbstract(true, this); 
-
             Util.implements(this, IElement);
         }
         Util.inherits(MetaElement, _super);
@@ -89,18 +86,7 @@
         MetaElement._PARAMS = ['name'];     // creator parameter
         
         /**
-         * 객체 비교
-         * @virtual
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaElement.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-        //     return this._name === p_target._name ? true : false;
-        // };
-
-        /**
-         * 메타 객체를 얻는다
+         * guid 객체 얻기
          * @virtual
          * @returns {object}
          */
@@ -108,38 +94,28 @@
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
-            // var origin = [];
-            // var origin = p_origin ? p_origin : obj;
 
             obj.name = this._name;
             return obj;                        
         };
 
+        /**
+         * guid 객체 설정
+         * @param {*} p_oGuid 
+         * @param {*} p_origin 
+         */
         MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
-            
             var origin = p_origin ? p_origin : p_oGuid;
             this.__SET$_name(p_oGuid.name, this);
         };
-
-        // MetaElement.prototype.setObject  = function(mObj, oObj) {
-        //     _super.prototype.setObject.call(this, mObj, oObj);
-        //     this._name = mObj.name;
-        // };
-        // MetaElement.prototype.setObject  = function(mObj) {
-        //     var parent = _super.prototype.setObject.call(this, mObj);
-        //     if(!parent) {
-        //         this._name = mObj.name;
-        //     } else return parent;
-        // };
         
         /**
-         * 메타 객체를 설정한다
+         * 메타 객체를 복제
          * @virtual
          * @returns {object}
          */
         MetaElement.prototype.clone  = function() {
-            // Message.error('ES013', ['clone()']);
             var clone = new MetaElement(this._name);
             return clone;
         };

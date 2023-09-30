@@ -191,7 +191,7 @@
          * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
          * @param {number} p_vOpt 레벨 옵션
          * @param {object?} p_vOpt 레벨 옵션
-         * @returns {array<object>?}  
+         * @returns {object}  
          */
         MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
             var vOpt = p_vOpt || 0;
