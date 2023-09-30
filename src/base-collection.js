@@ -53,9 +53,11 @@
 
         /**
         * 컬렉션 최상위 클래스 (추상클래스)
+        * @abstract
         * @constructs _L.Collection.BaseCollection
         * @implements {_L.Interface.ICollection}
-        * @param {Object} p_owner 소유객체
+        * @implements {_L.Interface.IList}
+        * @param {object} p_owner 소유객체
         */
         function BaseCollection(p_owner) { 
             _super.call(this);
@@ -65,47 +67,30 @@
             var _owner = p_owner || null;
             var _elements = [];
             var _descriptors = [];
-            var _KEYWORD = [];
             var _elemTypes  = []; 
+            var _KEYWORD = [];
 
             /** 
              * 이벤트 객체
              * @private 
-             * @member {Object} _L.Collection.BaseCollection#__event  
+             * @member {Observer} _L.Collection.BaseCollection#__event  
              */
-            Object.defineProperty(this, '__event', {
-                get: function() { 
-                    return __event;
-                },
+            Object.defineProperty(this, '__event', 
+            {
+                get: function() { return __event; },
                 configurable: false,
                 enumerable: false,
             });
 
              /** 
-             * 소유객체
+             * 컬렉션 소유 객체
              * @protected 
-             * @member {Object} _L.Collection.BaseCollection#_owner  
+             * @member {object} _L.Collection.BaseCollection#_owner  
              */
-              Object.defineProperty(this, '_owner', {   
-                  get: function() {
-                      return _owner;
-                    },
-                    set: function(val) {
-                        _owner = val;
-                    },
-                    configurable: false,
-                    enumerable: false,
-            });
-
-            /** 
-             * 컬랙선 내부값 
-             * @protected 
-             * @member {Array} _L.Collection.BaseCollection#_elements  
-             */
-            Object.defineProperty(this, '_elements', {
-                get: function() {
-                    return _elements;
-                },
+            Object.defineProperty(this, '_owner', 
+            {   
+                get: function() { return _owner; },
+                set: function(val) { _owner = val; },
                 configurable: false,
                 enumerable: false,
             });
@@ -113,41 +98,34 @@
             /** 
              * 컬랙선 내부값 
              * @protected 
-             * @member {Array} _L.Collection.BaseCollection#_descriptors  
+             * @member {array} _L.Collection.BaseCollection#_elements  
              */
-            Object.defineProperty(this, '_descriptors', {
-                get: function() {
-                    return _descriptors;
-                },
-                configurable: false,
-                enumerable: false,
-            });
-
-            
-            /** 
-             * 심볼 예약어 목록 
-             * @protected
-             * @member {Array}  _L.Collection.BaseCollection#_KEYWORD  
-             */
-             Object.defineProperty(this, '_KEYWORD', {
-                get: function() { 
-                    return _KEYWORD;
-                },
-                set: function(p_val) {
-                    _KEYWORD = p_val;
-                },
+            Object.defineProperty(this, '_elements', 
+            {
+                get: function() { return _elements; },
                 configurable: false,
                 enumerable: false,
             });
 
             /** 
-             * 요소타입
-             * @member {Observer}  _L.Collection.BaseCollection#_elemTypes  
+             * 컬랙선 내부값 
+             * @protected 
+             * @member {array} _L.Collection.BaseCollection#_descriptors  
              */
-            Object.defineProperty(this, '_elemTypes', {
-                get: function() {
-                    return _elemTypes;
-                },
+            Object.defineProperty(this, '_descriptors', 
+            {
+                get: function() { return _descriptors; },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /** 
+             * 요소 타입 (제약조건)
+             * @member {array<any>}  _L.Collection.BaseCollection#_elemTypes  
+             */
+            Object.defineProperty(this, '_elemTypes', 
+            {
+                get: function() { return _elemTypes; },
                 set: function(val) {
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
                     _elemTypes = arrType;
@@ -158,9 +136,10 @@
 
             /**
              * 컬렉션 목록 
-             * @member {Array}  _L.Collection.BaseCollection#list  
+             * @member {array}  _L.Collection.BaseCollection#list  
              */
-            Object.defineProperty(this, 'list', {
+            Object.defineProperty(this, 'list', 
+            {
                 get: function() {
                     var arr = [];
                     for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
@@ -171,26 +150,36 @@
             });
 
             /**
-             * 컬랙션 갯수 
-             * @member {Number} _L.Collection.BaseCollection#count 
+             * 컬렉션 갯수 
+             * @member {number} _L.Collection.BaseCollection#count 
              */
-            Object.defineProperty(this, 'count', {
-                get: function() {
-                    return this._elements.length;
-                },
+            Object.defineProperty(this, 'count', 
+            {
+                get: function() { return this._elements.length; },
                 enumerable: false,
                 configurable: false
             });
             
+            /** 
+             * 예약어
+             * @protected
+             * @member {array<string>}  _L.Collection.BaseCollection#_KEYWORD  
+             */
+            Object.defineProperty(this, '_KEYWORD', 
+            {
+                get: function() { return _KEYWORD; },
+                set: function(p_val) {_KEYWORD = p_val; },
+                configurable: false,
+                enumerable: false,
+            });
 
             /** 
              * 변경(등록/삭제) 후 이벤트  
              * @event _L.Collection.BaseCollection#onAdd 
              */
-            Object.defineProperty(this, 'onAdd', {
-                set: function(fun) {
-                    this.__event.subscribe(fun, 'add');
-                },
+            Object.defineProperty(this, 'onAdd', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'add'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -199,10 +188,9 @@
              * 제거 이벤트
              * @event _L.Collection.BaseCollection#onRemove
              */
-            Object.defineProperty(this, 'onRemove', {
-                set: function(fun) {
-                    this.__event.subscribe(fun, 'remove');
-                },
+            Object.defineProperty(this, 'onRemove', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'remove'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -211,10 +199,9 @@
              * 전체 제거 이벤트
              * @event _L.Collection.BaseCollection#onClear
              */
-            Object.defineProperty(this, 'onClear', {
-                set: function(fun) {
-                    this.__event.subscribe(fun, 'clear');
-                },
+            Object.defineProperty(this, 'onClear', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'clear'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -223,10 +210,9 @@
              * 변경(등록/삭제) 전 이벤트  
              * @event _L.Collection.BaseCollection#onChanging 
              */
-            Object.defineProperty(this, 'onChanging', {
-                set: function(fun) {
-                    this.__event.subscribe(fun, 'changing');
-                },
+            Object.defineProperty(this, 'onChanging', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'changing'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -235,10 +221,9 @@
              * 변경(등록/삭제) 후 이벤트  
              * @event _L.Collection.BaseCollection#onChanged 
              */
-            Object.defineProperty(this, 'onChanged', {
-                set: function(fun) {
-                    this.__event.subscribe(fun, 'changed');
-                },
+            Object.defineProperty(this, 'onChanged', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'changed'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -250,11 +235,13 @@
             this.__SET$_descriptors = function(val, call) {
                 if (call instanceof BaseCollection) _descriptors = val;    // 상속접근 허용
             }
+
             // 예약어 등록
-            this._KEYWORD = this._KEYWORD.concat(['__event', '_owner', '_elements', '_KEYWORD', '_elemTypes', 'list', 'count']);
+            this._KEYWORD = this._KEYWORD.concat(['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '_KEYWORD']);
             this._KEYWORD = this._KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
-            this._KEYWORD = this._KEYWORD.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
-            this._KEYWORD = this._KEYWORD.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
+            this._KEYWORD = this._KEYWORD.concat(['_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
+            this._KEYWORD = this._KEYWORD.concat(['_getPropDescriptor']);
+            this._KEYWORD = this._KEYWORD.concat(['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'exist', 'add', 'clear']);
 
             Util.implements(this, ICollection, IList);
         }
@@ -264,7 +251,6 @@
         BaseCollection._PARAMS = ['_owner'];    // creator parameter
         BaseCollection._ABSCRACT = true;
         
-
         /**
          * 추가 이벤트 수신자
          * @listens _L.Collection.BaseCollection#onClear
@@ -308,7 +294,7 @@
         /**
          * 프로퍼티 기술자 설정
          * @protected
-         * @param {Number} p_idx 인덱스
+         * @param {number} p_idx 인덱스
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
@@ -324,94 +310,26 @@
         };
 
         /** 
-         * 컬렉션을 삭제한다.
+         * 요소 제거 (내부)
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
-            Message.error('ES013', ['_remove(idx)']);
+            Message.error('ES013', ['_remove(idx): boolean ']);
         };
 
         /**
-         * 객체 비교
+         * guid 객체 얻기
          * @virtual
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // BaseCollection.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-            
-        //     if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
-        //     if (!this._compare(this._owner, p_target._owner)) return false;
-        //     if (!this._compare(this._elements, p_target._elements)) return false;
-        //     if (!this._compare(this._descriptors, p_target._descriptors)) return false;
-        //     if (!this._compare(this._elemTypes, p_target._elemTypes)) return false;
-        //     return true;
-        //     // for (var i = 0; i < this._descriptors.length; i++) {
-        //     //     if (!this._compare(this._descriptors[i], p_target._descriptors[i])) return false;
-        //     // }
-
-        //     // if (!Util.deepEqual(this.__event.__subscribers, obj)) return false;
-        //     // obj = p_target._caller;
-        //     // if (this._caller instanceof MetaObject) {
-        //     //     if (!this._caller.equal(obj)) return false;
-        //     // } else if (typeof this._caller === 'object' && this._caller !== null) {
-        //     //     if (!Util.deepEqual(this._caller, obj)) return false;
-        //     // } else {
-        //     //     this._caller === obj;
-        //     // }
-
-        //     // // 분기하여 검사하는 부분 함수로...
-        //     // function compare(ob1, obj2) {
-        //     //     if (obj1 instanceof MetaObject) {
-        //     //         if (!obj1.equal(obj2)) return false;
-        //     //     } else if (typeof obj1 === 'object' && this._caller !== null) {
-        //     //         if (!Util.deepEqual(obj1, obj2)) return false;
-        //     //     } else {
-        //     //         return this._caller === obj2;
-        //     //     }
-        //     // }
-            
-
-        //     /**
-        //      * 비교대상
-        //      * __event
-        //      * _owner : MetaObject인경우, object, 기본자료형, 함수형
-        //      * _descriptors : arr<obj>
-        //      * _elements : arr<obj | 기본형 | meta>
-        //      * _elemType : arr<fun....>
-        //      */
-
-        //     /**
-        //      * 비교방식
-        //      * - MetaObject : equal()
-        //      * - typeof === 'object' : deepEqual()
-        //      * - 기본자료형 : ===
-        //      * - array : 순환 
-        //      * - 함수 : ===
-        //      */
-        //     // return this._name === p_target._name ? true : false;
-
-        //     // inner function 
-        //     // function deepEqual(obj1, obj2){}
-        // };
-
-        /**
-         * 메타 객체를 얻는다
-         * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
         BaseCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            // var origin = p_origin ? p_origin : obj;
-            // var origin = [];
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             var _elems = [];
             
-            // if (Array.isArray(p_origin)) origin = p_origin;
-            // else if (p_origin) origin.push(p_origin);
-            // origin.push(obj);
-
             if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
                 obj.__subscribers = this.__event.__subscribers;
             }
@@ -425,16 +343,15 @@
                 else _elems.push(elem);
             }
             obj._elemTypes = _elems;
-
-            // obj._elem = [];
-            // for (var i = 0; i < this._elements.length; i++) {
-            //     var elem = this._elements[i];
-            //     if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
-            //     else obj._elem.push(elem);
-            // }
             return obj;                        
         };
 
+        /**
+         * guid 객체 설정
+         * @virtual
+         * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
+         */
         BaseCollection.prototype.setObject = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             
@@ -455,25 +372,20 @@
             }
         };
 
-        
-
-        
-
         /**
-         * 컬렉션을 삭제한다.
-         * @param {Object} p_elem 속성명
-         * @returns {boolean} 처리결과
+         * 컬렉션 요소 삭제
+         * @param {any} p_elem 속성명
+         * @returns {number} 삭제한 인덱스
          */
         BaseCollection.prototype.remove = function(p_elem) {
             var idx = this._elements.indexOf(p_elem);
-            // return idx < 0 ? false : this.removeAt(idx);
             if (idx >= 0 && this.removeAt(idx)) return idx;
             return -1;
         };
         
         /**
-         * 배열속성 삭제한다.
-         * @param {Number} p_idx 인덱스
+         * 인덱스 위치의 요소 삭제 
+         * @param {number} p_idx 인덱스
          * @returns {boolean} 처리 결과  
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
@@ -485,7 +397,6 @@
                 // before event
                 this._onChanging();
                 // process
-                // if (this._remove(p_idx) > 0) return false;
                 if (!this._remove(p_idx)) return false;
                 this._onRemove(p_idx, elem);
                 // after event
@@ -496,27 +407,27 @@
         };
 
         /**
-         * 배열속성 여부를 리턴한다. 
-         * @param {Object} p_elem 속성 객체
-         * @returns {Boolean}
+         * 켈렉션 요소 여부
+         * @param {object} p_elem 속성 객체
+         * @returns {boolean}
          */
         BaseCollection.prototype.contains = function(p_elem) {
             return this._elements.indexOf(p_elem) > -1;
         };
 
         /**
-         * 배열속성 인덱스 찾는다.
-         * @param {Object} p_elem 속성 객체
-         * @returns {Number}
+         * 요소의 위치 조회
+         * @param {any} p_elem 속성 객체
+         * @returns {number}
          */
         BaseCollection.prototype.indexOf = function(p_elem) {
             return this._elements.indexOf(p_elem);
         };
 
         /**
-         * 키 유무 조회
+         * 키 유무
          * @param {number | string} p_key index, key
-         * @returns
+         * @returns {boolean}
          */
         BaseCollection.prototype.exist = function(p_key) {
             if (typeof p_key === 'number' || typeof p_key === 'string') {
@@ -526,7 +437,7 @@
         };
 
         /** 
-         * 컬렉션을 추가한다.
+         * 컬렉션에 요소를 추가
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
@@ -534,7 +445,7 @@
         };
         
         /**
-         * 전체삭제(초기화)한다.
+         * 컬렉션 초기화
          * @abstract 
          * @fires _L.Collection.BaseCollection#onClear 
          */

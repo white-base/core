@@ -185,12 +185,14 @@
         };
 
         /**
-         * Guid 객체를 얻기 (순환 X, 참조 X)  
+         * guid 객체 얻기  
+         * (순환 X, 참조 X)  
          * - opt = 0 : <기본값> 참조 관점의 요약된 객체  
          * - opt = 1 : 소유 관점의 구조의 객체, guid 관점의 중복 가능  
          * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
+         * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object?} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}  
          */
         MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
@@ -204,8 +206,10 @@
         };
 
         /**
-         * 메타 객체를 설정(복원)
+         * guid 객체 설정
+         * @virtual
          * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
          */
         MetaObject.prototype.setObject  = function(p_oGuid, p_origin) {
             var origin = p_origin ? p_origin : p_oGuid;

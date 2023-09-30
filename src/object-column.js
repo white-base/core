@@ -509,9 +509,13 @@
         //     return obj;                        
         // };
         // // POINT: 2
+
+
         /**
-         * 메타 객체를 얻는다
+         * guid 객체 얻기
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
         ObjectColumn.prototype.getObject = function(p_vOpt, p_owned) {
@@ -541,9 +545,10 @@
         };
 
         /**
-         * 메타 객체를 설정한다
+         * guid 객체 설정
          * @virtual
-         * @returns {object}
+         * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
          */
         ObjectColumn.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -606,9 +611,10 @@
         };
 
         /**
-         * 아이템을 복제한다. 
-         * @param {BaseEntity?} p_entity 지정한 엔티티로 복제한다.
-         * @returns 
+         * 객체 복제
+         * @virtual
+         * @param {BaseEntity?} p_entity 지정한 엔티티로 복제
+         * @returns {ObjectColumn}
          */
         ObjectColumn.prototype.clone = function(p_entity) {
             var clone = new ObjectColumn(this.columnName);

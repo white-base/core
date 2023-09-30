@@ -488,8 +488,10 @@
         // };
 
         /**
-         * 메타 객체를 얻는다
+         * guid 객체 얻기
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaColumn.prototype.getObject = function(p_vOpt, p_owned) {
@@ -524,9 +526,10 @@
         };
 
         /**
-         * 메타 객체를 설정한다
+         * guid 객체 설정
          * @virtual
-         * @returns {object}
+         * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
          */
         MetaColumn.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -556,9 +559,10 @@
         };
 
         /**
-         * 아이템을 복제한다. 
-         * @param {BaseEntity?} p_entity 지정한 엔티티로 복제한다.
-         * @returns 
+         * 객체 복제
+         * @virtual
+         * @param {BaseEntity?} p_entity 지정한 엔티티로 복제
+         * @returns {MetaColumn}
          */
         MetaColumn.prototype.clone = function(p_entity) {
             var clone = new MetaColumn(this.columnName);
@@ -693,9 +697,9 @@
     var BaseColumnCollection  = (function (_super) {
         /**
          * 아이템 컬렉션 (최상위)
+         * @abstract
          * @constructs _L.Meta.Entity.BaseColumnCollection
          * @extends _L.Collection.PropertyCollection
-         * @abstract
          * @param {*} p_owner 소유자 
          */
         function BaseColumnCollection(p_owner, p_baseType) {
@@ -1013,12 +1017,18 @@
         //     if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
         // };
         
-
+        /**
+         * guid 객체 얻기
+         * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
+         * @returns {object}
+         */
         MetaViewColumnCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
 
-            
+
             // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             
             

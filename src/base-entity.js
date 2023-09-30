@@ -77,6 +77,7 @@
     var BaseEntity  = (function (_super) {
         /**
          * 엔티티
+         * @abstract
          * @constructs _L.Meta.Entity.BaseEntity
          * @extends _L.Meta.MetaElement
          * @implements {_L.Interface.IGroupControl}
@@ -416,11 +417,12 @@
         // POINT: 2
 
         /**
-         * 메타 객체를 얻는다
+         * guid 객체 얻기
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
-
         BaseEntity.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;

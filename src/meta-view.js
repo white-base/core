@@ -160,8 +160,10 @@
         // };
 
         /**
-         * 메타 객체를 얻는다
+         * guid 객체 얻기
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaView.prototype.getObject = function(p_vOpt, p_owned) {
@@ -178,9 +180,10 @@
         };
 
         /**
-         * 메타 객체를 설정한다
+         * guid 객체 설정
          * @virtual
-         * @returns {object}
+         * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
          */
         MetaView.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -205,11 +208,10 @@
             this.rows.setObject(p_oGuid.rows, origin);
             this.viewName = p_oGuid.viewName;
         };
-
         /**
-         * 뷰 엔티티를 복제한다.
-         * 참조가 사라진다.??
-         * @returns {*}
+         * 객체 복제
+         * @virtual
+         * @returns {MetaView}
          */
         MetaView.prototype.clone  = function() {
             var clone = new MetaView(this.viewName, this._baseEntity);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경

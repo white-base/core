@@ -53,6 +53,7 @@
     var BaseColumn  = (function (_super) {
         /**
          * 아이템
+         * @abstract
          * @constructs _L.Meta.Entity.BaseColumn
          * @extends _L.Meta.MetaElement
          * @param {String} p_name 아이템명
@@ -303,8 +304,10 @@
         // };
 
         /**
-         * 메타 객체를 얻는다
+         * guid 객체 얻기
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
         BaseColumn.prototype.getObject = function(p_vOpt, p_owned) {
@@ -344,9 +347,10 @@
         };
 
         /**
-         * 메타 객체를 설정한다
+         * guid 객체 설정
          * @virtual
-         * @returns {object}
+         * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
          */
         BaseColumn.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);

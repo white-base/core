@@ -332,8 +332,10 @@
 
 
         /**
-         * 메타 객체를 얻는다
+         * guid 객체 얻기
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaRow.prototype.getObject = function(p_vOpt, p_owned) {
@@ -376,9 +378,10 @@
         };
 
         /**
-         * 메타 객체를 설정한다
+         * guid 객체 설정
          * @virtual
-         * @returns {object}
+         * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
          */
         MetaRow.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -437,9 +440,9 @@
         // };
 
        /**
-         * 로우를 복제한다.
+         * 객체 복제
          * @param {BaseEntity?} p_entity 대상의 엔티티
-         * @returns 
+         * @returns {MetaRow}
          */
         MetaRow.prototype.clone  = function(p_entity) {
             var entity = p_entity || this._entity;

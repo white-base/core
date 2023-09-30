@@ -88,6 +88,8 @@
         /**
          * guid 객체 얻기
          * @virtual
+         * @param {number} p_vOpt 레벨 옵션
+         * @param {object?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaElement.prototype.getObject = function(p_vOpt, p_owned) {
@@ -101,8 +103,9 @@
 
         /**
          * guid 객체 설정
-         * @param {*} p_oGuid 
-         * @param {*} p_origin 
+         * @virtual
+         * @param {object} p_oGuid 레벨 옵션
+         * @param {object} p_origin 설정 원본 객체
          */
         MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -111,9 +114,9 @@
         };
         
         /**
-         * 메타 객체를 복제
+         * 객체 복제
          * @virtual
-         * @returns {object}
+         * @returns {MetaElement}
          */
         MetaElement.prototype.clone  = function() {
             var clone = new MetaElement(this._name);
