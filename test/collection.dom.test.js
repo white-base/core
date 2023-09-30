@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("[target: collection-property.js, collection-array.js, collection-base.js]", () => {
+describe("[target: collection-property.js, collection-array.js, base-collection.js]", () => {
     describe("BaseCollection :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -15,7 +15,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
         });
         it("- 예외 : Util 로딩이 인된경우", () => {
             require('../src/message');
-            expect(() => require('../src/collection-base')).toThrow(/Util/);
+            expect(() => require('../src/base-collection')).toThrow(/Util/);
         });
         it("- 예외 : Observer 로딩이 인된경우", () => {
             require('../src/message');
@@ -32,7 +32,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             // require('../src/observer');
             // require('../src/namespace-manager');
 
-            expect(() => require('../src/collection-base')).toThrow(/Observer/);
+            expect(() => require('../src/base-collection')).toThrow(/Observer/);
         });
         it("- 예외 : ICollection 로딩이 인된경우", () => {
             require('../src/message');
@@ -46,7 +46,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/i-object');
             require('../src/i-marshal');
 
-            expect(() => require('../src/collection-base')).toThrow(/ICollection/);
+            expect(() => require('../src/base-collection')).toThrow(/ICollection/);
         });
         it("- 예외 : IList 로딩이 인된경우", () => {
             require('../src/message');
@@ -61,7 +61,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/i-object');
             require('../src/i-marshal');
 
-            expect(() => require('../src/collection-base')).toThrow(/IList/);
+            expect(() => require('../src/base-collection')).toThrow(/IList/);
         });
         
         
@@ -81,7 +81,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             // require('../src/namespace-manager');
             // require('../src/meta-registry');  
             
-            expect(() => require('../src/collection-base')).toThrow(/MetaRegistry/);
+            expect(() => require('../src/base-collection')).toThrow(/MetaRegistry/);
         });
         it("- 예외 : MetaObject 로딩이 인된경우", () => {
             require('../src/message');
@@ -100,7 +100,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/meta-registry');  
             // require('../src/meta-object');  
             
-            expect(() => require('../src/collection-base')).toThrow(/MetaObject/);
+            expect(() => require('../src/base-collection')).toThrow(/MetaObject/);
         });
         it("- 로딩 성공 ", () => {
             require('../src/message');
@@ -118,7 +118,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/namespace-manager');
             require('../src/meta-registry');  
             require('../src/meta-object');  
-            require('../src/collection-base');
+            require('../src/base-collection');
     
             expect(global._L.BaseCollection).toBeDefined();
             expect(global._L.Collection.BaseCollection).toBeDefined();
@@ -198,7 +198,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/namespace-manager');
             require('../src/meta-registry');  
             require('../src/meta-object');  
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             
             expect(() => require('../src/collection-array')).toThrow(/BaseCollection/);
         });
@@ -219,7 +219,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/namespace-manager');
             require('../src/meta-registry');  
             require('../src/meta-object');  
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
     
             expect(global._L.ArrayCollection).toBeDefined();
@@ -299,7 +299,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/namespace-manager');
             require('../src/meta-registry');  
             require('../src/meta-object');  
-            // require('../src/collection-base');
+            // require('../src/base-collection');
     
             expect(() => require('../src/collection-property')).toThrow(/BaseCollection/);
         });
@@ -321,7 +321,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/namespace-manager');
             require('../src/meta-registry');  
             require('../src/meta-object');  
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-property');
     
             expect(global._L.PropertyCollection).toBeDefined();
@@ -441,7 +441,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/namespace-manager');
             require('../src/meta-registry');  
             require('../src/meta-object');  
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             
             expect(() => require('../src/collection-transaction')).toThrow(/TransactionQueue/);
@@ -463,7 +463,7 @@ describe("[target: collection-property.js, collection-array.js, collection-base.
             require('../src/namespace-manager');
             require('../src/meta-registry');  
             require('../src/meta-object');  
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');

@@ -10,12 +10,12 @@ const { MetaElement } = require('../src/meta-element');
 const { replacer, reviver, stringify, parse }              = require('telejson');
 const {MetaRegistry}        = require('../src/meta-registry');
 const { loadNamespace } = require('../src/load-namespace');
-const { BaseCollection } = require('../src/collection-base');
+const { BaseCollection } = require('../src/base-collection');
 let Student, School, Corp, Member, House, Space;
 
 //==============================================================
 // test
-describe("[target: collection-array.js, collection-base.js]", () => {
+describe("[target: collection-array.js, base-collection.js]", () => {
     describe("ArrayCollection :: 클래스", () => {
         beforeAll(() => {
             jest.resetModules();

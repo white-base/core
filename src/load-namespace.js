@@ -60,12 +60,12 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
         NamespaceManager            = require('./namespace-manager').NamespaceManager;
         ArrayCollection             = require('./collection-array').ArrayCollection;
-        BaseCollection              = require('./collection-base').BaseCollection;
+        BaseCollection              = require('./base-collection').BaseCollection;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         TransactionCollection       = require('./collection-transaction').TransactionCollection;
         CustomError                 = require('./custom-error').CustomError;
         IArrayCollection            = require('./i-collection-array').IArrayCollection;
-        // IBaseCollection             = require('./i-collection-base').IBaseCollection;
+        // IBaseCollection             = require('./i-base-collection').IBaseCollection;
         IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
         ICollection                 = require('./i-collection').ICollection;
         // IAllControl                 = require('./i-control-all').IAllControl;

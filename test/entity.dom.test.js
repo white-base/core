@@ -210,7 +210,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             // require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-array');
             // require('../src/trans-queue');
             // require('../src/collection-transaction');
@@ -242,7 +242,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -275,7 +275,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -312,7 +312,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -349,7 +349,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -388,7 +388,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -451,7 +451,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -486,7 +486,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -523,7 +523,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -563,7 +563,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -644,7 +644,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             // require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-array');
             // require('../src/trans-queue');
             // require('../src/collection-transaction');
@@ -675,7 +675,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -711,7 +711,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -748,7 +748,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -788,7 +788,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -976,7 +976,7 @@ describe("[ GROUP]", () => {
             // require('../src/namespace-manager');
             // require('../src/meta-registry');        
             // require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-array');
             // require('../src/trans-queue');
             // require('../src/collection-transaction');
@@ -1008,7 +1008,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -1043,7 +1043,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -1080,7 +1080,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -1119,7 +1119,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -1158,7 +1158,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');
@@ -1219,7 +1219,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-property');
             // require('../src/meta-element');
             // require('../src/base-column');
@@ -1245,7 +1245,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-property');
             require('../src/meta-element');
             require('../src/base-column');
@@ -1306,7 +1306,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-property');
             // require('../src/meta-element');
     
@@ -1330,7 +1330,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             // require('../src/collection-property');
             require('../src/meta-element');
             require('../src/base-column');
@@ -1355,7 +1355,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             // require('../src/collection-property');
             require('../src/meta-element');
             // require('../src/base-column');
@@ -1381,7 +1381,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-property');
             require('../src/meta-element');
             require('../src/base-column');
@@ -1441,7 +1441,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             // require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-property');
             // require('../src/meta-element');
     
@@ -1466,7 +1466,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-property');
             // require('../src/meta-element');
     
@@ -1490,7 +1490,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             // require('../src/collection-property');
             require('../src/meta-element');
             require('../src/base-column');
@@ -1515,7 +1515,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             // require('../src/collection-property');
             require('../src/meta-element');
             // require('../src/base-column');
@@ -1541,7 +1541,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-property');
             require('../src/meta-element');
             require('../src/base-column');
@@ -1643,7 +1643,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            // require('../src/collection-base');
+            // require('../src/base-collection');
             // require('../src/collection-array');
             // require('../src/trans-queue');
             // require('../src/collection-transaction');
@@ -1669,7 +1669,7 @@ describe("[ GROUP]", () => {
             require('../src/namespace-manager');
             require('../src/meta-registry');        
             require('../src/meta-object');
-            require('../src/collection-base');
+            require('../src/base-collection');
             require('../src/collection-array');
             require('../src/trans-queue');
             require('../src/collection-transaction');

@@ -13,7 +13,7 @@ let arrResult = [];
 
 //==============================================================
 // test
-describe("[target: collection-property.js, ollection-array.js, collection-base.js]", () => {
+describe("[target: collection-property.js, ollection-array.js, base-collection.js]", () => {
     describe("PropertyCollection :: 클래스", () => {
         beforeAll(() => {
             jest.resetModules();

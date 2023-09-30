@@ -46,7 +46,7 @@ File                                     | % Stmts | % Branch | % Funcs | % Line
 -----------------------------------------|---------|----------|---------|---------|--
 All files                 |   92.48 |    89.01 |   89.69 |   94.54 |                                                                 
  collection-array.js      |     100 |      100 |     100 |     100 |                                                                 
- collection-base.js       |     100 |      100 |     100 |     100 |                                                                 
+ base-collection.js       |     100 |      100 |     100 |     100 |                                                                 
  collection-property.js   |     100 |      100 |     100 |     100 |                                                                 
  error-custom.js          |   66.66 |       55 |      50 |   69.56 | 40-69                                                           
  i-collection-property.js |     100 |      100 |     100 |     100 |                                                                 

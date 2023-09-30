@@ -23,7 +23,7 @@
         Message                     = require('./message').Message;
         Util                        = require('./util');
         IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
-        BaseCollection              = require('./collection-base').BaseCollection;
+        BaseCollection              = require('./base-collection').BaseCollection;
         MetaObject                  = require('./meta-object').MetaObject;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
@@ -41,7 +41,7 @@
     if (typeof IPropertyCollection === 'undefined') Message.error('ES011', ['IPropertyCollection', 'i-collection-property']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
-    if (typeof BaseCollection === 'undefined') Message.error('ES011', ['BaseCollection', 'collection-base']);
+    if (typeof BaseCollection === 'undefined') Message.error('ES011', ['BaseCollection', 'base-collection']);
     
     //==============================================================
     // 4. module implementation   

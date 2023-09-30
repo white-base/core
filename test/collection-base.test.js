@@ -5,13 +5,13 @@
 // gobal defined
 'use strict';
 
-const {BaseCollection}          = require('../src/collection-base');
+const {BaseCollection}          = require('../src/base-collection');
 const {ArrayCollection}          = require('../src/collection-array');
 let Student, School, Corp, Member, House, Space;
 
 //==============================================================
 // test
-describe("[target: collection-base.js]", () => {
+describe("[target: base-collection.js]", () => {
     describe("BaseCollection :: 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();
