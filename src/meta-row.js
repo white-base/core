@@ -90,13 +90,13 @@
             Object.defineProperty(this, '_entity', 
             {
                 get: function() { return _entity; },
-                // set: function(newValue) {
-                //     if (newValue === null) return _entity = null;
-                //     if (typeof newValue !== 'undefined' && !(newValue instanceof MetaObject && newValue.instanceOf('BaseEntity'))) {
+                // set: function(nVal) {
+                //     if (nVal === null) return _entity = null;
+                //     if (typeof nVal !== 'undefined' && !(nVal instanceof MetaObject && nVal.instanceOf('BaseEntity'))) {
                 //         Message.error('ES032', ['_entity', 'BaseEntity']);
                 //     }
                 //     if (this.count > 0) Message.error('ES045', ['MetaRow', '_entity']);
-                //     _entity = newValue;
+                //     _entity = nVal;
                 // },
                 configurable: false,
                 enumerable: false
@@ -222,27 +222,27 @@
             function getPropDescriptor(p_idx) {
                 return {
                     get: function() { return _elements[p_idx]; },
-                    set: function(newValue) { 
+                    set: function(nVal) { 
                         var oldValue = _elements[p_idx];
                         var column;
                         
                         // 엔티티 항상 존재함
                         // if (_entity && _entity.columns[p_idx]) column = _entity.columns[p_idx];
                         column = _entity.columns[p_idx];
-                        if (column && column._valueTypes.length > 0) Util.validType(newValue, column._valueTypes);
+                        if (column && column._valueTypes.length > 0) Util.validType(nVal, column._valueTypes);
 
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (_entity && !_entity.rows.autoChanges) {
-                            var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
+                            var etc = 'idx:'+ p_idx +', new:' + nVal + ', old:'+ oldValue;
                             var pos = _entity.rows.indexOf(this);
                             if (pos > -1) { // 컬력션에 포힘됬을때만
                                 _entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
                             }
                         }
                         // 이벤트 및 처리
-                        _this._onChanging(p_idx, newValue, oldValue);
-                        _elements[p_idx] = newValue;
-                        _this._onChanged(p_idx, newValue, oldValue);
+                        _this._onChanging(p_idx, nVal, oldValue);
+                        _elements[p_idx] = nVal;
+                        _this._onChanged(p_idx, nVal, oldValue);
 
                     },
                     enumerable: true,
@@ -295,12 +295,12 @@
         // MetaRow.prototype._getPropDescriptor = function(p_idx) {
         //     // return {
         //     //     get: function() { return this._elements[p_idx]; },
-        //     //     set: function(newValue) {
+        //     //     set: function(nVal) {
         //     //         var typeName;
-        //     //         if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
-        //     //         if (newValue._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
-        //     //         this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
-        //     //         this._elements[p_idx] = newValue;
+        //     //         if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
+        //     //         if (nVal._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
+        //     //         this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
+        //     //         this._elements[p_idx] = nVal;
         //     //     },
         //     //     configurable: true,
         //     //     enumerable: true,
@@ -309,20 +309,20 @@
         //     var _this = this;
         //     return {
         //         get: function() { return this._elements[p_idx]; },
-        //         set: function(newValue) { 
+        //         set: function(nVal) { 
         //             var oldValue = this._elements[p_idx];
         //             // 트렌젹션 처리 => 함수로 추출 검토
         //             if (this._entity && !this._entity.rows.autoChanges) {
-        //                 var etc = 'idx:'+ p_idx +', new:' + newValue + ', old:'+ oldValue;
+        //                 var etc = 'idx:'+ p_idx +', new:' + nVal + ', old:'+ oldValue;
         //                 var pos = this._entity.rows.indexOf(this);
         //                 if (pos > -1) { // 컬력션에 포힘됬을때만
         //                     this._entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
         //                 }
         //             }
         //             // 이벤트 및 처리
-        //             _this._onChanging(p_idx, newValue, oldValue);
-        //             this._elements[p_idx] = newValue;
-        //             _this._onChanged(p_idx, newValue, oldValue);
+        //             _this._onChanging(p_idx, nVal, oldValue);
+        //             this._elements[p_idx] = nVal;
+        //             _this._onChanged(p_idx, nVal, oldValue);
 
         //         },
         //         enumerable: true,
@@ -494,12 +494,12 @@
         MetaRowCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
                 get: function() { return this._elements[p_idx]; },
-                set: function(newValue) {
+                set: function(nVal) {
                     var typeName;
-                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
-                    if (newValue._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
-                    this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
-                    this._elements[p_idx] = newValue;
+                    if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
+                    if (nVal._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
+                    this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
+                    this._elements[p_idx] = nVal;
                 },
                 configurable: true,
                 enumerable: true,

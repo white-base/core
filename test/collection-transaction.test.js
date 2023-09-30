@@ -138,9 +138,9 @@ describe("[target: collection-trans.js]", () => {
                     get() {
                       return bValue;
                     },
-                    set(newValue) {
-                        if (typeof newValue !== 'string') throw new Error('ES024 string 타입만')
-                        bValue = newValue;
+                    set(nVal) {
+                        if (typeof nVal !== 'string') throw new Error('ES024 string 타입만')
+                        bValue = nVal;
                     },
                     enumerable: true,
                     configurable: true,
@@ -409,17 +409,17 @@ describe("[target: collection-trans.js]", () => {
         });
 
         describe("TransactionCollection.commit() <커밋>", () => {
-            it("- isChanges : 변경 유무", () => {
+            it("- hasChanges : 변경 유무", () => {
                 let s = new Student();
                 
                 // 초기
-                expect(s.rows.isChanges).toBe(false);
+                expect(s.rows.hasChanges).toBe(false);
                 // 변경후
                 s.rows.add('A1');
-                expect(s.rows.isChanges).toBe(true);
+                expect(s.rows.hasChanges).toBe(true);
                 // 커밋 후
                 s.rows.commit();
-                expect(s.rows.isChanges).toBe(false);
+                expect(s.rows.hasChanges).toBe(false);
             });
         });
 

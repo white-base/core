@@ -172,7 +172,7 @@
         };
 
         /**
-         * 배열속성 컬렉션을 전체삭제한다. [구현]
+         * 배열속성 컬렉션을 초기화 [구현]
          */
         ArrayCollection.prototype.clear = function() {
             // before evnet
@@ -187,7 +187,7 @@
         };
 
         /**
-         * 지정 위치에 삽입
+         * 지정 위치에 요소 추가
          * @param {number} p_pos 
          * @param {any} p_value 
          * @param {object} p_desc 

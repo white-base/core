@@ -39,9 +39,9 @@
     // 4. module implementation   
     var TransactionQueue  = (function () {
         /**
-         * 로우
+         * 트랜젝션 큐
          * @constructs _L.Collection.TransactionQueue
-         * @param {BaseEntity} p_entity 메타엔티티
+         * @param {IArrayCollection} p_collection 배열컬렉션
          */
         function TransactionQueue(p_collection) {
             
@@ -49,8 +49,8 @@
             var collection;
 
             /**
-             * 로우의 소유 엔티티
-             * @member {BaseEntity} _L.Collection.TransactionQueue#queue
+             * 큐 목록
+             * @member {array<object>} _L.Collection.TransactionQueue#queue
              */
             Object.defineProperty(this, 'queue', 
             {
@@ -63,28 +63,27 @@
              * 컬랙션 갯수 
              * @member {Number} _L.Collection.TransactionQueue#count 
              */
-            Object.defineProperty(this, 'collection', {
-                get: function() {
-                    return collection;
-                },
-                set: function(newValue) { 
-                    if (!(newValue instanceof MetaObject)) {
+            Object.defineProperty(this, 'collection', 
+            {
+                get: function() { return collection; },
+                set: function(nVal) { 
+                    if (!(nVal instanceof MetaObject)) {
                         Message.error('ES032', ['collection', 'MetaObject']);
                     }
-                    if (!(newValue.isImplementOf(IArrayCollection))) {
+                    if (!(nVal.isImplementOf(IArrayCollection))) {
                         Message.error('ES033', ['collection', 'IArrayCollection']);
                     }
-                    collection = newValue;
+                    collection = nVal;
                 },
                 configurable: false,
                 enumerable: true
             });
 
-            // 설정
             this.collection = p_collection;
         }
 
         TransactionQueue._NS = 'Collection';    // namespace
+        TransactionQueue._PARAMS = ['_owner'];  // creator parameter
 
         /**
          * 초기화
@@ -127,9 +126,9 @@
 
         /**
          * 추가
-         * @param {*} p_pos 
-         * @param {*} p_target 
-         * @param {*} p_etc 
+         * @param {number} p_pos 
+         * @param {object} p_target 
+         * @param {string} p_etc 
          */
         TransactionQueue.prototype.insert  = function(p_pos, p_target, p_etc) {
             this.queue.push({
@@ -140,13 +139,12 @@
                 etc: p_etc || ''
             });
         };
-
         
         /**
          * 삭제
-         * @param {*} p_pos 
-         * @param {*} p_clone 
-         * @param {*} p_etc 
+         * @param {number} p_pos 
+         * @param {object} p_clone 
+         * @param {string} p_etc 
          */
         TransactionQueue.prototype.delete  = function(p_pos, p_clone, p_etc) {
             this.queue.push({
@@ -160,10 +158,10 @@
 
         /**
          * 수정
-         * @param {*} p_pos 
-         * @param {*} p_target 
-         * @param {*} p_clone 
-         * @param {*} p_etc 
+         * @param {number} p_pos 
+         * @param {object} p_target 
+         * @param {object} p_clone 
+         * @param {string} p_etc 
          */
         TransactionQueue.prototype.update  = function(p_pos, p_target, p_clone, p_etc) {
             this.queue.push({
@@ -177,7 +175,7 @@
         
         /**
          * 변경 내역 조회
-         * @returns 
+         * @returns {array<object>}
          */
         TransactionQueue.prototype.select  = function() {
             return this.queue;

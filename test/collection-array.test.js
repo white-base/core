@@ -468,9 +468,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                     get() {
                       return bValue;
                     },
-                    set(newValue) {
-                        if (typeof newValue !== 'string') throw new Error('ES024 string 타입만')
-                        bValue = newValue;
+                    set(nVal) {
+                        if (typeof nVal !== 'string') throw new Error('ES024 string 타입만')
+                        bValue = nVal;
                     },
                     enumerable: true,
                     configurable: true,

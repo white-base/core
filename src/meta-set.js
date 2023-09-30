@@ -94,11 +94,11 @@
             Object.defineProperty(this, 'setName', 
             {
                 get: function() { return this._name; },
-                set: function(newValue) { 
-                    if (typeof newValue !== 'string') Message.error('ES021', ['setName', 'string']);
-                    // setName = newValue;
-                    // this.__SET$_name(newValue, this);
-                    this._name = newValue;
+                set: function(nVal) { 
+                    if (typeof nVal !== 'string') Message.error('ES021', ['setName', 'string']);
+                    // setName = nVal;
+                    // this.__SET$_name(nVal, this);
+                    this._name = nVal;
                 },
                 configurable: false,
                 enumerable: true
@@ -131,12 +131,12 @@
              * @member {boolean}  _L.Meta.Entity.MetaSet#autoChanges
              */
             Object.defineProperty(this, 'autoChanges', {
-                set: function(newValue) { 
-                    if (typeof newValue !== 'boolean') {
+                set: function(nVal) { 
+                    if (typeof nVal !== 'boolean') {
                         Message.error('ES021', ['autoChanges', 'boolean']);
                     }
                     for (var i = 0; i < this.tables.count; i++) {
-                        this.tables[i].rows.autoChanges = newValue;
+                        this.tables[i].rows.autoChanges = nVal;
                     }
                 },
                 configurable: false,

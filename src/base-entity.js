@@ -99,11 +99,11 @@
             Object.defineProperty(this, '_metaSet', 
             {
                 get: function() { return _metaSet; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof MetaElement && newValue.instanceOf('MetaSet'))) {
+                set: function(nVal) { 
+                    if (!(nVal instanceof MetaElement && nVal.instanceOf('MetaSet'))) {
                         Message.error('ES032', ['_metaSet', 'MetaSet']);
                     }
-                    _metaSet = newValue;
+                    _metaSet = nVal;
                     // if (this.getTypes().indexOf('MetaView')
                 },
                 configurable: false,
@@ -119,9 +119,9 @@
                 get: function() { 
                     Message.error('ES0111', ['columns', 'MetaEntity']);
                 },
-                // set: function(newValue) { 
-                //     if (!(newValue instanceof BaseColumnCollection)) Message.error('ES032', ['columns', 'BaseColumnCollection']);
-                //     columns = newValue;
+                // set: function(nVal) { 
+                //     if (!(nVal instanceof BaseColumnCollection)) Message.error('ES032', ['columns', 'BaseColumnCollection']);
+                //     columns = nVal;
                 // },
                 configurable: true, // 하위에서 재정의 해야함
                 enumerable: true

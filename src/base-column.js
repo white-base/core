@@ -82,10 +82,10 @@
             Object.defineProperty(this, '__key', 
             {
                 get: function() { return __key; },
-                // set: function(newValue) { 
-                //     if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
-                //     if (newValue.length <= 0) Message.error('ES062', ['__key.length', '0']);
-                //     __key = newValue;
+                // set: function(nVal) { 
+                //     if (typeof nVal !== 'string') Message.error('ES021', ['columnName', 'string']);
+                //     if (nVal.length <= 0) Message.error('ES062', ['__key.length', '0']);
+                //     __key = nVal;
                 // },
                 configurable: false,
                 enumerable: false,
@@ -98,15 +98,15 @@
             Object.defineProperty(this, '_entity', 
             {
                 get: function() { return _entity; },
-                set: function(newValue) { 
-                    if (typeof newValue !== 'undefined' && !(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                set: function(nVal) { 
+                    if (typeof nVal !== 'undefined' && !(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
                         Message.error('ES032', ['_entity', 'BaseEntity']);
                     }
-                    // var column = newValue.columns[this.columnName];
-                    // if (column && column._entity !== newValue) {
-                    //     newValue.columns.add(this);
+                    // var column = nVal.columns[this.columnName];
+                    // if (column && column._entity !== nVal) {
+                    //     nVal.columns.add(this);
                     // }
-                    _entity = newValue;
+                    _entity = nVal;
                 },
                 configurable: false,
                 enumerable: true
@@ -119,10 +119,10 @@
             Object.defineProperty(this, '_valueTypes', 
             {
                 get: function() { return _valueTypes; },
-                set: function(newValue) { 
+                set: function(nVal) { 
                     var arr = [];
-                    if (!Array.isArray(newValue)) arr.push(newValue);
-                    else arr = newValue;
+                    if (!Array.isArray(nVal)) arr.push(nVal);
+                    else arr = nVal;
                     _valueTypes = arr;  
                 },
                 configurable: false,
@@ -139,13 +139,13 @@
             Object.defineProperty(this, 'columnName', 
             {
                 get: function() { return this._name; },
-                set: function(newValue) { 
-                    if (newValue === this.columnName) return;
-                    if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']); 
-                    if (_entity && _entity.columns.existColumnName(newValue)) Message.error('ES042', [newValue, 'columnName']);
-                    if (_entity && _entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
-                    // columnName = newValue;
-                    this.__SET$_name(newValue, this);
+                set: function(nVal) { 
+                    if (nVal === this.columnName) return;
+                    if (typeof nVal !== 'string') Message.error('ES021', ['columnName', 'string']); 
+                    if (_entity && _entity.columns.existColumnName(nVal)) Message.error('ES042', [nVal, 'columnName']);
+                    if (_entity && _entity.columns.existAlias(nVal)) Message.error('ES042', [nVal, 'alias']);
+                    // columnName = nVal;
+                    this.__SET$_name(nVal, this);
                 },
                 configurable: false,
                 enumerable: true
@@ -163,11 +163,11 @@
             Object.defineProperty(this, 'alias', 
             {
                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
-                set: function(newValue) { 
+                set: function(nVal) { 
                    var entity = this._entity;
-                   if(typeof newValue !== 'string') Message.error('ES021', ['alias', 'string']);
-                   if (entity && entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
-                   alias = newValue;
+                   if(typeof nVal !== 'string') Message.error('ES021', ['alias', 'string']);
+                   if (entity && entity.columns.existAlias(nVal)) Message.error('ES042', [nVal, 'alias']);
+                   alias = nVal;
                 },
                 configurable: false,
                 enumerable: true
@@ -182,13 +182,13 @@
             Object.defineProperty(this, 'default', 
             {
                 get: function() { return defaultValue; },
-                set: function(newValue) { 
-                    if (this._valueTypes.length > 0) Util.validType(newValue, this._valueTypes);
-                    // if(typeof newValue !== 'undefined' && newValue !== null 
-                    //     &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
+                set: function(nVal) { 
+                    if (this._valueTypes.length > 0) Util.validType(nVal, this._valueTypes);
+                    // if(typeof nVal !== 'undefined' && nVal !== null 
+                    //     &&  ['string', 'number', 'boolean'].indexOf(typeof nVal) < 0) {
                     //         Message.error('ES021', ['default', 'string | boolean | number']);
                     //     }
-                    defaultValue = newValue; 
+                    defaultValue = nVal; 
                 },
                 configurable: false,
                 enumerable: true
@@ -201,9 +201,9 @@
             Object.defineProperty(this, 'caption', 
             {
                 get: function() { return caption; },
-                set: function(newValue) { 
-                    if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']); 
-                    caption = newValue; 
+                set: function(nVal) { 
+                    if(typeof nVal !== 'string') Message.error('ES021', ['caption', 'string']); 
+                    caption = nVal; 
                 },
                 configurable: false,
                 enumerable: true
@@ -216,11 +216,11 @@
             Object.defineProperty(this, 'value', 
             {
                 get: function() { return __value; },
-                set: function(newValue) { 
-                    if (this._valueTypes.length > 0) Util.validType(newValue, this._valueTypes);
+                set: function(nVal) { 
+                    if (this._valueTypes.length > 0) Util.validType(nVal, this._valueTypes);
                     
-                    // if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']); 
-                    __value = newValue; 
+                    // if(typeof nVal !== 'string') Message.error('ES021', ['caption', 'string']); 
+                    __value = nVal; 
                 },
                 configurable: true,
                 enumerable: true

@@ -307,7 +307,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                     Object.defineProperty(this, 'prop',
                     {
                         get: function() { return _prop; },
-                        set: function(newValue) { _prop = newValue;},
+                        set: function(nVal) { _prop = nVal;},
                         configurable: false,
                         enumerable: true
                     });

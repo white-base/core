@@ -292,17 +292,17 @@
         };
 
         /**
-         * 프로퍼티 기술자 설정
+         * 기본 프로퍼티 기술자 
          * @protected
          * @param {number} p_idx 인덱스
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
                 get: function() { return this._elements[p_idx]; },
-                set: function(newValue) {
+                set: function(nVal) {
                     var typeName;
-                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
-                    this._elements[p_idx] = newValue; 
+                    if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
+                    this._elements[p_idx] = nVal; 
                 },
                 configurable: true,
                 enumerable: true,

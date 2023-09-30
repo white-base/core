@@ -1889,21 +1889,21 @@ describe("[target: meta-table.js]", () => {
 
 
         describe("MetaTable.acceptChanges() <변경 허락 : 커밋>", () => {
-            it("- isChanges : 변경 유무", () => {
+            it("- hasChanges : 변경 유무", () => {
                 var table1 = new MetaTable('T1');
                 table1.rows.autoChanges = false;
                 table1.columns.add('i1');
     
                 // 초기
-                expect(table1.rows.isChanges).toBe(false);
+                expect(table1.rows.hasChanges).toBe(false);
                 // 변경후
                 var row = table1.newRow();
                 row[0] = 'R1';
                 table1.rows.add(row);
-                expect(table1.rows.isChanges).toBe(true);
+                expect(table1.rows.hasChanges).toBe(true);
                 // 커밋 후
                 table1.acceptChanges();
-                expect(table1.rows.isChanges).toBe(false);
+                expect(table1.rows.hasChanges).toBe(false);
             });
         });
         describe("MetaTable.rejectChanges() <변경 거부>", () => {

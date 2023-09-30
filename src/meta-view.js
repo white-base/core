@@ -80,12 +80,12 @@
             Object.defineProperty(this, 'viewName', 
             {
                 get: function() { return this._name; },
-                set: function(newValue) { 
-                    if (newValue === this.viewName) return;
-                    if (typeof newValue !== 'string') Message.error('ES021', ['viewName', 'string']);
-                    // if (this._metaSet && this._metaSet.views.existViewName(newValue)) Message.error('ES041', [newValue]);
-                    // viewName = newValue;
-                    this.__SET$_name(newValue, this);
+                set: function(nVal) { 
+                    if (nVal === this.viewName) return;
+                    if (typeof nVal !== 'string') Message.error('ES021', ['viewName', 'string']);
+                    // if (this._metaSet && this._metaSet.views.existViewName(nVal)) Message.error('ES041', [nVal]);
+                    // viewName = nVal;
+                    this.__SET$_name(nVal, this);
                 },
                 configurable: false,
                 enumerable: true
@@ -98,10 +98,10 @@
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { return columns; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof MetaViewColumnCollection)) Message.error('ES032', ['columns', 'MetaViewColumnCollection']);
+                set: function(nVal) { 
+                    if (!(nVal instanceof MetaViewColumnCollection)) Message.error('ES032', ['columns', 'MetaViewColumnCollection']);
                     if (this.rows.count > 0) Message.error('ES047', ['rows', 'MetaRow', 'MetaViewColumnCollection']);
-                    columns = newValue;
+                    columns = nVal;
                 },
                 configurable: false,
                 enumerable: true
@@ -110,9 +110,9 @@
             Object.defineProperty(this, '_baseEntity', 
             {
                 get: function() { return _baseEntity; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof BaseEntity)) Message.error('ES032', ['_baseEntity', 'BaseEntity']);
-                    _baseEntity = newValue;
+                set: function(nVal) { 
+                    if (!(nVal instanceof BaseEntity)) Message.error('ES032', ['_baseEntity', 'BaseEntity']);
+                    _baseEntity = nVal;
                 },
                 configurable: false,
                 enumerable: true
@@ -293,13 +293,13 @@
             Object.defineProperty(this, '_baseType', 
             {
                 get: function() { return _baseType; },
-                set: function(newValue) { 
-                    // if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                set: function(nVal) { 
+                    // if (!(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
                     //     Message.error('ES032', ['_baseType', 'BaseEntity']);
                     // }
-                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    if (!(new newValue('temp') instanceof MetaView)) Message.error('ES032', ['_baseType', 'MetaView']);
-                    _baseType = newValue;
+                    if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
+                    if (!(new nVal('temp') instanceof MetaView)) Message.error('ES032', ['_baseType', 'MetaView']);
+                    _baseType = nVal;
                 },
                 configurable: false,
                 enumerable: true

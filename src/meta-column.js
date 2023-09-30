@@ -93,10 +93,10 @@
             // Object.defineProperty(this, '__value', 
             // {
             //     get: function() { return __value; },
-            //     set: function(newValue) { 
+            //     set: function(nVal) { 
             //         // 직접 입력하면 안됨
             //         // throw new Error('Only getter !! ');
-            //         __value = newValue;
+            //         __value = nVal;
             //     },
             //     configurable: true,
             //     enumerable: true
@@ -122,10 +122,10 @@
             // Object.defineProperty(this, '__key', 
             // {
             //     get: function() { return __key; },
-            //     // set: function(newValue) { 
-            //     //     if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']);
-            //     //     if (newValue.length <= 0) Message.error('ES062', ['__key.length', '0']);
-            //     //     __key = newValue;
+            //     // set: function(nVal) { 
+            //     //     if (typeof nVal !== 'string') Message.error('ES021', ['columnName', 'string']);
+            //     //     if (nVal.length <= 0) Message.error('ES062', ['__key.length', '0']);
+            //     //     __key = nVal;
             //     // },
             //     configurable: false,
             //     enumerable: false,
@@ -138,11 +138,11 @@
             // Object.defineProperty(this, '_entity', 
             // {
             //     get: function() { return _entity; },
-            //     set: function(newValue) { 
-            //         if (typeof newValue !== 'undefined' && !(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+            //     set: function(nVal) { 
+            //         if (typeof nVal !== 'undefined' && !(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
             //             Message.error('ES032', ['_entity', 'BaseEntity']);
             //         }
-            //         _entity = newValue;
+            //         _entity = nVal;
             //     },
             //     configurable: false,
             //     enumerable: true
@@ -158,13 +158,13 @@
             // Object.defineProperty(this, 'columnName', 
             // {
             //     get: function() { return this._name; },
-            //     set: function(newValue) { 
-            //         if (newValue === this.columnName) return;
-            //         if (typeof newValue !== 'string') Message.error('ES021', ['columnName', 'string']); 
-            //         if (_entity && _entity.columns.existColumnName(newValue)) Message.error('ES042', [newValue, 'columnName']);
-            //         if (_entity && _entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
-            //         // columnName = newValue;
-            //         this.__SET$_name(newValue, this);
+            //     set: function(nVal) { 
+            //         if (nVal === this.columnName) return;
+            //         if (typeof nVal !== 'string') Message.error('ES021', ['columnName', 'string']); 
+            //         if (_entity && _entity.columns.existColumnName(nVal)) Message.error('ES042', [nVal, 'columnName']);
+            //         if (_entity && _entity.columns.existAlias(nVal)) Message.error('ES042', [nVal, 'alias']);
+            //         // columnName = nVal;
+            //         this.__SET$_name(nVal, this);
             //     },
             //     configurable: false,
             //     enumerable: true
@@ -182,11 +182,11 @@
             // Object.defineProperty(this, 'alias', 
             // {
             //     get: function() { return typeof alias === 'string' ? alias : this.columnName; },
-            //     set: function(newValue) { 
+            //     set: function(nVal) { 
             //        var entity = this._entity;
-            //        if(typeof newValue !== 'string') Message.error('ES021', ['alias', 'string']);
-            //        if (entity && entity.columns.existAlias(newValue)) Message.error('ES042', [newValue, 'alias']);
-            //        alias = newValue;
+            //        if(typeof nVal !== 'string') Message.error('ES021', ['alias', 'string']);
+            //        if (entity && entity.columns.existAlias(nVal)) Message.error('ES042', [nVal, 'alias']);
+            //        alias = nVal;
             //     },
             //     configurable: false,
             //     enumerable: true
@@ -201,12 +201,12 @@
             // Object.defineProperty(this, 'default', 
             // {
             //     get: function() { return defaultValue; },
-            //     set: function(newValue) { 
-            //         if(typeof newValue !== 'undefined' && newValue !== null 
-            //             &&  ['string', 'number', 'boolean'].indexOf(typeof newValue) < 0) {
+            //     set: function(nVal) { 
+            //         if(typeof nVal !== 'undefined' && nVal !== null 
+            //             &&  ['string', 'number', 'boolean'].indexOf(typeof nVal) < 0) {
             //                 Message.error('ES021', ['default', 'string | boolean | number']);
             //             }
-            //         defaultValue = newValue; 
+            //         defaultValue = nVal; 
             //     },
             //     configurable: false,
             //     enumerable: true
@@ -219,9 +219,9 @@
             // Object.defineProperty(this, 'caption', 
             // {
             //     get: function() { return caption; },
-            //     set: function(newValue) { 
-            //         if(typeof newValue !== 'string') Message.error('ES021', ['caption', 'string']); 
-            //         caption = newValue; 
+            //     set: function(nVal) { 
+            //         if(typeof nVal !== 'string') Message.error('ES021', ['caption', 'string']); 
+            //         caption = nVal; 
             //     },
             //     configurable: false,
             //     enumerable: true
@@ -239,9 +239,9 @@
                 //     return isReturn; 
                 // },
                 get: function() { return isNotNull },
-                set: function(newValue) { 
-                    if(typeof newValue !== 'boolean') Message.error('ES021', ['isNotNull', 'boolean']);
-                    isNotNull = newValue; 
+                set: function(nVal) { 
+                    if(typeof nVal !== 'boolean') Message.error('ES021', ['isNotNull', 'boolean']);
+                    isNotNull = nVal; 
                 },
                 configurable: false,
                 enumerable: true
@@ -254,9 +254,9 @@
             Object.defineProperty(this, 'isNullPass', 
             {
                 get: function() { return isNullPass },
-                set: function(newValue) { 
-                    if(typeof newValue !== 'boolean') Message.error('ES021', ['isNullPass', 'boolean']);
-                    isNullPass = newValue; 
+                set: function(nVal) { 
+                    if(typeof nVal !== 'boolean') Message.error('ES021', ['isNullPass', 'boolean']);
+                    isNullPass = nVal; 
                 },
                 configurable: false,
                 enumerable: true
@@ -275,15 +275,15 @@
             Object.defineProperty(this, 'constraints', 
             {
                 get: function() { return constraints; },
-                set: function(newValue) { 
+                set: function(nVal) { 
                     var list = [];
                     
                     // 초기화
                     constraints = [];
                     
                     // 배열로 일반화
-                    if (Array.isArray(newValue))  list = newValue;
-                    else list.push(newValue);
+                    if (Array.isArray(nVal))  list = nVal;
+                    else list.push(nVal);
 
                     // 유효성 검사
                     for(var i = 0; list.length > i; i++) {
@@ -717,10 +717,10 @@
                 get: function() { 
                     return _baseType; 
                 },
-                set: function(newValue) { 
-                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    if (!(new newValue('temp') instanceof BaseColumn)) Message.error('ES032', ['_baseType', 'BaseColumn']);
-                    _baseType = newValue;
+                set: function(nVal) { 
+                    if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
+                    if (!(new nVal('temp') instanceof BaseColumn)) Message.error('ES032', ['_baseType', 'BaseColumn']);
+                    _baseType = nVal;
                 },
                 enumerable: false,
                 configurable: false,
@@ -952,9 +952,9 @@
             // Object.defineProperty(this, '_baseCollection', 
             // {
             //     get: function() { return _baseCollection; },
-            //     // set: function(newValue) { 
-            //     //     if (!(newValue instanceof BaseColumnCollection)) Message.error('ES032', ['_baseCollection', 'BaseColumnCollection']);
-            //     //     _baseCollection = newValue;
+            //     // set: function(nVal) { 
+            //     //     if (!(nVal instanceof BaseColumnCollection)) Message.error('ES032', ['_baseCollection', 'BaseColumnCollection']);
+            //     //     _baseCollection = nVal;
             //     // },
             //     configurable: false,
             //     enumerable: true

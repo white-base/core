@@ -39,7 +39,7 @@
     // 4. module implementation
     var TransactionCollection  = (function (_super) {
         /**
-         * 배열타입 컬렉션 클래스
+         * 트랜젝션 컬렉션 클래스
          * @constructs _L.Collection.TransactionCollection
          * @extends _L.Collection.ArrayCollection
          * @param {Object} p_owner 소유객체
@@ -52,7 +52,7 @@
 
             /**
              * 트렌젝션 큐
-             * @member {TransactionCollection} _L.Collection.TransactionQueue#transQueue
+             * @member {TransactionCollection} _L.Collection.TransactionQueue#_transQueue
              */
             Object.defineProperty(this, '_transQueue',
             {
@@ -62,16 +62,17 @@
             });
 
             /**
-             * 트랜젝션 사용 유무 (기본값: 사용 false)
+             * 자동 변경 유무 (기본값: 사용 false)
              * @member {boolean} _L.Collection.TransactionQueue#autoChanges
              */
-            Object.defineProperty(this, 'autoChanges', {
+            Object.defineProperty(this, 'autoChanges', 
+            {
                 get: function() { return autoChanges; },
-                set: function(newValue) { 
-                    if (typeof newValue !== 'boolean') {
+                set: function(nVal) { 
+                    if (typeof nVal !== 'boolean') {
                         Message.error('ES021', ['autoChanges', 'boolean']);
                     }
-                    autoChanges = newValue;
+                    autoChanges = nVal;
                 },
                 configurable: false,
                 enumerable: false
@@ -79,9 +80,9 @@
 
             /**
              * 변경 유무
-             * @member {TransactionCollection} _L.Collection.TransactionQueue#isChange
+             * @member {TransactionCollection} _L.Collection.TransactionQueue#hasChanges
              */
-            Object.defineProperty(this, 'isChanges',
+            Object.defineProperty(this, 'hasChanges',
             {
                 get: function() { return _transQueue.queue.length > 0; },
                 configurable: false,
@@ -93,30 +94,19 @@
 
         TransactionCollection._NS = 'Collection';      // namespace
         TransactionCollection._PARAMS = ['_owner'];    // creator parameter
-        
-        /**
-         * 객체 비교
-         * @virtual
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // TransactionCollection.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-            
-        //     if (!this._compare(this._transQueue.queue, p_target._transQueue.queue)) return false;
-        //     if (this.autoChanges !== p_target.autoChanges) return false;
-        //     return true;
-        // };
 
+        /**
+         * 트랜젝션 컬렉션 프로퍼티 기술자 
+         * @protected
+         * @param {number} p_idx 인덱스
+         */
         TransactionCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
                 get: function() { return this._elements[p_idx]; },
-                set: function(newValue) {
-                    var typeName;
-                    if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
-                    // if (newValue._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
-                    this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
-                    this._elements[p_idx] = newValue;
+                set: function(nVal) {
+                    if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
+                    this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
+                    this._elements[p_idx] = nVal;
                 },
                 configurable: true,
                 enumerable: true,
@@ -152,25 +142,49 @@
             if (p_oGuid.autoChanges) this.autoChanges = p_oGuid.autoChanges;
         };
 
+        /**
+         * 지정 위치에 요소 삭제
+         * @ovrride
+         * @param {*} p_pos 
+         * @returns {boolean}
+         */
         TransactionCollection.prototype.removeAt = function(p_pos) {
             if (!this.autoChanges) this._transQueue.delete(p_pos, this[p_pos]);
             return _super.prototype.removeAt.call(this, p_pos);
         };
 
+        /**
+         * 전체 초기화
+         * @override
+         */
         TransactionCollection.prototype.clear = function() {
             _super.prototype.clear.call(this);
             this._transQueue.init();
         };
 
+        /**
+         * 지정 위치에 요소 추가
+         * @override
+         * @param {number} p_pos 
+         * @param {any} p_value 
+         * @param {object} p_desc 
+         * @returns {boolean}
+         */
         TransactionCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
             if (!this.autoChanges) this._transQueue.insert(p_pos, p_value);
             return _super.prototype.insertAt.call(this, p_pos, p_value, p_desc);
         };
 
+        /**
+         * 변경사항 반영
+         */
         TransactionCollection.prototype.commit = function() {
             this._transQueue.commit();
         };
 
+        /**
+         * 변경사항 이전으로 복귀
+         */
         TransactionCollection.prototype.rollback = function() {
             this._transQueue.rollback();
         };

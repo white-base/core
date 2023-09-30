@@ -62,10 +62,10 @@
             Object.defineProperty(this, '_name',
             {
                 get: function() { return _name; },
-                set: function(newValue) { 
-                    if (typeof newValue !== 'string') Message.error('ES021', ['_name', 'string']);
-                    if (newValue.length === 0) Message.error('ES055', ['_name']);
-                    _name = newValue;
+                set: function(nVal) { 
+                    if (typeof nVal !== 'string') Message.error('ES021', ['_name', 'string']);
+                    if (nVal.length === 0) Message.error('ES055', ['_name']);
+                    _name = nVal;
                 },
                 configurable: false,
                 enumerable: true

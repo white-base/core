@@ -69,12 +69,12 @@
             Object.defineProperty(this, 'tableName', 
             {
                 get: function() { return this._name; },
-                set: function(newValue) { 
-                    if (newValue === this.tableName) return;
-                    if (typeof newValue !== 'string') Message.error('ES021', ['tableName', 'string']);
-                    // if (this._metaSet && this._metaSet.tables.existTableName(newValue)) Message.error('ES042', ['tableName', newValue]);
-                    // tableName = newValue;
-                    this.__SET$_name(newValue, this);
+                set: function(nVal) { 
+                    if (nVal === this.tableName) return;
+                    if (typeof nVal !== 'string') Message.error('ES021', ['tableName', 'string']);
+                    // if (this._metaSet && this._metaSet.tables.existTableName(nVal)) Message.error('ES042', ['tableName', nVal]);
+                    // tableName = nVal;
+                    this.__SET$_name(nVal, this);
                 },
                 configurable: false,
                 enumerable: true
@@ -87,10 +87,10 @@
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { return columns; },
-                set: function(newValue) { 
-                    if (!(newValue instanceof MetaTableColumnCollection)) Message.error('ES032', ['columns', 'MetaTableColumnCollection']);
+                set: function(nVal) { 
+                    if (!(nVal instanceof MetaTableColumnCollection)) Message.error('ES032', ['columns', 'MetaTableColumnCollection']);
                     if (this.rows.count > 0) Message.error('ES047', ['rows', 'MetaRow', 'MetaTableColumnCollection']);
-                    columns = newValue;
+                    columns = nVal;
                 },
                 configurable: false,
                 enumerable: true
@@ -253,13 +253,13 @@
             Object.defineProperty(this, '_baseType', 
             {
                 get: function() { return _baseType; },
-                set: function(newValue) { 
-                    if (!(typeof newValue === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    if (!(new newValue('temp') instanceof MetaTable)) Message.error('ES032', ['_baseType', 'MetaTable']);
-                    // if (!(newValue instanceof MetaElement && newValue.instanceOf('BaseEntity'))) {
+                set: function(nVal) { 
+                    if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
+                    if (!(new nVal('temp') instanceof MetaTable)) Message.error('ES032', ['_baseType', 'MetaTable']);
+                    // if (!(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
                     //     Message.error('ES032', ['_baseType', 'BaseEntity']);
                     // }
-                    _baseType = newValue;
+                    _baseType = nVal;
                 },
                 configurable: false,
                 enumerable: true

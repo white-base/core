@@ -1335,8 +1335,8 @@ describe("[target: meta-set.js]", () => {
 
                 // 전체 트랜젝션 모드
                 set1.autoChanges = false;
-                expect(set1.tables['T1'].rows.isChanges).toBe(false);
-                expect(set1.tables['T2'].rows.isChanges).toBe(false);
+                expect(set1.tables['T1'].rows.hasChanges).toBe(false);
+                expect(set1.tables['T2'].rows.hasChanges).toBe(false);
                 // 변경후
                 set1.tables['T1'].rows.add(row1);
                 set1.tables['T2'].rows.add(row2);
@@ -1360,8 +1360,8 @@ describe("[target: meta-set.js]", () => {
 
                 // 전체 트랜젝션 모드
                 set1.autoChanges = false;
-                expect(set1.tables['T1'].rows.isChanges).toBe(false);
-                expect(set1.tables['T2'].rows.isChanges).toBe(false);
+                expect(set1.tables['T1'].rows.hasChanges).toBe(false);
+                expect(set1.tables['T2'].rows.hasChanges).toBe(false);
                 // add()
                 set1.tables['T1'].rows.add(row1);
                 set1.tables['T2'].rows.add(row2);
@@ -1398,8 +1398,8 @@ describe("[target: meta-set.js]", () => {
 
                 // 전체 트랜젝션 모드
                 set1.autoChanges = false;
-                expect(set1.tables['T1'].rows.isChanges).toBe(false);
-                expect(set1.tables['T2'].rows.isChanges).toBe(false);
+                expect(set1.tables['T1'].rows.hasChanges).toBe(false);
+                expect(set1.tables['T2'].rows.hasChanges).toBe(false);
                 // add()
                 set1.tables['T1'].rows.add(row1);
                 set1.tables['T2'].rows.add(row2);
