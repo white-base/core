@@ -749,6 +749,10 @@ describe("[target: collection-property.js, base-collection.js]", () => {
 
                 expect(s.columns._keys).toEqual(['a1'])
             });
+            it("- this.__GET$_keys() : 커버리지 ", () => {
+                let s = new Student();
+                var aa = s.columns.__GET$_keys()
+            });
         });
         // it("- _remove(not idx) : 예외 ", () => {
         //     let s = new Student();

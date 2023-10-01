@@ -51,7 +51,7 @@ describe("[target: base-collection.js]", () => {
                     constructor(){ super()}
                 }
                 const s1 = new SubCollection();
-               
+                
                 expect(()=> s1.add()).toThrow(/ES013/)
                 expect(()=> s1.clear()).toThrow(/ES013/)
             });
@@ -62,6 +62,14 @@ describe("[target: base-collection.js]", () => {
                 }
                 const s1 = new SubCollection();
                const obj1 = s1.getObject( 0, {})
+            });
+            it("- 커버리지 :  this.__GET$_elements() ", () => {
+                class SubCollection extends BaseCollection {
+                    constructor(){ super()}
+                }
+                const s1 = new SubCollection();
+               const obj1 = s1.__GET$_elements()
+               const obj2 = s1.__GET$_descriptors()
             });
 
         });

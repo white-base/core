@@ -215,7 +215,7 @@
          * - 키 의 인덱스는 ABC._keys.indexOf('aaa') 로 조회 할수 있다.
          * @override
          * @param {string | any} p_obj key 또는 대상 객체
-         * @param {number} p_isKey 옵션
+         * @param {boolean?} p_isKey 옵션
          * @returns {number} 없을시 -1
          */
         PropertyCollection.prototype.indexOf = function(p_obj, p_isKey) {
@@ -231,7 +231,7 @@
         /**
          * 속성컬렉션을 등록한다.[구현]
          * @param {string} p_name [필수] 요소명
-         * @param {?any} p_value 요소값
+         * @param {any?} p_value 요소값
          * @returns {boolean} 처리결과
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
