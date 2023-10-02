@@ -106,19 +106,19 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
             if (this._descriptors.length > 0) {
-                obj._desc = [];
+                obj['_desc'] = [];
                 for (var i = 0; i < this._descriptors.length; i++) {
-                    obj._desc.push(this._descriptors[i]);
+                    obj['_desc'].push(this._descriptors[i]);
                 }
             }
-            obj._elem = [];
+            obj['_elem'] = [];
             for (var i = 0; i < this._elements.length; i++) {
                 var elem = this._elements[i];
                 if (elem instanceof MetaObject) {
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
-                        obj._elem.push(MetaRegistry.createReferObject(elem));
-                    } else obj._elem.push(elem.getObject(vOpt, owned));
-                } else obj._elem.push(elem);
+                        obj['_elem'].push(MetaRegistry.createReferObject(elem));
+                    } else obj['_elem'].push(elem.getObject(vOpt, owned));
+                } else obj['_elem'].push(elem);
             }
             return obj;                        
         };
@@ -133,24 +133,24 @@
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
 
-            if (Array.isArray(p_oGuid._desc) && p_oGuid._desc.length > 0) {
-                for (var i = 0; i < p_oGuid._desc.length; i++) {
-                    this.__GET$_descriptors(this).push(p_oGuid._desc[i]);
+            if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
+                for (var i = 0; i < p_oGuid['_desc'].length; i++) {
+                    this.__GET$_descriptors(this).push(p_oGuid['_desc'][i]);
                 }
             }
-            for(var i = 0; i < p_oGuid._elem.length; i++) {
+            for(var i = 0; i < p_oGuid['_elem'].length; i++) {
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
             }
 
-            for(var i = 0; i < p_oGuid._elem.length; i++) {
-                var elem = p_oGuid._elem[i];
+            for(var i = 0; i < p_oGuid['_elem'].length; i++) {
+                var elem = p_oGuid['_elem'][i];
                 if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
                     this.__GET$_elements(this).push(obj);
                     
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
+                    var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this.__GET$_elements(this).push(meta);  
                 

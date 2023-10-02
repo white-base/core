@@ -344,11 +344,11 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             var _elems = [];
             
-            if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
-                obj.__subscribers = this.__event.__subscribers;
+            if (!Util.deepEqual(this.__event['__subscribers'], this.__event._getInitObject())) {
+                obj['__subscribers'] = this.__event.__subscribers;
             }
             if (vOpt < 2 && vOpt > -1 && this._owner) {
-                obj._owner = MetaRegistry.createReferObject(this._owner);
+                obj['_owner'] = MetaRegistry.createReferObject(this._owner);
             }
             
             for (var i = 0; i < this._elemTypes.length; i++) {
@@ -356,7 +356,7 @@
                 if (typeof elem === 'function') _elems.push(MetaRegistry.createNsReferObject(elem));
                 else _elems.push(elem);
             }
-            obj._elemTypes = _elems;
+            obj['_elemTypes'] = _elems;
             return obj;                        
         };
 
@@ -373,16 +373,16 @@
             var origin = p_origin ? p_origin : p_oGuid;
             
             this.clear();
-            if (p_oGuid.__subscribers) {
-                this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
+            if (p_oGuid['__subscribers']) {
+                this.__event.__SET$__subscribers(p_oGuid['__subscribers'], this.__event);
             }
-            if (p_oGuid._owner) {
-                owner = MetaRegistry.findSetObject(p_oGuid._owner.$ref, origin);
-                if (!owner) Message.error('ES015', [p_oGuid.name, '_owner']);
+            if (p_oGuid['_owner']) {
+                owner = MetaRegistry.findSetObject(p_oGuid['_owner']['$ref'], origin);
+                if (!owner) Message.error('ES015', [p_oGuid['name'], '_owner']);
                 this._owner = owner;
             }
-            if (Array.isArray(p_oGuid._elemTypes) && p_oGuid._elemTypes.length > 0){
-                this._elemTypes = p_oGuid._elemTypes;
+            if (Array.isArray(p_oGuid['_elemTypes']) && p_oGuid['_elemTypes'].length > 0){
+                this._elemTypes = p_oGuid['_elemTypes'];
             }
         };
 

@@ -126,7 +126,7 @@
             // var origin = p_origin ? p_origin : obj;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
-            if (this.autoChanges !== false) obj.autoChanges = this.autoChanges;
+            if (this.autoChanges !== false) obj['autoChanges'] = this.autoChanges;
             return obj;                        
         };
 
@@ -139,7 +139,7 @@
         TransactionCollection.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             this._transQueue.init();
-            if (p_oGuid.autoChanges) this.autoChanges = p_oGuid.autoChanges;
+            if (p_oGuid['autoChanges']) this.autoChanges = p_oGuid['autoChanges'];
         };
 
         /**

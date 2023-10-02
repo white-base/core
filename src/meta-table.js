@@ -132,7 +132,7 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             // var origin = p_origin ? p_origin : obj;
 
-            obj.tableName = this.tableName;
+            obj['tableName'] = this.tableName;
             return obj;                        
         };
 
@@ -148,14 +148,14 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var metaSet;
 
-            if(p_oGuid._metaSet) {
-                metaSet = MetaRegistry.findSetObject(p_oGuid._metaSet.$ref, origin);
-                if (!metaSet) Message.error('ES015', [p_oGuid.name, 'metaSet']);
+            if(p_oGuid['_metaSet']) {
+                metaSet = MetaRegistry.findSetObject(p_oGuid['_metaSet']['$ref'], origin);
+                if (!metaSet) Message.error('ES015', [p_oGuid['name'], 'metaSet']);
                 this._metaSet = metaSet;
             }
-            this.columns.setObject(p_oGuid.columns, origin);
-            this.rows.setObject(p_oGuid.rows, origin);
-            this.tableName = p_oGuid.tableName;
+            this.columns.setObject(p_oGuid['columns'], origin);
+            this.rows.setObject(p_oGuid['rows'], origin);
+            this.tableName = p_oGuid['tableName'];
         };
 
         /**

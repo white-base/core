@@ -532,14 +532,14 @@
 
             if (defValue instanceof MetaObject) {
                 if (MetaRegistry.hasGuidObject(defValue, owned)) {
-                    obj.default = MetaRegistry.createReferObject(defValue);
-                } else obj.default = defValue.getObject(vOpt, owned);
+                    obj['default'] = MetaRegistry.createReferObject(defValue);
+                } else obj['default'] = defValue.getObject(vOpt, owned);
             }
 
             if (value instanceof MetaObject) {
                 if (MetaRegistry.hasGuidObject(value, owned)) {
-                    obj.value = MetaRegistry.createReferObject(value);
-                } else obj.value = value.getObject(vOpt, owned);
+                    obj['value'] = MetaRegistry.createReferObject(value);
+                } else obj['value'] = value.getObject(vOpt, owned);
             }
             return obj;                        
         };
@@ -557,21 +557,21 @@
             var elem;
 
             // 주의! defuault 설정후 value 설정 :getObject() 와 동일
-            elem = p_oGuid.default;
+            elem = p_oGuid['default'];
             if (typeof elem === 'object' && elem !== null) {
                 if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
-                    this.default = obj;
+                    this['default'] = obj;
                 
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
+                    var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) Message.error('ES015', ['ObjectColumn.default', '$ref']);
-                    this.default = meta;
+                    this['default'] = meta;
                 }
             }
 
-            elem = p_oGuid.value;
+            elem = p_oGuid['value'];
             if (typeof elem === 'object' && elem !== null) {
                 if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
@@ -579,7 +579,7 @@
                     this.value = obj;
                 
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
+                    var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) Message.error('ES015', ['ObjectColumn.value', '$ref']);
                     this.value = meta;
                 }

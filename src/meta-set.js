@@ -255,9 +255,9 @@
             // else if (p_origin) origin.push(p_origin);
             // origin.push(obj);
 
-            obj.setName = this.setName;
-            obj.tables = this.tables.getObject(vOpt, owned);
-            obj.views = this.views.getObject(vOpt, owned);
+            obj['setName'] = this.setName;
+            obj['tables'] = this.tables.getObject(vOpt, owned);
+            obj['views'] = this.views.getObject(vOpt, owned);
             return obj;                        
         };
 
@@ -271,9 +271,9 @@
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
             
-            this.setName = p_oGuid.setName;
-            this.tables.setObject(p_oGuid.tables, origin);
-            this.views.setObject(p_oGuid.views, origin);
+            this.setName = p_oGuid['setName'];
+            this.tables.setObject(p_oGuid['tables'], origin);
+            this.views.setObject(p_oGuid['views'], origin);
         };
 
         /**

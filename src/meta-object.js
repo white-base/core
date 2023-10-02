@@ -200,8 +200,8 @@
             var obj = {};
             // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
-            if (vOpt < 2 && vOpt > -1) obj._guid = this._guid;
-            obj._type = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
+            if (vOpt < 2 && vOpt > -1) obj['_guid'] = this._guid;
+            obj['_type'] = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
             return obj;                        
         };
 
@@ -216,7 +216,7 @@
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
             if (!_isObject(p_oGuid)) Message.error('ES021', ['oGuid', 'object']);
-            if (p_oGuid._type !== fullName) Message.error('ES046', [p_oGuid._type, fullName]);
+            if (p_oGuid['_type'] !== fullName) Message.error('ES046', [p_oGuid['_type'], fullName]);
             
             if (MetaRegistry.isGuidObject(origin)) {
                 if (!origin['__TRANSFORM_REFER']) {

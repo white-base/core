@@ -145,24 +145,24 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
             if (this._descriptors.length > 0) {
-                obj._desc = [];
+                obj['_desc'] = [];
                 for (var i = 0; i < this._descriptors.length; i++) {
-                    obj._desc.push(this._descriptors[i]);
+                    obj['_desc'].push(this._descriptors[i]);
                 }
             }
-            obj._elem = [];
+            obj['_elem'] = [];
             for (var i = 0; i < this.count; i++) {
                 var elem = this._elements[i];
                 if (elem instanceof MetaObject) {
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
-                        obj._elem.push(MetaRegistry.createReferObject(elem));
-                    } else obj._elem.push(elem.getObject(vOpt, owned));
-                } else obj._elem.push(elem);
+                        obj['_elem'].push(MetaRegistry.createReferObject(elem));
+                    } else obj['_elem'].push(elem.getObject(vOpt, owned));
+                } else obj['_elem'].push(elem);
             }
-            obj._key = [];
+            obj['_key'] = [];
             for (var i = 0; i < this._keys.length; i++) {
                 var key = this._keys[i];
-                obj._key.push(key);
+                obj['_key'].push(key);
             }
             return obj;                        
         };
@@ -177,25 +177,25 @@
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
 
-            if (p_oGuid._elem.length !== p_oGuid._key.length) Message.error('ES063', ['_elem', '_key']);
+            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) Message.error('ES063', ['_elem', '_key']);
             
-            if (Array.isArray(p_oGuid._desc) && p_oGuid._desc.length > 0) {
-                if (p_oGuid._elem.length !== p_oGuid._desc.length) Message.error('ES063', ['_elem', '_desc']);
-                for (var i = 0; i < p_oGuid._desc.length; i++) {
-                    this.__GET$_descriptors(this).push(p_oGuid._desc[i]);
+            if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
+                if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) Message.error('ES063', ['_elem', '_desc']);
+                for (var i = 0; i < p_oGuid['_desc'].length; i++) {
+                    this.__GET$_descriptors(this).push(p_oGuid['_desc'][i]);
                 }
             }
 
-            this._keys.length = 0;
-            for(var i = 0; i < p_oGuid._key.length; i++) {
-                var key = p_oGuid._key[i];
+            this.__SET$_keys([], this);
+            for(var i = 0; i < p_oGuid['_key'].length; i++) {
+                var key = p_oGuid['_key'][i];
                 this.__GET$_keys(this).push(key);
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
                 Object.defineProperty(this, key, this._getPropDescriptor(i));
             }
 
-            for(var i = 0; i < p_oGuid._elem.length; i++) {
-                var elem = p_oGuid._elem[i];
+            for(var i = 0; i < p_oGuid['_elem'].length; i++) {
+                var elem = p_oGuid['_elem'][i];
                 if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
@@ -232,6 +232,7 @@
          * 속성컬렉션을 등록한다.[구현]
          * @param {string} p_name [필수] 요소명
          * @param {any?} p_value 요소값
+         * @param {object?} p_desc 기술자
          * @returns {boolean} 처리결과
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
@@ -307,8 +308,7 @@
 
         /**
          * 키 유무
-         * REVIEW: 프로퍼티 컬렉션으로 이동 검토
-         * @param {number | string} p_key index, key
+         * @param {string} p_key index, key
          * @returns {boolean}
          */
         PropertyCollection.prototype.exist = function(p_key) {

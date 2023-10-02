@@ -433,9 +433,9 @@
             // else if (p_owned) owned.push(p_owned);
             // owned.push(obj);
 
-            if (vOpt < 2 && vOpt > -1 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
-            obj.columns = this.columns.getObject(vOpt, owned);
-            obj.rows = this.rows.getObject(vOpt, owned);
+            if (vOpt < 2 && vOpt > -1 && this._metaSet) obj['_metaSet'] = MetaRegistry.createReferObject(this._metaSet);
+            obj['columns'] = this.columns.getObject(vOpt, owned);
+            obj['rows'] = this.rows.getObject(vOpt, owned);
             return obj;                        
         };
 

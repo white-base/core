@@ -97,7 +97,7 @@
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
-            obj.name = this._name;
+            obj['name'] = this._name;
             return obj;                        
         };
 
@@ -110,7 +110,7 @@
         MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
-            this.__SET$_name(p_oGuid.name, this);
+            this.__SET$_name(p_oGuid['name'], this);
         };
         
         /**

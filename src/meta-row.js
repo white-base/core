@@ -350,12 +350,12 @@
             // origin.push(obj);
 
             if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
-                obj.__subscribers = this.__event.__subscribers;
+                obj['__subscribers'] = this.__event.__subscribers;
             }
             if (vOpt < 2 && vOpt > -1 && this._entity) {
-                obj._entity = MetaRegistry.createReferObject(this._entity);
+                obj['_entity'] = MetaRegistry.createReferObject(this._entity);
             }
-            obj._elem = [];
+            obj['_elem'] = [];
             for (var i = 0; i < this.list.length; i++) {
                 var elem = this.list[i];
                 // POINT:
@@ -364,15 +364,15 @@
                 if (elem instanceof MetaObject) {
                     // POINT:
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
-                        obj._elem.push(MetaRegistry.createReferObject(elem));
-                    } else obj._elem.push(elem.getObject(vOpt, owned));
-                } else obj._elem.push(elem);
+                        obj['_elem'].push(MetaRegistry.createReferObject(elem));
+                    } else obj['_elem'].push(elem.getObject(vOpt, owned));
+                } else obj['_elem'].push(elem);
             }
 
-            obj._key = [];
+            obj['_key'] = [];
             for (var i = 0; i < this._keys.length; i++) {
                 var key = this._keys[i];
-                obj._key.push(key);
+                obj['_key'].push(key);
             }
             return obj;                        
         };
@@ -389,12 +389,12 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var entity;
             
-            if (p_oGuid._elem.length !== p_oGuid._key.length) Message.error('ES063', ['_elem', '_key']);
+            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) Message.error('ES063', ['_elem', '_key']);
 
             // this.init();
             
-            if (p_oGuid.__subscribers) {
-                this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
+            if (p_oGuid['__subscribers']) {
+                this.__event.__SET$__subscribers(p_oGuid['__subscribers'], this.__event);
             }
             // this._entity = p_oGuid._entity;
             // if (p_oGuid._entity) {
@@ -410,8 +410,8 @@
             //     this._keys.push(key);
             // }
 
-            for(var i = 0; i < p_oGuid._elem.length; i++) {
-                var elem = p_oGuid._elem[i];
+            for(var i = 0; i < p_oGuid['_elem'].length; i++) {
+                var elem = p_oGuid['_elem'][i];
                 if (MetaRegistry.isGuidObject(elem)) {
                     // this._elements[i].setObject(elem, origin);
                     var obj = MetaRegistry.createMetaObject(elem, origin);
@@ -419,7 +419,7 @@
                     this.__GET$_elements(this)[i] = obj;
                     // this._elements[i] = obj;
                 } else if (elem['$ref']) {
-                    var meta = MetaRegistry.findSetObject(elem.$ref, origin);
+                    var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this.__GET$_elements(this)[i] = meta;   
                     // this._elements[i] = meta;     

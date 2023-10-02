@@ -172,9 +172,9 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             // var origin = p_origin ? p_origin : obj;
 
-            obj.viewName = this.viewName;
+            obj['viewName'] = this.viewName;
             if (vOpt < 2 && vOpt > -1 && this._baseEntity) {
-                obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity);
+                obj['_baseEntity'] = MetaRegistry.createReferObject(this._baseEntity);
             }
             return obj;                  
         };
@@ -192,21 +192,21 @@
             var metaSet;
             var baseEntity;
 
-            if(p_oGuid._metaSet) {
-                metaSet = MetaRegistry.findSetObject(p_oGuid._metaSet.$ref, origin);
-                if (!metaSet) Message.error('ES015', [p_oGuid.name, '_metaSet']);
+            if(p_oGuid['_metaSet']) {
+                metaSet = MetaRegistry.findSetObject(p_oGuid['_metaSet']['$ref'], origin);
+                if (!metaSet) Message.error('ES015', [p_oGuid['name'], '_metaSet']);
                 this._metaSet = metaSet;
             }
             // this.metaSet = mObj.metaSet;
-            if (p_oGuid._baseEntity) {
-                baseEntity = MetaRegistry.findSetObject(p_oGuid._baseEntity.$ref, origin);
-                if (!baseEntity) Message.error('ES015', [p_oGuid.name, '_baseEntity']);
+            if (p_oGuid['_baseEntity']) {
+                baseEntity = MetaRegistry.findSetObject(p_oGuid['_baseEntity']['$ref'], origin);
+                if (!baseEntity) Message.error('ES015', [p_oGuid['name'], '_baseEntity']);
                 // this.__SET$_baseEntity(baseEntity, this);
                 this._baseEntity = baseEntity;
             } 
-            this.columns.setObject(p_oGuid.columns, origin);
-            this.rows.setObject(p_oGuid.rows, origin);
-            this.viewName = p_oGuid.viewName;
+            this.columns.setObject(p_oGuid['columns'], origin);
+            this.rows.setObject(p_oGuid['rows'], origin);
+            this.viewName = p_oGuid['viewName'];
         };
         /**
          * 객체 복제

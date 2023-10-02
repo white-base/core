@@ -331,18 +331,18 @@
             // }
             // if (this.metaName !== this.columnName) obj.columnName = this.columnName;
             if (vOpt < 2 && vOpt > -1 && this._entity) {
-                obj._entity = MetaRegistry.createReferObject(this._entity);
+                obj['_entity'] = MetaRegistry.createReferObject(this._entity);
             }
-            obj.columnName = this.columnName;
-            if (this.default !== null) obj.default = this.default;
-            if (this.caption !== null) obj.caption = this.caption;            
+            obj['columnName'] = this.columnName;
+            if (this.default !== null) obj['default'] = this.default;
+            if (this.caption !== null) obj['caption'] = this.caption;            
             // if (this.isNotNull !== false) obj.isNotNull = this.isNotNull;
             // if (this.isNullPass !== false) obj.isNullPass = this.isNullPass;
             // if (this.constraints.length > 0) obj.constraints = Util.deepCopy(this.constraints);
             // if (this.getter !== null) obj.getter = this.getter;
             // if (this.setter !== null) obj.setter = this.setter;
-            if (this.__GET$alias(this) !== null) obj.alias = this.__GET$alias(this);
-            if (this.value !== null) obj.value = this.value;
+            if (this.__GET$alias(this) !== null) obj['alias'] = this.__GET$alias(this);
+            if (this.value !== null) obj['value'] = this.value;
             return obj;                        
         };
 
@@ -361,22 +361,22 @@
             // if (p_oGuid.__subscribers) {
             //     this.__event.__SET$__subscribers(p_oGuid.__subscribers, this.__event);
             // }
-            if (p_oGuid._entity) {
-                entity = MetaRegistry.findSetObject(p_oGuid._entity.$ref, origin);
-                if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
+            if (p_oGuid['_entity']) {
+                entity = MetaRegistry.findSetObject(p_oGuid['_entity']['$ref'], origin);
+                if (!entity) Message.error('ES015', [p_oGuid['name'], '_entity']);
                 this._entity = entity;
             } 
             // if (p_oGuid.columnName) this.columnName = p_oGuid.columnName;
-            this.columnName = p_oGuid.columnName;
-            if (p_oGuid.default) this.default = p_oGuid.default;
-            if (p_oGuid.caption) this.caption = p_oGuid.caption;
+            this.columnName = p_oGuid['columnName'];
+            if (p_oGuid['default']) this.default = p_oGuid['default'];
+            if (p_oGuid['caption']) this.caption = p_oGuid['caption'];
             // if (p_oGuid.isNotNull) this.isNotNull = p_oGuid.isNotNull;
             // if (p_oGuid.isNullPass) this.isNullPass = p_oGuid.isNullPass;
             // if (p_oGuid.constraints) this.constraints = p_oGuid.constraints;
             // if (p_oGuid.getter) this.getter = p_oGuid.getter;
             // if (p_oGuid.setter) this.setter = p_oGuid.setter;
-            if (p_oGuid.alias) this.alias = p_oGuid.alias;
-            if (p_oGuid.value) this.value = p_oGuid.value;
+            if (p_oGuid['alias']) this.alias = p_oGuid['alias'];
+            if (p_oGuid['value']) this.value = p_oGuid['value'];
         };
 
         /** @abstract */
