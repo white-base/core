@@ -299,7 +299,6 @@
             
             /**
              * 아이템 value
-             * @override 재정의함
              * @member {*} _L.Meta.Entity.MetaColumn#value
              */
             Object.defineProperty(this, 'value', 
@@ -491,7 +490,7 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object? | array<object>?} p_owned 소유한 객체
+         * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaColumn.prototype.getObject = function(p_vOpt, p_owned) {
@@ -810,7 +809,7 @@
         /**
          * 별칭이 존재하는지 검사
          * @param {*} p_key 
-         * @returns 
+         * @returns {boolean}
          */
         BaseColumnCollection.prototype.existAlias  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
@@ -822,7 +821,7 @@
         /**
          * 컬럼명이 존재하는지 검사
          * @param {*} p_key 
-         * @returns 
+         * @returns {boolean}
          */
         BaseColumnCollection.prototype.existColumnName  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
@@ -834,7 +833,7 @@
         /**
          * 별칭에대한 컬럼 조회
          * @param {*} p_key 
-         * @returns 
+         * @returns {BaseColumn}
          */
         BaseColumnCollection.prototype.alias  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
@@ -1021,7 +1020,7 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object? | array<object>?} p_owned 소유한 객체
+         * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaViewColumnCollection.prototype.getObject = function(p_vOpt, p_owned) {

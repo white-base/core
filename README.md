@@ -40,6 +40,12 @@ https://ui.toast.com/fe-guide/ko_TEST
 # php mvc 프레임웍 (임실)
 https://codeigniter.com/user_guide/database/configuration.html
 
+
+## jaguer 패치 : 패치 필요
+- templ/navigation.tmpl : 
+    + <li class="item" data-name="<?js= item.longname ?>">
+    => <li class="item" data-name="-<?js= item.longname ?>">
+
 ## 2023-03-28
 ----------------------------------------
 File                                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                           

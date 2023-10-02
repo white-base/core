@@ -105,7 +105,7 @@
             /** 
              * 컬랙선 내부값 
              * @protected 
-             * @member {Array} _L.Collection.BaseCollection#_elements  
+             * @member {Array} _L.Meta.Entity.MetaRow#_elements  
              */
             Object.defineProperty(this, '_elements', {
                 // get: function() { return _elements; },
@@ -335,7 +335,7 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object? | array<object>?} p_owned 소유한 객체
+         * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaRow.prototype.getObject = function(p_vOpt, p_owned) {
@@ -510,7 +510,7 @@
          * MetaRow 추가 idx 를 기준으로 검사한다.
          * @param {MetaRow} p_row 
          * @param {object} p_checkValid true: 검사 진행, false <*>: 검사 안함
-         * @returns 
+         * @returns {number}
          */
         MetaRowCollection.prototype.add  = function(p_row, p_checkValid) {
             return this.insertAt(this._elements.length, p_row, p_checkValid);
@@ -521,7 +521,7 @@
          * @param {*} p_pos 
          * @param {*} p_row 
          * @param {*} p_checkValid 
-         * @returns 
+         * @returns {boolean}
          */
         MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_checkValid) {
             var _this = this;

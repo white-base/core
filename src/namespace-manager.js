@@ -257,7 +257,7 @@
 
         /**
          * 네임스페이스 경로 얻기
-         * @param {string, array<sting>} p_ns 
+         * @param {string | array<sting>} p_ns 
          * @returns {object} 경로에 대한 객체
          */
         NamespaceManager.prototype.path = function(p_ns) {

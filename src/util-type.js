@@ -30,7 +30,7 @@
     /**
      * 최상위 object 이거나 사용자 함수에서 생성한 객체 여부
      * @param {*} obj 
-     * @returns 
+     * @returns {boolean}
      */
     function _isObject(obj)  {
         if(typeof obj === 'object' && obj !== null && !_isPrimitiveObj(obj)) {
@@ -42,7 +42,7 @@
     /**
      * 공백객체 인지 확인
      * @param {*} obj 검사대상
-     * @returns 
+     * @returns {boolean}
      */
     function _isEmptyObj(obj)  {
         // if(typeof obj === 'object' && Object.keys(obj).length === 0 && getAllProperties(obj).length === 0) {
@@ -54,7 +54,7 @@
     /**
      * 공백이 아닌 객체 (prototype 및 속성 있는것)
      * @param {*} obj 대상 
-     * @returns 
+     * @returns {boolean}
      */
     function _isFillObj(obj)  {
         // if(typeof obj === 'object' && getAllProperties(obj).length > 0 && !(obj instanceof RegExp)) {
@@ -66,7 +66,7 @@
     /**
      * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부
      * @param {*} obj 
-     * @returns 
+     * @returns {boolean}
      */
     function _isPrimitiveObj(obj) {
         if(typeof obj === 'object' && obj !== null 
@@ -78,7 +78,7 @@
     /**
      * 내장함수 유무
      * @param {*} obj 
-     * @returns 
+     * @returns {boolean}
      */
     function _isBuiltFunction(obj) {
         if (typeof obj === 'function' && (false 
@@ -217,7 +217,7 @@
     /**
      * function 생성하는 생성자
      * @param {*} type 
-     * @returns 
+     * @returns {object}
      */
     var _creator = function(type) {
         return new type;
@@ -243,7 +243,7 @@
      * @param {any} type 검사할 타입
      * @param {any} target 검사대상
      * @param {string} parentName '' 공백시 성공
-     * @returns 
+     * @returns {string?}
      */
     var checkTypeMessage = function(type, target, parentName) {
         var parentName = parentName ? parentName : 'this';

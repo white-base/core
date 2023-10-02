@@ -89,7 +89,7 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object? | array<object>?} p_owned 소유한 객체
+         * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaElement.prototype.getObject = function(p_vOpt, p_owned) {

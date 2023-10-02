@@ -123,7 +123,7 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object? | array<object>?} p_owned 소유한 객체
+         * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
          */
         MetaTable.prototype.getObject = function(p_vOpt, p_owned) {
@@ -223,7 +223,7 @@
 
         /**
          * 변경목록 얻기
-         * @returns 
+         * @returns {array<object>}
          */
         MetaTable.prototype.getChanges  = function() {
             return this.rows._transQueue.select();

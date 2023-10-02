@@ -1,5 +1,5 @@
 /**
- * namespace _L.Collection.BaseCollection
+ * namespace _L.Collection
  */
 (function(_global) {
     'use strict';
@@ -335,7 +335,7 @@
          * guid 객체 얻기
          * @virtual
          * @param {number} p_vOpt 레벨 옵션
-         * @param {object? | array<object>?} p_owned 소유한 객체
+         * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
          */
         BaseCollection.prototype.getObject = function(p_vOpt, p_owned) {

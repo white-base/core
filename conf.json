@@ -1,0 +1,39 @@
+{
+    "templates": {
+        "applicationName": "Automation",
+        "disqus": "",
+        "googleAnalytics": "",
+        "openGraph": {
+            "title": "Automation",
+            "type": "website",
+            "image": "",
+            "site_name": "",
+            "url": ""
+        },
+        "meta": {
+            "title": "_L",
+            "description": "White",
+            "keyword": ""
+        },
+        "linenums": true
+    },
+    "docdash" : {
+        "static" : false,
+        "sort" : true
+    },
+    "source": {
+        "include": ["./src"],
+        "includePattern": ".+\\.js(doc)?$",
+        "exclude": ["./src/old"],
+        "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+        "encoding": "utf8",
+        "recurse": true,
+        "private": true,
+        "lenient": true,
+        "destination": "./docs4",
+        "template": "./node_modules/jaguarjs-jsdoc"
+    }
+    
+}
