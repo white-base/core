@@ -462,7 +462,7 @@
 
         /**
          * 객체 비교
-         * @virtual
+         * @override
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
@@ -488,7 +488,7 @@
 
         /**
          * guid 객체 얻기
-         * @virtual
+         * @override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -526,7 +526,7 @@
 
         /**
          * guid 객체 설정
-         * @virtual
+         * @override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */
@@ -559,7 +559,7 @@
 
         /**
          * 객체 복제
-         * @virtual
+         * @override
          * @param {BaseEntity?} p_entity 지정한 엔티티로 복제
          * @returns {MetaColumn}
          */
@@ -734,7 +734,7 @@
         BaseColumnCollection._ABSCRACT = true;
         /**
          * 객체 비교
-         * @virtual
+         * @override
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
@@ -994,7 +994,7 @@
 
         /**
          * 객체 비교
-         * @virtual
+         * @override
          * @param {object} p_target 대상 MetaObject
          * @returns {boolean}
          */
@@ -1018,7 +1018,7 @@
         
         /**
          * guid 객체 얻기
-         * @virtual
+         * @override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}

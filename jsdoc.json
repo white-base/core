@@ -52,7 +52,7 @@
           "keyword": ""       // 검색 엔진용 키워드 
       },
       "search": true,       // 탐색 항목을 검색/필터링할 수 있는 탐색 상자를 탐색 위에 표시 
-      "commonNav": true,    // 각 페이지에서 가져온 nav.inc.html의 <nav>에 대한 모든 html 코드를 그룹화합니다(각 html 페이지에 포함하는 대신 {navSize}×{nb html 페이지}를 저장합니다. 프로젝트) 
+      "commonNav": false,    // 각 페이지에서 가져온 nav.inc.html의 <nav>에 대한 모든 html 코드를 그룹화합니다(각 html 페이지에 포함하는 대신 {navSize}×{nb html 페이지}를 저장합니다. 프로젝트) 
       "collapse": true,     // 현재 페이지의 현재 객체 탐색을 제외하고 기본적으로 탐색 축소 
       "wrap": true,         // 긴 탐색 이름을 트리밍하는 대신 래핑합니다. 
       "typedef" : true,     // 메뉴에 typedef 포함

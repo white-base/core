@@ -26,4 +26,11 @@ let user = { // 서드파티 코드에서 가져온 객체
 
     let dd = new Date();
 
+
+var a = {aa:1, bb:3}
+
+for(var p in a) {
+    console.log(a[p])
+}
+
     console.log(-1);

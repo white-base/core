@@ -129,6 +129,7 @@
 
             /** 
              * 요소 타입 (제약조건)
+             * @protected 
              * @member {array<any>}  _L.Collection.BaseCollection#_elemTypes  
              */
             Object.defineProperty(this, '_elemTypes', 
@@ -176,7 +177,7 @@
             Object.defineProperty(this, '_KEYWORD', 
             {
                 get: function() { return _KEYWORD; },
-                set: function(p_val) {_KEYWORD = p_val; },
+                set: function(p_val) { _KEYWORD = p_val; },
                 configurable: false,
                 enumerable: false,
             });
@@ -261,13 +262,15 @@
         }
         Util.inherits(BaseCollection, _super);
 
-        BaseCollection._NS = 'Collection';     // namespace
-        BaseCollection._PARAMS = ['_owner'];    // creator parameter
+        BaseCollection._NS = 'Collection';
+        BaseCollection._PARAMS = ['_owner'];
         BaseCollection._ABSCRACT = true;
         
         /**
          * 추가 이벤트 수신자
          * @listens _L.Collection.BaseCollection#onClear
+         * @param {number} p_idx 추가한 인덱스 번호
+         * @param {any} p_value 추가한 값
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
             this.__event.publish('add', p_idx, p_value, this); 
@@ -333,7 +336,7 @@
 
         /**
          * guid 객체 얻기
-         * @virtual
+         * @override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -362,7 +365,7 @@
 
         /**
          * guid 객체 설정
-         * @virtual
+         * @override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */

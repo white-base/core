@@ -124,6 +124,9 @@
          * @param {any} p_target 대상 객체
          * @param {any?} p_origin 비교 객체의 기본은 this 이며 입력시 다르객체와 비교한다.
          * @returns {boolean}
+         * @example
+         * if (this.equal(obj)) console.log('this == obj');
+         * if (this.equal(obj1, obj2)) console.log('obj1 == obj2')
          */
         MetaObject.prototype.equal = function(p_target, p_origin) {
             var origin = p_origin || this;
@@ -190,7 +193,6 @@
          * - opt = 0 : <기본값> 참조 관점의 요약된 객체  
          * - opt = 1 : 소유 관점의 구조의 객체, guid 관점의 중복 가능  
          * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
-         * @virtual
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}  
@@ -207,7 +209,6 @@
 
         /**
          * guid 객체 설정
-         * @virtual
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */

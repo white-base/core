@@ -418,7 +418,7 @@
 
         /**
          * guid 객체 얻기
-         * @virtual
+         * @override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
