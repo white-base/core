@@ -81,7 +81,10 @@
          * @constructs _L.Meta.Entity.BaseEntity
          * @extends _L.Meta.MetaElement
          * @implements {_L.Interface.IGroupControl}
-         * @implements {_L.Interface.IAllControl}
+         * @implements {_L.Interface.ISchemaControl}
+         * @implements {_L.Interface.IImportControl}
+         * @implements {_L.Interface.IExportControl}
+         * @implements {_L.Interface.ISerialize}
          * @param {*} p_name 
          * @param {*} p_metaSet 
          */
@@ -90,7 +93,6 @@
 
             var _metaSet = null;
             var rows  = new MetaRowCollection(this);
-            var columns = null;     
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
@@ -104,7 +106,6 @@
                         Message.error('ES032', ['_metaSet', 'MetaSet']);
                     }
                     _metaSet = nVal;
-                    // if (this.getTypes().indexOf('MetaView')
                 },
                 configurable: false,
                 enumerable: true
@@ -119,10 +120,6 @@
                 get: function() { 
                     Message.error('ES0111', ['columns', 'MetaEntity']);
                 },
-                // set: function(nVal) { 
-                //     if (!(nVal instanceof BaseColumnCollection)) Message.error('ES032', ['columns', 'BaseColumnCollection']);
-                //     columns = nVal;
-                // },
                 configurable: true, // 하위에서 재정의 해야함
                 enumerable: true
             });
@@ -142,73 +139,73 @@
         }
         Util.inherits(BaseEntity, _super);
 
-        BaseEntity._NS = 'Meta.Entity';          // namespace
-        BaseEntity._PARAMS = ['name'];         // creator parameter
+        BaseEntity._NS = 'Meta.Entity';         // namespace
+        BaseEntity._PARAMS = ['name'];          // creator parameter
         BaseEntity._ABSCRACT = true;
 
         
         // local funciton
-        function isObject(obj) {
+        function _isObject(obj) {    // 객체 여부
             if (typeof obj === 'object' && obj !== null) return true;
             return false;
         }
+        function _isString(obj) {    // 공백아닌 문자 여부
+            if (typeof obj === 'string' && obj.length > 0) return true;
+            return false;
+        }
+        function _isSchema(obj) {    // 객체 여부
+            if (!_isObject(obj)) return false;
+            if (_isObject(obj['columns']) || _isObject(obj['rows'])) return true;
+            return false;
+        }
 
-        // 3가지 타입 입력
+        /**
+         * 스카마 객체로 변환
+         * @protected
+         * @param {object} p_oGuid getObject()로 얻은 객체
+         * @returns {object}
+         */
         BaseEntity._transformSchema  = function(p_oGuid) {
             var _this = this;
-            var obj  = {
-                columns: null,
-                rows: null
-            };
 
-            if (p_oGuid['columns'] || p_oGuid['rows']) obj = p_oGuid;
-            return transformEntity(obj);
+            if (!_isSchema(p_oGuid)) { 
+                Message.error('ES021', ['_transformSchema(obj)', '{columns: ... , rows: ...}']);
+            }
+            return transformEntity(p_oGuid);
 
             // inner function
             function transformEntity(oGuid) {
                 var obj = {};
-                // if (oGuid['name']) obj['name'] = oGuid['name'];
                 if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
                 if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
-                if (oGuid['columns']) obj['columns'] = transformColumn(oGuid['columns'], oGuid);
-                if (oGuid['rows']) obj['rows'] = transformRow(oGuid['rows'], oGuid);
+                obj['columns'] = transformColumn(oGuid['columns'], oGuid);
+                obj['rows'] = transformRow(oGuid['rows'], oGuid);
                 return obj;
             }
             function transformColumn(oGuid, origin) {
                 var obj = {};
-                
-                // if (oGuid['$ref']) {
-                //     obj['$ref'] = oGuid['$ref'];
-                //     return obj;
-                // }
                 for (var i = 0; i < oGuid['_elem'].length; i++) {
                     var column = oGuid['_elem'][i];
-                    // var key = oGuid['_key'][i] || column.name;
                     var key = oGuid['_key'][i];
-                    
                     obj[key] = {};
-
-                    if (column['$ref']){
-                        obj[key] = column;
-                    } else {
-                        // if (column['_entity']['$ref']) obj[key]['_entity'] = MetaRegistry.find(column['_entity']['$ref']);
-                        // if (column['_entity']['$ref'] !== mEntity['_guid']) obj[key]['_entity'] = column['_entity']['$ref'];
-                        
-                        if (column._entity && column._entity['$ref'] !== origin['_guid']) {
+                    if (column['$ref']) obj[key] = column;
+                    else {
+                        if (column['_entity'] && column['_entity']['$ref'] !== origin['_guid']) {
                             obj[key]._entity = {};
-                            obj[key]._entity['$ref'] = column._entity['$ref'];
+                            obj[key]._entity['$ref'] = column['_entity']['$ref'];
                         } 
-
                         if (column._guid) obj[key]._guid = column['_guid'];
-                        if (column.default) obj[key].default = column.default;
-                        if (column.caption) obj[key].caption = column.caption;            
-                        if (column.isNotNull) obj[key].isNotNull = column.isNotNull;
-                        if (column.isNullPass) obj[key].isNullPass = column.isNullPass;
-                        if (Array.isArray(column.constraints)) obj[key].constraints = Util.deepCopy(column.constraints);
-                        if (column.getter) obj[key].getter = column.getter;
-                        if (column.setter) obj[key].setter = column.setter;
-                        if (column.alias) obj[key].alias = column.alias;
-                        if (column.value) obj[key].value = column.value;
+                        if (column.default) obj[key].default = column['default'];
+                        if (column.caption) obj[key].caption = column['caption'];            
+                        if (column.isNotNull) obj[key].isNotNull = column['isNotNull'];
+                        if (column.isNullPass) obj[key].isNullPass = column['isNullPass'];
+                        if (Array.isArray(column.constraints)) {
+                            obj[key]['constraints'] = Util.deepCopy(column['constraints']);
+                        }
+                        if (column.getter) obj[key].getter = column['getter'];
+                        if (column.setter) obj[key].setter = column['setter'];
+                        if (column.alias) obj[key].alias = column['alias'];
+                        if (column.value) obj[key].value = column['value'];
                     }
 
                 }
@@ -230,17 +227,12 @@
                 return arr;
             }
         };
-        BaseEntity._isSchema  = function(p_oSch) {
-            if (!isObject(p_oSch)) return false;
-            if (isObject(p_oSch['columns']) || isObject(p_oSch['rows'])) return true;
-            return false;
-        };
-
+        
         /**
          * BaseEntity 를 불러(로드)온다.
-         * @private
-         * @param {*} p_object 대상 엔티티
-         * @param {*} p_option 옵션
+         * @protected
+         * @param {BaseEntity} p_object 대상 엔티티
+         * @param {number} p_option 옵션
          */
         BaseEntity.prototype._readEntity = function(p_entity, p_option) {
             var opt = p_option || 3;
@@ -250,10 +242,11 @@
             if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
             if (opt % 2 === 1) loadColumn(); // opt: 1, 3
             if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
+            return;
 
+            // inner function
             function loadColumn() {
                 if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
-                
                 for (let i = 0; i < p_entity.columns.count; i++) {
                     var column = p_entity.columns[i].clone();
                     var key = p_entity.columns.keyOf(i);
@@ -261,11 +254,8 @@
                     _this.columns.add(column);
                 }
             }
-            // 컬럼 기준으로 로우를 가져온다.
-            function loadRow() {
+            function loadRow() {    // 컬럼 기준으로 로우를 가져온다.
                 for (let i = 0; i < p_entity.rows.count; i++) {
-                    // var row = p_entity.rows[i].clone();
-                    // _this.columns.add(column);
                     var row = _this.newRow(this);
                     for (let ii = 0; ii < _this.columns.count; ii++) {
                         var key = _this.columns.keyOf(ii);
@@ -276,37 +266,40 @@
             }
         };
 
+        /**
+         * 엔티티 대상에 로우 만들기
+         * @protected
+         * @param {BaseEntity} p_entity 빌드 대상 엔티티
+         * @param {*} p_callback 로우 대상 조회 콜백
+         * @param {*} p_items 선택할 로우명 , [] 또는 undefined 시 전체 선택
+         * @returns {BaseEntity}
+         */
         BaseEntity.prototype._buildEntity = function(p_entity, p_callback, p_items) {
             var orignal = this.clone();
             var columnName;
+            var column;
 
-            // var MetaView                    = require('./meta-view').MetaView;
-            
-            // entity 컬럼 구성
+            // columns 구성
             if (p_items.length === 0) {
                 for (var i = 0; i < this.columns.count; i++) {
-                    // columnName = this.columns[i].name;
-                    // entity.columns.add(columnName);  // 참조로 등록
-                    p_entity.columns.add(this.columns[i]);
+                    p_entity.columns.add(this.columns[i]);  // 참조로 등록
                 }
+
             } else {
                 for (var i = 0; i < p_items.length; i++) {
                     columnName = p_items[i];
-                    if (typeof columnName !== 'string') Message.error('ES045', ['items', 'string']);
-                    var column = this.columns.alias(columnName)
-                    // if (typeof columnName.length === 0) throw new Error('빈 items 은 입력할 수 없습니다.');
-                    // entity.columns.add(columnName);  // 참조로 등록
-                    // if (this.columns.existColumnName(columnName)) Message.error('ES042', [columnName, 'columnName']);
-                    // if (this.columns.existAlias(columnName)) Message.error('ES042', [columnName, 'alias']);
+                    if (!_isString(columnName)) Message.error('ES045', ['items', 'string']);
                     if (!this.columns.exist(columnName)) Message.error('ES053', ['items', 'column']);
-
+                    
+                    column = this.columns.alias(columnName)
                     p_entity.columns.add(column);
                 }
             }
 
-            // row 등록
-            for (var i = 0; i < orignal.rows.count; i++) {
-                if (!p_callback || (typeof p_callback === 'function' && p_callback.call(this, orignal.rows[i], i, p_entity))) {
+            // rows 등록
+            for (var i = 0; i < orignal.rows.count; i++) {  
+                if (!p_callback || (typeof p_callback === 'function' 
+                    && p_callback.call(this, orignal.rows[i], i, p_entity))) {
                     p_entity.rows.add(createRow(orignal.rows[i]));
                 } 
             }
@@ -315,17 +308,21 @@
             // inner function
             function createRow(row) {
                 var alias, newRow;
-
                 newRow = p_entity.newRow();
                 for (var ii = 0; ii < p_entity.columns.count; ii++) {
                     alias = p_entity.columns[ii].alias;
-                    // if (p_items.length > 0 && p_items.indexOf(alias) < 0) continue;
                     newRow[alias] = row[alias];
                 }
                 return newRow;
             }
         };
 
+        /**
+         * 스키마 읽기
+         * @param {object} p_obj 대상 객체
+         * @param {boolean} p_createRow 기본값 = false, 컬럼이 없을경우 로우이름의 컬럼 생성 여부
+         * @param {object} p_origin 원본 객체
+         */
         BaseEntity.prototype._readSchema  = function(p_obj, p_createRow, p_origin) {
             var _this = this;
             var obj = p_obj;
@@ -333,7 +330,6 @@
             var rows;
             var Column = this.columns._baseType;
             var origin = p_origin ? p_origin : p_obj;
-
             
             if (obj['_guid']) MetaRegistry.createSetObject(obj, this); 
 
@@ -341,49 +337,16 @@
                 obj['_baseEntity'] = MetaRegistry.findSetObject(obj._baseEntity['$ref'], origin);
                 if (!obj['_baseEntity']) Message.error('ES015', [key, '_baseEntity']);
             }
+
             columns = obj['columns'];
             if (columns) {
-                // 키 추출방식 2가지
+                // 1. $key 인덱스 기준으로 컬럼명 추출
                 if (columns['$key'] && Array.isArray(columns['$key'])) {
                     for (var i = 0; i < columns['$key'].length; i++) {
                         addColumn(columns['$key'][i], columns);
                     }
-                } else {
-                    for (var key in columns) {
-                        addColumn(key, columns);
-                    }
-                }
-                function addColumn(key, columns) {
-                    var column;
-                    // if (Object.hasOwnProperty.call(columns, key) && typeof columns[key] === 'object') {
-                    if (isObject(columns[key])) {
-                        if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
-                        var prop = columns[key];
-                        var obj = {};
-                        // if (prop['_entity'] && MetaRegistry.has(prop['_entity'])) {
-                        //     obj['_entity'] = MetaRegistry.find(prop['_entity']);
-                        // }
-                        if (isObject(prop) && prop['$ref']) {
-                            column = MetaRegistry.findSetObject(prop['$ref'], origin);
-                            if (!column) Message.error('ES015', [key, 'column']);
-                        } else {
-                            if (isObject(prop['_entity']) && prop['_entity']['$ref']) {
-                                prop['_entity'] = MetaRegistry.findSetObject(prop['_entity']['$ref'], origin);
-                                if (!prop['_entity']) Message.error('ES015', [key, '_entity']);
-                            }
-                            for (var p in prop) {
-                                obj[p] = prop[p];
-                            }
-                            column = new Column(key, null, obj);
-                        }
-                        // } else column = new Column(key, _this, obj);
-                        if(prop['_guid']) MetaRegistry.createSetObject(prop, column); 
-                        // column = new Column(key, _this, obj);
-
-                        if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
-                        _this.columns.add(column);
-                    }
-                }
+                // 2. 무작위로 컬럼명 추출
+                } else for (var key in columns) addColumn(key, columns);
             }
 
             // opt
@@ -400,22 +363,34 @@
                     }
                 }
             }
+
+            // innner function
+            function addColumn(key, columns) {
+                var column;
+                if (_isObject(columns[key])) {
+                    if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
+                    var prop = columns[key];
+                    var obj = {};
+                    if (_isObject(prop) && prop['$ref']) {
+                        column = MetaRegistry.findSetObject(prop['$ref'], origin);
+                        if (!column) Message.error('ES015', [key, 'column']);
+                    } else {
+                        if (_isObject(prop['_entity']) && prop['_entity']['$ref']) {
+                            prop['_entity'] = MetaRegistry.findSetObject(prop['_entity']['$ref'], origin);
+                            if (!prop['_entity']) Message.error('ES015', [key, '_entity']);
+                        }
+                        for (var p in prop) obj[p] = prop[p];
+
+                        column = new Column(key, null, obj);
+                    }
+                    if(prop['_guid']) MetaRegistry.createSetObject(prop, column); 
+                    if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
+                    _this.columns.add(column);
+                }
+            }
         
         };
         
-        // BaseEntity.prototype.getObject = function(p_vOpt, p_origin) {
-        //     var obj = _super.prototype.getObject.call(this, p_vOpt, p_origin);
-        //     var vOpt = p_vOpt || 0;
-        //     var origin = p_origin ? p_origin : obj;
-        //     var _metaSet;
-
-        //     if (vOpt < 2 && vOpt > -1 && this._metaSet) obj._metaSet = MetaRegistry.createReferObject(this._metaSet);
-        //     obj.columns = this.columns.getObject(vOpt, origin);
-        //     obj.rows = this.rows.getObject(vOpt, origin);
-        //     return obj;                        
-        // };
-        // POINT: 2
-
         /**
          * guid 객체 얻기
          * @override
@@ -427,31 +402,28 @@
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
-            // var _metaSet;
 
-            // if (Array.isArray(p_owned)) owned = p_owned;
-            // else if (p_owned) owned.push(p_owned);
-            // owned.push(obj);
-
-            if (vOpt < 2 && vOpt > -1 && this._metaSet) obj['_metaSet'] = MetaRegistry.createReferObject(this._metaSet);
+            if (vOpt < 2 && vOpt > -1 && this._metaSet) {
+                obj['_metaSet'] = MetaRegistry.createReferObject(this._metaSet);
+            }
             obj['columns'] = this.columns.getObject(vOpt, owned);
             obj['rows'] = this.rows.getObject(vOpt, owned);
             return obj;                        
         };
 
         /** 
-         * 아이템과 로우를 초기화 한다.
+         * rows(데이터) 초기화 한다
          */
         BaseEntity.prototype.clear = function() {
-            // this.columns.clear();
             this.rows.clear();
         };
 
+        /** 
+         * columns, rows(데이터)를 초기화 한다
+         */
         BaseEntity.prototype.reset = function() {
             this.rows.clear();
             this.columns.clear();
-
-            // MetaView                    = require('./meta-view').MetaView;
         };
 
         /**
@@ -462,7 +434,7 @@
         };
 
         /**
-         * 아아템의 value을 MetaRow 형식으로 얻는다.
+         * 컬럼의 value 값을 MetaRow 타입 객체로 얻기
          * @returns {MetaRow}
          */
         BaseEntity.prototype.getValue  = function() {
@@ -475,22 +447,21 @@
         };
 
         /**
-         * MetaRow 의 값을 아이템의 value에 설정한다.
-         * @param {*} p_row 
+         * MetaRow 의 값을 컬럼의 value에 설정한다.
+         * @param {MetaRow} p_row 
          */
         BaseEntity.prototype.setValue  = function(p_row) {
             var alias = '';
 
             if (!(p_row instanceof MetaRow)) Message.error('ES032', ['row', 'MetaRow']);
             for(var i = 0; this.columns.count > i; i++) {
-                // this.columns[i].value = p_row[i];
                 alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
                 this.columns[i].value = p_row[alias];
             }
         };
 
         /**
-         * 병합
+         * 엔티티(테이블/뷰)와 병합
          * @param {BaseEntity} p_target 
          * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨 <**>
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨
@@ -504,32 +475,30 @@
             var tempRows = [], clone;
             var target;
 
-            // 1.유효성 검사
+            // 1. 유효성 검사
             if (!(p_target instanceof BaseEntity)) Message.error('ES032', ['target', 'BaseEntity']);
             if (typeof p_option !== 'number') Message.error('ES021', ['option', 'number']);
 
-            // 타겟 복제본 만들기
+            // 2. 타겟 복제본 만들기
             target = p_target.clone();
 
             // opt = 0
             if (opt === 0) {
-                // 로우 임시 저장 및 초기화 
+                // 3-1. 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
                     tempRows.push(this.rows[i].clone());
                 }
                 this.rows.clear();
-
-                // 원본 row 추가
+                // 3-2. 원본 row 추가
                 for (var i = 0; i < tempRows.length; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
                         alias = this.columns[ii].alias;
-                        // key = this.columns.keyOf(ii);
                         if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
                     }
                     this.rows.add(newRow, p_checkValid);
                 }
-                // 타겟 row 추가
+                // 3-3. 타겟 row 추가
                 tarRows = target.rows;
                 for (var i = 0; i < tarRows.count; i++) {
                     newRow = this.newRow();
@@ -545,22 +514,18 @@
             if (opt === 1) {
                 tarColumns = target.columns;
                 tarRows = target.rows;
-                // 컬럼 중복 검사
+                // 3-1. 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
                     alias = tarColumns[i].alias;
                     if (this.columns.exist(alias)) Message.error('ES042', ['column.name', alias]);
                     if (this.columns.existAlias(alias)) Message.error('ES042', ['column.alias', alias]);
                 }
-                // 로우 임시 저장 및 초기화 
+                // 3-2. 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
                     tempRows.push(this.rows[i].clone());
                 }
-                // for (var i = 0; i < this.rows.count; i++) {
-                //     tempRows.push(this.rows[i]);
-                // }
-
                 this.rows.clear();
-                // 컬럼 추가
+                // 3-3. 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
                     clone = tarColumns[i].clone(this);
                     var key = tarColumns[i].alias;
@@ -568,7 +533,7 @@
                     clone.__SET$__key(key, clone);
                     this.columns.add(clone);
                 }
-                // 로우 추가 (기준:idx)
+                // 3-4. 로우 추가 (기준:idx)
                 for (var i = 0; i < tempRows.length; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
@@ -585,17 +550,13 @@
             if (opt === 2) {
                 tarColumns = target.columns;
                 tarRows = target.rows;
-                // 로우 임시 저장 및 초기화 
+                // 3-1. 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
                     tempRows.push(this.rows[i].clone());
                 }
-                // for (var i = 0; i < this.rows.count; i++) {
-                //     tempRows.push(this.rows[i])
-                // }
                 this.rows.clear();
-                // 컬럼 추가
+                // 3-2. 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
-                    // key = tarColumns.keyOf(i);
                     alias = tarColumns[i].alias;
                     if (!this.columns.exist(alias)) {
                         clone = tarColumns[i].clone(this);
@@ -603,28 +564,20 @@
                         this.columns.add(clone);
                     }
                 }
-                // for (var i = 0; i < tarColumns.count; i++) {
-                //     clone = tarColumns[i].clone(this);
-                //     clone.name = tarColumns[i].alias;
-                //     this.columns.add(clone);
-                // }
-                
-                // 로우 추가 : 원본
+                // 3-3. 로우 추가 : 원본
                 for (var i = 0; i < tempRows.length; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
                         alias = this.columns[ii].alias;
-                        // key = this.columns.keyOf(ii);
                         if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
                     }
                     this.rows.add(newRow, p_checkValid);
                 }
-                // 로우 추가 : 타겟
+                // 3-4. 로우 추가 : 타겟
                 for (var i = 0; i < tarRows.count; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
                         alias = this.columns[ii].alias;
-                        // key = this.columns.keyOf(ii);
                         if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
                     }
                     this.rows.add(newRow, p_checkValid);
@@ -634,36 +587,24 @@
             if (opt === 3) {
                 tarColumns = target.columns;
                 tarRows = target.rows;
-                // 컬럼 중복 검사
+                // 3-1. 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
-                    // key = tarColumns.keyOf(i);
                     alias = tarColumns[i].alias;
                     if (this.columns.exist(alias)) Message.error('ES042', ['columnName', alias]);
                     if (this.columns.existAlias(alias)) Message.error('ES042', ['alais', alias]);
-                    // key = tarColumns[i].alias;
-                    // if (this.columns.exist(key)) throw new Error('컬럼 중복 발생 '+ key);
                 }
-                // 로우 임시 저장 및 초기화 
+                // 3-2. 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
                     tempRows.push(this.rows[i].clone());
                 }
-                // for (var i = 0; i < this.rows.count; i++) {
-                //     tempRows.push(this.rows[i])
-                // }
                 this.rows.clear();
-                // 컬럼 추가
+                // 3-3. 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
                     clone = tarColumns[i].clone(this);
                     clone.name = tarColumns[i].alias;
                     this.columns.add(clone);
                 }
-                // for (var i = 0; i < tarColumns.count; i++) {
-                //     // this.columns.add(tarColumns[i].clone());
-                //     clone = tarColumns[i].clone();
-                //     clone.name = tarColumns[i].alias;
-                //     this.columns.add(clone);
-                // }
-                // 로우 추가 (idx)
+                // 3-4. 로우 추가 (idx)
                 for (var i = 0; i < tempRows.length; i++) {
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
@@ -672,26 +613,16 @@
                             newRow[alias] = tempRows[i][alias];
                             continue;
                         }else newRow[alias] = tarRows[i][alias]; // 타겟 로우
-                        // }else if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
-
-                        // key = this.columns.keyOf(ii);
-                        // if (tempRows[i][key]) {                         // 원본 로우
-                        //     newRow[key] = tempRows[i][key];
-                        //     continue;
-                        // }
-                        // if (tarRows[i][key]) newRow[key] = tarRows[i][key]; // 타겟 로우
                     }
                     this.rows.add(newRow, p_checkValid);
                 }     
-                // 타겟 로우가 클 경우 로우 추가
+                // 3-5. 타겟 로우가 클 경우 로우 추가
                 if (tempRows.length < tarRows.count) {
                     for (var i = tempRows.length; i < tarRows.count; i++) {
                         newRow = this.newRow();
                         for (var ii = 0; ii < this.columns.count; ii++) {
                             alias = this.columns[ii].alias;
                             if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
-                            // key = this.columns.keyOf(ii);
-                            // if (tarRows[i][key]) newRow[key] = tarRows[i][key];
                         }
                         this.rows.add(newRow, p_checkValid);
                     }
@@ -699,52 +630,10 @@
             }
         };
 
-        /** 
-         * 엔티티를 조회(검색) 한다.
-         * @param {Object} p_filter 필터객체
-         * @param {(Number | Array<Number>)?} p_index 인덱스 시작번호 또는 목록
-         * @param {Number?} p_end 인덱스 종료번호
-         * @return {BaseEntity}
-         * @example
-         * // 상속기법을 이용함
-         * filter = {
-         *  __except : ['name'...],        // 제외 아이템 (1방법)
-         *  아이템명: { __except: true }    // 아이템 제외 (2방법)
-         *  아이템명: { order: 100 }        // 속성 오버라이딩
-         * }
-         */
-        // BaseEntity.prototype.select  = function(p_filter, p_args) {
-        //     var args = Array.prototype.slice.call(arguments);
-        //     var _this = this;
-        //     var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
-            
-        //     // var MetaView = require('./meta-view').MetaView;
-        //     if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
-
-        //     var view = new MetaView('select', this);
-        //     var items = [];
-        //     var callback = null;
-        //     var columnName;
-        //     var orignal = this.clone();
-
-        //     // 매개변수 구성
-        //     if (typeof p_filter === 'function') {
-        //         callback = p_filter;
-        //         if (Array.isArray(p_args)) items = p_args;
-        //         else if (args.length > 1) items = args.splice(1);
-        //     } else if (typeof p_filter === 'string') {
-        //         items = args;
-        //     } else if (Array.isArray(p_filter)) {
-        //         items = p_filter;
-        //     }
-
-        //     return this._buildEntity(view, callback, items);
-        // };
-        
         /**
          * 엔티티의 지정한 컬럼과 조건의 row 를 조회
-         * @param {array<string>?} p_names 
          * @param {function | string | array} p_filter 
+         * @param {array<string>?} p_args 
          * @returns {MetaView}
          */
         BaseEntity.prototype.select  = function(p_filter, p_args) {
@@ -769,65 +658,36 @@
             } else {
                 columnNames = args.splice(0);
             }
-            
-            // if (p_filter && typeof p_filter !== 'function') Message.error('ES021', ['filter', 'function']);
-            // // if (!Array.isArray(columnNames)) Message.error('ES021', ['names', 'array']);
-            // callback = p_filter;
-            // view = new MetaView('select', this);
-            
-            // if (Array.isArray(p_names)) columnNames = p_names;
-            // else if (typeof p_names === 'string') columnNames.push(p_names);
-            // else if (typeof p_names !== 'undefined') Message.error('ES021', ['p_names', 'array<string> | string']);
-
+            // 엔티티 빌드
             return this._buildEntity(view, callback, columnNames);
         };
         
         /**
          * 불러오기/가져오기 (!! 병합용도가 아님)
          * 기존을 초기화 하고 불러오는 역활
-         * @param {string} p_target 로드 대상
+         * @param {object} p_obj 불러오기 대상
          * @param {function?} p_parse 파서
          */
         BaseEntity.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
-            var mObj;
             
-            // if (p_obj instanceof BaseEntity) {
-            //     this._readEntity(p_obj, 3);
-            // } else if (typeof p_obj === 'object') {
-            //     mObj = MetaRegistry.hasRefer(p_obj) ? MetaRegistry.transformRefer(p_obj) : p_obj;
-            //     this.setObject(mObj);
-            // } else {
-            //     throw new Error('[p_obj] 처리할 수 없는 타입입니다. ');
-            // }
             if (p_obj instanceof BaseEntity) Message.error('ES022', ['BaseEntity']);
 
-            // if (typeof obj === 'string') obj = JSON.parse(obj, p_reviver()); 
             if (typeof obj === 'string') {
                 if (typeof p_parse === 'function') obj = p_parse(obj);
                 else obj = JSON.parse(obj, null);
             }
-
-            // 기존에 존재하면 기존 객체 리턴
-            // if (MetaRegistry.has(obj)) return MetaRegistry.findSetObject(obj);
-            
-            // REVIEW: 필요한지 검토
-            // if(!MetaRegistry.isGuidObject(obj)) Message.error('ES022', ['p_obj']);
-            
             this.setObject(obj);
-            // if (MetaRegistry.isGuidObject(obj)) {
-            //     mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
-            //     this.setObject(mObj);
-            // } else Message.error('ES022', ['obj']);
         };
 
-        
-        // BaseEntity.prototype.output = function(p_vOpt, p_replacer) {
-        //     var rObj = this.getObject(p_vOpt);
-        //     var str = JSON.stringify(rObj, p_replacer(), 2);
-        //     return str;
-        // };
-        BaseEntity.prototype.output = function(p_stringify, p_space, p_vOpt) {
+        /**
+         * 객체 출력(직렬화)
+         * @param {number} p_vOpt
+         * @param {function?} p_stringify 
+         * @param {string?} p_space 
+         * @returns {string}
+         */
+        BaseEntity.prototype.output = function(p_vOpt, p_stringify, p_space) {
             var rObj = this.getObject(p_vOpt);
             var str;
             
@@ -851,20 +711,16 @@
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
-            if (typeof p_obj !== 'object' || p_obj === null) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
             if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
             if (opt <= 0 || opt > 3) Message.error('ES067', ['option', '1', '3']);
-
-            // if (p_obj instanceof MetaObject) throw new Error('[p_obj] MetaObject 인스턴스는 읽을 수 없습니다.');
-            // if (MetaRegistry.hasRefer(p_obj)) mObj = MetaRegistry.transformRefer(obj);;
-
 
             if (p_obj instanceof BaseEntity) {
                 this._readEntity(p_obj, p_option);
             } else{
                 if (p_obj.viewName) this.viewName = p_obj.viewName;
                 if (p_obj.tableName) this.tableName = p_obj.tableName;
-    
+                // 스키마 및 데이터 읽기
                 if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
                 if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
             }
@@ -874,75 +730,55 @@
          * 없으면 빈 컬럼을 생성해야 하는지?
          * 이경우에 대해서 명료하게 처리햐야함 !!
          * @param {object} p_obj object<Schema> | object<Guid>
-         * @param {*} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
+         * @param {boolean} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
         BaseEntity.prototype.readSchema  = function(p_obj, p_createRow) {
             var obj = p_obj;
             
-            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
-                // obj = MetaRegistry.transformRefer(p_obj);
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                // else obj = p_obj;
                 obj = BaseEntity._transformSchema(obj); // gObj >> sObj<요약>
             }
-            if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
-            // obj = BaseEntity._transformSchema(p_obj); // gObj >> sObj<요약>
-
-            // table <-> view 서로 호환됨
-            // if (this.instanceOf('MetaView') && entity['viewName']) this['viewName'] = entity['viewName'];
-            // if (this.instanceOf('MetaTable') && entity['tableName']) this['tableName'] = entity['tableName'];
-            
             this._readSchema(obj, p_createRow);
-        };
-
-        
+        };        
 
         /**
-         * 존재하는 로우만 가져온다.
-         * @param {*} p_obj 
+         * 존재하는 로우만 읽기
+         * @param {object} p_obj 
          */
         BaseEntity.prototype.readData  = function(p_obj) {
             var obj = p_obj;
             var rows;
 
-            if (typeof p_obj !== 'object') Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 obj = BaseEntity._transformSchema(p_obj);
             }
-            if (!BaseEntity._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
-            // obj = BaseEntity._transformSchema(p_obj);
-
-            // if (MetaRegistry.isGuidObject(p_obj) && MetaRegistry.hasRefer(p_obj)) {
-            //     p_obj = MetaRegistry.transformRefer(p_obj);
-            // }
-
-            // rows = obj['rows'] || obj;
+            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            
             rows = obj['rows'];
             if (Array.isArray(rows) && this.columns.count > 0) {
                 for (var i = 0; i < rows.length; i++) {
                     var row = this.newRow(this);
                     for (var key in rows[i]) {
-                        if (Object.hasOwnProperty.call(row, key)) {
-                            row[key] = rows[i][key];
-                        }
+                        if (Object.hasOwnProperty.call(row, key)) row[key] = rows[i][key];
                     }
                     this.rows.add(row);
                 }
             }
         };
 
-        // BaseEntity.prototype.write  = function(p_vOpt) {
-        //     var vOpt = p_vOpt || 0;
-        //     var obj = this.writeSchema(vOpt);
-            
-        //     obj.rows = this.writeData(vOpt).rows;
-        //     return obj;
-        // };
+        /**
+         * 엔티티를 컬럼과 로우를 스키마 타입의 객체로 쓰기(내보내기)
+         * @param {number} p_vOpt 
+         * @returns {object} 스키마 타입
+         */
         BaseEntity.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var oSch;
@@ -951,43 +787,11 @@
             return BaseEntity._transformSchema(oGuid);
         };
 
-        // BaseEntity.prototype.writeSchema  = function(p_vOpt) {
-        //     var vOpt = p_vOpt || 0;
-        //     var obj = { columns: {}, rows: [] };
-
-        //     obj._guid = this._guid;
-        //     if(this._baseEntity) obj._baseEntity = MetaRegistry.createReferObject(this._baseEntity); 
-
-        //     // if (this.instanceOf('MetaView')) obj.viewName = this.viewName;
-        //     // if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
-
-        //     for(var i = 0; i < this.columns.count; i++) {
-        //         var column = this.columns[i];
-        //         var key = this.columns.keyOf(i);
-        //         var cObj = {};
-        //         var rObj = column.getObject(p_vOpt);
-
-        //         cObj._guid = column._guid;
-        //         if (rObj.cloumnName) cObj.cloumnName = column.columnName;
-        //         if (rObj.default) cObj.default = rObj.default;
-        //         if (rObj.caption) cObj.caption = rObj.caption;
-        //         if (rObj.isNotNull) cObj.isNotNull = rObj.isNotNull;
-        //         if (rObj.constraints) cObj.constraints = rObj.constraints;
-        //         if (rObj.getter) cObj.getter = rObj.getter;
-        //         if (rObj.setter) cObj.setter = rObj.setter;
-        //         if (rObj.alias) cObj.alias = rObj.alias;
-        //         if (rObj.value) cObj.alias = rObj.value;
-                
-        //         obj.columns[key] = cObj;
-        //     }
-
-        //     obj.columns['$key'] = [];
-        //     for (var i = 0; i < this.columns['_keys'].length; i++) {
-        //         var key = this.columns['_keys'][i];
-        //         obj.columns['$key'].push(key);
-        //     }
-        //     return obj;
-        // };
+        /**
+         * 엔티티 스키마(컬럼)을 스키마 타입의 객체로 쓰기
+         * @param {number} p_vOpt 
+         * @returns {object} 스키마 타입
+         */
         BaseEntity.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             
@@ -997,22 +801,11 @@
             
         };
 
-        // BaseEntity.prototype.writeData  = function(p_vOpt) {
-        //     var vOpt = p_vOpt || 0;
-        //     var obj = { rows: [] };
-            
-        //     for(var i = 0; i < this.rows.count; i++) {
-        //         var row = this.rows[i];
-        //         var rObj = {};
-        //         for(var ii = 0; ii < row.list.length; ii++) {
-        //             var rValue = row.list[ii];
-        //             var rKey = row['_keys'][ii];
-        //             rObj[rKey] = rValue;
-        //         }
-        //         obj.rows.push(rObj);
-        //     }
-        //     return obj;
-        // };
+        /**
+         * 엔티티 데이터(로우)를 스키마 타입의 객체로 쓰기
+         * @param {number} p_vOpt 
+         * @returns {object} 스키마 타입
+         */
         BaseEntity.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var schema = this.write(vOpt);
@@ -1021,12 +814,18 @@
             return schema;
         };
 
-        /** @abstract */
+        /** 
+         * 엔티티 복제
+         * @abstract 
+         * */
         BaseEntity.prototype.clone = function() {
             Message.error('ES013', ['clone()']);
         };
 
-        /** @abstract */
+        /** 
+         * 엔티티 복사
+         * @abstract 
+         * */
         BaseEntity.prototype.copy = function() {
             Message.error('ES013', ['copy()']);
         };
@@ -1034,7 +833,6 @@
         return BaseEntity;
     
     }(MetaElement));
-
 
     //==============================================================
     // 5. module export

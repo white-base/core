@@ -997,7 +997,7 @@ describe("[target: meta-table.js]", () => {
                 // table1.rows._elemTypes.push(String);                
                 // MetaRegistry.registerClass('', 'String', String);
                 
-                var str = table1.output(stringify, '\t');
+                var str = table1.output(0, stringify, '\t');
 
                 // 강제로 초기화 후, ns에 대상 등록 후 생성
                 MetaRegistry.init();
@@ -2041,7 +2041,7 @@ describe("[target: meta-table.js]", () => {
                 const v1 = set1.views['V1'];
                 const v2 = set1.views['V2'];
                 const v3 = set1.views['V3'];
-                const str = set1.output(stringify, '\t');
+                const str = set1.output(0,stringify, '\t');
                 const set2 = new MetaSet('S2');
                 const view = new MetaView('V');
                 set2.load(str, parse);
@@ -2049,9 +2049,9 @@ describe("[target: meta-table.js]", () => {
                 const vv2 = set1.views['V2'];
                 const vv3 = set1.views['V3'];              
 
-                expect(()=> view.load(v1.output(stringify, '\t'))).toThrow('ES015')
-                expect(()=> view.load(v2.output(stringify, '\t'))).toThrow('ES015')
-                expect(()=> view.load(v3.output(stringify, '\t'))).toThrow('ES015')
+                expect(()=> view.load(v1.output(0, stringify, '\t'))).toThrow('ES015')
+                expect(()=> view.load(v2.output(0, stringify, '\t'))).toThrow('ES015')
+                expect(()=> view.load(v3.output(0, stringify, '\t'))).toThrow('ES015')
                 expect(v1.columns.count).toBe(3)
                 expect(v2.columns.count).toBe(2)
                 expect(v3.columns.count).toBe(1)

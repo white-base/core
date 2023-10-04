@@ -327,7 +327,7 @@
             // } else Message.error('ES022', ['obj']);
         };
 
-        MetaSet.prototype.output = function(p_stringify, p_space, p_vOpt) {
+        MetaSet.prototype.output = function(p_vOpt, p_stringify, p_space) {
             var rObj = this.getObject(p_vOpt);
             var str;
             

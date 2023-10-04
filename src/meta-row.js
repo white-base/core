@@ -563,4 +563,3 @@
     }
 
 }(typeof window !== 'undefined' ? window : global));
-// TODO: 모든 입력에 대한 제한 검토

@@ -668,9 +668,9 @@ describe("[target: meta-view.js]", () => {
                 view2.columns.add('c2');
                 const view3 = new MetaView('V3');
                 view3.columns.add('c3', view2.columns); // 일부 참조
-                const str1 = view1.output(stringify, '\t');
-                const str2 = view2.output(stringify, '\t');
-                const str3 = view3.output(stringify, '\t');
+                const str1 = view1.output(0, stringify, '\t');
+                const str2 = view2.output(0, stringify, '\t');
+                const str3 = view3.output(0, stringify, '\t');
                 const v1 = new MetaView('VV1');
                 const v2 = new MetaView('VV2');
                 const v3 = new MetaView('VV3');

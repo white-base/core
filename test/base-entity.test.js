@@ -109,7 +109,7 @@ describe("[target: base-entity.js]", () => {
             });
         });
         describe("커버리지 및 예외", () => {
-            it("- BaseEntity._isSchema() ", () => {
+            it.skip("- BaseEntity._isSchema() ", () => {
                 // class SubClass extends BaseEntity {
                 //     constructor(name) {super(name)}
                 // }

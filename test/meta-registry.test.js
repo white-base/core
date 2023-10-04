@@ -792,7 +792,7 @@ describe("[target: meta-registry.js]", () => {
                 const t1 = new MetaTable('T1');
                 t1.columns.add('i1');
                 t1.columns.add('i2');
-                const str = t1.output(null, '\t');
+                const str = t1.output(0,null, '\t');
                 const t2 = MetaRegistry.loadMetaObject(str);
 
                 expect(t2.tableName).toBe('T1');
@@ -805,7 +805,7 @@ describe("[target: meta-registry.js]", () => {
                 const t1 = new MetaTable('T1');
                 t1.columns.add('i1');
                 t1.columns.add('i2');
-                const str = t1.output(null, '\t');
+                const str = t1.output(0, null, '\t');
                 MetaRegistry.init()
                 loadNamespace();
                 const t2 = MetaRegistry.loadMetaObject(str);
@@ -820,7 +820,7 @@ describe("[target: meta-registry.js]", () => {
                 const t1 = new MetaTable('T1');
                 t1.columns.add('i1');
                 t1.columns.add('i2');
-                const str = t1.output(stringify, '\t');
+                const str = t1.output(0, stringify, '\t');
                 const t2 = MetaRegistry.loadMetaObject(str, parse);
 
                 expect(t2.tableName).toBe('T1');

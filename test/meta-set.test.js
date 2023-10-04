@@ -372,7 +372,7 @@ describe("[target: meta-set.js]", () => {
                     },
                 };
                 set1.read(json1);
-                const str = set1.output(stringify, '\t');
+                const str = set1.output(0, stringify, '\t');
                 // MetaRegistry.init();
                 // loadNamespace();
                 var set2 = new MetaSet('S2');
@@ -444,7 +444,7 @@ describe("[target: meta-set.js]", () => {
                 };
                 set1.read(json1);
                 const beginCnt = MetaRegistry.count;
-                const str = set1.output(stringify, '\t');
+                const str = set1.output(0, stringify, '\t');
                 // MetaRegistry.init();
                 // const initCnt = MetaRegistry.count;
                 // loadNamespace();    // init() 초기화하여 불러와야함
@@ -498,7 +498,7 @@ describe("[target: meta-set.js]", () => {
                 };
                 set1.read(json1);
                 // const beginCnt = MetaRegistry.count;
-                const str = set1.output(stringify, '\t');
+                const str = set1.output(0,stringify, '\t');
                 // MetaRegistry.init();
                 // const initCnt = MetaRegistry.count;
                 // loadNamespace();    // init() 초기화하여 불러와야함
@@ -551,7 +551,7 @@ describe("[target: meta-set.js]", () => {
                     },
                 };
                 set1.read(json1);
-                const str = set1.output(stringify, '\t');
+                const str = set1.output(0, stringify, '\t');
                 // MetaRegistry.init()
                 const set2 = MetaRegistry.loadMetaObject(str, parse);
                 
@@ -599,7 +599,7 @@ describe("[target: meta-set.js]", () => {
                 
                 set1.read(json1);
                 // const beginCnt = MetaRegistry.count;
-                const str = set1.output(stringify, '\t');
+                const str = set1.output(0, stringify, '\t');
                 // MetaRegistry.init();
                 // const initCnt = MetaRegistry.count;
                 // loadNamespace();

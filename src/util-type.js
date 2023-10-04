@@ -240,6 +240,8 @@
 
     /**
      * 타입을 검사하여 메세지를 리턴
+     * TODO: 배열제네릭 검토, => [[MetaObjec]]
+     * TODO: null 입력에 대한 검토, 기본 null any 표현 대체 검토, NaN 같은 고유 상수 찾기
      * @param {any} type 검사할 타입
      * @param {any} target 검사대상
      * @param {string} parentName '' 공백시 성공
