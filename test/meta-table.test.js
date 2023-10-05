@@ -1976,7 +1976,7 @@ describe("[target: meta-table.js]", () => {
         describe("예외 및 커버리지", () => {
             it("- BaseEntity._metaSet : 예외 ", () => {
                 var table1 = new MetaTable('T1');
-
+                table1.columns = new MetaTableColumnCollection(table1)
             });
 
         });
