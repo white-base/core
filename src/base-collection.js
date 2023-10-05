@@ -185,8 +185,11 @@
             });
 
             /** 
-             * 변경(등록/삭제) 후 이벤트  
-             * @event _L.Collection.BaseCollection#onAdd 
+             * 등록 전 이벤트  
+             * @event _L.Collection.BaseCollection#onAdd
+             * @param {number} p_idx 삭제하는 index
+             * @param {anyd} p_value 삭제하는 value
+             * @param {anyd} p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onAdd', 
             {
@@ -196,7 +199,21 @@
             });
 
             /** 
-             * 제거 이벤트
+             * 등록 후 이벤트  
+             * @event _L.Collection.BaseCollection#onAdded
+             * @param {number} p_idx 삭제하는 index
+             * @param {anyd} p_value 삭제하는 value
+             * @param {anyd} p_this 현재 컬렉션
+             */
+            Object.defineProperty(this, 'onAdded', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'added'); },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /** 
+             * 삭제 전 이벤트
              * @event _L.Collection.BaseCollection#onRemove
              * @param {number} p_idx 삭제하는 index
              * @param {anyd} p_value 삭제하는 value
@@ -210,7 +227,21 @@
             });
 
             /** 
-             * 전체 제거 이벤트
+             * 삭제 후 이벤트
+             * @event _L.Collection.BaseCollection#onRemoved
+             * @param {number} p_idx 삭제하는 index
+             * @param {anyd} p_value 삭제하는 value
+             * @param {anyd} p_this 현재 컬렉션
+             */
+            Object.defineProperty(this, 'onRemoved', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'removed'); },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /** 
+             * 전체 제거 전 이벤트
              * @event _L.Collection.BaseCollection#onClear
              */
             Object.defineProperty(this, 'onClear', 
@@ -221,7 +252,18 @@
             });
 
             /** 
-             * 변경(등록/삭제) 전 이벤트  
+             * 전체 제거 후 이벤트
+             * @event _L.Collection.BaseCollection#onCleared
+             */
+            Object.defineProperty(this, 'onCleared', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'cleared'); },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /** 
+             * 변경 전 이벤트  
              * @event _L.Collection.BaseCollection#onChanging 
              */
             Object.defineProperty(this, 'onChanging', 
@@ -232,7 +274,7 @@
             });
 
             /** 
-             * 변경(등록/삭제) 후 이벤트  
+             * 변경 후 이벤트  
              * @event _L.Collection.BaseCollection#onChanged 
              */
             Object.defineProperty(this, 'onChanged', 
@@ -272,28 +314,53 @@
         BaseCollection._ABSCRACT = true;
         
         /**
-         * 추가 이벤트 수신자
-         * @listens _L.Collection.BaseCollection#onClear
+         * 추가 전 이벤트 수신자
+         * @listens _L.Collection.BaseCollection#_onAdd
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
             this.__event.publish('add', p_idx, p_value, this); 
         };
 
         /**
-         * 삭제 이벤트 수신자
+         * 추가 후 이벤트 수신자
+         * @listens _L.Collection.BaseCollection#_onAdded
+         */
+        BaseCollection.prototype._onAdded = function(p_idx, p_value) {
+            this.__event.publish('added', p_idx, p_value, this); 
+        };
+
+        /**
+         * 삭제 전 이벤트 수신자
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_value) {
             this.__event.publish('remove', p_idx, p_value, this);
         };
 
+        /**
+         * 삭제 후 이벤트 수신자
+         * @listens _L.Collection.BaseCollection#onRemoved
+         */
+        BaseCollection.prototype._onRemoved = function(p_idx, p_value) {
+            this.__event.publish('removed', p_idx, p_value, this);
+        };
+
         /** 
-         *  전체삭제 수신자 이벤트
+         *  초기화 전 수신자 이벤트
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
             this.__event.publish('clear', this); 
         };
+
+        /** 
+         *  초기화 후 수신자 이벤트
+         * @listens _L.Collection.BaseCollection#onCleared
+         */
+        BaseCollection.prototype._onCleared = function() {
+            this.__event.publish('cleared', this); 
+        };
+
 
         /** 
          *  변경(등록/삭제) 전 수신자 이벤트
@@ -417,6 +484,7 @@
             if (elem) {
                 this._onRemove(p_idx, elem);
                 if (!this._remove(p_idx)) return false;
+                this._onRemoved(p_idx, elem);
                 return true;
             }
             return false;

@@ -266,6 +266,8 @@
                     Object.defineProperty(this, [index], this._getPropDescriptor(index));
                     Object.defineProperty(this, p_name, this._getPropDescriptor(index));
                 }
+                this._onAdded(index, p_value);
+
                 return index;
 
             } catch (error) {
@@ -287,6 +289,8 @@
             this.__SET$_elements([], this);
             this.__SET$_descriptors([], this);
             this.__SET$_keys([], this);
+            
+            this._onCleared();
         };
     
         /**

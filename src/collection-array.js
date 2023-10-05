@@ -175,10 +175,11 @@
          * 배열속성 컬렉션을 초기화 [구현]
          */
         ArrayCollection.prototype.clear = function() {
+            this._onClear();    // event
             for (var i = 0; i < this.count; i++) delete this[i];
             this.__SET$_elements([], this);
             this.__SET$_descriptors([], this);
-            this._onClear();    // event
+            this._onCleared();    // event
         };
 
         /**
@@ -218,6 +219,8 @@
                     var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }
+                this._onAdded(p_pos, p_value);
+                
                 return true;
 
             } catch (error) {

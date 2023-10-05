@@ -109,16 +109,14 @@ describe("[target: base-entity.js]", () => {
             });
         });
         describe("커버리지 및 예외", () => {
-            it.skip("- BaseEntity._isSchema() ", () => {
+            it("- 커버리지 : _isSchema() ", () => {
                 // class SubClass extends BaseEntity {
                 //     constructor(name) {super(name)}
                 // }
                 // const s1 = new SubClass('S1');
 
-                expect(BaseEntity._isSchema('ERR')).toBe(false);
-                expect(BaseEntity._isSchema(null)).toBe(false);
-                expect(BaseEntity._isSchema({columns: {}})).toBe(true);
-                expect(BaseEntity._isSchema({rows: {}})).toBe(true);
+                expect(()=> BaseEntity._transformSchema('ERR')).toThrow(/ES021/)
+                expect(()=> BaseEntity._transformSchema(null)).toThrow(/ES021/)
             });
         });
     });
