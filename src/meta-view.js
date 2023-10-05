@@ -53,28 +53,19 @@
     // 4. module implementation   
     var MetaView  = (function (_super) {
         /**
-         * 뷰 엔티티
+         * 메타 뷰
          * @constructs _L.Meta.Entity.MetaView
          * @extends _L.Meta.Entity.BaseEntity
-         * @param {*} p_name 
-         * @param {*} p_baseEntity 
+         * @param {string} p_name 
+         * @param {BaseEntity?} p_baseEntity 기본 엔티티, 컬럼 추가시 기본엔티티에 추가 된다.
          */
         function MetaView(p_name, p_baseEntity) {
             _super.call(this, p_name);
 
             var _baseEntity;
-            // var _baseEntity = p_baseEntity;
-            // var _refEntities = [];
-            // var viewName;
-            var columns;
-            // var _baseEntity;
-
-            // if (p_baseEntity && p_baseEntity instanceof MetaObject && p_baseEntity.instanceOf('BaseEntity')) {
-            //     baseCollection = p_baseEntity.columns;
-            // }
-
+            var columns = new MetaViewColumnCollection(this);
             /**
-             * 테이블 이름
+             * 메타 뷰 이름
              * @member {string} _L.Meta.Entity.MetaView#viewName
              */
             Object.defineProperty(this, 'viewName', 
@@ -83,8 +74,6 @@
                 set: function(nVal) { 
                     if (nVal === this.viewName) return;
                     if (typeof nVal !== 'string') Message.error('ES021', ['viewName', 'string']);
-                    // if (this._metaSet && this._metaSet.views.existViewName(nVal)) Message.error('ES041', [nVal]);
-                    // viewName = nVal;
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -92,7 +81,7 @@
             });
 
             /**
-             * 엔티티의 아이템(속성) 컬렉션
+             * 뷰의 컬럼 컬렉션
              * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#columns
              */
             Object.defineProperty(this, 'columns', 
@@ -107,6 +96,10 @@
                 enumerable: true
             });
            
+            /**
+             * 기본 엔티티
+             * @member {MetaViewColumnCollection} _L.Meta.Entity.MetaView#_baseEntity
+             */
             Object.defineProperty(this, '_baseEntity', 
             {
                 get: function() { return _baseEntity; },
@@ -118,12 +111,10 @@
                 enumerable: true
             });
 
-            // this.viewName      = p_name || '';
-            // this.viewName = p_name || '';
             if (p_baseEntity) this._baseEntity = p_baseEntity;
             
-            // this._refEntities   = [];
-            this.columns = new MetaViewColumnCollection(this);
+
+            // this.columns 
 
             // inner variable access
             // this.__SET$_baseEntity = function(val, call) {

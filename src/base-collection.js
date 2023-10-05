@@ -187,9 +187,10 @@
             /** 
              * 등록 전 이벤트  
              * @event _L.Collection.BaseCollection#onAdd
-             * @param {number} p_idx 삭제하는 index
-             * @param {anyd} p_value 삭제하는 value
-             * @param {anyd} p_this 현재 컬렉션
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx 삭제하는 index
+             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onAdd', 
             {
@@ -201,9 +202,10 @@
             /** 
              * 등록 후 이벤트  
              * @event _L.Collection.BaseCollection#onAdded
-             * @param {number} p_idx 삭제하는 index
-             * @param {anyd} p_value 삭제하는 value
-             * @param {anyd} p_this 현재 컬렉션
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx 삭제하는 index
+             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onAdded', 
             {
@@ -215,9 +217,10 @@
             /** 
              * 삭제 전 이벤트
              * @event _L.Collection.BaseCollection#onRemove
-             * @param {number} p_idx 삭제하는 index
-             * @param {anyd} p_value 삭제하는 value
-             * @param {anyd} p_this 현재 컬렉션
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx 삭제하는 index
+             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onRemove', 
             {
@@ -229,9 +232,10 @@
             /** 
              * 삭제 후 이벤트
              * @event _L.Collection.BaseCollection#onRemoved
-             * @param {number} p_idx 삭제하는 index
-             * @param {anyd} p_value 삭제하는 value
-             * @param {anyd} p_this 현재 컬렉션
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx 삭제하는 index
+             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onRemoved', 
             {
@@ -243,6 +247,8 @@
             /** 
              * 전체 제거 전 이벤트
              * @event _L.Collection.BaseCollection#onClear
+             * @param {function}    p_callback
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onClear', 
             {
@@ -254,6 +260,8 @@
             /** 
              * 전체 제거 후 이벤트
              * @event _L.Collection.BaseCollection#onCleared
+             * @param {function}    p_callback
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onCleared', 
             {
@@ -265,6 +273,10 @@
             /** 
              * 변경 전 이벤트  
              * @event _L.Collection.BaseCollection#onChanging 
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx 삭제하는 index
+             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onChanging', 
             {
@@ -276,6 +288,10 @@
             /** 
              * 변경 후 이벤트  
              * @event _L.Collection.BaseCollection#onChanged 
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx 삭제하는 index
+             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onChanged', 
             {

@@ -157,6 +157,11 @@
             /**
              * 변경전 이벤트 
              * @event _L.Meta.Entity.MetaRow#onChanged 
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx  index
+             * @param {any}         p_callback.p_nValue 신규 값
+             * @param {any}         p_callback.p_oValue 기존 값
+             * @param {this}        p_callback.p_this 로우 객체
              */
             Object.defineProperty(this, 'onChanging', 
             {
@@ -168,6 +173,11 @@
             /**
              * 변경후 이벤트 
              * @event _L.Meta.Entity.MetaRow#onChanged 
+             * @param {function}    p_callback
+             * @param {number}      p_callback.p_idx  index
+             * @param {any}         p_callback.p_nValue 신규 값
+             * @param {any}         p_callback.p_oValue 기존 값
+             * @param {this}        p_callback.p_this 로우 객체
              */
             Object.defineProperty(this, 'onChanged', {
                 set: function(fun) { this.__event.subscribe(fun, 'onChanged'); },
@@ -249,7 +259,7 @@
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
         MetaRow.prototype._onChanging = function(p_idx, p_nValue, p_oValue) {
-            this.__event.publish('onChanging', p_idx, p_nValue, p_oValue);
+            this.__event.publish('onChanging', p_idx, p_nValue, p_oValue, this);
         };
 
         /**
@@ -257,7 +267,7 @@
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
         MetaRow.prototype._onChanged = function(p_idx, p_nValue, p_oValue) {
-            this.__event.publish('onChanged', p_idx, p_nValue, p_oValue);
+            this.__event.publish('onChanged', p_idx, p_nValue, p_oValue, this);
         };
 
         /**

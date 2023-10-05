@@ -8,6 +8,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var Util;
+    var ITransaction;
     var BaseEntity;
     var PropertyCollection;
     var MetaTableColumnCollection;
@@ -24,6 +25,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         Util                        = require('./util');
+        ITransaction                = require('./i-transaction').ITransaction;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         BaseEntity                  = require('./base-entity').BaseEntity;
         MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
@@ -31,6 +33,7 @@
     } else {    
         Message                     = _global._L.Message;
         Util                        = _global._L.Util;
+        ITransaction                = _global._L.ITransaction;
         PropertyCollection          = _global._L.PropertyCollection;
         BaseEntity                  = _global._L.BaseEntity;
         MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
@@ -40,6 +43,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
     if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
@@ -54,13 +58,12 @@
          * 테이블 엔티티
          * @constructs _L.Meta.Entity.MetaTable
          * @extends _L.Meta.Entity.BaseEntity
-         * @param {*} p_name 
+         * @param {string} p_name 
          */
         function MetaTable(p_name) {
             _super.call(this, p_name);
 
-            // var tableName;
-            var columns;
+            var columns  = new MetaTableColumnCollection(this);
 
             /**
              * 테이블 이름
@@ -72,8 +75,6 @@
                 set: function(nVal) { 
                     if (nVal === this.tableName) return;
                     if (typeof nVal !== 'string') Message.error('ES021', ['tableName', 'string']);
-                    // if (this._metaSet && this._metaSet.tables.existTableName(nVal)) Message.error('ES042', ['tableName', nVal]);
-                    // tableName = nVal;
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -96,29 +97,13 @@
                 enumerable: true
             });
             
-
-            // this.tableName  = p_name || '';
-            this.columns = new MetaTableColumnCollection(this);
-
+            Util.implements(this, ITransaction);
         }
         Util.inherits(MetaTable, _super);
 
-        MetaTable._NS = 'Meta.Entity';    // namespace
-        MetaTable._PARAMS = ['name'];  // creator parameter
+        MetaTable._NS = 'Meta.Entity';      // namespace
+        MetaTable._PARAMS = ['name'];       // creator parameter
 
-        /**
-         * 객체 비교
-         * @override
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaTable.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-
-        //     if (!this._compare(this.tableName, p_target.tableName)) return false;
-        //     return true;
-        // };
-        
         /**
          * guid 객체 얻기
          * @override
@@ -130,7 +115,6 @@
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
-            // var origin = p_origin ? p_origin : obj;
 
             obj['tableName'] = this.tableName;
             return obj;                        
@@ -180,18 +164,23 @@
 
         /**
          * 엔티티를 복사한다. (조회 후 복제)
-         * @param {function | string | array} p_filter 
-         * @param {*} p_args
+         * @param {array<string> | arguments<string>} p_columns 컬럼명
+         * @returns {MetaTable}
+         */
+        MetaTable.prototype.copy  = function(p_columns) {
+        };
+
+        /**
+         * 엔티티를 복사한다. (조회 후 복제)
+         * @param {function} p_filter rows 필터 함수
+         * @param {array<string> | arguments<string>} p_args 컬럼명
+         * @returns {MetaTable}
          */
         MetaTable.prototype.copy  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
-            var _this = this;
-            // var MetaView                    = require('./meta-view').MetaView;
             var columnNames = [];
             var callback = null;
-            var columnName;
             var entity = new MetaTable(this.tableName, this);
-            var orignal = this.clone();
 
             // 매개변수 구성
             if (typeof p_filter === 'function') {
@@ -237,10 +226,10 @@
     // implementation
      var MetaTableCollection  = (function (_super) {
         /**
-         * 테이블 컬렉션
+         * 메타 테이블 컬렉션
          * @constructs _L.Meta.Entity.MetaTableCollection
          * @extends _L.Collection.PropertyCollection
-         * @param {*} p_owner 소유자 
+         * @param {object} p_owner 소유자 
          */
         function MetaTableCollection(p_owner) {   // COVER:
             _super.call(this, p_owner);
@@ -256,17 +245,13 @@
                 set: function(nVal) { 
                     if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
                     if (!(new nVal('temp') instanceof MetaTable)) Message.error('ES032', ['_baseType', 'MetaTable']);
-                    // if (!(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
-                    //     Message.error('ES032', ['_baseType', 'BaseEntity']);
-                    // }
                     _baseType = nVal;
                 },
                 configurable: false,
                 enumerable: true
             });
 
-            this._elemTypes = MetaTable;   // 컬렉션타입 설정
-
+            this._elemTypes = MetaTable;   // 컬렉션 타입 설정
         }
         Util.inherits(MetaTableCollection, _super);
 
@@ -274,22 +259,9 @@
         MetaTableCollection._PARAMS = ['_owner'];  // creator parameter
 
         /**
-         * 객체 비교
-         * @override
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaTableCollection.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-
-        //     if (!this._compare(this._baseType, p_target._baseType)) return false;
-        //     return true;
-        // };
-
-        /**
-         * 테이블 컬렉션에 엔티티 추가한다.
-         * @param {String | MetaColumn} p_any 
-         * @returns {MetaColumn} 등록한 아이템
+         * 테이블 컬렉션에 엔티티 추가
+         * @param {string | MetaTable} p_any 
+         * @returns {MetaTable} 등록한 아이템
          */
         MetaTableCollection.prototype.add  = function(p_any) { // COVER:
             var table;
@@ -305,7 +277,6 @@
                 p_any._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaTable object']);
 
-            // if (typeof key === 'undefined') Message.error('ES051', ['tableName']);
             if (this.existTableName(key)) Message.error('ES042', ['tableName', key]);
 
             _super.prototype.add.call(this, key, table);
@@ -313,6 +284,11 @@
             return this[key];
         };
 
+        /**
+         * 테이블명 존재 유무
+         * @param {string} p_key 테이블명
+         * @returns {boolean}
+         */
         MetaTableCollection.prototype.existTableName  = function(p_key) {
             for (var i = 0; this.count > i; i++) {
                 if (this[i].tableName === p_key) return true;

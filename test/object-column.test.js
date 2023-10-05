@@ -47,13 +47,12 @@ describe("[target: object-column.js]", () => {
                 const t1 = new MetaTable('T1');
                 const obj1 = {aa: 1}
                 const prop = {
-                    _entity: t1,
                     default: {},
                     value: obj1,
                     alias: 'oo1',
                     caption:'OBJ1'
                 }
-                const o1 = new ObjectColumn('o1', null, prop);
+                const o1 = new ObjectColumn('o1', t1, prop);
 
                 expect(o1._name).toBe('o1');
                 expect(o1._entity).toBe(t1);
@@ -85,13 +84,12 @@ describe("[target: object-column.js]", () => {
                 const e1 = new MetaElement('E1')
                 const obj1 = {aa: 1}
                 const prop1 = {
-                    _entity: t1,
                     default: {},
                     value: e1,
                     alias: 'oo1',
                     caption:'C1'
                 }
-                const o1 = new ObjectColumn('o1', null, prop1);
+                const o1 = new ObjectColumn('o1', t1, prop1);
                 const g1 = o1.getObject();
                 const g2 = o1.getObject(1);
 
@@ -109,13 +107,12 @@ describe("[target: object-column.js]", () => {
                 const e1 = new MetaElement('E1')
                 const obj1 = {aa: 1}
                 const prop1 = {
-                    _entity: t1,
                     default: e1,
                     value: e1,
                     alias: 'oo1',
                     caption:'C1'
                 }
-                const o1 = new ObjectColumn('o1', null, prop1);
+                const o1 = new ObjectColumn('o1', t1, prop1);
                 const g1 = o1.getObject();
                 const g2 = o1.getObject(1);
 
