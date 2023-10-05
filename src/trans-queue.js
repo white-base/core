@@ -50,6 +50,7 @@
 
             /**
              * 큐 목록
+             * @readonly
              * @member {array<object>} _L.Collection.TransactionQueue#queue
              */
             Object.defineProperty(this, 'queue', 

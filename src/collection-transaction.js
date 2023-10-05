@@ -52,6 +52,7 @@
 
             /**
              * 트렌젝션 큐
+             * @readonly
              * @member {TransactionCollection} _L.Collection.TransactionQueue#_transQueue
              */
             Object.defineProperty(this, '_transQueue',
@@ -80,6 +81,7 @@
 
             /**
              * 변경 유무
+             * @readonly
              * @member {TransactionCollection} _L.Collection.TransactionQueue#hasChanges
              */
             Object.defineProperty(this, 'hasChanges',

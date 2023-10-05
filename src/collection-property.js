@@ -60,7 +60,7 @@
 
             /** 
              * 키값
-             * @protected 
+             * @readonly
              * @member {Array} _L.Collection.PropertyCollection#_keys 
              */
             Object.defineProperty(this, '_keys',
@@ -253,8 +253,6 @@
                     Message.warn('WS011', ['writable = true', 'element']);
                 }
 
-                // before event
-                this._onChanging();
                 this._onAdd(index, p_value);
                 // data process
                 this.__GET$_elements(this).push(p_value);
@@ -268,8 +266,6 @@
                     Object.defineProperty(this, [index], this._getPropDescriptor(index));
                     Object.defineProperty(this, p_name, this._getPropDescriptor(index));
                 }
-                // after event
-                this._onChanged();
                 return index;
 
             } catch (error) {
@@ -281,8 +277,6 @@
          * 초기화
          */
         PropertyCollection.prototype.clear = function() {
-            // before event
-            this._onChanging();
             this._onClear();
             // data process
             for (var i = 0; i < this.count; i++) {
@@ -293,8 +287,6 @@
             this.__SET$_elements([], this);
             this.__SET$_descriptors([], this);
             this.__SET$_keys([], this);
-            // after event
-            this._onChanged();
         };
     
         /**

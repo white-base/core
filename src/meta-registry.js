@@ -36,7 +36,7 @@
     var MetaRegistry = (function () {
         /**
          * 메타 객체 등록소 클래스
-         * @constructs _L.Meta.Entity.MetaRegistry
+         * @constructs _L.Meta.MetaRegistry
          * @static
          */
         function MetaRegistry() { 

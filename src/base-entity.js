@@ -76,7 +76,7 @@
     // 4. module implementation   
     var BaseEntity  = (function (_super) {
         /**
-         * 엔티티
+         * 기본 엔티티 (최상위)
          * @abstract
          * @constructs _L.Meta.Entity.BaseEntity
          * @extends _L.Meta.MetaElement
@@ -85,8 +85,8 @@
          * @implements {_L.Interface.IImportControl}
          * @implements {_L.Interface.IExportControl}
          * @implements {_L.Interface.ISerialize}
-         * @param {*} p_name 
-         * @param {*} p_metaSet 
+         * @param {String} p_name 
+         * @param {MetaSet?} p_metaSet 메타셋
          */
         function BaseEntity(p_name) {
             _super.call(this, p_name);
@@ -96,7 +96,7 @@
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
-             * @member {BaseColumnCollection} _L.Meta.Entity.BaseEntity#_metaSet
+             * @member {MetaSet} _L.Meta.Entity.BaseEntity#_metaSet
              */
             Object.defineProperty(this, '_metaSet', 
             {
@@ -113,6 +113,7 @@
 
             /**
              * 엔티티의 아이템(속성) 컬렉션
+             * @readonly
              * @member {BaseColumnCollection} _L.Meta.Entity.BaseEntity#columns
              */
             Object.defineProperty(this, 'columns', 
@@ -126,6 +127,7 @@
             
             /**
              * 엔티티의 데이터(로우) 컬렉션
+             * @readonly
              * @member {MetaRowCollection} _L.Meta.Entity.BaseEntity#rows
              */
             Object.defineProperty(this, 'rows', 
@@ -229,7 +231,7 @@
         };
         
         /**
-         * BaseEntity 를 불러(로드)온다.
+         * BaseEntity 읽기(로드)
          * @protected
          * @param {BaseEntity} p_object 대상 엔티티
          * @param {number} p_option 옵션
@@ -270,8 +272,8 @@
          * 엔티티 대상에 로우 만들기
          * @protected
          * @param {BaseEntity} p_entity 빌드 대상 엔티티
-         * @param {*} p_callback 로우 대상 조회 콜백
-         * @param {*} p_items 선택할 로우명 , [] 또는 undefined 시 전체 선택
+         * @param {function} p_callback 로우 대상 조회 콜백
+         * @param {array<string>} p_items 선택할 로우명 , [] 또는 undefined 시 전체 선택
          * @returns {BaseEntity}
          */
         BaseEntity.prototype._buildEntity = function(p_entity, p_callback, p_items) {
@@ -428,6 +430,7 @@
 
         /**
          * 새로운 MetaRow 를 추가한다.
+         * @returns {MetaRow} columns 구조의 row를 생성
          */
         BaseEntity.prototype.newRow  = function() {
             return new MetaRow(this);
@@ -463,6 +466,7 @@
         /**
          * 엔티티(테이블/뷰)와 병합
          * @param {BaseEntity} p_target 
+         * @param {object} p_option 옵션
          * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨 <**>
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨
          * @param {object} p_option.2 로우(idx) 기준 병합, 초과 컬럼은 채워짐
@@ -632,8 +636,8 @@
 
         /**
          * 엔티티의 지정한 컬럼과 조건의 row 를 조회
-         * @param {function | string | array} p_filter 
-         * @param {array<string>?} p_args 
+         * @param {function | array<string>| arguments<string>} p_filter 
+         * @param {(array<string> | arguments<string>)?} p_args filter 설정시 컬럼명
          * @returns {MetaView}
          */
         BaseEntity.prototype.select  = function(p_filter, p_args) {
@@ -682,7 +686,7 @@
 
         /**
          * 객체 출력(직렬화)
-         * @param {number} p_vOpt
+         * @param {number?} p_vOpt 옵션 (0, 1, 2)
          * @param {function?} p_stringify 
          * @param {string?} p_space 
          * @returns {string}
@@ -702,10 +706,10 @@
          * { table: { columns: {}, rows: {} }}   
          * { columns: {...}, rows: {} }
          * @param {object} p_obj mObject 또는 rObject 또는 entity
-         * @param {Number} p_option 
+         * @param {Number?} p_option 기본값  = 3
          * @param {Number} p_option.1 컬럼(구조)만 가져온다. 
          * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
-         * @param {Number} p_option.3 <*기본값> 컬럼/로우를 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다. 
+         * @param {Number} p_option.3 컬럼/로우를 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다. 
          */
         BaseEntity.prototype.read  = function(p_obj, p_option) {
             var entity = null;
@@ -727,8 +731,8 @@
         };
         
         /**
-         * 없으면 빈 컬럼을 생성해야 하는지?
-         * 이경우에 대해서 명료하게 처리햐야함 !!
+         * 없으면 빈 컬럼을 생성해야 하는지?  
+         * 이경우에 대해서 명료하게 처리햐야함 !!  
          * @param {object} p_obj object<Schema> | object<Guid>
          * @param {boolean} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
          */
@@ -817,7 +821,8 @@
         /** 
          * 엔티티 복제
          * @abstract 
-         * */
+         * @returns {BaseEntity} 복제한 객체
+         */
         BaseEntity.prototype.clone = function() {
             Message.error('ES013', ['clone()']);
         };
@@ -825,7 +830,8 @@
         /** 
          * 엔티티 복사
          * @abstract 
-         * */
+         * @returns {MetaView} 복사한 뷰 객체
+         */
         BaseEntity.prototype.copy = function() {
             Message.error('ES013', ['copy()']);
         };

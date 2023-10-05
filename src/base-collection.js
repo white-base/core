@@ -97,7 +97,7 @@
 
             /** 
              * 컬랙선 요소 [참조값]
-             * @protected 
+             * @readonly
              * @member {array} _L.Collection.BaseCollection#_elements  
              */
             Object.defineProperty(this, '_elements', 
@@ -113,7 +113,7 @@
 
             /** 
              * 컬렉션 기술자 [참조값] 
-             * @protected 
+             * @readonly
              * @member {array} _L.Collection.BaseCollection#_descriptors  
              */
             Object.defineProperty(this, '_descriptors', 
@@ -145,6 +145,7 @@
 
             /**
              * 컬렉션 목록 [참조값]
+             * @readonly
              * @member {array}  _L.Collection.BaseCollection#list  
              */
             Object.defineProperty(this, 'list', 
@@ -160,6 +161,7 @@
 
             /**
              * 컬렉션 갯수 
+             * @readonly
              * @member {number} _L.Collection.BaseCollection#count 
              */
             Object.defineProperty(this, 'count', 
@@ -196,6 +198,9 @@
             /** 
              * 제거 이벤트
              * @event _L.Collection.BaseCollection#onRemove
+             * @param {number} p_idx 삭제하는 index
+             * @param {anyd} p_value 삭제하는 value
+             * @param {anyd} p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onRemove', 
             {
@@ -269,8 +274,6 @@
         /**
          * 추가 이벤트 수신자
          * @listens _L.Collection.BaseCollection#onClear
-         * @param {number} p_idx 추가한 인덱스 번호
-         * @param {any} p_value 추가한 값
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
             this.__event.publish('add', p_idx, p_value, this); 
@@ -296,16 +299,16 @@
          *  변경(등록/삭제) 전 수신자 이벤트
          * @listens _L.Collection.BaseCollection#onChanging
          */
-        BaseCollection.prototype._onChanging = function() {
-            this.__event.publish('changing', this); 
+        BaseCollection.prototype._onChanging = function(p_idx, p_value) {
+            this.__event.publish('changing', p_idx, p_value, this); 
         };
 
         /** 
          *  변경(등록/삭제) 후 수신자 이벤트
          * @listens _L.Collection.BaseCollection#onChanged
          */        
-        BaseCollection.prototype._onChanged = function() {
-            this.__event.publish('changed', this); 
+        BaseCollection.prototype._onChanged = function(p_idx, p_value) {
+            this.__event.publish('changed', p_idx, p_value, this); 
         };
 
         /**
@@ -317,9 +320,10 @@
             return {
                 get: function() { return this.__GET$_elements(this)[p_idx]; },
                 set: function(nVal) {
-                    var typeName;
                     if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
-                    this.__GET$_elements(this)[p_idx] = nVal; 
+                    this._onChanging(p_idx, nVal);  // before event
+                    this.__GET$_elements(this)[p_idx] = nVal;
+                    this._onChanged(p_idx, nVal);   // after event
                 },
                 configurable: true,
                 enumerable: true,
@@ -411,13 +415,8 @@
             if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
             elem = this._elements[p_idx];
             if (elem) {
-                // before event
-                this._onChanging();
-                // process
-                if (!this._remove(p_idx)) return false;
                 this._onRemove(p_idx, elem);
-                // after event
-                this._onChanged();
+                if (!this._remove(p_idx)) return false;
                 return true;
             }
             return false;
@@ -440,19 +439,6 @@
         BaseCollection.prototype.indexOf = function(p_elem) {
             return this._elements.indexOf(p_elem);
         };
-
-        /**
-         * 키 유무
-         * REVIEW: 프로퍼티 컬렉션으로 이동 검토
-         * @param {number | string} p_key index, key
-         * @returns {boolean}
-         */
-        // BaseCollection.prototype.exist = function(p_key) {
-        //     if (typeof p_key === 'number' || typeof p_key === 'string') {
-        //         return this.hasOwnProperty(p_key);
-        //     }
-        //     Message.error('ES021', ['key', 'number, string']);
-        // };
 
         /** 
          * 컬렉션에 요소를 추가

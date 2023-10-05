@@ -54,7 +54,8 @@
             
             /**
              * 유일한 값
-             * @member {array} _L.Meta.MetaObject#_guid 
+             * @readonly
+             * @member {string} _L.Meta.MetaObject#_guid 
              */
             Object.defineProperty(this, '_guid', 
             {
@@ -68,6 +69,7 @@
 
             /**
              * 생성자(일급함수)
+             * @readonly
              * @member {function} _L.Meta.MetaObject#_type 
              */
             Object.defineProperty(this, '_type', 

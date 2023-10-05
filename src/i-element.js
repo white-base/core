@@ -37,7 +37,7 @@
         function IElement() {
             /**
              * 요소명
-             * @member {string} _L.Interface.IList#_name
+             * @member {string} _L.Interface.IElement#_name
              */
             this._name = String;
         }

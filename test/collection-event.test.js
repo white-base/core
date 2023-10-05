@@ -32,11 +32,11 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
                     this.columns.onClear = function(_this) {
                         arrResult.push(`CLEAR.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onChanging = function(_this) {
-                        arrResult.push(`CHANGING.${_this._owner.constructor.name}`);
+                    this.columns.onChanging = function(i, v, _this) {
+                        arrResult.push(`CHANGING.${i}.${v}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onChanged = function(_this) {
-                        arrResult.push(`CHANGED.${_this._owner.constructor.name}`);
+                    this.columns.onChanged = function(i, v, _this) {
+                        arrResult.push(`CHANGED.${i}.${v}.${_this._owner.constructor.name}`);
                     }
                 }
             }
@@ -47,10 +47,8 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
             arrResult = [];
             const result = i.columns.add('a1', 'A1');
     
-            expect(arrResult[0]).toBe('CHANGING.School');
-            expect(arrResult[1]).toBe('ADD.0.A1.School');
-            expect(arrResult[2]).toBe('CHANGED.School');
-            expect(arrResult.length).toBe(3);
+            expect(arrResult[0]).toBe('ADD.0.A1.School');
+            expect(arrResult.length).toBe(1);
             expect(result > -1).toBeTruthy();
         });
         it("- add() : 실패 (중복, 예외) => 이벤트 없음 ", () => {
@@ -74,10 +72,8 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
             arrResult = [];
             const result3 = i.columns.remove('A2');
     
-            expect(arrResult[0]).toBe('CHANGING.School');
-            expect(arrResult[1]).toBe('REMOVE.1.A2.School');
-            expect(arrResult[2]).toBe('CHANGED.School');
-            expect(arrResult.length).toBe(3);
+            expect(arrResult[0]).toBe('REMOVE.1.A2.School');
+            expect(arrResult.length).toBe(1);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
             expect(result3).toBeTruthy();
@@ -98,10 +94,19 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
             arrResult = [];
             i.columns.clear();
     
-            expect(arrResult[0]).toBe('CHANGING.School');
-            expect(arrResult[1]).toBe('CLEAR.School');
-            expect(arrResult[2]).toBe('CHANGED.School');
-            expect(arrResult.length).toBe(3);
+            expect(arrResult[0]).toBe('CLEAR.School');
+            expect(arrResult.length).toBe(1);
+            expect(result1 > -1).toBeTruthy();
+        });
+        it("- 변경:  => onChanging, onChanged", () => {
+            const i = new School();
+            const result1 = i.columns.add('a1', 'A1');
+            arrResult = [];
+            i.columns['a1'] = 'AA1'
+    
+            expect(arrResult[0]).toBe('CHANGING.0.AA1.School');
+            expect(arrResult[1]).toBe('CHANGED.0.AA1.School');
+            expect(arrResult.length).toBe(2);
             expect(result1 > -1).toBeTruthy();
         });
     });
@@ -138,10 +143,8 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
             arrResult = [];
             const result = i.columns.add('A1');
     
-            expect(arrResult[0]).toBe('CHANGING.School');
-            expect(arrResult[1]).toBe('ADD.0.A1.School');
-            expect(arrResult[2]).toBe('CHANGED.School');
-            expect(arrResult.length).toBe(3);
+            expect(arrResult[0]).toBe('ADD.0.A1.School');
+            expect(arrResult.length).toBe(1);
             expect(result > -1).toBeTruthy();
         });
         // it("- add() : 실패 (예외) ", () => {
@@ -160,10 +163,8 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
             arrResult = [];
             const result3 = i.columns.remove('A2');
     
-            expect(arrResult[0]).toBe('CHANGING.School');
-            expect(arrResult[1]).toBe('REMOVE.1.A2.School');
-            expect(arrResult[2]).toBe('CHANGED.School');
-            expect(arrResult.length).toBe(3);
+            expect(arrResult[0]).toBe('REMOVE.1.A2.School');
+            expect(arrResult.length).toBe(1);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
             expect(result3).toBeTruthy();
@@ -184,10 +185,8 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
             arrResult = [];
             i.columns.clear();
     
-            expect(arrResult[0]).toBe('CHANGING.School');
-            expect(arrResult[1]).toBe('CLEAR.School');
-            expect(arrResult[2]).toBe('CHANGED.School');
-            expect(arrResult.length).toBe(3);
+            expect(arrResult[0]).toBe('CLEAR.School');
+            expect(arrResult.length).toBe(1);
             expect(result1 > -1).toBeTruthy();
         });
     });

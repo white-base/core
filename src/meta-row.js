@@ -58,7 +58,7 @@
          * 메타 로우
          * @constructs _L.Meta.Entity.MetaRow
          * @extends _L.Meta.MetaObject
-         * @param {BaseEntity} p_entity 메타엔티티
+         * @param {BaseEntity} p_entity 소유하는 엔티티
          */
         function MetaRow(p_entity) {
             _super.call(this);
@@ -71,59 +71,52 @@
 
             /** 
              * 이벤트 객체
-             * @protected 
+             * @private 
              * @member {Object} _L.Meta.Entity.MetaRow#__event  
              */
-            Object.defineProperty(this, '__event', {
+            Object.defineProperty(this, '__event', 
+            {
                 get: function() { return __event; },
                 configurable: false,
                 enumerable: false,
             });
 
             
-
             /**
              * 로우의 소유 엔티티
-             * // REVIEW: 엔티티는 설정할 수 없어야함??
+             * @readonly
              * @member {BaseEntity} _L.Meta.Entity.MetaRow#_entity
              */
             Object.defineProperty(this, '_entity', 
             {
                 get: function() { return _entity; },
-                // set: function(nVal) {
-                //     if (nVal === null) return _entity = null;
-                //     if (typeof nVal !== 'undefined' && !(nVal instanceof MetaObject && nVal.instanceOf('BaseEntity'))) {
-                //         Message.error('ES032', ['_entity', 'BaseEntity']);
-                //     }
-                //     if (this.count > 0) Message.error('ES045', ['MetaRow', '_entity']);
-                //     _entity = nVal;
-                // },
                 configurable: false,
                 enumerable: false
             });
 
             /** 
-             * 컬랙선 내부값 
-             * @protected 
-             * @member {Array} _L.Meta.Entity.MetaRow#_elements  
+             * 로우 요소값 
+             * @readonly
+             * @member {Array<any>} _L.Meta.Entity.MetaRow#_elements  
              */
-            Object.defineProperty(this, '_elements', {
-                // get: function() { return _elements; },
+            Object.defineProperty(this, '_elements', 
+            {
                 get: function() {
                     var arr = [];
                     for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
                     return arr;
                 },
-                // set: function(val) {
-                //     _elements = val;
-                // },
                 configurable: false,
                 enumerable: false,
             });
 
+            /** 
+             * 요소 키
+             * @readonly
+             * @member {Array<string>} _L.Meta.Entity.MetaRow#_keys  
+             */
             Object.defineProperty(this, '_keys',
             {
-                // get: function() { return _keys; },
                 get: function() {
                     var arr = [];
                     for (var i = 0; i < _keys.length; i++) arr.push(_keys[i]);
@@ -135,9 +128,11 @@
 
             /**
              * 컬렉션 목록 
-             * @member {Array}  _L.Meta.Entity.MetaRow#list  
+             * @readonly
+             * @member {Array<any>}  _L.Meta.Entity.MetaRow#list  
              */
-            Object.defineProperty(this, 'list', {
+            Object.defineProperty(this, 'list', 
+            {
                 get: function() {
                     var arr = [];
                     for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
@@ -149,12 +144,12 @@
             
             /**
              * 컬랙션 갯수 
+             * @readonly
              * @member {Number} _L.Meta.Entity.MetaRow#count 
              */
-            Object.defineProperty(this, 'count', {
-                get: function() {
-                    return _elements.length;
-                },
+            Object.defineProperty(this, 'count', 
+            {
+                get: function() { return _elements.length; },
                 configurable: false,
                 enumerable: false
             });
@@ -163,10 +158,9 @@
              * 변경전 이벤트 
              * @event _L.Meta.Entity.MetaRow#onChanged 
              */
-            Object.defineProperty(this, 'onChanging', {
-                set: function(fun) {
-                    this.__event.subscribe(fun, 'onChanging');
-                },
+            Object.defineProperty(this, 'onChanging', 
+            {
+                set: function(fun) { this.__event.subscribe(fun, 'onChanging'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -176,9 +170,7 @@
              * @event _L.Meta.Entity.MetaRow#onChanged 
              */
             Object.defineProperty(this, 'onChanged', {
-                set: function(fun) {
-                    this.__event.subscribe(fun, 'onChanged');
-                },
+                set: function(fun) { this.__event.subscribe(fun, 'onChanged'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -191,13 +183,13 @@
             //     if (call instanceof MetaRow) return _keys;
             // };
             this.__SET$_elements = function(val, call) {
-                if (call instanceof MetaRow) _elements = val;    // 상속접근 허용
+                if (call instanceof MetaRow) _elements = val;
             }
             // this.__SET$_keys = function(val, call) {
-            //     if (call instanceof MetaRow) _keys = val;    // 상속접근 허용
+            //     if (call instanceof MetaRow) _keys = val;
             // };
             // this.__SET$_entity = function(val, call) {
-            //     if (call instanceof MetaRow) _entity = val;    // 상속접근 허용
+            //     if (call instanceof MetaRow) _entity = val;
             // };
             
             // BaseEntity 등록 & order(순서) 값 계산
@@ -206,7 +198,6 @@
             }
             
             // 설정
-            // if (p_entity) {
             _entity = p_entity;
 
             for (var i = 0; i < _entity.columns.count; i++) {
@@ -217,7 +208,6 @@
                 Object.defineProperty(this, [i], getPropDescriptor(idx));
                 Object.defineProperty(this, alias, getPropDescriptor(idx));
             }
-            // }
 
             function getPropDescriptor(p_idx) {
                 return {
@@ -225,18 +215,15 @@
                     set: function(nVal) { 
                         var oldValue = _elements[p_idx];
                         var column;
-                        
                         // 엔티티 항상 존재함
-                        // if (_entity && _entity.columns[p_idx]) column = _entity.columns[p_idx];
                         column = _entity.columns[p_idx];
                         if (column && column._valueTypes.length > 0) Util.validType(nVal, column._valueTypes);
-
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (_entity && !_entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + nVal + ', old:'+ oldValue;
                             var pos = _entity.rows.indexOf(this);
-                            if (pos > -1) { // 컬력션에 포힘됬을때만
-                                _entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
+                            if (pos > -1) {     // 컬력션에 포힘때 : 변경시점에 큐에 추가
+                                _entity.rows._transQueue.update(pos, this, this.clone(), etc);
                             }
                         }
                         // 이벤트 및 처리
@@ -258,6 +245,7 @@
         MetaRow._PARAMS = ['_entity'];  // creator parameter
 
         /**
+         * 로우 요소 변경전 이벤트
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
         MetaRow.prototype._onChanging = function(p_idx, p_nValue, p_oValue) {
@@ -265,71 +253,12 @@
         };
 
         /**
+         * 로우 요소 변경후 이벤트
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
          */
         MetaRow.prototype._onChanged = function(p_idx, p_nValue, p_oValue) {
             this.__event.publish('onChanged', p_idx, p_nValue, p_oValue);
         };
-        /**
-         * 객체 비교
-         * @override
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaRow.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-
-        //     if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
-        //     if (!this._compare(this._entity, p_target._entity)) return false;
-        //     if (!this._compare(this._elements, p_target._elements)) return false;
-        //     if (!this._compare(this._keys, p_target._keys)) return false;
-        //     return true;
-        // };
-
-        /**
-         * 프로퍼티 기술자 설정
-         * @override
-         * @protected
-         * @param {Number} p_idx 인덱스
-         */
-        // MetaRow.prototype._getPropDescriptor = function(p_idx) {
-        //     // return {
-        //     //     get: function() { return this._elements[p_idx]; },
-        //     //     set: function(nVal) {
-        //     //         var typeName;
-        //     //         if (this._elemTypes.length > 0) Util.validType(nVal, this._elemTypes);
-        //     //         if (nVal._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
-        //     //         this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
-        //     //         this._elements[p_idx] = nVal;
-        //     //     },
-        //     //     configurable: true,
-        //     //     enumerable: true,
-        //     // };
-
-        //     var _this = this;
-        //     return {
-        //         get: function() { return this._elements[p_idx]; },
-        //         set: function(nVal) { 
-        //             var oldValue = this._elements[p_idx];
-        //             // 트렌젹션 처리 => 함수로 추출 검토
-        //             if (this._entity && !this._entity.rows.autoChanges) {
-        //                 var etc = 'idx:'+ p_idx +', new:' + nVal + ', old:'+ oldValue;
-        //                 var pos = this._entity.rows.indexOf(this);
-        //                 if (pos > -1) { // 컬력션에 포힘됬을때만
-        //                     this._entity.rows._transQueue.update(pos, this, this.clone(), etc);  // 변경시점에 큐를 추가함
-        //                 }
-        //             }
-        //             // 이벤트 및 처리
-        //             _this._onChanging(p_idx, nVal, oldValue);
-        //             this._elements[p_idx] = nVal;
-        //             _this._onChanged(p_idx, nVal, oldValue);
-
-        //         },
-        //         enumerable: true,
-        //         configurable: false
-        //     };
-        // };
-
 
         /**
          * guid 객체 얻기
@@ -341,13 +270,7 @@
         MetaRow.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
-            // var origin = p_origin ? p_origin : obj;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
-            // var origin = [];
-
-            // if (Array.isArray(p_origin)) origin = p_origin;
-            // else if (p_origin) origin.push(p_origin);
-            // origin.push(obj);
 
             if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
                 obj['__subscribers'] = this.__event.__subscribers;
@@ -358,17 +281,12 @@
             obj['_elem'] = [];
             for (var i = 0; i < this.list.length; i++) {
                 var elem = this.list[i];
-                // POINT:
-                // if (elem instanceof MetaObject) obj._elem.push(elem.getObject(vOpt, origin));
-                // else obj._elem.push(elem);
                 if (elem instanceof MetaObject) {
-                    // POINT:
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
                         obj['_elem'].push(MetaRegistry.createReferObject(elem));
                     } else obj['_elem'].push(elem.getObject(vOpt, owned));
                 } else obj['_elem'].push(elem);
             }
-
             obj['_key'] = [];
             for (var i = 0; i < this._keys.length; i++) {
                 var key = this._keys[i];
@@ -381,7 +299,7 @@
          * guid 객체 설정
          * @override
          * @param {object} p_oGuid 레벨 옵션
-         * @param {object} p_origin 설정 원본 객체
+         * @param {object?} p_origin 설정 원본 객체
          */
         MetaRow.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -391,57 +309,26 @@
             
             if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) Message.error('ES063', ['_elem', '_key']);
 
-            // this.init();
-            
             if (p_oGuid['__subscribers']) {
                 this.__event.__SET$__subscribers(p_oGuid['__subscribers'], this.__event);
             }
-            // this._entity = p_oGuid._entity;
-            // if (p_oGuid._entity) {
-            //     entity = MetaRegistry.findSetObject(origin, p_oGuid._entity.$ref);
-            //     if (!entity) Message.error('ES015', [p_oGuid.name, '_entity']);
-            //     // this._entity = entity;
-            //     this.__SET$_entity(entity. this);
-            // }
-
-            // this._keys.length = 0;
-            // for(var i = 0; i < p_oGuid._key.length; i++) {
-            //     var key = p_oGuid._key[i];
-            //     this._keys.push(key);
-            // }
-
             for(var i = 0; i < p_oGuid['_elem'].length; i++) {
                 var elem = p_oGuid['_elem'][i];
                 if (MetaRegistry.isGuidObject(elem)) {
-                    // this._elements[i].setObject(elem, origin);
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
                     this.__GET$_elements(this)[i] = obj;
-                    // this._elements[i] = obj;
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
                     this.__GET$_elements(this)[i] = meta;   
-                    // this._elements[i] = meta;     
-                // } else this._elements[i] = elem;
                 } else this.__GET$_elements(this)[i] = elem;   
             }
         };
 
-        /**
-         * 배열속성 컬렉션을 전체삭제한다. [구현]
-         */
-        // MetaRow.prototype.init = function() {
-        //     this.__event.init();
-        //     // this._entity = null;
-        //     this.__SET$_entity(null, this);
-        //     this.__SET$_elements([], this);
-        //     this.__SET$_keys([], this);
-        // };
-
        /**
          * 객체 복제
-         * @param {BaseEntity?} p_entity 대상의 엔티티
+         * @param {BaseEntity?} p_entity 대상의 엔티티 기준으로 생성
          * @returns {MetaRow}
          */
         MetaRow.prototype.clone  = function(p_entity) {
@@ -452,13 +339,7 @@
             if (obj.__subscribers) {
                 clone.__event.__SET$__subscribers(obj.__subscribers, this.__event);
             }
-            // clone._entity = p_entity ? p_entity : this._entity;
             clone.__SET$_elements(Util.deepCopy(obj._elem), this);
-            // clone.__SET$_keys(Util.deepCopy(obj._key), this);
-
-            // for (var i = 0; i < this.count; i++) {
-            //     clone._elements[i] = this._elements[i];   // 내부 복사
-            // }
             return clone;
         };
         
@@ -472,7 +353,7 @@
          * 로우 컬렉션
          * @constructs _L.Meta.Entity.MetaRowCollection
          * @extends _L.Collection.TransactionCollection
-         * @param {*} p_owner 소유자 
+         * @param {object?} p_owner 소유자 
          */
         function MetaRowCollection(p_owner) {
             _super.call(this, p_owner);
@@ -489,7 +370,7 @@
          * 프로퍼티 기술자 설정
          * @override
          * @protected
-         * @param {Number} p_idx 인덱스
+         * @param {number} p_idx 인덱스
          */
         MetaRowCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
@@ -509,7 +390,7 @@
         /**
          * MetaRow 추가 idx 를 기준으로 검사한다.
          * @param {MetaRow} p_row 
-         * @param {object} p_checkValid true: 검사 진행, false <*>: 검사 안함
+         * @param {boolean?} p_checkValid true: 검사 진행, false: 검사 안함
          * @returns {number}
          */
         MetaRowCollection.prototype.add  = function(p_row, p_checkValid) {
@@ -518,17 +399,15 @@
 
         /**
          * pos 위치에 추가
-         * @param {*} p_pos 
-         * @param {*} p_row 
-         * @param {*} p_checkValid 
+         * @param {number} p_pos 
+         * @param {MetaRow} p_row 
+         * @param {boolean?} p_checkValid 유효성 검사 여부 
          * @returns {boolean}
          */
         MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_checkValid) {
-            var _this = this;
             var checkValid = p_checkValid || false;
             var result;
             var entity = p_row._entity;
-
 
             if (!(p_row instanceof MetaRow )) Message.error('ES032', ['row', 'MetaRow']);
             if (entity._guid !== this._owner._guid) Message.error('ES034', ['_guid', '_owner._guid']);
@@ -542,7 +421,6 @@
                     }
                 }
             }
-
             return _super.prototype.insertAt.call(this, p_pos, p_row);
         };
 
