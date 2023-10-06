@@ -117,7 +117,7 @@
 
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -134,7 +134,7 @@
 
         /**
          * guid 객체 설정
-         * @override
+         * override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */
@@ -146,7 +146,6 @@
 
         /**
          * 지정 위치에 요소 삭제
-         * @override
          * @param {number} p_pos 
          * @returns {boolean}
          */
@@ -157,7 +156,6 @@
 
         /**
          * 전체 초기화
-         * @override
          */
         TransactionCollection.prototype.clear = function() {
             _super.prototype.clear.call(this);
@@ -166,7 +164,6 @@
 
         /**
          * 지정 위치에 요소 추가
-         * @override
          * @param {number} p_pos 
          * @param {any} p_value 
          * @param {object} p_desc 

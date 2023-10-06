@@ -54,6 +54,7 @@
         /**
         * 컬렉션 최상위 클래스 (추상클래스)
         * @abstract
+        * @extends _L.Meta.MetaObject
         * @constructs _L.Collection.BaseCollection
         * @implements {_L.Interface.ICollection}
         * @implements {_L.Interface.IList}
@@ -423,7 +424,7 @@
 
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -451,8 +452,8 @@
         };
 
         /**
-         * guid 객체 설정
-         * @override
+         * guid 객체 설정  
+         * override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */

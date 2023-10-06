@@ -72,18 +72,19 @@
     // 4. module implementation   
     var MetaSet  = (function (_super) {
         /**
-         * 엔티티
+         * 메타셋
          * @constructs _L.Meta.Entity.MetaSet
          * @extends _L.Meta.MetaElement
          * @implements {_L.Interface.ISchemaControl}
-         * @implements {_L.Interface.IAllControl}
+         * @implements {_L.Interface.IImportControl}
+         * @implements {_L.Interface.IExportControl}
          * @implements {_L.Interface.ITransaction}
-         * @param {*} p_name 
+         * @implements {_L.Interface.ISerialize}
+         * @param {string} p_name 
          */
         function MetaSet(p_name) {
             _super.call(this, p_name);
 
-            var setName;
             var tables = new MetaTableCollection(this);
             var views  = new MetaViewCollection(this);
 
@@ -96,8 +97,6 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (typeof nVal !== 'string') Message.error('ES021', ['setName', 'string']);
-                    // setName = nVal;
-                    // this.__SET$_name(nVal, this);
                     this._name = nVal;
                 },
                 configurable: false,
@@ -106,6 +105,7 @@
             
             /**
              * 메타 테이블 컬렉션
+             * @readonly
              * @member {MetaTableCollection} _L.Meta.Entity.MetaSet#tables
              */
             Object.defineProperty(this, 'tables', 
@@ -117,6 +117,7 @@
             
             /**
              * 메타 뷰 컬렉션
+             * @readonly
              * @member {MetaViewCollection} _L.Meta.Entity.MetaSet#views
              */
             Object.defineProperty(this, 'views', 
@@ -143,46 +144,44 @@
                 enumerable: true
             });
 
-            // this.setName  = p_name || '';
-            
-            // this._implements(ISchemaControl, IAllControl);
             Util.implements(this, ISchemaControl, IImportControl, IExportControl, ITransaction, ISerialize);
         }
         Util.inherits(MetaSet, _super);
 
         MetaSet._NS = 'Meta.Entity';    // namespace
-        MetaSet._PARAMS = ['name'];  // creator parameter
+        MetaSet._PARAMS = ['name'];     // creator parameter
 
         // local funciton
-        function isObject(obj) {
+        function _isObject(obj) {
             if (typeof obj === 'object' && obj !== null) return true;
             return false;
         }
-        // function isGuidObject(obj) {
-        //     if (!isObject(obj)) return false;
-        //     if (typeof obj['_guid'] === 'string' && typeof obj['_type'] === 'string') return true;
-        //     return false;
-        // }
+        function _isSchema(obj) {    // 객체 여부
+            if (!_isObject(obj)) return false;
+            if (_isObject(obj['tables']) || _isObject(obj['views'])) return true;
+            return false;
+        }
         
-        // 3가지 타입 입력
+        /**
+         * 메타셋 스카마 객체로 변환
+         * @protected
+         * @param {object} p_oGuid getObject()로 얻은 객체
+         * @returns {object}
+         */
         MetaSet.transformSchema  = function(p_oGuid) {
-            // var obj  = {
-            //     tables: null,
-            //     views: null
-            // };
+            var obj = {};
 
-            // if (!isGuidObject(p_oGuid)) Message.error('ES021', ['p_oGuid', 'object<Guid>']);
-            // if (p_oGuid['tables'] || p_oGuid['views']) obj = p_oGuid;
-            return transformSet(p_oGuid);
+            if (!_isSchema(p_oGuid)) { 
+                Message.error('ES021', ['transformSchema(obj)', '{tables: ... , views: ...}']);
+            }
+
+            obj['name'] = p_oGuid['name']; 
+            obj['tables'] = transformTable(p_oGuid['tables']);
+            obj['views'] = transformView(p_oGuid['views']);   
+            
+            return obj;
 
             // inner function
-            function transformSet(p_oGuid) {
-                var obj = {};
-                obj['name'] = p_oGuid['name']; 
-                obj['tables'] = transformTable(p_oGuid['tables']);
-                obj['views'] = transformView(p_oGuid['views']);   
-                return obj;
-            }
             function transformTable(p_oGuid) {
                 var obj = {};
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
@@ -205,41 +204,10 @@
             }
         };
         
-        // TODO: typeoof === 'object || !== null 함수로 상위함수 추출 => isObject()
-        MetaSet._isSchema  = function(p_oSch) {
-            // if (p_oSch === null || typeof p_oSch !== 'object') return false;
-            // if (p_oSch['tables'] || p_oSch['views']) return true;
-            if (!isObject(p_oSch)) return false;
-            if (isObject(p_oSch['tables']) || isObject(p_oSch['views'])) return true;
-            return false;
-        };
-        
-        // MetaSet.prototype._loadMetaSet = function(p_metaSet, p_option) {
-        //     var opt = typeof p_option === 'undefined' ? 3 : p_option;
-        //     var _this = this;
-
-        //     if (!(p_metaSet instanceof BaseEntity)) Message.error('ES032', ['metaSet', 'MetaSet']);
-        //     if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
-
-        //     if (p_metaSet.tables) loadEntity(p_metaSet.tables, this.tables); 
-        //     if (p_metaSet.views) loadEntity(p_metaSet.views, this.views); 
-
-
-        //     function loadEntity(p_target, p_orignal) {
-        //         if (!(p_target instanceof MetaTableCollection || p_target instanceof MetaTableCollection )) {
-        //             Message.error('ES032', ['target', 'MetaTableCollection, MetaTableCollection']);
-        //         }
-        //         for (var i = 0; i < p_target.count; i++) {
-        //             var key = p_target.keyOf(i);
-        //             if (p_orignal.exist(key)) Message.error('ES046', ['collection', key]);
-        //             p_orignal._loadEntity(p_target[i], opt);
-        //         }
-        //     }
-        // };
 
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -263,7 +231,7 @@
 
         /**
          * guid 객체 설정
-         * @override
+         * override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */
@@ -277,8 +245,7 @@
         };
 
         /**
-         * 객체 복제
-         * @override
+         * 메타셋 복제
          * @returns {MetaSet}
          */
         MetaSet.prototype.clone  = function() {
@@ -294,16 +261,28 @@
             return clone;
         };
         
+        /**
+         * 모든 view 와 모든 table 의 row 를 초기화
+         */
         MetaSet.prototype.clear  = function() {
             for(var i = 0; i < this.tables.count; i++) this.tables[i].clear();
             for(var i = 0; i < this.views.count; i++) this.views[i].clear();
         };
         
+        /**
+         * 전체 초기화
+         */
         MetaSet.prototype.reset  = function() {
             this.tables.clear();
             this.views.clear();
         };
 
+        /**
+         * 불러오기/가져오기 (!! 병합용도가 아님)
+         * 기존을 초기화 하고 불러오는 역활
+         * @param {object | string} p_obj 불러오기 대상
+         * @param {function?} p_parse 파서
+         */
         MetaSet.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
             var mObj;
@@ -315,18 +294,18 @@
                 else obj = JSON.parse(obj, null);
             }
             
-            if (typeof obj !== 'object' || obj === null) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(obj)) Message.error('ES021', ['obj', 'object']);
             
-            // REVIEW: 필요한지 검토
-            // if(!MetaRegistry.isGuidObject(obj)) Message.error('ES022', ['p_obj']);
-
             this.setObject(obj);
-            // if (MetaRegistry.isGuidObject(obj)) {
-            //     mObj = MetaRegistry.hasRefer(obj) ? MetaRegistry.transformRefer(obj) : p_obj;
-            //     this.setObject(mObj);
-            // } else Message.error('ES022', ['obj']);
         };
 
+        /**
+         * 메타셋 객체 출력(직렬화)
+         * @param {number?} p_vOpt 옵션 (0, 1, 2)
+         * @param {function?} p_stringify 
+         * @param {string?} p_space 
+         * @returns {string}
+         */
         MetaSet.prototype.output = function(p_vOpt, p_stringify, p_space) {
             var rObj = this.getObject(p_vOpt);
             var str;
@@ -336,6 +315,17 @@
             return str;
         };
 
+        /**
+         * object 로 로딩하기   
+         * JSON 스키마 규칙   
+         * { table: { columns: {}, rows: {} }}   
+         * { columns: {...}, rows: {} }
+         * @param {object} p_obj mObject 또는 rObject 또는 entity
+         * @param {Number?} p_option 기본값  = 3
+         * @param {Number} p_option.1 컬럼(구조)만 가져온다. 
+         * @param {Number} p_option.2 로우(데이터)만 가져온다 (컬럼 참조)  
+         * @param {Number} p_option.3 컬럼/로우를 가져온다. 로우만 존재하면 로우 이름의 빈 컬럼을 생성한다. 
+         */
         MetaSet.prototype.read  = function(p_obj, p_opt) {
             var opt = typeof p_opt === 'undefined' ? 3 : p_opt;
             var entity;
@@ -344,7 +334,6 @@
             if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
 
             if (p_obj instanceof MetaSet) {
-                // if (p_obj.setName && p_obj.setName.length > 0) this.setName = p_obj.setName;
                 this.setName = p_obj.setName;
 
                 for (var i = 0; i < p_obj.tables.count; i++) {
@@ -354,32 +343,32 @@
                     entity._readEntity(p_obj.tables[key], p_opt);
                 }
                 for (var i = 0; i < p_obj.views.count; i++) {
-                    // this.views[i]._readEntity(p_obj, p_opt);
                     var key = p_obj.views.keyOf(i);
                     if (this.views.indexOf(key, 1) < 0) this.views.add(key);
                     entity = this.views[key];
                     entity._readEntity(p_obj.views[key], p_opt);
                 }
             } else {
-                // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
                 if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
                 if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
             }
         };
-
         
-
+        /**
+         * 없으면 빈 컬럼을 생성해야 하는지?  
+         * 이경우에 대해서 명료하게 처리햐야함 !!  
+         * @param {object} p_obj object<Schema> | object<Guid>
+         * @param {boolean} p_createRow true 이면, row[0] 기준으로 컬럼을 추가함
+         */
         MetaSet.prototype.readSchema  = function(p_obj, p_createRow) {
             var _this = this;
             var metaSet = null;
             var obj;
             var entity;
 
-            if (!isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
 
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
-            // obj = metaSet;
-            // metaSet = p_obj;
 
             if (MetaRegistry.isGuidObject(metaSet)) {
                 // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);  // 참조가 기본 존재함
@@ -387,7 +376,7 @@
                 obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
-            if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
             if (obj['tables']) {
                 entity = obj['tables'];
@@ -410,24 +399,11 @@
             // inner funciton
             function addEntity(key, p_collec, p_baseCollec) {
                 var prop = p_collec[key];
-                var entity;
-                // if (Object.hasOwnProperty.call(p_collec, key) && typeof p_collec[key] === 'object') {
-                // if (prop) {
-                    // prop = p_collec[key];
-                    // if (prop['_metaSet'] && MetaRegistry.has(prop['_metaSet'])) {
-                    //     prop['_metaSet'] = MetaRegistry.find(prop['_metaSet']);
-                    // }
-                // if (p_baseCollec.exist(key)) Message.error('ES046', ['entity', key]);
                 if (!p_baseCollec.exist(key)) p_baseCollec.add(key);
-                
-                MetaRegistry.createSetObject(prop, p_baseCollec[key]); 
-                
+                MetaRegistry.createSetObject(prop, p_baseCollec[key]);                 
                 p_baseCollec[key]._readSchema(p_collec[key], p_createRow, obj);                    
-                // }
             }
         };
-
-
 
         /**
          * row 들을 불러 온다
@@ -436,13 +412,10 @@
         MetaSet.prototype.readData  = function(p_obj) {
             var metaSet = null;
             var obj;
-            var rows;
 
-            if (!isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
             
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
-            // obj = metaSet;
-            // metaSet = p_obj;
             
             if (MetaRegistry.isGuidObject(metaSet)) {
                 // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
@@ -450,14 +423,10 @@
                 obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
-            if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
-
-            // metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
+            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
             
-            // if (typeof obj['tables'] === 'object' && obj['tables'] !== null) createRow(obj['tables'], this.tables);
-            // if (typeof obj['views'] === 'object' && obj['views'] !== null) createRow(obj['views'], this.views);
-            if (isObject(obj['tables'])) createRow(obj['tables'], this.tables);
-            if (isObject(obj['views'])) createRow(obj['views'], this.views);
+            if (_isObject(obj['tables'])) createRow(obj['tables'], this.tables);
+            if (_isObject(obj['views'])) createRow(obj['views'], this.views);
 
             function createRow(p_entity, p_collec) {
                 for (var key in p_entity) {
@@ -468,47 +437,11 @@
             }
         };
 
-        // MetaSet.prototype.write  = function(p_vOpt) {
-        //     var vOpt = p_vOpt || 0;
-        //     var obj = { tables: {}, views: {} };
-        //     var schema;
-        //     var data;
-
-        //     obj.setName = this.setName;
-        //     // for(var i = 0; i < this.tables.count; i++) {
-        //     //     var table = this.tables[i];
-        //     //     var key = this.tables._keys[i];
-        //     //     var tObj = table.writeSchema();
-        //     //     tObj.rows = table.writeData().rows;
-        //     //     obj.tables[key] = tObj;
-        //     // }
-        //     schema = this.writeSchema(vOpt);
-        //     obj.tables = schema.tables;
-        //     obj.views = schema.views;
-
-        //     // obj.tables['_key'] = tObj['_key'];
-
-        //     // for(var i = 0; i < this.views.count; i++) {
-        //     //     var view = this.views[i];
-        //     //     var key = this.views._keys[i];
-        //     //     var vObj = view.writeSchema();
-        //     //     vObj.rows = view.writeData().rows;
-        //     //     obj.views[key] = vObj;
-        //     // }
-
-        //     for(var i = 0; i < this.tables.count; i++) {
-        //         var table = this.tables[i];
-        //         var key = this.tables._keys[i];
-        //         obj.tables[key].rows = table.writeData(vOpt).rows;
-        //     }
-        //     for(var i = 0; i < this.views.count; i++) {
-        //         var views = this.views[i];
-        //         var key = this.views._keys[i];
-        //         obj.views[key].rows = views.writeData(vOpt).rows;
-        //     }
-
-        //     return obj;
-        // };
+        /**
+         * 메타셋을 스키마 타입의 객체로 쓰기(내보내기)
+         * @param {number} p_vOpt 
+         * @returns {object} 스키마 타입
+         */
         MetaSet.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var oSch;
@@ -517,34 +450,11 @@
             return MetaSet.transformSchema(oGuid);
         };
 
-        // MetaSet.prototype.writeSchema  = function(p_vOpt) {
-        //     var vOpt = p_vOpt || 0;
-        //     var obj = { tables: {}, views: {} };
-
-        //     obj.setName = this.setName;
-        //     for(var i = 0; i < this.tables.count; i++) {
-        //         var table = this.tables[i];
-        //         var key = this.tables._keys[i];
-        //         obj.tables[key] = table.writeSchema(vOpt);
-        //     }
-        //     obj.tables['$key'] = [];
-        //     for (var i = 0; i < this.tables['_keys'].length; i++) {
-        //         var key = this.tables['_keys'][i];
-        //         obj.tables['$key'].push(key);
-        //     }
-
-        //     for(var i = 0; i < this.views.count; i++) {
-        //         var view = this.views[i];
-        //         var key = this.views._keys[i];
-        //         obj.views[key] = view.writeSchema(vOpt);
-        //     }
-        //     obj.views['$key'] = [];
-        //     for (var i = 0; i < this.views['_keys'].length; i++) {
-        //         var key = this.views['_keys'][i];
-        //         obj.views['$key'].push(key);
-        //     }
-        //     return obj;
-        // };
+        /**
+         * 메타셋 스키마(컬럼)을 스키마 타입의 객체로 쓰기
+         * @param {number} p_vOpt 
+         * @returns {object} 스키마 타입
+         */
         MetaSet.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var schema = this.write(vOpt);
@@ -559,23 +469,11 @@
             
         };
 
-        // MetaSet.prototype.writeData  = function(p_vOpt) {
-        //     var vOpt = p_vOpt || 0;
-        //     var obj = { tables: {}, views: {} };
-
-        //     obj.setName = this.setName;
-        //     for(var i = 0; i < this.tables.count; i++) {
-        //         var table = this.tables[i];
-        //         var key = this.tables._keys[i];
-        //         obj.tables[key] = table.writeData(vOpt);
-        //     }
-        //     for(var i = 0; i < this.views.count; i++) {
-        //         var view = this.views[i];
-        //         var key = this.views._keys[i];
-        //         obj.views[key] = view.writeData(vOpt);
-        //     }
-        //     return obj;
-        // };
+        /**
+         * 메타셋 데이터(로우)를 스키마 타입의 객체로 쓰기
+         * @param {number} p_vOpt 
+         * @returns {object} 스키마 타입
+         */
         MetaSet.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
             var schema = this.write(vOpt);
@@ -590,18 +488,28 @@
             return schema;
         };
 
+        /**
+         * 메타테이블의 변경사항 허락 : commit
+         */
         MetaSet.prototype.acceptChanges  = function() {
             for (let i = 0; i < this.tables.count; i++) {
                 this.tables[i].acceptChanges();                
             }
         };
         
+        /**
+         * 메타테이블의 변경사항 취소 : rollback
+         */
         MetaSet.prototype.rejectChanges  = function() {
             for (let i = 0; i < this.tables.count; i++) {
                 this.tables[i].rejectChanges();                
             }
         };
         
+        /**
+         * 메타테이블들의 변경 유무
+         * @returns {boolean} 변경 여부
+         */
         MetaSet.prototype.hasChanges  = function() {
             for (let i = 0; i < this.tables.count; i++) {
                 var table = this.tables[i];
@@ -609,6 +517,8 @@
             }
             return false;
         };
+
+        
 
         return MetaSet;
     

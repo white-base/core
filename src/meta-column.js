@@ -166,7 +166,6 @@
              * get 우선순위 : 1. getter 있는 경우, 2. 내부값 __value  
              * set 우선순위 : 1. setter 있는 경우, 2. setter 리턴값이 없는 경우  
              * REVIEW: 정리표 보고 수정 필요!!
-             * @override
              * @member {string | number | boolean} _L.Meta.Entity.MetaColumn#value
              */
             Object.defineProperty(this, 'value', 
@@ -307,7 +306,7 @@
 
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -331,7 +330,7 @@
 
         /**
          * guid 객체 설정
-         * @override
+         * override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */
@@ -354,7 +353,6 @@
 
         /**
          * 컬럼 복제
-         * @override
          * @param {BaseEntity?} p_entity 지정한 엔티티로 복제
          * @returns {MetaColumn}
          */
@@ -695,7 +693,7 @@
 
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}

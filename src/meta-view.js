@@ -119,10 +119,9 @@
         MetaView._NS = 'Meta.Entity';                   // namespace
         MetaView._PARAMS = ['name', '_baseEntity'];     // creator parameter
 
-
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -142,7 +141,7 @@
 
         /**
          * guid 객체 설정
-         * @override
+         * override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */
@@ -171,34 +170,20 @@
         };
         /**
          * 객체 복제
-         * @override
+         * override
          * @returns {MetaView}
          */
         MetaView.prototype.clone  = function() {
             var clone = new MetaView(this.viewName, this._baseEntity);  // 뷰를 복제하면 참조타입 >> 엔티티타입으로 변경
 
-            // if (this.columns._baseCollection) {
-            //     clone.columns.__SET$_baseCollection(this.columns._baseCollection, clone.columns);
-            // }
-            // for(var i = 0; i < this.columns._refEntities.length; i++) {
-            //     clone.columns._refEntities.push(this.columns._refEntities[i]);
-            // }
             for(var i = 0; i < this.columns.count; i++) {
                 if (this.columns[i]._entity === this) clone.columns.add(this.columns[i].clone(clone));
                 else clone.columns.add(this.columns[i].clone());
-                // clone.columns.add(this.columns[i].clone(clone));
             }
 
             for(var i = 0; i < this.rows.count; i++) {
                 clone.rows.add(this.rows[i].clone(clone));
             }
-
-            // var mObj = this.getObject();
-            // this.columns.setObject(mObj.columns);
-            // this.rows.setObject(mObj.rows);
-            // this.viewName = mObj.viewName;
-            
-
             return clone;
         };
         
@@ -244,12 +229,13 @@
          * 뷰 엔티티 컬렉션
          * @constructs _L.Meta.Entity.MetaViewCollection
          * @extends _L.Meta.Entity.PropertyCollection
-         * @param {*} p_owner 소유자 
+         * @param {object} p_owner 소유자 
          */
         function MetaViewCollection(p_owner) {    // COVER:
             _super.call(this, p_owner);
 
             var _baseType = MetaView;
+
             /**
              * 기본 생성 타입
              * @member {BaseColumnCollection} _L.Meta.Entity.MetaViewCollection#_baseType
@@ -258,9 +244,6 @@
             {
                 get: function() { return _baseType; },
                 set: function(nVal) { 
-                    // if (!(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
-                    //     Message.error('ES032', ['_baseType', 'BaseEntity']);
-                    // }
                     if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
                     if (!(new nVal('temp') instanceof MetaView)) Message.error('ES032', ['_baseType', 'MetaView']);
                     _baseType = nVal;
@@ -275,19 +258,6 @@
 
         MetaViewCollection._NS = 'Meta.Entity';    // namespace
         MetaViewCollection._PARAMS = ['_owner'];  // creator parameter
-
-        /**
-         * 객체 비교
-         * @override
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaViewCollection.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-
-        //     if (!this._compare(this._baseType, p_target._baseType)) return false;
-        //     return true;
-        // };
 
         /**
          * 뷰 컬렉션에 뷰 엔티티를 추가한다.
@@ -316,13 +286,11 @@
                 view = new this._baseType(key, p_baseEntity);
                 view._metaSet = this._owner;
             } else if (p_obj instanceof MetaView) {
-                // if (p_baseEntity) Message.error('ES015', ['MetaView object', 'refEntity']);
                 key  = p_obj.viewName;
                 view = p_obj;
                 p_obj._metaSet = this._owner;
             } else Message.error('ES021', ['object', 'string, MetaView object']);
 
-            // if (typeof key === 'undefined') Message.error('ES051', ['viewName']);
             if (this.existViewName(key)) Message.error('ES042', ['viewName', key]);
 
             return _super.prototype.add.call(this, key, view);

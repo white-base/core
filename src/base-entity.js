@@ -161,29 +161,29 @@
             return false;
         }
 
+        
         /**
-         * 스카마 객체로 변환
+         * 엔티티 스카마 객체로 변환
          * @protected
          * @param {object} p_oGuid getObject()로 얻은 객체
          * @returns {object}
          */
         BaseEntity.transformSchema  = function(p_oGuid) {
-            var _this = this;
+            var obj = {};
+            var oGuid = p_oGuid;
 
             if (!_isSchema(p_oGuid)) { 
                 Message.error('ES021', ['transformSchema(obj)', '{columns: ... , rows: ...}']);
             }
-            return transformEntity(p_oGuid);
 
-            // inner function
-            function transformEntity(oGuid) {
-                var obj = {};
-                if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
-                if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
-                obj['columns'] = transformColumn(oGuid['columns'], oGuid);
-                obj['rows'] = transformRow(oGuid['rows'], oGuid);
-                return obj;
-            }
+            if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
+            if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
+            obj['columns'] = transformColumn(oGuid['columns'], oGuid);
+            obj['rows'] = transformRow(oGuid['rows'], oGuid);
+            
+            return obj;
+
+            // inner funciton
             function transformColumn(oGuid, origin) {
                 var obj = {};
                 for (var i = 0; i < oGuid['_elem'].length; i++) {
@@ -395,7 +395,7 @@
         
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -669,7 +669,7 @@
         /**
          * 불러오기/가져오기 (!! 병합용도가 아님)
          * 기존을 초기화 하고 불러오는 역활
-         * @param {object} p_obj 불러오기 대상
+         * @param {object | string} p_obj 불러오기 대상
          * @param {function?} p_parse 파서
          */
         BaseEntity.prototype.load = function(p_obj, p_parse) {
@@ -681,6 +681,9 @@
                 if (typeof p_parse === 'function') obj = p_parse(obj);
                 else obj = JSON.parse(obj, null);
             }
+
+            if (!_isObject(obj)) Message.error('ES021', ['obj', 'object']);
+
             this.setObject(obj);
         };
 
@@ -835,6 +838,8 @@
         BaseEntity.prototype.copy = function() {
             Message.error('ES013', ['copy()']);
         };
+
+        
 
         return BaseEntity;
     

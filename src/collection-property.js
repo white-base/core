@@ -135,7 +135,7 @@
 
         /**
          * guid 객체 얻기
-         * @override
+         * override
          * @param {number} p_vOpt 레벨 옵션
          * @param {(object | array<object>)?} p_owned 소유한 객체
          * @returns {object}
@@ -170,7 +170,7 @@
 
         /**
          * guid 객체 설정
-         * @override
+         * override
          * @param {object} p_oGuid 레벨 옵션
          * @param {object} p_origin 설정 원본 객체
          */
@@ -214,7 +214,6 @@
         /**
          * 요소 또는 키를 인덱스 조회  
          * - 키 의 인덱스는 ABC._keys.indexOf('aaa') 로 조회 할수 있다.
-         * @override
          * @param {string | any} p_obj key 또는 대상 객체
          * @param {boolean?} p_isKey 옵션
          * @returns {number} 없을시 -1

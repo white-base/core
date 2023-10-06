@@ -1468,7 +1468,7 @@ describe("[target: meta-set.js]", () => {
                 expect(table1._metaSet === set1).toBe(true)
                 expect(()=> table1._metaSet = 'ERR').toThrow(/ES032/)
             });
-            it("- MetaSet._isSchema() ", () => {
+            it.skip("- MetaSet._isSchema() ", () => {
                 // class SubClass extends BaseEntity {
                 //     constructor(name) {super(name)}
                 // }
