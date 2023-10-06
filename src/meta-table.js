@@ -164,17 +164,11 @@
 
         /**
          * 엔티티를 복사한다. (조회 후 복제)
-         * @param {array<string> | arguments<string>} p_columns 컬럼명
-         * @returns {MetaTable}
-         */
-        MetaTable.prototype.copy  = function(p_columns) {
-        };
-
-        /**
-         * 엔티티를 복사한다. (조회 후 복제)
-         * @param {function} p_filter rows 필터 함수
-         * @param {array<string> | arguments<string>} p_args 컬럼명
-         * @returns {MetaTable}
+         * @param {overload}            type1
+         * @param {function}            type1.p_filter 로우 필터 함수
+         * @param {arguments<string>}   type1.p_args 컬럼명
+         * @param {overload}            type2
+         * @param {string}              type2.p_columns 컬럼명
          */
         MetaTable.prototype.copy  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);

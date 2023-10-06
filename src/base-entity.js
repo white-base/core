@@ -167,11 +167,11 @@
          * @param {object} p_oGuid getObject()로 얻은 객체
          * @returns {object}
          */
-        BaseEntity._transformSchema  = function(p_oGuid) {
+        BaseEntity.transformSchema  = function(p_oGuid) {
             var _this = this;
 
             if (!_isSchema(p_oGuid)) { 
-                Message.error('ES021', ['_transformSchema(obj)', '{columns: ... , rows: ...}']);
+                Message.error('ES021', ['transformSchema(obj)', '{columns: ... , rows: ...}']);
             }
             return transformEntity(p_oGuid);
 
@@ -743,7 +743,7 @@
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = BaseEntity._transformSchema(obj); // gObj >> sObj<요약>
+                obj = BaseEntity.transformSchema(obj); // gObj >> sObj<요약>
             }
             if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
 
@@ -762,7 +762,7 @@
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = BaseEntity._transformSchema(p_obj);
+                obj = BaseEntity.transformSchema(p_obj);
             }
             if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
             
@@ -788,7 +788,7 @@
             var oSch;
             var oGuid = this.getObject(p_vOpt);
 
-            return BaseEntity._transformSchema(oGuid);
+            return BaseEntity.transformSchema(oGuid);
         };
 
         /**

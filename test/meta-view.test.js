@@ -75,6 +75,12 @@ describe("[target: meta-view.js]", () => {
 
                 expect(()=> view1.columns = col).toThrow(/ES047/)
             });
+            it("- 커버리지 : columns ", () => {
+                var view1 = new MetaView('T1');
+                view1.columns.add('i1');
+                var col = new MetaViewColumnCollection(view1);
+                view1.columns = col
+            });
         });
         describe("MetaView._baseEntity <기본 엔티티>", () => {
             it("- 예외 : 타입이 다를 경우 ", () => {

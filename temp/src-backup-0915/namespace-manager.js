@@ -182,7 +182,7 @@
                 enumerable: true
             });
 
-            this.__KEYWORD = ['namespace', 'ns', 'NS', '_type'];
+            this.___KEYWORD = ['namespace', 'ns', 'NS', '_type'];
 
             Util.implements(this, IList, IListControl);
         }
@@ -253,7 +253,7 @@
             var sections = __getArray(p_ns);
         
             // 에약어 제거
-            if (this.__KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1);
+            if (this.___KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1);
         
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];

@@ -165,7 +165,7 @@
         // }
         
         // 3가지 타입 입력
-        MetaSet._transformSchema  = function(p_oGuid) {
+        MetaSet.transformSchema  = function(p_oGuid) {
             // var obj  = {
             //     tables: null,
             //     views: null
@@ -188,7 +188,7 @@
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var table = p_oGuid['_elem'][i];
                     var key = p_oGuid['_key'][i]; 
-                    obj[key] = BaseEntity._transformSchema(table);
+                    obj[key] = BaseEntity.transformSchema(table);
                 }
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
@@ -198,7 +198,7 @@
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var view = p_oGuid['_elem'][i];
                     var key = p_oGuid['_key'][i]; 
-                    obj[key] = BaseEntity._transformSchema(view);
+                    obj[key] = BaseEntity.transformSchema(view);
                 }
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
@@ -384,7 +384,7 @@
             if (MetaRegistry.isGuidObject(metaSet)) {
                 // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);  // 참조가 기본 존재함
                 metaSet = MetaRegistry.transformRefer(metaSet);
-                obj = MetaSet._transformSchema(metaSet);
+                obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
             if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
@@ -447,7 +447,7 @@
             if (MetaRegistry.isGuidObject(metaSet)) {
                 // if (MetaRegistry.hasRefer(metaSet)) metaSet = MetaRegistry.transformRefer(metaSet);
                 metaSet = MetaRegistry.transformRefer(metaSet);
-                obj = MetaSet._transformSchema(metaSet);
+                obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
             if (!MetaSet._isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
@@ -514,7 +514,7 @@
             var oSch;
             var oGuid = this.getObject(p_vOpt);
 
-            return MetaSet._transformSchema(oGuid);
+            return MetaSet.transformSchema(oGuid);
         };
 
         // MetaSet.prototype.writeSchema  = function(p_vOpt) {

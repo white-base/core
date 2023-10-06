@@ -5,8 +5,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    // var MetaObject;
-    var NamespaceManager;
 
     //==============================================================
     // 1. namespace declaration
@@ -15,24 +13,21 @@
 
     //==============================================================
     // 2. import module
-    // if (isNode) {     
-    //     NamespaceManager            = require('./namespace-manager').NamespaceManager;
-    // } else {
-    //     NamespaceManager            = _global._L.NamespaceManager;
-    // }
 
     //==============================================================Á
     // 3. module dependency check
-    // if (typeof NamespaceManager === 'undefined') throw new Error('[NamespaceManager] module load fail...');
 
     //==============================================================
     // 4. module implementation       
     var Message = (function () {
-        /**
-         * 메타 등록소
+       /**
+        * 메세지 
+        * @constructs _L.Common.Message
+        * @static
         */
        function Message() { 
         }
+
         Message._NS = 'Common';     // namespace
         
         // var define
@@ -494,7 +489,7 @@
         
         /**
          * 메세지 언어 
-         * @member {string} _L.Meta.Message#lang
+         * @member {string} _L.Common.Message#lang
          */
         Object.defineProperty(Message, "lang", {
             get: function() { return lang; },
@@ -508,7 +503,7 @@
 
         /**
          * 긴 메세지 여부
-         * @member {string} _L.Meta.Message#isLong
+         * @member {string} _L.Common.Message#isLong
          */
         Object.defineProperty(Message, "isLong", {
             get: function() { return isLong; },
@@ -585,25 +580,45 @@
         }
 
         /**
-         * 메세지 얻기
-         * @param {*} meta 
+         * 코드에 값을 매칭하여 리턴
+         * @param {string} p_code 코드
+         * @param {array<string>} p_aValue $1, $2... 매창값
+         * @returns {string}
          */
         Message.get = function(p_code, p_aValue) {
             return buildMessage(p_code, p_aValue);
         };
 
+        /**
+         * 코드에 대한 정보
+         * @param {string} p_code 
+         * @returns {object}
+         */
         Message.getInfo = function(p_code) {
             return getCodeObject(p_code);
         };
 
+        /**
+         * 예외 리턴, throw new Error(...) 
+         * @param {string} p_code 코드
+         * @param {array<string>} p_aValue $1, $2... 매창값
+         */
         Message.error = function(p_code, p_aValue) {
             throw new Error(Message.get(p_code, p_aValue));
         };
 
+        /**
+         * 경로 리턴, console.warn(...)
+         * @param {string} p_code 코드
+         * @param {array<string>} p_aValue $1, $2... 매창값
+         */
         Message.warn = function(p_code, p_aValue) {
             console.warn(Message.get(p_code, p_aValue));
         };
 
+        /**
+         * 초기화
+         */
         Message.init = function() {
             this.lang = 'eng';
             this.isLong = true;

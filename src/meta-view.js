@@ -113,42 +113,12 @@
 
             if (p_baseEntity) this._baseEntity = p_baseEntity;
             
-
-            // this.columns 
-
-            // inner variable access
-            // this.__SET$_baseEntity = function(val, call) {
-            //     if (call instanceof MetaView) _baseEntity = val;
-            // }
         }
         Util.inherits(MetaView, _super);
 
-        MetaView._NS = 'Meta.Entity';    // namespace
-        MetaView._PARAMS = ['name', '_baseEntity'];  // creator parameter
+        MetaView._NS = 'Meta.Entity';                   // namespace
+        MetaView._PARAMS = ['name', '_baseEntity'];     // creator parameter
 
-        /**
-         * 뷰 엔티티에 참조를 등록한다. (중복 제거후)
-         * @param {BaseEntity} p_entity 
-         */
-        // MetaView.prototype._regRefer  = function(p_entity) {
-        //     if (!(p_entity instanceof BaseEntity)) Message.error('ES032', ['entity', 'BaseEntity']);
-        //     if (this._refEntities.indexOf(p_entity) < 0) this._refEntities.push(p_entity);
-        // };
-        
-        /**
-         * 객체 비교
-         * @override
-         * @param {object} p_target 대상 MetaObject
-         * @returns {boolean}
-         */
-        // MetaView.prototype.equal = function(p_target) {
-        //     if (!_super.prototype.equal.call(this, p_target)) return false;
-
-        //     if (!this._compare(this.viewName, p_target.viewName)) return false;
-        //     if (!this._compare(this._baseEntity, p_target._baseEntity)) return false;
-        //     if (!this._compare(this._refEntities, p_target._refEntities)) return false;
-        //     return true;
-        // };
 
         /**
          * guid 객체 얻기
@@ -234,8 +204,11 @@
         
         /**
          * 엔티티를 복사한다. (조회 후 복제)
-         * @param {function | stirng | array | arguments} p_filter
-         * @param {arguments} p_args
+         * @param {overload}            type1
+         * @param {function}            type1.p_filter 로우 필터 함수
+         * @param {arguments<string>}   type1.p_args 컬럼명
+         * @param {overload}            type2
+         * @param {string}              type2.p_columns 컬럼명
          */
         MetaView.prototype.copy  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);

@@ -27,7 +27,7 @@
     },
     "docdash": {
       "static": true,
-      "sort": false,
+      "sort": true,
       "sectionOrder": [
         "Namespaces",
         "Classes",

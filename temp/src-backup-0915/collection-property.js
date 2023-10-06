@@ -74,7 +74,7 @@
             });
 
             // 예약어 등록 
-            this._KEYWORD = this._KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
+            this.__KEYWORD = this.__KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
             Util.implements(this, IPropertyCollection);
         }
         Util.inherits(PropertyCollection, _super);
@@ -211,7 +211,7 @@
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
             // 예약어 검사
-            if (this._KEYWORD.indexOf(p_name) > -1) {
+            if (this.__KEYWORD.indexOf(p_name) > -1) {
                 Message.error('ES048', [p_name, 'Symbol word']);
             }
             if (this.exist(p_name)) {

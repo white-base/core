@@ -65,7 +65,7 @@
             var _owner = p_owner || null;
             var _elements = [];
             var _descriptors = [];
-            var _KEYWORD = [];
+            var __KEYWORD = [];
             var _elemTypes  = []; 
 
             /** 
@@ -135,14 +135,14 @@
             /** 
              * 심볼 예약어 목록 
              * @protected
-             * @member {Array}  _L.Collection.BaseCollection#_KEYWORD  
+             * @member {Array}  _L.Collection.BaseCollection#__KEYWORD  
              */
-             Object.defineProperty(this, '_KEYWORD', {
+             Object.defineProperty(this, '__KEYWORD', {
                 get: function() { 
-                    return _KEYWORD;
+                    return __KEYWORD;
                 },
                 set: function(p_val) {
-                    _KEYWORD = p_val;
+                    __KEYWORD = p_val;
                 },
                 enumerable: false,
                 configurable: false
@@ -253,10 +253,10 @@
             });
 
             // 예약어 등록
-            this._KEYWORD = this._KEYWORD.concat(['__event', '_owner', '_elements', '_KEYWORD', '_elemTypes', 'list', 'count']);
-            this._KEYWORD = this._KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
-            this._KEYWORD = this._KEYWORD.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
-            this._KEYWORD = this._KEYWORD.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
+            this.__KEYWORD = this.__KEYWORD.concat(['__event', '_owner', '_elements', '__KEYWORD', '_elemTypes', 'list', 'count']);
+            this.__KEYWORD = this.__KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
+            this.__KEYWORD = this.__KEYWORD.concat(['_getPropDescriptor', '_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
+            this.__KEYWORD = this.__KEYWORD.concat(['_remove', 'add', 'clear', 'remove', 'removeAt', 'indexOf', 'exist']);
 
             Util.implements(this, ICollection, IList);
         }

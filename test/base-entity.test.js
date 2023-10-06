@@ -115,8 +115,8 @@ describe("[target: base-entity.js]", () => {
                 // }
                 // const s1 = new SubClass('S1');
 
-                expect(()=> BaseEntity._transformSchema('ERR')).toThrow(/ES021/)
-                expect(()=> BaseEntity._transformSchema(null)).toThrow(/ES021/)
+                expect(()=> BaseEntity.transformSchema('ERR')).toThrow(/ES021/)
+                expect(()=> BaseEntity.transformSchema(null)).toThrow(/ES021/)
             });
         });
     });

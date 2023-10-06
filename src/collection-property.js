@@ -84,7 +84,7 @@
 
 
             // 예약어 등록 
-            this._KEYWORD = this._KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
+            this.__KEYWORD = this.__KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
 
             Util.implements(this, IPropertyCollection);
         }
@@ -243,7 +243,7 @@
 
                 if (!_isString(p_name)) Message.error('ES021', ['name', 'string']);
                 if(!regex.test(p_name)) Message.error('ES068', [p_name, 'Propery.name']);
-                if (this._KEYWORD.indexOf(p_name) > -1) Message.error('ES048', [p_name, 'Symbol word']);
+                if (this.__KEYWORD.indexOf(p_name) > -1) Message.error('ES048', [p_name, 'Symbol word']);
                 if (this.exist(p_name)) Message.error('ES042', [p_name, 'property._keys']);
                 if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
                 if (_isObject(p_desc) && p_desc.configurable === false) {

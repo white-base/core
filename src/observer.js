@@ -38,9 +38,9 @@
         function Observer(p_caller) {
             if (typeof p_caller !== 'object') Message.error('ES031', ['caller']);
             
+            var __subscribers = this._getInitObject();
             var isLog = false;
             var isSingleMode = false;
-            var __subscribers = this._getInitObject();
 
             /*_______________________________________*/        
             // priavte property

@@ -144,7 +144,7 @@
                 if (call instanceof NamespaceManager) __storage = val;
             }
 
-            this.__KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
+            this.___KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
 
             Util.implements(this, IList, IListControl);
         }
@@ -227,7 +227,7 @@
             var parent = this.__storage;
             var sections = _getArray(p_ns);
         
-            if (this.__KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
+            if (this.___KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
         
             for (var i = 0; i < sections.length; i+=1) {
                 var sName = sections[i];

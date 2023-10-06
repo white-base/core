@@ -68,7 +68,7 @@
             var _elements = [];
             var _descriptors = [];
             var _elemTypes  = []; 
-            var _KEYWORD = [];
+            var __KEYWORD = [];
 
             /** 
              * 이벤트 객체
@@ -173,13 +173,13 @@
             
             /** 
              * 예약어
-             * @protected
-             * @member {array<string>}  _L.Collection.BaseCollection#_KEYWORD  
+             * @private
+             * @member {array<string>}  _L.Collection.BaseCollection#__KEYWORD  
              */
-            Object.defineProperty(this, '_KEYWORD', 
+            Object.defineProperty(this, '__KEYWORD', 
             {
-                get: function() { return _KEYWORD; },
-                set: function(p_val) { _KEYWORD = p_val; },
+                get: function() { return __KEYWORD; },
+                set: function(p_val) { __KEYWORD = p_val; },
                 configurable: false,
                 enumerable: false,
             });
@@ -315,11 +315,11 @@
             }
 
             // 예약어 등록
-            this._KEYWORD = this._KEYWORD.concat(['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '_KEYWORD']);
-            this._KEYWORD = this._KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
-            this._KEYWORD = this._KEYWORD.concat(['_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
-            this._KEYWORD = this._KEYWORD.concat(['_getPropDescriptor']);
-            this._KEYWORD = this._KEYWORD.concat(['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'exist', 'add', 'clear']);
+            this.__KEYWORD = this.__KEYWORD.concat(['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD']);
+            this.__KEYWORD = this.__KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
+            this.__KEYWORD = this.__KEYWORD.concat(['_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
+            this.__KEYWORD = this.__KEYWORD.concat(['_getPropDescriptor']);
+            this.__KEYWORD = this.__KEYWORD.concat(['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'exist', 'add', 'clear']);
 
             Util.implements(this, ICollection, IList);
         }
