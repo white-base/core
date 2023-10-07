@@ -393,11 +393,16 @@
         };
         
         /**
-         * guid 객체 얻기
-         * override
-         * @param {number} p_vOpt 레벨 옵션
-         * @param {(object | array<object>)?} p_owned 소유한 객체
-         * @returns {object}
+         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
+         * - 순환참조는 $ref 값으로 대체된다.
+         * @param {number} p_vOpt 가져오기 옵션
+         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
+         * 객체 비교 : equal(a, b)  
+         * a.getObject(2) == b.getObject(2)   
+         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
+         * @returns {object}  
          */
         BaseEntity.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);

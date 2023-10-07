@@ -59,7 +59,7 @@
             var _keys = [];
 
             /** 
-             * 키값
+             * 컬렉션에 있는 요소의 키값을 목록으로 가져옵니다. (참조값)
              * @readonly
              * @member {Array} _L.Collection.PropertyCollection#_keys 
              */
@@ -84,7 +84,7 @@
 
 
             // 예약어 등록 
-            this.__KEYWORD = this.__KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
+            this.__KEYWORD = this.__KEYWORD.concat(['_keys', 'indexOf', 'exist', 'keyOf']);
 
             Util.implements(this, IPropertyCollection);
         }
@@ -104,7 +104,7 @@
         }
 
         /**
-         * 속성 컬렉션을 삭제한다. (내부처리) [구현]
+         * 컬렉션에서 지정된 요소를 제거합니다. (내부)
          * @protected
          * @param {number} p_idx 속성명
          * @returns {boolean} 
@@ -134,11 +134,16 @@
         };
 
         /**
-         * guid 객체 얻기
-         * override
-         * @param {number} p_vOpt 레벨 옵션
-         * @param {(object | array<object>)?} p_owned 소유한 객체
-         * @returns {object}
+         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
+         * - 순환참조는 $ref 값으로 대체된다.
+         * @param {number} p_vOpt 가져오기 옵션
+         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
+         * 객체 비교 : equal(a, b)  
+         * a.getObject(2) == b.getObject(2)   
+         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
+         * @returns {object}  
          */
         PropertyCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
@@ -169,10 +174,10 @@
         };
 
         /**
-         * guid 객체 설정
-         * override
-         * @param {object} p_oGuid 레벨 옵션
-         * @param {object} p_origin 설정 원본 객체
+         * 현재 객체를 초기화 후, 지정한 guid 타입의 객체를 사용하여 설정합니다.   
+         * @param {object} p_oGuid guid 타입의 객체
+         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
+         * 기본값은 p_oGuid 객체와 동일
          */
         PropertyCollection.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -212,10 +217,9 @@
         };
 
         /**
-         * 요소 또는 키를 인덱스 조회  
-         * - 키 의 인덱스는 ABC._keys.indexOf('aaa') 로 조회 할수 있다.
-         * @param {string | any} p_obj key 또는 대상 객체
-         * @param {boolean?} p_isKey 옵션
+         * 지정(키, 요소)된 요소의 인덱스를 가져옵니다.  
+         * @param {string | any} p_obj 키 또는 지정할 객체
+         * @param {boolean?} p_isKey 키로 조회 여부
          * @returns {number} 없을시 -1
          */
         PropertyCollection.prototype.indexOf = function(p_obj, p_isKey) {
@@ -229,11 +233,11 @@
         };
 
         /**
-         * 속성컬렉션을 등록한다.[구현]
+         * 컬렉션에 지정된 이름으로 요소를 추가합니다.
          * @param {string} p_name [필수] 요소명
-         * @param {any?} p_value 요소값
+         * @param {any?} p_value 요소
          * @param {object?} p_desc 기술자
-         * @returns {boolean} 처리결과
+         * @returns {boolean} 결과
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
             try {
@@ -275,11 +279,12 @@
         };
 
         /**
-         * 초기화
+         * 컬렉션을 초기화 합니다.  (_element, _descriptors, _keys)  
+         * 이벤트는 초기화 되지 않습니다.
          */
         PropertyCollection.prototype.clear = function() {
             this._onClear();
-            // data process
+            
             for (var i = 0; i < this.count; i++) {
                 var propName = this.keyOf(i);
                 delete this[i];
@@ -293,7 +298,7 @@
         };
     
         /**
-         * 인덱스에 대한 키값 조회 [구현]
+         * 지정된 키로 요소의 인덱스를 가져옵니다.
          * @param {number} p_idx
          * @returns {string}
          */
@@ -303,8 +308,8 @@
         };
 
         /**
-         * 키 유무
-         * @param {string} p_key index, key
+         * 컬렉션에 이름이 지정된 열이 있는지 여부를 확인합니다.
+         * @param {string} p_key 요소키, 컬렉션키
          * @returns {boolean}
          */
         PropertyCollection.prototype.exist = function(p_key) {

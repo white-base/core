@@ -234,18 +234,20 @@
 
         /**
          * 현재 객체의 guid 타입의 객체를 가져옵니다.  
-         * (순환 X, 참조 X)  
-         * - opt = 0 : <기본값> 참조 관점의 요약된 객체    
-         * - opt = 1 : 소유 관점의 구조의 객체, guid 관점의 중복 가능  
-         * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
-         * @param {number} p_vOpt 레벨 옵션
-         * @param {(object | array<object>)?} p_owned 소유한 객체
+         * - 순환참조는 $ref 값으로 대체된다.
+         * @param {number} p_vOpt 가져오기 옵션
+         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
+         * 객체 비교 : equal(a, b)  
+         * a.getObject(2) == b.getObject(2)   
+         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
          * @returns {object}  
          */
         MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
             var vOpt = p_vOpt || 0;
             var obj = {};
-            // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
             if (vOpt < 2 && vOpt > -1) obj['_guid'] = this._guid;
             obj['_type'] = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
@@ -253,9 +255,10 @@
         };
 
         /**
-         * 현재객체를 초기화하고, guid 타입의 객체를 설정합니다.
-         * @param {object} p_oGuid 레벨 옵션
-         * @param {object?} p_origin 설정 원본 객체
+         * 현재 객체를 초기화 후, 지정한 guid 타입의 객체를 사용하여 설정합니다.   
+         * @param {object} p_oGuid guid 타입의 객체
+         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
+         * 기본값은 p_oGuid 객체와 동일
          */
         MetaObject.prototype.setObject  = function(p_oGuid, p_origin) {
             var origin = p_origin ? p_origin : p_oGuid;
@@ -275,7 +278,7 @@
         };
 
         return MetaObject;
-        
+
     }());
 
     //==============================================================

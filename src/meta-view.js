@@ -120,11 +120,16 @@
         MetaView._PARAMS = ['name', '_baseEntity'];     // creator parameter
 
         /**
-         * guid 객체 얻기
-         * override
-         * @param {number} p_vOpt 레벨 옵션
-         * @param {(object | array<object>)?} p_owned 소유한 객체
-         * @returns {object}
+         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
+         * - 순환참조는 $ref 값으로 대체된다.
+         * @param {number} p_vOpt 가져오기 옵션
+         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
+         * 객체 비교 : equal(a, b)  
+         * a.getObject(2) == b.getObject(2)   
+         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
+         * @returns {object}  
          */
         MetaView.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
@@ -140,10 +145,10 @@
         };
 
         /**
-         * guid 객체 설정
-         * override
-         * @param {object} p_oGuid 레벨 옵션
-         * @param {object} p_origin 설정 원본 객체
+         * 현재 객체를 초기화 후, 지정한 guid 타입의 객체를 사용하여 설정합니다.  
+         * @param {object} p_oGuid guid 타입의 객체
+         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
+         * 기본값은 p_oGuid 객체와 동일
          */
         MetaView.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);

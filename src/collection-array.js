@@ -94,11 +94,16 @@
         };
 
         /**
-         * guid 객체 얻기
-         * override
-         * @param {number} p_vOpt 레벨 옵션
-         * @param {(object | array<object>)?} p_owned 소유한 객체
-         * @returns {object}
+         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
+         * - 순환참조는 $ref 값으로 대체된다.
+         * @param {number} p_vOpt 가져오기 옵션
+         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
+         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
+         * 객체 비교 : equal(a, b)  
+         * a.getObject(2) == b.getObject(2)   
+         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
+         * @returns {object}  
          */
         ArrayCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
@@ -124,10 +129,10 @@
         };
 
         /**
-         * guid 객체 설정
-         * override
-         * @param {object} p_oGuid 레벨 옵션
-         * @param {object} p_origin 설정 원본 객체
+         * 현재 객체를 초기화 후, 지정한 guid 타입의 객체를 사용하여 설정합니다.   
+         * @param {object} p_oGuid guid 타입의 객체
+         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
+         * 기본값은 p_oGuid 객체와 동일
          */
         ArrayCollection.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -160,7 +165,7 @@
         };        
 
         /**
-         * 배열속성 컬렉션을 추가한다. [구현]
+         * 컬렉션에 요소를 추가합니다.
          * @param {any} p_value [필수] 요소값
          * @param {object} p_desc 프로퍼티 기술 객체
          * @returns {number} 추가한 인덱스
@@ -172,22 +177,25 @@
         };
 
         /**
-         * 배열속성 컬렉션을 초기화 [구현]
+         * 컬렉션을 초기화 합니다.  (_element, _descriptors, _keys)  
+         * 이벤트는 초기화 되지 않습니다.
          */
         ArrayCollection.prototype.clear = function() {
             this._onClear();    // event
+
             for (var i = 0; i < this.count; i++) delete this[i];
             this.__SET$_elements([], this);
             this.__SET$_descriptors([], this);
+            
             this._onCleared();    // event
         };
 
         /**
-         * 지정 위치에 요소 추가
-         * @param {number} p_pos 
-         * @param {any} p_value 
-         * @param {object} p_desc 
-         * @returns {boolean}
+         * 컬렉션에서 지정된 인덱스의 열을 추가합니다.
+         * @param {number} p_pos 인덱스 위치
+         * @param {any} p_value 요소
+         * @param {object} p_desc 기술자
+         * @returns {boolean} 
          */
         ArrayCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
             try {
