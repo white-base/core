@@ -85,7 +85,7 @@
          * @implements {_L.Interface.IImportControl}
          * @implements {_L.Interface.IExportControl}
          * @implements {_L.Interface.ISerialize}
-         * @param {String} p_name 
+         * @param {string} p_name 
          * @param {MetaSet?} p_metaSet 메타셋
          */
         function BaseEntity(p_name) {
@@ -164,7 +164,6 @@
         
         /**
          * 엔티티 스카마 객체로 변환
-         * @protected
          * @param {object} p_oGuid getObject()로 얻은 객체
          * @returns {object}
          */

@@ -48,25 +48,28 @@
             /**
              * 전역 구독자
              * @private
-             * @member {object}
+             * @member {object}  _L.Common.Observer#__subscribers  
              */
             Object.defineProperty(this, '__subscribers',
             {
                 get: function() { return __subscribers; },
-                // get: function() { 
-                //     return Util.deepCopy(__subscribers); 
-                // },
-                set: function(nVal) { 
-                    Message.error('ES064', ['__subscribers', '__SET$__subscribers(val, caller)']);                    
-                    // if (typeof nVal !== 'object') Message.error('ES021', ['__subscribers', 'object']);
-                    // if (typeof nVal.any === 'undefined') Message.error('ES021', ['__subscribers.any', 'array']);
-                    // __subscribers = nVal;
-                }
+                configurable: false,
+                enumerable: false
+            });
+
+            /**
+             * 호출함수의 this 
+             * @protected
+             * @member {object} _L.Common.Observer#_caller  
+             */
+            Object.defineProperty(this, '_caller', {
+                value: p_caller,
+                writable: false
             });
 
             /**
              * 목록 
-             * @member {Array}  _L.Meta.NamespaceManager#list  
+             * @member {Array}  _L.Common.Observer#list  
              */
             Object.defineProperty(this, 'list', {
                 get: function() {
@@ -81,39 +84,15 @@
                         }
                     }
                     return arr;
-                    // var storage = this.__storage;
-                    // var arr = [];
-                    // var stack = [];
-
-                    // findElement(storage);
-                    // return arr;
-
-                    // // inner function
-                    // function findElement(target) { 
-                    //     // if (target !== null && typeof target !== 'object') return;
-                    //     for (var prop in target) {
-                    //         if (prop === '_type') continue;
-                    //         var ns = target[prop];
-                    //         stack.push(prop);
-                            
-                    //         if (!ns['_type']) {
-                    //             // for (var key in ns) {
-                    //             //     arr.push([stack.join('.'), key].join('.'));
-                    //             // }
-                    //             // arr.push([stack.join('.'), prop].join('.'));
-                    //             arr.push(stack.join('.'));
-                    //         // } else if (typeof ns === 'object') findElement(ns);
-                    //         } else findElement(ns);
-
-                    //         stack.pop();
-                    //     }
-                    // }
                 },
                 configurable: false,
                 enumerable: true,
             });
 
-
+            /**
+             * 콘솔로드 출력 여부
+             * @member {boolean}  _L.Common.Observer#isLog  
+             */
             Object.defineProperty(this, 'isLog', 
             {
                 get: function() { return isLog; },
@@ -126,7 +105,7 @@
             /** 
              * 싱글모드는 callback 같이 작동함
              * 구독자 멀티모드, 단일시(false) 마지막 등록 구독자만 활성화 (기본값:true)  
-             * @member {Boolean} 
+             * @member {boolean} _L.Common.Observer#isSingleMode  
              */
             Object.defineProperty(this, 'isSingleMode',
             {
@@ -137,15 +116,7 @@
                 }
             });
 
-            /**
-             * 등록함수의 this 
-             * @protected
-             * @member {object}
-             */
-            Object.defineProperty(this, '_caller', {
-                value: p_caller,
-                writable: false
-            });
+
 
             // inner variable access
             this.__SET$__subscribers = function(val, call) {
@@ -158,12 +129,19 @@
         }
 
         Observer._NS = 'Common';    // namespace
-        Observer._PARAMS = ['caller'];  // creator parameter
+        Observer._PARAMS = ['_caller'];  // creator parameter
 
+        /**
+         * 초기화 객체 얻기
+         * @returns {object}
+         */
         Observer.prototype._getInitObject = function() {
             return { any: [] };
         };
         
+        /**
+         * 초기화
+         */
         Observer.prototype.init = function() {
             var obj = this._getInitObject();
             this.__SET$__subscribers(obj, this);
@@ -243,8 +221,7 @@
         exports.Observer = Observer;
     } else {
         _global._L.Observer = Observer;
-        // namespace
-        _global._L.Common.Observer = Observer;
+        _global._L.Common.Observer = Observer;  // namespace
     }
 
 }(typeof window !== 'undefined' ? window : global));

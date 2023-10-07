@@ -76,6 +76,17 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(c2.equal({})).toBe(false);
                 expect(c2.equal(10)).toBe(false);
             });
+            it("- equal() : 외부 객체 비교, 객체 비교 ", () => {
+                var meta1 = new MetaObject();
+                var meta2 = new MetaObject();
+                var obj1 = {a: 1};
+                var obj2 = {a: 1};
+                
+                expect(meta1.equal(meta2)).toBe(true);
+                expect(meta2.equal(meta1)).toBe(true);
+                expect(meta1 === meta2).toBe(false);
+                expect(meta1.equal(obj1, obj2)).toBe(true);
+            });
         });
         
         describe("MetaObject.getTypes() : arr<func> <타입 조회>", () => {
@@ -401,7 +412,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
             it("- 예외 : _name, guid ", () => {
                 const i = new MetaElement('_name');
 
-                expect(()=> i._name = 10).toThrow('ES021');
+                // expect(()=> i._name = 10).toThrow('ES021');
                 expect(()=> i._guid = 10).toThrow(/Cannot set property _guid of/); // 직접 설정할 경우는 없음
             });
             it("- 커버리지 : this.__SET$_name ", () => {

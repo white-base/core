@@ -515,7 +515,7 @@
         });
 
         // local function
-        function getCodeObject(code){
+        function _getCodeObject(code){
             var MSG = __STORAGE[lang];
             var div, part, num;
 
@@ -530,8 +530,8 @@
         }
         
 
-        function buildMessage(code, arr) {
-            var obj = getCodeObject(code);
+        function _buildMessage(code, arr) {
+            var obj = _getCodeObject(code);
             var msg, long;
 
             if (typeof obj !== 'object') return _intro(code) + 'There are no messages about the code.' 
@@ -586,7 +586,7 @@
          * @returns {string}
          */
         Message.get = function(p_code, p_aValue) {
-            return buildMessage(p_code, p_aValue);
+            return _buildMessage(p_code, p_aValue);
         };
 
         /**
@@ -595,7 +595,7 @@
          * @returns {object}
          */
         Message.getInfo = function(p_code) {
-            return getCodeObject(p_code);
+            return _getCodeObject(p_code);
         };
 
         /**

@@ -43,7 +43,7 @@
     // 4. module implementation   
     var MetaObject  = (function () {
         /**
-         * 메타 최상위 클래스 (실체)
+         * 메타 최상위 클래스의 새 인스턴스를 초기화합니다.
          * @constructs _L.Meta.MetaObject
          * @implements {_L.Interface.IObject}
          * @implements {_L.Interface.IMarshal}
@@ -53,9 +53,12 @@
             var _guid;
             
             /**
-             * 유일한 값
+             * 현재 객체의 고유한 식별자을 가져옵니다.
              * @readonly
              * @member {string} _L.Meta.MetaObject#_guid 
+             * @example
+             * var obj = MetaObject();
+             * console.log(obj._guid);      // '5337877c-49d6-9add-f35a-7bd31d510d4f' unique key code
              */
             Object.defineProperty(this, '_guid', 
             {
@@ -68,9 +71,13 @@
             });
 
             /**
-             * 생성자(일급함수)
+             * 현재 인스턴스의 type 을 가져옵니다.
              * @readonly
              * @member {function} _L.Meta.MetaObject#_type 
+             * @example
+             * var obj = new MetaObject();
+             * obj._type === MetaObject;        // true
+             * console.log(typeof obj._type);   // 'function'
              */
             Object.defineProperty(this, '_type', 
             {
@@ -120,15 +127,22 @@
         }
 
         /**
-         * 객체 비교  
+         * 지정된 객체가 현재 객체와 같은지 확인합니다.
          * '===' 연산자의 객체 주소 비교가 아니고, 속성별 타입과 값에 대한 비교  
          * _guid 는 비교에서 제외됨  
          * @param {any} p_target 대상 객체
          * @param {any?} p_origin 비교 객체의 기본은 this 이며 입력시 다르객체와 비교한다.
          * @returns {boolean}
          * @example
-         * if (this.equal(obj)) console.log('this == obj');
-         * if (this.equal(obj1, obj2)) console.log('obj1 == obj2')
+         * var meta1 = new MetaObject();
+         * var meta2 = new MetaObject();
+         * meta1.equal(meta2);      // true
+         * meta2.equal(meat1);      // true
+         * meta1 === meta2;         // false
+         * 
+         * var obj1 = {a: 1};
+         * var obj2 = {a: 1};
+         * this.equal(obj1, obj2);  // true
          */
         MetaObject.prototype.equal = function(p_target, p_origin) {
             var origin = p_origin || this;
@@ -136,8 +150,21 @@
         };
 
         /**
-         * 객체 타입 이름 얻기 (상속포함)
+         * 현재 객체의 상속타입을 Array 타입으로 가져옵니다.
          * @returns {array<function>}
+         * @example
+         * var obj = new MetaObject();
+         * var arr = obj.getTypes();
+         * arr[0] === MetaObject;   // true
+         * arr[1] === Object;       // true
+         * console.log(arr.length); // 2
+         * 
+         * var elem = new MetaElement('e1');   // Inherited MetaObject 
+         * var arr = elem.getTypes();
+         * arr[0] === MetaElement;  // true
+         * arr[1] === MetaObject;   // true
+         * arr[2] === Object;       // true
+         * console.log(arr.length); // 3
          */
         MetaObject.prototype.getTypes = function() {
             return parentFunction(this);
@@ -155,9 +182,25 @@
         };
 
         /**
-         * 상위 클래스 또는 인터페이스 구현 여부
+         * 상위 클래스 또는 인터페이스의 인스턴지 인지 확인합니다.
          * @param {string | function} p_fun 함수명으로 넣으면 이름만 검색, 클래스를 넣은면 클래스 검색
          * @returns {boolean}
+         * @example
+         * var obj = new MetaObject();
+         * obj.instanceOf('MetaObject');    // true
+         * obj.instanceOf('Object');        // true
+         * obj.instanceOf(MetaObject);      // true
+         * obj.instanceOf(Object);          // true
+         * obj.instanceOf(String);          // false
+         * 
+         * var elem = new MetaElement('e1');// Inherited MetaObject 
+         * obj.instanceOf('MetaElement');   // true
+         * obj.instanceOf('MetaObject');    // true
+         * obj.instanceOf('Object');        // true
+         * obj.instanceOf(MetaElement);     // true
+         * obj.instanceOf(MetaObject);      // true
+         * obj.instanceOf(Object);          // true
+         * obj.instanceOf(String);          // false
          */
         MetaObject.prototype.instanceOf = function(p_fun) {
             var _this = this;
@@ -190,9 +233,9 @@
         };
 
         /**
-         * guid 객체 얻기  
+         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
          * (순환 X, 참조 X)  
-         * - opt = 0 : <기본값> 참조 관점의 요약된 객체  
+         * - opt = 0 : <기본값> 참조 관점의 요약된 객체    
          * - opt = 1 : 소유 관점의 구조의 객체, guid 관점의 중복 가능  
          * - opt = 2 : opt = 1 조건과 guid, $ref 가 제외됨  (객체 비교에 활용)
          * @param {number} p_vOpt 레벨 옵션
@@ -210,9 +253,9 @@
         };
 
         /**
-         * guid 객체 설정
+         * 현재객체를 초기화하고, guid 타입의 객체를 설정합니다.
          * @param {object} p_oGuid 레벨 옵션
-         * @param {object} p_origin 설정 원본 객체
+         * @param {object?} p_origin 설정 원본 객체
          */
         MetaObject.prototype.setObject  = function(p_oGuid, p_origin) {
             var origin = p_origin ? p_origin : p_oGuid;

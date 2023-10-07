@@ -58,9 +58,9 @@ describe("[target: observer.js]", () => {
             expect(()=> e._event.subscribe()).toThrow('ES021');
             expect(()=> e._event.subscribe('str')).toThrow('ES021');
             // __subscribers
-            expect(()=> e._event.__subscribers = 1).toThrow('ES064');
-            expect(()=> e._event.__subscribers = 'str').toThrow('ES064');
-            expect(()=> e._event.__subscribers = {}).toThrow('ES064');
+            // expect(()=> e._event.__subscribers = 1).toThrow('ES064');
+            // expect(()=> e._event.__subscribers = 'str').toThrow('ES064');
+            // expect(()=> e._event.__subscribers = {}).toThrow('ES064');
             // innner
             expect(()=> e._event.__SET$__subscribers(1, e._event)).toThrow('ES021');
             expect(()=> e._event.__SET$__subscribers('str', e._event)).toThrow('ES021');

@@ -246,7 +246,7 @@
             });
 
             /** 
-             * 전체 제거 전 이벤트
+             * 현재 컬렉션이 초기화될 때 발생합니다.
              * @event _L.Collection.BaseCollection#onClear
              * @param {function}    p_callback
              * @param {this}        p_callback.p_this 현재 컬렉션
@@ -259,7 +259,7 @@
             });
 
             /** 
-             * 전체 제거 후 이벤트
+             * 현재 컬렉션이 초기화된 후 발생합니다.
              * @event _L.Collection.BaseCollection#onCleared
              * @param {function}    p_callback
              * @param {this}        p_callback.p_this 현재 컬렉션
@@ -272,7 +272,7 @@
             });
 
             /** 
-             * 변경 전 이벤트  
+             * 현재 컬렉션의 값이 변경될 때 발생합니다.
              * @event _L.Collection.BaseCollection#onChanging 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -287,7 +287,7 @@
             });
 
             /** 
-             * 변경 후 이벤트  
+             * 현재 컬렉션의 값이 변경된 후 발생합니다.
              * @event _L.Collection.BaseCollection#onChanged 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -317,8 +317,8 @@
 
             // 예약어 등록
             this.__KEYWORD = this.__KEYWORD.concat(['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD']);
-            this.__KEYWORD = this.__KEYWORD.concat(['onAddr', 'onRemove', 'onClear', 'onChanging', 'onChanged']);
-            this.__KEYWORD = this.__KEYWORD.concat(['_onAdd', '_onRemove', '_onClear', '_onChanging', '_onChanged']);
+            this.__KEYWORD = this.__KEYWORD.concat(['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged']);
+            this.__KEYWORD = this.__KEYWORD.concat(['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged']);
             this.__KEYWORD = this.__KEYWORD.concat(['_getPropDescriptor']);
             this.__KEYWORD = this.__KEYWORD.concat(['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'exist', 'add', 'clear']);
 
@@ -331,23 +331,23 @@
         BaseCollection._ABSCRACT = true;
         
         /**
-         * 추가 전 이벤트 수신자
-         * @listens _L.Collection.BaseCollection#_onAdd
+         * onRemove 이벤트 수신자 입니다.
+         * @listens _L.Collection.BaseCollection#onAdd
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
             this.__event.publish('add', p_idx, p_value, this); 
         };
 
         /**
-         * 추가 후 이벤트 수신자
-         * @listens _L.Collection.BaseCollection#_onAdded
+         * onRemove 이벤트 수신자 입니다.
+         * @listens _L.Collection.BaseCollection#onAdded
          */
         BaseCollection.prototype._onAdded = function(p_idx, p_value) {
             this.__event.publish('added', p_idx, p_value, this); 
         };
 
         /**
-         * 삭제 전 이벤트 수신자
+         * onRemove 이벤트 수신자 입니다.
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_value) {
@@ -355,7 +355,7 @@
         };
 
         /**
-         * 삭제 후 이벤트 수신자
+         * onRemoved 이벤트 수신자 입니다.
          * @listens _L.Collection.BaseCollection#onRemoved
          */
         BaseCollection.prototype._onRemoved = function(p_idx, p_value) {
@@ -363,7 +363,7 @@
         };
 
         /** 
-         *  초기화 전 수신자 이벤트
+         * onClear 이벤트 수신자 입니다.
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
@@ -371,7 +371,7 @@
         };
 
         /** 
-         *  초기화 후 수신자 이벤트
+         * onCleared 이벤트 수신자 입니다.
          * @listens _L.Collection.BaseCollection#onCleared
          */
         BaseCollection.prototype._onCleared = function() {
@@ -380,7 +380,7 @@
 
 
         /** 
-         *  변경(등록/삭제) 전 수신자 이벤트
+         * onChanging 이벤트 수신자 입니다.
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function(p_idx, p_value) {
@@ -388,7 +388,7 @@
         };
 
         /** 
-         *  변경(등록/삭제) 후 수신자 이벤트
+         *  현재 컬렉션의 값이 변경된 후 발생합니다.
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function(p_idx, p_value) {

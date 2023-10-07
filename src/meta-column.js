@@ -51,7 +51,7 @@
     if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     if (typeof BaseColumn === 'undefined') Message.error('ES011', ['BaseColumn', 'base-column']);
-    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);   // ~ Branch:
+    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
 
     //==============================================================
     // 4. module implementation
@@ -61,7 +61,7 @@
         /**
          * 메타 컬럼
          * @constructs _L.Meta.Entity.MetaColumn
-         * @extends _L.Meta.BaseColumn
+         * @extends _L.Meta.Entity.BaseColumn
          * @param {string} p_name 속성명
          * @param {BaseEntity?} p_entity 소유 BaseEntity
          * @param {object?} p_property 

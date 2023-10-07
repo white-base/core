@@ -45,7 +45,6 @@
         /**
          * 메타 요소, 독립적으로 사용가능한 단위
          * @constructs _L.Meta.MetaElement
-         * @abstract
          * @extends _L.Meta.MetaObject
          * @implements {_L.Interface.IElement}
          * @param {*} p_name 
@@ -56,28 +55,26 @@
             var _name;
 
             /**
-             * 메타 이름
+             * 현재 객체의 이름을 가져오거나, 설정합니다.
+             * @readonly
              * @member {string} _L.Meta.MetaElement#_name
              */
             Object.defineProperty(this, '_name',
             {
                 get: function() { return _name; },
-                set: function(nVal) { 
-                    if (typeof nVal !== 'string') Message.error('ES021', ['_name', 'string']);
-                    if (nVal.length === 0) Message.error('ES055', ['_name']);
-                    _name = nVal;
-                },
                 configurable: false,
                 enumerable: true
             });
 
-            this._name = p_name || '';
-
             // inner variable access
             this.__SET$_name = function(val, call) {
+                if (typeof val !== 'string') Message.error('ES021', ['_name', 'string']);
+                if (val.length === 0) Message.error('ES055', ['_name']);
                 if (call instanceof MetaElement) _name = val;    // 상속접근 허용
             }
             
+            this.__SET$_name(p_name, this);
+
             Util.implements(this, IElement);
         }
         Util.inherits(MetaElement, _super);
@@ -98,14 +95,14 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
             obj['name'] = this._name;
-            return obj;                        
+            return obj;
         };
 
         /**
          * guid 객체 설정
          * override
          * @param {object} p_oGuid 레벨 옵션
-         * @param {object} p_origin 설정 원본 객체
+         * @param {object?} p_origin 설정 원본 객체
          */
         MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);

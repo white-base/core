@@ -97,12 +97,12 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (typeof nVal !== 'string') Message.error('ES021', ['setName', 'string']);
-                    this._name = nVal;
+                    this.__SET$_name(nVal, this);
                 },
                 configurable: false,
                 enumerable: true
             });
-            
+
             /**
              * 메타 테이블 컬렉션
              * @readonly
@@ -164,7 +164,6 @@
         
         /**
          * 메타셋 스카마 객체로 변환
-         * @protected
          * @param {object} p_oGuid getObject()로 얻은 객체
          * @returns {object}
          */
@@ -216,12 +215,6 @@
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
-            // var origin = [];
-            // var origin = p_origin ? p_origin : obj;
-            
-            // if (Array.isArray(p_origin)) origin = p_origin;
-            // else if (p_origin) origin.push(p_origin);
-            // origin.push(obj);
 
             obj['setName'] = this.setName;
             obj['tables'] = this.tables.getObject(vOpt, owned);
@@ -237,6 +230,7 @@
          */
         MetaSet.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
+
             var origin = p_origin ? p_origin : p_oGuid;
             
             this.setName = p_oGuid['setName'];
@@ -484,7 +478,6 @@
             for (var prop in schema.views) {
                 if (prop.indexOf('$') < 0) schema.views[prop].columns = {};
             }
-            // schema.columns = {};
             return schema;
         };
 
@@ -517,8 +510,6 @@
             }
             return false;
         };
-
-        
 
         return MetaSet;
     

@@ -50,7 +50,7 @@
     
         /**
          * 메타 객체 목록
-         * @member {string} _L.Meta.MetaRegistry#_name
+         * @member {string} _L.Meta.MetaRegistry#list
          */
         Object.defineProperty(MetaRegistry, "list", 
         {
@@ -65,7 +65,7 @@
 
         /**
          * 메타 객체 갯수
-         * @member {string} _L.Meta.MetaRegistry#metaName
+         * @member {string} _L.Meta.MetaRegistry#count
          */
         Object.defineProperty(MetaRegistry, "count", 
         {
@@ -104,27 +104,19 @@
             if (typeof obj === 'string' && obj.length > 0) return true;
             return false;
         }
-
-        /**
-         * 객체 배열 리턴
-         * string에서 사용
-         * @param {object} p_oGuid 
-         * @param {array<object>} p_arr 재귀호출시 포함 목록
-         * @returns {array<object>}
-         */
-        MetaRegistry.__getGuidList = function(p_oGuid, p_arr) {
-            p_arr = p_arr || [];
-            if (this.isGuidObject(p_oGuid)) p_arr.push(p_oGuid);
-            if (Array.isArray(p_oGuid)){
-                for(var i = 0; i < p_oGuid.length; i++) {
-                    if (_isObject(p_oGuid[i])) this.__getGuidList(p_oGuid[i], p_arr);
+        function _getGuidList(oGuid, arr) {  //객체 배열 리턴
+            arr = arr || [];
+            if (MetaRegistry.isGuidObject(oGuid)) arr.push(oGuid);
+            if (Array.isArray(oGuid)){
+                for(var i = 0; i < oGuid.length; i++) {
+                    if (_isObject(oGuid[i])) _getGuidList(oGuid[i], arr);
                 }
-            } else if (_isObject(p_oGuid)) {
-                for(var prop in p_oGuid) {
-                    if (_isObject(p_oGuid[prop])) this.__getGuidList(p_oGuid[prop], p_arr);
+            } else if (_isObject(oGuid)) {
+                for(var prop in oGuid) {
+                    if (_isObject(oGuid[prop])) _getGuidList(oGuid[prop], arr);
                 }
             }
-            return p_arr;
+            return arr;
         };
 
         /**
@@ -324,7 +316,7 @@
 
             if (!_isObject(p_oGuid)) Message.error('ES021', ['oGuid', 'object']);
             
-            arrObj = this.__getGuidList(p_oGuid);
+            arrObj = _getGuidList(p_oGuid);
             if (!validUniqueGuid() || !validReference(p_oGuid) || !validCollection(p_oGuid)) return false;
             return true;
 
@@ -403,7 +395,7 @@
 
             for (var i = 0; i < arrOrigin.length; i++) {
                 var origin = arrOrigin[i];
-                var arrObj = this.__getGuidList(origin);
+                var arrObj = _getGuidList(origin);
                 if (!_isObject(origin)) Message.error('ES024', ['p_origin', 'object']);
                 for (var ii = 0; ii < arrObj.length; ii++) {
                     if (arrObj[ii]._guid === guid) return true;
@@ -495,7 +487,7 @@
 
             if (!_isObject(p_oGuid)) Message.error('ES024', ['p_oGuid', 'object']);
             
-            arrObj = this.__getGuidList(p_oGuid);
+            arrObj = _getGuidList(p_oGuid);
             clone = Util.deepCopy(p_oGuid);
             linkReference(clone, arrObj);
             return clone;
