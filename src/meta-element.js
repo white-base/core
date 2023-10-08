@@ -47,7 +47,7 @@
          * @constructs _L.Meta.MetaElement
          * @extends _L.Meta.MetaObject
          * @implements {_L.Interface.IElement}
-         * @param {*} p_name 
+         * @param {string} p_name 
          */
         function MetaElement(p_name) {
             _super.call(this);

@@ -52,7 +52,7 @@
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
     if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
     if (typeof BaseColumn === 'undefined') Message.error('ES011', ['BaseColumn', 'base-column']);
-    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);   // ~ Branch:
+    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
 
     //==============================================================
     // 4. module implementation

@@ -10,7 +10,7 @@
 
 /** 
  * 공통 유틸리티 네임스페이스
- * namespace _L.Common.Util 
+ * @namespace _L.Common.Util 
  */
 
 /** 

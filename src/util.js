@@ -55,7 +55,7 @@
     // 4. module implementation   
 
     // local function
-    function isObject(obj) {
+    function _isObject(obj) {``
         return obj != null && typeof obj === 'object';
     }
 
@@ -65,7 +65,7 @@
           return Object.prototype.toString.call(p_obj) === '[object Array]';
         };
     }
-    // REVIEW: 제거해둠, 대부분은 keys 는 들어 있음
+    // REVIEW: 제거해둠, 대부분은 keys 는 기본으로 정의되어 있음
     // if (!Object.keys) {
     //     Object.keys = (function () {
     //         var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -85,13 +85,16 @@
     //         }
     //     })()
     // };
-
+    
     /**
-     * inherits(대상, 부모) : 상속
+     * 지정한 부모(생성자)를 상속합니다.
      * @function
      * @memberof _L.Common.Util
+     * @param {object} ctor 대상
+     * @param {object} superCtor 상속 받는 부모 생성자
      */
     var inherits = (function () {
+
         if (typeof Object.create === 'function') {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
@@ -122,12 +125,12 @@
     }());
 
     /**
-     * 배열 깊이 얻기
+     * 배열 깊이를 가져옵니다.
      * @param {*} p_elem 
      * @param {*} p_depts 
      * @memberof _L.Common.Util
      */
-    var getArrayDepth = function (p_elem, p_depts) {
+    var getArrayDepth  = function(p_elem, p_depts) {
         var MAX     = 10;
         var level   = 0;
         
@@ -142,10 +145,11 @@
     };
     
     /**
-     * createGuid Guid 생성
+     * 고유한 식별자(guid)을 생성합니다.
      * @memberof _L.Common.Util
      */
     var createGuid = function() {
+
         function _p8(s) {  
             var p = (Math.random().toString(16)+'000000000').substr(2,8);  
             return s ? '-' + p.substr(0,4) + '-' + p.substr(4,4) : p ;  
@@ -154,125 +158,86 @@
     };
 
     /**
-     * 구현 제약 조건 검사
+     * 대상 객체에 인터페이스를 정의하고, 인스턴스를 검사합니다.  
+     * @name implements
+     * @function
+     * @memberof _L.Common.Util
      * @param {object} p_obj 대상 객체
-     * @param {function} args 대상 함수
+     * @param {function} args 대상 인터페이스들
      */
     var implement = function(p_obj, args) {
-        // var obj;    
         var _interface = [];
         var msg = '';
 
         if (typeof p_obj !== 'object') Message.error('ES024', ['this(target)', 'obj']);
 
-        
-        var funcClass = getType(p_obj);
-        if (!funcClass['_interface']) funcClass['_interface'] = [];
-        // POINT: static 교체
         if (typeof p_obj._interface === 'undefined') {
             Object.defineProperty(p_obj, '_interface', {
                 get: function() { 
-                    return funcClass['_interface'];
+                    return _interface;
                 },
                 configurable: false,
                 enumerable: false,
             });
         }
 
-
         for(var i = 1; i < arguments.length; i++) {
-            // if (typeof arguments[i] === 'function') {
-            //     // 중복 제거
-            //     if (p_obj._interface.indexOf(arguments[i]) < 0) {
-            //         p_obj._interface.push(arguments[i]);
-            //         // object._interface[arguments[i].name] = arguments[i];    // 프로퍼티 접근자
-            //     }
-            // } else Message.error('ES021', ['arguments', 'function']);
-            // POINT: static 교체
             if (typeof arguments[i] === 'function') {
-                // 중복 제거
-                if (funcClass['_interface'].indexOf(arguments[i]) < 0) {
-                    funcClass['_interface'].push(arguments[i]);
+                if (p_obj._interface.indexOf(arguments[i]) < 0) { // 중복 검사 
+                    p_obj._interface.push(arguments[i]);
                 }
             } else Message.error('ES021', ['arguments', 'function']);
 
-            // 비교 원본 인터페이스 임시 객체 생성    
-            // obj = new arguments[i];
-    
-            // 객체 타입을 비교 (값은 비교 안함, 타입만 비교함)
-            // equalType(obj, object);
-            
             try {
                 validType(p_obj, arguments[i]);
             } catch (error) {
                 Message.error('ES017', [typeName(p_obj), typeName(arguments[i]), error.message]);
             }
-            // msg = checkTypeMessage(arguments[i], object);
-            // if (msg.length > 0) Message.error('ES017', [typeName(object), typeName(arguments[i]), msg]);
-
         }
-        // var types = Array.prototype.slice.call(arguments, 1);
 
-        // obj.prototype.isImplementOf = isImplementOf;
-        if (typeof p_obj.isImplementOf === 'undefined') {
+        if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
             Object.defineProperty(p_obj, 'isImplementOf',
             {
                 value: isImplementOf,
+                configurable: false,
                 enumerable: false
             });
         }
 
         // inner function
-        // function isImplementOf(target) {
-        //     // if (typeof target !== 'function') Message.error('ES024', ['target', 'function']);
-        //     if (typeof target === 'function') {
-        //         for (var i = 0; i < this._interface.length; i++) {
-        //             if (this._interface[i] === target) return true;  
-        //         }
-        //     } else if (typeof target === 'string') {
-        //         for (var i = 0; i < this._interface.length; i++) {
-        //             if (this._interface[i].name === target) return true;  
-        //         }
-        //     } else Message.error('ES021', ['isImplementOf()', 'function, string']);
-        //     return false;
-        // }
-        // POINT:3 static 교체
         function isImplementOf(target) {
-            var funcClass = getType(this);
             if (typeof target === 'function') {
-                for (var i = 0; i < funcClass._interface.length; i++) {
-                    if (funcClass._interface[i] === target) return true;  
+                for (var i = 0; i < this._interface.length; i++) {
+                    if (this._interface[i] === target) return true;  
                 }
             } else if (typeof target === 'string') {
-                for (var i = 0; i < funcClass._interface.length; i++) {
-                    if (funcClass._interface[i].name === target) return true;  
+                for (var i = 0; i < this._interface.length; i++) {
+                    if (this._interface[i].name === target) return true;  
                 }
             } else Message.error('ES021', ['isImplementOf()', 'function, string']);
             return false;
         }
-
-        // function isObject(obj) {
-        //     if (typeof obj === 'object' && obj !== null) return true;
-        //     return false;
-        // }
-
         function typeName(obj) {
             if (typeof obj === 'function') return obj.name;
-            if (isObject(obj)) {
-                // var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
+            if (_isObject(obj)) {
                 var constructor = getType(obj);
                 return  constructor.name;
             }
             // return 'unknown';
         }
         function getType(obj) {
-            var proto = obj.__proto__ || Object.getPrototypeOf(obj);            // COVER: 2
+            var proto = obj.__proto__ || Object.getPrototypeOf(obj);
             return proto.constructor;
         }
     }
 
+    /**
+     * 지정한 객체를 깊은 복사합니다.
+     * @memberof _L.Common.Util
+     * @returns {object}
+     */
     var deepCopy = function(object) {
-        if (object === null || typeof object !== "object") {
+        if (!_isObject(object)) {
           return object;
         }
         if (object instanceof RegExp) return object;
@@ -291,22 +256,22 @@
                 }
             }
         }
-        // 최신버전 of
-        // for (var key of Object.keys(object)) {   
-        //   copy[key] = deepCopy(object[key]);
-        // }
         return copy;
     }
 
+    /**
+     * 지정한 객체들이 같은지 깊은 비교를 합니다.
+     * @memberof _L.Common.Util
+     * @returns {object}
+     */
     var deepEqual = function(obj1, obj2) {
 
         if (Array.isArray(obj1)) {
-            // if (!Array.isArray(obj1)) return false;
             if (obj1.length !== obj2.length) return false;
             for (var i = 0; i < obj1.length; i++) {
                 var val1 = obj1[i];
                 var val2 = obj2[i];
-                var areObjects = isObject(val1) && isObject(val2);
+                var areObjects = _isObject(val1) && _isObject(val2);
                 if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
                     return false;
                 }
@@ -317,7 +282,7 @@
                 if (obj1.hasOwnProperty(key)) {
                     var val1 = obj1[key];
                     var val2 = obj2[key];
-                    var areObjects = isObject(val1) && isObject(val2);
+                    var areObjects = _isObject(val1) && _isObject(val2);
                     if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
                         return false;
                     }
@@ -325,28 +290,7 @@
             }
         }
         return true;
-        
-        // inner function
-
     }
-    // 최신 문법 of
-    //   var deepEqual = function(object1, object2) {
-    //     var keys1 = Object.keys(object1);
-    //     var keys2 = Object.keys(object2);
-    //     if (keys1.length !== keys2.length) return false;
-    //     for (const key of keys1) {
-    //       var val1 = object1[key];
-    //       var val2 = object2[key];
-    //       var areObjects = isObject(val1) && isObject(val2);
-    //       if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-    //         return false;
-    //       }
-    //     }
-    //     return true;
-    //     function isObject(obj) {
-    //         return obj != null && typeof obj === 'object';
-    //     }
-    //   }
 
     //==============================================================
     // 5. module export
@@ -384,28 +328,6 @@
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;
-
-        // _global._L.Util.inherits = inherits;
-        // _global._L.Util.getArrayDepth = getArrayDepth;
-        // _global._L.Util.createGuid = createGuid;
-        // _global._L.Util.implements = implement;
-        // _global._L.Util.getAllProperties = getAllProperties;
-        // _global._L.Util.checkType = checkType;
-        // _global._L.Util.checkUnionType = checkUnionType;
-        // _global._L.Util.validType = validType;
-        // _global._L.Util.validUnionType = validUnionType;
-
-        // _global._L.Common.Util.inherits = inherits;
-        // _global._L.Common.Util.getArrayDepth = getArrayDepth;
-        // _global._L.Common.Util.createGuid = createGuid;
-        // _global._L.Common.Util.implements = implement;
-        // _global._L.Common.Util.getAllProperties = getAllProperties;
-        // _global._L.Common.Util.checkType = checkType;
-        // _global._L.Common.Util.checkUnionType = checkUnionType;
-        // _global._L.Common.Util.validType = validType;
-        // _global._L.Common.Util.validUnionType = validUnionType;
-        // _global._L.Common.Util.equalType = equalType;
-        // _global._L.Common.Util.validSelector = validSelector;
     }
 
 }(typeof window !== 'undefined' ? window : global));
