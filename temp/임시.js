@@ -10,4 +10,26 @@ function _isFillObj(obj)  {
 }
 
 
+
+var bb;
+
+var aa = undefined;
+
+const sum = new Function('a', 'b', 'return a + b');
+var fun  = Function('a', 'b', 'return a + b');
+
+var fun2  = function(a,b) {};
+var fun3  = function(String, Number) {};
+
+var b = function(String, Number){Object}
+var fun = (String, Number)=>{Object}
+var fun = (String, Number)=> Object;
+var fun = (String, Number)=>{return Object};
+
+
+var arr = [11, 22]
+
+
+console.log(bb);
+console.log(aa);
 console.log(0);
