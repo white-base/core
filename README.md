@@ -51,3 +51,6 @@ https://codeigniter.com/user_guide/database/configuration.html
 
 하위 모듀 수정
 /Users/logic/PJ-Git/logic-core/node_modules/docdash/publish.js : POINT:
+
+TODO: <?js ... js>   템플릿 전차리에 추가
+TODO: getObject(3) : 모든 속성,  템플릿에서 활용될듯
