@@ -207,7 +207,9 @@
          */
         MetaObject.prototype.instanceOf = function(p_fun) {
             var _this = this;
-            
+            var unionTypes = this._type['_UNION'] || [];
+            var thisTypes = this.getTypes();
+
             if (typeof p_fun === 'string') return findFunctionName(p_fun);
             if (typeof p_fun === 'function') return findFunction(p_fun);
             return false;
@@ -218,8 +220,9 @@
                 for (var i = 0; i < types.length; i++) {
                     if (fun === types[i]) return true;
                 }
-                for (var i = 0; i < _this._interface.length; i++) {
-                    if (fun === _this._interface[i]) return true;
+                
+                for (var i = 0; i < unionTypes.length; i++) {
+                    if (fun ===  unionTypes[i]) return true;
                 }
                 return false;
             }
@@ -228,8 +231,8 @@
                 for (var i = 0; i < types.length; i++) {
                     if (funName === types[i].name) return true;
                 }
-                for (var i = 0; i < _this._interface.length; i++) {
-                    if (funName === _this._interface[i].name) return true;
+                for (var i = 0; i < unionTypes.length; i++) {
+                    if (funName === unionTypes[i].name) return true;
                 }
                 return false;
             }

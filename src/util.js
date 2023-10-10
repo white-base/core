@@ -166,33 +166,63 @@
      * @param {function} args 대상 인터페이스들
      */
     var implement = function(p_obj, args) {
-        var _interface = [];
+        // var _interface = [];
         var msg = '';
+        // var union = [];
 
         if (typeof p_obj !== 'object') Message.error('ES024', ['this(target)', 'obj']);
 
-        if (typeof p_obj._interface === 'undefined') {
-            Object.defineProperty(p_obj, '_interface', {
-                get: function() { 
-                    return _interface;
-                },
-                configurable: false,
-                enumerable: false,
-            });
-        }
-
+        // if (typeof p_obj._interface === 'undefined') {
+        //     Object.defineProperty(p_obj, '_interface', {
+        //         get: function() { 
+        //             return _interface;
+        //         },
+        //         configurable: false,
+        //         enumerable: false,
+        //     });
+        // }
+        // POINT: static 교체
+        var funcClass = getType(p_obj);
+        if (!funcClass['_UNION']) funcClass['_UNION'] = [];
+        // if (typeof funcClass['_UNION'] === 'undefined') {
+        //     // p_obj['_UNION'] = [];
+        //     Object.defineProperty(funcClass, '_UNION', {
+        //         get: function() { return union; },
+        //         set: function(nVal) { 
+        //             union = nVal;
+        //         },
+        //         configurable: false,
+        //         enumerable: false,
+        //     });
+        // }
+        
         for(var i = 1; i < arguments.length; i++) {
+            // if (typeof arguments[i] === 'function') {
+            //     if (p_obj._interface.indexOf(arguments[i]) < 0) { // 중복 검사 
+            //         p_obj._interface.push(arguments[i]);
+            //     }
+            // } else Message.error('ES021', ['arguments', 'function']);
+            // POINT: static 교체
             if (typeof arguments[i] === 'function') {
-                if (p_obj._interface.indexOf(arguments[i]) < 0) { // 중복 검사 
-                    p_obj._interface.push(arguments[i]);
+                // 중복 제거
+                if (funcClass['_UNION'].indexOf(arguments[i]) < 0) {
+                    funcClass['_UNION'].push(arguments[i]);
                 }
             } else Message.error('ES021', ['arguments', 'function']);
 
-            try {
-                validType(p_obj, arguments[i]);
-            } catch (error) {
-                Message.error('ES017', [typeName(p_obj), typeName(arguments[i]), error.message]);
+            // try {
+            //     validType(p_obj, arguments[i]);                
+            // } catch (error) {
+            //     Message.error('ES017', [typeName(p_obj), typeName(arguments[i]), error.message]);
+            // }
+
+        }
+        try {
+            for (var i = 0; i < funcClass['_UNION'].length; i++) {
+                validType(p_obj, funcClass['_UNION'][i]);
             }
+        } catch (error) {
+            Message.error('ES017', [typeName(p_obj), typeName(funcClass['_UNION'][i]), error.message]);
         }
 
         if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
@@ -205,14 +235,28 @@
         }
 
         // inner function
+        // function isImplementOf(target) {
+        //     if (typeof target === 'function') {
+        //         for (var i = 0; i < this._interface.length; i++) {
+        //             if (this._interface[i] === target) return true;  
+        //         }
+        //     } else if (typeof target === 'string') {
+        //         for (var i = 0; i < this._interface.length; i++) {
+        //             if (this._interface[i].name === target) return true;  
+        //         }
+        //     } else Message.error('ES021', ['isImplementOf()', 'function, string']);
+        //     return false;
+        // }
+        // POINT:3 static 교체
         function isImplementOf(target) {
+            var funcClass = getType(this);
             if (typeof target === 'function') {
-                for (var i = 0; i < this._interface.length; i++) {
-                    if (this._interface[i] === target) return true;  
+                for (var i = 0; i < funcClass['_UNION'].length; i++) {
+                    if (funcClass['_UNION'][i] === target) return true;  
                 }
             } else if (typeof target === 'string') {
-                for (var i = 0; i < this._interface.length; i++) {
-                    if (this._interface[i].name === target) return true;  
+                for (var i = 0; i < funcClass['_UNION'].length; i++) {
+                    if (funcClass['_UNION'][i].name === target) return true;  
                 }
             } else Message.error('ES021', ['isImplementOf()', 'function, string']);
             return false;

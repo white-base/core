@@ -65,7 +65,7 @@ describe("[target: util.js]", () => {
             const i = new CoClass();
     
             expect(i.m1()).toBe('C1');
-            expect(i._interface.length).toBe(1);
+            expect(CoClass['_UNION'].length).toBe(1);
             // expect(i.isImplementOf(ISuper)).toBe(true);
         });
         it('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = 인스턴스) ', () => {
@@ -322,7 +322,7 @@ describe("[target: util.js]", () => {
             }
             let obj = new CoClass1();
     
-            expect(obj._interface.length).toBe(2);
+            expect(CoClass1['_UNION'].length).toBe(2);
         });
         it('- class 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
