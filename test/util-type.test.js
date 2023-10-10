@@ -181,6 +181,35 @@ describe("[target: util-type.js.js]", () => {
 
     });
 
+    // POINT:
+    describe.skip('< function 타입 >', () => {
+        it('- 커버리지 : 일반 ', () => {
+            var i1 = function(){};
+            var i2 = function(String){Object};
+            var i3 = function(String, Number){[Object, Number]};
+            var fun1 = function(){};
+            var fun2 = function(){};
+            fun2._TYPE = {args: [String, Number], return: Object};
+            var fun3_1 = function(){};
+            fun3_1._TYPE = {args: [String, Number], return: Object};
+            var fun3_2 = function(){};
+            fun3_2._TYPE = {args: [String, Number], return: Number};
+            var fun3_3 = function(){};
+            fun3_3._TYPE = {args: [String], return: Number};
+            var fun3_4 = function(){};
+            fun3_4._TYPE = {args: [String, Number]};
+
+
+            expect(checkType(fun1, i1)).toBe(true);
+            expect(checkType(fun2, i2)).toBe(true);
+            expect(checkType(fun3_1, i3)).toBe(true);
+            expect(checkType(fun3_2, i3)).toBe(true);
+            expect(checkType(fun3_3, i3)).toBe(false);
+            expect(checkType(fun3_4, i3)).toBe(false);
+        });
+
+    });
+
     describe('< 기본 >', () => {
         it('- getTypeMap() ', () => {
             function User() {};

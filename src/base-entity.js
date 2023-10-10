@@ -143,7 +143,7 @@
 
         BaseEntity._NS = 'Meta.Entity';         // namespace
         BaseEntity._PARAMS = ['name'];          // creator parameter
-        BaseEntity._ABSCRACT = true;
+        BaseEntity._KIND = 'abstract';
 
         
         // local funciton

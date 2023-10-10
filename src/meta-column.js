@@ -274,7 +274,7 @@
 
         MetaColumn._NS = 'Meta.Entity';                                 // namespace
         MetaColumn._PARAMS = ['columnName', '_entity', '_property'];    // creator parameter
-        MetaColumn._TYPES = [String, Number, Boolean];
+        MetaColumn._VALUE_TYPE = [String, Number, Boolean];
 
         /**
          * @listens _L.Meta.Entity.MetaColumn#_onChanged
@@ -512,7 +512,7 @@
         
         BaseColumnCollection._NS = 'Meta.Entity';                   // namespace
         BaseColumnCollection._PARAMS = ['_owner', '_baseType'];     // creator parameter
-        BaseColumnCollection._ABSCRACT = true;
+        BaseColumnCollection._KIND = 'abstract';
 
 
         /**
@@ -642,7 +642,7 @@
         MetaTableColumnCollection.prototype.addValue  = function(p_name, p_value) {
             var item;
             var property = {};
-            var _valueTypes = this._baseType._TYPES;
+            var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if (_valueTypes.length > 0) Util.validType(p_value, _valueTypes);
@@ -787,7 +787,7 @@
         MetaViewColumnCollection.prototype.addValue  = function(p_name, p_value, p_refCollection) {
             var item;
             var property = {};
-            var _valueTypes = this._baseType._TYPES;
+            var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if (_valueTypes.length > 0) Util.validType(p_value, _valueTypes);

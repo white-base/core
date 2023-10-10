@@ -328,7 +328,7 @@
 
         BaseCollection._NS = 'Collection';
         BaseCollection._PARAMS = ['_owner'];
-        BaseCollection._ABSCRACT = true;
+        BaseCollection._KIND = 'abstract';
         
         /**
          * onRemove 이벤트 수신자 입니다.

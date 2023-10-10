@@ -60,7 +60,7 @@
             var __value         = null;
             var __key           = p_name;
             var _entity;
-            var _valueTypes     = this._type._TYPES || [];
+            var _valueTypes     = this._type._VALUE_TYPE || [];
             var defaultValue    = null;
             var caption         = null;
             var alias           = null;
@@ -217,8 +217,8 @@
 
         BaseColumn._NS = 'Meta.Entity';     // namespace
         BaseColumn._PARAMS = ['columnName', '_entity'];    // creator parameter
-        BaseColumn._ABSCRACT = true;
-        BaseColumn._TYPES = [];
+        BaseColumn._KIND = 'abstract';
+        BaseColumn._VALUE_TYPE = [];
 
         /**
          * 현재 객체의 guid 타입의 객체를 가져옵니다.  

@@ -258,24 +258,23 @@
         result = reg.exec(val);
         if (result !== null) return result[0].toUpperCase();
     }
-    // REVIEW: 보류 함수 본문도 해석해야 하는 이슈가 있음
-    // function _getFunInfo(FunBody) {
-    //     var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w]*}/;
-    //     var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:return\s+)?([\w]*)\s*}/;
-    //     var resParam = /[_\w]*/;
-    //     var arrFunc, arrParam;
-    //     var result = {args: [], return: null};
+    function _getFunInfo(FunBody) {
+        var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w]*}/;
+        var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:return\s+)?([\w]*)\s*}/;
+        var resParam = /[_\w]*/;
+        var arrFunc, arrParam;
+        var result = {args: [], return: null};
 
-    //     if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
-    //     arrFunc = regFunc.exec(FunBody);
-    //     if (arrFunc === null) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
-    //     result.return = arrFunc[2];
-    //     arrParam = regFunc.exec(arrFunc[1]);
-    //     if(Array.isArray(arrParam)) {
-    //         result.args = arrFunc.splice(1);
-    //     }
-    //     return result;
-    // }
+        if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
+        arrFunc = regFunc.exec(FunBody);
+        if (arrFunc === null) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
+        result.return = arrFunc[2];
+        arrParam = regFunc.exec(arrFunc[1]);
+        if(Array.isArray(arrParam)) {
+            result.args = arrFunc.splice(1);
+        }
+        return result;
+    }
 
     /**
      * 타입을 검사하여 메세지를 리턴
@@ -377,12 +376,18 @@
                 }
                 return arrMsg.toString();   // i 번째 값이 검사에 실패하였습니다.
             }
-            
         }
+        // POINT:
         if (defType.name === 'function') {
+            var info = _getFunInfo(type.toString());
+            
             if (typeof target === 'function') return '';
             return Message.get('ES024', [parentName, 'function']);
         }
+        // if (defType.name === 'function') {
+        //     if (typeof target === 'function') return '';
+        //     return Message.get('ES024', [parentName, 'function']);
+        // }
         if (defType.name === 'object') {
             if (type === Object && target instanceof type) return '';
             if (type !== Object && target instanceof type.constructor) return '';

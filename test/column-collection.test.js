@@ -281,7 +281,7 @@ describe("[target: meta-column.js]", () => {
                         if (prop && prop['value']) this.value = prop['value']
                     }
                 }
-                SubColumn._TYPES = [];
+                SubColumn._VALUE_TYPE = [];
                 var view1 = new MetaView('T1');
                 view1.columns._baseType = SubColumn;
                 view1.columns.addValue('c1', /reg/)

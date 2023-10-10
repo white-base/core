@@ -692,7 +692,7 @@ describe("[target: meta-column.js ]", () => {
 
             });
             it("- 커버리지 : 조건검사 ", () => {   
-                MetaColumn._TYPES = [];
+                MetaColumn._VALUE_TYPE = [];
                 const c1 = new MetaColumn('c1');
                 c1.value = {};
 

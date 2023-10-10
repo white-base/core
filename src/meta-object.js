@@ -95,8 +95,11 @@
             }
 
             // 추상클래스 검사
-            if (this._type.hasOwnProperty('_ABSCRACT')) {
-                Message.error('ES018', [this._type.name]);
+            if (this._type.hasOwnProperty('_KIND')) {
+                var kind = this._type['_KIND'].toLowerCase();
+                if (['abstract', 'interface', 'enum', 'function'].indexOf(kind) > -1) {
+                    Message.error('ES018', [this._type.name]);
+                }
             }
 
             // _NS 선언이 없으면 부모의 것을 기본으로 사용!

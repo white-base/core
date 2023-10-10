@@ -34,7 +34,7 @@ describe("[target: base-column.js]", () => {
                 class SubClass extends BaseColumn {
                     constructor() {super('S1')}
                 }
-                SubClass._TYPES = '';   // 커버리지
+                SubClass._VALUE_TYPE = '';   // 커버리지
                 const s1 = new SubClass();
                 
                 s1._valueTypes = String;
