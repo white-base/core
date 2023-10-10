@@ -18,9 +18,9 @@ describe("[ GROUP]", () => {
             
             expect(global._L.Common.Util.getAllProperties).toBeDefined();
             expect(global._L.Common.Util.checkType).toBeDefined();
-            expect(global._L.Common.Util.checkUnionType).toBeDefined();
+            // expect(global._L.Common.Util.checkUnionType).toBeDefined();
             expect(global._L.Common.Util.validType).toBeDefined();
-            expect(global._L.Common.Util.validUnionType).toBeDefined();
+            // expect(global._L.Common.Util.validUnionType).toBeDefined();
             expect(global._L.Common.Util.getTypeMap).toBeDefined();
         });
     });
@@ -38,9 +38,9 @@ describe("[ GROUP]", () => {
             // util-type.js
             expect(global._L.Common.Util.getAllProperties).toBeDefined();
             expect(global._L.Common.Util.checkType).toBeDefined();
-            expect(global._L.Common.Util.checkUnionType).toBeDefined();
+            // expect(global._L.Common.Util.checkUnionType).toBeDefined();
             expect(global._L.Common.Util.validType).toBeDefined();
-            expect(global._L.Common.Util.validUnionType).toBeDefined();
+            // expect(global._L.Common.Util.validUnionType).toBeDefined();
             expect(global._L.Common.Util.getTypeMap).toBeDefined();
             /// util.js
             expect(global._L.Common.Util.inherits).toBeDefined();
@@ -77,24 +77,24 @@ describe("[ GROUP]", () => {
             delete global._L.Common.Util.checkType;
             expect(() => require('../src/util')).toThrow(/checkType/);
         });
-        it("- 예외 : util-type.js : checkUnionType 제거", () => {
-            require('../src/message');
-            require('../src/util-type');
-            delete global._L.Common.Util.checkUnionType;
-            expect(() => require('../src/util')).toThrow(/checkUnionType/);
-        });
+        // it("- 예외 : util-type.js : checkUnionType 제거", () => {
+        //     require('../src/message');
+        //     require('../src/util-type');
+        //     delete global._L.Common.Util.checkUnionType;
+        //     expect(() => require('../src/util')).toThrow(/checkUnionType/);
+        // });
         it("- 예외 : util-type.js : validType 제거", () => {
             require('../src/message');
             require('../src/util-type');
             delete global._L.Common.Util.validType;
             expect(() => require('../src/util')).toThrow(/validType/);
         });
-        it("- 예외 : util-type.js : validUnionType 제거", () => {
-            require('../src/message');
-            require('../src/util-type');
-            delete global._L.Common.Util.validUnionType;
-            expect(() => require('../src/util')).toThrow(/validUnionType/);
-        });
+        // it("- 예외 : util-type.js : validUnionType 제거", () => {
+        //     require('../src/message');
+        //     require('../src/util-type');
+        //     delete global._L.Common.Util.validUnionType;
+        //     expect(() => require('../src/util')).toThrow(/validUnionType/);
+        // });
         
     });
     

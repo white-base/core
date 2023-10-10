@@ -10,9 +10,9 @@
     var checkTypeMessage;
     var getTypeMap;
     var checkType;
-    var checkUnionType;
+    // var checkUnionType;
     var validType;
-    var validUnionType;
+    // var validUnionType;
 
     //==============================================================
     // 1. 의존 모듈 선언
@@ -28,18 +28,18 @@
         checkTypeMessage            = require('./util-type').checkTypeMessage;
         getTypeMap                  = require('./util-type').getTypeMap;
         checkType                   = require('./util-type').checkType;
-        checkUnionType              = require('./util-type').checkUnionType;
+        // checkUnionType              = require('./util-type').checkUnionType;
         validType                   = require('./util-type').validType;
-        validUnionType              = require('./util-type').validUnionType;
+        // validUnionType              = require('./util-type').validUnionType;
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
         checkTypeMessage            = _global._L.Util.checkTypeMessage
         getTypeMap                  = _global._L.Util.getTypeMap
         checkType                   = _global._L.Util.checkType
-        checkUnionType              = _global._L.Util.checkUnionType
+        // checkUnionType              = _global._L.Util.checkUnionType
         validType                   = _global._L.Util.validType
-        validUnionType              = _global._L.Util.validUnionType
+        // validUnionType              = _global._L.Util.validUnionType
     }
 
     //==============================================================
@@ -48,9 +48,9 @@
     if (typeof checkTypeMessage === 'undefined') Message.error('ES012', ['checkTypeMessage', 'util-type']);
     if (typeof getTypeMap === 'undefined') Message.error('ES012', ['getTypeMap', 'util-type']);
     if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
-    if (typeof checkUnionType === 'undefined') Message.error('ES012', ['checkUnionType', 'util-type']);
+    // if (typeof checkUnionType === 'undefined') Message.error('ES012', ['checkUnionType', 'util-type']);
     if (typeof validType === 'undefined') Message.error('ES012', ['validType', 'util-type']);
-    if (typeof validUnionType === 'undefined') Message.error('ES012', ['validUnionType', 'util-type']);
+    // if (typeof validUnionType === 'undefined') Message.error('ES012', ['validUnionType', 'util-type']);
     //==============================================================
     // 4. module implementation   
 
@@ -233,6 +233,7 @@
 
     /**
      * 지정한 객체를 깊은 복사합니다.
+     * @param {object} object 
      * @memberof _L.Common.Util
      * @returns {object}
      */
@@ -261,6 +262,8 @@
 
     /**
      * 지정한 객체들이 같은지 깊은 비교를 합니다.
+     * @param {object} obj1 
+     * @param {object} obj2 
      * @memberof _L.Common.Util
      * @returns {object}
      */
@@ -303,9 +306,9 @@
         // exports.checkTypeMessage = checkTypeMessage;
         exports.getTypeMap = getTypeMap;
         exports.checkType = checkType;
-        exports.checkUnionType = checkUnionType;
+        // exports.checkUnionType = checkUnionType;
         exports.validType = validType;
-        exports.validUnionType = validUnionType;
+        // exports.validUnionType = validUnionType;
         exports.deepCopy = deepCopy;
         exports.deepEqual = deepEqual;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
@@ -320,9 +323,9 @@
             // checkTypeMessage: checkTypeMessage,
             getTypeMap: getTypeMap,
             checkType: checkType,
-            checkUnionType: checkUnionType,
+            // checkUnionType: checkUnionType,
             validType: validType,
-            validUnionType: validUnionType,
+            // validUnionType: validUnionType,
             deepCopy: deepCopy,
             deepEqual: deepEqual,
         };

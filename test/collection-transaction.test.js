@@ -565,7 +565,7 @@ describe("[target: collection-trans.js]", () => {
             }
             House = class {
                 rows = new TransactionCollection(this);
-                constructor() { this.rows._elemTypes = null }
+                constructor() { this.rows._elemTypes = ['_any_'] }
             }
             Space = class {
                 rows = new TransactionCollection(this);
@@ -593,13 +593,13 @@ describe("[target: collection-trans.js]", () => {
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result > -1).toBeTruthy();
         });
-        it("- null 타입 : rows.add(name, obj) ", () => {
+        it("- _any_ 타입 : rows.add(name, obj) ", () => {
             const elem = new House();
             const c1 = new Student(1);
             const result1 = elem.rows.add( c1);
             const result2 = elem.rows.add('str');
             
-            expect(() => elem.rows.add()).toThrow(/ES019(.|\s)*ES066/);
+            expect(() => elem.rows.add()).toThrow(/ES019(.|\s)*ES069/);
             expect(elem.rows[0].level).toBe(1);
             elem.rows[0] = 'OVER';
             expect(elem.rows[0]).toBe('OVER');
@@ -684,10 +684,10 @@ describe("[target: collection-trans.js]", () => {
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
-            expect(() => i.rows.add(undefined)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);  // 값이 없음
-            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);    // 공백 예외
-            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);// 타입 예외
-            expect(() => i.rows.add({})).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);
+            expect(() => i.rows.add(undefined)).toThrow(/ES019(.|\s)*ES069(.|\s)*ES024/);  // 값이 없음
+            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069(.|\s)*ES024/);    // 공백 예외
+            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES069(.|\s)*ES024/);// 타입 예외
+            expect(() => i.rows.add({})).toThrow(/ES019(.|\s)*ES069(.|\s)*ES024/);
             expect(() => i.rows[0] = 10).toThrow(/ES024(.|\s)*ES024/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();

@@ -783,7 +783,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             }
             House = class {
                 columns = new PropertyCollection(this);
-                constructor() { this.columns._elemTypes = null }
+                constructor() { this.columns._elemTypes = ['_any_'] }
             }
             Space = class {
                 columns = new PropertyCollection(this);
@@ -810,13 +810,13 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             expect(elem.columns['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result > -1).toBeTruthy();
         });
-        it("- null 타입 : columns.add(name, obj) ", () => {
+        it("- _any_ 타입 : columns.add(name, obj) ", () => {
             const elem = new House();
             const c1 = new Student(1);
             const result1 = elem.columns.add('a1', c1);
             const result2 = elem.columns.add('a2', 'str');
             
-            expect(() => elem.columns.add('a3')).toThrow(/ES066/);
+            expect(() => elem.columns.add('a3')).toThrow(/ES069/);
             expect(elem.columns[0].level).toBe(1);
             expect(elem.columns['a1'].level).toBe(1);
             elem.columns['a1'] = 'OVER';
@@ -909,8 +909,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             
             expect(() => i.columns.add('a3')).toThrow(/ES024/);     // 공백 예외
             expect(() => i.columns.add('a3', 10)).toThrow(/ES024/); // 타입 예외
-            expect(() => i.columns.add('a3', {})).toThrow(/ES066(.|\s)*ES024/);
-            expect(() => i.columns['a1'] = 10).toThrow(/ES066(.|\s)*ES024/);
+            expect(() => i.columns.add('a3', {})).toThrow(/ES069(.|\s)*ES024/);
+            expect(() => i.columns['a1'] = 10).toThrow(/ES069(.|\s)*ES024/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });

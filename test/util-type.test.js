@@ -20,7 +20,175 @@ describe("[target: util-type.js.js]", () => {
     
             // null, undefined
             expect(getTypeMap().name).toBe('undefined');
-            expect(getTypeMap(null).name).toBe('any');
+            expect(getTypeMap(null).name).toBe('null');
+            // or, and
+            expect(getTypeMap([String]).name).toBe('or');
+            expect(getTypeMap([String, Number]).name).toBe('or');
+            expect(getTypeMap({fill:true}).name).toBe('and');
+            expect(getTypeMap(new Corp).name).toBe('and');
+            // array
+            expect(getTypeMap([]).name).toBe('array');
+            expect(getTypeMap(Array).name).toBe('array');
+            expect(getTypeMap([[]]).name).toBe('array');
+            expect(getTypeMap([['_seq_']]).name).toBe('array');
+            expect(getTypeMap([['_opt_']]).name).toBe('array');
+            expect(getTypeMap([['_any_']]).name).toBe('array');
+            // object
+            expect(getTypeMap(Object).name).toBe('object');
+            expect(getTypeMap({}).name).toBe('object');
+            expect(getTypeMap(new User).name).toBe('object');
+            expect(getTypeMap(/reg/).name).toBe('object');
+            // function
+            expect(getTypeMap(Function).name).toBe('function');
+            // class
+            expect(getTypeMap(User).name).toBe('class');
+            expect(getTypeMap(Date).name).toBe('class');    // Data
+            // number, NaN
+            expect(getTypeMap(Number).name).toBe('number');
+            expect(getTypeMap(1).name).toBe('number');
+            expect(getTypeMap(NaN).name).toBe('number');
+            expect(getTypeMap(2).default).toBe(2);
+            // string
+            expect(getTypeMap(String).name).toBe('string');
+            expect(getTypeMap('str').name).toBe('string');
+            expect(getTypeMap('str').default).toBe('str');
+            // boolean
+            expect(getTypeMap(Boolean).name).toBe('boolean');
+            expect(getTypeMap(true).name).toBe('boolean');
+            expect(getTypeMap(true).default).toBe(true);
+            // Symbol   => new 생성이 안됨
+            expect(getTypeMap(Symbol).name).toBe('symbol');  
+            expect(getTypeMap(Symbol('a')).name).toBe('symbol');  // 존재하지 않는 타입
+            // BigInt는 사용 안함
+            expect(() => getTypeMap(2n ** 53n).name).toThrow('ES022');
+        });
+        it('- 예외 : validType(), validUnionType()  ', () => {
+            expect(() => validType({}, undefined)).toThrow(/ES026/);
+            // expect(() => validUnionType({}, undefined, Object)).toThrow(/ES022/);
+        });
+    });
+    describe('< or 조건 검사 >', () => {
+        it('- checkType() : 배열 ', () => {
+            var arr1 = [];
+            var arr2 = Array;
+            var arr3 = [[]];
+            var arr4 = [['_any_']];
+            var arr5 = [['_seq_', String, Number]];
+            var arr6 = [['_seq_']];
+            var arr7 = [['_opt_', String, Number]];
+            var arr8 = [['_opt_']];
+            var arr9 = [[String, Number]];
+
+            // arr1
+            expect(checkType([1,2,3], arr1)).toBe(true);
+            expect(checkType(10, arr1)).toBe(false);
+            // arr2
+            expect(checkType([1,2,3], arr2)).toBe(true);
+            expect(checkType(10, arr2)).toBe(false);
+            // arr3
+            expect(checkType([1,2,3], arr3)).toBe(true);
+            expect(checkType(10, arr3)).toBe(false);
+            // arr4
+            expect(checkType([1, 'str'], arr4)).toBe(true);
+            expect(checkType([0], arr4)).toBe(true);
+            expect(checkType([], arr4)).toBe(true);
+            expect(checkType([undefined], arr4)).toBe(false);
+            expect(checkType(10, arr4)).toBe(false);
+            // arr5
+            expect(checkType(['str', 10], arr5)).toBe(true);
+            expect(checkType(['str', 10, true], arr5)).toBe(true);
+            expect(checkType([10, 'str'], arr5)).toBe(false);
+            expect(checkType(['str'], arr5)).toBe(false);
+            expect(checkType(10, arr5)).toBe(false);
+            // arr6 : 모든값 ture, 의미 없음!
+            expect(checkType(['str', 10], arr6)).toBe(true);
+            expect(checkType(['str', 10, true], arr6)).toBe(true);
+            expect(checkType([10, 'str'], arr6)).toBe(true);
+            expect(checkType(['str'], arr6)).toBe(true);
+            expect(checkType(10, arr6)).toBe(false);
+            // arr7
+            expect(checkType(['str', 10], arr7)).toBe(true);
+            expect(checkType([10], arr7)).toBe(true);
+            expect(checkType([], arr7)).toBe(true);
+            expect(checkType(['str'], arr7)).toBe(true);
+            expect(checkType([true], arr7)).toBe(false);
+            expect(checkType([{}], arr7)).toBe(false);
+            expect(checkType(10, arr7)).toBe(false);
+            // arr8 : 모두 true, 의미 없음!
+            expect(checkType(['str', 10], arr8)).toBe(true);
+            expect(checkType([10], arr8)).toBe(true);
+            expect(checkType(['str'], arr8)).toBe(true);
+            expect(checkType([true], arr8)).toBe(true);
+            expect(checkType([{}], arr8)).toBe(true);
+            expect(checkType([], arr8)).toBe(true);
+            expect(checkType(10, arr8)).toBe(false);
+            // arr9
+            expect(checkType(['str', 10], arr9)).toBe(true);
+            expect(checkType([10], arr9)).toBe(true);
+            expect(checkType(['str'], arr9)).toBe(true);
+            expect(checkType([], arr9)).toBe(false);
+            expect(checkType([true], arr9)).toBe(false);
+            expect(checkType([{}], arr9)).toBe(false);
+            expect(checkType(10, arr9)).toBe(false);
+        });
+        it('- checkType() : 일반 ', () => {
+            var arr1 = ['_any_'];
+            var arr2 = ['_seq_', String, Number];
+            var arr3 = ['_seq_'];
+            var arr4 = ['_opt_', String, Number];
+            var arr5 = ['_opt_'];
+            var arr6 = [String, Number];
+
+
+            // arr1
+            expect(checkType(10, arr1)).toBe(true);
+            expect(checkType('str', arr1)).toBe(true);
+            expect(checkType([], arr1)).toBe(true);
+            expect(checkType({}, arr1)).toBe(true);
+            expect(checkType(true, arr1)).toBe(true);
+            expect(checkType(undefined, arr1)).toBe(false);
+            // arr2 : 모두실패
+            expect(checkType([1,2,3], arr2)).toBe(false);
+            expect(checkType(10, arr2)).toBe(false);
+            // arr3 : 모두 실패
+            expect(checkType([1,2,3], arr3)).toBe(false);
+            expect(checkType(10, arr3)).toBe(false);
+            // arr4
+            expect(checkType(10, arr4)).toBe(true);
+            expect(checkType('str', arr4)).toBe(true);
+            expect(checkType(undefined, arr4)).toBe(true);
+            expect(checkType(true, arr4)).toBe(false);
+            expect(checkType([], arr4)).toBe(false);
+            expect(checkType({}, arr4)).toBe(false);
+            // arr5 : 모두 true
+            expect(checkType(['str', 10], arr5)).toBe(true);
+            expect(checkType(['str', 10, true], arr5)).toBe(true);
+            expect(checkType([10, 'str'], arr5)).toBe(true);
+            expect(checkType(['str'], arr5)).toBe(true);
+            expect(checkType(10, arr5)).toBe(true);
+            // arr6 
+            expect(checkType(10, arr6)).toBe(true);
+            expect(checkType('str', arr6)).toBe(true);
+            expect(checkType(undefined, arr6)).toBe(false);
+            expect(checkType(true, arr6)).toBe(false);
+            expect(checkType([], arr6)).toBe(false);
+            expect(checkType({}, arr6)).toBe(false);
+        });
+        it('- 커버리지 : 일반 ', () => {
+            expect(checkType('str', ['default'])).toBe(true);   // 기본값 의미
+            expect(checkType(['str'], ['default'])).toBe(false); 
+        });
+
+    });
+
+    describe('< 기본 >', () => {
+        it('- getTypeMap() ', () => {
+            function User() {};
+            function Corp() {this.nm = 1};
+    
+            // null, undefined
+            expect(getTypeMap().name).toBe('undefined');
+            expect(getTypeMap(null).name).toBe('null');
             // or, and
             expect(getTypeMap([String]).name).toBe('or');
             expect(getTypeMap([String, Number]).name).toBe('or');
@@ -59,8 +227,8 @@ describe("[target: util-type.js.js]", () => {
             expect(() => getTypeMap(2n ** 53n).name).toThrow('ES022');
         });
         it('- 예외 : validType(), validUnionType()  ', () => {
-            expect(() => validType({}, undefined)).toThrow(/ES022/);
-            expect(() => validUnionType({}, undefined, Object)).toThrow(/ES022/);
+            expect(() => validType({}, undefined)).toThrow(/ES026/);
+            // expect(() => validUnionType({}, undefined, Object)).toThrow(/ES022/);
         });
     });
     describe('< 비교 >', () => {
@@ -120,7 +288,7 @@ describe("[target: util-type.js.js]", () => {
             expect(validType(compare.o4.target, compare.o4.type)).toBe(true);
         });
         
-        it('- checkUnionType() vs validUnionType() 비교', () => {
+        it.skip('- checkUnionType() vs validUnionType() 비교', () => {
             const Func1 = function() { this.aa = 1 };   // 기본값으로 설정
             const compare = {
                 // 원시 타입
@@ -183,35 +351,36 @@ describe("[target: util-type.js.js]", () => {
     describe('< type 기준 >', () => {
         it('- 타입이 없는 경우 ', () => {
             expect(checkType(1)).toBe(false);
-            expect(checkUnionType(1)).toBe(false);
+            // expect(checkUnionType(1)).toBe(false);
             expect(()=> validType(1)).toThrow('ES026');
-            expect(()=> validUnionType(1)).toThrow('ES026');
+            // expect(()=> validUnionType(1)).toThrow('ES026');
         });
-        it('- null : any 타입 (단독, or, and) ', () => {
+        it('- [_any_] : any 타입 (단독, or, and) ', () => {
             // 단독 검사
-            expect(checkType(function any(){}, null)).toBe(true);
-            expect(checkType(function any(){}, null)).toBe(true);
-            expect(checkType(null, null)).toBe(true);
-            expect(checkType(1, null)).toBe(true);
-            expect(checkType(NaN, null)).toBe(true);
-            expect(checkType('str', null)).toBe(true);
-            expect(checkType(true, null)).toBe(true);
-            expect(checkType(/reg/, null)).toBe(true);
-            expect(checkType(Symbol(), null)).toBe(true);
-            expect(checkType([], null)).toBe(true);
-            expect(checkType({aa: 1}, null)).toBe(true);
-            expect(checkType(Number, null)).toBe(true);
-            expect(checkType(String, null)).toBe(true);
-            expect(checkType(Function, null)).toBe(true);
-            expect(checkType(Object, null)).toBe(true);
-            expect(checkType(Symbol, null)).toBe(true);
+            expect(checkType(function any(){}, ['_any_'])).toBe(true);
+            expect(checkType(function any(){}, ['_any_'])).toBe(true);
+            expect(checkType(null, ['_any_'])).toBe(true);
+            expect(checkType(1, ['_any_'])).toBe(true);
+            expect(checkType(NaN, ['_any_'])).toBe(true);
+            expect(checkType('str', ['_any_'])).toBe(true);
+            expect(checkType(true, ['_any_'])).toBe(true);
+            expect(checkType(/reg/, ['_any_'])).toBe(true);
+            expect(checkType(Symbol(), ['_any_'])).toBe(true);
+            expect(checkType([], ['_any_'])).toBe(true);
+            expect(checkType({aa: 1}, ['_any_'])).toBe(true);
+            expect(checkType(Number, ['_any_'])).toBe(true);
+            expect(checkType(String, ['_any_'])).toBe(true);
+            expect(checkType(Function, ['_any_'])).toBe(true);
+            expect(checkType(Object, ['_any_'])).toBe(true);
+            expect(checkType(Symbol, ['_any_'])).toBe(true);
             // or 검사
-            expect(checkType(function any() {}, [String, null])).toBe(true);
-            expect(checkType(function any() {}, String, null)).toBe(true);
+            expect(checkType(function any() {}, [String, ['_any_']])).toBe(true);
+            expect(checkType(function any() {}, String, null)).toBe(false); // args 전달 안받음 배열로만 받음
+            // TODO: 넘치면 오류 또는 경고 처리해야 오류를 낮출듯
             // and 검사
-            expect(checkUnionType(function any(){}, null, Function)).toBe(true);
-            expect(checkUnionType(function any(){}, null, Object)).toBe(true);  // 상위
-            expect(checkUnionType(function any(){}, null, String)).toBe(false);
+            // expect(checkUnionType(function any(){}, null, Function)).toBe(true);
+            // expect(checkUnionType(function any(){}, null, Object)).toBe(true);  // 상위
+            // expect(checkUnionType(function any(){}, null, String)).toBe(false);
             // 타겟이 없는(undefind)인 경우
             expect(checkType(undefined, null)).toBe(false);
             expect(checkType(null, null)).toBe(true);
@@ -347,19 +516,20 @@ describe("[target: util-type.js.js]", () => {
         it('- [] : or 타입 (내장 타입) ', () => {
             const Func1 = function() { this.aa = Number };
             // true (나열) 
-            expect(checkType(1, String, Number)).toBe(true);
-            expect(checkType('str', String, Number)).toBe(true);
+            expect(checkType(1, String, Number)).toBe(false);
+            expect(checkType(true, String, Number)).toBe(false);
             // true (베열)
             expect(checkType(1, [String, Number])).toBe(true);
             expect(checkType('str', [String, Number])).toBe(true);
             expect(checkType(true, [Boolean, Number])).toBe(true);
             expect(checkType(null, [Boolean, null])).toBe(true);
-            expect(checkType(/reg/, [Boolean, null])).toBe(true);       // any
+            expect(checkType(/reg/, [Boolean, ['_any_']])).toBe(true);       // any
             expect(checkType(/reg/, [Boolean, Object])).toBe(true);     // objct 최상위
             expect(checkType(/reg/, [Boolean, RegExp])).toBe(true);     // 내장 함수
             expect(checkType(new Func1(), [Func1, Number])).toBe(true);
             expect(checkType(new Func1(), [[String, Func1], Number])).toBe(true);   // 복합 배열
-            expect(checkType(new Func1(), [[[Func1]], Number])).toBe(true);         // 복합 하위 배열
+            expect(checkType([new Func1()], [[[Func1]], Number])).toBe(true);         // 복합 하위 배열
+            // [[[Func1]]  는 배열안에 함수를 의미함!
             // false (예외)
             expect(()=> validType(1, [Array, String])).toThrow(/ES024.*ES024/);
             expect(()=> validType(function any(){}, [Array])).toThrow(/ES024/);
@@ -441,38 +611,38 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(obj2, Func1, Func2)).toBe(true);
             expect(checkType(obj2, Func1)).toBe(true);
             expect(checkType(obj2, Func2)).toBe(false);
-            expect(checkType(obj3, Func1, Func2)).toBe(true);
+            expect(checkType(obj3, [Func1, Func2])).toBe(true);
             expect(checkType(obj3, Func1)).toBe(false);
             expect(checkType(obj3, Func2)).toBe(true);
-            expect(checkType(obj4, Func1, Func2)).toBe(true);
+            expect(checkType(obj4, [Func1, Func2])).toBe(true);
             expect(checkType(obj4, Func1)).toBe(true);
             expect(checkType(obj4, Func2)).toBe(false);
             // false (예외)
-            expect(()=> validType(obj5, Func1, Func2)).toThrow(/ES027(.|\s)*ES027/);
+            expect(()=> validType(obj5, [Func1, Func2])).toThrow(/ES027(.|\s)*ES027/);
         });
         it('- 원시 타입 ', () => {
             // true
-            expect(checkType(1, Number, String, Boolean)).toBe(true);
-            expect(checkType('str', Number, String, Boolean)).toBe(true);
-            expect(checkType(true, Number, String, Boolean)).toBe(true);            
+            expect(checkType(1, [Number, String, Boolean])).toBe(true);
+            expect(checkType('str', [Number, String, Boolean])).toBe(true);
+            expect(checkType(true, [Number, String, Boolean])).toBe(true);            
             // false
-            expect(checkType(new Date(), Number, String, Boolean)).toBe(false);
-            expect(checkType(/reg/, Number, String, Boolean)).toBe(false);
-            expect(checkType(Symbol(), Number, String, Boolean)).toBe(false);
-            expect(checkType([], Number, String, Boolean)).toBe(false);
-            expect(checkType({}, Number, String, Boolean)).toBe(false);
+            expect(checkType(new Date(), [Number, String, Boolean])).toBe(false);
+            expect(checkType(/reg/, [Number, String, Boolean])).toBe(false);
+            expect(checkType(Symbol(), [Number, String, Boolean])).toBe(false);
+            expect(checkType([], [Number, String, Boolean])).toBe(false);
+            expect(checkType({}, [Number, String, Boolean])).toBe(false);
         });
         it('- 내장 객체 타입 ', () => {
             // true
-            expect(checkType(new Date(), RegExp, Date, Symbol)).toBe(true);
-            expect(checkType(/reg/, RegExp, Date, Symbol)).toBe(true);
-            expect(checkType(Symbol(), RegExp, Date, Symbol)).toBe(true);            
+            expect(checkType(new Date(), [RegExp, Date, Symbol])).toBe(true);
+            expect(checkType(/reg/, [RegExp, Date, Symbol])).toBe(true);
+            expect(checkType(Symbol(), [RegExp, Date, Symbol])).toBe(true);            
             // false
-            expect(checkType(1, RegExp, Date, Symbol)).toBe(false);
-            expect(checkType(true, RegExp, Date, Symbol)).toBe(false);
-            expect(checkType('str', RegExp, Date, Symbol)).toBe(false);       
-            expect(checkType([], RegExp, Date, Symbol)).toBe(false);       
-            expect(checkType({}, RegExp, Date, Symbol)).toBe(false);       
+            expect(checkType(1, [RegExp, Date, Symbol])).toBe(false);
+            expect(checkType(true, [RegExp, Date, Symbol])).toBe(false);
+            expect(checkType('str', [RegExp, Date, Symbol])).toBe(false);       
+            expect(checkType([], [RegExp, Date, Symbol])).toBe(false);       
+            expect(checkType({}, [RegExp, Date, Symbol])).toBe(false);       
         });
         it('- 상속 객체 타입 ', () => {
             class Super {
@@ -483,14 +653,14 @@ describe("[target: util-type.js.js]", () => {
                 constructor(){ super() }
             }
             // true
-            expect(checkType(new Sub(), Super, Sub)).toBe(true);
+            expect(checkType(new Sub(), [Super, Sub])).toBe(true);
             expect(checkType(new Sub(), Super)).toBe(true);
             expect(checkType(new Sub(), Sub)).toBe(true);
             expect(checkType(new Sub(), Object)).toBe(true);       
         });
         
     });
-    describe('checkUnionType() <and 조건>', () => {
+    describe.skip('checkUnionType() <and 조건>', () => {
         it('- 객체 타입 ', () => {
             var Func1 = function() { this.aa = String };
             var Func2 = function() { this.bb = Number };
@@ -560,26 +730,26 @@ describe("[target: util-type.js.js]", () => {
             var obj5 = { cc: 'STR'};
 
             // true
-            expect(checkType(obj1, Func1, Func2)).toBe(true);
+            expect(checkType(obj1, [Func1, Func2])).toBe(true);
             expect(checkType(obj1, Func1)).toBe(true);
             expect(checkType(obj1, Func2)).toBe(true);
             expect(obj1.bb).toBe(2);
-            expect(checkType(obj2, Func1, Func2)).toBe(true);
+            expect(checkType(obj2, [Func1, Func2])).toBe(true);
             expect(checkType(obj2, Func1)).toBe(true);
             expect(checkType(obj2, Func2)).toBe(true);
             expect(obj2.bb).toBe(10);    // 객체값 복사
-            expect(checkType(obj3, Func1, Func2)).toBe(true);
+            expect(checkType(obj3, [Func1, Func2])).toBe(true);
             expect(checkType(obj3, Func1)).toBe(false);
             expect(checkType(obj3, Func2)).toBe(true);
             expect(obj3.bb).toBe(5);    // 객체값 복사
-            expect(checkType(obj4, Func1, Func2)).toBe(true);
+            expect(checkType(obj4, [Func1, Func2])).toBe(true);
             expect(checkType(obj4, Func1)).toBe(true);
             expect(checkType(obj4, Func2)).toBe(false);
-            expect(checkType(obj5, Func1, Func2)).toBe(true);
+            expect(checkType(obj5, [Func1, Func2])).toBe(true);
             expect(checkType(obj5, Func1)).toBe(false);
             expect(checkType(obj5, Func2)).toBe(true);
         });
-        it('- 객체 기본값 : checkUnionType() ', () => {
+        it.skip('- 객체 기본값 : checkUnionType() ', () => {
             var Func1 = function() { this.aa = String };
             var Func2 = function() { this.bb = 10 };
             var obj1 = { aa: 'str', bb: 2}
@@ -618,7 +788,7 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(obj, bool)).toBe(true);
             expect(obj).toBeUndefined();                            // 참조 타입이 값이 전달되어 값이 설정 안됨
         });
-        it('- 원시 기본값 : checkUnionType() ', () => {
+        it.skip('- 원시 기본값 : checkUnionType() ', () => {
             var str = 'STR';
             var num = 100;
             var bool = true;

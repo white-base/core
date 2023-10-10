@@ -160,8 +160,8 @@ describe("[target: meta-column.js]", () => {
             it("- addValue(?, ?) : 예외 ", () => {
                 var table1 = new MetaTable('T1');
 
-                expect(() => table1.columns.addValue('c1', {})).toThrow(/ES066/);
-                expect(() => table1.columns.addValue('c1', /reg/)).toThrow(/ES066/);
+                expect(() => table1.columns.addValue('c1', {})).toThrow(/ES069/);
+                expect(() => table1.columns.addValue('c1', /reg/)).toThrow(/ES069/);
                 expect(()=> table1.columns.addValue(10)).toThrow(/ES021/)
                 expect(()=> table1.columns.addValue({})).toThrow(/ES021/)
             });
@@ -293,8 +293,8 @@ describe("[target: meta-column.js]", () => {
             it("- addValue(?, ?) : 예외 ", () => {
                 var view1 = new MetaView('T1');
 
-                expect(()=> view1.columns.addValue('c2', {})).toThrow(/ES066/)
-                expect(()=> view1.columns.addValue('c2', /reg/)).toThrow(/ES066/)
+                expect(()=> view1.columns.addValue('c2', {})).toThrow(/ES069/)
+                expect(()=> view1.columns.addValue('c2', /reg/)).toThrow(/ES069/)
                 expect(()=> view1.columns.addValue(10, 10)).toThrow(/ES021/)
             });
         });

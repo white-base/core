@@ -679,7 +679,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             }
             House = class {
                 rows = new ArrayCollection(this);
-                 constructor() { this.rows._elemTypes = null }
+                 constructor() { this.rows._elemTypes = ['_any_'] }
             }
             Space = class {
                 rows = new ArrayCollection(this);
@@ -707,7 +707,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result > -1).toBeTruthy();
         });
-        it("- null 타입 : rows.add(name, obj) ", () => {
+        it("- _any_ 타입 : rows.add(name, obj) ", () => {
             const elem = new House();
             const c1 = new Student(1);
             const result1 = elem.rows.add( c1);
@@ -787,7 +787,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             i.rows[0] = 'AA1';
             i.rows[1] = 'AA2';
     
-            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES066(.|\s)*ES024/);     // 공백 예외
+            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069(.|\s)*ES024/);     // 공백 예외
             expect(() => i.rows.add(10)).toThrow(/ES024/); // 타입 예외
             expect(() => i.rows[0] = 10).toThrow(/ES024/);
             expect(result1 > -1).toBeTruthy();

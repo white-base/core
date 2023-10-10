@@ -238,6 +238,10 @@
                             msg: '[$1] does not match rule [$2].',
                             long: ''
                         },
+                        9: {
+                            msg: '[$1] Condition check failed. ',
+                            long: '$2'
+                        },
                     },
                 },
                 W: { // warning
@@ -465,6 +469,10 @@
                         8: {
                             msg: '[$1]의 [$2] 규칙에 맞지 않습니다.',
                             long: ''
+                        },
+                        9: {
+                            msg: '[$1] 조건 검사에 실패하였습니다. ',
+                            long: '$2'
                         },
                     },
                 },

@@ -100,6 +100,15 @@ describe("[target: meta-set.js]", () => {
                 expect(c1.equal(c2)).toBe(false);
             });
         });
+        describe("MetaSet.transformSchema(): obj<guid> <스키마로 변환>", () => {
+            it("- transformSchema() : 직렬화 객체 얻기 ", () => {
+                // var set1 = new MetaSet('S1');
+                // // table add
+                // set1.tables.add("T1");
+                // set1.tables['T1'].columns.add('i1');
+                // set1.tables['T1'].columns.add('i2');
+            });
+        });                
         describe("MetaSet.getObject(): obj<ref> <객체 얻기>", () => {
             it("- getObject() : 직렬화 객체 얻기 ", () => {
                 var set1 = new MetaSet('S1');

@@ -16,9 +16,9 @@ describe("[target: index.js]", () => {
             expect(typeof index.Util.getArrayDepth).toBe('function');
             expect(typeof index.Util.createGuid).toBe('function');
             expect(typeof index.Util.checkType).toBe('function');
-            expect(typeof index.Util.checkUnionType).toBe('function');
+            // expect(typeof index.Util.checkUnionType).toBe('function');
             expect(typeof index.Util.validType).toBe('function');
-            expect(typeof index.Util.validUnionType).toBe('function');
+            // expect(typeof index.Util.validUnionType).toBe('function');
             expect(typeof index.Util.getAllProperties).toBe('function');
             expect(typeof index.Util.implements).toBe('function');
             expect(typeof index.Util.deepCopy).toBe('function');
@@ -33,9 +33,9 @@ describe("[target: index.js]", () => {
             expect(typeof index.Common.Util.getArrayDepth).toBe('function');
             expect(typeof index.Common.Util.createGuid).toBe('function');
             expect(typeof index.Common.Util.checkType).toBe('function');
-            expect(typeof index.Common.Util.checkUnionType).toBe('function');
+            // expect(typeof index.Common.Util.checkUnionType).toBe('function');
             expect(typeof index.Common.Util.validType).toBe('function');
-            expect(typeof index.Common.Util.validUnionType).toBe('function');
+            // expect(typeof index.Common.Util.validUnionType).toBe('function');
             expect(typeof index.Common.Util.getAllProperties).toBe('function');
             expect(typeof index.Common.Util.implements).toBe('function');
             expect(typeof index.Common.Util.deepCopy).toBe('function');

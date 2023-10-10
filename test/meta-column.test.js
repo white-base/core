@@ -664,7 +664,7 @@ describe("[target: meta-column.js ]", () => {
                 const c1 = new MetaColumn('c1');
 
                 expect(()=>c1._entity = 0).toThrow(/ES032/)
-                expect(()=>c1.default = {}).toThrow(/ES066/)
+                expect(()=>c1.default = {}).toThrow(/ES069/)
                 expect(()=>c1.value = {}).toThrow(/ES024/)
 
             });

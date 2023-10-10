@@ -3,12 +3,12 @@
  */
 //==============================================================
 // gobal defined
-const { getAllProperties, getTypeMap, checkType }       = require('../src/util-type2');
-const { checkUnionType, validType, validUnionType }     = require('../src/util-type2');
+const { getAllProperties, getTypeMap, checkType }       = require('../src/util-type');
+const { checkUnionType, validType, validUnionType }     = require('../src/util-type');
 
 //==============================================================
 // test
-describe("[target: util-type.js.js]", () => {
+describe.skip("[target: util-type.js.js]", () => {
     beforeAll(() => {
         // 경고 모킹 = 숨감
         // global.console.warn = jest.fn();

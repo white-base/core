@@ -126,7 +126,7 @@
 
         // seq 1 : === (operation) 
         if (type === null) {
-            obj.name = 'null';
+            obj.name = 'any';
             return obj;
         }
         if (type === Number) {
@@ -183,21 +183,11 @@
             return obj;
         }
         // seq 3 : instanceof
-        if (Array.isArray(type)) {
-            if (type.length === 0) {
-                obj.name = 'array';
-                return obj;
-            }
-            if (type.length ===  1 && Array.isArray(type[0])) obj.name = 'array';
-            else obj.name = 'or';
+        if (type instanceof Array || Array.isArray(type)) {
+            if (type.length > 0) obj.name = 'or';
+            else obj.name = 'array'
             return obj;
         }
-        // if (type instanceof Array || Array.isArray(type)) {
-        //     if (type.length > 0) obj.name = 'or';
-        //     else obj.name = 'array'
-        //     return obj;
-        // }
-
         // seq 4: funciton
         if (_isFillObj(type)) {
             obj.name = 'and';
@@ -248,33 +238,6 @@
         // return 'unknown';
     }
 
-    function _getKeyCode(val) {
-        var reg = /^_[a-zA-Z]+_/;
-        var result;
-
-        if (typeof val !== 'string') return;
-        result = reg.exec(val);
-        if (result !== null) return result[0].toUpperCase();
-    }
-    // REVIEW: 보류 함수 본문도 해석해야 하는 이슈가 있음
-    function _getFunInfo(FunBody) {
-        var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w]*}/;
-        var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:return\s+)?([\w]*)\s*}/;
-        var resParam = /[_\w]*/;
-        var arrFunc, arrParam;
-        var result = {args: [], return: null};
-
-        if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
-        arrFunc = regFunc.exec(FunBody);
-        if (arrFunc === null) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
-        result.return = arrFunc[2];
-        arrParam = regFunc.exec(arrFunc[1]);
-        if(Array.isArray(arrParam)) {
-            result.args = arrFunc.splice(1);
-        }
-        return result;
-    }
-
     /**
      * 타입을 검사하여 메세지를 리턴
      * TODO: 배열제네릭 검토, => [[MetaObjec]]
@@ -294,43 +257,14 @@
         
         // if (target === null || typeof type === 'undefined') return '대상이 null, undefined 는 검사할 수 없습니다.';
 
-        if (defType.name === 'or') {    // TODO:
-
+        if (defType.name === 'or') {                                                    // or
             for(var i = 0; i < type.length; i++) {
-                var keyCode = _getKeyCode(type[i]);
-                
-                if (keyCode == '_ANY_') {
-                    if (typeof target !== 'undefined') return '';
-                    return '[_any_] 타입에 undefined 입력할 수 없습니다.';
-                } else if (keyCode == '_OPT_') {
-                    if (typeof target === 'undefined') return '';
-                    continue;
-                } else if (keyCode == '_SEQ_') {
-                    // if (!Array.isArray(target)) return '[target]은 배열 타입이 아닙니다.';
-                    // for(var ii = 1; ii < type.length; ii++) {
-                    //     var tar = target[ii - 1];
-                    //     if (!tar) return '[target]은 [i]번째 배열값이 없습니다.';
-                    //     returnMsg = checkTypeMessage(type[ii], tar);
-                    //     if (returnMsg.length > 0) return returnMsg;
-                    // }
-                    // return '';
-                    return '[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.';
-                }
-                
                 returnMsg = checkTypeMessage(type[i], target);
                 if(returnMsg.length === 0) return '';
                 else arrMsg.push(returnMsg);
             }
             return arrMsg.toString();
         }
-        // if (defType.name === 'or') {
-        //     for(var i = 0; i < type.length; i++) {
-        //         returnMsg = checkTypeMessage(type[i], target);
-        //         if(returnMsg.length === 0) return '';
-        //         else arrMsg.push(returnMsg);
-        //     }
-        //     return arrMsg.toString();
-        // }
         if (defType.name === 'any') {
             if (typeof target !== 'undefined') return '';
             return parentName +'에 속성이 없습니다.';
@@ -358,56 +292,15 @@
             return Message.get('ES024', [parentName, 'symbol']);
             // return parentName +'은 symbol 타입이 아닙니다.';
         }
-        if (defType.name === 'array') { // TODO:
-            if (!Array.isArray(target)) return Message.get('ES024', [parentName, 'array']);
-            if (type.length === 0 && Array.isArray(target)) return '';  // success
-            if (type.length === 1 && Array.isArray(type[0]) && type[0].length === 0) return '';  // success
-
-            var keyCode
-            var beginIdx = 0;
-            var arrType = [];
-            if (type.length > 0 && Array.isArray(type[0])) {
-                arrType = type[0];
-                keyCode = _getKeyCode(arrType[0]);
-            }
-
-            if (keyCode == '_ANY_') {
-                for(var ii = 0; ii < target.length; ii++) {
-                    var tar = target[ii];
-                    if (typeof tar === 'undefined') return '[_any_] 타입에 undefined 입력할 수 없습니다.';
-                }
-                return '';
-            } else if (keyCode == '_SEQ_') {
-                for(var i = 1; i < arrType.length; i++) {
-                    var tar = target[i - 1];
-                    if (typeof tar === 'undefined') return '[target]은 [i]번째 배열값이 없습니다.';
-                    returnMsg = checkTypeMessage(arrType[i], tar);
-                    if (returnMsg.length > 0) return returnMsg;
-                }
-                return '';
-            } else if (keyCode == '_OPT_') {
-                if (typeof target === 'undefined') return '';
-                if (Array.isArray(target) && target.length === 0) return '';
-                beginIdx = 1;
-            }
-
-            for (var i = 0; i < target.length; i++) {
-                for (var ii = beginIdx; ii < arrType.length; ii++) {
-                    returnMsg = checkTypeMessage(arrType[ii], target[i]);
-                    if(returnMsg.length === 0) return '';
-                    else arrMsg.push(returnMsg);
-                }
-                return arrMsg.toString();   // i 번째 값이 검사에 실패하였습니다.
-            }
-            
+        if (defType.name === 'array') {
+            if (Array.isArray(target)) return '';
+            return Message.get('ES024', [parentName, 'array']);
+            // return parentName +'은 array 타입이 아닙니다.';
         }
-        // if (defType.name === 'array') {
-        //     if (Array.isArray(target)) return '';
-        //     return Message.get('ES024', [parentName, 'array']);
-        // }        
         if (defType.name === 'function') {
             if (typeof target === 'function') return '';
             return Message.get('ES024', [parentName, 'function']);
+            // return parentName +'은 function 타입이 아닙니다.';
         }
         if (defType.name === 'object') {
             // if (typeof target === 'object') return '';
@@ -468,20 +361,16 @@
     };
 
     // OR 조건
-    var checkType = function(target, chkType) {
-        // var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
+    var checkType = function(target) {
+        var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
 
-        // if (arrType.length === 0) return false;
-        if (typeof chkType === 'undefined') return false;
+        if (arrType.length === 0) return false;
 
-        // for(var i = 0; i < arrType.length; i++) {
-        //     msg = checkTypeMessage(arrType[i], target);
-        //     if(msg.length === 0) return true;
-        // }
-        msg = checkTypeMessage(chkType, target);
-        if(msg.length === 0) return true;
-
+        for(var i = 0; i < arrType.length; i++) {
+            msg = checkTypeMessage(arrType[i], target);
+            if(msg.length === 0) return true;
+        }
         return false;
     };
 
@@ -491,20 +380,16 @@
 
         if (arrType.length === 0) Message.error('ES026', ['arguments.length == 0']);
 
-        // for(var i = 0; i < arrType.length; i++) {
-        //     msg = checkTypeMessage(arrType[i], target);
+        for(var i = 0; i < arrType.length; i++) {
+            msg = checkTypeMessage(arrType[i], target);
             
-        //     if(msg.length === 0) return true;
-        //     else arrMsg.push(msg);
-        // }
-        
-            msg = checkTypeMessage(arrType, target);  // TODO: target 이 앞으로 가야 맞을듯
             if(msg.length === 0) return true;
-
+            else arrMsg.push(msg);
+        }
         Message.error('ES066', [arrMsg]);
     };
 
-    // AND 조건 => REVIEW: 필요 없을듯
+    // AND 조건
     var checkUnionType = function(target) {
         var arrType = arguments.length > 1 ? Array.prototype.slice.call(arguments, 1) : [];
         var msg = '';
