@@ -165,25 +165,30 @@
      * @param {object} p_obj 대상 객체
      * @param {function} args 대상 인터페이스들
      */
-    var implement = function(p_obj, args) {
-        // var _interface = [];
+    var implement = function(p_ctor, p_obj, args) {
+        var _interface = [];
         var msg = '';
+        var addCnt = 0;
         // var union = [];
 
-        if (typeof p_obj !== 'object') Message.error('ES024', ['this(target)', 'obj']);
+        if (typeof p_ctor !== 'function') Message.error('ES024', ['p_ctor', 'function']);
+        if (typeof p_obj !== 'object') Message.error('ES024', ['p_obj', 'obj']);
 
-        // if (typeof p_obj._interface === 'undefined') {
-        //     Object.defineProperty(p_obj, '_interface', {
-        //         get: function() { 
-        //             return _interface;
-        //         },
-        //         configurable: false,
-        //         enumerable: false,
-        //     });
-        // }
+        if (typeof p_obj._interface === 'undefined') {
+            Object.defineProperty(p_obj, '_interface', {
+                get: function() { 
+                    return _interface;
+                },
+                configurable: false,
+                enumerable: false,
+            });
+        }
+
+        if (!p_ctor['_UNION']) p_ctor['_UNION'] = [];
+        
         // POINT: static 교체
-        var funcClass = getType(p_obj);
-        if (!funcClass['_UNION']) funcClass['_UNION'] = [];
+        // var funcClass = getType(p_obj);
+        // if (!funcClass['_UNION']) funcClass['_UNION'] = [];
         // if (typeof funcClass['_UNION'] === 'undefined') {
         //     // p_obj['_UNION'] = [];
         //     Object.defineProperty(funcClass, '_UNION', {
@@ -196,19 +201,20 @@
         //     });
         // }
         
-        for(var i = 1; i < arguments.length; i++) {
-            // if (typeof arguments[i] === 'function') {
-            //     if (p_obj._interface.indexOf(arguments[i]) < 0) { // 중복 검사 
-            //         p_obj._interface.push(arguments[i]);
-            //     }
-            // } else Message.error('ES021', ['arguments', 'function']);
-            // POINT: static 교체
+        for(var i = 2; i < arguments.length; i++) {
             if (typeof arguments[i] === 'function') {
-                // 중복 제거
-                if (funcClass['_UNION'].indexOf(arguments[i]) < 0) {
-                    funcClass['_UNION'].push(arguments[i]);
+                if (p_obj._interface.indexOf(arguments[i]) < 0) { // 중복 검사 
+                    p_obj._interface.push(arguments[i]);
+                    addCnt++;
                 }
             } else Message.error('ES021', ['arguments', 'function']);
+            // POINT: static 교체
+            // if (typeof arguments[i] === 'function') {
+            //     // 중복 제거
+            //     if (funcClass['_UNION'].indexOf(arguments[i]) < 0) {
+            //         funcClass['_UNION'].push(arguments[i]);
+            //     }
+            // } else Message.error('ES021', ['arguments', 'function']);
 
             // try {
             //     validType(p_obj, arguments[i]);                
@@ -217,13 +223,89 @@
             // }
 
         }
+
+        for (var i = 0; i < p_ctor['_UNION'].length; i++) {
+            if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {
+                p_obj._interface.push(p_ctor['_UNION'][i]);
+                addCnt++;
+            }
+        }
+
+        // var arrSuper = getTypes(p_obj);
+        // for (var i = arrSuper.length - 2; i >= 0; i--) {
+        //     var arrFun = arrSuper[i]['_UNION'] || [];
+        //     for (var ii = 0; ii < arrFun.length; ii++) {
+        //         if (p_obj._interface.indexOf(arrFun[ii]) < 0) {
+        //             p_obj._interface.push(arrFun[ii]);
+        //             if (arrFun[ii] === funcClass) addCnt++;
+        //         }
+        //     }
+        // }
+        // 키스킨이 무슨일이 생길까요?
+
+        /**
+         * 아이보리 키보드 입니다.
+         * 무엇일까요?
+         * 키보드가 괜찮은듯합니다.
+         * 감사합니다.
+         * 키보드가 좋은지 어쩐지는
+         * this is the this is this is this is this is interface.lengt > asdfseeeeeeeee
+         * 한글이 조금 깨지는 것인가요?
+         * 무엇이 키보드일까요?
+         * 
+         * 기능은 어느정도 잘 되는것 같습니다.
+         * 
+         * 무엇이 더 잘될까요?
+         * 
+         * 
+         * 키보드는 좀더 조용한 환경에서 무엇을 해야 할지 더욱 정확해 진것 같습니다.
+         * 무엇이 키보드에 적응이 잘되는 것일까요?
+         * 키보드에서는 그런데로 잘 되는것 같습니다.
+         * 
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 감사합니다.
+         * 무엇이 감사할까요?
+         * 무엇일 감사할 까요?
+         * 
+         * 키보드가 무엇이 중요할까요?
+         * 감ㅅㄱ임ㄴㅇ리;ㅏㅓㄷㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹ
+         * 
+         */
+
+
         try {
-            for (var i = 0; i < funcClass['_UNION'].length; i++) {
-                validType(p_obj, funcClass['_UNION'][i]);
+            var beginIdx = p_obj._interface.length - addCnt;    // 성능이슈
+            // var beginIdx = 0;
+            for (var i = beginIdx; i < p_obj._interface.length; i++) {
+                validType(p_obj, p_obj._interface[i]);
             }
         } catch (error) {
-            Message.error('ES017', [typeName(p_obj), typeName(funcClass['_UNION'][i]), error.message]);
+            Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
         }
+        // try {
+        //     for (var i = 0; i < funcClass['_UNION'].length; i++) {
+        //         validType(p_obj, funcClass['_UNION'][i]);
+        //     }
+        // } catch (error) {
+        //     Message.error('ES017', [typeName(p_obj), typeName(funcClass['_UNION'][i]), error.message]);
+        // }
 
         if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
             Object.defineProperty(p_obj, 'isImplementOf',
@@ -235,32 +317,32 @@
         }
 
         // inner function
-        // function isImplementOf(target) {
-        //     if (typeof target === 'function') {
-        //         for (var i = 0; i < this._interface.length; i++) {
-        //             if (this._interface[i] === target) return true;  
-        //         }
-        //     } else if (typeof target === 'string') {
-        //         for (var i = 0; i < this._interface.length; i++) {
-        //             if (this._interface[i].name === target) return true;  
-        //         }
-        //     } else Message.error('ES021', ['isImplementOf()', 'function, string']);
-        //     return false;
-        // }
-        // POINT:3 static 교체
         function isImplementOf(target) {
-            var funcClass = getType(this);
             if (typeof target === 'function') {
-                for (var i = 0; i < funcClass['_UNION'].length; i++) {
-                    if (funcClass['_UNION'][i] === target) return true;  
+                for (var i = 0; i < this._interface.length; i++) {
+                    if (this._interface[i] === target) return true;  
                 }
             } else if (typeof target === 'string') {
-                for (var i = 0; i < funcClass['_UNION'].length; i++) {
-                    if (funcClass['_UNION'][i].name === target) return true;  
+                for (var i = 0; i < this._interface.length; i++) {
+                    if (this._interface[i].name === target) return true;  
                 }
             } else Message.error('ES021', ['isImplementOf()', 'function, string']);
             return false;
         }
+        // POINT:3 static 교체
+        // function isImplementOf(target) {
+        //     var funcClass = getType(this);
+        //     if (typeof target === 'function') {
+        //         for (var i = 0; i < funcClass['_UNION'].length; i++) {
+        //             if (funcClass['_UNION'][i] === target) return true;  
+        //         }
+        //     } else if (typeof target === 'string') {
+        //         for (var i = 0; i < funcClass['_UNION'].length; i++) {
+        //             if (funcClass['_UNION'][i].name === target) return true;  
+        //         }
+        //     } else Message.error('ES021', ['isImplementOf()', 'function, string']);
+        //     return false;
+        // }
         function typeName(obj) {
             if (typeof obj === 'function') return obj.name;
             if (_isObject(obj)) {
@@ -272,6 +354,15 @@
         function getType(obj) {
             var proto = obj.__proto__ || Object.getPrototypeOf(obj);
             return proto.constructor;
+        }
+        function getTypes(obj) {
+            var list = [];
+            var proto = obj.__proto__ || Object.getPrototypeOf(obj);
+            if (proto) {
+                list.push(proto.constructor);
+                list = list.concat(getTypes(proto));
+            }
+            return list;
         }
     }
 

@@ -146,7 +146,7 @@
 
             this.___KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
 
-            Util.implements(this, IList, IListControl);
+            Util.implements(NamespaceManager, this, IList, IListControl);
         }
         NamespaceManager._NS = 'Meta';    // namespace
         

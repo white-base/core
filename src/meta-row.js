@@ -247,7 +247,7 @@
                 };
             }
 
-            Util.implements(this, IList);
+            Util.implements(MetaRow, this, IList);
         }
         Util.inherits(MetaRow, _super);
 

@@ -137,7 +137,7 @@
                 enumerable: true
             });
 
-            Util.implements(this, IGroupControl, ISchemaControl, IImportControl, IExportControl, ISerialize);
+            Util.implements(BaseEntity, this, IGroupControl, ISchemaControl, IImportControl, IExportControl, ISerialize);
         }
         Util.inherits(BaseEntity, _super);
 

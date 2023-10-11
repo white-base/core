@@ -144,7 +144,7 @@
                 enumerable: true
             });
 
-            Util.implements(this, ISchemaControl, IImportControl, IExportControl, ITransaction, ISerialize);
+            Util.implements(MetaSet, this, ISchemaControl, IImportControl, IExportControl, ITransaction, ISerialize);
         }
         Util.inherits(MetaSet, _super);
 

@@ -56,7 +56,7 @@
         function ArrayCollection(p_owner) {
             _super.call(this, p_owner);
 
-            Util.implements(this, IArrayCollection);
+            Util.implements(ArrayCollection, this, IArrayCollection);
         }
         Util.inherits(ArrayCollection, _super);
 

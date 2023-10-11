@@ -106,7 +106,7 @@
             if (this._type && this._type._NS) this._ns = this._type._NS;
             MetaRegistry.register(this);
 
-            Util.implements(this, IObject, IMarshal);
+            Util.implements(MetaObject, this, IObject, IMarshal);
         }
         
         MetaObject._NS = 'Meta';        // namespace
@@ -207,7 +207,8 @@
          */
         MetaObject.prototype.instanceOf = function(p_fun) {
             var _this = this;
-            var unionTypes = this._type['_UNION'] || [];
+            // var unionTypes = this._type['_UNION'] || [];
+            var unionTypes = this._interface || [];
             var thisTypes = this.getTypes();
 
             if (typeof p_fun === 'string') return findFunctionName(p_fun);

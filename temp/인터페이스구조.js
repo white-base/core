@@ -32,6 +32,25 @@ function ClassA() {
 Util.inherits(ClassA, SuperA);
 ClassA._UNION = [IType, IList];
 //-------------------------
+// 방식 A-2  [****]
+function ClassA() {
+    ISuper.call(this);
+    // ....
+    Util.implements(ClassA, this);
+}
+Util.inherits(ClassA, SuperA);
+ClassA._UNION = [IType, IList];
+
+// 방식 A-2  [****]
+function ClassA() {
+    ISuper.call(this);
+    // ....
+    Util.implements(ClassA, this);
+}
+Util.inherits(ClassA, SuperA);
+ClassA._UNION = [IType, IList];
+
+//-------------------------
 // 방식 A-1
 function ClassA() {
     ISuper.call(this);

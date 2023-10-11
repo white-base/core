@@ -16,7 +16,7 @@ describe("[target: util.js]", () => {
                 this.m1 = Function;
             }
             function CoClass() {
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
@@ -25,7 +25,7 @@ describe("[target: util.js]", () => {
             function ISuper() {}
             ISuper.prototype.m1 = Function;
             function CoClass() {
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
             
             expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
@@ -37,17 +37,69 @@ describe("[target: util.js]", () => {
             }
             class CoClass {
                 constructor() {
-                    Util.implements(this, ISuper);    /** @implements */
+                    Util.implements(CoClass, this, ISuper);    /** @implements */
                 }
             }
     
             expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
         });
+        it('- class 인터페이스 선언 : _UNION 예외 (인터페이스 미구현)', () => {
+            class ISuper {
+                m1 = function() {};
+            }
+            class CoClass {
+                constructor() {
+                    Util.implements(CoClass, this);
+                }
+            }
+            CoClass._UNION = [ISuper]
+    
+            expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
+        });
+        it('- class 인터페이스 선언 : _UNION', () => {
+            class ISuper {
+                m1 = Number
+                f1 = function() {};
+            }
+            class CoClass {
+                m1 = 10
+                constructor() {
+                    Util.implements(CoClass, this);
+                }
+                f1() {} //  => 예외 발생 안힘 !!
+            }
+            CoClass._UNION = [ISuper]
+            class ISub {
+                m2 = String
+                f2 = function() {};
+            }
+            class CoSub extends CoClass {
+                m2 = 'str'
+                constructor() {
+                    super();
+                    Util.implements(CoSub, this);
+                }
+                f2() {}
+            }
+            CoSub._UNION = [ISub]
+            var c2 = new CoSub();
+            
+            // class CoSub2 extends CoClass {
+            //     constructor() {
+            //         super();
+            //         Util.implements(this);
+            //     }
+            // }
+            // CoSub2._UNION = [ISub]
+
+            // expect(() => new CoSub2()).toThrow(/ES017(.|\s)*ES027/);
+        });
+
         it('- prototype 인터페이스 선언 : 예외 (인터페이스 미구현) ', () => {
             function ISuper() {}
             ISuper.prototype.m1 = function() {};
             function CoClass() {
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
             
             expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
@@ -59,13 +111,13 @@ describe("[target: util.js]", () => {
             }
             // ISuper.prototype.m1 = function() { return 'C1' }
             function CoClass() {
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
             CoClass.prototype.m1 = function() { return 'C1' }
             const i = new CoClass();
     
             expect(i.m1()).toBe('C1');
-            expect(CoClass['_UNION'].length).toBe(1);
+            expect(i._interface.length).toBe(1);
             // expect(i.isImplementOf(ISuper)).toBe(true);
         });
         it('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = 인스턴스) ', () => {
@@ -75,7 +127,7 @@ describe("[target: util.js]", () => {
             }
             function CoClass() {
                 this.obj = /err/;    // 객체(Regex)
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES031/);
@@ -86,7 +138,7 @@ describe("[target: util.js]", () => {
             }
             function CoClass() {
                 this.obj = 'err'
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES031/);
@@ -97,7 +149,7 @@ describe("[target: util.js]", () => {
             }
             function CoClass() {
                 this.arr = 'err';
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES024/);
@@ -108,7 +160,7 @@ describe("[target: util.js]", () => {
             }
             function CoClass() {
                 this.str = 1;
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES024/);
@@ -119,7 +171,7 @@ describe("[target: util.js]", () => {
             }
             function CoClass() {
                 this.num = 'err';
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES024/);
@@ -130,7 +182,7 @@ describe("[target: util.js]", () => {
             }
             function CoClass() {
                 this.bool   = 'err';
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES024/);
@@ -149,7 +201,7 @@ describe("[target: util.js]", () => {
                 this.str    = -1;
                 this.arr    = -1;
                 this.obj    = -1;
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
             expect(new CoClass()).toEqual({
@@ -187,7 +239,7 @@ describe("[target: util.js]", () => {
                     add: {}     // 확장 속성
                 };
                 this.add = 1;   // 확장 속성
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass1, this, ISuper);    /** @implements */
             }
             CoClass1.prototype.m1 = new Fun;
             function CoClass2() {
@@ -201,7 +253,7 @@ describe("[target: util.js]", () => {
                     add: {}     // 확장 속성
                 };
                 this.add = 1;   // 확장 속성
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass2, this, ISuper);    /** @implements */
             }
             CoClass1.prototype.m1 = new Fun;
             function CoClass3() {
@@ -215,7 +267,7 @@ describe("[target: util.js]", () => {
                     add: {}     // 확장 속성
                 };
                 this.add = 1;   // 확장 속성
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass3, this, ISuper);    /** @implements */
             }
     
             expect(()=> new CoClass1()).toThrow(/ES017(.|\s)*ES024/);
@@ -265,7 +317,7 @@ describe("[target: util.js]", () => {
                     bool: false,
                     any: null,
                 };
-                Util.implements(this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);    /** @implements */
             }
             
             expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES027/);
@@ -286,13 +338,13 @@ describe("[target: util.js]", () => {
             class CoClass1 {
                 fun = new Fun;
                 arr = [];
-                constructor() { Util.implements(this, ISuper1, ISuper2); }
+                constructor() { Util.implements(CoClass1, this, ISuper1, ISuper2); }
                 m1() { return 'M1' };
                 m2() { return 'M2' };
             }
             class CoClass2 {
                 fun = new Fun;
-                constructor() { Util.implements(this, ISuper1, ISuper2); }
+                constructor() { Util.implements(CoClass2, this, ISuper1, ISuper2); }
                 m1() { return 'M1' };
                 m2() { return 'M2' };
             }
@@ -316,13 +368,13 @@ describe("[target: util.js]", () => {
             class CoClass1 {
                 fun = new Fun;
                 arr = [];
-                constructor() { Util.implements(this, ISuper1, ISuper2, ISuper1); }
+                constructor() { Util.implements(CoClass1, this, ISuper1, ISuper2, ISuper1); }
                 m1() { return 'M1' };
                 m2() { return 'M2' };
             }
             let obj = new CoClass1();
     
-            expect(CoClass1['_UNION'].length).toBe(2);
+            expect(obj._interface.length).toBe(2);
         });
         it('- class 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
@@ -334,7 +386,7 @@ describe("[target: util.js]", () => {
             class ISub {
                 arr = [];           // 재정의
                 fun = Function;
-                constructor() { Util.implements(this, ISuper); }
+                constructor() { Util.implements(ISub, this, ISuper); }
                 m1 = Function;            // 재정의
                 m2 = Function;
             }
@@ -342,13 +394,13 @@ describe("[target: util.js]", () => {
             class CoClass1 {
                 arr = [];
                 fun = function() { return 'FUN' };
-                constructor() { Util.implements(this, ISub); }
+                constructor() { Util.implements(CoClass1, this, ISub); }
                 m1() { return 'M1' };
                 m2() { return 'M2' };
             }
             class CoClass2 {
                 fun = function() {};
-                constructor() { Util.implements(this, ISub); }
+                constructor() { Util.implements(CoClass2, this, ISub); }
                 m1() { return 'M1' };
                 m2() { return 'M2' };
             }
@@ -367,7 +419,7 @@ describe("[target: util.js]", () => {
             function ISub() {
                 this.arr = [];                  // 재정의
                 this.fun = function() {};
-                Util.implements(this, ISuper);
+                Util.implements(ISub, this, ISuper);
             }
             ISub.prototype.m1 = function() {};  // 재정의
             ISub.prototype.m2 = function() {};
@@ -375,13 +427,13 @@ describe("[target: util.js]", () => {
             function CoClass1() {
                 this.fun = function() { return 'FUN' };
                 this.arr = [];
-                Util.implements(this, ISub);
+                Util.implements(CoClass1, this, ISub);
             }
             CoClass1.prototype.m1 = function() { return 'M1' };
             CoClass1.prototype.m2 = function() { return 'M2' };
             function CoClass2() {
                 this.fun = function() { return 'FUN' };
-                Util.implements(this, ISub); 
+                Util.implements(CoClass2, this, ISub); 
             }
             CoClass2.prototype.m1 = function() { return 'M1' };
             CoClass2.prototype.m2 = function() { return 'M2' };
@@ -407,13 +459,13 @@ describe("[target: util.js]", () => {
             function CoClass1() {   // 정상 작동
                 this.fun = function() { return 'FUN' };
                 this.arr = [];
-                Util.implements(this, ISub);
+                Util.implements(CoClass1, this, ISub);
             }
             CoClass1.prototype.m1 = function() { return 'M1' };
             CoClass1.prototype.m2 = function() { return 'M2' };
             function CoClass2() {
                 this.fun = function() { return 'FUN' };
-                Util.implements(this, ISub); 
+                Util.implements(CoClass2, this, ISub); 
             }
             CoClass2.prototype.m1 = function() { return 'M1' };
             CoClass2.prototype.m2 = function() { return 'M2' };
@@ -437,13 +489,13 @@ describe("[target: util.js]", () => {
             function CoClass1() {
                 this.fun = function() { return 'FUN' };
                 this.arr = [];
-                Util.implements(this, ISub);
+                Util.implements(CoClass1, this, ISub);
             }
             CoClass1.prototype.m1 = function() { return 'M1' };
             CoClass1.prototype.m2 = function() { return 'M2' };
             function CoClass2() {
                 this.fun = function() { return 'FUN' };
-                Util.implements(this, ISub); 
+                Util.implements(CoClass2, this, ISub); 
             }
             CoClass2.prototype.m1 = function() { return 'M1' };
             CoClass2.prototype.m2 = function() { return 'M2' };
@@ -464,7 +516,7 @@ describe("[target: util.js]", () => {
             // 클래스 정의
             function CoClass1() {
                 this.arr = [];
-                Util.implements(this, ISuper1);
+                Util.implements(CoClass1, this, ISuper1);
             }
             let obj = new CoClass1();
     
@@ -489,7 +541,7 @@ describe("[target: util.js]", () => {
         it('- implements() : 예외 ', () => {
             function CoClass1() {
                 this.arr = [];
-                Util.implements(this, -1);
+                Util.implements(CoClass1, this, -1);
             }
     
             expect(()=> new CoClass1()).toThrow('ES021');
@@ -497,7 +549,7 @@ describe("[target: util.js]", () => {
         it('- implements() : 예외 ', () => {
             function CoClass1() {
                 this.arr = [];
-                Util.implements(this, null);
+                Util.implements(CoClass1, this, null);
             }
     
             expect(()=> new CoClass1()).toThrow('ES021');

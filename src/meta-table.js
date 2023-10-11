@@ -97,7 +97,7 @@
                 enumerable: true
             });
             
-            Util.implements(this, ITransaction);
+            Util.implements(MetaTable, this, ITransaction);
         }
         Util.inherits(MetaTable, _super);
 

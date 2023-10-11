@@ -322,7 +322,7 @@
             this.__KEYWORD = this.__KEYWORD.concat(['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type']);
             this.__KEYWORD = this.__KEYWORD.concat(['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'add', 'clear']);
 
-            Util.implements(this, ICollection, IList);
+            Util.implements(BaseCollection, this, ICollection, IList);
         }
         Util.inherits(BaseCollection, _super);
 

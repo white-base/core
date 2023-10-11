@@ -75,7 +75,7 @@
             
             this.__SET$_name(p_name, this);
 
-            Util.implements(this, IElement);
+            Util.implements(MetaElement, this, IElement);
         }
         Util.inherits(MetaElement, _super);
     
