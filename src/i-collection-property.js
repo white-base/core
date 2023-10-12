@@ -45,6 +45,7 @@
         }
         Util.inherits(IPropertyCollection, _super);
 
+        IPropertyCollection._KIND = 'interface';
         IPropertyCollection._NS = 'Interface';    // namespace
 
         /**

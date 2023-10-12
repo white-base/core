@@ -35,7 +35,8 @@
         }
     
         ITransaction._NS = 'Interface';    // namespace
-        
+        ITransaction._KIND = 'interface';
+
         /**
          * 변경 수락 (commit)
          * @abstract

@@ -34,6 +34,7 @@
         }
         
         IObject._NS = 'Interface';    // namespace
+        IObject._KIND = 'interface';
 
         /**
          * 객체타입 얻기

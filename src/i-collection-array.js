@@ -44,7 +44,8 @@
             _super.call(this);
         }
         Util.inherits(IArrayCollection, _super);
-
+        
+        IArrayCollection._KIND = 'interface';
         IArrayCollection._NS = 'Interface';    // namespace
 
         /**

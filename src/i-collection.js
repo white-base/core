@@ -45,7 +45,7 @@
         function ICollection() {
         }
 
-    
+        ICollection._KIND = 'interface';
         ICollection._NS = 'Interface';    // namespace
 
         /**

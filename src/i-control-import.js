@@ -34,6 +34,7 @@
         }
     
         IImportControl._NS = 'Interface';    // namespace
+        IImportControl._KIND = 'interface';
 
         /**
          * 입력 : 전체

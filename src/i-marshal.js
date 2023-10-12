@@ -50,6 +50,7 @@
         }
 
         IMarshal._NS = 'Interface';    // namespace
+        IMarshal._KIND = 'interface';
         
         /**
          * 객체 얻기

@@ -43,6 +43,7 @@
         }
 
         IElement._NS = 'Interface';    // namespace
+        IElement._KIND = 'interface';
 
         /**
          * 복제

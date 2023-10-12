@@ -38,6 +38,7 @@
         }
 
         IListControl._NS = 'Interface';    // namespace
+        IListControl._KIND = 'interface';
         
         /**
          * 등록

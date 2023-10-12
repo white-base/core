@@ -35,6 +35,7 @@
         }
 
         ISchemaControl._NS = 'Interface';    // namespace
+        ISchemaControl._KIND = 'interface';
 
         /**
          * 스키마 읽기

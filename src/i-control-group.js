@@ -34,6 +34,7 @@
         }
 
         IGroupControl._NS = 'Interface';    // namespace
+        IGroupControl._KIND = 'interface';
 
         /**
          * 병합 : 그룹

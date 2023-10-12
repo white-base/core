@@ -34,6 +34,7 @@
         }
     
         IExportControl._NS = 'Interface';    // namespace
+        IExportControl._KIND = 'interface';
 
         /**
          * 출력 : 전체

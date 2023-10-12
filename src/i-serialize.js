@@ -38,6 +38,7 @@
         }
 
         ISerialize._NS = 'Interface';    // namespace
+        ISerialize._KIND = 'interface';
 
         /**
          * 출력 (내보내기)

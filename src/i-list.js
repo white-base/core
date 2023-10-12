@@ -49,6 +49,7 @@
         }
 
         IList._NS = 'Interface';    // namespace
+        IList._KIND = 'interface';
 
         return IList;
         
