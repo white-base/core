@@ -196,7 +196,7 @@
                     // settter 의 리턴이 여부
                     __val = typeof _val !== 'undefined' ? _val : val;
                     __val = __val === null ? '' : __val;  // null 등록 오류 처리
-                    if (this._valueTypes.length > 0) Util.validType(__val, this._valueTypes);
+                    if (this._valueTypes.length > 0) Util.validType(this._valueTypes, __val);
                     __value = __val;
                     if (_oldVal !== __val && __val) this._onChanged(__val, _oldVal);    // 검사 및 이벤트 발생
                 },
@@ -270,7 +270,6 @@
             if (p_property) this._load(p_property);
         }
         Util.inherits(MetaColumn, _super);
-
 
         MetaColumn._NS = 'Meta.Entity';                                 // namespace
         MetaColumn._PARAMS = ['columnName', '_entity', '_property'];    // creator parameter
@@ -645,7 +644,7 @@
             var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
-            if (_valueTypes.length > 0) Util.validType(p_value, _valueTypes);
+            if (_valueTypes.length > 0) Util.validType(_valueTypes, p_value);
             
             property = { value: p_value };
             item = new this._baseType(p_name, this._owner, property);
@@ -790,7 +789,7 @@
             var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
-            if (_valueTypes.length > 0) Util.validType(p_value, _valueTypes);
+            if (_valueTypes.length > 0) Util.validType(_valueTypes, p_value);
             
             property = { value: p_value };
             item = new this._baseType(p_name, null, property);

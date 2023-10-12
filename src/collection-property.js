@@ -86,10 +86,10 @@
             // 예약어 등록 
             this.__KEYWORD = this.__KEYWORD.concat(['_keys', 'indexOf', 'exist', 'keyOf']);
 
-            Util.implements(PropertyCollection, this, IPropertyCollection);
+            Util.implements(PropertyCollection, this);
         }
         Util.inherits(PropertyCollection, _super);
-
+        PropertyCollection._UNION = [IPropertyCollection];
         PropertyCollection._NS = 'Collection';      // namespace
         PropertyCollection._PARAMS = ['_owner'];    // creator parameter
 
@@ -248,7 +248,7 @@
                 if(!regex.test(p_name)) Message.error('ES068', [p_name, 'Propery.name']);
                 if (this.__KEYWORD.indexOf(p_name) > -1) Message.error('ES048', [p_name, 'Symbol word']);
                 if (this.exist(p_name)) Message.error('ES042', [p_name, 'property._keys']);
-                if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
+                if (this._elemTypes.length > 0) Util.validType(this._elemTypes, p_value);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                         Message.warn('WS011', ['configurable = true', 'element']);
                 }

@@ -109,12 +109,7 @@ describe("[target: meta-set.js]", () => {
                 // set1.tables['T1'].columns.add('i2');
             });
             it("- 커버리지 : transformSchema() ", () => {
-                var set1 = new MetaSet('S1');
-            
-                // // table add
-                // set1.tables.add("T1");
-                // set1.tables['T1'].columns.add('i1');
-                // set1.tables['T1'].columns.add('i2');
+                expect(()=> MetaSet.transformSchema(null)).toThrow(/ES021/)
             });
         });                
         describe("MetaSet.getObject(): obj<ref> <객체 얻기>", () => {

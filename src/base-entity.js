@@ -170,10 +170,10 @@
                 enumerable: true
             });
 
-            Util.implements(BaseEntity, this, IGroupControl, ISchemaControl, IImportControl, IExportControl, ISerialize);
+            Util.implements(BaseEntity, this);
         }
         Util.inherits(BaseEntity, _super);
-
+        BaseEntity._UNION = [IGroupControl, ISchemaControl, IImportControl, IExportControl, ISerialize];
         BaseEntity._NS = 'Meta.Entity';         // namespace
         BaseEntity._PARAMS = ['name'];          // creator parameter
         BaseEntity._KIND = 'abstract';

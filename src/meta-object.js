@@ -106,12 +106,11 @@
             if (this._type && this._type._NS) this._ns = this._type._NS;
             MetaRegistry.register(this);
 
-            Util.implements(MetaObject, this, IObject, IMarshal);
+            Util.implements(MetaObject, this, );
         }
-        
-        MetaObject._NS = 'Meta';        // namespace
-        MetaObject._PARAMS = [];        // creator parameter
-        
+        MetaObject._UNION = [IObject, IMarshal];
+        MetaObject._NS = 'Meta';
+        MetaObject._PARAMS = [];
 
         // local function
         function _isObject(obj) {    // 객체 여부

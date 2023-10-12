@@ -75,10 +75,10 @@
             
             this.__SET$_name(p_name, this);
 
-            Util.implements(MetaElement, this, IElement);
+            Util.implements(MetaElement, this);
         }
         Util.inherits(MetaElement, _super);
-    
+        MetaElement._UNION = [IElement];
         MetaElement._NS = 'Meta';           // namespace
         MetaElement._PARAMS = ['name'];     // creator parameter
         

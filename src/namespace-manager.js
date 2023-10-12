@@ -146,9 +146,10 @@
 
             this.___KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
 
-            Util.implements(NamespaceManager, this, IList, IListControl);
+            Util.implements(NamespaceManager, this);
         }
-        NamespaceManager._NS = 'Meta';    // namespace
+        NamespaceManager._UNION = [IList, IListControl];
+        NamespaceManager._NS = 'Meta';
         
         // local function
         function _isString(obj) {    // 공백아닌 문자 여부
@@ -289,7 +290,7 @@
             var ns = oPath['ns'];
 
             sections = _getArray(ns);
-            if (this._elemTypes.length > 0) Util.validType(p_elem, this._elemTypes);
+            if (this._elemTypes.length > 0) Util.validType(this._elemTypes, p_elem);
             if (!_validName(key)) Message.error('ES054', [key, '_validName()']);
             if (!this.isOverlap && this.getPath(p_elem)) {
                 Message.error('ES041', ['elem', '[isOverlap=false]']);

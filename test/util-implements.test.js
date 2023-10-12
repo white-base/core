@@ -554,7 +554,13 @@ describe("[target: util.js]", () => {
     
             expect(()=> new CoClass1()).toThrow('ES021');
         });
-        // it('- 속성 = null : 예외 및 검사', () => {
-        // });
+        it('- implements() : 예외 ', () => {
+            function CoClass1() {
+                this.arr = [];
+                Util.implements(null, null, null);
+            }
+    
+            expect(()=> new CoClass1()).toThrow('ES024');
+        });
     });
 });

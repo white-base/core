@@ -90,6 +90,13 @@
         return false;
     }
 
+    function _isUpper(strValue) {
+        var firstStr = strValue.charAt(0);
+        if(firstStr === firstStr.toUpperCase()) return true;
+        else false;
+    }
+
+
     /**
      * 전체 프로퍼티 조회
      * @memberof _L.Common.Util
@@ -181,7 +188,16 @@
         }
         if (typeof type === 'function') {
             if (type.name === 'Symbol') obj.name = 'symbol';
-            else obj.name = 'class';
+            else {
+                var kind = type['_KIND'];
+                if (kind) {
+                    kind = kind.toLowerCase();
+                    if (kind === 'class' || kind === 'interface') obj.name = 'class';
+                    if (kind === 'function') obj.name = 'function';
+                } else {
+                    obj.name = _isUpper(type.name) ? 'class' : 'function';
+                }
+            }
             return obj;
         }
         // seq 3 : instanceof
@@ -259,20 +275,22 @@
         if (result !== null) return result[0].toUpperCase();
     }
     function _getFunInfo(FunBody) {
-        var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w]*}/;
-        var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:return\s+)?([\w]*)\s*}/;
-        var resParam = /[_\w]*/;
+        var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;
+        var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/;
+        // var resParam = /[_\w0-1]*/g;
         var arrFunc, arrParam;
-        var result = {args: [], return: null};
+        var result = {args: [], return: undefined};
 
         if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
         arrFunc = regFunc.exec(FunBody);
         if (arrFunc === null) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
+        // var param = '['+ arrFunc[1] +']';
+        // arrParam = JSON.parse(param);
+        var arrParam = (new Function('return ['+ arrFunc[1] +']'))();
+        // if(Array.isArray(arrParam)) result.args = arrParam.splice(1);
+        result.args = arrParam;
         result.return = arrFunc[2];
-        arrParam = regFunc.exec(arrFunc[1]);
-        if(Array.isArray(arrParam)) {
-            result.args = arrFunc.splice(1);
-        }
+
         return result;
     }
 
@@ -281,12 +299,12 @@
      * TODO: 배열제네릭 검토, => [[MetaObjec]]
      * TODO: null 입력에 대한 검토, 기본 null any 표현 대체 검토, NaN 같은 고유 상수 찾기
      * @memberof _L.Common.Util
-     * @param {any} target 검사대상
      * @param {any} type 검사할 타입
+     * @param {any} target 검사대상
      * @param {string} parentName '' 공백시 성공
      * @returns {string?}
      */
-    var checkTypeMessage = function(target, type, parentName) {
+    var checkTypeMessage = function(type, target, parentName) {
         var parentName = parentName ? parentName : 'this';
         var typeDef = {type: type, name: '', default: null};
         var returnMsg = '', arrMsg = [];
@@ -308,7 +326,7 @@
                 } else if (keyCode == '_SEQ_') {
                     return '[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.';
                 }
-                returnMsg = checkTypeMessage(target, type[i]);
+                returnMsg = checkTypeMessage(type[i], target);
                 if(returnMsg.length === 0) return '';
                 else arrMsg.push(returnMsg);
             }
@@ -359,7 +377,7 @@
                 for(var i = 1; i < arrType.length; i++) {
                     var tar = target[i - 1];
                     if (typeof tar === 'undefined') return '[target]은 [i]번째 배열값이 없습니다.';
-                    returnMsg = checkTypeMessage(tar, arrType[i]);
+                    returnMsg = checkTypeMessage(arrType[i], tar);
                     if (returnMsg.length > 0) return returnMsg;
                 }
                 return '';
@@ -370,7 +388,7 @@
 
             for (var i = 0; i < target.length; i++) {
                 for (var ii = beginIdx; ii < arrType.length; ii++) {
-                    returnMsg = checkTypeMessage(target[i], arrType[ii]);
+                    returnMsg = checkTypeMessage(arrType[ii], target[i]);
                     if(returnMsg.length === 0) return '';
                     else arrMsg.push(returnMsg);
                 }
@@ -379,10 +397,49 @@
         }
         // POINT:
         if (defType.name === 'function') {
-            var info = _getFunInfo(type.toString());
-            
+            if (typeof target !== 'function') return Message.get('ES024', [parentName, 'function']);
+            if (type === Function) return '';
+            // var func = type.toString().replace(/ /g,'');
+            // if (func === 'function(){}' || func === '()=>{}') return '';
+            var info = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
+            var _type = target['_TYPE'];
+            var args = [];
+            var returns = [];
+            var iType, fType;
+            if (!info.return && info.args.length === 0) return '';    // success
+            if ((info.return || info.args.length) && !_type) return 'function._TYPE 정보가 없습니다.';
+            if (!_type) return 'target[_TYPE] 객체가 없습니다.'
+            if (!(_type.args && _type.return)) {
+                return 'function._TYPE = {args: [], return: []} function _TYPE 규칙이 다릅니다.';
+            }
+            args = (Array.isArray(_type.args )) ? _type.args : [_type.args];
+            returns = (Array.isArray(_type.returns )) ? _type.returns : [_type.returns];
+            if (info.args.length !== args.length) return 'args.length ='+ info.args.length +' 길이가 서로 다릅니다.'
+            // args 검사
+            for (var i = 0; i < info.args.length; i++) {
+                iType = getTypeMap(info.args[i]);
+                fType = getTypeMap(args[i]);
+                if (iType.name = fType.name) continue;
+                /**
+                 * 원시타입
+                 * symbol => 원시와 같이
+                 * object => 원시와 같이 비교
+                 * ---
+                 * array => 타입, _any_ 같은 예약어, 순환
+                 * or : [] 순환
+                 * and : 순환
+                 * fun : 타입
+                 * class : 순환
+                 */
+
+            }
+            // return 검사
+
             if (typeof target === 'function') return '';
-            return Message.get('ES024', [parentName, 'function']);
+            return '알수없는 오류';
+
+            // inner function
+
         }
         // if (defType.name === 'function') {
         //     if (typeof target === 'function') return '';
@@ -400,7 +457,7 @@
                 else return Message.get('ES032', [parentName, _typeName(type)]);
             } else {
                 if (typeof target === 'object' && target instanceof type) return '';
-                if (typeof target === 'object' && target !== null) return checkTypeMessage(target, _creator(type), parentName);
+                if (typeof target === 'object' && target !== null) return checkTypeMessage(_creator(type), target, parentName);
                 return Message.get('ES032', [parentName, _typeName(type)]);
             }
         }
@@ -422,7 +479,7 @@
                     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
                     else return Message.get('ES031', [parentName + '.' + key]);
                 } 
-                msg = checkTypeMessage(target[key], type[key], parentName +'.'+ key);
+                msg = checkTypeMessage(type[key], target[key], parentName +'.'+ key);
                 if (msg.length > 0) return msg;
             }
             return '';
@@ -433,16 +490,16 @@
     /**
      * 타입 검사
      * @memberof _L.Common.Util
-     * @param {any} target 
      * @param {any} chkType 
+     * @param {any} target 
      * @returns {boolean} 
      */
-    var checkType = function(target, chkType) {
+    var checkType = function(chkType, target) {
         var msg = '';
 
         if (typeof chkType === 'undefined') return false;
         
-        msg = checkTypeMessage(target, chkType);
+        msg = checkTypeMessage(chkType, target);
         if(msg.length === 0) return true;
         return false;
     };
@@ -450,16 +507,16 @@
     /**
      * 타입 검사 
      * @memberof _L.Common.Util
-     * @param {any} target 
      * @param {any} chkType 
+     * @param {any} target 
      * @returns {boolean | Error} 성공시 true, 실패시 예외
      */
-    var validType = function(target, chkType) {
-        var msg = '', arrMsg = [];
+    var validType = function(chkType, target) {
+        var msg = '';
 
         if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
         
-        msg = checkTypeMessage(target, chkType);  // TODO: target 이 앞으로 가야 맞을듯
+        msg = checkTypeMessage(chkType, target);
         if(msg.length === 0) return true;
         Message.error('ES069', ['type vaild', msg]);
     };

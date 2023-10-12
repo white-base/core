@@ -151,8 +151,8 @@
     var createGuid = function() {
 
         function _p8(s) {  
-            var p = (Math.random().toString(16)+'000000000').substr(2,8);  
-            return s ? '-' + p.substr(0,4) + '-' + p.substr(4,4) : p ;  
+            var p = (Math.random().toString(16)+'000000000').substring(2,10);  
+            return s ? '-' + p.substring(0, 4) + '-' + p.substring(4, 8) : p ;  
         }
         return _p8() + _p8(true) + _p8(true) + _p8();
     };
@@ -172,7 +172,7 @@
         // var union = [];
 
         if (typeof p_ctor !== 'function') Message.error('ES024', ['p_ctor', 'function']);
-        if (typeof p_obj !== 'object') Message.error('ES024', ['p_obj', 'obj']);
+        if (!_isObject(p_obj)) Message.error('ES024', ['p_obj', 'obj']);
 
         if (typeof p_obj._interface === 'undefined') {
             Object.defineProperty(p_obj, '_interface', {
@@ -246,7 +246,7 @@
             var beginIdx = p_obj._interface.length - addCnt;    // 성능이슈
             // var beginIdx = 0;
             for (var i = beginIdx; i < p_obj._interface.length; i++) {
-                validType(p_obj, p_obj._interface[i]);
+                validType(p_obj._interface[i], p_obj);
             }
         } catch (error) {
             Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
@@ -307,15 +307,15 @@
             var proto = obj.__proto__ || Object.getPrototypeOf(obj);
             return proto.constructor;
         }
-        function getTypes(obj) {
-            var list = [];
-            var proto = obj.__proto__ || Object.getPrototypeOf(obj);
-            if (proto) {
-                list.push(proto.constructor);
-                list = list.concat(getTypes(proto));
-            }
-            return list;
-        }
+        // function getTypes(obj) {
+        //     var list = [];
+        //     var proto = obj.__proto__ || Object.getPrototypeOf(obj);
+        //     if (proto) {
+        //         list.push(proto.constructor);
+        //         list = list.concat(getTypes(proto));
+        //     }
+        //     return list;
+        // }
     }
 
     /**
