@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const { getAllProperties, getTypeMap, checkType }       = require('../src/util-type');
+const { getAllProperties, getTypeMap, checkType, equalType }       = require('../src/util-type');
 const { checkUnionType, validType, validUnionType }     = require('../src/util-type');
 
 //==============================================================
@@ -22,10 +22,10 @@ describe("[target: util-type.js.js]", () => {
             expect(getTypeMap().name).toBe('undefined');
             expect(getTypeMap(null).name).toBe('null');
             // or, and
-            expect(getTypeMap([String]).name).toBe('or');
-            expect(getTypeMap([String, Number]).name).toBe('or');
-            expect(getTypeMap({fill:true}).name).toBe('and');
-            expect(getTypeMap(new Corp).name).toBe('and');
+            expect(getTypeMap([String]).name).toBe('choice');
+            expect(getTypeMap([String, Number]).name).toBe('choice');
+            expect(getTypeMap({fill:true}).name).toBe('union');
+            expect(getTypeMap(new Corp).name).toBe('union');
             // array
             expect(getTypeMap([]).name).toBe('array');
             expect(getTypeMap(Array).name).toBe('array');
@@ -64,8 +64,148 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- 예외 : validType(), validUnionType()  ', () => {
             expect(() => validType(undefined, {})).toThrow(/ES026/);
+
             // expect(() => validUnionType({}, undefined, Object)).toThrow(/ES022/);
         });
+    });
+    describe('< 타입 비교 >', () => {
+        it('- equalType(a, b) : array choice', () => {
+            var typeA1 = [];
+            var typeB1 = [];
+            var typeA3 = [['_any_']];
+            var typeB3_1 = [[null]];
+            var typeB3_2 = [];                              // false
+            var typeB3_3 = undefined;                       // false
+            var typeB3_4 = [[]];                            // false
+            var typeA4 = [['_any_', String]]
+            var typeB4_1 = [['_any_', String]]
+            var typeB4_2 = [[String]]
+            var typeB4_3 = [[Number]]
+            var typeA5 = [['_seq_']];
+            var typeB5_1 = [['_seq_']];
+            var typeB5_2 = [['_seq_', Boolean]];
+            var typeB5_3 = [[]];                            // false
+            var typeA6 = [['_seq_', Number]];
+            var typeB6_1 = [['_seq_', Number]];
+            var typeB6_2 = [['_seq_', Number, String]];
+            var typeB6_3 = [['_seq_']];                     // false
+            var typeB6_4 = [['_seq_', Boolean]];            // false
+            var typeB6_5 = [[Number]];                      // false
+            var typeA7 = [['_opt_']];
+            var typeB7_1 = [['_opt_']];
+            var typeB7_2 = [['_opt_', String]];
+            var typeB7_3 = [['_any_']];
+            var typeB7_4 = [[]];                            
+            var typeA8 = [['_opt_', String]];
+            var typeB8_1 = [['_opt_', String]];
+            var typeB8_2 = [['_opt_', Number, String]];
+            var typeB8_3 = [['_opt_', Number]];             // false
+            var typeB8_4 = [['_opt_']];                     // false
+            var typeB8_5 = [['_any_']];                     // false
+
+
+            expect(equalType(typeA1, typeB1)).toBe(true);
+            expect(equalType(typeA3, typeB3_1)).toBe(true);
+            expect(equalType(typeA3, typeB3_2)).toBe(false);
+            expect(equalType(typeA3, typeB3_3)).toBe(false);
+            expect(equalType(typeA3, typeB3_4)).toBe(false);
+            expect(equalType(typeA4, typeB4_1)).toBe(true);
+            expect(equalType(typeA4, typeB4_2)).toBe(true);
+            expect(equalType(typeA4, typeB4_3)).toBe(true);
+            expect(equalType(typeA5, typeB5_1)).toBe(true);
+            expect(equalType(typeA5, typeB5_2)).toBe(true);
+            expect(equalType(typeA5, typeB5_3)).toBe(false);
+            expect(equalType(typeA6, typeB6_1)).toBe(true);
+            expect(equalType(typeA6, typeB6_2)).toBe(true);
+            expect(equalType(typeA6, typeB6_3)).toBe(false);
+            expect(equalType(typeA6, typeB6_4)).toBe(false);
+            expect(equalType(typeA6, typeB6_5)).toBe(false);
+            expect(equalType(typeA7, typeB7_1)).toBe(true);
+            expect(equalType(typeA7, typeB7_2)).toBe(true);
+            expect(equalType(typeA7, typeB7_3)).toBe(true);
+            expect(equalType(typeA7, typeB7_4)).toBe(true);
+            expect(equalType(typeA8, typeB8_1)).toBe(true);
+            expect(equalType(typeA8, typeB8_1)).toBe(true);
+            expect(equalType(typeA8, typeB8_2)).toBe(true);
+            expect(equalType(typeA8, typeB8_3)).toBe(false);
+            expect(equalType(typeA8, typeB8_4)).toBe(false);
+            expect(equalType(typeA8, typeB8_5)).toBe(false);
+        });
+
+        it('- equalType(a, b) : 원시 자료형 ', () => {
+            var typeA1 = String;
+            var typeB1 = String;
+            var typeA2 = 'str';
+            var typeB2 = 'str';
+
+            expect(equalType(typeA1, typeB1)).toBe(true);
+            expect(equalType(typeA2, typeB2)).toBe(true);
+        });
+        it('- equalType(a, b) : choice ', () => {
+        });
+        it('- equalType(a, b) : function ', () => {
+        });
+        it('- equalType(a, b) : object ', () => {
+        });
+        it('- equalType(a, b) : union (기본) ', () => {
+            var typeA1 = {
+                str: String,
+                num: Number
+            };
+            var typeB1_1 = {
+                str: String,
+                num: Number
+            };
+            var typeB1_2 = {
+                str: '',
+                num: 0
+            };
+            var typeB1_3 = {
+                str: ''
+            };
+
+            expect(equalType(typeA1, typeB1_1)).toBe(true);
+            expect(equalType(typeA1, typeB1_2)).toBe(true);
+            expect(equalType(typeB1_2, typeA1)).toBe(false);
+            expect(equalType(typeA1, typeB1_3)).toBe(false);
+        });
+        it('- equalType(a, b) : union (choice) ', () => {
+            var typeA1 = {
+                str: [String, Number],
+                bool: ['_any_'],
+                num: ['_opt_', Number]
+            };
+            var typeB1_1 = {
+                str: String,
+                bool: null,
+                num: Number
+            };
+            var typeB1_2 = {
+                str: String,
+                bool: null,
+                num: Number
+            };
+            var typeB1_3 = {
+                str: '',
+                bool: true,
+            };
+            var typeB1_4 = {
+                str: String,
+                bool: false,
+                num: String
+            };
+            var typeB1_5 = {
+                str: String,
+            };
+
+            expect(equalType(typeA1, typeB1_1)).toBe(true);
+            expect(equalType(typeA1, typeB1_2)).toBe(true);
+            expect(equalType(typeA1, typeB1_3)).toBe(true);
+            expect(equalType(typeA1, typeB1_4)).toBe(false);
+            expect(equalType(typeA1, typeB1_5)).toBe(false);
+        });
+
+
     });
     describe('< or 조건 검사 >', () => {
         it('- checkType() : 배열 ', () => {
@@ -183,7 +323,7 @@ describe("[target: util-type.js.js]", () => {
 
     // POINT:
     describe('< function 타입 >', () => {
-        it('- 커버리지 : 일반 ', () => {
+        it('- function : 선언 타입 검사 ', () => {
             // 타입 
             var type1 = function(){};
             var type2 = function(){};
@@ -192,6 +332,13 @@ describe("[target: util-type.js.js]", () => {
             var type3 = function(){};
             type3._TYPE = {args: [], return: [Object, String]};
             var type3_1 = function(){return [Object, String]};
+            
+            var args4 = {aa: 1, bb: function(String, Number){}}
+            var type4 = function(args4, Number) {};
+            var type5 = (Number) => {};
+            var type6 = ({fun: String}, Number) => {return Number};
+
+
             // 타겟
             var tar1 = function(){}; 
             var tar2 = function(){}; 
@@ -200,7 +347,6 @@ describe("[target: util-type.js.js]", () => {
             tar3._TYPE = {args: [], return: [Object, String]}
             var tar4 = function(){}; 
             tar4._TYPE = {args: [String], return: [Object, String]}
-
             
 
             // type1
@@ -212,11 +358,39 @@ describe("[target: util-type.js.js]", () => {
             expect(checkType(type2, tar1)).toBe(false);
             expect(checkType(type2, tar2)).toBe(true);
             expect(checkType(type2, tar3)).toBe(false);
+        });
+        it('- function : 외부 참조형 타입 비교 ', () => {
+            /**
+             * function 의 args 영역 규칙
+             * - 거부
+             *  + 정수명(0~9) 입력 불가
+             *  + 내부에 function 사용 불가, ()=> {} 또한 불가
+             * - 허용 
+             *  + 객체 및 배열은 가능
+             *  + String 원시함수이름을 사용하면, 변수로 인식한다.
+             */
+            var arg1 = [String, {aa: Number}]
+            var type1 = function(arg1){}
+            var type2 = function(String, {aa: Number}){}  
+            var type3 = function(){}
+            type3._TYPE = {args: arg1}
+            var type4 = function([{aa: Number}]){}
+            
+            var tar1 = function(){}; 
+            tar1._TYPE = {args: [String, {aa: Number}], return: [Object]}
+            var tar2 = function(){};
+            tar2._TYPE = {args: [[{aa: Number}]]}
 
-
+            expect(()=> validType(type1, tar1)).toThrow(/arg1/);    // func 내부 참조변수 오류
+            expect(validType(type2, tar1)).toBe(true);
+            expect(validType(type3, tar1)).toBe(true);
+            expect(validType(type4, tar2)).toBe(true);
+            
+            // TODO: 확인해야함
+            // expect(validType(type3, tar1)).toBe(false);  
+            // expect(validType(type3, tar2)).toBe(true);
 
         });
-
     });
 
     describe('< 기본 >', () => {
@@ -228,10 +402,10 @@ describe("[target: util-type.js.js]", () => {
             expect(getTypeMap().name).toBe('undefined');
             expect(getTypeMap(null).name).toBe('null');
             // or, and
-            expect(getTypeMap([String]).name).toBe('or');
-            expect(getTypeMap([String, Number]).name).toBe('or');
-            expect(getTypeMap({fill:true}).name).toBe('and');
-            expect(getTypeMap(new Corp).name).toBe('and');
+            expect(getTypeMap([String]).name).toBe('choice');
+            expect(getTypeMap([String, Number]).name).toBe('choice');
+            expect(getTypeMap({fill:true}).name).toBe('union');
+            expect(getTypeMap(new Corp).name).toBe('union');
             // array
             expect(getTypeMap([]).name).toBe('array');
             expect(getTypeMap(Array).name).toBe('array');

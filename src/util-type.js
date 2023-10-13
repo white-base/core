@@ -207,18 +207,18 @@
                 return obj;
             }
             if (type.length ===  1 && Array.isArray(type[0])) obj.name = 'array';
-            else obj.name = 'or';
+            else obj.name = 'choice';
             return obj;
         }
         // if (type instanceof Array || Array.isArray(type)) {
-        //     if (type.length > 0) obj.name = 'or';
+        //     if (type.length > 0) obj.name = 'choice';
         //     else obj.name = 'array'
         //     return obj;
         // }
 
         // seq 4: funciton
         if (_isFillObj(type)) {
-            obj.name = 'and';
+            obj.name = 'union';
             return obj;
         }
         if (_isEmptyObj(type)) {        // {..}, 빈 생성자
@@ -274,9 +274,50 @@
         result = reg.exec(val);
         if (result !== null) return result[0].toUpperCase();
     }
+
+    var deepEqual = function(obj1, obj2) {
+        if (obj1 === obj2) return true;
+        if (typeof obj1 !== typeof obj2) return false;
+
+        if (Array.isArray(obj1)) {
+            if (obj1.length !== obj2.length) return false;
+            for (var i = 0; i < obj1.length; i++) {
+                var val1 = obj1[i];
+                var val2 = obj2[i];
+                var areObjects = _isObject(val1) && _isObject(val2);
+                if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+                    return false;
+                }
+            }
+        } else {
+            if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+            for (var key in obj1) {
+                if (obj1.hasOwnProperty(key)) {
+                    var val1 = obj1[key];
+                    var val2 = obj2[key];
+                    var areObjects = _isObject(val1) && _isObject(val2);
+                    if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 함수 규칙  
+     * - (args 내부에는 '()' 입력 금지)
+     * - 참조형 타입 금지 : new Function() 시점에 자동 해석됨
+     * 
+     * @param {*} FunBody 
+     * @returns 
+     */
     function _getFunInfo(FunBody) {
-        var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;
-        var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/;
+        // var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;  // 제한 규칙
+        var regChk = /\([,_\[\]{:}\w\s]*\)(?:=>|\s*)?{[\[\]{:}\s\w;]*}/;  // 
+        // var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/; // 제한 규칙
+        var regFunc = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/;
         // var resParam = /[_\w0-1]*/g;
         var arrFunc, arrParam;
         var result = {args: [], return: undefined};
@@ -286,13 +327,119 @@
         if (arrFunc === null) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
         // var param = '['+ arrFunc[1] +']';
         // arrParam = JSON.parse(param);
-        var arrParam = (new Function('return ['+ arrFunc[1] +']'))();
-        // if(Array.isArray(arrParam)) result.args = arrParam.splice(1);
-        result.args = arrParam;
-        result.return = arrFunc[2];
+        
+        try {
+            var arrParam = [];
+            var arrRetrun;
+            arrParam = (new Function('return ['+ arrFunc[1] +']'))();
+            result.args = arrParam;
+            
+            if (arrFunc[2] !== '') arrRetrun = (new Function('return '+ arrFunc[2]))()
+            result.return = arrRetrun;
+
+        } catch (error) {
+            return error.message;
+        }
 
         return result;
     }
+
+    var equalType = function (type1, type2) {
+        var def1 = getTypeMap(type1);
+        var def2 = getTypeMap(type2);
+        
+        if (_isObject(type1) &&  _isObject(type2) && deepEqual(type1, type2)) return true;
+        // if (def1.name !== def2.name) return false;
+        if (def1.name === 'choice') {
+            for(var i = 0; i < type1.length; i++) {
+                var keyCode = _getKeyCode(type1[i]);
+                if (keyCode == '_ANY_') {
+                    if (typeof type2 !== 'undefined') return true;
+                } else if (keyCode == '_OPT_') {
+                    if (typeof type2 === 'undefined') return true;
+                    continue;
+                } else if (keyCode == '_SEQ_') return false;
+                
+                var arrType2 = Array.isArray(type2) ? type2 : [type2];
+                for (var ii = 0; ii < arrType2.length; ii++) {
+                    if (equalType(type1[i], arrType2[ii])) return true;
+                }
+                return false;
+            }
+        }
+        // 원시타입은 타입만 같은지 비교
+        if (['null', 'number', 'string', 'boolean', 'symbol'].indexOf(def1.name) > -1) {
+            if(def1.default !== null && def1.default !== def2.default) return false;
+            if (def1.name === def2.name) return true;
+            return false;
+        }
+        // array & array 조건
+        if (def1.name === 'array') {
+            if (!Array.isArray(type2)) return false;
+            if ((type1 === Array || type1.length === 0) && Array.isArray(type2)) return true;      // [], Array
+            if (type1.length === 1 && Array.isArray(type1[0]) && type1[0].length === 0) return true;
+            
+            var keyCode1 = _getKeyCode(type1[0][0]);
+            var keyCode2;
+            if (type2[0] && type2[0][0]) keyCode2 = _getKeyCode(type2[0][0]);
+            if (keyCode1 == '_ANY_') {
+                if (typeof type2[0] === 'undefined' || typeof type2[0][0] === 'undefined'
+                    || type2[0].length === 0) return false;
+                if (type2[0].length > 0) return true;
+                return false;
+            
+            } else if (keyCode1 == '_OPT_') {
+                if (typeof type2[0] === 'undefined' || type2[0].length === 0) return true;
+                if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
+                if (keyCode1 !== keyCode2) return false;
+                if (type1[0].length > type2[0].length) return false;
+                for (var i = 1; i < type1[0].length; i++) {
+                    var success = false;
+                    for (var ii = 1; ii < type2[0].length; ii++) {
+                        if (success) continue;
+                        if (equalType(type1[0][i], type2[0][ii])) success = true;
+                    }
+                    if (!success) return false;
+                }
+                return true;
+            
+            } else if (keyCode1 == '_SEQ_') {
+                if (keyCode1 !== keyCode2) return false;
+                if (type1[0].length > type2[0].length) return false;
+                for (var i = 1; i < type1[0].length; i++) {
+                    if (!equalType(type1[0][i], type2[0][i])) return false;
+                }
+                return true;
+            }
+
+            return false;
+        }
+        
+        if (def1.name === 'function') {
+            if (typeof type2 !== 'function') return false;
+            if (type1 === Function) return true;
+            var info1 = type1['_TYPE'] ? type1['_TYPE'] : _getFunInfo(type1.toString());
+            var info2 =  type2['_TYPE'] ? type2['_TYPE'] : _getFunInfo(type2.toString());
+            if (!info1.return && info1.args.length === 0) return true;
+            if (info1.args.length !== info2.args.length) return false;
+            for (var i = 0; i < info1.args.length; i++) {
+                if (!equalType(info1.args[i], info2.args[i])) return false;
+            }
+            return true;
+        }
+        if (def1.name === 'object' || def1.name === 'class') {
+            if (type1 === type2) return true;
+            return false; // REVIEW: 검사 필요
+        }
+        if (def1.name === 'union') {
+            var list = getAllProperties(type1);
+            for (var i = 0; i < list.length; i++) {
+                var key = list[i];
+                if (!equalType(type1[key], type2[key])) return false;
+            }
+            return true;
+        }
+    };
 
     /**
      * 타입을 검사하여 메세지를 리턴
@@ -312,7 +459,7 @@
 
         defType = getTypeMap(type);
         
-        if (defType.name === 'or') {    // TODO:
+        if (defType.name === 'choice') {    // TODO:
 
             for(var i = 0; i < type.length; i++) {
                 var keyCode = _getKeyCode(type[i]);
@@ -402,43 +549,52 @@
             // var func = type.toString().replace(/ /g,'');
             // if (func === 'function(){}' || func === '()=>{}') return '';
             var info = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
-            var _type = target['_TYPE'];
-            var args = [];
             var returns = [];
+            var _type = target['_TYPE'];
+            var _args = [];
+            var _returns = [];
             var iType, fType;
+            if (typeof info === 'string') return info;
             if (!info.return && info.args.length === 0) return '';    // success
-            if ((info.return || info.args.length) && !_type) return 'function._TYPE 정보가 없습니다.';
+            if ((info.return || info.args.length > 0) && !_type) return 'function._TYPE 정보가 없습니다.';
             if (!_type) return 'target[_TYPE] 객체가 없습니다.'
-            if (!(_type.args && _type.return)) {
+            if (!(_type.args.length > 0 || _type.return)) {
                 return 'function._TYPE = {args: [], return: []} function _TYPE 규칙이 다릅니다.';
             }
-            args = (Array.isArray(_type.args )) ? _type.args : [_type.args];
-            returns = (Array.isArray(_type.returns )) ? _type.returns : [_type.returns];
-            if (info.args.length !== args.length) return 'args.length ='+ info.args.length +' 길이가 서로 다릅니다.'
+            _args = (Array.isArray(_type.args )) ? _type.args : [_type.args];
+            if (info.return) returns = (Array.isArray(info.return )) ? info.return : [info.return];
+            if (_type.return) _returns = (Array.isArray(_type.return )) ? _type.return : [_type.return];
+            if (info.args.length > _args.length) return 'args.length ='+ info.args.length +' 길이가 서로 다릅니다.'
             // args 검사
             for (var i = 0; i < info.args.length; i++) {
-                iType = getTypeMap(info.args[i]);
-                fType = getTypeMap(args[i]);
-                if (iType.name = fType.name) continue;
+                
+                // iType = getTypeMap(info.args[i]);
+                // fType = getTypeMap(args[i]);
+                // if (iType.name = fType.name) continue;
+                if (!equalType(info.args[i], _args[i])) return false;
                 /**
                  * 원시타입
                  * symbol => 원시와 같이
                  * object => 원시와 같이 비교
                  * ---
-                 * array => 타입, _any_ 같은 예약어, 순환
-                 * or : [] 순환
-                 * and : 순환
-                 * fun : 타입
-                 * class : 순환
+                 * array : 순환 :: [], [[..]], [['_any_',...]]
+                 * or : 순환 :: [...]
+                 * fun : 순환 :: 직접 입금은 금지 변수로 삽입 => 해결가능할 듯 => 자동 금지됨
+                 * class(object) : 순환  :: Class
+                 * and(object) : 순환 :: {....} => number 타입은 금지됨
                  */
 
             }
             // return 검사
-
-            if (typeof target === 'function') return '';
-            return '알수없는 오류';
+            if (returns.length > _returns.length) return 'return.length ='+ returns.length +' 길이가 서로 다릅니다.'
+            for (var i = 0; i < returns.length; i++) {
+                if (!equalType(returns[i], _returns[i])) return 'return 타입이 서로 다릅니다.'
+            }
+            return '';
 
             // inner function
+            
+            
 
         }
         // if (defType.name === 'function') {
@@ -461,7 +617,7 @@
                 return Message.get('ES032', [parentName, _typeName(type)]);
             }
         }
-        if (defType.name === 'and') {
+        if (defType.name === 'union') {
             var list = getAllProperties(typeDef.type);
 
             for (var i = 0; i < list.length; i++) {
@@ -469,6 +625,7 @@
                 var listDefType = getTypeMap(type[key]);
                 var msg = '';
                 
+                // REVIEW: for 위쪽으로 이동 검토!
                 if (!_isObject(target)) return Message.get('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
                 if (listDefType.default !== null && typeof target[key] === 'undefined')      // default 설정
@@ -530,6 +687,7 @@
         exports.getTypeMap = getTypeMap;
         exports.checkType = checkType;
         exports.validType = validType;
+        exports.equalType = equalType;
     } else {
         var ns = {
             getAllProperties: getAllProperties,
@@ -537,6 +695,7 @@
             getTypeMap: getTypeMap,
             checkType: checkType,
             validType: validType,
+            equalType: equalType
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;
