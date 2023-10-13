@@ -70,33 +70,33 @@ describe("[target: util-type.js.js]", () => {
     });
     describe('< 타입 비교 >', () => {
         it('- equalType(a, b) : array choice', () => {
-            var typeA1 = [];
-            var typeB1 = [];
-            var typeA3 = [['_any_']];
+            var typeA1_0 = [];
+            var typeB1_0 = [];
+            var typeA3_0 = [['_any_']];
             var typeB3_1 = [[null]];
             var typeB3_2 = [];                              // false
             var typeB3_3 = undefined;                       // false
             var typeB3_4 = [[]];                            // false
-            var typeA4 = [['_any_', String]]
+            var typeA4_0 = [['_any_', String]]
             var typeB4_1 = [['_any_', String]]
             var typeB4_2 = [[String]]
             var typeB4_3 = [[Number]]
-            var typeA5 = [['_seq_']];
+            var typeA5_0 = [['_seq_']];
             var typeB5_1 = [['_seq_']];
             var typeB5_2 = [['_seq_', Boolean]];
             var typeB5_3 = [[]];                            // false
-            var typeA6 = [['_seq_', Number]];
+            var typeA6_0 = [['_seq_', Number]];
             var typeB6_1 = [['_seq_', Number]];
             var typeB6_2 = [['_seq_', Number, String]];
             var typeB6_3 = [['_seq_']];                     // false
             var typeB6_4 = [['_seq_', Boolean]];            // false
             var typeB6_5 = [[Number]];                      // false
-            var typeA7 = [['_opt_']];
+            var typeA7_0 = [['_opt_']];
             var typeB7_1 = [['_opt_']];
             var typeB7_2 = [['_opt_', String]];
             var typeB7_3 = [['_any_']];
             var typeB7_4 = [[]];                            
-            var typeA8 = [['_opt_', String]];
+            var typeA8_0 = [['_opt_', String]];
             var typeB8_1 = [['_opt_', String]];
             var typeB8_2 = [['_opt_', Number, String]];
             var typeB8_3 = [['_opt_', Number]];             // false
@@ -104,7 +104,7 @@ describe("[target: util-type.js.js]", () => {
             var typeB8_5 = [['_any_']];                     // false
 
 
-            expect(equalType(typeA1, typeB1)).toBe(true);
+            expect(equalType(typeA1, typeB1_0)).toBe(true);
             expect(equalType(typeA3, typeB3_1)).toBe(true);
             expect(equalType(typeA3, typeB3_2)).toBe(false);
             expect(equalType(typeA3, typeB3_3)).toBe(false);
