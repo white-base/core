@@ -106,7 +106,7 @@
             if (this._type && this._type._NS) this._ns = this._type._NS;
             MetaRegistry.register(this);
 
-            Util.implements(MetaObject, this, );
+            Util.implements(MetaObject, this);
         }
         MetaObject._UNION = [IObject, IMarshal];
         MetaObject._NS = 'Meta';
