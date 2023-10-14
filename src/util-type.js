@@ -315,16 +315,16 @@
      */
     function _getFunInfo(FunBody) {
         // var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;  // 제한 규칙
-        var regChk = /\([,_\[\]{:}\w\s]*\)(?:=>|\s*)?{[\[\]{:}\s\w;]*}/;  // 
+        var regChk = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;
         // var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/; // 제한 규칙
-        var regFunc = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/;
+        var regFunc = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
         // var resParam = /[_\w0-1]*/g;
         var arrFunc, arrParam;
         var result = {args: [], return: undefined};
 
-        if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
+        if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. : '+ FunBody;
         arrFunc = regFunc.exec(FunBody);
-        if (arrFunc === null) return '함수타입 규칙이 아닙니다. function(arg..) { returType }';
+        if (arrFunc === null) return '함수타입 내용이 없습니다. : '+ FunBody;
         // var param = '['+ arrFunc[1] +']';
         // arrParam = JSON.parse(param);
         
@@ -344,6 +344,7 @@
         return result;
     }
 
+    // TODO: type1 => parent 로 조정 필요
     var equalType = function (type1, type2) {
         var def1 = getTypeMap(type1);
         var def2 = getTypeMap(type2);
@@ -351,24 +352,34 @@
         if (_isObject(type1) &&  _isObject(type2) && deepEqual(type1, type2)) return true;
         // if (def1.name !== def2.name) return false;
         if (def1.name === 'choice') {
-            for(var i = 0; i < type1.length; i++) {
-                var keyCode = _getKeyCode(type1[i]);
-                if (keyCode == '_ANY_') {
-                    if (typeof type2 !== 'undefined') return true;
-                } else if (keyCode == '_OPT_') {
-                    if (typeof type2 === 'undefined') return true;
-                    continue;
-                } else if (keyCode == '_SEQ_') return false;
-                
-                var arrType2 = Array.isArray(type2) ? type2 : [type2];
-                for (var ii = 0; ii < arrType2.length; ii++) {
-                    if (equalType(type1[i], arrType2[ii])) return true;
-                }
+            // var cntType2 = 0;
+
+            var keyCode1 = _getKeyCode(type1[0]);
+            if (keyCode1 == '_ANY_') {
+                if (typeof type2 !== 'undefined') return true;
                 return false;
+            } else if (keyCode1 == '_OPT_') {
+                if (type1.length === 1) return true;
+            } else if (keyCode1 == '_SEQ_') return false;
+
+            var keyCode2 = Array.isArray(type2) ? _getKeyCode(type2[0]) : undefined;
+            var arrType2 = Array.isArray(type2) ? type2 : [type2];
+            var start1 = keyCode1 ? 1 : 0;
+            var start2 = keyCode2 ? 1 : 0;
+            if (type1.length - start1 < arrType2.length - start2) return false;
+            if (type1.length - start1 > 0 && arrType2.length - start2 === 0) return false;
+            for (i = start2; i < arrType2.length; i++) {
+                var success = false;
+                for (var ii = start1; ii < type1.length; ii++) {
+                    if (success) continue;
+                    if (equalType(type1[ii], arrType2[i])) success = true;
+                }
+                if (!success) return false;
             }
+            return true;
         }
         // 원시타입은 타입만 같은지 비교
-        if (['null', 'number', 'string', 'boolean', 'symbol'].indexOf(def1.name) > -1) {
+        if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(def1.name) > -1) {
             if(def1.default !== null && def1.default !== def2.default) return false;
             if (def1.name === def2.name) return true;
             return false;
@@ -390,14 +401,18 @@
             
             } else if (keyCode1 == '_OPT_') {
                 if (typeof type2[0] === 'undefined' || type2[0].length === 0) return true;
-                if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
+                // if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
+                if (type1[0].length === 1) return true;
                 if (keyCode1 !== keyCode2) return false;
-                if (type1[0].length > type2[0].length) return false;
-                for (var i = 1; i < type1[0].length; i++) {
+                var start1 = keyCode1 ? 1 : 0;
+                var start2 = keyCode2 ? 1 : 0;
+                if (type1[0].length - start1 < type2[0].length - start2) return false;
+                if (type1[0].length - start1 > 0 && type2[0].length - start2 === 0) return false;
+                for (var i = start2; i < type2[0].length; i++) {
                     var success = false;
-                    for (var ii = 1; ii < type2[0].length; ii++) {
+                    for (var ii = start1; ii < type1[0].length; ii++) {
                         if (success) continue;
-                        if (equalType(type1[0][i], type2[0][ii])) success = true;
+                        if (equalType(type1[0][ii], type2[0][i])) success = true;
                     }
                     if (!success) return false;
                 }
@@ -420,16 +435,35 @@
             if (type1 === Function) return true;
             var info1 = type1['_TYPE'] ? type1['_TYPE'] : _getFunInfo(type1.toString());
             var info2 =  type2['_TYPE'] ? type2['_TYPE'] : _getFunInfo(type2.toString());
+            if (typeof info1 === 'string') return info1;
             if (!info1.return && info1.args.length === 0) return true;
+            if (typeof info2 === 'string') return info2;
             if (info1.args.length !== info2.args.length) return false;
             for (var i = 0; i < info1.args.length; i++) {
                 if (!equalType(info1.args[i], info2.args[i])) return false;
             }
             return true;
         }
-        if (def1.name === 'object' || def1.name === 'class') {
+        if (def1.name === 'object') {
+            if (def1.name !== 'object') return false;
             if (type1 === type2) return true;
-            return false; // REVIEW: 검사 필요
+            if (_isEmptyObj(type2)) return true;
+            if (type1 instanceof RegExp) {
+                if (!(type2 instanceof RegExp) || type1.source !== type2.source) return false;
+            }
+            if (deepEqual(type1, type2)) return true;
+            return false;
+        }
+        if (def1.name === 'class') {
+            if (type1 === type2) return true;
+            try {
+                var obj1 = new type1();
+                var obj2 = new type2();
+                if (deepEqual(obj1, obj2)) return true;
+            } catch (error) {
+                return false;
+            }
+            return false;
         }
         if (def1.name === 'union') {
             var list = getAllProperties(type1);

@@ -15,8 +15,8 @@ describe("[target: util-type.js.js]", () => {
     });
     describe('< 기본 >', () => {
         it('- getTypeMap() ', () => {
-            function User() {};
-            function Corp() {this.nm = 1};
+            function User() {};             // object
+            function Corp() {this.nm = 1};  // union
     
             // null, undefined
             expect(getTypeMap().name).toBe('undefined');
@@ -36,7 +36,7 @@ describe("[target: util-type.js.js]", () => {
             // object
             expect(getTypeMap(Object).name).toBe('object');
             expect(getTypeMap({}).name).toBe('object');
-            expect(getTypeMap(new User).name).toBe('object');
+            expect(getTypeMap(new User).name).toBe('object');       // 빈객체
             expect(getTypeMap(/reg/).name).toBe('object');
             // function
             expect(getTypeMap(Function).name).toBe('function');
@@ -68,43 +68,140 @@ describe("[target: util-type.js.js]", () => {
             // expect(() => validUnionType({}, undefined, Object)).toThrow(/ES022/);
         });
     });
+
     describe('< 타입 비교 >', () => {
+        it('- equalType(a, b) : 원시 자료형 ', () => {
+            var typeA1      = null;
+            var typeB1_1    = null;
+            var typeB1_2    = undefined;    // false
+            
+            var typeA2_1    = Number;
+            var typeA2_2    = NaN;          // true : 없음
+            var typeA2_3    = 1;            // true : 1
+            var typeB2_1    = Number;
+            var typeB2_2    = NaN;
+            var typeB2_3    = 10;
+            var typeB2_4    = String;       // false
+            var typeB2_5    = true;         // false
+            
+            var typeA3_1    = String;
+            var typeA3_2    = 'str'         // true : 'str'
+            var typeB3_1    = String
+            var typeB3_2    = '';
+            var typeB3_3    = -1;           // false
+            var typeB3_4    = Boolean;      // false
+            
+            var typeA4_1    = Boolean;
+            var typeA4_2    = true
+            var typeB4_1    = Boolean
+            var typeB4_2    = false
+            var typeB4_3    = 'str';        // false
+
+            var typeA5_1    = undefined;
+            var typeA5_2
+            var typeB5_1    = undefined
+            var typeB5_2
+            var typeB5_3    = null          // false
+
+            var typeA6_1    = Symbol
+            var typeA6_2    = Symbol()      // Symbol 과 동일
+            var typeB6_1    = Symbol
+            var typeB6_2    = Symbol()
+            var typeB6_3    = null          // false
+            var typeB6_4    = Object        // false
+
+            expect(equalType(typeA1,    typeB1_1)).toBe(true);
+            expect(equalType(typeA1,    typeB1_2)).toBe(false);
+            expect(equalType(typeA2_1,  typeB2_1)).toBe(true);
+            expect(equalType(typeA2_1,  typeB2_2)).toBe(true);
+            expect(equalType(typeA2_1,  typeB2_3)).toBe(true);
+            expect(equalType(typeA2_1,  typeB2_4)).toBe(false);
+            expect(equalType(typeA2_1,  typeB2_5)).toBe(false);
+            expect(equalType(typeA2_2,  typeB2_1)).toBe(false);
+            expect(equalType(typeA2_2,  typeB2_2)).toBe(false);
+            expect(equalType(typeA2_2,  typeB2_3)).toBe(false);
+            expect(equalType(typeA2_3,  typeA2_3)).toBe(true);
+            expect(equalType(typeA2_3,  typeB2_1)).toBe(false);
+            expect(equalType(typeA2_3,  typeB2_2)).toBe(false);
+            expect(equalType(typeA3_1,  typeB3_1)).toBe(true);
+            expect(equalType(typeA3_1,  typeB3_2)).toBe(true);
+            expect(equalType(typeA3_1,  typeB3_3)).toBe(false);
+            expect(equalType(typeA3_1,  typeB3_4)).toBe(false);
+            expect(equalType(typeA3_2,  typeA3_2)).toBe(true);
+            expect(equalType(typeA3_2,  typeB3_1)).toBe(false);
+            expect(equalType(typeA3_2,  typeB3_2)).toBe(false);
+            expect(equalType(typeA4_1,  typeB4_1)).toBe(true);
+            expect(equalType(typeA4_1,  typeB4_2)).toBe(true);
+            expect(equalType(typeA4_1,  typeB4_3)).toBe(false);
+            expect(equalType(typeA4_2,  typeA4_2)).toBe(true);
+            expect(equalType(typeA4_2,  typeB4_1)).toBe(false);
+            expect(equalType(typeA4_2,  typeB4_2)).toBe(false);
+            expect(equalType(typeA5_1,  typeB5_1)).toBe(true);
+            expect(equalType(typeA5_1,  typeB5_2)).toBe(true);
+            expect(equalType(typeA5_1,  typeB5_3)).toBe(false);
+            expect(equalType(typeA5_2,  typeB5_1)).toBe(true);
+            expect(equalType(typeA6_1,  typeB6_1)).toBe(true);
+            expect(equalType(typeA6_1,  typeB6_2)).toBe(true);
+            expect(equalType(typeA6_1,  typeB6_3)).toBe(false);
+            expect(equalType(typeA6_1,  typeB6_4)).toBe(false);
+            expect(equalType(typeA6_2,  typeB6_1)).toBe(true);
+            expect(equalType(typeA6_2,  typeB6_2)).toBe(true);
+            expect(equalType(typeA6_2,  typeB6_3)).toBe(false);
+            expect(equalType(typeA6_2,  typeB6_3)).toBe(false);
+            
+        });
+        
         it('- equalType(a, b) : array choice', () => {
             var typeA1   = [];
-            var typeB1   = [];
+            var typeB1_1 = [];
+            
             var typeA3   = [['_any_']];
             var typeB3_1 = [[null]];
             var typeB3_2 = [];                              // false
             var typeB3_3 = undefined;                       // false
             var typeB3_4 = [[]];                            // false
+            
             var typeA4   = [['_any_', String]]
             var typeB4_1 = [['_any_', String]]
             var typeB4_2 = [[String]]
             var typeB4_3 = [[Number]]
+            
             var typeA5   = [['_seq_']];
             var typeB5_1 = [['_seq_']];
             var typeB5_2 = [['_seq_', Boolean]];
             var typeB5_3 = [[]];                            // false
+            
             var typeA6   = [['_seq_', Number]];
             var typeB6_1 = [['_seq_', Number]];
             var typeB6_2 = [['_seq_', Number, String]];
             var typeB6_3 = [['_seq_']];                     // false
             var typeB6_4 = [['_seq_', Boolean]];            // false
             var typeB6_5 = [[Number]];                      // false
+            
             var typeA7   = [['_opt_']];
             var typeB7_1 = [['_opt_']];
             var typeB7_2 = [['_opt_', String]];
             var typeB7_3 = [['_any_']];
             var typeB7_4 = [[]];                            
+            
             var typeA8   = [['_opt_', String]];
             var typeB8_1 = [['_opt_', String]];
-            var typeB8_2 = [['_opt_', Number, String]];
+            var typeB8_2 = [['_opt_', Number, String]];     // false
             var typeB8_3 = [['_opt_', Number]];             // false
             var typeB8_4 = [['_opt_']];                     // false
             var typeB8_5 = [['_any_']];                     // false
 
+            var typeA9   = [['_opt_', String, Number]];
+            var typeB9_1 = [['_opt_', Number, String]];
+            var typeB9_2 = [['_opt_', String]];
+            var typeB9_3 = [['_opt_', Number]];
+            var typeB9_4 = [['_opt_', Number, String, Boolean]];    // fasle
+            var typeB9_5 = [[Number, String, Boolean]];             // fasle
+            var typeB9_6 = [['_opt_']];                             // false
+            var typeB9_7 = [['_any_']];                             // false
 
-            expect(equalType(typeA1, typeB1_0)).toBe(true);
+
+            expect(equalType(typeA1, typeB1_1)).toBe(true);
             expect(equalType(typeA3, typeB3_1)).toBe(true);
             expect(equalType(typeA3, typeB3_2)).toBe(false);
             expect(equalType(typeA3, typeB3_3)).toBe(false);
@@ -125,44 +222,178 @@ describe("[target: util-type.js.js]", () => {
             expect(equalType(typeA7, typeB7_3)).toBe(true);
             expect(equalType(typeA7, typeB7_4)).toBe(true);
             expect(equalType(typeA8, typeB8_1)).toBe(true);
-            expect(equalType(typeA8, typeB8_1)).toBe(true);
-            expect(equalType(typeA8, typeB8_2)).toBe(true);
+            expect(equalType(typeA8, typeB8_2)).toBe(false);
             expect(equalType(typeA8, typeB8_3)).toBe(false);
             expect(equalType(typeA8, typeB8_4)).toBe(false);
             expect(equalType(typeA8, typeB8_5)).toBe(false);
-        });
-
-        it('- equalType(a, b) : 원시 자료형 ', () => {
-            var typeA1 = String;
-            var typeB1 = String;
-            var typeA2 = 'str';
-            var typeB2 = 'str';
-
-            expect(equalType(typeA1, typeB1)).toBe(true);
-            expect(equalType(typeA2, typeB2)).toBe(true);
+            expect(equalType(typeA9, typeB9_1)).toBe(true);
+            expect(equalType(typeA9, typeB9_2)).toBe(true);
+            expect(equalType(typeA9, typeB9_3)).toBe(true);
+            expect(equalType(typeA9, typeB9_4)).toBe(false);
+            expect(equalType(typeA9, typeB9_5)).toBe(false);
+            expect(equalType(typeA9, typeB9_6)).toBe(false);
+            expect(equalType(typeA9, typeB9_7)).toBe(false);
         });
         it('- equalType(a, b) : choice ', () => {
+            var typeA1   = [String, Number];
+            var typeB1   = [Number];
+            
+            var typeA2   = ['_any_'];
+            var typeB2_1 = ['_any_'];
+            var typeB2_2 = [Number];
+            var typeB2_3 = [null];
+            var typeB2_4 = [undefined];
+            var typeB2_5 = undefined;           // false
+            var typeB2_6;                       // false
+            
+            var typeA3   = ['_opt_'];
+            var typeB3_1 = ['_opt_'];
+            var typeB3_2 = undefined
+            var typeB3_3 = [String];
+            
+            var typeA4   = ['_opt_', String];
+            var typeB4_1 = ['_opt_', String];
+            var typeB4_2 = ['_opt_'];           // false
+            var typeB4_3 = undefined;           // false
+            var typeB4_4 = [String];
+            var typeB4_5 = [Number];            // false
+
+
+            var typeA5   = ['_opt_', String, Number];
+            var typeB5_1 = ['_opt_', String, Boolean, Number];  // false
+            var typeB5_2 = ['_opt_'];                           // false
+            var typeB5_3 = undefined;                           // false
+            var typeB5_4 = [String, Number];
+            var typeB5_5 = [String, Boolean];                   // false
+            var typeB5_6 = [Number];                   
+            
+            var typeA6   = ['_seq_'];
+            var typeB6_1 = ['_seq_'];
+            var typeA6_2 = ['_seq_', String];   // false
+            var typeA6_3 = ['_seq_', String];   // false
+
+            expect(equalType(typeA1, typeB1)).toBe(true);
+            expect(equalType(typeA2, typeB2_1)).toBe(true);
+            expect(equalType(typeA2, typeB2_2)).toBe(true);
+            expect(equalType(typeA2, typeB2_3)).toBe(true);
+            expect(equalType(typeA2, typeB2_4)).toBe(true);
+            expect(equalType(typeA2, typeB2_5)).toBe(false);
+            expect(equalType(typeA2, typeB2_6)).toBe(false);
+            expect(equalType(typeA3, typeB3_1)).toBe(true);
+            expect(equalType(typeA3, typeB3_2)).toBe(true);
+            expect(equalType(typeA3, typeB3_3)).toBe(true);
+            expect(equalType(typeA4, typeB4_1)).toBe(true);
+            expect(equalType(typeA4, typeB4_2)).toBe(false);
+            expect(equalType(typeA4, typeB4_3)).toBe(false);
+            expect(equalType(typeA4, typeB4_4)).toBe(true);
+            expect(equalType(typeA4, typeB4_5)).toBe(false);
+            expect(equalType(typeA5, typeB5_1)).toBe(false);
+            expect(equalType(typeA5, typeB5_2)).toBe(false);
+            expect(equalType(typeA5, typeB5_3)).toBe(false);
+            expect(equalType(typeA5, typeB5_4)).toBe(true);
+            expect(equalType(typeA5, typeB5_5)).toBe(false);
+            expect(equalType(typeA5, typeB5_6)).toBe(true);
+            expect(equalType(typeA6, typeB6_1)).toBe(true);
+            expect(equalType(typeA6, typeA6_2)).toBe(false);
+            expect(equalType(typeA6, typeA6_3)).toBe(false);
+
+
         });
-        it('- equalType(a, b) : function ', () => {
+        it('- equalType(a, b) : function (같은 내용, 다른 형식) ', () => {
+            /**
+             * 함수 args 금지 : number, string, bool, null, fuction, ( ), =>
+             * func._TYPE 정적 영역으로 우회해서 설정
+             */
+            var typeA1      = function(String, Number){Boolean}
+            var typeB1_1    = function(String, Number){return Boolean}
+            var typeB1_2    = function fun(String, Number){Boolean}
+            var typeB1_3    = function fun(String, Number){return Boolean }
+            var typeB1_4    = (String, Number) => {Boolean}
+            var typeB1_5    = (String, Number) => {return Boolean}
+
+            var typeA2      = function([String], Number){[Boolean]}
+            var typeB2_1    = function([String], Number){return [Boolean]}
+            var typeB2_2    = ([String], Number)=>{[Boolean]}
+            var typeB2_3    = ([String], Number)=>{return [Boolean]}
+
+            var typeA3      = function({aa: String}, Number) {[Boolean, {bb:Number}]}
+            var typeB3_1    = function ({aa: String}, Number){return [Boolean, {bb:Number}]}
+            var typeB3_2    = function fun({aa: String}, Number){[Boolean, {bb:Number}]}
+            var typeB3_3    = function fun({aa: String}, Number){return [Boolean, {bb:Number}]}
+            var typeB3_4    = ({aa: String}, Number)=>{[Boolean, {bb:Number}]}
+            var typeB3_5    = ({aa: String}, Number)=>{return [Boolean, {bb:Number}]}
+
+            var typeA4      = function([[{aa: String}]]) {[[{bb:Number}]]}
+            var typeB4_1    = function ([[{aa: String}]]){return [[{bb:Number}]]}
+            var typeB4_2    = function fun ([[{aa: String}]]){ [[{bb:Number}]]}
+            var typeB4_3    = function fun ([[{aa: String}]]){return [[{bb:Number}]]}
+            var typeB4_4    = ([[{aa: String}]]) => { [[{bb:Number}]]}
+            var typeB4_5    = ([[{aa: String}]]) => {return [[{bb:Number}]]}
+
+            expect(equalType(typeA1, typeB1_1)).toBe(true);
+            expect(equalType(typeA1, typeB1_2)).toBe(true);
+            expect(equalType(typeA1, typeB1_3)).toBe(true);
+            expect(equalType(typeA1, typeB1_4)).toBe(true);
+            expect(equalType(typeA1, typeB1_5)).toBe(true);
+            expect(equalType(typeA2, typeB2_1)).toBe(true);
+            expect(equalType(typeA2, typeB2_2)).toBe(true);
+            expect(equalType(typeA2, typeB2_3)).toBe(true);
+            expect(equalType(typeA3, typeB3_1)).toBe(true);
+            expect(equalType(typeA3, typeB3_2)).toBe(true);
+            expect(equalType(typeA3, typeB3_3)).toBe(true);
+            expect(equalType(typeA3, typeB3_4)).toBe(true);
+            expect(equalType(typeA3, typeB3_5)).toBe(true);
+            expect(equalType(typeA4, typeB4_1)).toBe(true);
+            expect(equalType(typeA4, typeB4_2)).toBe(true);
+            expect(equalType(typeA4, typeB4_3)).toBe(true);
+            expect(equalType(typeA4, typeB4_4)).toBe(true);
+            expect(equalType(typeA4, typeB4_5)).toBe(true);
+
         });
         it('- equalType(a, b) : object ', () => {
+            // Object, {}, /reg/, new Class(빈것)
+            var ClassA = function(){};
+            var ClassB = function(){this.aa = 1};
+
+            var typeA1      = Object
+            var typeB1_1    = Object
+            var typeB1_2    = {}
+            var typeA2      = /reg/
+            var typeB2_1    = /reg/;
+            var typeB2_2    = /reg2/;           // false
+            var typeB3_1    = {}
+            var typeB3_1    = new ClassA();
+            var typeB3_2    = new ClassB();     // false
+
+            expect(equalType(typeA1,    typeB1_1)).toBe(true);
+            expect(equalType(typeA1,    typeB1_2)).toBe(true);
+            expect(equalType(typeA2,    typeB2_1)).toBe(true);
+            expect(equalType(typeA2,    typeB2_2)).toBe(false);
+            expect(equalType(typeB3_1,  typeB3_1)).toBe(true);
+            expect(equalType(typeB3_1,  typeB3_2)).toBe(false);
+        });
+        it('- equalType(a, b) : class ', () => {
+            var ClassA = function(){this.a = 1}
+            var ClassB = function(){this.a = 1}
+            var ClassC = function(){this.a = 10}      // false
+            var ClassD = function(){this.b = 10}      // false
+
+            var typeA1      = ClassA
+            var typeA2      = String
+            var typeB2      = String
+
+            expect(equalType(typeA1,    ClassA)).toBe(true);
+            expect(equalType(typeA1,    ClassB)).toBe(true);
+            expect(equalType(typeA1,    ClassC)).toBe(false);
+            expect(equalType(typeA1,    ClassD)).toBe(false);
+            expect(equalType(typeA2,    typeB2)).toBe(true);
+
         });
         it('- equalType(a, b) : union (기본) ', () => {
-            var typeA1 = {
-                str: String,
-                num: Number
-            };
-            var typeB1_1 = {
-                str: String,
-                num: Number
-            };
-            var typeB1_2 = {
-                str: '',
-                num: 0
-            };
-            var typeB1_3 = {
-                str: ''
-            };
+            var typeA1 = {str: String, num: Number};
+            var typeB1_1 = {str: String, num: Number};
+            var typeB1_2 = {str: '', num: 0};           // false
+            var typeB1_3 = {str: ''};                   // false
 
             expect(equalType(typeA1, typeB1_1)).toBe(true);
             expect(equalType(typeA1, typeB1_2)).toBe(true);
@@ -175,36 +406,18 @@ describe("[target: util-type.js.js]", () => {
                 bool: ['_any_'],
                 num: ['_opt_', Number]
             };
-            var typeB1_1 = {
-                str: String,
-                bool: null,
-                num: Number
-            };
-            var typeB1_2 = {
-                str: String,
-                bool: null,
-                num: Number
-            };
-            var typeB1_3 = {
-                str: '',
-                bool: true,
-            };
-            var typeB1_4 = {
-                str: String,
-                bool: false,
-                num: String
-            };
-            var typeB1_5 = {
-                str: String,
-            };
+            var typeB1_1 = {str: String, bool: null, num: Number};
+            var typeB1_2 = {str: String, bool: null, num: Number};
+            var typeB1_3 = {str: '', bool: true,};                  // false
+            var typeB1_4 = {str: String, bool: false, num: String}; // false
+            var typeB1_5 = {str: String,};                          // false
 
             expect(equalType(typeA1, typeB1_1)).toBe(true);
             expect(equalType(typeA1, typeB1_2)).toBe(true);
-            expect(equalType(typeA1, typeB1_3)).toBe(true);
+            expect(equalType(typeA1, typeB1_3)).toBe(false);
             expect(equalType(typeA1, typeB1_4)).toBe(false);
             expect(equalType(typeA1, typeB1_5)).toBe(false);
         });
-
 
     });
     describe('< or 조건 검사 >', () => {
@@ -321,7 +534,6 @@ describe("[target: util-type.js.js]", () => {
 
     });
 
-    // POINT:
     describe('< function 타입 >', () => {
         it('- function : 선언 타입 검사 ', () => {
             // 타입 
