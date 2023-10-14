@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const { getAllProperties, getTypeMap, checkType, equalType }       = require('../src/util-type');
+const {getTypeMap, checkType, equalType }       = require('../src/util-type');
 const { checkUnionType, validType, validUnionType }     = require('../src/util-type');
 
 //==============================================================
@@ -12,6 +12,8 @@ describe("[target: util-type.js.js]", () => {
     beforeAll(() => {
         // 경고 모킹 = 숨감
         // global.console.warn = jest.fn();
+        jest.resetModules();
+        // MetaRegistry.init();
     });
     describe('< 기본 >', () => {
         it('- getTypeMap() ', () => {
@@ -420,7 +422,7 @@ describe("[target: util-type.js.js]", () => {
         });
 
     });
-    describe('< or 조건 검사 >', () => {
+    describe('< choice 조건 검사 >', () => {
         it('- checkType() : 배열 ', () => {
             var arr1 = [];
             var arr2 = Array;

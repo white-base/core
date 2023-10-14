@@ -344,35 +344,35 @@
         return result;
     }
 
-    // TODO: type1 => parent 로 조정 필요
-    var equalType = function (type1, type2) {
-        var def1 = getTypeMap(type1);
-        var def2 = getTypeMap(type2);
+    // TODO: type1 => ori, tar
+    var equalType = function (ori, tar) {
+        var def1 = getTypeMap(ori);
+        var def2 = getTypeMap(tar);
         
-        if (_isObject(type1) &&  _isObject(type2) && deepEqual(type1, type2)) return true;
+        if (_isObject(ori) &&  _isObject(tar) && deepEqual(ori, tar)) return true;
         // if (def1.name !== def2.name) return false;
         if (def1.name === 'choice') {
             // var cntType2 = 0;
 
-            var keyCode1 = _getKeyCode(type1[0]);
+            var keyCode1 = _getKeyCode(ori[0]);
             if (keyCode1 == '_ANY_') {
-                if (typeof type2 !== 'undefined') return true;
+                if (typeof tar !== 'undefined') return true;
                 return false;
             } else if (keyCode1 == '_OPT_') {
-                if (type1.length === 1) return true;
+                if (ori.length === 1) return true;
             } else if (keyCode1 == '_SEQ_') return false;
 
-            var keyCode2 = Array.isArray(type2) ? _getKeyCode(type2[0]) : undefined;
-            var arrType2 = Array.isArray(type2) ? type2 : [type2];
+            var keyCode2 = Array.isArray(tar) ? _getKeyCode(tar[0]) : undefined;
+            var arrType2 = Array.isArray(tar) ? tar : [tar];
             var start1 = keyCode1 ? 1 : 0;
             var start2 = keyCode2 ? 1 : 0;
-            if (type1.length - start1 < arrType2.length - start2) return false;
-            if (type1.length - start1 > 0 && arrType2.length - start2 === 0) return false;
+            if (ori.length - start1 < arrType2.length - start2) return false;
+            if (ori.length - start1 > 0 && arrType2.length - start2 === 0) return false;
             for (i = start2; i < arrType2.length; i++) {
                 var success = false;
-                for (var ii = start1; ii < type1.length; ii++) {
+                for (var ii = start1; ii < ori.length; ii++) {
                     if (success) continue;
-                    if (equalType(type1[ii], arrType2[i])) success = true;
+                    if (equalType(ori[ii], arrType2[i])) success = true;
                 }
                 if (!success) return false;
             }
@@ -386,33 +386,33 @@
         }
         // array & array 조건
         if (def1.name === 'array') {
-            if (!Array.isArray(type2)) return false;
-            if ((type1 === Array || type1.length === 0) && Array.isArray(type2)) return true;      // [], Array
-            if (type1.length === 1 && Array.isArray(type1[0]) && type1[0].length === 0) return true;
+            if (!Array.isArray(tar)) return false;
+            if ((ori === Array || ori.length === 0) && Array.isArray(tar)) return true;      // [], Array
+            if (ori.length === 1 && Array.isArray(ori[0]) && ori[0].length === 0) return true;
             
-            var keyCode1 = _getKeyCode(type1[0][0]);
+            var keyCode1 = _getKeyCode(ori[0][0]);
             var keyCode2;
-            if (type2[0] && type2[0][0]) keyCode2 = _getKeyCode(type2[0][0]);
+            if (tar[0] && tar[0][0]) keyCode2 = _getKeyCode(tar[0][0]);
             if (keyCode1 == '_ANY_') {
-                if (typeof type2[0] === 'undefined' || typeof type2[0][0] === 'undefined'
-                    || type2[0].length === 0) return false;
-                if (type2[0].length > 0) return true;
+                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined'
+                    || tar[0].length === 0) return false;
+                if (tar[0].length > 0) return true;
                 return false;
             
             } else if (keyCode1 == '_OPT_') {
-                if (typeof type2[0] === 'undefined' || type2[0].length === 0) return true;
+                if (typeof tar[0] === 'undefined' || tar[0].length === 0) return true;
                 // if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
-                if (type1[0].length === 1) return true;
+                if (ori[0].length === 1) return true;
                 if (keyCode1 !== keyCode2) return false;
                 var start1 = keyCode1 ? 1 : 0;
                 var start2 = keyCode2 ? 1 : 0;
-                if (type1[0].length - start1 < type2[0].length - start2) return false;
-                if (type1[0].length - start1 > 0 && type2[0].length - start2 === 0) return false;
-                for (var i = start2; i < type2[0].length; i++) {
+                if (ori[0].length - start1 < tar[0].length - start2) return false;
+                if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) return false;
+                for (var i = start2; i < tar[0].length; i++) {
                     var success = false;
-                    for (var ii = start1; ii < type1[0].length; ii++) {
+                    for (var ii = start1; ii < ori[0].length; ii++) {
                         if (success) continue;
-                        if (equalType(type1[0][ii], type2[0][i])) success = true;
+                        if (equalType(ori[0][ii], tar[0][i])) success = true;
                     }
                     if (!success) return false;
                 }
@@ -420,9 +420,9 @@
             
             } else if (keyCode1 == '_SEQ_') {
                 if (keyCode1 !== keyCode2) return false;
-                if (type1[0].length > type2[0].length) return false;
-                for (var i = 1; i < type1[0].length; i++) {
-                    if (!equalType(type1[0][i], type2[0][i])) return false;
+                if (ori[0].length > tar[0].length) return false;
+                for (var i = 1; i < ori[0].length; i++) {
+                    if (!equalType(ori[0][i], tar[0][i])) return false;
                 }
                 return true;
             }
@@ -431,10 +431,10 @@
         }
         
         if (def1.name === 'function') {
-            if (typeof type2 !== 'function') return false;
-            if (type1 === Function) return true;
-            var info1 = type1['_TYPE'] ? type1['_TYPE'] : _getFunInfo(type1.toString());
-            var info2 =  type2['_TYPE'] ? type2['_TYPE'] : _getFunInfo(type2.toString());
+            if (typeof tar !== 'function') return false;
+            if (ori === Function) return true;
+            var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());
+            var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString());
             if (typeof info1 === 'string') return info1;
             if (!info1.return && info1.args.length === 0) return true;
             if (typeof info2 === 'string') return info2;
@@ -446,19 +446,19 @@
         }
         if (def1.name === 'object') {
             if (def1.name !== 'object') return false;
-            if (type1 === type2) return true;
-            if (_isEmptyObj(type2)) return true;
-            if (type1 instanceof RegExp) {
-                if (!(type2 instanceof RegExp) || type1.source !== type2.source) return false;
+            if (ori === tar) return true;
+            if (_isEmptyObj(tar)) return true;
+            if (ori instanceof RegExp) {
+                if (!(tar instanceof RegExp) || ori.source !== tar.source) return false;
             }
-            if (deepEqual(type1, type2)) return true;
+            if (deepEqual(ori, tar)) return true;
             return false;
         }
         if (def1.name === 'class') {
-            if (type1 === type2) return true;
+            if (ori === tar) return true;
             try {
-                var obj1 = new type1();
-                var obj2 = new type2();
+                var obj1 = new ori();
+                var obj2 = new tar();
                 if (deepEqual(obj1, obj2)) return true;
             } catch (error) {
                 return false;
@@ -466,10 +466,10 @@
             return false;
         }
         if (def1.name === 'union') {
-            var list = getAllProperties(type1);
+            var list = getAllProperties(ori);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                if (!equalType(type1[key], type2[key])) return false;
+                if (!equalType(ori[key], tar[key])) return false;
             }
             return true;
         }
