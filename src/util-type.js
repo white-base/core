@@ -135,12 +135,11 @@
     }
 
     /**
-     * 함수 규칙  
-     * - (args 내부에는 '()' 입력 금지)
-     * - 참조형 타입 금지 : new Function() 시점에 자동 해석됨
-     * 
+     * 함수 규칙   
+     * - (args 내부에는 '()' 입력 금지)  
+     * - 참조형 타입 금지 : new Function() 시점에 자동 해석됨  
      * @param {*} FunBody 
-     * @returns 
+     * @returns {object}
      */
     function _getFunInfo(FunBody) {
         // var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;  // 제한 규칙
@@ -178,7 +177,7 @@
      * @memberof _L.Common.Util
      * @param {object} obj Object를 제외한 프로터피 리턴
      * @param {boolean?} hasObj Object를 포함 여부
-     * @returns {array}  
+     * @returns {array<string>}  
      */
     var getAllProperties = function(obj, hasObj) {
         var allProps = [], curr = obj;
@@ -234,9 +233,9 @@
      * return {name: , default: null}
      * @memberof _L.Common.Util
      * @param {any} type 대상타입
-     * @returns {object}
+     * @returns {object} {name: string, default: [null, any]}
      */
-    var getTypeMap = function(type) {
+    var getTypeObject = function(type) {
         var obj =  {name: '', default: null};
 
         // seq 1 : === (operation) 
@@ -349,10 +348,17 @@
     }
     
 
-    // TODO: type1 => ori, tar
-    var equalType = function (ori, tar) {
-        var def1 = getTypeMap(ori);
-        var def2 = getTypeMap(tar);
+    /**
+     * 원본타입에 대상타입이 덮어쓰기가 허용 가능한지 검사합니다.  
+     * 원본타입에 대상타입으로 캐스팅이 가능하지 확인합니다.
+     * @memberof _L.Common.Util
+     * @param {any} ori 원본 타입
+     * @param {any} tar 대상 타입
+     * @returns {boolean}
+     */
+    var allowType = function (ori, tar) {
+        var def1 = getTypeObject(ori);
+        var def2 = getTypeObject(tar);
         
         if (_isObject(ori) &&  _isObject(tar) && deepEqual(ori, tar)) return true;
         // if (def1.name !== def2.name) return false;
@@ -377,7 +383,7 @@
                 var success = false;
                 for (var ii = start1; ii < ori.length; ii++) {
                     if (success) continue;
-                    if (equalType(ori[ii], arrType2[i])) success = true;
+                    if (allowType(ori[ii], arrType2[i])) success = true;
                 }
                 if (!success) return false;
             }
@@ -418,7 +424,7 @@
                     var success = false;
                     for (var ii = start1; ii < ori[0].length; ii++) {
                         if (success) continue;
-                        if (equalType(ori[0][ii], tar[0][i])) success = true;
+                        if (allowType(ori[0][ii], tar[0][i])) success = true;
                     }
                     if (!success) return false;
                 }
@@ -428,7 +434,7 @@
                 if (keyCode1 !== keyCode2) return false;
                 if (ori[0].length > tar[0].length) return false;
                 for (var i = 1; i < ori[0].length; i++) {
-                    if (!equalType(ori[0][i], tar[0][i])) return false;
+                    if (!allowType(ori[0][i], tar[0][i])) return false;
                 }
                 return true;
             }
@@ -446,7 +452,7 @@
             if (typeof info2 === 'string') return info2;
             if (info1.args.length !== info2.args.length) return false;
             for (var i = 0; i < info1.args.length; i++) {
-                if (!equalType(info1.args[i], info2.args[i])) return false;
+                if (!allowType(info1.args[i], info2.args[i])) return false;
             }
             return true;
         }
@@ -475,7 +481,7 @@
             var list = getAllProperties(ori);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                if (!equalType(ori[key], tar[key])) return false;
+                if (!allowType(ori[key], tar[key])) return false;
             }
             return true;
         }
@@ -497,7 +503,7 @@
         var returnMsg = '', arrMsg = [];
         var defType;
 
-        defType = getTypeMap(type);
+        defType = getTypeObject(type);
         
         if (defType.name === 'choice') {    // TODO:
 
@@ -609,10 +615,10 @@
             // args 검사
             for (var i = 0; i < info.args.length; i++) {
                 
-                // iType = getTypeMap(info.args[i]);
-                // fType = getTypeMap(args[i]);
+                // iType = getTypeObject(info.args[i]);
+                // fType = getTypeObject(args[i]);
                 // if (iType.name = fType.name) continue;
-                if (!equalType(info.args[i], _args[i])) return false;
+                if (!allowType(info.args[i], _args[i])) return false;
                 /**
                  * 원시타입
                  * symbol => 원시와 같이
@@ -629,7 +635,7 @@
             // return 검사
             if (returns.length > _returns.length) return 'return.length ='+ returns.length +' 길이가 서로 다릅니다.'
             for (var i = 0; i < returns.length; i++) {
-                if (!equalType(returns[i], _returns[i])) return 'return 타입이 서로 다릅니다.'
+                if (!allowType(returns[i], _returns[i])) return 'return 타입이 서로 다릅니다.'
             }
             return '';
 
@@ -663,7 +669,7 @@
 
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                var listDefType = getTypeMap(type[key]);
+                var listDefType = getTypeObject(type[key]);
                 var msg = '';
                 
                 // REVIEW: for 위쪽으로 이동 검토!
@@ -707,7 +713,7 @@
      * @memberof _L.Common.Util
      * @param {any} chkType 
      * @param {any} target 
-     * @returns {boolean | Error} 성공시 true, 실패시 예외
+     * @returns {true | throw} 성공시 true, 실패시 예외를 던진다.
      */
     var validType = function(chkType, target) {
         var msg = '';
@@ -726,19 +732,19 @@
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
         exports.checkTypeMessage = checkTypeMessage;
-        exports.getTypeMap = getTypeMap;
+        exports.getTypeObject = getTypeObject;
         exports.checkType = checkType;
         exports.validType = validType;
-        exports.equalType = equalType;
+        exports.allowType = allowType;
     } else {
         var ns = {
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
             checkTypeMessage: checkTypeMessage,
-            getTypeMap: getTypeMap,
+            getTypeObject: getTypeObject,
             checkType: checkType,
             validType: validType,
-            equalType: equalType
+            allowType: allowType
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;

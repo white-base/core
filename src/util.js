@@ -8,7 +8,7 @@
     var Message;
     var getAllProperties;
     var checkTypeMessage;
-    var getTypeMap;
+    var getTypeObject;
     var checkType;
     // var checkUnionType;
     var validType;
@@ -27,7 +27,7 @@
         Message                     = require('./message').Message;
         getAllProperties            = require('./util-type').getAllProperties;
         checkTypeMessage            = require('./util-type').checkTypeMessage;
-        getTypeMap                  = require('./util-type').getTypeMap;
+        getTypeObject                  = require('./util-type').getTypeObject;
         checkType                   = require('./util-type').checkType;
         // checkUnionType              = require('./util-type').checkUnionType;
         validType                   = require('./util-type').validType;
@@ -37,7 +37,7 @@
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
         checkTypeMessage            = _global._L.Util.checkTypeMessage
-        getTypeMap                  = _global._L.Util.getTypeMap
+        getTypeObject                  = _global._L.Util.getTypeObject
         checkType                   = _global._L.Util.checkType
         // checkUnionType              = _global._L.Util.checkUnionType
         validType                   = _global._L.Util.validType
@@ -49,7 +49,7 @@
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
     if (typeof checkTypeMessage === 'undefined') Message.error('ES012', ['checkTypeMessage', 'util-type']);
-    if (typeof getTypeMap === 'undefined') Message.error('ES012', ['getTypeMap', 'util-type']);
+    if (typeof getTypeObject === 'undefined') Message.error('ES012', ['getTypeObject', 'util-type']);
     if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
     // if (typeof checkUnionType === 'undefined') Message.error('ES012', ['checkUnionType', 'util-type']);
     if (typeof validType === 'undefined') Message.error('ES012', ['validType', 'util-type']);
@@ -122,7 +122,7 @@
         }
         return _p8() + _p8(true) + _p8(true) + _p8();
     };
-        
+
     /**
      * 지정한 부모(생성자)를 상속합니다.
      * @function
@@ -168,8 +168,9 @@
      * @name implements
      * @function
      * @memberof _L.Common.Util
-     * @param {object} p_obj 대상 객체
-     * @param {function} args 대상 인터페이스들
+     * @param {function} p_ctor 적용할 생성자
+     * @param {object} p_obj 검사 대상 인스턴스 객체
+     * @param {function?} args 인터페이스들,  ctor._UNION 으로 설정 가능
      */
     var implement = function(p_ctor, p_obj, args) {
         var _interface = [];
@@ -325,7 +326,7 @@
     }
 
     /**
-     * 지정한 객체를 깊은 복사합니다.
+     * 지정한 객체를 깊은 복사를 하여 회신합니다.
      * @param {object} object 
      * @memberof _L.Common.Util
      * @returns {object}
@@ -353,13 +354,13 @@
         return copy;
     }
 
-    /**
-     * 지정한 객체들이 같은지 깊은 비교를 합니다.
-     * @param {object} obj1 
-     * @param {object} obj2 
-     * @memberof _L.Common.Util
-     * @returns {object}
-     */
+    // /**
+    //  * 지정한 객체들이 같은지 깊은 비교를 합니다.
+    //  * @param {object} obj1 
+    //  * @param {object} obj2 
+    //  * @memberof _L.Common.Util
+    //  * @returns {object}
+    //  */
     // var deepEqual = function(obj1, obj2) {
 
     //     if (Array.isArray(obj1)) {
@@ -397,7 +398,7 @@
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
         // exports.checkTypeMessage = checkTypeMessage;
-        exports.getTypeMap = getTypeMap;
+        exports.getTypeObject = getTypeObject;
         exports.checkType = checkType;
         // exports.checkUnionType = checkUnionType;
         exports.validType = validType;
@@ -405,7 +406,7 @@
         exports.deepCopy = deepCopy;
         exports.deepEqual = deepEqual;
         // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
-        // module.exports.equalType = equalType;
+        // module.exports.allowType = allowType;
     } else {
         var ns = {
             inherits: inherits,
@@ -414,7 +415,7 @@
             implements: implement,
             getAllProperties: getAllProperties,
             // checkTypeMessage: checkTypeMessage,
-            getTypeMap: getTypeMap,
+            getTypeObject: getTypeObject,
             checkType: checkType,
             // checkUnionType: checkUnionType,
             validType: validType,
