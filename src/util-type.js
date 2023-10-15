@@ -97,16 +97,92 @@
     }
 
 
+
+
+    
+
+    /**
+     * function 생성하는 생성자
+     * @param {*} type 
+     * @returns {object}
+     */
+    var _creator = function(type) {
+        return new type;
+        // if (typeof type === 'function') {   
+        //     // if (['String', 'Number', 'Boolean', 'Symbol'].indexOf(type.name) > -1) return type();   
+        //     return new type;
+        // }
+        // throw new Error('함수 타입만 생성할 수 있습니다.');    => 불필요함 내부적으로 사용함
+    }
+
+    function _typeName(obj) {
+        return obj.name;
+        // if (typeof obj === 'function') return obj.name;
+        // if (typeof obj === 'object' && obj !== null) {
+        //     var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
+        //     return  proto.constructor.name;
+        // }
+        // return 'unknown';
+    }
+
+    function _getKeyCode(val) {
+        var reg = /^_[a-zA-Z]+_/;
+        var result;
+
+        if (typeof val !== 'string') return;
+        result = reg.exec(val);
+        if (result !== null) return result[0].toUpperCase();
+    }
+
+    /**
+     * 함수 규칙  
+     * - (args 내부에는 '()' 입력 금지)
+     * - 참조형 타입 금지 : new Function() 시점에 자동 해석됨
+     * 
+     * @param {*} FunBody 
+     * @returns 
+     */
+    function _getFunInfo(FunBody) {
+        // var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;  // 제한 규칙
+        var regChk = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;
+        // var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/; // 제한 규칙
+        var regFunc = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
+        // var resParam = /[_\w0-1]*/g;
+        var arrFunc, arrParam;
+        var result = {args: [], return: undefined};
+
+        if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. : '+ FunBody;
+        arrFunc = regFunc.exec(FunBody);
+        if (arrFunc === null) return '함수타입 내용이 없습니다. : '+ FunBody;
+        // var param = '['+ arrFunc[1] +']';
+        // arrParam = JSON.parse(param);
+        
+        try {
+            var arrParam = [];
+            var arrRetrun;
+            arrParam = (new Function('return ['+ arrFunc[1] +']'))();
+            result.args = arrParam;
+            
+            if (arrFunc[2] !== '') arrRetrun = (new Function('return '+ arrFunc[2]))()
+            result.return = arrRetrun;
+
+        } catch (error) {
+            return error.message;
+        }
+
+        return result;
+    }
+
     /**
      * 전체 프로퍼티 조회
      * @memberof _L.Common.Util
      * @param {object} obj Object를 제외한 프로터피 리턴
-     * @param {boolean?} isObj Object를 포함 여부
+     * @param {boolean?} hasObj Object를 포함 여부
      * @returns {array}  
      */
-    var getAllProperties = function(obj, isObj) {
+    var getAllProperties = function(obj, hasObj) {
         var allProps = [], curr = obj;
-        var is = isObj || false;
+        var is = hasObj || false;
         do {
             var props = Object.getOwnPropertyNames(curr);
             
@@ -122,6 +198,36 @@
         } while (curr = Object.getPrototypeOf(curr))
         return allProps;
     };
+
+    var deepEqual = function(obj1, obj2) {
+        if (obj1 === obj2) return true;
+        if (typeof obj1 !== typeof obj2) return false;
+
+        if (Array.isArray(obj1)) {
+            if (obj1.length !== obj2.length) return false;
+            for (var i = 0; i < obj1.length; i++) {
+                var val1 = obj1[i];
+                var val2 = obj2[i];
+                var areObjects = _isObject(val1) && _isObject(val2);
+                if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+                    return false;
+                }
+            }
+        } else {
+            if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+            for (var key in obj1) {
+                if (obj1.hasOwnProperty(key)) {
+                    var val1 = obj1[key];
+                    var val2 = obj2[key];
+                    var areObjects = _isObject(val1) && _isObject(val2);
+                    if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     /**
      * js 의 타입을 객체로 리턴한다.
@@ -241,108 +347,7 @@
         // }
         Message.error('ES022', ['type']);
     }
-
-    /**
-     * function 생성하는 생성자
-     * @param {*} type 
-     * @returns {object}
-     */
-    var _creator = function(type) {
-        return new type;
-        // if (typeof type === 'function') {   
-        //     // if (['String', 'Number', 'Boolean', 'Symbol'].indexOf(type.name) > -1) return type();   
-        //     return new type;
-        // }
-        // throw new Error('함수 타입만 생성할 수 있습니다.');    => 불필요함 내부적으로 사용함
-    }
-
-    function _typeName(obj) {
-        return obj.name;
-        // if (typeof obj === 'function') return obj.name;
-        // if (typeof obj === 'object' && obj !== null) {
-        //     var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
-        //     return  proto.constructor.name;
-        // }
-        // return 'unknown';
-    }
-
-    function _getKeyCode(val) {
-        var reg = /^_[a-zA-Z]+_/;
-        var result;
-
-        if (typeof val !== 'string') return;
-        result = reg.exec(val);
-        if (result !== null) return result[0].toUpperCase();
-    }
-
-    var deepEqual = function(obj1, obj2) {
-        if (obj1 === obj2) return true;
-        if (typeof obj1 !== typeof obj2) return false;
-
-        if (Array.isArray(obj1)) {
-            if (obj1.length !== obj2.length) return false;
-            for (var i = 0; i < obj1.length; i++) {
-                var val1 = obj1[i];
-                var val2 = obj2[i];
-                var areObjects = _isObject(val1) && _isObject(val2);
-                if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-                    return false;
-                }
-            }
-        } else {
-            if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
-            for (var key in obj1) {
-                if (obj1.hasOwnProperty(key)) {
-                    var val1 = obj1[key];
-                    var val2 = obj2[key];
-                    var areObjects = _isObject(val1) && _isObject(val2);
-                    if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 함수 규칙  
-     * - (args 내부에는 '()' 입력 금지)
-     * - 참조형 타입 금지 : new Function() 시점에 자동 해석됨
-     * 
-     * @param {*} FunBody 
-     * @returns 
-     */
-    function _getFunInfo(FunBody) {
-        // var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;  // 제한 규칙
-        var regChk = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;
-        // var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/; // 제한 규칙
-        var regFunc = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
-        // var resParam = /[_\w0-1]*/g;
-        var arrFunc, arrParam;
-        var result = {args: [], return: undefined};
-
-        if (regChk.test(FunBody) === false) return '함수타입 규칙이 아닙니다. : '+ FunBody;
-        arrFunc = regFunc.exec(FunBody);
-        if (arrFunc === null) return '함수타입 내용이 없습니다. : '+ FunBody;
-        // var param = '['+ arrFunc[1] +']';
-        // arrParam = JSON.parse(param);
-        
-        try {
-            var arrParam = [];
-            var arrRetrun;
-            arrParam = (new Function('return ['+ arrFunc[1] +']'))();
-            result.args = arrParam;
-            
-            if (arrFunc[2] !== '') arrRetrun = (new Function('return '+ arrFunc[2]))()
-            result.return = arrRetrun;
-
-        } catch (error) {
-            return error.message;
-        }
-
-        return result;
-    }
+    
 
     // TODO: type1 => ori, tar
     var equalType = function (ori, tar) {
@@ -386,9 +391,10 @@
         }
         // array & array 조건
         if (def1.name === 'array') {
+            if ((ori === Array || ori.length === 0 || (ori[0] && ori[0].length === 0)) 
+            && (Array.isArray(tar) || tar === Array)) return true;      // [], [[]], Array
             if (!Array.isArray(tar)) return false;
-            if ((ori === Array || ori.length === 0) && Array.isArray(tar)) return true;      // [], Array
-            if (ori.length === 1 && Array.isArray(ori[0]) && ori[0].length === 0) return true;
+            // if (ori.length === 1 && Array.isArray(ori[0]) && ori[0].length === 0) return true;
             
             var keyCode1 = _getKeyCode(ori[0][0]);
             var keyCode2;
@@ -536,10 +542,11 @@
             if (typeof target === 'symbol') return '';
             return Message.get('ES024', [parentName, 'symbol']);
         }
-        if (defType.name === 'array') { // TODO:
+        if (defType.name === 'array') {
+            if ((type === Array || type.length === 0 || (type[0] && type[0].length === 0))
+            && (Array.isArray(target) || target === Array)) return '';
+            // if (type.length === 1 && Array.isArray(type[0]) && type[0].length === 0) return ''; // [[]]
             if (!Array.isArray(target)) return Message.get('ES024', [parentName, 'array']);
-            if ((type === Array || type.length === 0) && Array.isArray(target)) return '';      // [], Array
-            if (type.length === 1 && Array.isArray(type[0]) && type[0].length === 0) return ''; // [[]]
 
             var keyCode
             var beginIdx = 0;
@@ -717,6 +724,7 @@
     // 5. module export
     if (isNode) {     
         exports.getAllProperties = getAllProperties;
+        exports.deepEqual = deepEqual;
         exports.checkTypeMessage = checkTypeMessage;
         exports.getTypeMap = getTypeMap;
         exports.checkType = checkType;
@@ -725,6 +733,7 @@
     } else {
         var ns = {
             getAllProperties: getAllProperties,
+            deepEqual: deepEqual,
             checkTypeMessage: checkTypeMessage,
             getTypeMap: getTypeMap,
             checkType: checkType,

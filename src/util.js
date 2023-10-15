@@ -12,6 +12,7 @@
     var checkType;
     // var checkUnionType;
     var validType;
+    var deepEqual;
     // var validUnionType;
 
     //==============================================================
@@ -30,6 +31,7 @@
         checkType                   = require('./util-type').checkType;
         // checkUnionType              = require('./util-type').checkUnionType;
         validType                   = require('./util-type').validType;
+        deepEqual                   = require('./util-type').deepEqual;
         // validUnionType              = require('./util-type').validUnionType;
     } else {    
         Message                     = _global._L.Message;
@@ -39,6 +41,7 @@
         checkType                   = _global._L.Util.checkType
         // checkUnionType              = _global._L.Util.checkUnionType
         validType                   = _global._L.Util.validType
+        deepEqual                   = _global._L.Util.deepEqual
         // validUnionType              = _global._L.Util.validUnionType
     }
 
@@ -50,6 +53,7 @@
     if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
     // if (typeof checkUnionType === 'undefined') Message.error('ES012', ['checkUnionType', 'util-type']);
     if (typeof validType === 'undefined') Message.error('ES012', ['validType', 'util-type']);
+    if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);
     // if (typeof validUnionType === 'undefined') Message.error('ES012', ['validUnionType', 'util-type']);
     //==============================================================
     // 4. module implementation   
@@ -86,6 +90,39 @@
     //     })()
     // };
     
+    /**
+     * 배열 깊이를 가져옵니다.
+     * @param {*} p_elem 
+     * @param {*} p_depts 
+     * @memberof _L.Common.Util
+     */
+    var getArrayDepth  = function(p_elem, p_depts) {
+        var MAX     = 10;
+        var level   = 0;
+        
+        p_depts = p_depts || 0;
+
+        if (p_elem instanceof Array && MAX > p_depts) {
+            level++;
+            p_depts++;
+            level = level + this.getArrayDepth(p_elem[0], p_depts);  // 재귀호출을 통해 깊이 얻기
+        }
+        return level;
+    };
+    
+    /**
+     * 고유한 식별자(guid)을 생성합니다.
+     * @memberof _L.Common.Util
+     */
+    var createGuid = function() {
+
+        function _p8(s) {  
+            var p = (Math.random().toString(16)+'000000000').substring(2,10);  
+            return s ? '-' + p.substring(0, 4) + '-' + p.substring(4, 8) : p ;  
+        }
+        return _p8() + _p8(true) + _p8(true) + _p8();
+    };
+        
     /**
      * 지정한 부모(생성자)를 상속합니다.
      * @function
@@ -124,38 +161,7 @@
         }
     }());
 
-    /**
-     * 배열 깊이를 가져옵니다.
-     * @param {*} p_elem 
-     * @param {*} p_depts 
-     * @memberof _L.Common.Util
-     */
-    var getArrayDepth  = function(p_elem, p_depts) {
-        var MAX     = 10;
-        var level   = 0;
-        
-        p_depts = p_depts || 0;
 
-        if (p_elem instanceof Array && MAX > p_depts) {
-            level++;
-            p_depts++;
-            level = level + this.getArrayDepth(p_elem[0], p_depts);  // 재귀호출을 통해 깊이 얻기
-        }
-        return level;
-    };
-    
-    /**
-     * 고유한 식별자(guid)을 생성합니다.
-     * @memberof _L.Common.Util
-     */
-    var createGuid = function() {
-
-        function _p8(s) {  
-            var p = (Math.random().toString(16)+'000000000').substring(2,10);  
-            return s ? '-' + p.substring(0, 4) + '-' + p.substring(4, 8) : p ;  
-        }
-        return _p8() + _p8(true) + _p8(true) + _p8();
-    };
 
     /**
      * 대상 객체에 인터페이스를 정의하고, 인스턴스를 검사합니다.  
@@ -354,33 +360,33 @@
      * @memberof _L.Common.Util
      * @returns {object}
      */
-    var deepEqual = function(obj1, obj2) {
+    // var deepEqual = function(obj1, obj2) {
 
-        if (Array.isArray(obj1)) {
-            if (obj1.length !== obj2.length) return false;
-            for (var i = 0; i < obj1.length; i++) {
-                var val1 = obj1[i];
-                var val2 = obj2[i];
-                var areObjects = _isObject(val1) && _isObject(val2);
-                if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-                    return false;
-                }
-            }
-        } else {
-            if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
-            for (var key in obj1) {
-                if (obj1.hasOwnProperty(key)) {
-                    var val1 = obj1[key];
-                    var val2 = obj2[key];
-                    var areObjects = _isObject(val1) && _isObject(val2);
-                    if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    }
+    //     if (Array.isArray(obj1)) {
+    //         if (obj1.length !== obj2.length) return false;
+    //         for (var i = 0; i < obj1.length; i++) {
+    //             var val1 = obj1[i];
+    //             var val2 = obj2[i];
+    //             var areObjects = _isObject(val1) && _isObject(val2);
+    //             if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+    //                 return false;
+    //             }
+    //         }
+    //     } else {
+    //         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+    //         for (var key in obj1) {
+    //             if (obj1.hasOwnProperty(key)) {
+    //                 var val1 = obj1[key];
+    //                 var val2 = obj2[key];
+    //                 var areObjects = _isObject(val1) && _isObject(val2);
+    //                 if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
+    //                     return false;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
 
     //==============================================================
     // 5. module export
