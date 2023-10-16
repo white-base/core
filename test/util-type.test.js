@@ -147,21 +147,35 @@ describe("[target: util-type.js.js]", () => {
             expect(allowType([['_seq_', Number]],         [['_seq_']]                   )).toBe(false);
             expect(allowType([['_seq_', Number]],         [['_seq_', Boolean]]          )).toBe(false);
             expect(allowType([['_seq_', Number]],         [[Number]]                    )).toBe(false);
+            expect(allowType([['_seq_', Number, String]], [['_seq_', Number, String]]   )).toBe(T);
+            expect(allowType([['_seq_', Number, String]], [['_seq_', Number]]           )).toBe(false);
+            expect(allowType([['_seq_', Number, String]], [[Number]]                    )).toBe(false);
             expect(allowType([['_opt_']],                 [['_opt_']]                   )).toBe(T);
             expect(allowType([['_opt_']],                 [['_opt_', String]]           )).toBe(T);
             expect(allowType([['_opt_']],                 [['_any_']]                   )).toBe(T);
             expect(allowType([['_opt_']],                 [[]]                          )).toBe(T);
+            expect(allowType([['_opt_']],                 []                            )).toBe(T);
+            expect(allowType([['_opt_']],                 [[String]]                    )).toBe(T);
             expect(allowType([['_opt_', String]],         [['_opt_', String]]           )).toBe(T);
             expect(allowType([['_opt_', String]],         [['_opt_', Number, String]]   )).toBe(false);
             expect(allowType([['_opt_', String]],         [['_opt_', Number]]           )).toBe(false);
             expect(allowType([['_opt_', String]],         [['_opt_']]                   )).toBe(false);
             expect(allowType([['_opt_', String]],         [['_any_']]                   )).toBe(false);
+            expect(allowType([['_opt_', String]],         [[String]]                    )).toBe(T);
+            expect(allowType([['_opt_', String]],         [[Number]]                    )).toBe(false);
+            expect(allowType([['_opt_', String]],         [[undefined]]                 )).toBe(false);
             expect(allowType([['_opt_', String, Number]], [['_opt_', Number, String]]   )).toBe(T);
             expect(allowType([['_opt_', String, Number]], [['_opt_', String]]           )).toBe(T);
             expect(allowType([['_opt_', String, Number]], [['_opt_', Number]]           )).toBe(T);
+            expect(allowType([['_opt_', String, Number]], [[String, Number]]            )).toBe(T);
+            expect(allowType([['_opt_', String, Number]], [[Number, String]]            )).toBe(T);
+            expect(allowType([['_opt_', String, Number]], [[Number, Boolean]]           )).toBe(false);
             expect(allowType([['_opt_', String, Number]], [[Number, String, Boolean]]   )).toBe(false);
+            expect(allowType([['_opt_', String, Number]], [[Number]]                    )).toBe(T);
+            expect(allowType([['_opt_', String, Number]], [[String]]                    )).toBe(T);            
             expect(allowType([['_opt_', String, Number]], [['_opt_']]                   )).toBe(false);
             expect(allowType([['_opt_', String, Number]], [['_any_']]                   )).toBe(false);
+            expect(allowType([['_opt_', String, Number]], [[undefined]]                 )).toBe(false);
             expect(allowType([['_opt_', String, Number]], [['_opt_', Number, String, Boolean]])).toBe(false);
         });
         it('- allowType(a, b) : choice ', () => {
@@ -175,19 +189,39 @@ describe("[target: util-type.js.js]", () => {
             expect(allowType(['_seq_'],                 ['_seq_']           )).toBe(T);
             expect(allowType(['_seq_'],                 ['_seq_', String]   )).toBe(false);
             expect(allowType(['_seq_'],                 ['_seq_', Number]   )).toBe(false);
+            expect(allowType(['_seq_', Number],         ['_seq_', Number]           )).toBe(T); // 같은 경우만 True
+            expect(allowType(['_seq_', Number],         ['_seq_', Number, String]   )).toBe(false);
+            expect(allowType(['_seq_', Number],         ['_seq_']                   )).toBe(false);
+            expect(allowType(['_seq_', Number],         ['_seq_', Boolean]          )).toBe(false);
+            expect(allowType(['_seq_', Number],         [Number]                    )).toBe(false);
+            expect(allowType(['_seq_', Number, String], ['_seq_', Number, String]   )).toBe(T); // 같은 경우만 True
+            expect(allowType(['_seq_', Number, String], ['_seq_', Number]           )).toBe(false);
+            expect(allowType(['_seq_', Number, String], [Number]                    )).toBe(false);
             expect(allowType(['_opt_'],                 ['_opt_']           )).toBe(T);
+            expect(allowType(['_opt_'],                 ['_opt_', String]   )).toBe(T);
+            expect(allowType(['_opt_'],                 ['_any_']           )).toBe(T);
             expect(allowType(['_opt_'],                 undefined           )).toBe(T);
-            expect(allowType(['_opt_'],                 [String]            )).toBe(T);
-            expect(allowType(['_opt_', String],         ['_opt_', String]   )).toBe(T);
-            expect(allowType(['_opt_', String],         ['_opt_']           )).toBe(false);
-            expect(allowType(['_opt_', String],         undefined           )).toBe(false);
-            expect(allowType(['_opt_', String],         [String]            )).toBe(T);
-            expect(allowType(['_opt_', String],         [Number]            )).toBe(false);
-            expect(allowType(['_opt_', String, Number], undefined           )).toBe(false);
-            expect(allowType(['_opt_', String, Number], [String, Number]    )).toBe(T);
-            expect(allowType(['_opt_', String, Number], [String, Boolean]   )).toBe(false);
-            expect(allowType(['_opt_', String, Number], [Number]            )).toBe(T);
-            expect(allowType(['_opt_', String, Number], ['_opt_']           )).toBe(false);
+            expect(allowType(['_opt_'],                 [String]                    )).toBe(T);
+            expect(allowType(['_opt_', String],         ['_opt_', String]           )).toBe(T);
+            expect(allowType(['_opt_', String],         ['_opt_', Number, String]   )).toBe(false);
+            expect(allowType(['_opt_', String],         ['_opt_', Number]           )).toBe(false);
+            expect(allowType(['_opt_', String],         ['_opt_']                   )).toBe(false);
+            expect(allowType(['_opt_', String],         ['_any_']                   )).toBe(false);
+            expect(allowType(['_opt_', String],         [String]                    )).toBe(T);
+            expect(allowType(['_opt_', String],         [Number]                    )).toBe(false);
+            expect(allowType(['_opt_', String],         undefined                   )).toBe(false);
+            expect(allowType(['_opt_', String, Number], ['_opt_', String, Number]   )).toBe(T);
+            expect(allowType(['_opt_', String, Number], ['_opt_', Number]           )).toBe(T);
+            expect(allowType(['_opt_', String, Number], ['_opt_', String]           )).toBe(T);
+            expect(allowType(['_opt_', String, Number], [String, Number]            )).toBe(T);
+            expect(allowType(['_opt_', String, Number], [Number, String]            )).toBe(T);
+            expect(allowType(['_opt_', String, Number], [String, Boolean]           )).toBe(false);
+            expect(allowType(['_opt_', String, Number], [Number, String, Boolean]   )).toBe(false);
+            expect(allowType(['_opt_', String, Number], [Number]                    )).toBe(T);
+            expect(allowType(['_opt_', String, Number], [String]                    )).toBe(T);
+            expect(allowType(['_opt_', String, Number], ['_opt_']                   )).toBe(false);
+            expect(allowType(['_opt_', String, Number], ['_any_']                   )).toBe(false);
+            expect(allowType(['_opt_', String, Number], undefined                   )).toBe(false);
             expect(allowType(['_opt_', String, Number], ['_opt_', String, Boolean, Number])).toBe(false);
         });
         it('- allowType(a, b) : function, 함수 파싱 ', () => {
@@ -195,50 +229,50 @@ describe("[target: util-type.js.js]", () => {
              * 함수 args 금지 : number, string, bool, null, fuction, ( ), =>
              * func._TYPE 정적 영역으로 우회해서 설정
              */
-            var typeA1      = function(String, Number){Boolean}
-            var typeB1_1    = function(String, Number){return Boolean}
-            var typeB1_2    = function fun(String, Number){Boolean}
-            var typeB1_3    = function fun(String, Number){return Boolean }
-            var typeB1_4    = (String, Number) => {Boolean}
-            var typeB1_5    = (String, Number) => {return Boolean}
+            var type1      = function(String, Number){Boolean}
+            var type1_1    = function(String, Number){return Boolean}
+            var type1_2    = function fun(String, Number){Boolean}
+            var type1_3    = function fun(String, Number){return Boolean }
+            var type1_4    = (String, Number) => {Boolean}
+            var type1_5    = (String, Number) => {return Boolean}
 
-            var typeA2      = function([String], Number){[Boolean]}
-            var typeB2_1    = function([String], Number){return [Boolean]}
-            var typeB2_2    = ([String], Number)=>{[Boolean]}
-            var typeB2_3    = ([String], Number)=>{return [Boolean]}
+            var type2      = function([String], Number){[Boolean]}
+            var type2_1    = function([String], Number){return [Boolean]}
+            var type2_2    = ([String], Number)=>{[Boolean]}
+            var type2_3    = ([String], Number)=>{return [Boolean]}
 
-            var typeA3      = function({aa: String}, Number) {[Boolean, {bb:Number}]}
-            var typeB3_1    = function ({aa: String}, Number){return [Boolean, {bb:Number}]}
-            var typeB3_2    = function fun({aa: String}, Number){[Boolean, {bb:Number}]}
-            var typeB3_3    = function fun({aa: String}, Number){return [Boolean, {bb:Number}]}
-            var typeB3_4    = ({aa: String}, Number)=>{[Boolean, {bb:Number}]}
-            var typeB3_5    = ({aa: String}, Number)=>{return [Boolean, {bb:Number}]}
+            var type3      = function({aa: String}, Number) {[Boolean, {bb:Number}]}
+            var type3_1    = function ({aa: String}, Number){return [Boolean, {bb:Number}]}
+            var type3_2    = function fun({aa: String}, Number){[Boolean, {bb:Number}]}
+            var type3_3    = function fun({aa: String}, Number){return [Boolean, {bb:Number}]}
+            var type3_4    = ({aa: String}, Number)=>{[Boolean, {bb:Number}]}
+            var type3_5    = ({aa: String}, Number)=>{return [Boolean, {bb:Number}]}
 
-            var typeA4      = function([[{aa: String}]]) {[[{bb:Number}]]}
-            var typeB4_1    = function ([[{aa: String}]]){return [[{bb:Number}]]}
-            var typeB4_2    = function fun ([[{aa: String}]]){ [[{bb:Number}]]}
-            var typeB4_3    = function fun ([[{aa: String}]]){return [[{bb:Number}]]}
-            var typeB4_4    = ([[{aa: String}]]) => { [[{bb:Number}]]}
-            var typeB4_5    = ([[{aa: String}]]) => {return [[{bb:Number}]]}
+            var type4      = function([[{aa: String}]]) {[[{bb:Number}]]}
+            var type4_1    = function ([[{aa: String}]]){return [[{bb:Number}]]}
+            var type4_2    = function fun ([[{aa: String}]]){ [[{bb:Number}]]}
+            var type4_3    = function fun ([[{aa: String}]]){return [[{bb:Number}]]}
+            var type4_4    = ([[{aa: String}]]) => { [[{bb:Number}]]}
+            var type4_5    = ([[{aa: String}]]) => {return [[{bb:Number}]]}
 
-            expect(allowType(typeA1, typeB1_1)).toBe(true);
-            expect(allowType(typeA1, typeB1_2)).toBe(true);
-            expect(allowType(typeA1, typeB1_3)).toBe(true);
-            expect(allowType(typeA1, typeB1_4)).toBe(true);
-            expect(allowType(typeA1, typeB1_5)).toBe(true);
-            expect(allowType(typeA2, typeB2_1)).toBe(true);
-            expect(allowType(typeA2, typeB2_2)).toBe(true);
-            expect(allowType(typeA2, typeB2_3)).toBe(true);
-            expect(allowType(typeA3, typeB3_1)).toBe(true);
-            expect(allowType(typeA3, typeB3_2)).toBe(true);
-            expect(allowType(typeA3, typeB3_3)).toBe(true);
-            expect(allowType(typeA3, typeB3_4)).toBe(true);
-            expect(allowType(typeA3, typeB3_5)).toBe(true);
-            expect(allowType(typeA4, typeB4_1)).toBe(true);
-            expect(allowType(typeA4, typeB4_2)).toBe(true);
-            expect(allowType(typeA4, typeB4_3)).toBe(true);
-            expect(allowType(typeA4, typeB4_4)).toBe(true);
-            expect(allowType(typeA4, typeB4_5)).toBe(true);
+            expect(allowType(type1, type1_1)).toBe(true);
+            expect(allowType(type1, type1_2)).toBe(true);
+            expect(allowType(type1, type1_3)).toBe(true);
+            expect(allowType(type1, type1_4)).toBe(true);
+            expect(allowType(type1, type1_5)).toBe(true);
+            expect(allowType(type2, type2_1)).toBe(true);
+            expect(allowType(type2, type2_2)).toBe(true);
+            expect(allowType(type2, type2_3)).toBe(true);
+            expect(allowType(type3, type3_1)).toBe(true);
+            expect(allowType(type3, type3_2)).toBe(true);
+            expect(allowType(type3, type3_3)).toBe(true);
+            expect(allowType(type3, type3_4)).toBe(true);
+            expect(allowType(type3, type3_5)).toBe(true);
+            expect(allowType(type4, type4_1)).toBe(true);
+            expect(allowType(type4, type4_2)).toBe(true);
+            expect(allowType(type4, type4_3)).toBe(true);
+            expect(allowType(type4, type4_4)).toBe(true);
+            expect(allowType(type4, type4_5)).toBe(true);
         });
         it('- allowType(a, b) : object ', () => {
             var ClassA = function(){};
@@ -253,48 +287,36 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- allowType(a, b) : class ', () => {
             var ClassA = function(){this.a = 1}
-            var ClassB = function(){this.a = 10}      // false
-            var ClassC = function(){this.b = 10}      // false
+            var ClassB = function(){this.a = 10}
+            var ClassC = function(){this.b = 10}
+            var ClassD = function(){this.b = 10}
 
             expect(allowType(ClassA,    ClassA)).toBe(T);
             expect(allowType(ClassA,    ClassB)).toBe(false);
             expect(allowType(ClassA,    ClassC)).toBe(false);
+            expect(allowType(ClassC,    ClassD)).toBe(T);
             expect(allowType(String,    String)).toBe(T);
 
         });
         it('- allowType(a, b) : union (기본) ', () => {
-            var typeA1      = {str: String, num: Number};
-            var typeB1_1    = {str: '', num: 0};
-            var typeB1_2    = {str: ''};
+            var type1      = {str: String, num: Number};
 
-            expect(allowType(typeA1,    typeA1  )).toBe(true);
-            expect(allowType(typeA1,    typeB1_1)).toBe(true);
-            expect(allowType(typeA1,    typeB1_2)).toBe(false);
+            expect(allowType(type1,    {str: String, num: Number}  )).toBe(true);
+            expect(allowType(type1,    {str: '', num: 0}           )).toBe(true);
+            expect(allowType(type1,    {str: ''}                   )).toBe(false);
         });
         it('- allowType(a, b) : union (choice) ', () => {
-            var typeA1   = {str: [String, Number], bool: ['_any_'], num: ['_opt_', Number]};
-            var typeB1_1 = {str: String, bool: null, num: Number};
-            var typeB1_2 = {str: String, bool: null, num: Number};
-            var typeB1_3 = {str: '', bool: true};                  
-            var typeB1_4 = {str: String, bool: false, num: String}; 
-            var typeB1_5 = {str: String,};
+            var type1   = {str: [String, Number], bool: ['_any_'], num: ['_opt_', Number]};
 
-            expect(allowType(typeA1, typeB1_1)).toBe(T);
-            expect(allowType(typeA1, typeB1_2)).toBe(T);
-            expect(allowType(typeA1, typeB1_3)).toBe(false);
-            expect(allowType(typeA1, typeB1_4)).toBe(false);
-            expect(allowType(typeA1, typeB1_5)).toBe(false);
+            expect(allowType(type1, {str: String, bool: null, num: Number}          )).toBe(T);
+            expect(allowType(type1, {str: '', bool: true, num: ['_opt_', Number]}   )).toBe(T);
+            expect(allowType(type1, {str: '', bool: null, num: ['_opt_', String]}   )).toBe(false);
+            expect(allowType(type1, {str: String, bool: false, num: String}         )).toBe(false);
+            expect(allowType(type1, {str: String}                                   )).toBe(false);
         });
     });
     describe('checkType(type, target)', () => {
         it('- checkType() : 일반 ', () => {
-            var arr1 = ['_any_'];
-            var arr2 = ['_seq_', String, Number];
-            var arr3 = ['_seq_'];
-            var arr4 = ['_opt_', String, Number];
-            var arr5 = ['_opt_'];
-            var arr6 = [String, Number];
-
             // _any_
             expect(checkType(['_any_'],         10          )).toBe(T);
             expect(checkType(['_any_'],         'str'       )).toBe(T);

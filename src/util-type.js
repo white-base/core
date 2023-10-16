@@ -415,7 +415,7 @@
                 if (typeof tar[0] === 'undefined' || tar[0].length === 0) return true;
                 // if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
                 if (ori[0].length === 1) return true;
-                if (keyCode1 !== keyCode2) return false;
+                // if (keyCode1 !== keyCode2) return false;
                 var start1 = keyCode1 ? 1 : 0;
                 var start2 = keyCode2 ? 1 : 0;
                 if (ori[0].length - start1 < tar[0].length - start2) return false;
@@ -489,8 +489,6 @@
 
     /**
      * 타입을 검사하여 메세지를 리턴
-     * TODO: 배열제네릭 검토, => [[MetaObjec]]
-     * TODO: null 입력에 대한 검토, 기본 null any 표현 대체 검토, NaN 같은 고유 상수 찾기
      * @memberof _L.Common.Util
      * @param {any} type 검사할 타입
      * @param {any} target 검사대상
@@ -505,7 +503,7 @@
 
         defType = getTypeObject(type);
         
-        if (defType.name === 'choice') {    // TODO:
+        if (defType.name === 'choice') {
 
             for(var i = 0; i < type.length; i++) {
                 var keyCode = _getKeyCode(type[i]);
