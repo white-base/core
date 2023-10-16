@@ -283,6 +283,7 @@ describe("[target: meta-column.js]", () => {
                 }
                 SubColumn._VALUE_TYPE = [];
                 var view1 = new MetaView('T1');
+                // var arr = Util.getTypes(SubColumn);
                 view1.columns._baseType = SubColumn;
                 view1.columns.addValue('c1', /reg/)
                 view1.columns.addValue('c2', {})

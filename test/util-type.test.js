@@ -77,14 +77,15 @@ describe("[target: util-type.js.js]", () => {
             expect(allowType(null,      undefined   )).toBe(false);
             // Number
             expect(allowType(Number,    Number      )).toBe(T);
-            expect(allowType(Number,    NaN         )).toBe(T);
             expect(allowType(Number,    10          )).toBe(T);
+            expect(allowType(Number,    NaN         )).toBe(T);
             expect(allowType(Number,    String      )).toBe(false);
             expect(allowType(Number,    true        )).toBe(false);
             expect(allowType(NaN,       Number      )).toBe(false);
             expect(allowType(NaN,       NaN         )).toBe(false);
             expect(allowType(NaN,       10          )).toBe(false);
             expect(allowType(10,        10          )).toBe(T);
+            expect(allowType(10,        20          )).toBe(false);
             expect(allowType(10,        Number      )).toBe(false);
             expect(allowType(10,        NaN         )).toBe(false);
             // String

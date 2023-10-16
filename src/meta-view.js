@@ -250,7 +250,8 @@
                 get: function() { return _baseType; },
                 set: function(nVal) { 
                     if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    if (!(new nVal('temp') instanceof MetaView)) Message.error('ES032', ['_baseType', 'MetaView']);
+                    // if (!(new nVal('temp') instanceof MetaView)) Message.error('ES032', ['_baseType', 'MetaView']);
+                    if (!(Util.isType(nVal, MetaView))) Message.error('ES032', ['_baseType', 'MetaView']);
                     _baseType = nVal;
                 },
                 configurable: false,

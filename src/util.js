@@ -92,6 +92,7 @@
     
     /**
      * 배열 깊이를 가져옵니다.
+     * REVIEW: 필요성 검토 필요!
      * @param {*} p_elem 
      * @param {*} p_depts 
      * @memberof _L.Common.Util
@@ -101,11 +102,10 @@
         var level   = 0;
         
         p_depts = p_depts || 0;
-
         if (p_elem instanceof Array && MAX > p_depts) {
             level++;
             p_depts++;
-            level = level + this.getArrayDepth(p_elem[0], p_depts);  // 재귀호출을 통해 깊이 얻기
+            level = level + getArrayDepth(p_elem[0], p_depts);
         }
         return level;
     };
@@ -122,6 +122,35 @@
         }
         return _p8() + _p8(true) + _p8(true) + _p8();
     };
+
+    /**
+     * 지정한 객체를 깊은 복사를 하여 회신합니다.
+     * @param {object} object 
+     * @memberof _L.Common.Util
+     * @returns {object}
+     */
+    var deepCopy = function(object) {
+        if (!_isObject(object)) {
+          return object;
+        }
+        if (object instanceof RegExp) return object;
+
+        // 객체인지 배열인지 판단
+        var copy = Array.isArray(object) ? [] : {};
+       
+        if (Array.isArray(object)) {
+            for (var i = 0; i < object.length; i++) {
+                copy[i] = deepCopy(object[i]);
+            }
+        } else {
+            for (var key in object) {
+                if (object.hasOwnProperty(key)) {
+                    copy[key] = deepCopy(object[key]);
+                }
+            }
+        }
+        return copy;
+    }    
 
     /**
      * 지정한 부모(생성자)를 상속합니다.
@@ -145,6 +174,9 @@
                         	enumerable: false,
                         }
                     });
+                    // 상위 조회를 위해
+                    // Object.setPrototypeOf(ctor, superCtor);
+                    // Object.setPrototypeOf(ctor.prototype, superCtor.prototype);
                 }
             };
         } else {
@@ -156,6 +188,8 @@
                     TempCtor.prototype = superCtor.prototype;
                     ctor.prototype = new TempCtor();
                     ctor.prototype.constructor = ctor;
+                    // 상위 조회를 위해
+                    // Object.setPrototypeOf(ctor, superCtor);
                 }
             }
         }
@@ -314,45 +348,67 @@
             var proto = obj.__proto__ || Object.getPrototypeOf(obj);
             return proto.constructor;
         }
-        // function getTypes(obj) {
-        //     var list = [];
-        //     var proto = obj.__proto__ || Object.getPrototypeOf(obj);
-        //     if (proto) {
-        //         list.push(proto.constructor);
-        //         list = list.concat(getTypes(proto));
-        //     }
-        //     return list;
-        // }
+    };
+
+    /**
+     * 대상의 상위를 포함하여 '_UNION'과 자신의 타입 목록을 가져옵니다.
+     * @memberof _L.Common.Util
+     * @param {function} ctor 생성자
+     * @returns {array<function>}
+     */
+    var getTypes = function (ctor) {
+        var arr = [];
+        var tempArr = [];
+        var union;
+        var proto;
+
+        if (typeof ctor !== 'function') return;
+        
+        arr.push(ctor);
+        union = ctor['_UNION'] || [];
+        proto = getPrototype(ctor);        
+        
+        if (proto !== Function.prototype) {
+            arr = arr.concat(getTypes(proto));
+        }
+        for (var i = 0; i < union.length; i++) {
+            arr = arr.concat(getTypes(union[i]));
+        }
+        for (var i = 0; i < arr.length; i++) {
+            var idx = tempArr.indexOf(arr[i]);
+            if (idx < 0) tempArr.push(arr[i]);
+        }
+        return tempArr;
+
+        // innner function
+        function getPrototype(ctor) {
+            if (ctor.hasOwnProperty('super')) return ctor.super;
+            return  Object.getPrototypeOf(ctor) || ctor.__proto__;
+        }
     }
 
     /**
-     * 지정한 객체를 깊은 복사를 하여 회신합니다.
-     * @param {object} object 
+     * 생성자의 상위 또는 _UNION 에 지정된 생성자의 타입과 같은지 검사합니다.
      * @memberof _L.Common.Util
-     * @returns {object}
+     * @param {function} ctor 생성자
+     * @param {function | string} target 검사 대상
+     * @returns {boolean}
      */
-    var deepCopy = function(object) {
-        if (!_isObject(object)) {
-          return object;
-        }
-        if (object instanceof RegExp) return object;
-
-        // 객체인지 배열인지 판단
-        var copy = Array.isArray(object) ? [] : {};
-       
-        if (Array.isArray(object)) {
-            for (var i = 0; i < object.length; i++) {
-                copy[i] = deepCopy(object[i]);
-            }
-        } else {
-            for (var key in object) {
-                if (object.hasOwnProperty(key)) {
-                    copy[key] = deepCopy(object[key]);
-                }
+    var isType = function(ctor, target) {
+        if (typeof ctor !== 'function') return false;
+        var arr = getTypes(ctor);
+        
+        for (var i = 0; i < arr.length; i++) {
+            if (typeof target === 'string') {
+                if (target === arr[i].name) return true;
+            } else if (typeof target === 'function') {
+                if (target === arr[i]) return true;
             }
         }
-        return copy;
+        return false;
     }
+
+
 
     // /**
     //  * 지정한 객체들이 같은지 깊은 비교를 합니다.
@@ -393,6 +449,8 @@
     // 5. module export
     if (isNode) {     
         exports.inherits = inherits;
+        exports.isType = isType;
+        exports.getTypes = getTypes;
         exports.getArrayDepth = getArrayDepth;
         exports.createGuid = createGuid;
         exports.implements = implement;
@@ -410,6 +468,8 @@
     } else {
         var ns = {
             inherits: inherits,
+            isType: isType,
+            getTypes: getTypes,
             getArrayDepth: getArrayDepth,
             createGuid: createGuid,
             implements: implement,

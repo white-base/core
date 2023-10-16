@@ -1002,6 +1002,7 @@ describe("[target: meta-table.js]", () => {
                 // 강제로 초기화 후, ns에 대상 등록 후 생성
                 MetaRegistry.init();
                 MetaRegistry.registerClass(MetaRow, 'Meta.Entity', 'MetaRow');
+                MetaRegistry.registerClass(MetaColumn, 'Meta.Entity', 'MetaColumn');
                 var table2 = new MetaTable('T2');
                 table2.load(str, parse);
         
