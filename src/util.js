@@ -7,13 +7,11 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var getAllProperties;
-    var checkTypeMessage;
-    var getTypeObject;
-    var checkType;
-    // var checkUnionType;
-    var validType;
+    var typeKind;
+    var typeAllowCheck;
+    var typeCheck;
+    var typeValid;
     var deepEqual;
-    // var validUnionType;
 
     //==============================================================
     // 1. 의존 모듈 선언
@@ -26,35 +24,30 @@
     if (isNode) {
         Message                     = require('./message').Message;
         getAllProperties            = require('./util-type').getAllProperties;
-        checkTypeMessage            = require('./util-type').checkTypeMessage;
-        getTypeObject                  = require('./util-type').getTypeObject;
-        checkType                   = require('./util-type').checkType;
-        // checkUnionType              = require('./util-type').checkUnionType;
-        validType                   = require('./util-type').validType;
+        typeKind                    = require('./util-type').typeKind;
+        typeAllowCheck              = require('./util-type').typeAllowCheck;
+        typeCheck                   = require('./util-type').typeCheck;
+        typeValid                   = require('./util-type').typeValid;
         deepEqual                   = require('./util-type').deepEqual;
-        // validUnionType              = require('./util-type').validUnionType;
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
-        checkTypeMessage            = _global._L.Util.checkTypeMessage
-        getTypeObject                  = _global._L.Util.getTypeObject
-        checkType                   = _global._L.Util.checkType
-        // checkUnionType              = _global._L.Util.checkUnionType
-        validType                   = _global._L.Util.validType
+        typeKind                    = _global._L.Util.typeKind
+        typeAllowCheck              = _global._L.Util.typeAllowCheck
+        typeCheck                   = _global._L.Util.typeCheck
+        typeValid                   = _global._L.Util.typeValid
         deepEqual                   = _global._L.Util.deepEqual
-        // validUnionType              = _global._L.Util.validUnionType
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
-    if (typeof checkTypeMessage === 'undefined') Message.error('ES012', ['checkTypeMessage', 'util-type']);
-    if (typeof getTypeObject === 'undefined') Message.error('ES012', ['getTypeObject', 'util-type']);
-    if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
-    // if (typeof checkUnionType === 'undefined') Message.error('ES012', ['checkUnionType', 'util-type']);
-    if (typeof validType === 'undefined') Message.error('ES012', ['validType', 'util-type']);
+    if (typeof typeKind === 'undefined') Message.error('ES012', ['typeKind', 'util-type']);
+    if (typeof typeAllowCheck === 'undefined') Message.error('ES012', ['typeAllowCheck', 'util-type']);
+    if (typeof typeCheck === 'undefined') Message.error('ES012', ['typeCheck', 'util-type']);
+    if (typeof typeValid === 'undefined') Message.error('ES012', ['typeValid', 'util-type']);
     if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);
-    // if (typeof validUnionType === 'undefined') Message.error('ES012', ['validUnionType', 'util-type']);
+    
     //==============================================================
     // 4. module implementation   
 
@@ -93,8 +86,8 @@
     /**
      * 배열 깊이를 가져옵니다.
      * REVIEW: 필요성 검토 필요!
-     * @param {*} p_elem 
-     * @param {*} p_depts 
+     * @param {array} p_elem 
+     * @param {number} p_depts 
      * @memberof _L.Common.Util
      */
     var getArrayDepth  = function(p_elem, p_depts) {
@@ -113,6 +106,7 @@
     /**
      * 고유한 식별자(guid)을 생성합니다.
      * @memberof _L.Common.Util
+     * @returns {string}
      */
     var createGuid = function() {
 
@@ -174,9 +168,6 @@
                         	enumerable: false,
                         }
                     });
-                    // 상위 조회를 위해
-                    // Object.setPrototypeOf(ctor, superCtor);
-                    // Object.setPrototypeOf(ctor.prototype, superCtor.prototype);
                 }
             };
         } else {
@@ -188,14 +179,10 @@
                     TempCtor.prototype = superCtor.prototype;
                     ctor.prototype = new TempCtor();
                     ctor.prototype.constructor = ctor;
-                    // 상위 조회를 위해
-                    // Object.setPrototypeOf(ctor, superCtor);
                 }
             }
         }
     }());
-
-
 
     /**
      * 대상 객체에 인터페이스를 정의하고, 인스턴스를 검사합니다.  
@@ -227,21 +214,6 @@
 
         if (!p_ctor['_UNION']) p_ctor['_UNION'] = [];
         
-        // POINT: static 교체
-        // var funcClass = getType(p_obj);
-        // if (!funcClass['_UNION']) funcClass['_UNION'] = [];
-        // if (typeof funcClass['_UNION'] === 'undefined') {
-        //     // p_obj['_UNION'] = [];
-        //     Object.defineProperty(funcClass, '_UNION', {
-        //         get: function() { return union; },
-        //         set: function(nVal) { 
-        //             union = nVal;
-        //         },
-        //         configurable: false,
-        //         enumerable: false,
-        //     });
-        // }
-        
         for(var i = 2; i < arguments.length; i++) {
             if (typeof arguments[i] === 'function') {
                 if (p_obj._interface.indexOf(arguments[i]) < 0) { // 중복 검사 
@@ -249,20 +221,6 @@
                     addCnt++;
                 }
             } else Message.error('ES021', ['arguments', 'function']);
-            // POINT: static 교체
-            // if (typeof arguments[i] === 'function') {
-            //     // 중복 제거
-            //     if (funcClass['_UNION'].indexOf(arguments[i]) < 0) {
-            //         funcClass['_UNION'].push(arguments[i]);
-            //     }
-            // } else Message.error('ES021', ['arguments', 'function']);
-
-            // try {
-            //     validType(p_obj, arguments[i]);                
-            // } catch (error) {
-            //     Message.error('ES017', [typeName(p_obj), typeName(arguments[i]), error.message]);
-            // }
-
         }
 
         for (var i = 0; i < p_ctor['_UNION'].length; i++) {
@@ -272,33 +230,14 @@
             }
         }
 
-        // var arrSuper = getTypes(p_obj);
-        // for (var i = arrSuper.length - 2; i >= 0; i--) {
-        //     var arrFun = arrSuper[i]['_UNION'] || [];
-        //     for (var ii = 0; ii < arrFun.length; ii++) {
-        //         if (p_obj._interface.indexOf(arrFun[ii]) < 0) {
-        //             p_obj._interface.push(arrFun[ii]);
-        //             if (arrFun[ii] === funcClass) addCnt++;
-        //         }
-        //     }
-        // }
-
         try {
-            var beginIdx = p_obj._interface.length - addCnt;    // 성능이슈
-            // var beginIdx = 0;
+            var beginIdx = p_obj._interface.length - addCnt;
             for (var i = beginIdx; i < p_obj._interface.length; i++) {
-                validType(p_obj._interface[i], p_obj);
+                typeValid(p_obj._interface[i], p_obj);
             }
         } catch (error) {
             Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
         }
-        // try {
-        //     for (var i = 0; i < funcClass['_UNION'].length; i++) {
-        //         validType(p_obj, funcClass['_UNION'][i]);
-        //     }
-        // } catch (error) {
-        //     Message.error('ES017', [typeName(p_obj), typeName(funcClass['_UNION'][i]), error.message]);
-        // }
 
         if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
             Object.defineProperty(p_obj, 'isImplementOf',
@@ -322,20 +261,6 @@
             } else Message.error('ES021', ['isImplementOf()', 'function, string']);
             return false;
         }
-        // POINT:3 static 교체
-        // function isImplementOf(target) {
-        //     var funcClass = getType(this);
-        //     if (typeof target === 'function') {
-        //         for (var i = 0; i < funcClass['_UNION'].length; i++) {
-        //             if (funcClass['_UNION'][i] === target) return true;  
-        //         }
-        //     } else if (typeof target === 'string') {
-        //         for (var i = 0; i < funcClass['_UNION'].length; i++) {
-        //             if (funcClass['_UNION'][i].name === target) return true;  
-        //         }
-        //     } else Message.error('ES021', ['isImplementOf()', 'function, string']);
-        //     return false;
-        // }
         function typeName(obj) {
             if (typeof obj === 'function') return obj.name;
             if (_isObject(obj)) {
@@ -408,43 +333,6 @@
         return false;
     }
 
-
-
-    // /**
-    //  * 지정한 객체들이 같은지 깊은 비교를 합니다.
-    //  * @param {object} obj1 
-    //  * @param {object} obj2 
-    //  * @memberof _L.Common.Util
-    //  * @returns {object}
-    //  */
-    // var deepEqual = function(obj1, obj2) {
-
-    //     if (Array.isArray(obj1)) {
-    //         if (obj1.length !== obj2.length) return false;
-    //         for (var i = 0; i < obj1.length; i++) {
-    //             var val1 = obj1[i];
-    //             var val2 = obj2[i];
-    //             var areObjects = _isObject(val1) && _isObject(val2);
-    //             if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-    //                 return false;
-    //             }
-    //         }
-    //     } else {
-    //         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
-    //         for (var key in obj1) {
-    //             if (obj1.hasOwnProperty(key)) {
-    //                 var val1 = obj1[key];
-    //                 var val2 = obj2[key];
-    //                 var areObjects = _isObject(val1) && _isObject(val2);
-    //                 if (areObjects && !deepEqual(val1, val2) || !areObjects && val1 !== val2 ) {
-    //                     return false;
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
-
     //==============================================================
     // 5. module export
     if (isNode) {     
@@ -455,16 +343,12 @@
         exports.createGuid = createGuid;
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
-        // exports.checkTypeMessage = checkTypeMessage;
-        exports.getTypeObject = getTypeObject;
-        exports.checkType = checkType;
-        // exports.checkUnionType = checkUnionType;
-        exports.validType = validType;
-        // exports.validUnionType = validUnionType;
+        exports.typeAllowCheck = typeAllowCheck;
+        exports.typeKind = typeKind;
+        exports.typeCheck = typeCheck;
+        exports.typeValid = typeValid;
         exports.deepCopy = deepCopy;
         exports.deepEqual = deepEqual;
-        // module.exports.validSelector = validSelector;   // node 에서는 테스트 불가능!
-        // module.exports.allowType = allowType;
     } else {
         var ns = {
             inherits: inherits,
@@ -474,12 +358,10 @@
             createGuid: createGuid,
             implements: implement,
             getAllProperties: getAllProperties,
-            // checkTypeMessage: checkTypeMessage,
-            getTypeObject: getTypeObject,
-            checkType: checkType,
-            // checkUnionType: checkUnionType,
-            validType: validType,
-            // validUnionType: validUnionType,
+            typeAllowCheck: typeAllowCheck,
+            typeKind: typeKind,
+            typeCheck: typeCheck,
+            typeValid: typeValid,
             deepCopy: deepCopy,
             deepEqual: deepEqual,
         };

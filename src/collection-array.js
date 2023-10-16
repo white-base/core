@@ -204,7 +204,7 @@
                 if (typeof p_pos !== 'number') Message.error('ES021', ['pos', 'number']);
                 if (index < p_pos) Message.error('ES061', ['pos']);
                 if (p_pos < 0) Message.error('ES062', ['pos', '0']);
-                if (this._elemTypes.length > 0) Util.validType(this._elemTypes, p_value);
+                if (this._elemTypes.length > 0) Util.typeValid(this._elemTypes, p_value);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                     Message.warn('WS011', ['configurable = false', 'element']); 
                 }

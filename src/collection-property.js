@@ -248,7 +248,7 @@
                 if(!regex.test(p_name)) Message.error('ES068', [p_name, 'Propery.name']);
                 if (this.__KEYWORD.indexOf(p_name) > -1) Message.error('ES048', [p_name, 'Symbol word']);
                 if (this.exist(p_name)) Message.error('ES042', [p_name, 'property._keys']);
-                if (this._elemTypes.length > 0) Util.validType(this._elemTypes, p_value);
+                if (this._elemTypes.length > 0) Util.typeValid(this._elemTypes, p_value);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                         Message.warn('WS011', ['configurable = true', 'element']);
                 }

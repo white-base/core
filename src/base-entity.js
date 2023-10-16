@@ -508,9 +508,9 @@
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨
          * @param {object} p_option.2 로우(idx) 기준 병합, 초과 컬럼은 채워짐
          * @param {object} p_option.3 컬럼(key) 기준 병합, 초과 로우는 채워짐 
-         * @param {boolean} p_checkValid 로우 유효성 검사 유무 (기본:false)
+         * @param {boolean} p_typeValid 로우 유효성 검사 유무 (기본:false)
          */
-        BaseEntity.prototype.merge  = function(p_target, p_option, p_checkValid) {
+        BaseEntity.prototype.merge  = function(p_target, p_option, p_typeValid) {
             var opt = p_option || 0;
             var key, alias, newRow, tarRow, oriRows, tarRows, tarColumns;
             var tempRows = [], clone;
@@ -537,7 +537,7 @@
                         alias = this.columns[ii].alias;
                         if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
                     }
-                    this.rows.add(newRow, p_checkValid);
+                    this.rows.add(newRow, p_typeValid);
                 }
                 // 3-3. 타겟 row 추가
                 tarRows = target.rows;
@@ -548,7 +548,7 @@
                         alias = this.columns[ii].alias;
                         if (tarRow[alias]) newRow[alias] = tarRow[alias];
                     }
-                    this.rows.add(newRow, p_checkValid);
+                    this.rows.add(newRow, p_typeValid);
                 }
             }
             // opt = 1
@@ -584,7 +584,7 @@
                             continue;
                         } else if (tarRows[i] && tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
                     }
-                    this.rows.add(newRow, p_checkValid);
+                    this.rows.add(newRow, p_typeValid);
                 }                                
             }
             // opt = 2
@@ -612,7 +612,7 @@
                         alias = this.columns[ii].alias;
                         if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
                     }
-                    this.rows.add(newRow, p_checkValid);
+                    this.rows.add(newRow, p_typeValid);
                 }
                 // 3-4. 로우 추가 : 타겟
                 for (var i = 0; i < tarRows.count; i++) {
@@ -621,7 +621,7 @@
                         alias = this.columns[ii].alias;
                         if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
                     }
-                    this.rows.add(newRow, p_checkValid);
+                    this.rows.add(newRow, p_typeValid);
                 }
             }
             // opt = 3
@@ -655,7 +655,7 @@
                             continue;
                         }else newRow[alias] = tarRows[i][alias]; // 타겟 로우
                     }
-                    this.rows.add(newRow, p_checkValid);
+                    this.rows.add(newRow, p_typeValid);
                 }     
                 // 3-5. 타겟 로우가 클 경우 로우 추가
                 if (tempRows.length < tarRows.count) {
@@ -665,7 +665,7 @@
                             alias = this.columns[ii].alias;
                             if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
                         }
-                        this.rows.add(newRow, p_checkValid);
+                        this.rows.add(newRow, p_typeValid);
                     }
                 }
             }
