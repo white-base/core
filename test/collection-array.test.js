@@ -691,8 +691,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const c1 = new Student(1);
             const result = elem.rows.add(c1);
             
-            expect(() => elem.rows.add(null)).toThrow('ES032');
-            expect(() => elem.rows.add('str')).toThrow('ES032');
+            expect(() => elem.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => elem.rows.add('str')).toThrow(/ES019(.|\s)*ES069/);
             expect(result > -1).toBeTruthy();
         });
         it("- 단일 타입 : rows.요소명 = obj ", () => {
@@ -702,7 +702,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result = elem.rows.add(c1);
             elem.rows[0] = c2;
     
-            expect(() => elem.rows[0] = 10 ).toThrow('ES032');
+            expect(() => elem.rows[0] = 10 ).toThrow(/ES069/);
             expect(elem.rows[0].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result > -1).toBeTruthy();
@@ -743,8 +743,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result1 = elem.rows.add(c1);
             const result2 = elem.rows.add(m1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES032/);
-            expect(() => elem.rows.add('str')).toThrow(/ES032(\s|.)*ES032/);
+            expect(() => elem.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => elem.rows.add('str')).toThrow(/ES019(.|\s)*ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -758,7 +758,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             elem.rows[0] = c2;
             elem.rows[1] = c2;
     
-            expect(() => elem.rows[0] = 'str' ).toThrow(/ES032(\s|.)*ES032/);
+            expect(() => elem.rows[0] = 'str' ).toThrow(/ES069/);
             expect(elem.rows[0].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(elem.rows[1].level).toBe(2);                   // 교체된 객체
@@ -787,9 +787,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             i.rows[0] = 'AA1';
             i.rows[1] = 'AA2';
     
-            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069(.|\s)*ES024/);     // 공백 예외
-            expect(() => i.rows.add(10)).toThrow(/ES024/); // 타입 예외
-            expect(() => i.rows[0] = 10).toThrow(/ES024/);
+            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows[0] = 10).toThrow(/ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -798,11 +798,11 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
-            expect(() => i.rows.add(undefined)).toThrow(/(boolean)|(string)/);  // 값이 없음
-            expect(() => i.rows.add(null)).toThrow(/(boolean)|(string)/);    // 공백 예외
-            expect(() => i.rows.add(10)).toThrow(/(boolean)|(string)/);// 타입 예외
-            expect(() => i.rows.add({})).toThrow(/(boolean)|(string)/);
-            expect(() => i.rows[0] = 10).toThrow(/(boolean)|(string)/);
+            expect(() => i.rows.add(undefined)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows.add({})).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows[0] = 10).toThrow(/ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });

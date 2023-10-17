@@ -861,7 +861,7 @@ describe("[target: meta-row.js]", () => {
                 var row1 = table1.newRow();
                 table1.rows.add(row1);  // 정상 등록
                 
-                expect(()=> table1.rows[0] = {}).toThrow(/ES032/)
+                expect(()=> table1.rows[0] = {}).toThrow(/ES069/)
                 table1.rows._elemTypes.length = 0   // 강제 삭제
                 table1.rows[0] = row1;
             });

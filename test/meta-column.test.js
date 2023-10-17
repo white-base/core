@@ -665,7 +665,7 @@ describe("[target: meta-column.js ]", () => {
 
                 expect(()=>c1._entity = 0).toThrow(/ES032/)
                 expect(()=>c1.default = {}).toThrow(/ES069/)
-                expect(()=>c1.value = {}).toThrow(/ES024/)
+                expect(()=>c1.value = {}).toThrow(/ES069/)
 
             });
             it("- 예외 : 설정 1", () => {   
