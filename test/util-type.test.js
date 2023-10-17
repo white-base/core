@@ -276,6 +276,18 @@ describe("[target: util-type.js.js]", () => {
             expect(checkAllowType(type4, type4_4)).toBe(true);
             expect(checkAllowType(type4, type4_5)).toBe(true);
 
+        });
+        it('- checkAllowType(a, b) : function ', () => {
+            var type1   = function(String, Number){Boolean}
+            var type2   = function(){}
+            type2._TYPE = {args: [String, Number], return: Boolean}
+            var tar1    = function(){}
+            tar1._TYPE  = {args: [String, Number], return: Boolean}
+
+            expect(checkAllowType(Function, Function    )).toBe(T);
+            expect(checkAllowType(type1, {}             )).toBe(false);
+            expect(checkAllowType(type1, tar1           )).toBe(T);
+            expect(checkAllowType(type2, tar1           )).toBe(T);
 
         });
         it('- checkAllowType(a, b) : object ', () => {
@@ -622,8 +634,9 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- String, "str" : string 타입 ', () => {
             // true
-            expect(isValidType('str',     ''  )).toBe(true);
-            expect(isValidType(String,    ''  )).toBe(true);
+            expect(isValidType('str',     ''        )).toBe(true);
+            expect(isValidType('str',     undefined )).toBe(true);  // 기본값 설정됨
+            expect(isValidType(String,    ''        )).toBe(true);
             // false (예외)
             expect(()=> checkType('str',    function any(){}    )).toThrow('ES024');
             expect(()=> checkType(String,   function any(){}    )).toThrow('ES024');
@@ -639,8 +652,9 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- Boolean, true, false : boolean 타입 ', () => {
             // true
-            expect(isValidType(true,      false   )).toBe(true);
-            expect(isValidType(Boolean,   false   )).toBe(true);
+            expect(isValidType(true,      false     )).toBe(true);
+            expect(isValidType(true,      undefined )).toBe(true);  // 기본값 설정됨
+            expect(isValidType(Boolean,   false     )).toBe(true);
             // false (예외)
             expect(()=> checkType(true,     function any(){}    )).toThrow('ES024');
             expect(()=> checkType(Boolean,  function any(){}    )).toThrow('ES024');
@@ -685,6 +699,42 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkType(Function, Symbol()    )).toThrow('ES024');
             expect(()=> checkType(Function, true        )).toThrow('ES024');
             expect(()=> checkType(Function, {aa:1}      )).toThrow('ES024');
+        });
+        it('- Function : 정의된 function 타입 1 ', () => {
+            var fun1 = function(String, Number){Boolean}
+            var tar1 = function(){};
+            var tar2 = function(){};
+            var tar3 = function(){};
+            var tar4 = function(){};
+            var tar5 = function(){};
+            var tar6 = function(){};
+            var tar7 = function(){};
+            tar1._TYPE = {args: [String, Number], return: Boolean}
+            tar2._TYPE = {args: [String, Number]}
+            tar3._TYPE = {param: [String, Number]}
+            tar4._TYPE = {args: String}
+            tar5._TYPE = {return: [Boolean]}
+            tar6._TYPE = {args: String, return: [Boolean]}
+
+
+            expect(isValidType(fun1,    tar1)).toBe(true);
+            // 오류
+            expect(()=> checkType(fun1, tar2)).toThrow('ES069');
+            expect(()=> checkType(fun1, tar3)).toThrow('ES069');
+            expect(()=> checkType(fun1, tar4)).toThrow('ES069');
+            expect(()=> checkType(fun1, tar5)).toThrow('ES069');
+            expect(()=> checkType(fun1, tar6)).toThrow('ES069');
+            expect(()=> checkType(fun1, tar7)).toThrow('ES069');
+        });
+        it('- Function : 정의된 function 타입 2 ', () => {
+            var fun1 = function(){[Boolean, String]}
+            var tar1 = function(){};
+            var tar2 = function(){};
+            tar1._TYPE = {args: [String, Number], return: [Boolean, String]}
+            tar2._TYPE = {args: [String, Number]}
+
+            expect(isValidType(fun1,    tar1)).toBe(true);
+            expect(isValidType(fun1,    tar2)).toBe(false);
         });
         it('- Object, {} : object 타입 (regex, new, null) ', () => {
             const Func = function() {};

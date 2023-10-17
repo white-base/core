@@ -174,9 +174,9 @@
 
     /**
      * 타입을 검사하여 메세지를 리턴
-     * @param {any} type 검사할 타입
+     * @param {any} type 검사할 타입 , origin
      * @param {any} target 검사대상
-     * @param {string} parentName '' 공백시 성공
+     * @param {string?} parentName '' 공백시 성공
      * @returns {string?}
      */
     var _check = function(type, target, parentName) {
@@ -187,32 +187,13 @@
 
         defType = typeKind(type);
         
-        if (defType.name === 'choice') {
-
-            for(var i = 0; i < type.length; i++) {
-                var keyCode = _getKeyCode(type[i]);
-                
-                if (keyCode == '_ANY_') {
-                    if (typeof target !== 'undefined') return '';
-                    return '[_any_] 타입에 undefined 입력할 수 없습니다.';
-                } else if (keyCode == '_OPT_') {
-                    if (typeof target === 'undefined') return '';
-                    continue;
-                } else if (keyCode == '_SEQ_') {
-                    return '[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.';
-                }
-                returnMsg = _check(type[i], target);
-                if(returnMsg.length === 0) return '';
-                else arrMsg.push(returnMsg);
-            }
-            return arrMsg.toString();
-        }
+        
         if (defType.name === 'undefined') {
             if (typeof target === 'undefined') return '';
             return parentName +'는 undefined 속성입니다.';
         }
         if (defType.name === 'null') {
-            if (target === null) return ''; // Branch:
+            if (target === null) return '';
             return parentName +'는 null 속성이 입니다.';
         }
         if (defType.name === 'number') {
@@ -233,6 +214,26 @@
         if (defType.name === 'symbol') {
             if (typeof target === 'symbol') return '';
             return Message.get('ES024', [parentName, 'symbol']);
+        }
+        if (defType.name === 'choice') {
+
+            for(var i = 0; i < type.length; i++) {
+                var keyCode = _getKeyCode(type[i]);
+                
+                if (keyCode == '_ANY_') {
+                    if (typeof target !== 'undefined') return '';
+                    return '[_any_] 타입에 undefined 입력할 수 없습니다.';
+                } else if (keyCode == '_OPT_') {
+                    if (typeof target === 'undefined') return '';
+                    continue;
+                } else if (keyCode == '_SEQ_') {
+                    return '[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.';
+                }
+                returnMsg = _check(type[i], target);
+                if(returnMsg.length === 0) return '';
+                else arrMsg.push(returnMsg);
+            }
+            return arrMsg.toString();
         }
         if (defType.name === 'array') {
             if ((type === Array || type.length === 0 || (type[0] && type[0].length === 0))
@@ -275,36 +276,45 @@
                 return arrMsg.toString();   // i 번째 값이 검사에 실패하였습니다.
             }
         }
-        // POINT:
         if (defType.name === 'function') {
             if (typeof target !== 'function') return Message.get('ES024', [parentName, 'function']);
             if (type === Function) return '';
             // var func = type.toString().replace(/ /g,'');
             // if (func === 'function(){}' || func === '()=>{}') return '';
-            var info = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
-            var returns = [];
-            var _type = target['_TYPE'];
-            var _args = [];
-            var _returns = [];
-            var iType, fType;
-            if (typeof info === 'string') return info;
-            if (!info.return && info.args.length === 0) return '';    // success
-            if ((info.return || info.args.length > 0) && !_type) return 'function._TYPE 정보가 없습니다.';
-            if (!_type) return 'target[_TYPE] 객체가 없습니다.' // Branch:
-            if (!Array.isArray(_type.args) || !(_type.args.length > 0 || _type.return)) { // Branch:
+            // if (!checkAllowType(type, target)) return '';
+
+
+
+            var fixType = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
+            var fixReturns = [];
+            var tarType = target['_TYPE'];
+            var tarArgs = [];
+            var tarReturns = [];
+            if (typeof fixType === 'string') return fixType;
+            if (!fixType.return && fixType.args.length === 0) return '';    // success
+            if ((fixType.return || fixType.args.length > 0) && !tarType) return 'targetdml function _TYPE 정보가 없습니다.';
+            // if (!tarType) return 'target[_TYPE] 객체가 없습니다.' // Branch:
+            if (typeof tarType.args === 'undefined' && typeof tarType.return === 'undefined') { // Branch:
+            // if (!tarType.args || !(tarType.args.length > 0 || tarType.return)) { // Branch:
                 return 'function._TYPE = {args: [], return: []} function _TYPE 규칙이 다릅니다.';
             }
-            _args = (Array.isArray(_type.args )) ? _type.args : [_type.args];   // Branch:
-            if (info.return) returns = (Array.isArray(info.return )) ? info.return : [info.return]; // Branch:
-            if (_type.return) _returns = (Array.isArray(_type.return )) ? _type.return : [_type.return];    // Branch:
-            if (info.args.length > _args.length) return 'args.length ='+ info.args.length +' 길이가 서로 다릅니다.'
+            tarArgs = (Array.isArray(tarType.args )) ? tarType.args : [tarType.args];   // Branch:
+            if (fixType.return) fixReturns = (Array.isArray(fixType.return )) ? fixType.return : [fixType.return]; // Branch:
+            if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];    // Branch:
+            // if (fixType.args.length !== tarArgs.length) return 'args.length ='+ fixType.args.length +' 길이가 서로 다릅니다.'
             // args 검사
-            for (var i = 0; i < info.args.length; i++) {
+            if (fixType.args.length > 0) {
+                var seqArr1 = ['_SEQ_'].concat(fixType.args);
+                var seqArr2 = ['_SEQ_'].concat(tarArgs);
+                if (!checkAllowType(seqArr1, seqArr2)) return false;  // Branch:
+            }
+
+            // for (var i = 0; i < fixType.args.length; i++) {
                 
                 // iType = typeKind(info.args[i]);
                 // fType = typeKind(args[i]);
                 // if (iType.name = fType.name) continue;
-                if (!checkAllowType(info.args[i], _args[i])) return false;  // Branch:
+                // if (!checkAllowType(fixType.args[i], tarArgs[i])) return false;  // Branch:
                 /**
                  * 원시타입
                  * symbol => 원시와 같이
@@ -317,12 +327,14 @@
                  * and(object) : 순환 :: {....} => number 타입은 금지됨
                  */
 
-            }
+            // }
             // return 검사
-            if (returns.length > _returns.length) return 'return.length ='+ returns.length +' 길이가 서로 다릅니다.'
-            for (var i = 0; i < returns.length; i++) {
-                if (!checkAllowType(returns[i], _returns[i])) return 'return 타입이 서로 다릅니다.'
-            }
+            if (!checkAllowType(fixReturns, tarReturns)) return false;  // Branch:
+
+            // if (fixReturns.length > tarReturns.length) return 'return.length ='+ fixReturns.length +' 길이가 서로 다릅니다.'
+            // for (var i = 0; i < fixReturns.length; i++) {
+            //     if (!checkAllowType(fixReturns[i], tarReturns[i])) return 'return 타입이 서로 다릅니다.'
+            // }
             return '';
 
             // inner function
@@ -577,9 +589,14 @@
         
         if (_isObject(ori) &&  _isObject(tar) && deepEqual(ori, tar)) return true;
         // if (def1.name !== def2.name) return false;
-        if (def1.name === 'choice') {
-            // var cntType2 = 0;
-
+        
+        // 원시타입 타입
+        if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(def1.name) > -1) {
+            if(def1.default !== null && def1.default !== def2.default) return false;
+            if (def1.name === def2.name) return true;
+            return false;
+        }
+        if (def1.name === 'choice') {   // choice
             var keyCode1 = _getKeyCode(ori[0]);
             if (keyCode1 == '_ANY_') {
                 if (typeof tar !== 'undefined') return true;
@@ -604,14 +621,7 @@
             }
             return true;
         }
-        // 원시타입은 타입만 같은지 비교
-        if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(def1.name) > -1) {
-            if(def1.default !== null && def1.default !== def2.default) return false;
-            if (def1.name === def2.name) return true;
-            return false;
-        }
-        // array & array 조건
-        if (def1.name === 'array') {
+        if (def1.name === 'array') {    // array
             if ((ori === Array || ori.length === 0 || (ori[0] && ori[0].length === 0)) 
             && (Array.isArray(tar) || tar === Array)) return true;      // [], [[]], Array
             if (!Array.isArray(tar)) return false;
@@ -658,8 +668,9 @@
             return false;
         }
         
-        if (def1.name === 'function') {
-            if (typeof tar !== 'function') return false;    // Branch:
+        if (def1.name === 'function') { // function
+            if (def2.name !== 'function') return false;   // Branch:
+            // if (typeof tar !== 'function') return false;    // Branch:
             if (ori === Function) return true;  // Branch:
             var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());  // Branch:
             var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString()); // Branch:

@@ -75,7 +75,6 @@
     //==============================================================
     // 4. module implementation   
 
-
     /**
      * 병합 옵션입니다.
      * @readonly
@@ -92,20 +91,6 @@
         /** 컬럼 기준, 넘침 로우 채움 */
         Column_Over: 3
     };
-
-
-
-    // var enumOption = function() {
-        
-    //     /** 기본옵션 */
-    //     var AA  = 1;
-        
-    //     return {
-    //         /** 작동 없음 */
-    //         aa: 0,
-    //         bb: 1
-    //     }
-    // };
 
     var BaseEntity  = (function (_super) {
         /**
