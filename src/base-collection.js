@@ -404,7 +404,7 @@
             return {
                 get: function() { return this.__GET$_elements(this)[p_idx]; },
                 set: function(nVal) {
-                    if (this._elemTypes.length > 0) Util.typeValid(this._elemTypes, nVal);
+                    if (this._elemTypes.length > 0) Util.checkType(this._elemTypes, nVal);
                     this._onChanging(p_idx, nVal);  // before event
                     this.__GET$_elements(this)[p_idx] = nVal;
                     this._onChanged(p_idx, nVal);   // after event

@@ -174,7 +174,6 @@
 
     /**
      * 타입을 검사하여 메세지를 리턴
-     * @memberof _L.Common.Util
      * @param {any} type 검사할 타입
      * @param {any} target 검사대상
      * @param {string} parentName '' 공백시 성공
@@ -208,9 +207,13 @@
             }
             return arrMsg.toString();
         }
+        if (defType.name === 'undefined') {
+            if (typeof target === 'undefined') return '';
+            return parentName +'는 undefined 속성입니다.';
+        }
         if (defType.name === 'null') {
-            if (target === null) return '';
-            return parentName +'에 속성이 없습니다.';
+            if (target === null) return ''; // Branch:
+            return parentName +'는 null 속성이 입니다.';
         }
         if (defType.name === 'number') {
             if (defType.default && typeof target === 'undefined') target = defType.default; 
@@ -218,12 +221,12 @@
             return Message.get('ES024', [parentName, 'number']);
         }
         if (defType.name === 'string') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (defType.default && typeof target === 'undefined') target = defType.default; // Branch:
             if (typeof target === 'string') return '';
             return Message.get('ES024', [parentName, 'string']);
         }
         if (defType.name === 'boolean') {
-            if (defType.default && typeof target === 'undefined') target = defType.default; 
+            if (defType.default && typeof target === 'undefined') target = defType.default;     // Branch:
             if (typeof target === 'boolean') return '';
             return Message.get('ES024', [parentName, 'boolean']);
         }
@@ -287,13 +290,13 @@
             if (typeof info === 'string') return info;
             if (!info.return && info.args.length === 0) return '';    // success
             if ((info.return || info.args.length > 0) && !_type) return 'function._TYPE 정보가 없습니다.';
-            if (!_type) return 'target[_TYPE] 객체가 없습니다.'
-            if (!(_type.args.length > 0 || _type.return)) {
+            if (!_type) return 'target[_TYPE] 객체가 없습니다.' // Branch:
+            if (!Array.isArray(_type.args) || !(_type.args.length > 0 || _type.return)) { // Branch:
                 return 'function._TYPE = {args: [], return: []} function _TYPE 규칙이 다릅니다.';
             }
-            _args = (Array.isArray(_type.args )) ? _type.args : [_type.args];
-            if (info.return) returns = (Array.isArray(info.return )) ? info.return : [info.return];
-            if (_type.return) _returns = (Array.isArray(_type.return )) ? _type.return : [_type.return];
+            _args = (Array.isArray(_type.args )) ? _type.args : [_type.args];   // Branch:
+            if (info.return) returns = (Array.isArray(info.return )) ? info.return : [info.return]; // Branch:
+            if (_type.return) _returns = (Array.isArray(_type.return )) ? _type.return : [_type.return];    // Branch:
             if (info.args.length > _args.length) return 'args.length ='+ info.args.length +' 길이가 서로 다릅니다.'
             // args 검사
             for (var i = 0; i < info.args.length; i++) {
@@ -301,7 +304,7 @@
                 // iType = typeKind(info.args[i]);
                 // fType = typeKind(args[i]);
                 // if (iType.name = fType.name) continue;
-                if (!typeAllowCheck(info.args[i], _args[i])) return false;
+                if (!checkAllowType(info.args[i], _args[i])) return false;  // Branch:
                 /**
                  * 원시타입
                  * symbol => 원시와 같이
@@ -318,7 +321,7 @@
             // return 검사
             if (returns.length > _returns.length) return 'return.length ='+ returns.length +' 길이가 서로 다릅니다.'
             for (var i = 0; i < returns.length; i++) {
-                if (!typeAllowCheck(returns[i], _returns[i])) return 'return 타입이 서로 다릅니다.'
+                if (!checkAllowType(returns[i], _returns[i])) return 'return 타입이 서로 다릅니다.'
             }
             return '';
 
@@ -408,7 +411,7 @@
      */
     var deepEqual = function(obj1, obj2) {
         if (obj1 === obj2) return true;
-        if (typeof obj1 !== typeof obj2) return false;
+        if (typeof obj1 !== typeof obj2) return false;  // Branch:
 
         if (Array.isArray(obj1)) {
             if (obj1.length !== obj2.length) return false;
@@ -423,7 +426,7 @@
         } else {
             if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
             for (var key in obj1) {
-                if (obj1.hasOwnProperty(key)) {
+                if (obj1.hasOwnProperty(key)) { // Branch:
                     var val1 = obj1[key];
                     var val2 = obj2[key];
                     var areObjects = _isObject(val1) && _isObject(val2);
@@ -509,8 +512,8 @@
                 var kind = type['_KIND'];
                 if (kind) {
                     kind = kind.toLowerCase();
-                    if (kind === 'class' || kind === 'interface') obj.name = 'class';
-                    if (kind === 'function') obj.name = 'function';
+                    if (kind === 'class' || kind === 'interface') obj.name = 'class';   // Branch:
+                    if (kind === 'function') obj.name = 'function'; // Branch:
                 } else {
                     obj.name = _isUpper(type.name) ? 'class' : 'function';
                 }
@@ -568,7 +571,7 @@
      * @param {any} tar 대상 타입
      * @returns {boolean}
      */
-    var typeAllowCheck = function (ori, tar) {
+    var checkAllowType = function (ori, tar) {
         var def1 = typeKind(ori);
         var def2 = typeKind(tar);
         
@@ -595,7 +598,7 @@
                 var success = false;
                 for (var ii = start1; ii < ori.length; ii++) {
                     if (success) continue;
-                    if (typeAllowCheck(ori[ii], arrType2[i])) success = true;
+                    if (checkAllowType(ori[ii], arrType2[i])) success = true;
                 }
                 if (!success) return false;
             }
@@ -618,17 +621,18 @@
             var keyCode2;
             if (tar[0] && tar[0][0]) keyCode2 = _getKeyCode(tar[0][0]);
             if (keyCode1 == '_ANY_') {
-                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined'
-                    || tar[0].length === 0) return false;
+                if (keyCode2 && keyCode2 !== '_ANY_') return false;
+                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') return false;
                 if (tar[0].length > 0) return true;
-                return false;
+                // if (tar[0].length > 0) return true; // Branch:
+                // else return false;   
             
             } else if (keyCode1 == '_OPT_') {
                 if (typeof tar[0] === 'undefined' || tar[0].length === 0) return true;
                 // if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
                 if (ori[0].length === 1) return true;
                 // if (keyCode1 !== keyCode2) return false;
-                var start1 = keyCode1 ? 1 : 0;
+                var start1 = keyCode1 ? 1 : 0;  // Branch:
                 var start2 = keyCode2 ? 1 : 0;
                 if (ori[0].length - start1 < tar[0].length - start2) return false;
                 if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) return false;
@@ -636,17 +640,17 @@
                     var success = false;
                     for (var ii = start1; ii < ori[0].length; ii++) {
                         if (success) continue;
-                        if (typeAllowCheck(ori[0][ii], tar[0][i])) success = true;
+                        if (checkAllowType(ori[0][ii], tar[0][i])) success = true;
                     }
                     if (!success) return false;
                 }
                 return true;
             
-            } else if (keyCode1 == '_SEQ_') {
+            } else if (keyCode1 == '_SEQ_') {   // Branch:
                 if (keyCode1 !== keyCode2) return false;
                 if (ori[0].length > tar[0].length) return false;
                 for (var i = 1; i < ori[0].length; i++) {
-                    if (!typeAllowCheck(ori[0][i], tar[0][i])) return false;
+                    if (!checkAllowType(ori[0][i], tar[0][i])) return false;
                 }
                 return true;
             }
@@ -655,21 +659,21 @@
         }
         
         if (def1.name === 'function') {
-            if (typeof tar !== 'function') return false;
-            if (ori === Function) return true;
-            var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());
-            var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString());
-            if (typeof info1 === 'string') return info1;
-            if (!info1.return && info1.args.length === 0) return true;
-            if (typeof info2 === 'string') return info2;
-            if (info1.args.length !== info2.args.length) return false;
+            if (typeof tar !== 'function') return false;    // Branch:
+            if (ori === Function) return true;  // Branch:
+            var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());  // Branch:
+            var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString()); // Branch:
+            if (typeof info1 === 'string') return info1;    // Branch:
+            if (!info1.return && info1.args.length === 0) return true;  // Branch:
+            if (typeof info2 === 'string') return info2;    // Branch:
+            if (info1.args.length !== info2.args.length) return false;  // Branch:
             for (var i = 0; i < info1.args.length; i++) {
-                if (!typeAllowCheck(info1.args[i], info2.args[i])) return false;
+                if (!checkAllowType(info1.args[i], info2.args[i])) return false;    // Branch:
             }
             return true;
         }
         if (def1.name === 'object') {
-            if (def1.name !== 'object') return false;
+            if (def2.name !== 'object') return false;   // Branch:
             if (ori === tar) return true;
             if (_isEmptyObj(tar)) return true;
             if (ori instanceof RegExp) {
@@ -689,11 +693,11 @@
             }
             return false;
         }
-        if (def1.name === 'union') {
+        if (def1.name === 'union') {    // Branch:
             var list = getAllProperties(ori);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                if (!typeAllowCheck(ori[key], tar[key])) return false;
+                if (!checkAllowType(ori[key], tar[key])) return false;
             }
             return true;
         }
@@ -708,7 +712,7 @@
      * @param {any} target 
      * @returns {boolean} 
      */
-    var typeCheck = function(chkType, target) {
+    var isValidType = function(chkType, target) {
         var msg = '';
 
         if (typeof chkType === 'undefined') return false;
@@ -723,16 +727,16 @@
      * @memberof _L.Common.Util
      * @param {any} chkType 
      * @param {any} target 
-     * @returns {true | throw} 성공시 true, 실패시 예외를 던진다.
+     * @returns {throw?} 실패시 예외를 던진다.
      */
-    var typeValid = function(chkType, target) {
+    var checkType = function(chkType, target) {
         var msg = '';
 
-        if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
+        if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);    // Branch:
         
         msg = _check(chkType, target);
-        if(msg.length === 0) return true;
-        Message.error('ES069', ['type vaild', msg]);
+        if(msg.length === 0) return;
+        Message.error('ES069', ['check type', msg]);
     };
 
 
@@ -743,18 +747,18 @@
         exports.deepEqual = deepEqual;
         // exports._check = _check;
         exports.typeKind = typeKind;
-        exports.typeCheck = typeCheck;
-        exports.typeValid = typeValid;
-        exports.typeAllowCheck = typeAllowCheck;
+        exports.isValidType = isValidType;
+        exports.checkType = checkType;
+        exports.checkAllowType = checkAllowType;
     } else {
         var ns = {
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
             // _check: _check,
             typeKind: typeKind,
-            typeCheck: typeCheck,
-            typeValid: typeValid,
-            typeAllowCheck: typeAllowCheck
+            isValidType: isValidType,
+            checkType: checkType,
+            checkAllowType: checkAllowType
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;

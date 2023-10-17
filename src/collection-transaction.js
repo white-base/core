@@ -106,7 +106,7 @@
             return {
                 get: function() { return this._elements[p_idx]; },
                 set: function(nVal) {
-                    if (this._elemTypes.length > 0) Util.typeValid(this._elemTypes, nVal);
+                    if (this._elemTypes.length > 0) Util.checkType(this._elemTypes, nVal);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
                 },

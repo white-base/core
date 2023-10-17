@@ -97,7 +97,7 @@
             // 추상클래스 검사
             if (this._type.hasOwnProperty('_KIND')) {
                 var kind = this._type['_KIND'].toLowerCase();
-                if (['abstract', 'interface', 'enum', 'function'].indexOf(kind) > -1) {
+                if (['abstract', 'interface', 'enum', 'function'].indexOf(kind) > -1) { // Branch:
                     Message.error('ES018', [this._type.name]);
                 }
             }
@@ -207,7 +207,7 @@
         MetaObject.prototype.instanceOf = function(p_fun) {
             var _this = this;
             // var unionTypes = this._type['_UNION'] || [];
-            var unionTypes = this._interface || [];
+            var unionTypes = this._interface || []; // Branch:
             var thisTypes = this.getTypes();
 
             if (typeof p_fun === 'string') return findFunctionName(p_fun);

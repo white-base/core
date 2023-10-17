@@ -158,7 +158,7 @@
             {
                 get: function() { return defaultValue; },
                 set: function(nVal) { 
-                    if (this._valueTypes.length > 0) Util.typeValid(this._valueTypes, nVal);
+                    if (this._valueTypes.length > 0) Util.checkType(this._valueTypes, nVal);
                     defaultValue = nVal; 
                 },
                 configurable: false,
@@ -188,7 +188,7 @@
             {
                 get: function() { return __value; },
                 set: function(nVal) { 
-                    if (this._valueTypes.length > 0) Util.typeValid(this._valueTypes, nVal);
+                    if (this._valueTypes.length > 0) Util.checkType(this._valueTypes, nVal);
                     __value = nVal; 
                 },
                 configurable: true,

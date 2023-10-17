@@ -8,9 +8,9 @@
     var Message;
     var getAllProperties;
     var typeKind;
-    var typeAllowCheck;
-    var typeCheck;
-    var typeValid;
+    var checkAllowType;
+    var isValidType;
+    var checkType;
     var deepEqual;
 
     //==============================================================
@@ -25,17 +25,17 @@
         Message                     = require('./message').Message;
         getAllProperties            = require('./util-type').getAllProperties;
         typeKind                    = require('./util-type').typeKind;
-        typeAllowCheck              = require('./util-type').typeAllowCheck;
-        typeCheck                   = require('./util-type').typeCheck;
-        typeValid                   = require('./util-type').typeValid;
+        checkAllowType              = require('./util-type').checkAllowType;
+        isValidType                   = require('./util-type').isValidType;
+        checkType                   = require('./util-type').checkType;
         deepEqual                   = require('./util-type').deepEqual;
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
         typeKind                    = _global._L.Util.typeKind
-        typeAllowCheck              = _global._L.Util.typeAllowCheck
-        typeCheck                   = _global._L.Util.typeCheck
-        typeValid                   = _global._L.Util.typeValid
+        checkAllowType              = _global._L.Util.checkAllowType
+        isValidType                   = _global._L.Util.isValidType
+        checkType                   = _global._L.Util.checkType
         deepEqual                   = _global._L.Util.deepEqual
     }
 
@@ -43,9 +43,9 @@
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
     if (typeof typeKind === 'undefined') Message.error('ES012', ['typeKind', 'util-type']);
-    if (typeof typeAllowCheck === 'undefined') Message.error('ES012', ['typeAllowCheck', 'util-type']);
-    if (typeof typeCheck === 'undefined') Message.error('ES012', ['typeCheck', 'util-type']);
-    if (typeof typeValid === 'undefined') Message.error('ES012', ['typeValid', 'util-type']);
+    if (typeof checkAllowType === 'undefined') Message.error('ES012', ['checkAllowType', 'util-type']);
+    if (typeof isValidType === 'undefined') Message.error('ES012', ['isValidType', 'util-type']);
+    if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
     if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);
     
     //==============================================================
@@ -233,7 +233,7 @@
         try {
             var beginIdx = p_obj._interface.length - addCnt;
             for (var i = beginIdx; i < p_obj._interface.length; i++) {
-                typeValid(p_obj._interface[i], p_obj);
+                checkType(p_obj._interface[i], p_obj);
             }
         } catch (error) {
             Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
@@ -325,7 +325,7 @@
         
         for (var i = 0; i < arr.length; i++) {
             if (typeof target === 'string') {
-                if (target === arr[i].name) return true;
+                if (target === arr[i].name) return true;    // Line:
             } else if (typeof target === 'function') {
                 if (target === arr[i]) return true;
             }
@@ -343,10 +343,10 @@
         exports.createGuid = createGuid;
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
-        exports.typeAllowCheck = typeAllowCheck;
+        exports.checkAllowType = checkAllowType;
         exports.typeKind = typeKind;
-        exports.typeCheck = typeCheck;
-        exports.typeValid = typeValid;
+        exports.isValidType = isValidType;
+        exports.checkType = checkType;
         exports.deepCopy = deepCopy;
         exports.deepEqual = deepEqual;
     } else {
@@ -358,10 +358,10 @@
             createGuid: createGuid,
             implements: implement,
             getAllProperties: getAllProperties,
-            typeAllowCheck: typeAllowCheck,
+            checkAllowType: checkAllowType,
             typeKind: typeKind,
-            typeCheck: typeCheck,
-            typeValid: typeValid,
+            isValidType: isValidType,
+            checkType: checkType,
             deepCopy: deepCopy,
             deepEqual: deepEqual,
         };

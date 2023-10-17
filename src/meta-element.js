@@ -68,7 +68,7 @@
 
             // inner variable access
             this.__SET$_name = function(val, call) {
-                if (typeof val !== 'string') Message.error('ES021', ['_name', 'string']);
+                if (typeof val !== 'string') Message.error('ES021', ['_name', 'string']);   // Branch:
                 if (val.length === 0) Message.error('ES055', ['_name']);
                 if (call instanceof MetaElement) _name = val;    // 상속접근 허용
             }
