@@ -149,16 +149,15 @@
         // var resParam = /[_\w0-1]*/g;
         var arrFunc, arrParam;
         var result = {args: [], return: undefined};
-
-        if (regChk.test(funBody) === false) return '함수타입 규칙이 아닙니다. : '+ funBody;
-        arrFunc = regFunc.exec(funBody);
-        if (arrFunc === null) return '함수타입 내용이 없습니다. : '+ funBody;
-        // var param = '['+ arrFunc[1] +']';
-        // arrParam = JSON.parse(param);
+        var arrParam = [];
+        var arrRetrun;
         
         try {
-            var arrParam = [];
-            var arrRetrun;
+
+            if (regChk.test(funBody) === false) throw new Error('함수타입 규칙이 아닙니다. : '+ funBody);;
+            arrFunc = regFunc.exec(funBody);
+            if (arrFunc === null) throw new Error('함수타입 내용이 없습니다. : '+ funBody);
+
             arrParam = (new Function('return ['+ arrFunc[1] +']'))();
             result.args = arrParam;
             
@@ -166,7 +165,7 @@
             result.return = arrRetrun;
 
         } catch (error) {
-            return error.message;
+            throw new Error('function parse Fail :' + error);
         }
 
         return result;
@@ -330,7 +329,12 @@
             if (fixType.args.length > 0) {
                 var seqArr1 = ['_SEQ_'].concat(fixType.args);
                 var seqArr2 = ['_SEQ_'].concat(tarArgs);
-                if (!checkAllowType(seqArr1, seqArr2)) throw new Error('function args 허용타입이 아닙니다.');
+                try {
+                    checkAllowType(seqArr1, seqArr2)
+                } catch (error) {
+                    throw new Error('function args 허용타입이 아닙니다.\n'+ error);
+                }
+                // if (!checkAllowType(seqArr1, seqArr2)) throw new Error('function args 허용타입이 아닙니다.');
             }
 
             // for (var i = 0; i < fixType.args.length; i++) {
@@ -353,7 +357,12 @@
 
             // }
             // return 검사
-            if (!checkAllowType(fixReturns, tarReturns)) throw new Error('function return 허용타입이 아닙니다.');
+            // if (!checkAllowType(fixReturns, tarReturns)) throw new Error('function return 허용타입이 아닙니다.');
+            try {
+                checkAllowType(fixReturns, tarReturns)
+            } catch (error) {
+                throw new Error('function return 허용타입이 아닙니다. \n'+ error);
+            }
 
             // if (fixReturns.length > tarReturns.length) return 'return.length ='+ fixReturns.length +' 길이가 서로 다릅니다.'
             // for (var i = 0; i < fixReturns.length; i++) {
@@ -627,130 +636,167 @@
         var def1 = typeKind(ori);
         var def2 = typeKind(tar);
         
-        if (_isObject(ori) &&  _isObject(tar) && deepEqual(ori, tar)) return true;
+        if (_isObject(ori) &&  _isObject(tar) && deepEqual(ori, tar)) return;
         // if (def1.name !== def2.name) return false;
         
         // 원시타입 타입
         if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(def1.name) > -1) {
-            if(def1.default !== null && def1.default !== def2.default) return false;
-            if (def1.name === def2.name) return true;
-            return false;
+            if(def1.default !== null && def1.default !== def2.default) throw new Error(def1.name+ ' 타입의 default 이 다릅니다. '+  def1.default);
+            if (def1.name === def2.name) return;
+            throw new Error(def1.name+ ' 원시타입이 서로 다릅니다. '+  def1.name);
         }
         if (def1.name === 'choice') {   // choice
             var keyCode1 = _getKeyCode(ori[0]);
             if (keyCode1 == '_ANY_') {
-                if (typeof tar !== 'undefined') return true;
-                return false;
+                if (typeof tar !== 'undefined') return;
+                throw new Error('chice 에서  _ANY_ 에는 undefined 을 사용할 수 없습니다. ');
             } else if (keyCode1 == '_OPT_') {
-                if (ori.length === 1) return true;
-            } else if (keyCode1 == '_SEQ_') return false;
+                if (ori.length === 1) return;
+            } else if (keyCode1 == '_SEQ_') throw new Error('chice 에서  _SEQ_ 는 사용할 수 없습니다. ');
 
             var keyCode2 = Array.isArray(tar) ? _getKeyCode(tar[0]) : undefined;
             var arrType2 = Array.isArray(tar) ? tar : [tar];
             var start1 = keyCode1 ? 1 : 0;
             var start2 = keyCode2 ? 1 : 0;
-            if (ori.length - start1 < arrType2.length - start2) return false;
-            if (ori.length - start1 > 0 && arrType2.length - start2 === 0) return false;
+            if (ori.length - start1 < arrType2.length - start2) throw new Error(' 대상타입의 choice 조건이 더 큽니다. '+ arrType2);
+            if (ori.length - start1 > 0 && arrType2.length - start2 === 0) throw new Error(' 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
             for (i = start2; i < arrType2.length; i++) {
                 var success = false;
                 for (var ii = start1; ii < ori.length; ii++) {
-                    if (success) continue;
-                    if (checkAllowType(ori[ii], arrType2[i])) success = true;
+                    try {
+                        if (success) continue;
+                        checkAllowType(ori[ii], arrType2[i]);
+                        success = true;
+                    } catch (error) {
+                        continue;
+                    }
+                    // if (success) continue;
+                    // if (checkAllowType(ori[ii], arrType2[i])) success = true;
                 }
-                if (!success) return false;
+                if (!success) throw new Error(' 원본 choice 조건에 허용되지 않습니다. ');
             }
-            return true;
+            return;
         }
         if (def1.name === 'array') {    // array
             if ((ori === Array || ori.length === 0 || (ori[0] && ori[0].length === 0)) 
-            && (Array.isArray(tar) || tar === Array)) return true;      // [], [[]], Array
-            if (!Array.isArray(tar)) return false;
+            && (Array.isArray(tar) || tar === Array)) return;      // [], [[]], Array
+            if (!Array.isArray(tar)) throw new Error(' 대상타입의 Array 타입이 아닙니다. ');
             // if (ori.length === 1 && Array.isArray(ori[0]) && ori[0].length === 0) return true;
             
             var keyCode1 = _getKeyCode(ori[0][0]);
             var keyCode2;
             if (tar[0] && tar[0][0]) keyCode2 = _getKeyCode(tar[0][0]);
             if (keyCode1 == '_ANY_') {
-                if (keyCode2 && keyCode2 !== '_ANY_') return false;
-                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') return false;
-                if (tar[0].length > 0) return true;
-                // if (tar[0].length > 0) return true; // Branch:
+                if (keyCode2 && keyCode2 !== '_ANY_') throw new Error(' array 대상이 _ANY_ 타입이 아닙니다. '+ keyCode2);
+                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') throw new Error('원본은 _ANY_ 타입이지만 대상이 undefined 입니다. ');
+                if (tar[0].length > 0) return;
+                // if (tar[0].length > 0) return true
                 // else return false;   
             
             } else if (keyCode1 == '_OPT_') {
-                if (typeof tar[0] === 'undefined' || tar[0].length === 0) return true;
+                if (typeof tar[0] === 'undefined' || tar[0].length === 0) return;
                 // if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
-                if (ori[0].length === 1) return true;
+                if (ori[0].length === 1) return;
                 // if (keyCode1 !== keyCode2) return false;
-                var start1 = keyCode1 ? 1 : 0;  // Branch:
+                var start1 = keyCode1 ? 1 : 0;
                 var start2 = keyCode2 ? 1 : 0;
-                if (ori[0].length - start1 < tar[0].length - start2) return false;
-                if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) return false;
+                if (ori[0].length - start1 < tar[0].length - start2) throw new Error(' _OPT_ 대상타입의 choice 조건이 더 큽니다. '+ tar[0]);
+                if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) throw new Error(' _OPT_ 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
                 for (var i = start2; i < tar[0].length; i++) {
                     var success = false;
                     for (var ii = start1; ii < ori[0].length; ii++) {
-                        if (success) continue;
-                        if (checkAllowType(ori[0][ii], tar[0][i])) success = true;
+                        try {
+                            if (success) continue;
+                            checkAllowType(ori[0][ii], tar[0][i]);
+                            success = true;
+                        } catch (error) {
+                            continue;
+                        }
+                        // if (success) continue;
+                        // if (checkAllowType(ori[0][ii], tar[0][i])) success = true;
                     }
-                    if (!success) return false;
+                    if (!success)  throw new Error(' array choice 조건에 허용되지 않습니다. ');
                 }
-                return true;
+                return;
             
             } else if (keyCode1 == '_SEQ_') {   // Branch:
-                if (keyCode1 !== keyCode2) return false;
-                if (ori[0].length > tar[0].length) return false;
+                if (keyCode1 !== keyCode2)  throw new Error(' array 대상이 _SEQ_ 타입이 아닙니다. '+ keyCode2);
+                if (ori[0].length > tar[0].length) throw new Error(' array 대상 _SEQ_ 타입이 적습니다. '+ tar[0]);
                 for (var i = 1; i < ori[0].length; i++) {
-                    if (!checkAllowType(ori[0][i], tar[0][i])) return false;
-                }
-                return true;
-            }
+                    try {
+                        checkAllowType(ori[0][i], tar[0][i]);
+                    } catch (error) {
+                        throw new Error(' array _SEQ_ 조건에 허용되지 않습니다. \n'+ error);
+                    }
+                    
 
-            return false;
+                    // if (!checkAllowType(ori[0][i], tar[0][i])) 
+                }
+                return;
+            }
+            throw new Error(' array choice 처리할 타입이 없습니다. ');
         }
         
         if (def1.name === 'function') { // function
-            if (def2.name !== 'function') return false;   // Branch:
-            // if (typeof tar !== 'function') return false;    // Branch:
-            if (ori === Function) return true;  // Branch:
-            var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());  // Branch:
-            var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString()); // Branch:
-            if (typeof info1 === 'string') return info1;    // Branch:
-            if (!info1.return && info1.args.length === 0) return true;  // Branch:
-            if (typeof info2 === 'string') return info2;    // Branch:
-            if (info1.args.length !== info2.args.length) return false;  // Branch:
+            if (def2.name !== 'function') throw new Error(' function 의 대상이 function 타입이 아닙니다. ');
+            if (ori === Function) return;
+            var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());
+            var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString());
+            // if (typeof info1 === 'string') return info1;
+            if (!info1.return && info1.args.length === 0) return;
+            // if (typeof info2 === 'string') return info2;
+            if (info1.args.length !== info2.args.length) throw new Error(' function 의 args타입의 길이가 서로 다릅니다. ');
             for (var i = 0; i < info1.args.length; i++) {
-                if (!checkAllowType(info1.args[i], info2.args[i])) return false;    // Branch:
+                try {
+                    checkAllowType(info1.args[i], info2.args[i]);
+                } catch (error) {
+                    throw new Error(' function 의 args 타입 조건이 허용되지 않습니다. \n'+ error);
+                }
+                
+                // if (!checkAllowType(info1.args[i], info2.args[i])) throw new Error(' function 의 args타입 조건이 허용되지 않습니다. ');
             }
-            return true;
+            try {
+                checkAllowType(info1.return, info2.return);
+            } catch (error) {
+                throw new Error(' function 의 return 타입 조건이 허용되지 않습니다. \n'+ error);
+            }
+            
+
+            return;
         }
         if (def1.name === 'object') {
-            if (def2.name !== 'object') return false;   // Branch:
-            if (ori === tar) return true;
-            if (_isEmptyObj(tar)) return true;
+            if (def2.name !== 'object') throw new Error(' object 의 대상이 object 타입이 아닙니다. ');
+            if (ori === tar) return;
+            if (_isEmptyObj(tar)) return;
             if (ori instanceof RegExp) {
-                if (!(tar instanceof RegExp) || ori.source !== tar.source) return false;
+                if (!(tar instanceof RegExp) || ori.source !== tar.source) throw new Error(' RegExp의 source가 서로 다릅니다. '+ ori.source);
             }
-            if (deepEqual(ori, tar)) return true;
-            return false;
+            if (deepEqual(ori, tar)) return;
+            throw new Error(' object 의 대상이 거부되었습니다. ');
         }
         if (def1.name === 'class') {
-            if (ori === tar) return true;
+            if (ori === tar) return;
             try {
                 var obj1 = new ori();
                 var obj2 = new tar();
-                if (deepEqual(obj1, obj2)) return true;
+                if (deepEqual(obj1, obj2)) return;
             } catch (error) {
-                return false;
+                throw new Error(' class 타입의 비교중에 오류가 발생하였습니다. ');
             }
-            return false;
+            throw new Error(' class 타입의 생성 객체가 서도 다릅니다. ');
         }
         if (def1.name === 'union') {    // Branch:
             var list = getAllProperties(ori);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                if (!checkAllowType(ori[key], tar[key])) return false;
+                try {
+                    checkAllowType(ori[key], tar[key])
+                } catch (error) {
+                    throw new Error(' union 타입 조건이 허용되지 않습니다. \n'+ error);
+                }
+                // if (!checkAllowType(ori[key], tar[key])) throw new Error(' union 타입의 거부되었습니다. ');
             }
-            return true;
+            return;
         }
     };
 
