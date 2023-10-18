@@ -96,11 +96,6 @@
         else false;
     }
 
-
-
-
-    
-
     /**
      * function 생성하는 생성자
      * @param {*} type 
@@ -154,9 +149,9 @@
         
         try {
 
-            if (regChk.test(funBody) === false) throw new Error('함수타입 규칙이 아닙니다. : '+ funBody);;
+            if (regChk.test(funBody) === false) Message.error('ES071', [funBody]);
             arrFunc = regFunc.exec(funBody);
-            if (arrFunc === null) throw new Error('함수타입 내용이 없습니다. : '+ funBody);
+            if (arrFunc === null) Message.error('ES072', [funBody]);
 
             arrParam = (new Function('return ['+ arrFunc[1] +']'))();
             result.args = arrParam;
@@ -165,7 +160,7 @@
             result.return = arrRetrun;
 
         } catch (error) {
-            throw new Error('function parse Fail :' + error);
+            Message.error('ES073', [error]);
         }
 
         return result;
@@ -189,62 +184,100 @@
         
         if (defType.name === 'undefined') {
             if (typeof target === 'undefined') return;
-            throw new Error(parentName +'는 undefined 속성입니다.');
+            Message.error('ES074', [parentName, 'undefined']);
+            // throw new Error(parentName +'는 undefined 속성입니다.');
         }
         if (defType.name === 'null') {
             if (target === null) return;
-            throw new Error(parentName +'는 null 속성이 입니다.');
+            Message.error('ES074', [parentName, 'null']);
+            // throw new Error(parentName +'는 null 속성이 입니다.');
         }
         if (defType.name === 'number') {
             if (defType.default && typeof target === 'undefined') target = defType.default; 
             if (typeof target === 'number') return;
-            return Message.error('ES024', [parentName, 'number']);
+            Message.error('ES074', [parentName, 'number']);
+            // return Message.error('ES024', [parentName, 'number']);
         }
         if (defType.name === 'string') {
-            if (defType.default && typeof target === 'undefined') target = defType.default; // Branch:
+            if (defType.default && typeof target === 'undefined') target = defType.default;
             if (typeof target === 'string') return;
-            return Message.error('ES024', [parentName, 'string']);
+            Message.error('ES074', [parentName, 'string']);
+            // return Message.error('ES024', [parentName, 'string']);
         }
         if (defType.name === 'boolean') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;     // Branch:
+            if (defType.default && typeof target === 'undefined') target = defType.default;
             if (typeof target === 'boolean') return;
-            return Message.error('ES024', [parentName, 'boolean']);
+            Message.error('ES074', [parentName, 'boolean']);
+            // return Message.error('ES024', [parentName, 'boolean']);
         }
         if (defType.name === 'symbol') {
             if (typeof target === 'symbol') return '';
-            return Message.error('ES024', [parentName, 'symbol']);
+            Message.error('ES074', [parentName, 'symbol']);
+            // return Message.error('ES024', [parentName, 'symbol']);
         }
         if (defType.name === 'choice') {
-
-            for(var i = 0; i < type.length; i++) {
-                var keyCode = _getKeyCode(type[i]);
+            var beginIdx = 0;
+            var keyCode = _getKeyCode(type[0]);
+            // var tar = Array.isArray(target) ? target : [target];
                 
-                if (keyCode == '_ANY_') {
-                    if (typeof target !== 'undefined') return;
-                    throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
-                } else if (keyCode == '_OPT_') {
-                    if (typeof target === 'undefined') return;
-                    if (type.length - 1 === i) return;
-
-                    continue;
-                } else if (keyCode == '_SEQ_') {
-                    throw new Error('[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.');
-                }
-                var success = false;
-                try {
-                    _check(type[i], target);
-                    success = true;
-                } catch (error) {
-                    continue;
-                }
-                if (success) return;
-                // returnMsg = _check(type[i], target);
-                // if(returnMsg.length === 0) return;      
-                // else arrMsg.push(returnMsg);    //TODO: 방식 바꿔야 함 throw ...
+            if (keyCode == '_ANY_') {
+                if (typeof target !== 'undefined') return;
+                Message.error('ES075', ['choice', '_ANY_', 'undefined']);
+                // throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
+            } else if (keyCode == '_OPT_') {
+                if (typeof target === 'undefined') return;
+                if (type.length === 1) return;
+                beginIdx = 1;
+            } else if (keyCode == '_SEQ_') {
+                Message.error('ES077', ['choice', '_SEQ_']);
+                // throw new Error('[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.');
             }
-            // return arrMsg.toString();
-            throw new Error('choice 검사가 실패하였습니다. ');; 
+            
+            // for (var i = 0; i < tar.length; i++) {
+                for (var ii = beginIdx; ii < type.length; ii++) {
+                    // var success = false;
+                    try {
+                        _check(type[ii], target);
+                        // success = true;
+                        return;
+                    } catch (error) {
+                        continue;
+                    }
+                    // if (success) return;
+                }
+                Message.error('ES076', ['choice']);
+                // throw new Error('array choice 검사가 실패하였습니다. ');; 
+            // }
         }
+        // if (defType.name === 'choice') {
+
+        //     for(var i = 0; i < type.length; i++) {
+        //         var keyCode = _getKeyCode(type[i]);
+                
+        //         if (keyCode == '_ANY_') {
+        //             if (typeof target !== 'undefined') return;
+        //             Message.error('ES075', ['choice', '_ANY_', 'undefined']);
+        //             // throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
+        //         } else if (keyCode == '_OPT_') {
+        //             if (typeof target === 'undefined') return;
+        //             if (type.length - 1 === i) return;
+        //             continue;
+        //         } else if (keyCode == '_SEQ_') {
+        //             Message.error('ES077', ['choice', '_SEQ_']);
+        //             // throw new Error('[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.');
+        //         }
+        //         var success = false;
+        //         try {
+        //             _check(type[i], target);
+        //             success = true;
+        //         } catch (error) {
+        //             continue;
+        //         }
+        //         if (success) return;
+        //     }
+        //     Message.error('ES076', ['choice']);
+        //     // throw new Error('choice 검사가 실패하였습니다. ');; 
+        // }
         if (defType.name === 'array') {
             if ((type === Array || type.length === 0 || (type[0] && type[0].length === 0))
             && (Array.isArray(target) || target === Array)) return;
@@ -261,16 +294,16 @@
             if (keyCode == '_ANY_') {
                 for(var ii = 0; ii < target.length; ii++) {
                     var tar = target[ii];
-                    if (typeof tar === 'undefined') throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
+                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_ANY_', 'undefined']);
+                    // if (typeof tar === 'undefined') throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
                 }
                 return;
             } else if (keyCode == '_SEQ_') {
                 for(var i = 1; i < arrType.length; i++) {
                     var tar = target[i - 1];
-                    if (typeof tar === 'undefined') throw new Error('[target]은 [i]번째 배열값이 없습니다.');
+                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', i]);
+                    // if (typeof tar === 'undefined') throw new Error('[target]은 [i]번째 배열값이 없습니다.');
                     _check(arrType[i], tar);
-                    // returnMsg = _check(arrType[i], tar);    // TODO: 방식 변경 필요
-                    // if (returnMsg.length > 0) return returnMsg;
                 }
                 return;
             } else if (keyCode == '_OPT_') {
@@ -281,22 +314,18 @@
 
             for (var i = 0; i < target.length; i++) {
                 for (var ii = beginIdx; ii < arrType.length; ii++) {
-                    var success = false;
+                    // var success = false;
                     try {
                         _check(arrType[ii], target[i]);
-                        success = true;
+                        return;
+                        // success = true;
                     } catch (error) {
                         continue;
                     }
-                    if (success) return;
-
-                    // returnMsg = _check(arrType[ii], target[i]);
-                    // if(returnMsg.length === 0) return;
-                    // else arrMsg.push(returnMsg);    //TODO: 방식 바꿔야 함 throw ...
-
+                    // if (success) return;
                 }
-                throw new Error('array choice 검사가 실패하였습니다. ');; 
-                // return arrMsg.toString();   // i 번째 값이 검사에 실패하였습니다.   //TODO: 방식 바꿔야 함 throw ...
+                Message.error('ES076', ['array']);
+                // throw new Error('array choice 검사가 실패하였습니다. ');; 
             }
         }
         if (defType.name === 'function') {
@@ -313,17 +342,20 @@
             var tarType = target['_TYPE'];
             var tarArgs = [];
             var tarReturns = [];
-            if (typeof fixType === 'string') throw new Error('target 의 function _TYPE 정보가 없습니다.');  // TODO: 방식 바꿔야함
+            // if (typeof fixType !== 'object') Message.error('ES079', ['origin', 'function', '_TYPE']);
+            // if (typeof fixType !== 'object') throw new Error('target 의 function _TYPE 정보가 없습니다.');
             if (!fixType.return && fixType.args.length === 0) return;    // success
-            if ((fixType.return || fixType.args.length > 0) && !tarType) throw new Error('targetdml function _TYPE 정보가 없습니다.');
-            // if (!tarType) return 'target[_TYPE] 객체가 없습니다.' // Branch:
-            if (typeof tarType.args === 'undefined' && typeof tarType.return === 'undefined') { // Branch:
-            // if (!tarType.args || !(tarType.args.length > 0 || tarType.return)) { // Branch:
-            throw new Error('function._TYPE = {args: [], return: []} function _TYPE 규칙이 다릅니다.');
+            if ((fixType.return || fixType.args.length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
+            // if ((fixType.return || fixType.args.length > 0) && !tarType) throw new Error('targetdml function _TYPE 정보가 없습니다.');
+            // if (!tarType) return 'target[_TYPE] 객체가 없습니다.' 
+            if (typeof tarType.args === 'undefined' && typeof tarType.return === 'undefined') { 
+                // if (!tarType.args || !(tarType.args.length > 0 || tarType.return)) { 
+                Message.error('ES0710', ['target', 'function', ' {args: [], return: []} ']);
+                // throw new Error('function._TYPE = {args: [], return: []} function _TYPE 규칙이 다릅니다.');
             }
-            tarArgs = (Array.isArray(tarType.args )) ? tarType.args : [tarType.args];   // Branch:
-            if (fixType.return) fixReturns = (Array.isArray(fixType.return )) ? fixType.return : [fixType.return]; // Branch:
-            if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];    // Branch:
+            tarArgs = (Array.isArray(tarType.args )) ? tarType.args : [tarType.args];
+            if (fixType.return) fixReturns = (Array.isArray(fixType.return )) ? fixType.return : [fixType.return]; 
+            if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];
             // if (fixType.args.length !== tarArgs.length) return 'args.length ='+ fixType.args.length +' 길이가 서로 다릅니다.'
             // args 검사
             if (fixType.args.length > 0) {
@@ -332,7 +364,8 @@
                 try {
                     checkAllowType(seqArr1, seqArr2)
                 } catch (error) {
-                    throw new Error('function args 허용타입이 아닙니다.\n'+ error);
+                    Message.error('ES0711', ['function', 'args', error]);
+                    // throw new Error('function args 허용타입이 아닙니다.\n'+ error);
                 }
                 // if (!checkAllowType(seqArr1, seqArr2)) throw new Error('function args 허용타입이 아닙니다.');
             }
@@ -342,7 +375,7 @@
                 // iType = typeKind(info.args[i]);
                 // fType = typeKind(args[i]);
                 // if (iType.name = fType.name) continue;
-                // if (!checkAllowType(fixType.args[i], tarArgs[i])) return false;  // Branch:
+                // if (!checkAllowType(fixType.args[i], tarArgs[i])) return false; 
                 /**
                  * 원시타입
                  * symbol => 원시와 같이
@@ -361,7 +394,8 @@
             try {
                 checkAllowType(fixReturns, tarReturns)
             } catch (error) {
-                throw new Error('function return 허용타입이 아닙니다. \n'+ error);
+                    Message.error('ES0711', ['function', 'return', error]);
+                    // throw new Error('function return 허용타입이 아닙니다. \n'+ error);
             }
 
             // if (fixReturns.length > tarReturns.length) return 'return.length ='+ fixReturns.length +' 길이가 서로 다릅니다.'
@@ -641,25 +675,33 @@
         
         // 원시타입 타입
         if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(def1.name) > -1) {
-            if(def1.default !== null && def1.default !== def2.default) throw new Error(def1.name+ ' 타입의 default 이 다릅니다. '+  def1.default);
+            if(def1.default !== null && def1.default !== def2.default) {
+                Message.error('ES0712', [def1.name, def1.default, def2.default]);
+                // throw new Error(def1.name+ ' 타입의 default 이 다릅니다. '+  def1.default);
+            }
             if (def1.name === def2.name) return;
-            throw new Error(def1.name+ ' 원시타입이 서로 다릅니다. '+  def1.name);
+                Message.error('ES0713', [def1.name, def2.name]);
+                // throw new Error(def1.name+ ' 원시타입이 서로 다릅니다. '+  def1.name);
         }
         if (def1.name === 'choice') {   // choice
             var keyCode1 = _getKeyCode(ori[0]);
             if (keyCode1 == '_ANY_') {
                 if (typeof tar !== 'undefined') return;
-                throw new Error('chice 에서  _ANY_ 에는 undefined 을 사용할 수 없습니다. ');
+                Message.error('ES0714', ['_ANY_', 'undefined']);
+                // throw new Error('chice 에서  _ANY_ 에는 undefined 을 사용할 수 없습니다. ');
             } else if (keyCode1 == '_OPT_') {
                 if (ori.length === 1) return;
-            } else if (keyCode1 == '_SEQ_') throw new Error('chice 에서  _SEQ_ 는 사용할 수 없습니다. ');
+            } else if (keyCode1 == '_SEQ_') Message.error('ES0715', ['_SEQ_']);
+            // } else if (keyCode1 == '_SEQ_') throw new Error('chice 에서  _SEQ_ 는 사용할 수 없습니다. ');
 
             var keyCode2 = Array.isArray(tar) ? _getKeyCode(tar[0]) : undefined;
             var arrType2 = Array.isArray(tar) ? tar : [tar];
             var start1 = keyCode1 ? 1 : 0;
             var start2 = keyCode2 ? 1 : 0;
-            if (ori.length - start1 < arrType2.length - start2) throw new Error(' 대상타입의 choice 조건이 더 큽니다. '+ arrType2);
-            if (ori.length - start1 > 0 && arrType2.length - start2 === 0) throw new Error(' 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
+            if (ori.length - start1 < arrType2.length - start2) Message.error('ES0716', ['choice', ori.join(','), arrType2.join(',')]);
+            // if (ori.length - start1 < arrType2.length - start2) throw new Error(' 대상타입의 choice 조건이 더 큽니다. '+ arrType2);
+            if (ori.length - start1 > 0 && arrType2.length - start2 === 0) Message.error('ES0717', ['choice']);
+            // if (ori.length - start1 > 0 && arrType2.length - start2 === 0) throw new Error(' 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
             for (i = start2; i < arrType2.length; i++) {
                 var success = false;
                 for (var ii = start1; ii < ori.length; ii++) {
@@ -673,22 +715,26 @@
                     // if (success) continue;
                     // if (checkAllowType(ori[ii], arrType2[i])) success = true;
                 }
-                if (!success) throw new Error(' 원본 choice 조건에 허용되지 않습니다. ');
+                if (!success) Message.error('ES0718', ['choice']);
+                // if (!success) throw new Error(' 원본 choice 조건에 허용되지 않습니다. ');
             }
             return;
         }
         if (def1.name === 'array') {    // array
             if ((ori === Array || ori.length === 0 || (ori[0] && ori[0].length === 0)) 
             && (Array.isArray(tar) || tar === Array)) return;      // [], [[]], Array
-            if (!Array.isArray(tar)) throw new Error(' 대상타입의 Array 타입이 아닙니다. ');
+            if (!Array.isArray(tar)) Message.error('ES0719', ['array']);
+            // if (!Array.isArray(tar)) throw new Error(' 대상타입의 Array 타입이 아닙니다. ');
             // if (ori.length === 1 && Array.isArray(ori[0]) && ori[0].length === 0) return true;
             
             var keyCode1 = _getKeyCode(ori[0][0]);
             var keyCode2;
             if (tar[0] && tar[0][0]) keyCode2 = _getKeyCode(tar[0][0]);
             if (keyCode1 == '_ANY_') {
-                if (keyCode2 && keyCode2 !== '_ANY_') throw new Error(' array 대상이 _ANY_ 타입이 아닙니다. '+ keyCode2);
-                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') throw new Error('원본은 _ANY_ 타입이지만 대상이 undefined 입니다. ');
+                if (keyCode2 && keyCode2 !== '_ANY_') Message.error('ES0713', ['array _ANY_', keyCode2]);
+                // if (keyCode2 && keyCode2 !== '_ANY_') throw new Error(' array 대상이 _ANY_ 타입이 아닙니다. '+ keyCode2);
+                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') Message.error('ES075', ['array _ANY_', 'undefined']);
+                // if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') throw new Error('원본은 _ANY_ 타입이지만 대상이 undefined 입니다. ');
                 if (tar[0].length > 0) return;
                 // if (tar[0].length > 0) return true
                 // else return false;   
@@ -700,8 +746,10 @@
                 // if (keyCode1 !== keyCode2) return false;
                 var start1 = keyCode1 ? 1 : 0;
                 var start2 = keyCode2 ? 1 : 0;
-                if (ori[0].length - start1 < tar[0].length - start2) throw new Error(' _OPT_ 대상타입의 choice 조건이 더 큽니다. '+ tar[0]);
-                if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) throw new Error(' _OPT_ 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
+                if (ori[0].length - start1 < tar[0].length - start2) Message.error('ES0716', ['array _OPT_', ori[0].join(','), tar[0].join(',')]);
+                // if (ori[0].length - start1 < tar[0].length - start2) throw new Error(' _OPT_ 대상타입의 choice 조건이 더 큽니다. '+ tar[0]);
+                if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) Message.error('ES0717', ['array']);
+                // if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) throw new Error(' _OPT_ 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
                 for (var i = start2; i < tar[0].length; i++) {
                     var success = false;
                     for (var ii = start1; ii < ori[0].length; ii++) {
@@ -715,42 +763,58 @@
                         // if (success) continue;
                         // if (checkAllowType(ori[0][ii], tar[0][i])) success = true;
                     }
-                    if (!success)  throw new Error(' array choice 조건에 허용되지 않습니다. ');
+                    if (!success) Message.error('ES0718', ['array']);
+                    // if (!success)  throw new Error(' array choice 조건에 허용되지 않습니다. ');
                 }
                 return;
             
             } else if (keyCode1 == '_SEQ_') {   // Branch:
-                if (keyCode1 !== keyCode2)  throw new Error(' array 대상이 _SEQ_ 타입이 아닙니다. '+ keyCode2);
-                if (ori[0].length > tar[0].length) throw new Error(' array 대상 _SEQ_ 타입이 적습니다. '+ tar[0]);
+                if (keyCode1 !== keyCode2)  Message.error('ES0719', ['_SEQ_']);
+                // if (keyCode1 !== keyCode2)  throw new Error(' array 대상이 _SEQ_ 타입이 아닙니다. '+ keyCode2);
+                if (ori[0].length > tar[0].length) Message.error('ES0720', ['array', '_SEQ_']);
+                // if (ori[0].length > tar[0].length) throw new Error(' array 대상 _SEQ_ 타입이 적습니다. '+ tar[0]);
                 for (var i = 1; i < ori[0].length; i++) {
                     try {
                         checkAllowType(ori[0][i], tar[0][i]);
                     } catch (error) {
-                        throw new Error(' array _SEQ_ 조건에 허용되지 않습니다. \n'+ error);
+                        Message.error('ES0711', ['array', '_SEQ_', error]);
+                        // throw new Error(' array _SEQ_ 조건에 허용되지 않습니다. \n'+ error);
                     }
                     
 
                     // if (!checkAllowType(ori[0][i], tar[0][i])) 
                 }
                 return;
+            } else {
+                try {
+                    checkAllowType(ori[0], tar[0]);
+                    return;
+                } catch (error) {
+                    Message.error('ES0711', ['array', '', error]);
+                    // throw new Error(' array 조건에 허용되지 않습니다. \n'+ error);
+                }
             }
-            throw new Error(' array choice 처리할 타입이 없습니다. ');
+
+            // throw new Error(' array choice 처리할 타입이 없습니다. ');
         }
         
         if (def1.name === 'function') { // function
-            if (def2.name !== 'function') throw new Error(' function 의 대상이 function 타입이 아닙니다. ');
+            if (def2.name !== 'function')  Message.error('ES0713', ['function', def1.name, def2.name]);
+            // if (def2.name !== 'function') throw new Error(' function 의 대상이 function 타입이 아닙니다. ');
             if (ori === Function) return;
             var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());
             var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString());
             // if (typeof info1 === 'string') return info1;
             if (!info1.return && info1.args.length === 0) return;
             // if (typeof info2 === 'string') return info2;
-            if (info1.args.length !== info2.args.length) throw new Error(' function 의 args타입의 길이가 서로 다릅니다. ');
+            if (info1.args.length !== info2.args.length) Message.error('ES0721', ['function', 'args', info1.args.length]);
+            // if (info1.args.length !== info2.args.length) throw new Error(' function 의 args타입의 길이가 서로 다릅니다. ');
             for (var i = 0; i < info1.args.length; i++) {
                 try {
                     checkAllowType(info1.args[i], info2.args[i]);
                 } catch (error) {
-                    throw new Error(' function 의 args 타입 조건이 허용되지 않습니다. \n'+ error);
+                    Message.error('ES0722', ['function', 'args', error]);
+                    // throw new Error(' function 의 args 타입 조건이 허용되지 않습니다. \n'+ error);
                 }
                 
                 // if (!checkAllowType(info1.args[i], info2.args[i])) throw new Error(' function 의 args타입 조건이 허용되지 않습니다. ');
@@ -758,21 +822,27 @@
             try {
                 checkAllowType(info1.return, info2.return);
             } catch (error) {
-                throw new Error(' function 의 return 타입 조건이 허용되지 않습니다. \n'+ error);
+                    Message.error('ES0722', ['function', 'return', error]);
+                    // throw new Error(' function 의 return 타입 조건이 허용되지 않습니다. \n'+ error);
             }
             
 
             return;
         }
         if (def1.name === 'object') {
-            if (def2.name !== 'object') throw new Error(' object 의 대상이 object 타입이 아닙니다. ');
+            if (def2.name !== 'object') Message.error('ES0713', ['object', def1.name, def2.name]);
+            // if (def2.name !== 'object') throw new Error(' object 의 대상이 object 타입이 아닙니다. ');
             if (ori === tar) return;
             if (_isEmptyObj(tar)) return;
             if (ori instanceof RegExp) {
-                if (!(tar instanceof RegExp) || ori.source !== tar.source) throw new Error(' RegExp의 source가 서로 다릅니다. '+ ori.source);
+                if (!(tar instanceof RegExp) || ori.source !== tar.source) {
+                    Message.error('ES0723', [ori.source, tar.source]);
+                    // throw new Error(' RegExp의 source가 서로 다릅니다. '+ ori.source);
+                }
             }
             if (deepEqual(ori, tar)) return;
-            throw new Error(' object 의 대상이 거부되었습니다. ');
+                Message.error('ES0718', ['object']);
+                // throw new Error(' object 의 대상이 거부되었습니다. ');
         }
         if (def1.name === 'class') {
             if (ori === tar) return;
@@ -781,9 +851,11 @@
                 var obj2 = new tar();
                 if (deepEqual(obj1, obj2)) return;
             } catch (error) {
-                throw new Error(' class 타입의 비교중에 오류가 발생하였습니다. ');
+                Message.error('ES0724', ['object', error]);
+                // throw new Error(' class 타입의 비교중에 오류가 발생하였습니다. ');
             }
-            throw new Error(' class 타입의 생성 객체가 서도 다릅니다. ');
+            Message.error('ES0725', ['object']);
+            // throw new Error(' class 타입의 생성 객체가 서도 다릅니다. ');
         }
         if (def1.name === 'union') {    // Branch:
             var list = getAllProperties(ori);
@@ -792,15 +864,14 @@
                 try {
                     checkAllowType(ori[key], tar[key])
                 } catch (error) {
-                    throw new Error(' union 타입 조건이 허용되지 않습니다. \n'+ error);
+                    Message.error('ES0726', ['union', error]);
+                    // throw new Error(' union 타입 조건이 허용되지 않습니다. \n'+ error);
                 }
                 // if (!checkAllowType(ori[key], tar[key])) throw new Error(' union 타입의 거부되었습니다. ');
             }
             return;
         }
     };
-
-    
 
     /**
      * 타입 검사

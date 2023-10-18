@@ -163,7 +163,7 @@ describe("[target: util.js]", () => {
                 Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
-            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES024/);
+            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES069(.|\s)*ES074/);
         });
         it('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = number) ', () => {
             function ISuper() {
@@ -174,7 +174,7 @@ describe("[target: util.js]", () => {
                 Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
-            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES024/);
+            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES069(.|\s)*ES074/);
         });
         it('- this 인터페이스 선언 <-- 구현 : 예외 (타입 = boolean) ', () => {
             function ISuper() {
@@ -185,7 +185,7 @@ describe("[target: util.js]", () => {
                 Util.implements(CoClass, this, ISuper);    /** @implements */
             }
     
-            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES024/);
+            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES069(.|\s)*ES074/);
         });
         it('- this 인터페이스 선언 <-- 구현 : (타입 = null) any 역활 ', () => {
             function ISuper() {
@@ -270,7 +270,7 @@ describe("[target: util.js]", () => {
                 Util.implements(CoClass3, this, ISuper);    /** @implements */
             }
     
-            expect(()=> new CoClass1()).toThrow(/ES017(.|\s)*ES024/);
+            expect(()=> new CoClass1()).toThrow(/ES017(.|\s)*ES069(.|\s)*ES074/);
             expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES031/);
             expect(()=> new CoClass3()).toThrow(/ES017(.|\s)*ES027/);
         });
