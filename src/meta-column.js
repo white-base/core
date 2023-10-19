@@ -196,7 +196,7 @@
                     // settter 의 리턴이 여부
                     __val = typeof _val !== 'undefined' ? _val : val;
                     __val = __val === null ? '' : __val;  // null 등록 오류 처리
-                    if (this._valueTypes.length > 0) Util.checkType(this._valueTypes, __val);
+                    if (this._valueTypes.length > 0) Util.checkType([this._valueTypes], __val);
                     __value = __val;
                     if (_oldVal !== __val && __val) this._onChanged(__val, _oldVal);    // 검사 및 이벤트 발생
                 },
@@ -645,7 +645,7 @@
             var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
-            if (_valueTypes.length > 0) Util.checkType(_valueTypes, p_value);
+            if (_valueTypes.length > 0) Util.checkType([_valueTypes], p_value);
             
             property = { value: p_value };
             item = new this._baseType(p_name, this._owner, property);
@@ -790,7 +790,7 @@
             var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
-            if (_valueTypes.length > 0) Util.checkType(_valueTypes, p_value);
+            if (_valueTypes.length > 0) Util.checkType([_valueTypes], p_value);
             
             property = { value: p_value };
             item = new this._baseType(p_name, null, property);

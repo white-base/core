@@ -189,11 +189,11 @@ describe("[target: util.js]", () => {
         });
         it('- this 인터페이스 선언 <-- 구현 : (타입 = null) any 역활 ', () => {
             function ISuper() {
-                this.bool   = ['_any_'];
-                this.num    = ['_any_'];
-                this.str    = ['_any_'];
-                this.arr    = ['_any_'];
-                this.obj    = ['_any_'];
+                this.bool   = [['_any_']];
+                this.num    = [['_any_']];
+                this.str    = [['_any_']];
+                this.arr    = [['_any_']];
+                this.obj    = [['_any_']];
             }
             function CoClass() {
                 this.bool   = -1;
@@ -223,7 +223,7 @@ describe("[target: util.js]", () => {
                     str: '',
                     num: 1,
                     bool: false,
-                    any: ['_any_']
+                    any: [['_any_']]
                 };
             }
             ISuper.prototype.m1 = Fun;

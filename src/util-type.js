@@ -166,296 +166,7 @@
         return result;
     }
 
-    /**
-     * 타입을 검사하여 메세지를 리턴
-     * @param {any} type 검사할 타입 , origin
-     * @param {any} target 검사대상
-     * @param {string?} parentName '' 공백시 성공
-     * @returns {throw?}
-     */
-    var _check = function(type, target, parentName) {
-        var parentName = parentName ? parentName : 'this';
-        var typeDef = {type: type, name: '', default: null};
-        var returnMsg = '', arrMsg = [];
-        var defType;
 
-        defType = typeKind(type);
-        
-        
-        if (defType.name === 'undefined') {
-            if (typeof target === 'undefined') return;
-            Message.error('ES074', [parentName, 'undefined']);
-            // throw new Error(parentName +'는 undefined 속성입니다.');
-        }
-        if (defType.name === 'null') {
-            if (target === null) return;
-            Message.error('ES074', [parentName, 'null']);
-            // throw new Error(parentName +'는 null 속성이 입니다.');
-        }
-        if (defType.name === 'number') {
-            if (defType.default && typeof target === 'undefined') target = defType.default; 
-            if (typeof target === 'number') return;
-            Message.error('ES074', [parentName, 'number']);
-            // return Message.error('ES024', [parentName, 'number']);
-        }
-        if (defType.name === 'string') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;
-            if (typeof target === 'string') return;
-            Message.error('ES074', [parentName, 'string']);
-            // return Message.error('ES024', [parentName, 'string']);
-        }
-        if (defType.name === 'boolean') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;
-            if (typeof target === 'boolean') return;
-            Message.error('ES074', [parentName, 'boolean']);
-            // return Message.error('ES024', [parentName, 'boolean']);
-        }
-        if (defType.name === 'symbol') {
-            if (typeof target === 'symbol') return '';
-            Message.error('ES074', [parentName, 'symbol']);
-            // return Message.error('ES024', [parentName, 'symbol']);
-        }
-        if (defType.name === 'choice') {
-            var beginIdx = 0;
-            var keyCode = _getKeyCode(type[0]);
-            // var tar = Array.isArray(target) ? target : [target];
-                
-            if (keyCode == '_ANY_') {
-                if (typeof target !== 'undefined') return;
-                Message.error('ES075', ['choice', '_ANY_', 'undefined']);
-                // throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
-            } else if (keyCode == '_OPT_') {
-                if (typeof target === 'undefined') return;
-                if (type.length === 1) return;
-                beginIdx = 1;
-            } else if (keyCode == '_SEQ_') {
-                Message.error('ES077', ['choice', '_SEQ_']);
-                // throw new Error('[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.');
-            }
-            
-            // for (var i = 0; i < tar.length; i++) {
-                for (var ii = beginIdx; ii < type.length; ii++) {
-                    // var success = false;
-                    try {
-                        _check(type[ii], target);
-                        // success = true;
-                        return;
-                    } catch (error) {
-                        continue;
-                    }
-                    // if (success) return;
-                }
-                Message.error('ES076', ['choice']);
-                // throw new Error('array choice 검사가 실패하였습니다. ');; 
-            // }
-        }
-        // if (defType.name === 'choice') {
-
-        //     for(var i = 0; i < type.length; i++) {
-        //         var keyCode = _getKeyCode(type[i]);
-                
-        //         if (keyCode == '_ANY_') {
-        //             if (typeof target !== 'undefined') return;
-        //             Message.error('ES075', ['choice', '_ANY_', 'undefined']);
-        //             // throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
-        //         } else if (keyCode == '_OPT_') {
-        //             if (typeof target === 'undefined') return;
-        //             if (type.length - 1 === i) return;
-        //             continue;
-        //         } else if (keyCode == '_SEQ_') {
-        //             Message.error('ES077', ['choice', '_SEQ_']);
-        //             // throw new Error('[or] 조건에 [_seq_] 키워드를 사용할 수 없습니다.');
-        //         }
-        //         var success = false;
-        //         try {
-        //             _check(type[i], target);
-        //             success = true;
-        //         } catch (error) {
-        //             continue;
-        //         }
-        //         if (success) return;
-        //     }
-        //     Message.error('ES076', ['choice']);
-        //     // throw new Error('choice 검사가 실패하였습니다. ');; 
-        // }
-        if (defType.name === 'array') {
-            if ((type === Array || type.length === 0 || (type[0] && type[0].length === 0))
-            && (Array.isArray(target) || target === Array)) return;
-            // if (type.length === 1 && Array.isArray(type[0]) && type[0].length === 0) return ''; // [[]]
-            if (!Array.isArray(target)) return Message.error('ES024', [parentName, 'array']);
-
-            var keyCode
-            var beginIdx = 0;
-            var arrType = [];
-
-            arrType = type[0];
-            keyCode = _getKeyCode(arrType[0]);
-
-            if (keyCode == '_ANY_') {
-                for(var ii = 0; ii < target.length; ii++) {
-                    var tar = target[ii];
-                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_ANY_', 'undefined']);
-                    // if (typeof tar === 'undefined') throw new Error('[_any_] 타입에 undefined 입력할 수 없습니다.');
-                }
-                return;
-            } else if (keyCode == '_SEQ_') {
-                for(var i = 1; i < arrType.length; i++) {
-                    var tar = target[i - 1];
-                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', i]);
-                    // if (typeof tar === 'undefined') throw new Error('[target]은 [i]번째 배열값이 없습니다.');
-                    _check(arrType[i], tar);
-                }
-                return;
-            } else if (keyCode == '_OPT_') {
-                if (Array.isArray(target) && target.length === 0) return;
-                if (arrType.length === 1) return;
-                beginIdx = 1;
-            }
-
-            for (var i = 0; i < target.length; i++) {
-                for (var ii = beginIdx; ii < arrType.length; ii++) {
-                    // var success = false;
-                    try {
-                        _check(arrType[ii], target[i]);
-                        return;
-                        // success = true;
-                    } catch (error) {
-                        continue;
-                    }
-                    // if (success) return;
-                }
-                Message.error('ES076', ['array']);
-                // throw new Error('array choice 검사가 실패하였습니다. ');; 
-            }
-        }
-        if (defType.name === 'function') {
-            if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
-            if (type === Function) return;
-            // var func = type.toString().replace(/ /g,'');
-            // if (func === 'function(){}' || func === '()=>{}') return '';
-            // if (!checkAllowType(type, target)) return '';
-
-
-
-            var fixType = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
-            var fixReturns = [];
-            var tarType = target['_TYPE'];
-            var tarArgs = [];
-            var tarReturns = [];
-            // if (typeof fixType !== 'object') Message.error('ES079', ['origin', 'function', '_TYPE']);
-            // if (typeof fixType !== 'object') throw new Error('target 의 function _TYPE 정보가 없습니다.');
-            if (!fixType.return && fixType.args.length === 0) return;    // success
-            if ((fixType.return || fixType.args.length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
-            // if ((fixType.return || fixType.args.length > 0) && !tarType) throw new Error('targetdml function _TYPE 정보가 없습니다.');
-            // if (!tarType) return 'target[_TYPE] 객체가 없습니다.' 
-            if (typeof tarType.args === 'undefined' && typeof tarType.return === 'undefined') { 
-                // if (!tarType.args || !(tarType.args.length > 0 || tarType.return)) { 
-                Message.error('ES0710', ['target', 'function', ' {args: [], return: []} ']);
-                // throw new Error('function._TYPE = {args: [], return: []} function _TYPE 규칙이 다릅니다.');
-            }
-            tarArgs = (Array.isArray(tarType.args )) ? tarType.args : [tarType.args];
-            if (fixType.return) fixReturns = (Array.isArray(fixType.return )) ? fixType.return : [fixType.return]; 
-            if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];
-            // if (fixType.args.length !== tarArgs.length) return 'args.length ='+ fixType.args.length +' 길이가 서로 다릅니다.'
-            // args 검사
-            if (fixType.args.length > 0) {
-                var seqArr1 = ['_SEQ_'].concat(fixType.args);
-                var seqArr2 = ['_SEQ_'].concat(tarArgs);
-                try {
-                    checkAllowType(seqArr1, seqArr2)
-                } catch (error) {
-                    Message.error('ES0711', ['function', 'args', error]);
-                    // throw new Error('function args 허용타입이 아닙니다.\n'+ error);
-                }
-                // if (!checkAllowType(seqArr1, seqArr2)) throw new Error('function args 허용타입이 아닙니다.');
-            }
-
-            // for (var i = 0; i < fixType.args.length; i++) {
-                
-                // iType = typeKind(info.args[i]);
-                // fType = typeKind(args[i]);
-                // if (iType.name = fType.name) continue;
-                // if (!checkAllowType(fixType.args[i], tarArgs[i])) return false; 
-                /**
-                 * 원시타입
-                 * symbol => 원시와 같이
-                 * object => 원시와 같이 비교
-                 * ---
-                 * array : 순환 :: [], [[..]], [['_any_',...]]
-                 * or : 순환 :: [...]
-                 * fun : 순환 :: 직접 입금은 금지 변수로 삽입 => 해결가능할 듯 => 자동 금지됨
-                 * class(object) : 순환  :: Class
-                 * and(object) : 순환 :: {....} => number 타입은 금지됨
-                 */
-
-            // }
-            // return 검사
-            // if (!checkAllowType(fixReturns, tarReturns)) throw new Error('function return 허용타입이 아닙니다.');
-            try {
-                checkAllowType(fixReturns, tarReturns)
-            } catch (error) {
-                    Message.error('ES0711', ['function', 'return', error]);
-                    // throw new Error('function return 허용타입이 아닙니다. \n'+ error);
-            }
-
-            // if (fixReturns.length > tarReturns.length) return 'return.length ='+ fixReturns.length +' 길이가 서로 다릅니다.'
-            // for (var i = 0; i < fixReturns.length; i++) {
-            //     if (!checkAllowType(fixReturns[i], tarReturns[i])) return 'return 타입이 서로 다릅니다.'
-            // }
-            return;
-
-            // inner function
-            
-            
-
-        }
-        // if (defType.name === 'function') {
-        //     if (typeof target === 'function') return '';
-        //     return Message.get('ES024', [parentName, 'function']);
-        // }
-        if (defType.name === 'object') {
-            if (type === Object && target instanceof type) return;
-            if (type !== Object && target instanceof type.constructor) return;
-            return Message.error('ES024', [parentName, 'object']);
-        }
-        if (defType.name === 'class') {
-        
-            if (_isBuiltFunction(type)) {
-                if (target instanceof type) return; 
-                else return Message.error('ES032', [parentName, _typeName(type)]);
-            } else {
-                if (typeof target === 'object' && target instanceof type) return;
-                if (typeof target === 'object' && target !== null) return _check(_creator(type), target, parentName);
-                return Message.error('ES032', [parentName, _typeName(type)]);
-            }
-        }
-        if (defType.name === 'union') {
-            var list = getAllProperties(typeDef.type);
-
-            for (var i = 0; i < list.length; i++) {
-                var key = list[i];
-                var listDefType = typeKind(type[key]);
-                var msg = '';
-                
-                // REVIEW: for 위쪽으로 이동 검토!
-                if (!_isObject(target)) return Message.error('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
-                if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-                if (listDefType.default !== null && typeof target[key] === 'undefined')      // default 설정
-                    target[key] = listDefType.default;
-                if (target !== null && !(key in target)) return Message.error('ES027', [listDefType.name, parentName + '.' + key]);    
-                if (listDefType.name === 'class'){
-                    if (typeof target[key] === 'function') continue;                        // class method
-                    if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
-                    else return Message.error('ES031', [parentName + '.' + key]);
-                } 
-                _check(type[key], target[key], parentName +'.'+ key);
-                // msg = _check(type[key], target[key], parentName +'.'+ key);
-                // if (msg.length > 0) throw new Error(msg);
-            }
-            return;
-        }
-        return Message.error('ES022', [defType.name]);
-    };
 
     /**
      * 전체 프로퍼티 조회
@@ -531,7 +242,7 @@
      * @returns {object} {name: string, default: [null, any]}
      */
     var typeKind = function(type) {
-        var obj =  {name: '', default: null};
+        var obj =  {name: '', val: type, default: null, opt: null};
 
         // seq 1 : === (operation) 
         if (type === null) {
@@ -602,20 +313,16 @@
         }
         // seq 3 : instanceof
         if (Array.isArray(type)) {
-            if (type.length === 0) {
+            if (type.length ===  1 && Array.isArray(type[0])) {
+                obj.name = 'choice';
+                obj.opt = _getKeyCode(type[0][0]);
+                obj.val = type[0];
+            } else {
                 obj.name = 'array';
-                return obj;
+                obj.opt = _getKeyCode(type[0]);
             }
-            if (type.length ===  1 && Array.isArray(type[0])) obj.name = 'array';
-            else obj.name = 'choice';
             return obj;
         }
-        // if (type instanceof Array || Array.isArray(type)) {
-        //     if (type.length > 0) obj.name = 'choice';
-        //     else obj.name = 'array'
-        //     return obj;
-        // }
-
         // seq 4: funciton
         if (_isFillObj(type)) {
             obj.name = 'union';
@@ -629,16 +336,6 @@
             obj.name = 'object';
             return obj;
         }
-        // if (typeof type === 'object') {
-            // obj.name = 'object';
-            // return obj;
-        // }
-        
-        // if (typeof type === 'object') {
-        //     if (type instanceof RegExp) obj.name = 'regexp';  
-        //     else obj.name = 'object';
-        //     return obj;
-        // }
         Message.error('ES022', ['type']);
     }
     
@@ -667,210 +364,335 @@
      * @returns {throw?}
      */
     var checkAllowType = function (ori, tar) {
-        var def1 = typeKind(ori);
-        var def2 = typeKind(tar);
+        var oriDef = typeKind(ori);
+        var tarDef = typeKind(tar);
         
-        if (_isObject(ori) &&  _isObject(tar) && deepEqual(ori, tar)) return;
-        // if (def1.name !== def2.name) return false;
+        if (_isObject(oriDef.val) &&  _isObject(tarDef.val) && deepEqual(oriDef.val, tarDef.val)) return;
         
         // 원시타입 타입
-        if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(def1.name) > -1) {
-            if(def1.default !== null && def1.default !== def2.default) {
-                Message.error('ES0712', [def1.name, def1.default, def2.default]);
-                // throw new Error(def1.name+ ' 타입의 default 이 다릅니다. '+  def1.default);
+        if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(oriDef.name) > -1) {
+            if(oriDef.default !== null && oriDef.default !== tarDef.default) {
+                Message.error('ES0712', [oriDef.name, oriDef.default, tarDef.default]);
             }
-            if (def1.name === def2.name) return;
-                Message.error('ES0713', [def1.name, def2.name]);
-                // throw new Error(def1.name+ ' 원시타입이 서로 다릅니다. '+  def1.name);
+            if (oriDef.name === tarDef.name) return;
+                Message.error('ES0713', [oriDef.name, tarDef.name]);
         }
-        if (def1.name === 'choice') {   // choice
-            var keyCode1 = _getKeyCode(ori[0]);
-            if (keyCode1 == '_ANY_') {
-                if (typeof tar !== 'undefined') return;
+        if (oriDef.name === 'choice') {   // choice
+            if (oriDef.val.length === 0) throw new Error('chice 에서 타입이 없습니다. ');
+            if (oriDef.opt == '_ANY_') {
+                if (typeof tarDef.val !== 'undefined') return;
                 Message.error('ES0714', ['_ANY_', 'undefined']);
-                // throw new Error('chice 에서  _ANY_ 에는 undefined 을 사용할 수 없습니다. ');
-            } else if (keyCode1 == '_OPT_') {
-                if (ori.length === 1) return;
-            } else if (keyCode1 == '_SEQ_') Message.error('ES0715', ['_SEQ_']);
-            // } else if (keyCode1 == '_SEQ_') throw new Error('chice 에서  _SEQ_ 는 사용할 수 없습니다. ');
+            } else if (oriDef.opt == '_OPT_') {
+                if (oriDef.val.length === 1) return;
+            } else if (oriDef.opt == '_SEQ_') Message.error('ES0715', ['_SEQ_']);
 
-            var keyCode2 = Array.isArray(tar) ? _getKeyCode(tar[0]) : undefined;
-            var arrType2 = Array.isArray(tar) ? tar : [tar];
-            var start1 = keyCode1 ? 1 : 0;
-            var start2 = keyCode2 ? 1 : 0;
-            if (ori.length - start1 < arrType2.length - start2) Message.error('ES0716', ['choice', ori.join(','), arrType2.join(',')]);
-            // if (ori.length - start1 < arrType2.length - start2) throw new Error(' 대상타입의 choice 조건이 더 큽니다. '+ arrType2);
-            if (ori.length - start1 > 0 && arrType2.length - start2 === 0) Message.error('ES0717', ['choice']);
-            // if (ori.length - start1 > 0 && arrType2.length - start2 === 0) throw new Error(' 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
-            for (i = start2; i < arrType2.length; i++) {
+            var arrTarget = Array.isArray(tarDef.val) ? tarDef.val : [tarDef.val];
+            var start1 = oriDef.opt ? 1 : 0;
+            var start2 = tarDef.opt ? 1 : 0;
+            if (oriDef.val.length - start1 < arrTarget.length - start2) {
+                Message.error('ES0716', ['choice', oriDef.val.join(','), arrTarget.join(',')]);
+            }
+            if (oriDef.val.length - start1 > 0 && arrTarget.length - start2 === 0) {
+                Message.error('ES0717', ['choice']);
+            }
+            for (i = start2; i < arrTarget.length; i++) {
                 var success = false;
-                for (var ii = start1; ii < ori.length; ii++) {
+                for (var ii = start1; ii < oriDef.val.length; ii++) {
                     try {
                         if (success) continue;
-                        checkAllowType(ori[ii], arrType2[i]);
+                        checkAllowType(oriDef.val[ii], arrTarget[i]);
                         success = true;
                     } catch (error) {
                         continue;
                     }
-                    // if (success) continue;
-                    // if (checkAllowType(ori[ii], arrType2[i])) success = true;
                 }
                 if (!success) Message.error('ES0718', ['choice']);
-                // if (!success) throw new Error(' 원본 choice 조건에 허용되지 않습니다. ');
             }
             return;
         }
-        if (def1.name === 'array') {    // array
-            if ((ori === Array || ori.length === 0 || (ori[0] && ori[0].length === 0)) 
-            && (Array.isArray(tar) || tar === Array)) return;      // [], [[]], Array
-            if (!Array.isArray(tar)) Message.error('ES0719', ['array']);
-            // if (!Array.isArray(tar)) throw new Error(' 대상타입의 Array 타입이 아닙니다. ');
-            // if (ori.length === 1 && Array.isArray(ori[0]) && ori[0].length === 0) return true;
+        if (oriDef.name === 'array') {    // array
+            if ((oriDef.val === Array || oriDef.val.length === 0) && (Array.isArray(tarDef.val) || tarDef.val === Array)) return;      // [], [[]], Array
+            if (!Array.isArray(tarDef.val)) Message.error('ES0719', ['array']);
+            if (oriDef.opt == '_ANY_') {
+                if (tarDef.opt && tarDef.opt !== '_ANY_') Message.error('ES0713', ['array _ANY_', tarDef.opt]);
+                if (typeof tarDef.val === 'undefined' || typeof tarDef.val[0] === 'undefined') Message.error('ES075', ['array _ANY_', 'undefined']);
+                if (tarDef.val.length > 0) return;
             
-            var keyCode1 = _getKeyCode(ori[0][0]);
-            var keyCode2;
-            if (tar[0] && tar[0][0]) keyCode2 = _getKeyCode(tar[0][0]);
-            if (keyCode1 == '_ANY_') {
-                if (keyCode2 && keyCode2 !== '_ANY_') Message.error('ES0713', ['array _ANY_', keyCode2]);
-                // if (keyCode2 && keyCode2 !== '_ANY_') throw new Error(' array 대상이 _ANY_ 타입이 아닙니다. '+ keyCode2);
-                if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') Message.error('ES075', ['array _ANY_', 'undefined']);
-                // if (typeof tar[0] === 'undefined' || typeof tar[0][0] === 'undefined') throw new Error('원본은 _ANY_ 타입이지만 대상이 undefined 입니다. ');
-                if (tar[0].length > 0) return;
-                // if (tar[0].length > 0) return true
-                // else return false;   
-            
-            } else if (keyCode1 == '_OPT_') {
-                if (typeof tar[0] === 'undefined' || tar[0].length === 0) return;
-                // if (type1[0].length === 1 && keyCode2 === '_ANY_') return true;
-                if (ori[0].length === 1) return;
-                // if (keyCode1 !== keyCode2) return false;
-                var start1 = keyCode1 ? 1 : 0;
-                var start2 = keyCode2 ? 1 : 0;
-                if (ori[0].length - start1 < tar[0].length - start2) Message.error('ES0716', ['array _OPT_', ori[0].join(','), tar[0].join(',')]);
-                // if (ori[0].length - start1 < tar[0].length - start2) throw new Error(' _OPT_ 대상타입의 choice 조건이 더 큽니다. '+ tar[0]);
-                if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) Message.error('ES0717', ['array']);
-                // if (ori[0].length - start1 > 0 && tar[0].length - start2 === 0) throw new Error(' _OPT_ 원본타입의 choice 조건이 존재하지만, 대상타입에는 없습니다. '+ ori);
-                for (var i = start2; i < tar[0].length; i++) {
+            } else if (oriDef.opt == '_OPT_') {
+                if (typeof tarDef.val === 'undefined' || tarDef.val.length === 0) return;
+                if (oriDef.val.length === 1) return;
+                var start1 = oriDef.opt ? 1 : 0;
+                var start2 = tarDef.opt ? 1 : 0;
+                if (oriDef.val.length - start1 < tarDef.val.length - start2) {
+                    Message.error('ES0716', ['array _OPT_', oriDef.val.join(','), tarDef.val.join(',')]);
+                }
+                if (oriDef.val.length - start1 > 0 && tarDef.val.length - start2 === 0) {
+                    Message.error('ES0717', ['array']);
+                }
+                for (var i = start2; i < tarDef.val.length; i++) {
                     var success = false;
-                    for (var ii = start1; ii < ori[0].length; ii++) {
+                    for (var ii = start1; ii < oriDef.val.length; ii++) {
                         try {
                             if (success) continue;
-                            checkAllowType(ori[0][ii], tar[0][i]);
+                            checkAllowType(oriDef.val[ii], tarDef.val[i]);
                             success = true;
                         } catch (error) {
                             continue;
                         }
-                        // if (success) continue;
-                        // if (checkAllowType(ori[0][ii], tar[0][i])) success = true;
                     }
                     if (!success) Message.error('ES0718', ['array']);
-                    // if (!success)  throw new Error(' array choice 조건에 허용되지 않습니다. ');
                 }
                 return;
             
-            } else if (keyCode1 == '_SEQ_') {   // Branch:
-                if (keyCode1 !== keyCode2)  Message.error('ES0719', ['_SEQ_']);
-                // if (keyCode1 !== keyCode2)  throw new Error(' array 대상이 _SEQ_ 타입이 아닙니다. '+ keyCode2);
-                if (ori[0].length > tar[0].length) Message.error('ES0720', ['array', '_SEQ_']);
-                // if (ori[0].length > tar[0].length) throw new Error(' array 대상 _SEQ_ 타입이 적습니다. '+ tar[0]);
-                for (var i = 1; i < ori[0].length; i++) {
+            } else if (oriDef.opt == '_SEQ_') {   // Branch:
+                if (oriDef.opt !== tarDef.opt)  Message.error('ES0719', ['_SEQ_']);
+                if (oriDef.val.length > tarDef.val.length) Message.error('ES0720', ['array', '_SEQ_']);
+                for (var i = 1; i < oriDef.val.length; i++) {
                     try {
-                        checkAllowType(ori[0][i], tar[0][i]);
+                        checkAllowType(oriDef.val[i], tarDef.val[i]);
                     } catch (error) {
                         Message.error('ES0711', ['array', '_SEQ_', error]);
-                        // throw new Error(' array _SEQ_ 조건에 허용되지 않습니다. \n'+ error);
                     }
-                    
-
-                    // if (!checkAllowType(ori[0][i], tar[0][i])) 
                 }
                 return;
+
             } else {
                 try {
-                    checkAllowType(ori[0], tar[0]);
+                    checkAllowType([oriDef.val], [tarDef.val]);
                     return;
                 } catch (error) {
                     Message.error('ES0711', ['array', '', error]);
-                    // throw new Error(' array 조건에 허용되지 않습니다. \n'+ error);
                 }
+            }
+        }
+        if (oriDef.name === 'function') { // function
+            if (tarDef.name !== 'function')  Message.error('ES0713', ['function', oriDef.name, tarDef.name]);
+            if (oriDef.val === Function) return;
+            var info1 = oriDef.val['_TYPE'] ? oriDef.val['_TYPE'] : _getFunInfo(oriDef.val.toString());
+            var info2 =  tarDef.val['_TYPE'] ? tarDef.val['_TYPE'] : _getFunInfo(tarDef.val.toString());
+            if (!info1.return && info1.args.length === 0) return;
+            if (info1.args.length !== info2.args.length) Message.error('ES0721', ['function', 'args', info1.args.length]);
+            
+            try {
+                checkAllowType(['_SEQ_'].concat(info1.args), ['_SEQ_'].concat(info2.args));
+            } catch (error) {
+                Message.error('ES0722', ['function', 'args', error]);
             }
 
-            // throw new Error(' array choice 처리할 타입이 없습니다. ');
-        }
-        
-        if (def1.name === 'function') { // function
-            if (def2.name !== 'function')  Message.error('ES0713', ['function', def1.name, def2.name]);
-            // if (def2.name !== 'function') throw new Error(' function 의 대상이 function 타입이 아닙니다. ');
-            if (ori === Function) return;
-            var info1 = ori['_TYPE'] ? ori['_TYPE'] : _getFunInfo(ori.toString());
-            var info2 =  tar['_TYPE'] ? tar['_TYPE'] : _getFunInfo(tar.toString());
-            // if (typeof info1 === 'string') return info1;
-            if (!info1.return && info1.args.length === 0) return;
-            // if (typeof info2 === 'string') return info2;
-            if (info1.args.length !== info2.args.length) Message.error('ES0721', ['function', 'args', info1.args.length]);
-            // if (info1.args.length !== info2.args.length) throw new Error(' function 의 args타입의 길이가 서로 다릅니다. ');
-            for (var i = 0; i < info1.args.length; i++) {
-                try {
-                    checkAllowType(info1.args[i], info2.args[i]);
-                } catch (error) {
-                    Message.error('ES0722', ['function', 'args', error]);
-                    // throw new Error(' function 의 args 타입 조건이 허용되지 않습니다. \n'+ error);
-                }
-                
-                // if (!checkAllowType(info1.args[i], info2.args[i])) throw new Error(' function 의 args타입 조건이 허용되지 않습니다. ');
-            }
             try {
                 checkAllowType(info1.return, info2.return);
             } catch (error) {
                     Message.error('ES0722', ['function', 'return', error]);
-                    // throw new Error(' function 의 return 타입 조건이 허용되지 않습니다. \n'+ error);
             }
-            
-
             return;
         }
-        if (def1.name === 'object') {
-            if (def2.name !== 'object') Message.error('ES0713', ['object', def1.name, def2.name]);
-            // if (def2.name !== 'object') throw new Error(' object 의 대상이 object 타입이 아닙니다. ');
-            if (ori === tar) return;
-            if (_isEmptyObj(tar)) return;
-            if (ori instanceof RegExp) {
-                if (!(tar instanceof RegExp) || ori.source !== tar.source) {
-                    Message.error('ES0723', [ori.source, tar.source]);
-                    // throw new Error(' RegExp의 source가 서로 다릅니다. '+ ori.source);
+        if (oriDef.name === 'object') {
+            if (tarDef.name !== 'object') Message.error('ES0713', ['object', oriDef.name, tarDef.name]);
+            if (oriDef.val === tarDef.val) return;
+            if (_isEmptyObj(tarDef.val)) return;
+            if (oriDef.val instanceof RegExp) {
+                if (!(tarDef.val instanceof RegExp) || oriDef.val.source !== tarDef.val.source) {
+                    Message.error('ES0723', [oriDef.val.source, tarDef.val.source]);
                 }
             }
-            if (deepEqual(ori, tar)) return;
+            if (deepEqual(oriDef.val, tarDef.val)) return;
                 Message.error('ES0718', ['object']);
-                // throw new Error(' object 의 대상이 거부되었습니다. ');
         }
-        if (def1.name === 'class') {
-            if (ori === tar) return;
+        if (oriDef.name === 'class') {
+            if (oriDef.val === tarDef.val) return;
             try {
-                var obj1 = new ori();
-                var obj2 = new tar();
+                var obj1 = new oriDef.val();
+                var obj2 = new tarDef.val();
                 if (deepEqual(obj1, obj2)) return;
             } catch (error) {
                 Message.error('ES0724', ['object', error]);
-                // throw new Error(' class 타입의 비교중에 오류가 발생하였습니다. ');
             }
             Message.error('ES0725', ['object']);
-            // throw new Error(' class 타입의 생성 객체가 서도 다릅니다. ');
         }
-        if (def1.name === 'union') {    // Branch:
-            var list = getAllProperties(ori);
+        if (oriDef.name === 'union') {
+            var list = getAllProperties(oriDef.val);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 try {
-                    checkAllowType(ori[key], tar[key])
+                    checkAllowType(oriDef.val[key], tarDef.val[key])
                 } catch (error) {
                     Message.error('ES0726', ['union', error]);
-                    // throw new Error(' union 타입 조건이 허용되지 않습니다. \n'+ error);
                 }
-                // if (!checkAllowType(ori[key], tar[key])) throw new Error(' union 타입의 거부되었습니다. ');
             }
             return;
         }
+    };
+
+    /**
+     * 타입을 검사하여 메세지를 리턴
+     * @param {any} type 검사할 타입 , origin
+     * @param {any} target 검사대상
+     * @param {string?} parentName '' 공백시 성공
+     * @returns {throw?}
+     */
+    var process = function(type, target, parentName) {
+        var parentName = parentName ? parentName : 'this';
+        // var typeDef = {type: type, name: '', default: null, option: null};
+        var returnMsg = '', arrMsg = [];
+        var defType;
+
+        defType = typeKind(type);
+        
+        
+        if (defType.name === 'undefined') {
+            if (typeof target === 'undefined') return;
+            Message.error('ES074', [parentName, 'undefined']);
+        }
+        if (defType.name === 'null') {
+            if (target === null) return;
+            Message.error('ES074', [parentName, 'null']);
+        }
+        if (defType.name === 'number') {
+            if (defType.default && typeof target === 'undefined') target = defType.default; 
+            if (typeof target === 'number') return;
+            Message.error('ES074', [parentName, 'number']);
+        }
+        if (defType.name === 'string') {
+            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof target === 'string') return;
+            Message.error('ES074', [parentName, 'string']);
+        }
+        if (defType.name === 'boolean') {
+            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof target === 'boolean') return;
+            Message.error('ES074', [parentName, 'boolean']);
+        }
+        if (defType.name === 'symbol') {
+            if (typeof target === 'symbol') return '';
+            Message.error('ES074', [parentName, 'symbol']);
+        }
+        if (defType.name === 'choice') {
+            var beginIdx = 0;
+            if (defType.opt == '_ANY_') {
+                if (typeof target !== 'undefined') return;
+                Message.error('ES075', ['choice', '_ANY_', 'undefined']);
+            } else if (defType.opt == '_OPT_') {
+                if (typeof target === 'undefined') return;
+                if (defType.val.length === 1) return;
+                beginIdx = 1;
+            } else if (defType.opt == '_SEQ_') {
+                Message.error('ES077', ['choice', '_SEQ_']);
+            }
+            for (var ii = beginIdx; ii < defType.val.length; ii++) {
+                try {
+                    process(defType.val[ii], target);
+                    return;
+                } catch (error) {
+                    continue;
+                }
+            }
+            Message.error('ES076', ['choice']);
+
+        }
+        if (defType.name === 'array') {
+            if ((type === Array || type.length === 0) && (Array.isArray(target) || target === Array)) return;
+            if (!Array.isArray(target)) return Message.error('ES024', [parentName, 'array']);
+            var beginIdx = 0;
+            if (defType.opt == '_ANY_') {
+                for(var ii = 0; ii < target.length; ii++) {
+                    var tar = target[ii];
+                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_ANY_', 'undefined']);
+                }
+                return;
+            } else if (defType.opt == '_SEQ_') {
+                for(var i = 1; i < defType.val.length; i++) {
+                    var tar = target[i - 1];
+                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', i]);
+                    process(defType.val[i], tar);
+                }
+                return;
+            } else if (defType.opt == '_OPT_') {
+                if (Array.isArray(target) && target.length === 0) return;
+                if (defType.val.length === 1) return;
+                beginIdx = 1;
+            }
+            for (var i = 0; i < target.length; i++) {
+                for (var ii = beginIdx; ii < defType.val.length; ii++) {
+                    try {
+                        process(defType.val[ii], target[i]);
+                        return;
+                    } catch (error) {
+                        continue;
+                    }
+                }
+                Message.error('ES076', ['array']);
+            }
+        }
+        if (defType.name === 'function') {
+            if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
+            if (type === Function) return;
+            var fixType = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
+            var fixReturns = [];
+            var tarType = target['_TYPE'];
+            var tarArgs = [];
+            var tarReturns = [];
+            if (!fixType.return && fixType.args.length === 0) return;    // success
+            if ((fixType.return || fixType.args.length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
+            if (typeof tarType.args === 'undefined' && typeof tarType.return === 'undefined') { 
+                Message.error('ES0710', ['target', 'function', ' {args: [], return: []} ']);
+            }
+            tarArgs = (Array.isArray(tarType.args )) ? tarType.args : [tarType.args];
+            if (fixType.return) fixReturns = (Array.isArray(fixType.return )) ? fixType.return : [fixType.return]; 
+            if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];
+            
+            if (fixType.args.length > 0) {  // args 검사
+                try {
+                    checkAllowType(['_SEQ_'].concat(fixType.args), ['_SEQ_'].concat(tarArgs))
+                } catch (error) {
+                    Message.error('ES0711', ['function', 'args', error]);
+                }
+            }
+            if (fixReturns.length > 0) {
+                try {
+                    checkAllowType(fixReturns, tarReturns)
+                } catch (error) {
+                        Message.error('ES0711', ['function', 'return', error]);
+                }
+            }
+            return;
+        }
+        if (defType.name === 'object') {
+            if (type === Object && target instanceof type) return;
+            if (type !== Object && target instanceof type.constructor) return;
+            return Message.error('ES024', [parentName, 'object']);
+        }
+        if (defType.name === 'class') {
+        
+            if (_isBuiltFunction(type)) {
+                if (target instanceof type) return; 
+                else return Message.error('ES032', [parentName, _typeName(type)]);
+            } else {
+                if (typeof target === 'object' && target instanceof type) return;
+                if (typeof target === 'object' && target !== null) return process(_creator(type), target, parentName);
+                return Message.error('ES032', [parentName, _typeName(type)]);
+            }
+        }
+        if (defType.name === 'union') {
+            var list = getAllProperties(defType.val);
+            for (var i = 0; i < list.length; i++) {
+                var key = list[i];
+                var listDefType = typeKind(type[key]);
+                // REVIEW: for 위쪽으로 이동 검토!
+                if (!_isObject(target)) return Message.error('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
+                if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+                if (listDefType.default !== null && typeof target[key] === 'undefined')      // default 설정
+                    target[key] = listDefType.default;
+                if (target !== null && !(key in target)) return Message.error('ES027', [listDefType.name, parentName + '.' + key]);    
+                if (listDefType.name === 'class'){
+                    if (typeof target[key] === 'function') continue;                        // class method
+                    if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
+                    else return Message.error('ES031', [parentName + '.' + key]);
+                } 
+                process(type[key], target[key], parentName +'.'+ key);
+            }
+            return;
+        }
+        return Message.error('ES022', [defType.name]);
     };
 
     /**
@@ -883,7 +705,7 @@
     var isValidType = function(chkType, target) {
         if (typeof chkType === 'undefined') return false;
         try {
-            _check(chkType, target);
+            process(chkType, target);
             
         } catch (error) {
             return false;
@@ -905,16 +727,11 @@
         
         
         try {
-            _check(chkType, target);
+            process(chkType, target);
             
         } catch (error) {
             Message.error('ES069', ['check type', error]);
         }
-        
-        // _check(chkType, target);
-        // msg = _check(chkType, target);
-        // if(msg.length === 0) return;
-        // Message.error('ES069', ['check type', msg]);
     };
 
 
@@ -923,7 +740,6 @@
     if (isNode) {     
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
-        // exports._check = _check;
         exports.typeKind = typeKind;
         exports.isValidType = isValidType;
         exports.checkType = checkType;
@@ -933,7 +749,7 @@
         var ns = {
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
-            // _check: _check,
+            // process: process,
             typeKind: typeKind,
             isValidType: isValidType,
             checkType: checkType,

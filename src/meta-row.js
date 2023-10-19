@@ -227,7 +227,7 @@
                         var column;
                         // 엔티티 항상 존재함
                         column = _entity.columns[p_idx];
-                        if (column && column._valueTypes.length > 0) Util.checkType(column._valueTypes, nVal);
+                        if (column && column._valueTypes.length > 0) Util.checkType([column._valueTypes], nVal);
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (_entity && !_entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + nVal + ', old:'+ oldValue;
@@ -391,7 +391,7 @@
                 get: function() { return this._elements[p_idx]; },
                 set: function(nVal) {
                     var typeName;
-                    if (this._elemTypes.length > 0) Util.checkType(this._elemTypes, nVal);
+                    if (this._elemTypes.length > 0) Util.checkType([this._elemTypes], nVal);
                     if (nVal._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
