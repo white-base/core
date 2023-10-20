@@ -176,10 +176,10 @@
      * @returns {array<string>}  
      */
     var getAllProperties = function(obj, hasObj) {
-        var allProps = [], curr = obj;
+        var allProps = [], cur = obj;
         var is = hasObj || false;
         do {
-            var props = Object.getOwnPropertyNames(curr);
+            var props = Object.getOwnPropertyNames(cur);
             
             // props.forEach(function(prop) {
             //     if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
@@ -190,7 +190,7 @@
                 if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop)))
                     allProps.push(prop);
             }
-        } while (curr = Object.getPrototypeOf(curr))
+        } while (cur = Object.getPrototypeOf(cur))
         return allProps;
     };
 
@@ -244,6 +244,22 @@
     var typeKind = function(type) {
         var obj =  {name: '', val: type, default: null, opt: null};
 
+        obj.toString = function(){
+            var temp = '';
+            var arr = [];
+            if (this.name === 'array' || this.name === 'choice') {
+                for (var i = this.opt ? 1 : 0; i < this.val.length; i++) {
+                    var tName = typeKind(this.val[i]).name;
+                    if (tName === 'array' || tName === 'choice') arr.push(tName);
+                    else arr.push(typeKind(this.val[i]).toString());
+                }
+                temp = arr.join(',');
+            } else {
+                temp = this.name;
+                if (this.default) temp += '('+this.default+')';
+            }
+            return temp;
+        }
         // seq 1 : === (operation) 
         if (type === null) {
             obj.name = 'null';
@@ -303,8 +319,8 @@
                 var kind = type['_KIND'];
                 if (kind) {
                     kind = kind.toLowerCase();
-                    if (kind === 'class' || kind === 'interface') obj.name = 'class';   // Branch:
-                    if (kind === 'function') obj.name = 'function'; // Branch:
+                    if (kind === 'class' || kind === 'interface') obj.name = 'class';
+                    if (kind === 'function') obj.name = 'function';
                 } else {
                     obj.name = _isUpper(type.name) ? 'class' : 'function';
                 }
@@ -339,21 +355,7 @@
         Message.error('ES022', ['type']);
     }
     
-    /**
-     * 타입 검사
-     * @memberof _L.Common.Util
-     * @param {any} origin 
-     * @param {any} target 
-     * @returns {boolean} 
-     */
-    var isValidAllowType = function(origin, target) {
-        try {
-            checkAllowType(origin, target);
-        } catch (error) {
-            return false;
-        }
-        return true;
-    };    
+  
 
     /**
      * 원본타입에 대상타입이 덮어쓰기가 허용 가능한지 검사합니다.  
@@ -363,21 +365,22 @@
      * @param {any} tar 대상 타입
      * @returns {throw?}
      */
-    var checkAllowType = function (ori, tar) {
+    var _execAllowType = function (ori, tar) {
         var oriDef = typeKind(ori);
         var tarDef = typeKind(tar);
         
         if (_isObject(oriDef.val) &&  _isObject(tarDef.val) && deepEqual(oriDef.val, tarDef.val)) return;
         
-        // 원시타입 타입
-        if (['null', 'number', 'string', 'boolean', 'symbol', 'undefined'].indexOf(oriDef.name) > -1) {
+        // primitive
+        if (['null', 'undefined', 'number', 'string', 'boolean', 'symbol'].indexOf(oriDef.name) > -1) {
             if(oriDef.default !== null && oriDef.default !== tarDef.default) {
                 Message.error('ES0712', [oriDef.name, oriDef.default, tarDef.default]);
             }
             if (oriDef.name === tarDef.name) return;
                 Message.error('ES0713', [oriDef.name, tarDef.name]);
         }
-        if (oriDef.name === 'choice') {   // choice
+        // choice
+        if (oriDef.name === 'choice') {   
             if (oriDef.val.length === 0) throw new Error('chice 에서 타입이 없습니다. ');
             if (oriDef.opt == '_ANY_') {
                 if (typeof tarDef.val !== 'undefined') return;
@@ -393,14 +396,14 @@
                 Message.error('ES0716', ['choice', oriDef.val.join(','), arrTarget.join(',')]);
             }
             if (oriDef.val.length - start1 > 0 && arrTarget.length - start2 === 0) {
-                Message.error('ES0717', ['choice']);
+                Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
             }
             for (i = start2; i < arrTarget.length; i++) {
                 var success = false;
                 for (var ii = start1; ii < oriDef.val.length; ii++) {
                     try {
                         if (success) continue;
-                        checkAllowType(oriDef.val[ii], arrTarget[i]);
+                        _execAllowType(oriDef.val[ii], arrTarget[i]);
                         success = true;
                     } catch (error) {
                         continue;
@@ -410,7 +413,8 @@
             }
             return;
         }
-        if (oriDef.name === 'array') {    // array
+        // array
+        if (oriDef.name === 'array') {    
             if ((oriDef.val === Array || oriDef.val.length === 0) && (Array.isArray(tarDef.val) || tarDef.val === Array)) return;      // [], [[]], Array
             if (!Array.isArray(tarDef.val)) Message.error('ES0719', ['array']);
             if (oriDef.opt == '_ANY_') {
@@ -434,7 +438,7 @@
                     for (var ii = start1; ii < oriDef.val.length; ii++) {
                         try {
                             if (success) continue;
-                            checkAllowType(oriDef.val[ii], tarDef.val[i]);
+                            _execAllowType(oriDef.val[ii], tarDef.val[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -444,12 +448,14 @@
                 }
                 return;
             
-            } else if (oriDef.opt == '_SEQ_') {   // Branch:
+            } else if (oriDef.opt == '_SEQ_') {
                 if (oriDef.opt !== tarDef.opt)  Message.error('ES0719', ['_SEQ_']);
-                if (oriDef.val.length > tarDef.val.length) Message.error('ES0720', ['array', '_SEQ_']);
+                if (oriDef.val.length > tarDef.val.length) {
+                    Message.error('ES0720', [oriDef.toString(), tarDef.toString()]);
+                }
                 for (var i = 1; i < oriDef.val.length; i++) {
                     try {
-                        checkAllowType(oriDef.val[i], tarDef.val[i]);
+                        _execAllowType(oriDef.val[i], tarDef.val[i]);
                     } catch (error) {
                         Message.error('ES0711', ['array', '_SEQ_', error]);
                     }
@@ -458,14 +464,15 @@
 
             } else {
                 try {
-                    checkAllowType([oriDef.val], [tarDef.val]);
+                    _execAllowType([oriDef.val], [tarDef.val]);
                     return;
                 } catch (error) {
                     Message.error('ES0711', ['array', '', error]);
                 }
             }
         }
-        if (oriDef.name === 'function') { // function
+        // function
+        if (oriDef.name === 'function') { 
             if (tarDef.name !== 'function')  Message.error('ES0713', ['function', oriDef.name, tarDef.name]);
             if (oriDef.val === Function) return;
             var info1 = oriDef.val['_TYPE'] ? oriDef.val['_TYPE'] : _getFunInfo(oriDef.val.toString());
@@ -474,18 +481,19 @@
             if (info1.args.length !== info2.args.length) Message.error('ES0721', ['function', 'args', info1.args.length]);
             
             try {
-                checkAllowType(['_SEQ_'].concat(info1.args), ['_SEQ_'].concat(info2.args));
+                _execAllowType(['_SEQ_'].concat(info1.args), ['_SEQ_'].concat(info2.args));
             } catch (error) {
                 Message.error('ES0722', ['function', 'args', error]);
             }
 
             try {
-                checkAllowType(info1.return, info2.return);
+                _execAllowType(info1.return, info2.return);
             } catch (error) {
                     Message.error('ES0722', ['function', 'return', error]);
             }
             return;
         }
+        // object
         if (oriDef.name === 'object') {
             if (tarDef.name !== 'object') Message.error('ES0713', ['object', oriDef.name, tarDef.name]);
             if (oriDef.val === tarDef.val) return;
@@ -498,6 +506,7 @@
             if (deepEqual(oriDef.val, tarDef.val)) return;
                 Message.error('ES0718', ['object']);
         }
+        // class
         if (oriDef.name === 'class') {
             if (oriDef.val === tarDef.val) return;
             try {
@@ -509,12 +518,13 @@
             }
             Message.error('ES0725', ['object']);
         }
+        // union
         if (oriDef.name === 'union') {
             var list = getAllProperties(oriDef.val);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 try {
-                    checkAllowType(oriDef.val[key], tarDef.val[key])
+                    _execAllowType(oriDef.val[key], tarDef.val[key])
                 } catch (error) {
                     Message.error('ES0726', ['union', error]);
                 }
@@ -530,22 +540,20 @@
      * @param {string?} parentName '' 공백시 성공
      * @returns {throw?}
      */
-    var process = function(type, target, parentName) {
+    var _execType = function(type, target, parentName) {
         var parentName = parentName ? parentName : 'this';
-        // var typeDef = {type: type, name: '', default: null, option: null};
-        var returnMsg = '', arrMsg = [];
-        var defType;
+        var defType, tarType;
 
         defType = typeKind(type);
-        
-        
-        if (defType.name === 'undefined') {
-            if (typeof target === 'undefined') return;
-            Message.error('ES074', [parentName, 'undefined']);
-        }
+        tarType = typeKind(target);
+        // primitive
         if (defType.name === 'null') {
             if (target === null) return;
             Message.error('ES074', [parentName, 'null']);
+        }
+        if (defType.name === 'undefined') {
+            if (typeof target === 'undefined') return;
+            Message.error('ES074', [parentName, 'undefined']);
         }
         if (defType.name === 'number') {
             if (defType.default && typeof target === 'undefined') target = defType.default; 
@@ -566,6 +574,7 @@
             if (typeof target === 'symbol') return '';
             Message.error('ES074', [parentName, 'symbol']);
         }
+        // choice
         if (defType.name === 'choice') {
             var beginIdx = 0;
             if (defType.opt == '_ANY_') {
@@ -580,15 +589,16 @@
             }
             for (var ii = beginIdx; ii < defType.val.length; ii++) {
                 try {
-                    process(defType.val[ii], target);
+                    _execType(defType.val[ii], target);
                     return;
                 } catch (error) {
                     continue;
                 }
             }
-            Message.error('ES076', ['choice']);
-
+            var logTitle = defType.opt ? 'choice('+defType.opt+')' : 'choice';
+            Message.error('ES076', [logTitle, defType.toString(), tarType.toString()]);
         }
+        // array
         if (defType.name === 'array') {
             if ((type === Array || type.length === 0) && (Array.isArray(target) || target === Array)) return;
             if (!Array.isArray(target)) return Message.error('ES024', [parentName, 'array']);
@@ -602,8 +612,8 @@
             } else if (defType.opt == '_SEQ_') {
                 for(var i = 1; i < defType.val.length; i++) {
                     var tar = target[i - 1];
-                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', i]);
-                    process(defType.val[i], tar);
+                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
+                    _execType(defType.val[i], tar);
                 }
                 return;
             } else if (defType.opt == '_OPT_') {
@@ -614,15 +624,17 @@
             for (var i = 0; i < target.length; i++) {
                 for (var ii = beginIdx; ii < defType.val.length; ii++) {
                     try {
-                        process(defType.val[ii], target[i]);
+                        _execType(defType.val[ii], target[i]);
                         return;
                     } catch (error) {
                         continue;
                     }
                 }
-                Message.error('ES076', ['array']);
+                var logTitle = defType.opt ? 'array('+defType.opt+')' : 'array';
+                Message.error('ES076', [logTitle, defType.toString(), tarType.toString()]);
             }
         }
+        // function
         if (defType.name === 'function') {
             if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
             if (type === Function) return;
@@ -642,25 +654,27 @@
             
             if (fixType.args.length > 0) {  // args 검사
                 try {
-                    checkAllowType(['_SEQ_'].concat(fixType.args), ['_SEQ_'].concat(tarArgs))
+                    _execAllowType(['_SEQ_'].concat(fixType.args), ['_SEQ_'].concat(tarArgs))
                 } catch (error) {
                     Message.error('ES0711', ['function', 'args', error]);
                 }
             }
             if (fixReturns.length > 0) {
                 try {
-                    checkAllowType(fixReturns, tarReturns)
+                    _execAllowType([fixReturns], [tarReturns])
                 } catch (error) {
-                        Message.error('ES0711', ['function', 'return', error]);
+                    Message.error('ES0711', ['function', 'return', error]);
                 }
             }
             return;
         }
+        // object
         if (defType.name === 'object') {
             if (type === Object && target instanceof type) return;
             if (type !== Object && target instanceof type.constructor) return;
             return Message.error('ES024', [parentName, 'object']);
         }
+        // class
         if (defType.name === 'class') {
         
             if (_isBuiltFunction(type)) {
@@ -668,10 +682,11 @@
                 else return Message.error('ES032', [parentName, _typeName(type)]);
             } else {
                 if (typeof target === 'object' && target instanceof type) return;
-                if (typeof target === 'object' && target !== null) return process(_creator(type), target, parentName);
+                if (typeof target === 'object' && target !== null) return _execType(_creator(type), target, parentName);
                 return Message.error('ES032', [parentName, _typeName(type)]);
             }
         }
+        // union
         if (defType.name === 'union') {
             var list = getAllProperties(defType.val);
             for (var i = 0; i < list.length; i++) {
@@ -688,7 +703,7 @@
                     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
                     else return Message.error('ES031', [parentName + '.' + key]);
                 } 
-                process(type[key], target[key], parentName +'.'+ key);
+                _execType(type[key], target[key], parentName +'.'+ key);
             }
             return;
         }
@@ -696,7 +711,56 @@
     };
 
     /**
-     * 타입 검사
+     * 원본타입에 대상타입을 적용(설정)가능 여부를 검사한다.
+     * @memberof _L.Common.Util
+     * @param {any} origin 
+     * @param {any} target 
+     * @returns {throw?} 실패시 예외를 던진다.
+     */
+    var checkAllowType = function(origin, target) {
+        try {
+            if (typeof chkType === 'undefined') Message.error('ES026', ['origin']);
+            _execAllowType(chkType, target);
+        } catch (error) {
+            Message.error('ES069', ['check allow type', error]);
+        }
+    };    
+
+
+    /**
+     * 대상의 타입 여부를 검사합니다.
+     * @memberof _L.Common.Util
+     * @param {any} chkType 
+     * @param {any} target 
+     * @returns {throw?} 실패시 예외를 던진다.
+     */
+    var checkType = function(chkType, target) {
+        try {
+            if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
+            _execType(chkType, target);
+        } catch (error) {
+            Message.error('ES069', ['check type', error]);
+        }
+    };
+
+    /**
+     * 원본타입에 대상타입을 적용(설정)가능 여부를 검사한다.
+     * @memberof _L.Common.Util
+     * @param {any} origin 
+     * @param {any} target 
+     * @returns {boolean} 
+     */
+    var isValidAllowType = function(origin, target) {
+        try {
+            _execAllowType(origin, target);
+        } catch (error) {
+            return false;
+        }
+        return true;
+    };  
+
+    /**
+     * 대상의 타입 여부를 검사합니다.
      * @memberof _L.Common.Util
      * @param {any} chkType 
      * @param {any} target 
@@ -705,32 +769,10 @@
     var isValidType = function(chkType, target) {
         if (typeof chkType === 'undefined') return false;
         try {
-            process(chkType, target);
-            
+            _execType(chkType, target);
+            return true;
         } catch (error) {
             return false;
-        }
-        return true;
-    };
-
-    /**
-     * 타입 검사 
-     * @memberof _L.Common.Util
-     * @param {any} chkType 
-     * @param {any} target 
-     * @returns {throw?} 실패시 예외를 던진다.
-     */
-    var checkType = function(chkType, target) {
-        var msg = '';
-
-        if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);    // Branch:
-        
-        
-        try {
-            process(chkType, target);
-            
-        } catch (error) {
-            Message.error('ES069', ['check type', error]);
         }
     };
 
@@ -741,20 +783,19 @@
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
         exports.typeKind = typeKind;
-        exports.isValidType = isValidType;
         exports.checkType = checkType;
-        exports.isValidAllowType = isValidAllowType;
         exports.checkAllowType = checkAllowType;
+        exports.isValidType = isValidType;
+        exports.isValidAllowType = isValidAllowType;
     } else {
         var ns = {
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
-            // process: process,
             typeKind: typeKind,
-            isValidType: isValidType,
             checkType: checkType,
-            isValidAllowType: isValidAllowType,
-            checkAllowType: checkAllowType
+            checkAllowType: checkAllowType,
+            isValidType: isValidType,
+            isValidAllowType: isValidAllowType
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;
