@@ -65,8 +65,27 @@ describe("[target: util-type.js.js]", () => {
             expect(typeKind(true).default         ).toBe(true);
             // Symbol   => new 생성이 안됨
             expect(typeKind(Symbol).name          ).toBe('symbol');  
-            expect(typeKind(Symbol('a')).name     ).toBe('symbol');  // 존재하지 않는 타입
+            expect(typeKind(Symbol('a')).name     ).toBe('symbol');
         });
+        it('- typeKind() : 자료형별 타입 얻기 ', () => {
+            // object : Date
+            expect(typeKind(Date).name              ).toBe('class');
+            expect(typeKind(new Date()).name        ).toBe('object');
+            
+            expect(typeKind(Math).name              ).toBe('union');
+            expect(typeKind(Math.E).name            ).toBe('number');
+            expect(typeKind(Math.LN2).name          ).toBe('number');
+            
+            expect(typeKind(Map).name               ).toBe('class');
+            expect(typeKind(new Map()).name         ).toBe('union');
+            
+            expect(typeKind(Int8Array).name         ).toBe('class');
+            expect(typeKind(new Int8Array(2)).name  ).toBe('union');
+            
+            expect(typeKind(Promise).name           ).toBe('class');
+            expect(typeKind(new Promise((r,r2) => {})).name        ).toBe('union');
+       });
+
         it('- 예외 :  ', () => {
             // BigInt는 사용 안함
             expect(() => typeKind(2n ** 53n).name ).toThrow('ES022');
