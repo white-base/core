@@ -216,16 +216,16 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType([['_any_']],                  [[undefined]]         )).toBe(T);
             // expect(isValidAllowType([['_any_']],                  undefined           )).toBe(false);    // TODO:
             // expect(isValidAllowType([['_any_']],                                      )).toBe(false);    // TODO:
-            expect(isValidAllowType([['_seq_']],                  [['_seq_']]           )).toBe(T);
-            expect(isValidAllowType([['_seq_']],                  [['_seq_', String]]   )).toBe(false);
-            expect(isValidAllowType([['_seq_']],                  [['_seq_', Number]]   )).toBe(false);
-            expect(isValidAllowType([['_seq_', Number]],          [['_seq_', Number]]           )).toBe(T); // 같은 경우만 True
-            expect(isValidAllowType([['_seq_', Number]],          [['_seq_', Number, String]]   )).toBe(false);
+            expect(isValidAllowType([['_seq_']],                  [['_seq_']]           )).toBe(T);     // TODO: 허용하도록 처리함 
+            expect(isValidAllowType([['_seq_']],                  [['_seq_', String]]   )).toBe(T);
+            expect(isValidAllowType([['_seq_']],                  [['_seq_', Number]]   )).toBe(T);
+            expect(isValidAllowType([['_seq_', Number]],          [['_seq_', Number]]           )).toBe(T); // 같은 경우만 True  
+            expect(isValidAllowType([['_seq_', Number]],          [['_seq_', Number, String]]   )).toBe(T); 
             expect(isValidAllowType([['_seq_', Number]],          [['_seq_']]                   )).toBe(false);
             expect(isValidAllowType([['_seq_', Number]],          [['_seq_', Boolean]]          )).toBe(false);
-            expect(isValidAllowType([['_seq_', Number]],          [[Number]]                    )).toBe(false);
+            expect(isValidAllowType([['_seq_', Number]],          [[Number]]                    )).toBe(false); 
             expect(isValidAllowType([['_seq_', Number, String]],  [['_seq_', Number, String]]   )).toBe(T); // 같은 경우만 True
-            expect(isValidAllowType([['_seq_', Number, String]],  [['_seq_', Number]]           )).toBe(false);
+            expect(isValidAllowType([['_seq_', Number, String]],  [['_seq_', Number]]           )).toBe(false); 
             expect(isValidAllowType([['_seq_', Number, String]],  [[Number]]                    )).toBe(false);
             expect(isValidAllowType([['_opt_']],                  [['_opt_']]           )).toBe(T);
             expect(isValidAllowType([['_opt_']],                  [['_opt_', String]]   )).toBe(T);
@@ -541,7 +541,7 @@ describe("[target: util-type.js.js]", () => {
             // _seq_
             expect(isValidType(['_seq_'], ['str', 10]       )).toBe(T);
             expect(isValidType(['_seq_'], ['str', 10, true] )).toBe(T);
-            expect(isValidType(['_seq_'], [10, 'str']       )).toBe(T);
+            expect(isValidType(['_seq_'], [10, 'str']       )).toBe(T); 
             expect(isValidType(['_seq_'], ['str']           )).toBe(T);
             expect(isValidType(['_seq_'], 10                )).toBe(false);
             expect(isValidType(['_seq_', String, Number], ['str', 10]       )).toBe(T);
@@ -577,7 +577,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkType(Array,        10                  )).toThrow(/ES069(\s|.)*ES024/)
             expect(()=> checkType(['_any_'],    [undefined]         )).toThrow(/ES069(\s|.)*ES075/)
             expect(()=> checkType(['_any_'],    10                  )).toThrow(/ES069(\s|.)*ES024/)
-            expect(()=> checkType(['_seq_'],    10                  )).toThrow(/ES069(\s|.)*ES024/)
+            expect(()=> checkType(['_seq_'],    10                  )).toThrow(/ES069(\s|.)*ES024/) 
             expect(()=> checkType(['_seq_', String, Number], [10, 'str'])).toThrow(/ES069(\s|.)*ES074/)
             expect(()=> checkType(['_seq_', String, Number], ['str']    )).toThrow(/ES069(\s|.)*ES075/)
             expect(()=> checkType(['_seq_', String, Number], 10         )).toThrow(/ES069(\s|.)*ES024/)
