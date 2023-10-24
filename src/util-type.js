@@ -281,7 +281,7 @@
         if (type === Array) {
             obj.name = 'array';
             obj.kind = '_ALL_';
-            obj.val = [];
+            obj.list = [];
             return obj;
         }
         if (type === Function) {
@@ -336,12 +336,12 @@
                 obj.name = 'choice';
                 if (type[0].length === 0) obj.kind = '_ALL_';
                 else obj.kind = _getKeyCode(type[0][0]);
-                obj.val = obj.kind ? type[0].slice(1) : type[0];
+                obj.list = obj.kind ? type[0].slice(1) : type[0];
             } else {
                 obj.name = 'array';
                 if (type.length === 0) obj.kind = '_ALL_';
                 else obj.kind = _getKeyCode(type[0]);
-                obj.val = obj.kind ? type.slice(1) : type;
+                obj.list = obj.kind ? type.slice(1) : type;
             }
             if (!obj.kind) obj.kind = '_VAL_';
             // if ((obj.kind === '_OPT_' || obj.kind === '_SEQ_')
@@ -382,35 +382,31 @@
         
         if (_isObject(oriDef.val) &&  _isObject(tarDef.val) && deepEqual(oriDef, tarDef)) return;
         // ori seq, opt 필수 검사
-        if (oriDef.name === 'choice' || oriDef.name === 'array') {
+        if (oriDef.kind) {
             if ((oriDef.kind === '_SEQ_' || oriDef.kind === '_OPT_') 
-            && (typeof oriDef.val === 'undefined' || oriDef.val.length === 0)) throw new Error('ori 의 SEQ, OPT 뒤에 인자가 없습니다.');
+            && (typeof oriDef.val === 'undefined' || oriDef.list.length === 0)) throw new Error('ori 의 SEQ, OPT 뒤에 인자가 없습니다.');
         }
         // tar seq, opt 필수 검사
-        if (tarDef.name === 'choice' || tarDef.name === 'array') {
+        if (tarDef.kind) {
             if ((tarDef.kind === '_SEQ_' || tarDef.kind === '_OPT_') 
-            && (typeof tarDef.val === 'undefined' || tarDef.val.length === 0)) throw new Error('tar 의 SEQ, OPT 뒤에 인자가 없습니다.');
+            && (typeof tarDef.val === 'undefined' || tarDef.list.length === 0)) throw new Error('tar 의 SEQ, OPT 뒤에 인자가 없습니다.');
         }
 
-        if ((oriDef.name === 'choice' || oriDef.name === 'array') 
-        && (tarDef.name === 'choice' || tarDef.name === 'array')) {
-            if ((oriDef.kind === '_SEQ_' || oriDef.kind === '_OPT_') 
-            && (typeof oriDef.val === 'undefined' || oriDef.val.length === 0)) throw new Error('ori 의 SEQ, OPT 뒤에 인자가 없습니다.');
-            // kind 별 허용 검사
-            if (oriDef.kind === '_ALL_' && (tarDef.kind === '_NON_' || tarDef.kind === '_ANY_')) {
-                throw new Error('all 타입에는 non, any 타입을 거부합니다.');
+        if ((oriDef.kind) && (tarDef.kind)) {
+            if (oriDef.kind === '_ALL_' && (tarDef.kind === '_NON_')) {
+                throw new Error('all 타입에는 non 타입을 거부합니다.');
             } 
-            if (oriDef.kind === '_NON_' && tarDef.kind !== '_NON_') throw new Error('non 타입에는 non 타입만 허용합니다.');
-            if (oriDef.kind === '_ANY_' && (!tarDef.kind || tarDef.kind === '_NON_' || tarDef.kind === '_ALL_' )) {
-                throw new Error('any 타입에는 choice, all, non 타입을 거부합니다.');
+            if (oriDef.kind === '_NON_' && tarDef.kind !== '_NON_') throw new Error('non 타입에는 non 타입만 허용합니다. tar.kind='+ tarDef.kind);
+            if (oriDef.kind === '_ANY_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
+                throw new Error('any 타입에는 val, all, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
             }
-            if (oriDef.kind === '_OPT_' && tarDef.kind && !(tarDef.kind === '_OPT_' || tarDef.kind === '_SEQ_') ){
-                throw new Error('opt 타입에는 opt, seq 타입만 하용합니다.');
+            if (oriDef.kind === '_OPT_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' || tarDef.kind === '_NON_') ){
+                throw new Error('opt 타입에는 opt, seq 타입만 거부합니다. tar.kind='+ tarDef.kind);
             } 
-            if (oriDef.kind === '_VAL_' && (tarDef.kind === '_ANY_' || tarDef.kind === '_ALL_' || tarDef.kind === '_NON_')) {
-                throw new Error('choice 타입에는 any, all, non 타입을 거부합니다.');
+            if (oriDef.kind === '_VAL_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' ||  tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
+                throw new Error('choice 타입에는 any, all, opt, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
             }
-            if (oriDef.kind === '_SEQ_' && tarDef.kind !== '_SEQ_') throw new Error('seq 타입에는 seq 타입만 허용합니다.');
+            if (oriDef.kind === '_SEQ_' && tarDef.kind !== '_SEQ_') throw new Error('seq 타입에는 seq 타입만 허용합니다. tar.kind='+ tarDef.kind);
         }
 
         // primitive
@@ -434,37 +430,40 @@
                 // if (oriDef.val.length === 0) throw new Error('choice(seq) 타입이 없습니다. ');  
                 if (tarDef.kind !== '_SEQ_') throw new Error('대상의 choice(seq)가 아닙니다. ');
                 // Message.error('ES0715', ['_SEQ_']);
-                if (oriDef.val.length > tarDef.val.length) {
+                if (oriDef.list.length > tarDef.list.length) {
                     throw new Error('대상의 choice(seq)가 원본보다 작을 수 없습니다. ');
                     // Message.error('ES0716', ['choice', oriDef.val.join(','), arrTarget.join(',')]);
                 }
-                if (oriDef.val.length === 0 && tarDef.val.length > 0) return;
-                for (i = 0; i < oriDef.val.length; i++) {
+                if (oriDef.list.length === 0 && tarDef.list.length > 0) return;
+                for (i = 0; i < oriDef.list.length; i++) {
                     try {
-                        _execAllowType(oriDef.val[i], tarDef.val[i]);
+                        _execAllowType(oriDef.list[i], tarDef.list[i]);
                     } catch (error) {
                         throw new Error('원본의 chice 와 대상의 choice가 다릅니다.');
                     }
                 }
                 return;
             
-            } else if (oriDef.kind == '_OPT_') {
+            } else if (oriDef.kind == '_VAL_') {
                 // if (oriDef.val.length === 0) throw new Error('choice(opt) 타입이 없습니다. ');  
                 // if (oriDef.val.length === 0) return;
                 if (tarDef.val.length === 0) {
                     throw new Error('원본이 0이 아닌데 대상의 0보다 커야한다. ');
                     // Message.error('ES0716', ['choice', oriDef.val.join(','), arrTarget.join(',')]);
                 }
-                var arrTarget = Array.isArray(tarDef.val) ? tarDef.val : [tarDef.val];
-                if (oriDef.val.length > 0 && arrTarget.length === 0) {
+                // var arrTarget = Array.isArray(tarDef.val) ? tarDef.val : [tarDef.val];
+                var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
+                // if (tarDef.kind) arrTarget = tarDef.list;
+
+                if (oriDef.list.length > 0 && arrTarget.length === 0) {
                     Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
                 }
                 for (i = 0; i < arrTarget.length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef.val.length; ii++) {
+                    for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllowType(oriDef.val[ii], arrTarget[i]);
+                            _execAllowType(oriDef.list[ii], arrTarget[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -474,20 +473,23 @@
                 }
                 return;
 
-            } else if (oriDef.kind === '_VAL_') {
+            } else if (oriDef.kind === '_OPT_') {
+                // var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
                 if (typeof tarDef.val === 'undefined') return;
 
-                var arrTarget = Array.isArray(tarDef.val) ? tarDef.val : [tarDef.val];
-                if (oriDef.val.length > 0 && arrTarget.length === 0) {
+                // var arrTarget = Array.isArray(tarDef.list) ? tarDef.list : [tarDef.list];
+                var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
+
+                if (oriDef.list.length > 0 && arrTarget.length === 0) {
                     Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
                 }
                 for (i = 0; i < arrTarget.length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef.val.length; ii++) {
+                    for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            if (typeof arrTarget[i] === 'undefined') return;
-                            _execAllowType(oriDef.val[ii], arrTarget[i]);
+                            // if (typeof arrTarget[i] === 'undefined') return;
+                            _execAllowType(oriDef.list[ii], arrTarget[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -502,47 +504,48 @@
         }
         // array
         if (oriDef.name === 'array') {    
-            if (oriDef.val.length === 0 && !oriDef.kind && tarDef.name === 'array') return;      // [], [[]], Array
-            if (!Array.isArray(tarDef.val)) Message.error('ES0719', ['array']);
+            if (oriDef.list.length === 0 && !oriDef.kind && tarDef.name === 'array') return;      // [], [[]], Array
+            if (!Array.isArray(tarDef.list)) Message.error('ES0719', ['array']);
             if (oriDef.kind == '_ALL_') {
                 return;
             } else if (oriDef.kind == '_ANY_') {
-                if (tarDef.kind && tarDef.kind !== '_ANY_') Message.error('ES0713', ['array _ANY_', tarDef.kind]);
-                if (typeof tarDef.val === 'undefined' || typeof tarDef.val[0] === 'undefined') Message.error('ES075', ['array _ANY_', 'undefined']);
-                if (tarDef.val.length > 0) return;
+                // if (tarDef.kind && tarDef.list.length === !== '_ANY_') Message.error('ES0713', ['array _ANY_', tarDef.kind]);
+                // if (typeof tarDef.list === 'undefined' || typeof tarDef.list[0] === 'undefined') Message.error('ES075', ['array _ANY_', 'undefined']);
+                if (tarDef.kind && tarDef.list.length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
+                if (tarDef.list.length > 0) return;
                 
             } else if (oriDef.kind == '_SEQ_') {
                 // if (oriDef.val.length === 0) throw new Error('array(seq) 타입이 없습니다. ');  
                 if (oriDef.kind !== tarDef.kind)  Message.error('ES0719', ['_SEQ_']);
-                if (oriDef.val.length > tarDef.val.length) {
+                if (oriDef.list.length > tarDef.list.length) {
                     Message.error('ES0720', [oriDef.toString(), tarDef.toString()]);
                 }
-                for (var i = 0; i < oriDef.val.length; i++) {
+                for (var i = 0; i < oriDef.list.length; i++) {
                     try {
-                        _execAllowType(oriDef.val[i], tarDef.val[i]);
+                        _execAllowType(oriDef.list[i], tarDef.list[i]);
                     } catch (error) {
                         Message.error('ES0711', ['array', '_SEQ_', error]);
                     }
                 }
                 return;
 
-            } else if (oriDef.kind == '_OPT_') {
+            } else if (oriDef.kind == '_VAL_') {
                 // if (oriDef.val.length === 0) throw new Error('array(opt) 타입이 없습니다. ');  
                 // if (typeof tarDef.val === 'undefined' || tarDef.val.length === 0) return;
                 // var start1 = oriDef.kind ? 1 : 0;
                 // var start2 = tarDef.kind ? 1 : 0;
-                if (oriDef.val.length < tarDef.val.length) {
-                    Message.error('ES0716', ['array _OPT_', oriDef.val.join(','), tarDef.val.join(',')]);
+                if (oriDef.list.length < tarDef.list.length) {
+                    Message.error('ES0716', ['array _OPT_', oriDef.list.join(','), tarDef.list.join(',')]);
                 }
-                if (oriDef.val.length > 0 && tarDef.val.length === 0) {
+                if (oriDef.list.length > 0 && tarDef.list.length === 0) {
                     Message.error('ES0717', ['array']);
                 }
-                for (var i = 0; i < tarDef.val.length; i++) {
+                for (var i = 0; i < tarDef.list.length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef.val.length; ii++) {
+                    for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllowType(oriDef.val[ii], tarDef.val[i]);
+                            _execAllowType(oriDef.list[ii], tarDef.list[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -552,9 +555,9 @@
                 }
                 return;
             
-            } else if (oriDef.kind === '_VAL_') {
+            } else if (oriDef.kind === '_OPT_') {
                 // if (typeof tarDef.val === 'undefined') return;
-                if (Array.isArray(tarDef.val) && tarDef.val.length === 0) return;
+                if (Array.isArray(tarDef.list) && tarDef.list.length === 0) return;
 
                 // try {
                 //     _execAllowType([oriDef.val], [tarDef.val]);
@@ -562,12 +565,13 @@
                 // } catch (error) {
                 //     Message.error('ES0711', ['array', '', error]);
                 // }
-                for (var i = 0; i < tarDef.val.length; i++) {
+                for (var i = 0; i < tarDef.list.length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef.val.length; ii++) {
+                    for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllowType(oriDef.val[ii], tarDef.val[i]);
+                            // if (typeof tarDef[i] === 'undefined') return;
+                            _execAllowType(oriDef.list[ii], tarDef.list[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -691,21 +695,21 @@
             } else if (defType.kind == '_ANY_') {
                 if (typeof target !== 'undefined') return;
                 Message.error('ES075', ['choice', '_ANY_', 'undefined']);
-            } else if (defType.kind == '_OPT_') {
-                if (defType.val.length === 0) throw new Error('choice(opt) 타입이 없습니다. ');  
+            } else if (defType.kind == '_VAL_') {
+                if (defType.list.length === 0) throw new Error('choice(val) 타입이 없습니다. ');  
                 // if (typeof target === 'undefined') return;
-                if (defType.val.length === 0) return;
+                if (defType.list.length === 0) return;
                 // beginIdx = 1;
             } else if (defType.kind == '_SEQ_') {
-                if (defType.val.length === 0) throw new Error('choice(seq) 타입이 없습니다. ');  
+                if (defType.list.length === 0) throw new Error('choice(seq) 타입이 없습니다. ');  
                 Message.error('ES077', ['choice', '_SEQ_']);
-            } else if (defType.kind === '_VAL_') {
+            } else if (defType.kind === '_OPT_') {
                 if (typeof tarType.val === 'undefined') return;
             }
 
-            for (var ii = 0; ii < defType.val.length; ii++) {
+            for (var ii = 0; ii < defType.list.length; ii++) {
                 try {
-                    _execType(defType.val[ii], target);
+                    _execType(defType.list[ii], target);
                     return;
                 } catch (error) {
                     continue;
@@ -728,25 +732,25 @@
                 }
                 return;
             } else if (defType.kind == '_SEQ_') {
-                if (defType.val.length === 0) throw new Error('array(seq) 타입이 없습니다. ');  
-                for(var i = 0; i < defType.val.length; i++) {
-                    var tar = tarType.val[i];
+                if (defType.list.length === 0) throw new Error('array(seq) 타입이 없습니다. ');  
+                for(var i = 0; i < defType.list.length; i++) {
+                    var tar = tarType.list[i];
                     if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
-                    _execType(defType.val[i], tar);
+                    _execType(defType.list[i], tar);
                 }
                 return;
-            } else if (defType.kind == '_OPT_') {
-                if (defType.val.length === 0) throw new Error('array(opt) 타입이 없습니다. ');  
+            } else if (defType.kind == '_VAL_') {
+                if (defType.list.length === 0) throw new Error('array(opt) 타입이 없습니다. ');  
                 // if (Array.isArray(target) && target.length === 0) return;
                 // if (defType.val.length === 0) return;
                 // beginIdx = 1;
-            } else if (defType.kind === '_VAL_') {
+            } else if (defType.kind === '_OPT_') {
                 if (Array.isArray(target) && target.length === 0) return;
             }
             for (var i = 0; i < target.length; i++) {
-                for (var ii = 0; ii < defType.val.length; ii++) {
+                for (var ii = 0; ii < defType.list.length; ii++) {
                     try {
-                        _execType(defType.val[ii], tarType.val[i]);
+                        _execType(defType.list[ii], tarType.list[i]);
                         return;
                     } catch (error) {
                         continue;
