@@ -54,3 +54,5 @@ https://codeigniter.com/user_guide/database/configuration.html
 
 TODO: <?js ... js>   템플릿 전차리에 추가
 TODO: getObject(3) : 모든 속성,  템플릿에서 활용될듯
+
+타입 다이어 그램을 기준으로  테스트 작성 
