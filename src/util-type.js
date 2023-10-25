@@ -384,29 +384,50 @@
         // ori seq, opt 필수 검사
         if (oriDef.kind) {
             if ((oriDef.kind === '_SEQ_' || oriDef.kind === '_OPT_') 
-            && (typeof oriDef.val === 'undefined' || oriDef.list.length === 0)) throw new Error('ori 의 SEQ, OPT 뒤에 인자가 없습니다.');
+            && (typeof oriDef.val === 'undefined' || oriDef.list.length === 0)) {
+                Message.error('ES0729', ['origin', oriDef.kind]);
+                // throw new Error('ori 의 SEQ, OPT 뒤에 인자가 없습니다.');
+            }
         }
         // tar seq, opt 필수 검사
         if (tarDef.kind) {
             if ((tarDef.kind === '_SEQ_' || tarDef.kind === '_OPT_') 
-            && (typeof tarDef.val === 'undefined' || tarDef.list.length === 0)) throw new Error('tar 의 SEQ, OPT 뒤에 인자가 없습니다.');
+            && (typeof tarDef.val === 'undefined' || tarDef.list.length === 0)) {
+                Message.error('ES0729', ['target', tarDef.kind]);
+                // throw new Error('tar 의 SEQ, OPT 뒤에 인자가 없습니다.');
+            }
         }
 
         if ((oriDef.kind) && (tarDef.kind)) {
+            // 거부조건
             if (oriDef.kind === '_ALL_' && (tarDef.kind === '_NON_')) {
-                throw new Error('all 타입에는 non 타입을 거부합니다.');
+                Message.error('ES0727', [oriDef.kind, '_NON_', tarDef.kind]);
+                // throw new Error('all 타입에는 non 타입을 거부합니다.');
             } 
-            if (oriDef.kind === '_NON_' && tarDef.kind !== '_NON_') throw new Error('non 타입에는 non 타입만 허용합니다. tar.kind='+ tarDef.kind);
+            if (oriDef.kind === '_NON_' && tarDef.kind !== '_NON_') { 
+                Message.error('ES0728', [oriDef.kind, '_NON_', tarDef.kind]);
+                // throw new Error('non 타입에는 non 타입만 허용합니다. tar.kind='+ tarDef.kind);
+            }
             if (oriDef.kind === '_ANY_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
-                throw new Error('any 타입에는 val, all, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
+                Message.error('ES0727', [oriDef.kind, '_VAL_, _ALL_, _NON_', tarDef.kind]);
+                // throw new Error('any 타입에는 val, all, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
             }
             if (oriDef.kind === '_OPT_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' || tarDef.kind === '_NON_') ){
-                throw new Error('opt 타입에는 opt, seq 타입만 거부합니다. tar.kind='+ tarDef.kind);
+                Message.error('ES0728', [oriDef.kind, '_OPT_, _SEQ_', tarDef.kind]);
+                // throw new Error('opt 타입에는 opt, seq 타입만 허용합니다. tar.kind='+ tarDef.kind);
             } 
             if (oriDef.kind === '_VAL_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' ||  tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
-                throw new Error('choice 타입에는 any, all, opt, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
+                Message.error('ES0727', [oriDef.kind, '_ANY_, _ALL_, _OPT_, _NON_', tarDef.kind]);
+                // throw new Error('choice 타입에는 any, all, opt, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
             }
-            if (oriDef.kind === '_SEQ_' && tarDef.kind !== '_SEQ_') throw new Error('seq 타입에는 seq 타입만 허용합니다. tar.kind='+ tarDef.kind);
+            if (oriDef.kind === '_SEQ_' && tarDef.kind !== '_SEQ_') { 
+                Message.error('ES0728', [oriDef.kind, '_SEQ_', tarDef.kind]);
+                // throw new Error('seq 타입에는 seq 타입만 허용합니다. tar.kind='+ tarDef.kind);
+            }
+            // 허용 조건
+            if (oriDef.kind === '_ALL_' && (tarDef.kind !== '_NON_')) return;
+            if (oriDef.kind === '_NON_' && (tarDef.kind === '_NON_')) return;
+            if (oriDef.kind === '_ANY_' && (tarDef.kind === '_ANY_')) return;
         }
 
         // primitive
@@ -848,8 +869,8 @@
      */
     var checkAllowType = function(origin, target) {
         try {
-            if (typeof chkType === 'undefined') Message.error('ES026', ['origin']);
-            _execAllowType(chkType, target);
+            if (typeof origin === 'undefined') Message.error('ES026', ['origin']);
+            _execAllowType(origin, target);
         } catch (error) {
             Message.error('ES069', ['check allow type', error]);
         }

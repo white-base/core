@@ -3,7 +3,8 @@
  */
 //==============================================================
 // gobal defined
-const {typeKind, isValidAllowType }  = require('../src/util-type');
+const {typeKind}  = require('../src/util-type');
+const {isValidAllowType, checkAllowType }  = require('../src/util-type');
 const { isValidType, checkType }  = require('../src/util-type');
 const T = true;
 
@@ -93,7 +94,7 @@ describe("[target: util-type.js.js]", () => {
 
     });
 
-    describe('isValidAllowType(origin, target) : 타입간에 비교 ', () => {
+    describe('isValidAllowType(), checkAllowType() : 타입 허용 ', () => {
         it('- isValidAllowType(a, b) : 원시 자료형 ', () => { 
             // null
             expect(isValidAllowType(null,      null        )).toBe(T);
@@ -145,25 +146,64 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType(Symbol(),  null        )).toBe(false);
             expect(isValidAllowType(Symbol(),  Object      )).toBe(false);
         });
+        it('- checkAllowType(a, b) : 원시 자료형 : 예외 ', () => { 
+            // null
+            expect(()=> checkAllowType(null,      undefined   )).toThrow('ES0713')
+            // Number
+            expect(()=> checkAllowType(Number,    String      )).toThrow('ES0713')
+            expect(()=> checkAllowType(Number,    true        )).toThrow('ES0713')
+            expect(()=> checkAllowType(NaN,       Number      )).toThrow('ES0712')
+            expect(()=> checkAllowType(NaN,       NaN         )).toThrow('ES0712')
+            expect(()=> checkAllowType(NaN,       10          )).toThrow('ES0712')
+            expect(()=> checkAllowType(10,        20          )).toThrow('ES0712')
+            expect(()=> checkAllowType(10,        Number      )).toThrow('ES0712')
+            expect(()=> checkAllowType(10,        NaN         )).toThrow('ES0712') 
+            // String
+            expect(()=> checkAllowType(String,    10          )).toThrow('ES0713')
+            expect(()=> checkAllowType(String,    Boolean     )).toThrow('ES0713')
+            expect(()=> checkAllowType('str',     ''          )).toThrow('ES0712')
+            expect(()=> checkAllowType('str',     String      )).toThrow('ES0712')
+            // Boolean
+            expect(()=> checkAllowType(Boolean,   'str'       )).toThrow('ES0713')
+            expect(()=> checkAllowType(true,      false       )).toThrow('ES0712')
+            expect(()=> checkAllowType(true,      Boolean     )).toThrow('ES0712')
+            // undefined
+            expect(()=> checkAllowType(undefined, null        )).toThrow('ES069')
+            // null
+            expect(()=> checkAllowType(null,      undefined   )).toThrow('ES0713')
+            expect(()=> checkAllowType(null,      {}          )).toThrow('ES0713')
+            expect(()=> checkAllowType(null,      Object      )).toThrow('ES0713')
+            // Symbol
+            expect(()=> checkAllowType(Symbol,    null        )).toThrow('ES0713')
+            expect(()=> checkAllowType(Symbol,    Object      )).toThrow('ES0713')
+            expect(()=> checkAllowType(Symbol(),  null        )).toThrow('ES0713')
+            expect(()=> checkAllowType(Symbol(),  Object      )).toThrow('ES0713')
+        });
         it('- isValidAllowType(a, b) : array choice', () => {       
-            expect(isValidAllowType([],                          []                           )).toBe(T);
-            expect(isValidAllowType([],                          Array                        )).toBe(T);
-            expect(isValidAllowType([],                          [[]]                         )).toBe(T);
-            expect(isValidAllowType([[]],                        []                           )).toBe(T);
-            expect(isValidAllowType([[]],                        Array                        )).toBe(T);
-            expect(isValidAllowType([[]],                        [[]]                         )).toBe(T);
-            expect(isValidAllowType(Array,                       []                           )).toBe(T);
-            expect(isValidAllowType(Array,                       Array                        )).toBe(T);
-            expect(isValidAllowType(Array,                       [[]]                         )).toBe(T);
-            expect(isValidAllowType(['_etc_'],                 [null]                     )).toBe(false);
+            // all
+            expect(isValidAllowType([],                        []                         )).toBe(T);
+            expect(isValidAllowType([],                        Array                      )).toBe(T);
+            expect(isValidAllowType([],                        [[]]                       )).toBe(T);
+            expect(isValidAllowType([],                        ['_any_']                  )).toBe(T);
+            expect(isValidAllowType(Array,                     []                         )).toBe(T);
+            expect(isValidAllowType(Array,                     Array                      )).toBe(T);
+            expect(isValidAllowType(Array,                     [[]]                       )).toBe(T);
+            expect(isValidAllowType(Array,                     ['_non_']                  )).toBe(false);
+            // any
             expect(isValidAllowType(['_any_'],                 [null]                     )).toBe(T);
-            expect(isValidAllowType(['_any_'],                 []                           )).toBe(false); 
-            expect(isValidAllowType(['_any_'],                 undefined                    )).toBe(false);
+            expect(isValidAllowType(['_any_'],                 [String]                   )).toBe(T);
+            expect(isValidAllowType(['_any_'],                 [String]                   )).toBe(T);
+            expect(isValidAllowType(['_any_'],                 []                         )).toBe(false); 
+            expect(isValidAllowType(['_any_'],                 undefined                  )).toBe(false);
             expect(isValidAllowType(['_any_'],                 []                         )).toBe(false);
+            expect(isValidAllowType(['_any_'],                 ['_any_']                  )).toBe(T);
+            expect(isValidAllowType(['_any_'],                 ['_seq_']                  )).toBe(false);
             expect(isValidAllowType(['_any_'],                 ['_opt_']                  )).toBe(false);
+            expect(isValidAllowType(['_any_'],                 ['_non_']                  )).toBe(false);
             expect(isValidAllowType(['_any_', String],         ['_any_', String]          )).toBe(T);
             expect(isValidAllowType(['_any_', String],         [String]                   )).toBe(T);
             expect(isValidAllowType(['_any_', String],         [Number]                   )).toBe(T);
+            // seq
             expect(isValidAllowType(['_seq_'],                 ['_seq_']                  )).toBe(false);
             expect(isValidAllowType(['_seq_'],                 ['_seq_', Boolean]         )).toBe(false);
             expect(isValidAllowType(['_seq_'],                 []                         )).toBe(false);
@@ -175,11 +215,11 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType(['_seq_', Number, String], ['_seq_', Number, String]  )).toBe(T);
             expect(isValidAllowType(['_seq_', Number, String], ['_seq_', Number]          )).toBe(false);
             expect(isValidAllowType(['_seq_', Number, String], [Number]                   )).toBe(false);
+            // opt
             expect(isValidAllowType(['_opt_'],                 ['_opt_']                  )).toBe(false);
             expect(isValidAllowType(['_opt_'],                 ['_opt_', String]          )).toBe(false);
             expect(isValidAllowType(['_opt_'],                 ['_any_']                  )).toBe(false);
-            expect(isValidAllowType(['_opt_'],                 []                         )).toBe(false);
-            expect(isValidAllowType(['_opt_'],                 []                         )).toBe(false);
+            expect(isValidAllowType(['_opt_'],                 []                         )).toBe(false); 
             expect(isValidAllowType(['_opt_'],                 [String]                   )).toBe(false);
             expect(isValidAllowType(['_opt_', String],         ['_opt_', String]          )).toBe(T);
             expect(isValidAllowType(['_opt_', String],         ['_opt_', Number, String]  )).toBe(false);
@@ -187,39 +227,97 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType(['_opt_', String],         ['_opt_']                  )).toBe(false);
             expect(isValidAllowType(['_opt_', String],         ['_any_']                  )).toBe(false);
             expect(isValidAllowType(['_opt_', String],         [String]                   )).toBe(T);
-            // expect(isValidAllowType(['_opt_', String],         [undefined]                )).toBe(T);
             expect(isValidAllowType(['_opt_', String],         [Number]                   )).toBe(false);
-            expect(isValidAllowType(['_opt_', String],         [undefined]                )).toBe(false);
+            expect(isValidAllowType(['_opt_', String],         [undefined]                )).toBe(false);   // length > 0 이면 true
+            expect(isValidAllowType(['_opt_', String],         ['_any_']                  )).toBe(false);
+            expect(isValidAllowType(['_opt_', String],         []                         )).toBe(false);
             expect(isValidAllowType(['_opt_', String, Number], ['_opt_', Number, String]  )).toBe(T);
             expect(isValidAllowType(['_opt_', String, Number], ['_opt_', String]          )).toBe(T);
             expect(isValidAllowType(['_opt_', String, Number], ['_opt_', Number]          )).toBe(T);
-            // expect(isValidAllowType(['_opt_', String, Number], [String, Number]           )).toBe(T);
-            // expect(isValidAllowType(['_opt_', String, Number], [Number, String]           )).toBe(T);
-            // expect(isValidAllowType(['_opt_', String, Number], [Number, Boolean]          )).toBe(false);
-            // expect(isValidAllowType(['_opt_', String, Number], [Number, String, Boolean]  )).toBe(false);
-            // expect(isValidAllowType(['_opt_', String, Number], [Number]                   )).toBe(T);
-            // expect(isValidAllowType(['_opt_', String, Number], [String]                   )).toBe(T);            
+            expect(isValidAllowType(['_opt_', String, Number], [String, Number]           )).toBe(T);
+            expect(isValidAllowType(['_opt_', String, Number], [Number, String]           )).toBe(T);
+            expect(isValidAllowType(['_opt_', String, Number], [Number, Boolean]          )).toBe(false);
+            expect(isValidAllowType(['_opt_', String, Number], [Number, String, Boolean]  )).toBe(false);
+            expect(isValidAllowType(['_opt_', String, Number], [Number]                   )).toBe(T);
+            expect(isValidAllowType(['_opt_', String, Number], [String]                   )).toBe(T);            
             expect(isValidAllowType(['_opt_', String, Number], ['_opt_']                  )).toBe(false);
             expect(isValidAllowType(['_opt_', String, Number], ['_any_']                  )).toBe(false);
             expect(isValidAllowType(['_opt_', String, Number], [undefined]                )).toBe(false);
             expect(isValidAllowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toBe(false);
+            // val
             expect(isValidAllowType([String, Number],          [String]                   )).toBe(T);
             expect(isValidAllowType([String, Number],          [Number, String]           )).toBe(T);
             expect(isValidAllowType([String, Number],          [String, Boolean, Number]  )).toBe(false);
-            // expect(isValidAllowType([String, Number],          ['_opt_']                  )).toBe(false);
-            // expect(isValidAllowType([String, Number],          ['_any_']                  )).toBe(false);
+            expect(isValidAllowType([String, Number],          ['_opt_']                  )).toBe(false);
+            expect(isValidAllowType([String, Number],          ['_any_']                  )).toBe(false);
+            // non
+            expect(isValidAllowType(['_non_'],                 ['_non_']                  )).toBe(T);
+            expect(isValidAllowType(['_non_'],                 ['_any_']                  )).toBe(false);
+            // etc.
+            expect(isValidAllowType(['_etc_'],                 [null]                     )).toBe(false);
+        });
+        it('- checkAllowType(a, b) : array choice : 예외', () => {       
+            // all 
+            expect(()=> checkAllowType(Array,                     ['_non_']                  )).toThrow('ES069')
+            // any
+            expect(()=> checkAllowType(['_any_'],                 []                         )).toThrow('ES0727')
+            expect(()=> checkAllowType(['_any_'],                 undefined                  )).toThrow('ES0719')
+            expect(()=> checkAllowType(['_any_'],                 []                         )).toThrow('ES0727')
+            expect(()=> checkAllowType(['_any_'],                 ['_seq_']                  )).toThrow('ES0729')
+            expect(()=> checkAllowType(['_any_'],                 ['_opt_']                  )).toThrow('ES0729')
+            expect(()=> checkAllowType(['_any_'],                 ['_non_']                  )).toThrow('ES0727')
+            // seq
+            expect(()=> checkAllowType(['_seq_'],                 ['_seq_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_seq_'],                 ['_seq_', Boolean]         )).toThrow('ES026')
+            expect(()=> checkAllowType(['_seq_'],                 []                         )).toThrow('ES026')
+            expect(()=> checkAllowType(['_seq_', Number],         ['_seq_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_seq_', Number],         ['_seq_', Boolean]         )).toThrow('ES026')
+            expect(()=> checkAllowType(['_seq_', Number],         [Number]                   )).toThrow('ES026')
+            expect(()=> checkAllowType(['_seq_', Number, String], ['_seq_', Number]          )).toThrow('ES026')
+            expect(()=> checkAllowType(['_seq_', Number, String], [Number]                   )).toThrow('ES026')
+            // opt
+            expect(()=> checkAllowType(['_opt_'],                 ['_opt_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_'],                 ['_opt_', String]          )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_'],                 ['_any_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_'],                 []                         )).toThrow('ES026') 
+            expect(()=> checkAllowType(['_opt_'],                 [String]                   )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String],         ['_opt_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String],         ['_any_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String],         [Number]                   )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String],         [undefined]                )).toThrow('ES026')   // length > 0 이면 true
+            expect(()=> checkAllowType(['_opt_', String],         ['_any_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String],         []                         )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String, Number], ['_opt_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String, Number], ['_any_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String, Number], [undefined]                )).toThrow('ES026')
+            expect(()=> checkAllowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('ES026')
+            // val
+            expect(()=> checkAllowType([String, Number],          [String, Boolean, Number]  )).toThrow('ES026')
+            expect(()=> checkAllowType([String, Number],          ['_opt_']                  )).toThrow('ES026')
+            expect(()=> checkAllowType([String, Number],          ['_any_']                  )).toThrow('ES026')
+            // non
+            expect(()=> checkAllowType(['_non_'],                 ['_any_']                  )).toThrow('ES026')
+            // etc.
+            expect(()=> checkAllowType(['_etc_'],                 [null]                     )).toThrow('ES026')
         });
         it('- isValidAllowType(a, b) : choice ', () => {  
+            expect(isValidAllowType([[]],                        []                       )).toBe(T);
+            expect(isValidAllowType([[]],                        Array                    )).toBe(T);
+            expect(isValidAllowType([[]],                        [[]]                     )).toBe(T);
             expect(isValidAllowType([[String, Number]],           [[Number]]            )).toBe(T);
             expect(isValidAllowType([['_any_']],                  [['_any_']]           )).toBe(T);
-            // expect(isValidAllowType([['_any_']],                  [[Number]]            )).toBe(T);
-            // expect(isValidAllowType([['_any_']],                  [[null]]              )).toBe(T);
-            // expect(isValidAllowType([['_any_']],                  [[undefined]]         )).toBe(T);
-            // expect(isValidAllowType([['_any_']],                  undefined           )).toBe(false);    // TODO:
-            // expect(isValidAllowType([['_any_']],                                      )).toBe(false);    // TODO:
-            // expect(isValidAllowType([['_seq_']],                  [['_seq_']]           )).toBe(T);     // TODO: 허용하도록 처리함 
-            // expect(isValidAllowType([['_seq_']],                  [['_seq_', String]]   )).toBe(T);
-            // expect(isValidAllowType([['_seq_']],                  [['_seq_', Number]]   )).toBe(T);
+            expect(isValidAllowType([['_any_']],                  [[Number]]            )).toBe(T);
+            expect(isValidAllowType([['_any_']],                  [[null]]              )).toBe(T);
+            expect(isValidAllowType([['_any_']],                  [[undefined]]         )).toBe(T);
+            expect(isValidAllowType([['_any_']],                  undefined             )).toBe(false);
+            expect(isValidAllowType([['_any_']],                                        )).toBe(false);
+            expect(isValidAllowType([['_seq_']],                  [['_seq_']]           )).toBe(false);
+            expect(isValidAllowType([['_seq_']],                  [['_seq_', String]]   )).toBe(false);
+            expect(isValidAllowType([['_seq_']],                  [['_seq_', Number]]   )).toBe(false);
             expect(isValidAllowType([['_seq_', Number]],          [['_seq_', Number]]           )).toBe(T); // 같은 경우만 True  
             expect(isValidAllowType([['_seq_', Number]],          [['_seq_', Number, String]]   )).toBe(T); 
             expect(isValidAllowType([['_seq_', Number]],          [['_seq_']]                   )).toBe(false);
@@ -228,28 +326,28 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType([['_seq_', Number, String]],  [['_seq_', Number, String]]   )).toBe(T); // 같은 경우만 True
             expect(isValidAllowType([['_seq_', Number, String]],  [['_seq_', Number]]           )).toBe(false); 
             expect(isValidAllowType([['_seq_', Number, String]],  [[Number]]                    )).toBe(false);
-            // expect(isValidAllowType([['_opt_']],                  [['_opt_']]           )).toBe(T);
-            // expect(isValidAllowType([['_opt_']],                  [['_opt_', String]]   )).toBe(T);
-            // expect(isValidAllowType([['_opt_']],                  [['_any_']]           )).toBe(T);
-            // expect(isValidAllowType([['_opt_']],                  undefined           )).toBe(T);
-            // expect(isValidAllowType([['_opt_']],                  [[String]]                    )).toBe(T);
+            expect(isValidAllowType([['_opt_']],                  [['_opt_']]                   )).toBe(false);
+            expect(isValidAllowType([['_opt_']],                  [['_opt_', String]]           )).toBe(false);
+            expect(isValidAllowType([['_opt_']],                  [['_any_']]                   )).toBe(false);
+            expect(isValidAllowType([['_opt_']],                  undefined                     )).toBe(false);
+            expect(isValidAllowType([['_opt_']],                  [[String]]                    )).toBe(false);
             expect(isValidAllowType([['_opt_', String]],          [['_opt_', String]]           )).toBe(T);
             expect(isValidAllowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toBe(false);
             expect(isValidAllowType([['_opt_', String]],          [['_opt_', Number]]           )).toBe(false);
             expect(isValidAllowType([['_opt_', String]],          [['_opt_']]                   )).toBe(false);
             expect(isValidAllowType([['_opt_', String]],          [['_any_']]                   )).toBe(false);
-            // expect(isValidAllowType([['_opt_', String]],          [[String]]                    )).toBe(T);
-            // expect(isValidAllowType([['_opt_', String]],          [[Number]]                    )).toBe(false);
-            // expect(isValidAllowType([['_opt_', String]],          undefined                   )).toBe(false);
+            expect(isValidAllowType([['_opt_', String]],          [[String]]                    )).toBe(T);
+            expect(isValidAllowType([['_opt_', String]],          [[Number]]                    )).toBe(false);
+            expect(isValidAllowType([['_opt_', String]],          undefined                     )).toBe(T);
             expect(isValidAllowType([['_opt_', String, Number]],  [['_opt_', String, Number]]   )).toBe(T);
             expect(isValidAllowType([['_opt_', String, Number]],  [['_opt_', Number]]           )).toBe(T);
             expect(isValidAllowType([['_opt_', String, Number]],  [['_opt_', String]]           )).toBe(T);
-            // expect(isValidAllowType([['_opt_', String, Number]],  [[String, Number]]            )).toBe(T);
-            // expect(isValidAllowType([['_opt_', String, Number]],  [[Number, String]]            )).toBe(T);
-            // expect(isValidAllowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toBe(false);
-            // expect(isValidAllowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toBe(false);
-            // expect(isValidAllowType([['_opt_', String, Number]],  [[Number]]                    )).toBe(T);
-            // expect(isValidAllowType([['_opt_', String, Number]],  [[String]]                    )).toBe(T);
+            expect(isValidAllowType([['_opt_', String, Number]],  [[String, Number]]            )).toBe(T);
+            expect(isValidAllowType([['_opt_', String, Number]],  [[Number, String]]            )).toBe(T);
+            expect(isValidAllowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toBe(false);
+            expect(isValidAllowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toBe(false);
+            expect(isValidAllowType([['_opt_', String, Number]],  [[Number]]                    )).toBe(T);
+            expect(isValidAllowType([['_opt_', String, Number]],  [[String]]                    )).toBe(T);
             expect(isValidAllowType([['_opt_', String, Number]],  [['_opt_']]                   )).toBe(false);
             expect(isValidAllowType([['_opt_', String, Number]],  [['_any_']]                   )).toBe(false);
             expect(isValidAllowType([['_opt_', String, Number]],  undefined                   )).toBe(T);
@@ -259,6 +357,36 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType([[String, Number]],           [[String, Boolean, Number]]   )).toBe(false);
             expect(isValidAllowType([[String, Number]],           [['_opt_']]                   )).toBe(false);
             expect(isValidAllowType([[String, Number]],           [['_any_']]                   )).toBe(false);
+        });
+        it('- checkAllowType(a, b) : choice : 예외', () => {  
+            expect(()=> checkAllowType([['_any_']],                  undefined             )).toThrow('ES026')
+            expect(()=> checkAllowType([['_any_']],                                        )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_']],                  [['_seq_']]           )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_']],                  [['_seq_', String]]   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_']],                  [['_seq_', Number]]   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_', Number]],          [['_seq_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_', Number]],          [['_seq_', Boolean]]          )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_', Number]],          [[Number]]                    )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_', Number, String]],  [['_seq_', Number]]           )).toThrow('ES026')
+            expect(()=> checkAllowType([['_seq_', Number, String]],  [[Number]]                    )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_']],                  [['_opt_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_']],                  [['_opt_', String]]           )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_']],                  [['_any_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_']],                  undefined                     )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_']],                  [[String]]                    )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String]],          [['_opt_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String]],          [['_any_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String]],          [[Number]]                    )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [['_opt_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('ES026')
+            expect(()=> checkAllowType([[String, Number]],           [[String, Boolean, Number]]   )).toThrow('ES026')
+            expect(()=> checkAllowType([[String, Number]],           [['_opt_']]                   )).toThrow('ES026')
+            expect(()=> checkAllowType([[String, Number]],           [['_any_']]                   )).toThrow('ES026')
         });
         it('- isValidAllowType(a, b) : function, 함수 파싱 ', () => { 
             /**
