@@ -592,10 +592,48 @@
                             msg: '타입허용검사 : $1 의 _SEQ_, _OPT_, 타입을 지정해야 합니다. ',
                             long: 'kind = $3',
                         },
-                        30: {
+                        31: {
+                            msg: '$1이 choice(seq)가 아닙니다.',
+                            long: 'kind = $3',
+                        },
+                        32: {
+                            msg: '원본 choice(seq) 보다 대상의 choice(seq)가 작습니다.',
+                            long: 'origin choice(seq): $1, origin choice(seq): $2',
+                        },
+                        33: {
+                            msg: '원본 choice(seq)에 대상의 choice(seq)가 거부되었습니다. ',
+                            long: 'origin choice(seq): $1, origin choice(seq): $2',
+                        },
+                        34: {
+                            msg: '대상 choice(val)에 내용이 없습니다. ',
+                            long: '',
+                        },
+                        35: {
+                            msg: '처리할 수 없는 kind 타입니다. ',
+                            long: 'kind = $1',
+                        },
+                        36: {
+                            msg: '함수 args 가 원본보다 작습니다.',
+                            long: 'origin args=$1, target args=$2',
+                        },
+                        37: {
+                            msg: '함수 return 타입이 없습니다. ',
+                            long: '',
+                        },
+                        38: {
                             msg: '',
                             long: '',
                         },
+                        39: {
+                            msg: '',
+                            long: '',
+                        },
+                        40: {
+                            msg: '',
+                            long: '',
+                        },
+
+
 
                     },
                 },
