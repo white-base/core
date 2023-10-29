@@ -148,7 +148,6 @@
         var arrRetrun;
         
         try {
-
             if (regChk.test(funBody) === false) Message.error('ES071', [funBody]);
             arrFunc = regFunc.exec(funBody);
             if (arrFunc === null) Message.error('ES072', [funBody]);
@@ -202,7 +201,7 @@
      */
     var deepEqual = function(obj1, obj2) {
         if (obj1 === obj2) return true;
-        if (typeof obj1 !== typeof obj2) return false;  // Branch:
+        if (typeof obj1 !== typeof obj2) return false;
 
         if (Array.isArray(obj1)) {
             if (obj1.length !== obj2.length) return false;
@@ -217,7 +216,7 @@
         } else {
             if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
             for (var key in obj1) {
-                if (obj1.hasOwnProperty(key)) { // Branch:
+                if (obj1.hasOwnProperty(key)) { 
                     var val1 = obj1[key];
                     var val2 = obj2[key];
                     // if (!_isObject(val1)) continue;
@@ -251,7 +250,6 @@
             if (this.name === 'array' || this.name === 'choice') {
                 for (var i = 0; i < this.list.length; i++) {
                     var _type = typeKind(this.list[i]);
-                    // var tName = typeKind(this.list[i]).name;
                     if (_type.kind) arr.push(typeKind(this.list[i]).toString());
                     else arr.push(_type.name);
                 }
@@ -345,10 +343,6 @@
                 obj.list = obj.kind ? type.slice(1) : type;
             }
             if (!obj.kind) obj.kind = '_VAL_';
-            // if ((obj.kind === '_OPT_' || obj.kind === '_SEQ_')
-            // && (typeof obj.val === 'undefined' || obj.val.length === 0) ) {
-            //     throw new Error('_SEQ_, _OPT_ 다음에는 타입을 지정해야 합니다. ');
-            // }
             return obj;
         }
         // seq 4: funciton
@@ -366,8 +360,6 @@
         }
         Message.error('ES022', ['type']);
     }
-    
-  
 
     /**
      * 원본타입에 대상타입이 덮어쓰기가 허용 가능한지 검사합니다.  
@@ -387,7 +379,6 @@
             if ((oriDef.kind === '_SEQ_' || oriDef.kind === '_OPT_') 
             && (typeof oriDef.val === 'undefined' || oriDef.list.length === 0)) {
                 Message.error('ES0729', ['origin', oriDef.kind]);
-                // throw new Error('ori 의 SEQ, OPT 뒤에 인자가 없습니다.');
             }
         }
         // tar seq, opt 필수 검사
@@ -395,7 +386,6 @@
             if ((tarDef.kind === '_SEQ_' || tarDef.kind === '_OPT_') 
             && (typeof tarDef.val === 'undefined' || tarDef.list.length === 0)) {
                 Message.error('ES0729', ['target', tarDef.kind]);
-                // throw new Error('tar 의 SEQ, OPT 뒤에 인자가 없습니다.');
             }
         }
 
@@ -403,27 +393,21 @@
             // 거부조건
             if (oriDef.kind === '_ALL_' && (tarDef.kind === '_NON_')) {
                 Message.error('ES0727', [oriDef.kind, '_NON_', tarDef.kind]);
-                // throw new Error('all 타입에는 non 타입을 거부합니다.');
             } 
             if (oriDef.kind === '_NON_' && tarDef.kind !== '_NON_') { 
                 Message.error('ES0728', [oriDef.kind, '_NON_', tarDef.kind]);
-                // throw new Error('non 타입에는 non 타입만 허용합니다. tar.kind='+ tarDef.kind);
             }
             if (oriDef.kind === '_ANY_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
                 Message.error('ES0727', [oriDef.kind, '_VAL_, _ALL_, _NON_', tarDef.kind]);
-                // throw new Error('any 타입에는 val, all, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
             }
             if (oriDef.kind === '_OPT_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' || tarDef.kind === '_NON_') ){
                 Message.error('ES0728', [oriDef.kind, '_OPT_, _SEQ_', tarDef.kind]);
-                // throw new Error('opt 타입에는 opt, seq 타입만 허용합니다. tar.kind='+ tarDef.kind);
             } 
             if (oriDef.kind === '_VAL_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' ||  tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
                 Message.error('ES0727', [oriDef.kind, '_ANY_, _ALL_, _OPT_, _NON_', tarDef.kind]);
-                // throw new Error('choice 타입에는 any, all, opt, non 타입을 거부합니다. tar.kind='+ tarDef.kind);
             }
             if (oriDef.kind === '_SEQ_' && tarDef.kind !== '_SEQ_') { 
                 Message.error('ES0728', [oriDef.kind, '_SEQ_', tarDef.kind]);
-                // throw new Error('seq 타입에는 seq 타입만 허용합니다. tar.kind='+ tarDef.kind);
             }
             // 허용 조건
             if (oriDef.kind === '_ALL_' && (tarDef.kind !== '_NON_')) return;
@@ -441,7 +425,6 @@
         }
         // choice
         if (oriDef.name === 'choice') {   
-            // if (oriDef.val.length === 0) throw new Error('chice 에서 타입이 없습니다. ');
             if (oriDef.kind == '_ALL_') {
                 return;
             } else if (oriDef.kind == '_ANY_') {
@@ -449,14 +432,9 @@
                 Message.error('ES0714', ['_ANY_', 'undefined']);
             
             } else if (oriDef.kind == '_SEQ_') {
-                // if (oriDef.val.length === 0) throw new Error('choice(seq) 타입이 없습니다. ');  
                 if (tarDef.kind !== '_SEQ_') Message.error('ES0731', ['target', tarDef.kind]);
-                // if (tarDef.kind !== '_SEQ_') throw new Error('대상의 choice(seq)가 아닙니다. ');
-                // Message.error('ES0715', ['_SEQ_']);
                 if (oriDef.list.length > tarDef.list.length) {
                     Message.error('ES0732', [oriDef.toString(), tarDef.toString()]);
-                    // throw new Error('대상의 choice(seq)가 원본보다 작을 수 없습니다. ');
-                    // Message.error('ES0716', ['choice', oriDef.val.join(','), arrTarget.join(',')]);
                 }
                 if (oriDef.list.length === 0 && tarDef.list.length > 0) return;
                 for (i = 0; i < oriDef.list.length; i++) {
@@ -464,22 +442,15 @@
                         _execAllowType(oriDef.list[i], tarDef.list[i]);
                     } catch (error) {
                         Message.error('ES0733', [oriDef.list[i], tarDef.list[i]]);
-                        // throw new Error('원본의 chice 와 대상의 choice가 다릅니다.');
                     }
                 }
                 return;
             
             } else if (oriDef.kind == '_VAL_') {
-                // if (oriDef.val.length === 0) throw new Error('choice(opt) 타입이 없습니다. ');  
-                // if (oriDef.val.length === 0) return;
-                if (tarDef.val.length === 0) {
+                if (tarDef.kind && tarDef.val.length === 0) {
                     Message.error('ES0734');
-                    // throw new Error('원본이 0이 아닌데 대상의 0보다 커야한다. ');
-                    // Message.error('ES0716', ['choice', oriDef.val.join(','), arrTarget.join(',')]);
                 }
-                // var arrTarget = Array.isArray(tarDef.val) ? tarDef.val : [tarDef.val];
                 var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
-                // if (tarDef.kind) arrTarget = tarDef.list;
 
                 if (oriDef.list.length > 0 && arrTarget.length === 0) {
                     Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
@@ -495,15 +466,12 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0718', ['choice']);
+                    if (!success) Message.error('ES0738', ['choice(_OPT_)', typeKind(arrTarget[i]).name]);
                 }
                 return;
 
             } else if (oriDef.kind === '_OPT_') {
-                // var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
                 if (typeof tarDef.val === 'undefined') return;
-
-                // var arrTarget = Array.isArray(tarDef.list) ? tarDef.list : [tarDef.list];
                 var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
 
                 if (oriDef.list.length > 0 && arrTarget.length === 0) {
@@ -514,19 +482,17 @@
                     for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            // if (typeof arrTarget[i] === 'undefined') return;
                             _execAllowType(oriDef.list[ii], arrTarget[i]);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0718', ['choice']);
+                    if (!success) Message.error('ES0738', ['_OPT_', typeKind(arrTarget[i]).name]);
                 }
                 return;                
             } else {
                     Message.error('ES0735', [oriDef.kind]);
-                    // throw new Error('choice 처리할 수 없는 타입니다.');
             }
         }
         // array
@@ -536,13 +502,10 @@
             if (oriDef.kind == '_ALL_') {
                 return;
             } else if (oriDef.kind == '_ANY_') {
-                // if (tarDef.kind && tarDef.list.length === !== '_ANY_') Message.error('ES0713', ['array _ANY_', tarDef.kind]);
-                // if (typeof tarDef.list === 'undefined' || typeof tarDef.list[0] === 'undefined') Message.error('ES075', ['array _ANY_', 'undefined']);
                 if (tarDef.kind && tarDef.list.length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
                 if (tarDef.list.length > 0) return;
                 
             } else if (oriDef.kind == '_SEQ_') {
-                // if (oriDef.val.length === 0) throw new Error('array(seq) 타입이 없습니다. ');  
                 if (oriDef.kind !== tarDef.kind)  Message.error('ES0719', ['_SEQ_']);
                 if (oriDef.list.length > tarDef.list.length) {
                     Message.error('ES0720', [oriDef.toString(), tarDef.toString()]);
@@ -557,10 +520,6 @@
                 return;
 
             } else if (oriDef.kind == '_VAL_') {
-                // if (oriDef.val.length === 0) throw new Error('array(opt) 타입이 없습니다. ');  
-                // if (typeof tarDef.val === 'undefined' || tarDef.val.length === 0) return;
-                // var start1 = oriDef.kind ? 1 : 0;
-                // var start2 = tarDef.kind ? 1 : 0;
                 if (oriDef.list.length < tarDef.list.length) {
                     Message.error('ES0716', ['array _OPT_', oriDef.toString(), tarDef.toString()]);
                 }
@@ -578,43 +537,33 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0718', ['array']);
+                    if (!success) Message.error('ES0738', ['array(_VAL_)', typeKind(tarDef.list[i]).name]);
                 }
                 return;
             
             } else if (oriDef.kind === '_OPT_') {
-                // if (typeof tarDef.val === 'undefined') return;
                 if (Array.isArray(tarDef.list) && tarDef.list.length === 0) return;
-
-                // try {
-                //     _execAllowType([oriDef.val], [tarDef.val]);
-                //     return;
-                // } catch (error) {
-                //     Message.error('ES0711', ['array', '', error]);
-                // }
                 for (var i = 0; i < tarDef.list.length; i++) {
                     var success = false;
                     for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            // if (typeof tarDef[i] === 'undefined') return;
                             _execAllowType(oriDef.list[ii], tarDef.list[i]);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0718', ['array']);
+                    if (!success) Message.error('ES0738', ['array(_OPT_)', typeKind(tarDef.list[i]).name]);
                 }
 
             } else {              
                 Message.error('ES0735', [oriDef.kind]);
-                // throw new Error('array 에 사용하지 않는 kind 입니다. '+ oriDef.kind);  
             }
         }
         // function
         if (oriDef.name === 'function') { 
-            if (tarDef.name !== 'function')  Message.error('ES0713', ['function', oriDef.name, tarDef.name]);
+            if (tarDef.name !== 'function')  Message.error('ES0713', [oriDef.name, tarDef.name]);
             if (oriDef.val === Function) return;
             var info1 = oriDef.val['_TYPE'] ? oriDef.val['_TYPE'] : _getFunInfo(oriDef.val.toString());
             var info2 =  tarDef.val['_TYPE'] ? tarDef.val['_TYPE'] : _getFunInfo(tarDef.val.toString());
@@ -636,7 +585,7 @@
         }
         // object
         if (oriDef.name === 'object') {
-            if (tarDef.name !== 'object') Message.error('ES0713', ['object', oriDef.name, tarDef.name]);
+            if (tarDef.name !== 'object') Message.error('ES0713', [oriDef.name, tarDef.name]);
             if (oriDef.val === tarDef.val) return;
             if (_isEmptyObj(tarDef.val)) return;
             if (oriDef.val instanceof RegExp) {
@@ -687,6 +636,15 @@
 
         defType = typeKind(type);
         tarType = typeKind(target);
+
+        // ori seq, opt 필수 검사
+        if (defType.kind) {
+            if ((defType.kind === '_SEQ_' || defType.kind === '_OPT_') 
+            && (typeof defType.val === 'undefined' || defType.list.length === 0)) {
+                Message.error('ES0729', ['type', defType.kind]);
+            }
+        }
+
         // primitive
         if (defType.name === 'null') {
             if (target === null) return;
@@ -717,19 +675,15 @@
         }
         // choice
         if (defType.name === 'choice') {
-            // var beginIdx = 0;
             if (defType.kind == '_ALL_') {
                 return;
             } else if (defType.kind == '_ANY_') {
                 if (typeof target !== 'undefined') return;
                 Message.error('ES075', ['choice', '_ANY_', 'undefined']);
             } else if (defType.kind == '_VAL_') {
-                // if (defType.list.length === 0) throw new Error('choice(val) 타입이 없습니다. ');  
-                // if (typeof target === 'undefined') return;
                 if (defType.list.length === 0) return;
                 // beginIdx = 1;
             } else if (defType.kind == '_SEQ_') {
-                // if (defType.list.length === 0) throw new Error('choice(seq) 타입이 없습니다. ');  
                 Message.error('ES077', ['choice', '_SEQ_']);
             } else if (defType.kind === '_OPT_') {
                 if (typeof tarType.val === 'undefined') return;
@@ -750,7 +704,6 @@
         if (defType.name === 'array') {
             if ((type === Array || type.length === 0) && (Array.isArray(target) || target === Array)) return;
             if (!Array.isArray(target)) return Message.error('ES024', [parentName, 'array']);
-            // var beginIdx = 0;
             if (defType.kind == '_ALL_') {
                 return;
             } else if (defType.kind == '_ANY_') {
@@ -760,7 +713,6 @@
                 }
                 return;
             } else if (defType.kind == '_SEQ_') {
-                // if (defType.list.length === 0) throw new Error('array(seq) 타입이 없습니다. ');  
                 for(var i = 0; i < defType.list.length; i++) {
                     var tar = tarType.list[i];
                     if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
@@ -809,7 +761,6 @@
             if (fixType.args.length > 0) {  // args 검사
                 try {
                     if (fixType.args.length > tarArgs.length) Message.error('ES0736', [fixType.args, tarArgs]);
-                    // if (fixType.args.length > tarArgs.length) throw new Error('대상의 args 의 길이가 작습니다.');
 
                     _execAllowType(['_SEQ_'].concat(fixType.args), ['_SEQ_'].concat(tarArgs))
                 } catch (error) {
@@ -819,7 +770,6 @@
             if (fixReturns.length > 0) {
                 try {
                     if (tarReturns.length === 0) Message.error('ES0737', []);
-                    // if (tarReturns.length === 0) throw new Error('대상의 return 타입이 없습니다. ');
                     _execAllowType([fixReturns], [tarReturns])
                 } catch (error) {
                     Message.error('ES0711', ['function', 'return', error]);

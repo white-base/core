@@ -256,7 +256,7 @@ describe("[target: util-type.js.js]", () => {
             // etc.
             expect(isValidAllowType(['_etc_'],                 [null]                     )).toBe(false);
         });
-        it('- checkAllowType(a, b) : array choice : 예외', () => {       
+        it('- checkAllowType(a, b) : array choice : 예외', () => {        
             // all 
             expect(()=> checkAllowType(Array,                     ['_non_']                  )).toThrow('ES069')
             // any
@@ -281,20 +281,20 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkAllowType(['_opt_'],                 ['_any_']                  )).toThrow('ES0729')
             expect(()=> checkAllowType(['_opt_'],                 []                         )).toThrow('ES0729') 
             expect(()=> checkAllowType(['_opt_'],                 [String]                   )).toThrow('ES0729')
-            expect(()=> checkAllowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('ES0718')
-            expect(()=> checkAllowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('ES0718')
+            expect(()=> checkAllowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('ES0738')
+            expect(()=> checkAllowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('ES0738')
             expect(()=> checkAllowType(['_opt_', String],         ['_opt_']                  )).toThrow('ES0729')
             expect(()=> checkAllowType(['_opt_', String],         ['_any_']                  )).toThrow('ES0728')
-            expect(()=> checkAllowType(['_opt_', String],         [Number]                   )).toThrow('ES0718')
-            expect(()=> checkAllowType(['_opt_', String],         [undefined]                )).toThrow('ES0718')   // length > 0 이면 true
+            expect(()=> checkAllowType(['_opt_', String],         [Number]                   )).toThrow('ES0738')
+            expect(()=> checkAllowType(['_opt_', String],         [undefined]                )).toThrow('ES0738')   // length > 0 이면 true
             expect(()=> checkAllowType(['_opt_', String],         ['_any_']                  )).toThrow('ES0728')
             expect(()=> checkAllowType(['_opt_', String],         []                         )).toThrow('ES0728')
-            expect(()=> checkAllowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('ES0718')
-            expect(()=> checkAllowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('ES0718')
+            expect(()=> checkAllowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('ES0738')
+            expect(()=> checkAllowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('ES0738')
             expect(()=> checkAllowType(['_opt_', String, Number], ['_opt_']                  )).toThrow('ES0729')
             expect(()=> checkAllowType(['_opt_', String, Number], ['_any_']                  )).toThrow('ES0728')
-            expect(()=> checkAllowType(['_opt_', String, Number], [undefined]                )).toThrow('ES0718')
-            expect(()=> checkAllowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('ES0718')
+            expect(()=> checkAllowType(['_opt_', String, Number], [undefined]                )).toThrow('ES0738')
+            expect(()=> checkAllowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('ES0738')
             // val
             expect(()=> checkAllowType([String, Number],          [String, Boolean, Number]  )).toThrow('ES0716')
             expect(()=> checkAllowType([String, Number],          ['_opt_']                  )).toThrow('ES0729')
@@ -374,17 +374,17 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkAllowType([['_opt_']],                  [['_any_']]                   )).toThrow('ES0729')
             expect(()=> checkAllowType([['_opt_']],                  undefined                     )).toThrow('ES0729')
             expect(()=> checkAllowType([['_opt_']],                  [[String]]                    )).toThrow('ES0729')
-            expect(()=> checkAllowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('ES0718')
-            expect(()=> checkAllowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('ES0718')
+            expect(()=> checkAllowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('ES0738')
+            expect(()=> checkAllowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('ES0738')
             expect(()=> checkAllowType([['_opt_', String]],          [['_opt_']]                   )).toThrow('ES0729')
             expect(()=> checkAllowType([['_opt_', String]],          [['_any_']]                   )).toThrow('ES0728')
-            expect(()=> checkAllowType([['_opt_', String]],          [[Number]]                    )).toThrow('ES0718')
-            expect(()=> checkAllowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('ES0718')
-            expect(()=> checkAllowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('ES0718')
+            expect(()=> checkAllowType([['_opt_', String]],          [[Number]]                    )).toThrow('ES0738')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('ES0738')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('ES0738')
             expect(()=> checkAllowType([['_opt_', String, Number]],  [['_opt_']]                   )).toThrow('ES0729')
             expect(()=> checkAllowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('ES0728')
-            expect(()=> checkAllowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('ES0718')
-            expect(()=> checkAllowType([[String, Number]],           [[String, Boolean, Number]]   )).toThrow('ES0718')
+            expect(()=> checkAllowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('ES0738')
+            expect(()=> checkAllowType([[String, Number]],           [[String, Boolean, Number]]   )).toThrow('ES0738')
             expect(()=> checkAllowType([[String, Number]],           [['_opt_']]                   )).toThrow('ES0729')
             expect(()=> checkAllowType([[String, Number]],           [['_any_']]                   )).toThrow('ES0727')
         });
@@ -450,8 +450,9 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType(type1, {}             )).toBe(false);
             expect(isValidAllowType(type1, tar1           )).toBe(T);
             expect(isValidAllowType(type2, tar1           )).toBe(T);
-
-        });
+            // 예외 : 오류코드
+            expect(()=> checkAllowType(type1, {}          )).toThrow('ES0713')
+        }); 
         it('- isValidAllowType(a, b) : object ', () => {
             var ClassA = function(){};
             var ClassB = function(){this.aa = 1};
@@ -463,6 +464,10 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType({},        new ClassA()    )).toBe(T);
             expect(isValidAllowType({},        new ClassB()    )).toBe(false);
             expect(isValidAllowType({},        true            )).toBe(false);
+            // 예외 : 오류코드
+            expect(()=> checkAllowType(/reg/,     /reg2/          )).toThrow('ES0723')
+            expect(()=> checkAllowType({},        new ClassB()    )).toThrow('ES0713')
+            expect(()=> checkAllowType({},        true            )).toThrow('ES0713')
         });
         it('- isValidAllowType(a, b) : class ', () => {
             var ClassA = function(){this.a = 1}
@@ -477,7 +482,10 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType(ClassC,       ClassD)).toBe(T );
             expect(isValidAllowType(String,       String)).toBe(T );
             expect(isValidAllowType(ClassA,       ClassE)).toBe(false );
-
+            // 예외 : 오류코드
+            expect(()=> checkAllowType(ClassA,       ClassB)).toThrow('ES0725')
+            expect(()=> checkAllowType(ClassA,       ClassC)).toThrow('ES0725')
+            expect(()=> checkAllowType(ClassA,       ClassE)).toThrow('ES0724')
         }); 
         it('- isValidAllowType(a, b) : union (기본) ', () => {
             var type1      = {str: String, num: Number};
@@ -485,117 +493,24 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidAllowType(type1,    {str: String, num: Number}  )).toBe(true);
             expect(isValidAllowType(type1,    {str: '', num: 0}           )).toBe(true);
             expect(isValidAllowType(type1,    {str: ''}                   )).toBe(false);
+            // 예외 : 오류코드
+            expect(()=> checkAllowType(type1,    {str: ''}                )).toThrow('ES0713')
         });
-        it('- isValidAllowType(a, b) : union (choice) ', () => {       
+        it('- isValidAllowType(a, b) : union (choice) ', () => {        
             var type1   = {str: [[String, Number]], bool: [['_any_']], num: [['_opt_', Number]]}; 
 
             expect(isValidAllowType(type1, {str: String, bool: null, num: Number}           )).toBe(T);
-            expect(isValidAllowType(type1, {str: '', bool: true, num: [['_opt_', Number]]}  )).toBe(false);
+            expect(isValidAllowType(type1, {str: '', bool: true, num: [['_opt_', Number]]}  )).toBe(T);
             expect(isValidAllowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toBe(false);
             expect(isValidAllowType(type1, {str: String, bool: false, num: String}          )).toBe(false);
             expect(isValidAllowType(type1, {str: String}                                    )).toBe(false);
+            // 예외 : 오류코드
+            expect(()=> checkAllowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('ES0738')
+            expect(()=> checkAllowType(type1, {str: String, bool: false, num: String}          )).toThrow('ES0738')
+            expect(()=> checkAllowType(type1, {str: String}                                    )).toThrow('ES0714')
         });
     });
     describe('isValidType(type, target)', () => {
-        it('- isValidType() : choice ', () => {      
-            // _any_
-            expect(isValidType([['_any_']],         10          )).toBe(T);
-            expect(isValidType([['_any_']],         'str'       )).toBe(T);
-            expect(isValidType([['_any_']],         [[]]        )).toBe(T);
-            expect(isValidType([['_any_']],         {}          )).toBe(T);
-            expect(isValidType([['_any_']],         true        )).toBe(T);
-            expect(isValidType([['_any_']],         undefined   )).toBe(false);
-            // _seq_[
-            // expect(isValidType([['_seq_']],                 [[1,2,3]]   )).toBe(false);
-            // expect(isValidType([['_seq_']],                 10          )).toBe(false);
-            expect(isValidType([['_seq_', String, Number]], [[1,2,3]]   )).toBe(false);
-            expect(isValidType([['_seq_', String, Number]], 10          )).toBe(false);
-            // _opt_[
-            // expect(isValidType([['_opt_']],                 [['str', 10]]   )).toBe(T);
-            // expect(isValidType([['_opt_']],                 [[10, 'str']]   )).toBe(T);
-            // expect(isValidType([['_opt_']],                 [['str']]       )).toBe(T);
-            // expect(isValidType([['_opt_']],                 10              )).toBe(T);
-            // expect(isValidType([['_opt_']],                 [['str', 10, true]])).toBe(T);
-            expect(isValidType([['_opt_', String, Number]], 10          )).toBe(T);
-            expect(isValidType([['_opt_', String, Number]], 'str'       )).toBe(T);
-            expect(isValidType([['_opt_', String, Number]], undefined   )).toBe(T);
-            expect(isValidType([['_opt_', String, Number]], true        )).toBe(false);
-            expect(isValidType([['_opt_', String, Number]], []          )).toBe(false);
-            expect(isValidType([['_opt_', String, Number]], {}          )).toBe(false);
-            // choice
-            expect(isValidType([[String, Number]],  10                  )).toBe(T);
-            expect(isValidType([[String, Number]],  'str'               )).toBe(T);
-            expect(isValidType([[String, Number]],  undefined           )).toBe(false);
-            expect(isValidType([[String, Number]],  true                )).toBe(false);
-            expect(isValidType([[String, Number]],  [[]]                )).toBe(false);
-            expect(isValidType([[String, Number]],  {}                  )).toBe(false);
-            expect(isValidType([[String, Number]],  [[String, Boolean]] )).toBe(false); // 당연히 실패
-            expect(isValidType([[String, Number]],  [[Number, String]]  )).toBe(false);
-            expect(isValidType([[String, Number]],  [[Number, String, Boolean]] )).toBe(false);
-            // 예외 오류 코드
-            expect(()=> checkType([['_any_']],                 undefined   )).toThrow(/ES075/)
-            expect(()=> checkType([['_seq_']],                 [[1,2,3]]   )).toThrow(/ES077/)
-            expect(()=> checkType([['_seq_']],                 10          )).toThrow(/ES077/)
-            expect(()=> checkType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
-            expect(()=> checkType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
-            expect(()=> checkType([['_opt_', String, Number]], true        )).toThrow(/ES076/)
-            expect(()=> checkType([['_opt_', String, Number]], []          )).toThrow(/ES076/)
-            expect(()=> checkType([['_opt_', String, Number]], {}          )).toThrow(/ES076/)            
-            // expect(()=> checkType([[String, Number]],  undefined           )).toThrow(/ES076/)
-            expect(()=> checkType([[String, Number]],  true                )).toThrow(/ES076/)
-            expect(()=> checkType([[String, Number]],  [[]]                )).toThrow(/ES076/)
-            expect(()=> checkType([[String, Number]],  {}                  )).toThrow(/ES076/)
-            expect(()=> checkType([[String, Number]],  [[String, Boolean]] )).toThrow(/ES076/) // 당연히 실패
-            expect(()=> checkType([[String, Number]],  [[Number, String]]  )).toThrow(/ES076/)
-            expect(()=> checkType([[String, Number]],  [[Number, String, Boolean]] )).toThrow(/ES076/)
-        });
-        it('- isValidType() : object ', () => {
-            var Class1 = function() { this.aa = String }
-            var Class2 = function() { this.bb = Number }
-    
-            expect(isValidType([[Class1, Class2]], {aa: 'STR', bb: 10}      )).toBe(T);
-            expect(isValidType(Class1,             {aa: 'STR', bb: 10}      )).toBe(T);
-            expect(isValidType(Class2,             {aa: 'STR', bb: 10}      )).toBe(T);
-            expect(isValidType([[Class1, Class2]], {aa: 'STR'}              )).toBe(T);
-            expect(isValidType(Class1,             {aa: 'STR'}              )).toBe(T);
-            expect(isValidType(Class2,             {aa: 'STR'}              )).toBe(false);
-            expect(isValidType([[Class1, Class2]], {aa: 'STR', bb: 'STR'}   )).toBe(T);
-            expect(isValidType(Class1,             {aa: 'STR', bb: 'STR'}   )).toBe(T);
-            expect(isValidType(Class2,             {aa: 'STR', bb: 'STR'}   )).toBe(false);
-            expect(isValidType([[Class1, Class2]], {cc: 'STR'}              )).toBe(false);
-            expect(isValidType(Class1,             {cc: 'STR'}              )).toBe(false);
-            expect(isValidType(Class2,             {cc: 'STR'}              )).toBe(false);
-            // 예외 오류 코드
-            expect(()=> checkType(Class2,             {aa: 'STR'}           )).toThrow(/ES027/)
-            expect(()=> checkType(Class2,             {aa: 'STR', bb: 'STR'})).toThrow(/ES074/)
-            expect(()=> checkType([[Class1, Class2]], {cc: 'STR'}           )).toThrow(/ES076/)
-            expect(()=> checkType(Class1,             {cc: 'STR'}           )).toThrow(/ES027/)
-            expect(()=> checkType(Class2,             {cc: 'STR'}           )).toThrow(/ES027/)            
-        });
-        it('- isValidType() : object (객체 기본값) ', () => {
-            var Class1 = function() { this.aa = String };
-            var Class2 = function() { this.bb = 10 };
-
-            expect(isValidType([[Class1, Class2]],{aa: 'str', bb: 2}  )).toBe(T);
-            expect(isValidType(Class1,            {aa: 'str', bb: 2}  )).toBe(T);
-            expect(isValidType(Class2,            {aa: 'str', bb: 2}  )).toBe(T);
-            expect(isValidType([[Class1, Class2]],{aa: 'str'}         )).toBe(T);
-            expect(isValidType(Class1,            {aa: 'str'}         )).toBe(T);
-            expect(isValidType(Class2,            {aa: 'str'}         )).toBe(T);
-            expect(isValidType([[Class1, Class2]],{bb: 5}             )).toBe(T);
-            expect(isValidType(Class1,            {bb: 5}             )).toBe(false);
-            expect(isValidType(Class2,            {bb: 5}             )).toBe(T);
-            expect(isValidType([[Class1, Class2]],{cc: 'STR'}         )).toBe(T);
-            expect(isValidType(Class1,            {cc: 'STR'}         )).toBe(false);
-            expect(isValidType(Class2,            {cc: 'STR'}         )).toBe(T);
-            expect(isValidType([[Class1, Class2]],{aa: 'STR', bb: 'STR'})).toBe(T);
-            expect(isValidType(Class1,            {aa: 'STR', bb: 'STR'})).toBe(T);
-            expect(isValidType(Class2,            {aa: 'STR', bb: 'STR'})).toBe(false);
-            // 예외 오류 코드
-            expect(()=> checkType(Class1,         {bb: 5}               )).toThrow(/ES027/)
-            expect(()=> checkType(Class1,         {cc: 'STR'}           )).toThrow(/ES027/)
-            expect(()=> checkType(Class2,         {aa: 'STR', bb: 'STR'})).toThrow(/ES074/)
-        });
         it('- isValidType() : object (원시 객체 기본값) ', () => {
             expect(isValidType(/reg2/,        /reg/       )).toBe(T);
             expect(isValidType(new Date(),    new Date()  )).toBe(T);
@@ -607,230 +522,6 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkType({},         Symbol()    )).toThrow(/ES024/)
 
         });
-        it('- isValidType() : choice 원시 타입 ', () => {
-            expect(isValidType([[Number, String, Boolean]], 1           )).toBe(T);
-            expect(isValidType([[Number, String, Boolean]], 'str'       )).toBe(T);
-            expect(isValidType([[Number, String, Boolean]], true        )).toBe(T);            
-            expect(isValidType([[Number, String, Boolean]], new Date()  )).toBe(false);
-            expect(isValidType([[Number, String, Boolean]], /reg/       )).toBe(false);
-            expect(isValidType([[Number, String, Boolean]], Symbol()    )).toBe(false);
-            expect(isValidType([[Number, String, Boolean]], []          )).toBe(false);
-            expect(isValidType([[Number, String, Boolean]], {}          )).toBe(false);
-            // 예외 오류 코드
-            expect(()=> checkType([[Number, String, Boolean]], new Date()  )).toThrow(/ES076/)
-            expect(()=> checkType([[Number, String, Boolean]], /reg/       )).toThrow(/ES076/)
-            expect(()=> checkType([[Number, String, Boolean]], Symbol()    )).toThrow(/ES076/)
-            expect(()=> checkType([[Number, String, Boolean]], []          )).toThrow(/ES076/)
-            expect(()=> checkType([[Number, String, Boolean]], {}          )).toThrow(/ES076/)
-        });
-        it('- isValidType() : choice 내장 객체 타입 ', () => {
-            expect(isValidType([[RegExp, Date, Symbol]], new Date() )).toBe(T);
-            expect(isValidType([[RegExp, Date, Symbol]], /reg/      )).toBe(T);
-            expect(isValidType([[RegExp, Date, Symbol]], Symbol()   )).toBe(T);            
-            expect(isValidType([[RegExp, Date, Symbol]], 1          )).toBe(false);
-            expect(isValidType([[RegExp, Date, Symbol]], true       )).toBe(false);
-            expect(isValidType([[RegExp, Date, Symbol]], 'str'      )).toBe(false);       
-            expect(isValidType([[RegExp, Date, Symbol]], []         )).toBe(false);       
-            expect(isValidType([[RegExp, Date, Symbol]], {}         )).toBe(false);       
-            // 예외 오류 코드
-            expect(()=> checkType([[RegExp, Date, Symbol]], 1          )).toThrow(/ES076/)
-            expect(()=> checkType([[RegExp, Date, Symbol]], true       )).toThrow(/ES076/)
-            expect(()=> checkType([[RegExp, Date, Symbol]], 'str'      )).toThrow(/ES076/)       
-            expect(()=> checkType([[RegExp, Date, Symbol]], []         )).toThrow(/ES076/)       
-            expect(()=> checkType([[RegExp, Date, Symbol]], {}         )).toThrow(/ES076/)       
-        });
-        it('- isValidType() : 상속 객체 타입 ', () => {
-            class Super {
-                aa = 1;
-            }
-            class Sub extends Super {
-                bb = 'str'
-                constructor(){ super() }
-            }
-            
-            expect(isValidType([[Super, Sub]],  new Sub())).toBe(T);
-            expect(isValidType(Super,           new Sub())).toBe(T);
-            expect(isValidType(Sub,             new Sub())).toBe(T);
-            expect(isValidType(Object,          new Sub())).toBe(T);       
-        });
-        it('- isValidType() : array 조건 검사  ', () => {   
-            // array
-            expect(isValidType([],            [1,2,3]     )).toBe(T);
-            expect(isValidType([],            10          )).toBe(false);
-            expect(isValidType(Array,         [1,2,3]     )).toBe(T);
-            expect(isValidType(Array,         10          )).toBe(false);
-            // expect(isValidType([[]],          [1,2,3]     )).toBe(T);
-            // expect(isValidType([[]],          10          )).toBe(false);
-            // _any_
-            expect(isValidType(['_any_'],   [1, 'str']  )).toBe(T);
-            expect(isValidType(['_any_'],   [0]         )).toBe(T);
-            expect(isValidType(['_any_'],   []          )).toBe(T);
-            expect(isValidType(['_any_'],   [undefined] )).toBe(false);
-            expect(isValidType(['_any_'],   10          )).toBe(false);
-            // _seq_
-            // expect(isValidType(['_seq_'], ['str', 10]       )).toBe(T);
-            // expect(isValidType(['_seq_'], ['str', 10, true] )).toBe(T);
-            // expect(isValidType(['_seq_'], [10, 'str']       )).toBe(T); 
-            // expect(isValidType(['_seq_'], ['str']           )).toBe(T);
-            // expect(isValidType(['_seq_'], 10                )).toBe(false);
-            expect(isValidType(['_seq_', String, Number], ['str', 10]       )).toBe(T);
-            expect(isValidType(['_seq_', String, Number], ['str', 10, true] )).toBe(T);
-            expect(isValidType(['_seq_', String, Number], [10, 'str']       )).toBe(false);
-            expect(isValidType(['_seq_', String, Number], ['str']           )).toBe(false);
-            expect(isValidType(['_seq_', String, Number], 10                )).toBe(false);
-            // _opt_
-            // expect(isValidType(['_opt_'], ['str', 10]       )).toBe(T);
-            // expect(isValidType(['_opt_'], [10]              )).toBe(T);
-            // expect(isValidType(['_opt_'], ['str']           )).toBe(T);
-            // expect(isValidType(['_opt_'], [true]            )).toBe(T);
-            // expect(isValidType(['_opt_'], [{}]              )).toBe(T);
-            // expect(isValidType(['_opt_'], []                )).toBe(T);
-            // expect(isValidType(['_opt_'], 10                )).toBe(false);
-            expect(isValidType(['_opt_', String, Number], ['str', 10] )).toBe(T);
-            expect(isValidType(['_opt_', String, Number], [10]        )).toBe(T);
-            expect(isValidType(['_opt_', String, Number], ['str']     )).toBe(T);
-            expect(isValidType(['_opt_', String, Number], []          )).toBe(T);
-            expect(isValidType(['_opt_', String, Number], [true]      )).toBe(false);
-            expect(isValidType(['_opt_', String, Number], [{}]        )).toBe(false);
-            expect(isValidType(['_opt_', String, Number], 10          )).toBe(false);
-            expect(isValidType(['_opt_', String, Number], undefined   )).toBe(false);
-            // choice
-            expect(isValidType([String, Number], ['str', 10]    )).toBe(T);
-            expect(isValidType([String, Number], [10]           )).toBe(T);
-            expect(isValidType([String, Number], ['str']        )).toBe(T);
-            expect(isValidType([String, Number], []             )).toBe(false);
-            expect(isValidType([String, Number], [true]         )).toBe(false);
-            expect(isValidType([String, Number], [{}]           )).toBe(false);
-            expect(isValidType([String, Number], 10             )).toBe(false);
-            // 예외 오류 코드
-            expect(()=> checkType([],           10                  )).toThrow(/ES024/)
-            expect(()=> checkType(Array,        10                  )).toThrow(/ES024/)
-            expect(()=> checkType(['_any_'],    [undefined]         )).toThrow(/ES075/)
-            expect(()=> checkType(['_any_'],    10                  )).toThrow(/ES024/)
-            expect(()=> checkType(['_seq_'],    10                  )).toThrow(/ES024/) 
-            expect(()=> checkType(['_seq_', String, Number], [10, 'str'])).toThrow(/ES074/)
-            expect(()=> checkType(['_seq_', String, Number], ['str']    )).toThrow(/ES075/)
-            expect(()=> checkType(['_seq_', String, Number], 10         )).toThrow(/ES024/)
-            expect(()=> checkType(['_opt_'],    10                  )).toThrow(/ES024/)
-            expect(()=> checkType(['_opt_', String, Number], [true] )).toThrow(/ES076/)
-            expect(()=> checkType(['_opt_', String, Number], [{}]   )).toThrow(/ES076/)
-            expect(()=> checkType(['_opt_', String, Number], 10     )).toThrow(/ES024/)
-            // expect(()=> checkType([String, Number], []              )).toThrow(/ES022/) // REVIEW: 확인
-            expect(()=> checkType([String, Number], [true]          )).toThrow(/ES076/)
-            expect(()=> checkType([String, Number], [{}]            )).toThrow(/ES076/)
-            expect(()=> checkType([String, Number], 10              )).toThrow(/ES024/)
-
-        });
-        it('- isValidType() : function (선언 타입 검사) ', () => { 
-            var type1 = function(){};
-            var type2 = function(String, Number){Object};
-            var tar1  = function(){}; 
-            var tar2  = function(){}; 
-            var tar3  = function(){}; 
-            var tar4  = function(){}; 
-            tar2._TYPE = {args: [String, Number], return: [Object]}
-            tar3._TYPE = {args: [], return: [Object, String]}
-            tar4._TYPE = {param: [], return: [Object, String]}
-
-            expect(isValidType(type1, tar1)).toBe(T);
-            expect(isValidType(type1, tar2)).toBe(T); 
-            expect(isValidType(type1, tar3)).toBe(T);
-            expect(isValidType(type2, tar1)).toBe(false);
-            expect(isValidType(type2, tar2)).toBe(T);
-            expect(isValidType(type2, tar3)).toBe(false);
-            expect(isValidType(type2, tar4)).toBe(false);
-            // 예외 오류 코드
-            expect(()=> checkType(type2, tar1)).toThrow(/ES079/)
-            expect(()=> checkType(type2, tar3)).toThrow(/ES0736/)
-            expect(()=> checkType(type2, tar4)).toThrow(/ES0736/)
-        });
-        
-        it('- isValidType() : choice(_any_) (모두 true) ', () => {
-            // 단독 검사
-            expect(isValidType([['_any_']], function any(){}    )).toBe(true);
-            expect(isValidType([['_any_']], function any(){}    )).toBe(true);
-            expect(isValidType([['_any_']], null                )).toBe(true);
-            expect(isValidType([['_any_']], 1                   )).toBe(true);
-            expect(isValidType([['_any_']], NaN                 )).toBe(true);
-            expect(isValidType([['_any_']], 'str'               )).toBe(true);
-            expect(isValidType([['_any_']], true                )).toBe(true);
-            expect(isValidType([['_any_']], /reg/               )).toBe(true);
-            expect(isValidType([['_any_']], Symbol()            )).toBe(true);
-            expect(isValidType([['_any_']], []                  )).toBe(true);
-            expect(isValidType([['_any_']], {aa: 1}             )).toBe(true);
-            expect(isValidType([['_any_']], Number              )).toBe(true);
-            expect(isValidType([['_any_']], String              )).toBe(true);
-            expect(isValidType([['_any_']], Function            )).toBe(true);
-            expect(isValidType([['_any_']], Object              )).toBe(true);
-            expect(isValidType([['_any_']], Symbol              )).toBe(true);
-            // or 검사
-            expect(isValidType([[String, [['_any_']] ]], function any() {})).toBe(true);
-            expect(isValidType(String, function any() {}, null)).toBe(false); // args 전달 안받음 배열로만 받음
-            // TODO: 넘치면 오류 또는 경고 처리해야 오류를 낮출듯
-            // and 검사
-            // expect(checkUnionType(function any(){}, null, Function)).toBe(true);
-            // expect(checkUnionType(function any(){}, null, Object)).toBe(true);  // 상위
-            // expect(checkUnionType(function any(){}, null, String)).toBe(false);
-            // 타겟이 없는(undefind)인 경우
-            expect(isValidType(undefined, null)).toBe(false);
-            expect(isValidType(null, null)).toBe(true);
-        });
-        it('- isValidType() : 타입이 없는 경우 ', () => {
-            expect(isValidType(1)).toBe(true);
-            // expect(checkUnionType(1)).toBe(false);
-            // expect(()=> checkType(1)).toThrow('ES026');
-            // expect(()=> validUnionType(1)).toThrow('ES026');
-        });
-        it('- 커버리지 : 일반 ', () => {
-            expect(isValidType([['default']], 'str')).toBe(true);   // 기본값 의미
-            expect(isValidType([['default']], ['str'])).toBe(false); 
-        });
-
-    });
-    describe('checkType() : 타입 검사, 실패시 예외 ', () => {
-        it('- 예외 : function  ', () => {
-            var type1 = ()=> Number
-            var type1_1 = ()=>{}
-            var type2 = (a,b)=> {"A"}
-
-            expect(() => checkType(type1, type1_1)).toThrow(/ES069/);
-            expect(() => checkType(type2, type1_1)).toThrow(/ES069/);
-        });
-        it('- checkType() : function (외부 참조형 타입 비교) ', () => {
-            /**
-             * function 의 args 영역 규칙
-             * - 거부
-             *  + 정수명(0~9) 입력 불가
-             *  + 내부에 function 사용 불가, ()=> {} 또한 불가
-             * - 허용 
-             *  + 객체 및 배열은 가능
-             *  + String 원시함수이름을 사용하면, 변수로 인식한다.
-             */
-            var arg1 = [String, {aa: Number}]
-            var type1 = function(arg1){}
-            var type2 = function(String, {aa: Number}){}  
-            var type3 = function(){}
-            var type4 = function([{aa: Number}]){}
-            var tar1 = function(){}; 
-            var tar2 = function(){};
-            tar1._TYPE = {args: [String, {aa: Number}], return: [Object]}
-            tar2._TYPE = {args: [[{aa: Number}]]}
-            type3._TYPE = {args: arg1}
-
-
-            expect(()=> checkType(type1, tar1)).toThrow(/ES069/);    // func 내부 참조변수 오류
-            expect(checkType(type2, tar1)).toBe(undefined);
-            expect(checkType(type3, tar1)).toBe(undefined);
-            expect(checkType(type4, tar2)).toBe(undefined);
-            
-            // TODO: 확인해야함
-            // expect(checkType(type3, tar1)).toBe(false);  
-            // expect(checkType(type3, tar2)).toBe(true);
-
-        });
-    });
-
-    describe('isValidType() & checkType() : 검사 ', () => {
         it('- null, undefined ', () => {
             // true
             expect(isValidType(null,                null            )).toBe(T);
@@ -897,13 +588,210 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkType(Boolean,  Number              )).toThrow(/ES074/);
             expect(()=> checkType(Boolean,  Symbol              )).toThrow(/ES074/);
         });
+        it('- isValidType() : choice ', () => {      
+            // _any_
+            expect(isValidType([['_any_']],         10          )).toBe(T);
+            expect(isValidType([['_any_']],         'str'       )).toBe(T);
+            expect(isValidType([['_any_']],         [[]]        )).toBe(T);
+            expect(isValidType([['_any_']],         {}          )).toBe(T);
+            expect(isValidType([['_any_']],         true        )).toBe(T);
+            expect(isValidType([['_any_']],         undefined   )).toBe(false);
+            // _seq_[
+            expect(isValidType([['_seq_']],                 [[1,2,3]]   )).toBe(false);
+            expect(isValidType([['_seq_']],                 10          )).toBe(false);
+            expect(isValidType([['_seq_', String, Number]], [[1,2,3]]   )).toBe(false);
+            expect(isValidType([['_seq_', String, Number]], 10          )).toBe(false);
+            // _opt_[
+            expect(isValidType([['_opt_']],                 [['str', 10]]   )).toBe(false);
+            expect(isValidType([['_opt_']],                 [[10, 'str']]   )).toBe(false);
+            expect(isValidType([['_opt_', String, Number]], 10          )).toBe(T);
+            expect(isValidType([['_opt_', String, Number]], 'str'       )).toBe(T);
+            expect(isValidType([['_opt_', String, Number]], undefined   )).toBe(T);
+            expect(isValidType([['_opt_', String, Number]], true        )).toBe(false);
+            expect(isValidType([['_opt_', String, Number]], []          )).toBe(false);
+            expect(isValidType([['_opt_', String, Number]], {}          )).toBe(false);
+            // choice
+            expect(isValidType([[String, Number]],  10                  )).toBe(T);
+            expect(isValidType([[String, Number]],  'str'               )).toBe(T);
+            expect(isValidType([[String, Number]],  undefined           )).toBe(false);
+            expect(isValidType([[String, Number]],  true                )).toBe(false);
+            expect(isValidType([[String, Number]],  [[]]                )).toBe(false);
+            expect(isValidType([[String, Number]],  {}                  )).toBe(false);
+            expect(isValidType([[String, Number]],  [[String, Boolean]] )).toBe(false); // 당연히 실패
+            expect(isValidType([[String, Number]],  [[Number, String]]  )).toBe(false);
+            expect(isValidType([[String, Number]],  [[Number, String, Boolean]] )).toBe(false);
+            // 예외 오류 코드
+            expect(()=> checkType([['_any_']],                 undefined   )).toThrow(/ES075/)
+            expect(()=> checkType([['_seq_']],                 [[1,2,3]]   )).toThrow(/ES0729/)
+            expect(()=> checkType([['_seq_']],                 10          )).toThrow(/ES0729/)
+            expect(()=> checkType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
+            expect(()=> checkType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
+            expect(()=> checkType([['_opt_', String, Number]], true        )).toThrow(/ES076/)
+            expect(()=> checkType([['_opt_', String, Number]], []          )).toThrow(/ES076/)
+            expect(()=> checkType([['_opt_', String, Number]], {}          )).toThrow(/ES076/)            
+            // expect(()=> checkType([[String, Number]],  undefined           )).toThrow(/ES076/)
+            expect(()=> checkType([[String, Number]],  true                )).toThrow(/ES076/)
+            expect(()=> checkType([[String, Number]],  [[]]                )).toThrow(/ES076/)
+            expect(()=> checkType([[String, Number]],  {}                  )).toThrow(/ES076/)
+            expect(()=> checkType([[String, Number]],  [[String, Boolean]] )).toThrow(/ES076/) // 당연히 실패
+            expect(()=> checkType([[String, Number]],  [[Number, String]]  )).toThrow(/ES076/)
+            expect(()=> checkType([[String, Number]],  [[Number, String, Boolean]] )).toThrow(/ES076/)
+        });
+        it('- isValidType() : object ', () => {
+            var Class1 = function() { this.aa = String }
+            var Class2 = function() { this.bb = Number }
+    
+            expect(isValidType([[Class1, Class2]], {aa: 'STR', bb: 10}      )).toBe(T);
+            expect(isValidType(Class1,             {aa: 'STR', bb: 10}      )).toBe(T);
+            expect(isValidType(Class2,             {aa: 'STR', bb: 10}      )).toBe(T);
+            expect(isValidType([[Class1, Class2]], {aa: 'STR'}              )).toBe(T);
+            expect(isValidType(Class1,             {aa: 'STR'}              )).toBe(T);
+            expect(isValidType(Class2,             {aa: 'STR'}              )).toBe(false);
+            expect(isValidType([[Class1, Class2]], {aa: 'STR', bb: 'STR'}   )).toBe(T);
+            expect(isValidType(Class1,             {aa: 'STR', bb: 'STR'}   )).toBe(T);
+            expect(isValidType(Class2,             {aa: 'STR', bb: 'STR'}   )).toBe(false);
+            expect(isValidType([[Class1, Class2]], {cc: 'STR'}              )).toBe(false);
+            expect(isValidType(Class1,             {cc: 'STR'}              )).toBe(false);
+            expect(isValidType(Class2,             {cc: 'STR'}              )).toBe(false);
+            // 예외 오류 코드
+            expect(()=> checkType(Class2,             {aa: 'STR'}           )).toThrow(/ES027/)
+            expect(()=> checkType(Class2,             {aa: 'STR', bb: 'STR'})).toThrow(/ES074/)
+            expect(()=> checkType([[Class1, Class2]], {cc: 'STR'}           )).toThrow(/ES076/)
+            expect(()=> checkType(Class1,             {cc: 'STR'}           )).toThrow(/ES027/)
+            expect(()=> checkType(Class2,             {cc: 'STR'}           )).toThrow(/ES027/)            
+        });
+        it('- isValidType() : object (객체 기본값) ', () => {
+            var Class1 = function() { this.aa = String };
+            var Class2 = function() { this.bb = 10 };
+
+            expect(isValidType([[Class1, Class2]],{aa: 'str', bb: 2}  )).toBe(T);
+            expect(isValidType(Class1,            {aa: 'str', bb: 2}  )).toBe(T);
+            expect(isValidType(Class2,            {aa: 'str', bb: 2}  )).toBe(T);
+            expect(isValidType([[Class1, Class2]],{aa: 'str'}         )).toBe(T);
+            expect(isValidType(Class1,            {aa: 'str'}         )).toBe(T);
+            expect(isValidType(Class2,            {aa: 'str'}         )).toBe(T);
+            expect(isValidType([[Class1, Class2]],{bb: 5}             )).toBe(T);
+            expect(isValidType(Class1,            {bb: 5}             )).toBe(false);
+            expect(isValidType(Class2,            {bb: 5}             )).toBe(T);
+            expect(isValidType([[Class1, Class2]],{cc: 'STR'}         )).toBe(T);
+            expect(isValidType(Class1,            {cc: 'STR'}         )).toBe(false);
+            expect(isValidType(Class2,            {cc: 'STR'}         )).toBe(T);
+            expect(isValidType([[Class1, Class2]],{aa: 'STR', bb: 'STR'})).toBe(T);
+            expect(isValidType(Class1,            {aa: 'STR', bb: 'STR'})).toBe(T);
+            expect(isValidType(Class2,            {aa: 'STR', bb: 'STR'})).toBe(false);
+            // 예외 오류 코드
+            expect(()=> checkType(Class1,         {bb: 5}               )).toThrow(/ES027/)
+            expect(()=> checkType(Class1,         {cc: 'STR'}           )).toThrow(/ES027/)
+            expect(()=> checkType(Class2,         {aa: 'STR', bb: 'STR'})).toThrow(/ES074/)
+        });
         
-        it('- Array, [] : array 타입 ', () => {
-            // true
-            expect(isValidType(Array,     []      )).toBe(true);
-            expect(isValidType([],        [false] )).toBe(true);
-            // expect(isValidType([[]],      Array   )).toBe(true);
-            // false (예외)
+        it('- isValidType() : choice 원시 타입 ', () => {
+            expect(isValidType([[Number, String, Boolean]], 1           )).toBe(T);
+            expect(isValidType([[Number, String, Boolean]], 'str'       )).toBe(T);
+            expect(isValidType([[Number, String, Boolean]], true        )).toBe(T);            
+            expect(isValidType([[Number, String, Boolean]], new Date()  )).toBe(false);
+            expect(isValidType([[Number, String, Boolean]], /reg/       )).toBe(false);
+            expect(isValidType([[Number, String, Boolean]], Symbol()    )).toBe(false);
+            expect(isValidType([[Number, String, Boolean]], []          )).toBe(false);
+            expect(isValidType([[Number, String, Boolean]], {}          )).toBe(false);
+            // 예외 오류 코드
+            expect(()=> checkType([[Number, String, Boolean]], new Date()  )).toThrow(/ES076/)
+            expect(()=> checkType([[Number, String, Boolean]], /reg/       )).toThrow(/ES076/)
+            expect(()=> checkType([[Number, String, Boolean]], Symbol()    )).toThrow(/ES076/)
+            expect(()=> checkType([[Number, String, Boolean]], []          )).toThrow(/ES076/)
+            expect(()=> checkType([[Number, String, Boolean]], {}          )).toThrow(/ES076/)
+        });
+        it('- isValidType() : choice 내장 객체 타입 ', () => {
+            expect(isValidType([[RegExp, Date, Symbol]], new Date() )).toBe(T);
+            expect(isValidType([[RegExp, Date, Symbol]], /reg/      )).toBe(T);
+            expect(isValidType([[RegExp, Date, Symbol]], Symbol()   )).toBe(T);            
+            expect(isValidType([[RegExp, Date, Symbol]], 1          )).toBe(false);
+            expect(isValidType([[RegExp, Date, Symbol]], true       )).toBe(false);
+            expect(isValidType([[RegExp, Date, Symbol]], 'str'      )).toBe(false);       
+            expect(isValidType([[RegExp, Date, Symbol]], []         )).toBe(false);       
+            expect(isValidType([[RegExp, Date, Symbol]], {}         )).toBe(false);       
+            // 예외 오류 코드
+            expect(()=> checkType([[RegExp, Date, Symbol]], 1          )).toThrow(/ES076/)
+            expect(()=> checkType([[RegExp, Date, Symbol]], true       )).toThrow(/ES076/)
+            expect(()=> checkType([[RegExp, Date, Symbol]], 'str'      )).toThrow(/ES076/)       
+            expect(()=> checkType([[RegExp, Date, Symbol]], []         )).toThrow(/ES076/)       
+            expect(()=> checkType([[RegExp, Date, Symbol]], {}         )).toThrow(/ES076/)       
+        });
+        it('- isValidType() : 상속 객체 타입 ', () => {
+            class Super {
+                aa = 1;
+            }
+            class Sub extends Super {
+                bb = 'str'
+                constructor(){ super() }
+            }
+            
+            expect(isValidType([[Super, Sub]],  new Sub())).toBe(T);
+            expect(isValidType(Super,           new Sub())).toBe(T);
+            expect(isValidType(Sub,             new Sub())).toBe(T);
+            expect(isValidType(Object,          new Sub())).toBe(T);       
+        });
+        it('- isValidType() : array 조건 검사  ', () => {    
+            // array
+            expect(isValidType([],            [1,2,3]     )).toBe(T);
+            expect(isValidType([],            10          )).toBe(false);
+            expect(isValidType(Array,         [1,2,3]     )).toBe(T);
+            expect(isValidType(Array,         10          )).toBe(false);
+            expect(isValidType(Array,         []          )).toBe(T);
+            expect(isValidType([[]],          [1,2,3]     )).toBe(T);
+            expect(isValidType([[]],          10          )).toBe(T);
+            expect(isValidType([],            [false]     )).toBe(T);
+            // _any_
+            expect(isValidType(['_any_'],   [1, 'str']  )).toBe(T);
+            expect(isValidType(['_any_'],   [0]         )).toBe(T);
+            expect(isValidType(['_any_'],   []          )).toBe(T);
+            expect(isValidType(['_any_'],   [undefined] )).toBe(false);
+            expect(isValidType(['_any_'],   10          )).toBe(false);
+            // _seq_
+            expect(isValidType(['_seq_'], ['str']           )).toBe(false);
+            expect(isValidType(['_seq_'], 10                )).toBe(false);
+            expect(isValidType(['_seq_', String, Number], ['str', 10]       )).toBe(T);
+            expect(isValidType(['_seq_', String, Number], ['str', 10, true] )).toBe(T);
+            expect(isValidType(['_seq_', String, Number], [10, 'str']       )).toBe(false);
+            expect(isValidType(['_seq_', String, Number], ['str']           )).toBe(false);
+            expect(isValidType(['_seq_', String, Number], 10                )).toBe(false);
+            // _opt_
+            expect(isValidType(['_opt_'], ['str', 10]       )).toBe(false);
+            expect(isValidType(['_opt_'], []                )).toBe(false);
+            expect(isValidType(['_opt_'], 10                )).toBe(false);
+            expect(isValidType(['_opt_', String, Number], ['str', 10] )).toBe(T);
+            expect(isValidType(['_opt_', String, Number], [10]        )).toBe(T);
+            expect(isValidType(['_opt_', String, Number], ['str']     )).toBe(T);
+            expect(isValidType(['_opt_', String, Number], []          )).toBe(T);
+            expect(isValidType(['_opt_', String, Number], [true]      )).toBe(false);
+            expect(isValidType(['_opt_', String, Number], [{}]        )).toBe(false);
+            expect(isValidType(['_opt_', String, Number], 10          )).toBe(false);
+            expect(isValidType(['_opt_', String, Number], undefined   )).toBe(false);
+            // choice
+            expect(isValidType([String, Number], ['str', 10]    )).toBe(T);
+            expect(isValidType([String, Number], [10]           )).toBe(T);
+            expect(isValidType([String, Number], ['str']        )).toBe(T);
+            expect(isValidType([String, Number], []             )).toBe(false);
+            expect(isValidType([String, Number], [true]         )).toBe(false);
+            expect(isValidType([String, Number], [{}]           )).toBe(false);
+            expect(isValidType([String, Number], 10             )).toBe(false);
+            // 예외 오류 코드
+            expect(()=> checkType([],           10                  )).toThrow(/ES024/)
+            expect(()=> checkType(Array,        10                  )).toThrow(/ES024/)
+            expect(()=> checkType(['_any_'],    [undefined]         )).toThrow(/ES075/)
+            expect(()=> checkType(['_any_'],    10                  )).toThrow(/ES024/)
+            expect(()=> checkType(['_seq_'],    10                  )).toThrow(/ES0729/) 
+            expect(()=> checkType(['_seq_', String, Number], [10, 'str'])).toThrow(/ES074/)
+            expect(()=> checkType(['_seq_', String, Number], ['str']    )).toThrow(/ES075/)
+            expect(()=> checkType(['_seq_', String, Number], 10         )).toThrow(/ES024/)
+            expect(()=> checkType(['_opt_'],    10                  )).toThrow(/ES0729/)
+            expect(()=> checkType(['_opt_', String, Number], [true] )).toThrow(/ES076/)
+            expect(()=> checkType(['_opt_', String, Number], [{}]   )).toThrow(/ES076/)
+            expect(()=> checkType(['_opt_', String, Number], 10     )).toThrow(/ES024/)
+            expect(()=> checkType([String, Number], []              )).toThrow(/ES022/)
+            expect(()=> checkType([String, Number], [true]          )).toThrow(/ES076/)
+            expect(()=> checkType([String, Number], [{}]            )).toThrow(/ES076/)
+            expect(()=> checkType([String, Number], 10              )).toThrow(/ES024/)
             expect(()=> checkType(Array, function any(){}       )).toThrow(/ES024/);
             expect(()=> checkType(Array, function any(){}, []   )).toThrow(/ES024/);
             expect(()=> checkType(Array, null                   )).toThrow(/ES024/);
@@ -916,10 +804,31 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkType(Array, Number                 )).toThrow(/ES024/);
             expect(()=> checkType(Array, Symbol                 )).toThrow(/ES024/);
         });
-        it('- Function : function 타입 ', () => {
-            // true
-            expect(isValidType(Function, function any(){})).toBe(true);
-            // false (예외)
+
+        it('- isValidType() : function (선언 타입 검사) ', () => { 
+            var type1 = function(){};
+            var type2 = function(String, Number){Object};
+            var tar1  = function(){}; 
+            var tar2  = function(){}; 
+            var tar3  = function(){}; 
+            var tar4  = function(){}; 
+            tar2._TYPE = {args: [String, Number], return: [Object]}
+            tar3._TYPE = {args: [], return: [Object, String]}
+            tar4._TYPE = {param: [], return: [Object, String]}
+
+            expect(isValidType(type1, tar1)).toBe(T);
+            expect(isValidType(type1, tar2)).toBe(T); 
+            expect(isValidType(type1, tar3)).toBe(T);
+            expect(isValidType(type2, tar1)).toBe(false);
+            expect(isValidType(type2, tar2)).toBe(T);
+            expect(isValidType(type2, tar3)).toBe(false);
+            expect(isValidType(type2, tar4)).toBe(false);
+            expect(isValidType(Function, function any(){})).toBe(T);
+
+            // 예외 오류 코드
+            expect(()=> checkType(type2, tar1)).toThrow(/ES079/)
+            expect(()=> checkType(type2, tar3)).toThrow(/ES0736/)
+            expect(()=> checkType(type2, tar4)).toThrow(/ES0736/)
             expect(()=> checkType(Function, []          )).toThrow(/ES024/);
             expect(()=> checkType(Function, null        )).toThrow(/ES024/);
             expect(()=> checkType(Function, 'str'       )).toThrow(/ES024/);
@@ -967,25 +876,57 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidType(fun1,        tar1)).toBe(true);
             expect(()=> checkType(fun1,     tar2)).toThrow(/return/)
         });
-        it('- Object, {} : object 타입 (regex, new, null) ', () => {
-            const Func = function() {};
-            // true
-            expect(isValidType({}, Object             )).toBe(true);
-            // expect(isValidType(null, Object)).toBe(true);
-            expect(isValidType({}, /reg/              )).toBe(true);
-            expect(isValidType({}, new Func()         )).toBe(true);
-            expect(isValidType({}, function any(){}   )).toBe(true);
-            expect(isValidType({}, Number             )).toBe(true);
-            expect(isValidType({}, Symbol             )).toBe(true);
-            // false (예외)
-            // expect(()=> checkType(function any(){}, Object)).toThrow(/object.*타입/);
-            expect(()=> checkType(Object, 'str'     )).toThrow(/ES024/);
-            expect(()=> checkType(Object, 1         )).toThrow(/ES024/);
-            expect(()=> checkType(Object, Symbol()  )).toThrow(/ES024/);
-            expect(()=> checkType(Object, true      )).toThrow(/ES024/);
-            // expect(()=> checkType(Number, Object)).toThrow(/object.*타입/);
-            // expect(()=> checkType(Symbol, Object)).toThrow(/object.*타입/);
-            expect(()=> checkType(Object, null      )).toThrow(/ES024/);
+        it('- isValidType() : choice(_any_) (모두 true) ', () => {
+            // 단독 검사
+            expect(isValidType([['_any_']], function any(){}    )).toBe(T);
+            expect(isValidType([['_any_']], function any(){}    )).toBe(T);
+            expect(isValidType([['_any_']], null                )).toBe(T);
+            expect(isValidType([['_any_']], 1                   )).toBe(T);
+            expect(isValidType([['_any_']], NaN                 )).toBe(T);
+            expect(isValidType([['_any_']], 'str'               )).toBe(T);
+            expect(isValidType([['_any_']], true                )).toBe(T);
+            expect(isValidType([['_any_']], /reg/               )).toBe(T);
+            expect(isValidType([['_any_']], Symbol()            )).toBe(T);
+            expect(isValidType([['_any_']], []                  )).toBe(T);
+            expect(isValidType([['_any_']], {aa: 1}             )).toBe(T);
+            expect(isValidType([['_any_']], Number              )).toBe(T);
+            expect(isValidType([['_any_']], String              )).toBe(T);
+            expect(isValidType([['_any_']], Function            )).toBe(T);
+            expect(isValidType([['_any_']], Object              )).toBe(T);
+            expect(isValidType([['_any_']], Symbol              )).toBe(T);
+            expect(isValidType([['_any_']], undefined           )).toBe(false);
+            // or 검사
+            expect(isValidType([[String, [['_any_']] ]], function any() {})).toBe(true);
+            expect(isValidType(String, function any() {}, null)).toBe(false); // args 전달 안받음 배열로만 받음
+            // TODO: 넘치면 오류 또는 경고 처리해야 오류를 낮출듯
+            // and 검사
+            // expect(checkUnionType(function any(){}, null, Function)).toBe(true);
+            // expect(checkUnionType(function any(){}, null, Object)).toBe(true);  // 상위
+            // expect(checkUnionType(function any(){}, null, String)).toBe(false);
+            // 타겟이 없는(undefind)인 경우
+            expect(isValidType(undefined, null)).toBe(false);
+            expect(isValidType(null, null)).toBe(true);
+        });
+        it('- choice : or 타입 (내장 타입) ', () => {
+            const Func1 = function() { this.aa = Number };
+            // true (베열)
+            expect(isValidType([[String, Number]],              'str'       )).toBe(true);
+            expect(isValidType([[String, Number]],              1           )).toBe(true);
+            expect(isValidType([[Boolean, Number]],             true        )).toBe(true);
+            expect(isValidType([[Boolean, null  ]],             null        )).toBe(true);
+            expect(isValidType([[Boolean, [['_any_']]]],        /reg/       )).toBe(true);       // any
+            expect(isValidType([[Boolean, Object]],             /reg/       )).toBe(true);     // objct 최상위
+            expect(isValidType([[Boolean, RegExp]],             /reg/       )).toBe(true);     // 내장 함수
+            expect(isValidType([[Func1, Number]],               new Func1() )).toBe(true);
+            expect(isValidType([[[[String, Func1]], Number]],   new Func1() )).toBe(true);   // 복합 배열
+            expect( isValidType([[[Func1], Number]],            [new Func1()])).toBe(true);         // 복합 하위 배열
+            // [[[Func1 ]]  는 배열안에 함수를 의미함!
+            // false (예외) 
+            expect(()=> checkType([[Array, String]],          1               )).toThrow(/ES076/);
+            expect(()=> checkType([[Array]],                  function any(){})).toThrow(/ES076/);
+            expect(()=> checkType([[String]],                 function any(){})).toThrow(/ES076/);
+            expect(()=> checkType([[String, Number]],         null            )).toThrow(/ES076/);
+            expect(()=> checkType([[Array, Number, Boolean]], 'str'           )).toThrow(/ES076/);
         });
         it('- function() : class 타입', () => {
             const Func1 = function() { this.aa = Number };
@@ -1008,31 +949,6 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkType(Func1, true               )).toThrow(/ES032/);
             expect(()=> checkType(Func1, Number             )).toThrow(/ES032/);
             expect(()=> checkType(Func1, Symbol             )).toThrow(/ES032/);
-        });
-
-        it('- [] : or 타입 (내장 타입) ', () => {
-            const Func1 = function() { this.aa = Number };
-            // true (베열)
-            expect(isValidType([[String, Number]],              'str'       )).toBe(true);
-            expect(isValidType([[String, Number]],              1           )).toBe(true);
-            expect(isValidType([[Boolean, Number]],             true        )).toBe(true);
-            expect(isValidType([[Boolean, null  ]],             null        )).toBe(true);
-            expect(isValidType([[Boolean, [['_any_']]]],        /reg/       )).toBe(true);       // any
-            expect(isValidType([[Boolean, Object]],             /reg/       )).toBe(true);     // objct 최상위
-            expect(isValidType([[Boolean, RegExp]],             /reg/       )).toBe(true);     // 내장 함수
-            expect(isValidType([[Func1, Number]],               new Func1() )).toBe(true);
-            expect(isValidType([[[[String, Func1]], Number]],   new Func1() )).toBe(true);   // 복합 배열
-            expect( isValidType([[[Func1], Number]],            [new Func1()])).toBe(true);         // 복합 하위 배열
-            // [[[Func1 ]]  는 배열안에 함수를 의미함!
-            // false (예외) 
-            expect(()=> checkType([[Array, String]],          1               )).toThrow(/ES076/);
-            expect(()=> checkType([[Array]],                  function any(){})).toThrow(/ES076/);
-            expect(()=> checkType([[String]],                 function any(){})).toThrow(/ES076/);
-            expect(()=> checkType([[String, Number]],         null            )).toThrow(/ES076/);
-            expect(()=> checkType([[Array, Number, Boolean]], 'str'           )).toThrow(/ES076/);
-        });
-        it('- {obj:...} : union 타입 ', () => {
-       
         });
         it('- Symbol() : symbol 타입', () => {
             // true
@@ -1084,10 +1000,88 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> checkType(RegExp, Symbol()          )).toThrow(/ES032/);
             expect(()=> checkType(RegExp, Symbol            )).toThrow(/ES032/);
         });
+        it('- isValidType() : 타입이 없는 경우 ', () => {
+            expect(isValidType(1)).toBe(true);
+            // expect(checkUnionType(1)).toBe(false);
+            // expect(()=> checkType(1)).toThrow('ES026');
+            // expect(()=> validUnionType(1)).toThrow('ES026');
+        });
+        it('- 커버리지 : 일반 ', () => {
+            expect(isValidType([['default']], 'str')).toBe(true);   // 기본값 의미
+            expect(isValidType([['default']], ['str'])).toBe(false); 
+        });
+
     });
-    
-    
-    
-    describe('isValidType() VS checkType() : 오류 찾기 ', () => {
-    }); 
+    describe('checkType() : 타입 검사, 실패시 예외 ', () => {
+        it('- 예외 : function  ', () => {
+            var type1 = ()=> Number
+            var type1_1 = ()=>{}
+            var type2 = (a,b)=> {"A"}
+
+            expect(() => checkType(type1, type1_1)).toThrow(/ES069/);
+            expect(() => checkType(type2, type1_1)).toThrow(/ES069/);
+        });
+        it('- checkType() : function (외부 참조형 타입 비교) ', () => {
+            /**
+             * function 의 args 영역 규칙
+             * - 거부
+             *  + 정수명(0~9) 입력 불가
+             *  + 내부에 function 사용 불가, ()=> {} 또한 불가
+             * - 허용 
+             *  + 객체 및 배열은 가능
+             *  + String 원시함수이름을 사용하면, 변수로 인식한다.
+             */
+            var arg1 = [String, {aa: Number}]
+            var type1 = function(arg1){}
+            var type2 = function(String, {aa: Number}){}  
+            var type3 = function(){}
+            var type4 = function([{aa: Number}]){}
+            var tar1 = function(){}; 
+            var tar2 = function(){};
+            tar1._TYPE = {args: [String, {aa: Number}], return: [Object]}
+            tar2._TYPE = {args: [[{aa: Number}]]}
+            type3._TYPE = {args: arg1}
+
+
+            expect(()=> checkType(type1, tar1)).toThrow(/ES069/);    // func 내부 참조변수 오류
+            expect(checkType(type2, tar1)).toBe(undefined);
+            expect(checkType(type3, tar1)).toBe(undefined);
+            expect(checkType(type4, tar2)).toBe(undefined);
+            
+            // TODO: 확인해야함
+            // expect(checkType(type3, tar1)).toBe(false);  
+            // expect(checkType(type3, tar2)).toBe(true);
+
+        });
+    });
+
+    describe('isValidType() & checkType() : 검사 ', () => {
+        
+        
+        
+        
+        
+        it('- Object, {} : object 타입 (regex, new, null) ', () => {
+            const Func = function() {};
+            // true
+            expect(isValidType({}, Object             )).toBe(true);
+            // expect(isValidType(null, Object)).toBe(true);
+            expect(isValidType({}, /reg/              )).toBe(true);
+            expect(isValidType({}, new Func()         )).toBe(true);
+            expect(isValidType({}, function any(){}   )).toBe(true);
+            expect(isValidType({}, Number             )).toBe(true);
+            expect(isValidType({}, Symbol             )).toBe(true);
+            // false (예외)
+            // expect(()=> checkType(function any(){}, Object)).toThrow(/object.*타입/);
+            expect(()=> checkType(Object, 'str'     )).toThrow(/ES024/);
+            expect(()=> checkType(Object, 1         )).toThrow(/ES024/);
+            expect(()=> checkType(Object, Symbol()  )).toThrow(/ES024/);
+            expect(()=> checkType(Object, true      )).toThrow(/ES024/);
+            // expect(()=> checkType(Number, Object)).toThrow(/object.*타입/);
+            // expect(()=> checkType(Symbol, Object)).toThrow(/object.*타입/);
+            expect(()=> checkType(Object, null      )).toThrow(/ES024/);
+        });
+        
+    });
+
 });

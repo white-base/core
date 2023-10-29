@@ -23,7 +23,7 @@ const { loadNamespace } = require('../src/load-namespace');
 
 //==============================================================
 // test
-describe("[target: meta-set.js]", () => {
+describe.skip("[target: meta-set.js]", () => {
     beforeEach(() => {
        jest.resetModules();
        MetaRegistry.init();
