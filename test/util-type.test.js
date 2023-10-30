@@ -46,6 +46,7 @@ describe("[target: util-type.js.js]", () => {
             expect(typeKind({}).name              ).toBe('object');
             expect(typeKind(new User).name        ).toBe('object');       // 빈객체
             expect(typeKind(/reg/).name           ).toBe('object');
+            expect(typeKind(RegExp).name          ).toBe('class');
             // function
             expect(typeKind(Function).name        ).toBe('function');
             // class

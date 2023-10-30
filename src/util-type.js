@@ -330,10 +330,12 @@
             return obj;
         }
         // special type
-        if (typeof type === 'object' && type['$kind']) {
-            obj.name = 'function';
-            obj['args'] = type['args'] || [];
-            obj['return'] = type['return'];
+        if (typeof type === 'object' && type['$type']) {
+            if (type['$type'] === 'function') {
+                obj.name = 'function';
+                obj['args'] = type['args'] || [];
+                obj['return'] = type['return'];
+            }
             return obj;
         }
 
