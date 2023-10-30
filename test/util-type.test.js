@@ -68,6 +68,10 @@ describe("[target: util-type.js.js]", () => {
             expect(typeKind(Symbol).name          ).toBe('symbol');  
             expect(typeKind(Symbol('a')).name     ).toBe('symbol');
         });
+        it('- typeKind() : 특별한 타입 얻기 ', () => {
+            // 
+        });
+
         it('- typeKind() : 자료형별 타입 얻기 ', () => {
             // object : Date
             expect(typeKind(Date).name              ).toBe('class');

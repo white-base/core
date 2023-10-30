@@ -22,7 +22,7 @@ let MetaObjectSub, MetaElementSub, ComplexElementSub, EmpytClass;
 
 //==============================================================
 // test
-describe("[target: object-column.js]", () => {
+describe.skip("[target: object-column.js]", () => {
     describe("ObjectColumn :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();

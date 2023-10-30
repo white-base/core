@@ -329,6 +329,14 @@
             }
             return obj;
         }
+        // special type
+        if (typeof type === 'object' && type['$kind']) {
+            obj.name = 'function';
+            obj['args'] = type['args'] || [];
+            obj['return'] = type['return'];
+            return obj;
+        }
+
         // seq 3 : instanceof
         if (Array.isArray(type)) {
             if (type.length ===  1 && Array.isArray(type[0])) {

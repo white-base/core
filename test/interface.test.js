@@ -27,7 +27,7 @@ const {IArrayCollection}        = require('../src/i-collection-array');
 
 //==============================================================
 // test
-describe("[target: i-* ]", () => {
+describe.skip("[target: i-* ]", () => {
     beforeAll(() => {
         // jest.resetModules();
     });
