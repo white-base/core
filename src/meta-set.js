@@ -147,6 +147,7 @@
             Util.implements(MetaSet, this);
         }
         Util.inherits(MetaSet, _super);
+        
         MetaSet._UNION = [ISchemaControl, IImportControl, IExportControl, ITransaction, ISerialize];
         MetaSet._NS = 'Meta.Entity';    // namespace
         MetaSet._PARAMS = ['name'];     // creator parameter

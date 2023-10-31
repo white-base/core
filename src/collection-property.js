@@ -89,6 +89,7 @@
             Util.implements(PropertyCollection, this);
         }
         Util.inherits(PropertyCollection, _super);
+        
         PropertyCollection._UNION = [IPropertyCollection];
         PropertyCollection._NS = 'Collection';      // namespace
         PropertyCollection._PARAMS = ['_owner'];    // creator parameter

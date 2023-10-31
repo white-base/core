@@ -325,6 +325,7 @@
             Util.implements(BaseCollection, this);
         }
         Util.inherits(BaseCollection, _super);
+        
         BaseCollection._UNION = [ICollection, IList];
         BaseCollection._NS = 'Collection';
         BaseCollection._PARAMS = ['_owner'];

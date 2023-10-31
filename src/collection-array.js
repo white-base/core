@@ -59,6 +59,7 @@
             Util.implements(ArrayCollection, this);
         }
         Util.inherits(ArrayCollection, _super);
+        
         ArrayCollection._UNION = [IArrayCollection];
         ArrayCollection._NS = 'Collection';     // namespace
         ArrayCollection._PARAMS = ['_owner'];   // creator parameter

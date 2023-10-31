@@ -131,7 +131,7 @@
 
     /**
      * 함수 규칙   
-     * - (args 내부에는 '()' 입력 금지)  
+     * - (params 내부에는 '()' 입력 금지)  
      * - 참조형 타입 금지 : new Function() 시점에 자동 해석됨  
      * @param {*} funBody 
      * @returns {object}
@@ -143,7 +143,7 @@
         var regFunc = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
         // var resParam = /[_\w0-1]*/g;
         var arrFunc, arrParam;
-        var result = {args: [], return: undefined};
+        var result = {params: [], return: undefined};
         var arrParam = [];
         var arrRetrun;
         
@@ -153,7 +153,7 @@
             if (arrFunc === null) Message.error('ES072', [funBody]);
 
             arrParam = (new Function('return ['+ arrFunc[1] +']'))();
-            result.args = arrParam;
+            result.params = arrParam;
             
             if (arrFunc[2] !== '') arrRetrun = (new Function('return '+ arrFunc[2]))()
             result.return = arrRetrun;
@@ -333,7 +333,7 @@
         if (typeof type === 'object' && type['$type']) {
             if (type['$type'] === 'function') {
                 obj.name = 'function';
-                obj['args'] = type['args'] || [];
+                obj['params'] = type['params'] || [];
                 obj['return'] = type['return'];
             }
             return obj;
@@ -577,13 +577,13 @@
             if (oriDef.val === Function) return;
             var info1 = oriDef.val['_TYPE'] ? oriDef.val['_TYPE'] : _getFunInfo(oriDef.val.toString());
             var info2 =  tarDef.val['_TYPE'] ? tarDef.val['_TYPE'] : _getFunInfo(tarDef.val.toString());
-            if (!info1.return && info1.args.length === 0) return;
-            if (info1.args.length !== info2.args.length) Message.error('ES0721', ['function', 'args', info1.args.length]);
+            if (!info1.return && info1.params.length === 0) return;
+            if (info1.params.length !== info2.params.length) Message.error('ES0721', ['function', 'params', info1.params.length]);
             
             try {
-                _execAllowType(['_SEQ_'].concat(info1.args), ['_SEQ_'].concat(info2.args));
+                _execAllowType(['_SEQ_'].concat(info1.params), ['_SEQ_'].concat(info2.params));
             } catch (error) {
-                Message.error('ES0722', ['function', 'args', error]);
+                Message.error('ES0722', ['function', 'params', error]);
             }
 
             try {
@@ -759,22 +759,22 @@
             var tarType = target['_TYPE'];
             var tarArgs = [];
             var tarReturns = [];
-            if (!fixType.return && fixType.args.length === 0) return;    // success
-            if ((fixType.return || fixType.args.length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
-            if (typeof tarType.args === 'undefined' && typeof tarType.return === 'undefined') { 
-                Message.error('ES0710', ['target', 'function', ' {args: [], return: []} ']);
+            if (!fixType.return && fixType.params.length === 0) return;    // success
+            if ((fixType.return || fixType.params.length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
+            if (typeof tarType.params === 'undefined' && typeof tarType.return === 'undefined') { 
+                Message.error('ES0710', ['target', 'function', ' {params: [], return: []} ']);
             }
-            tarArgs = (Array.isArray(tarType.args )) ? tarType.args : [tarType.args];
+            tarArgs = (Array.isArray(tarType.params )) ? tarType.params : [tarType.params];
             if (fixType.return) fixReturns = (Array.isArray(fixType.return )) ? fixType.return : [fixType.return]; 
             if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];
             
-            if (fixType.args.length > 0) {  // args 검사
+            if (fixType.params.length > 0) {  // params 검사
                 try {
-                    if (fixType.args.length > tarArgs.length) Message.error('ES0736', [fixType.args, tarArgs]);
+                    if (fixType.params.length > tarArgs.length) Message.error('ES0736', [fixType.params, tarArgs]);
 
-                    _execAllowType(['_SEQ_'].concat(fixType.args), ['_SEQ_'].concat(tarArgs))
+                    _execAllowType(['_SEQ_'].concat(fixType.params), ['_SEQ_'].concat(tarArgs))
                 } catch (error) {
-                    Message.error('ES0711', ['function', 'args', error]);
+                    Message.error('ES0711', ['function', 'params', error]);
                 }
             }
             if (fixReturns.length > 0) {

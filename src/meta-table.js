@@ -100,6 +100,7 @@
             Util.implements(MetaTable, this);
         }
         Util.inherits(MetaTable, _super);
+        
         MetaTable._UNION = [ITransaction];
         MetaTable._NS = 'Meta.Entity';      // namespace
         MetaTable._PARAMS = ['name'];       // creator parameter

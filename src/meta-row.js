@@ -250,6 +250,7 @@
             Util.implements(MetaRow, this);
         }
         Util.inherits(MetaRow, _super);
+        
         MetaRow._UNION = [IList];
         MetaRow._NS = 'Meta.Entity';
         MetaRow._PARAMS = ['_entity'];

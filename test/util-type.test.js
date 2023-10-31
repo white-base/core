@@ -447,9 +447,9 @@ describe("[target: util-type.js.js]", () => {
         it('- isValidAllowType(a, b) : function ', () => {
             var type1   = function(String, Number){Boolean}
             var type2   = function(){}
-            type2._TYPE = {args: [String, Number], return: Boolean}
+            type2._TYPE = {params: [String, Number], return: Boolean}
             var tar1    = function(){}
-            tar1._TYPE  = {args: [String, Number], return: Boolean}
+            tar1._TYPE  = {params: [String, Number], return: Boolean}
 
             expect(isValidAllowType(Function, Function    )).toBe(T);
             expect(isValidAllowType(type1, {}             )).toBe(false);
@@ -817,8 +817,8 @@ describe("[target: util-type.js.js]", () => {
             var tar2  = function(){}; 
             var tar3  = function(){}; 
             var tar4  = function(){}; 
-            tar2._TYPE = {args: [String, Number], return: [Object]}
-            tar3._TYPE = {args: [], return: [Object, String]}
+            tar2._TYPE = {params: [String, Number], return: [Object]}
+            tar3._TYPE = {params: [], return: [Object, String]}
             tar4._TYPE = {param: [], return: [Object, String]}
 
             expect(isValidType(type1, tar1)).toBe(T);
@@ -853,13 +853,13 @@ describe("[target: util-type.js.js]", () => {
             var tar6 = function(){};
             var tar7 = function(){}; 
             var tar8 = function(){};
-            tar1._TYPE = {args: [String, Number], return: Boolean}  // T
-            tar2._TYPE = {args: [String, Number]}
-            tar3._TYPE = {param: [String, Number]}
-            tar4._TYPE = {args: String}
+            tar1._TYPE = {params: [String, Number], return: Boolean}  // T
+            tar2._TYPE = {params: [String, Number]}
+            tar3._TYPE = {arg: [String, Number]}
+            tar4._TYPE = {params: String}
             tar5._TYPE = {return: [Boolean]}
-            tar6._TYPE = {args: String, return: [Boolean]}
-            tar7._TYPE = {args: Boolean, return: [Boolean]}
+            tar6._TYPE = {params: String, return: [Boolean]}
+            tar7._TYPE = {params: Boolean, return: [Boolean]}
 
             expect(isValidType(fun1,    tar1)).toBe(true); 
             // 오류
@@ -875,8 +875,8 @@ describe("[target: util-type.js.js]", () => {
             var fun1 = function(){[Boolean, String]}
             var tar1 = function(){};
             var tar2 = function(){};
-            tar1._TYPE = {args: [String, Number], return: [Boolean, String]}
-            tar2._TYPE = {args: [String, Number]}
+            tar1._TYPE = {params: [String, Number], return: [Boolean, String]}
+            tar2._TYPE = {params: [String, Number]}
 
             expect(isValidType(fun1,        tar1)).toBe(true);
             expect(()=> checkType(fun1,     tar2)).toThrow(/return/)
@@ -1043,9 +1043,9 @@ describe("[target: util-type.js.js]", () => {
             var type4 = function([{aa: Number}]){}
             var tar1 = function(){}; 
             var tar2 = function(){};
-            tar1._TYPE = {args: [String, {aa: Number}], return: [Object]}
-            tar2._TYPE = {args: [[{aa: Number}]]}
-            type3._TYPE = {args: arg1}
+            tar1._TYPE = {params: [String, {aa: Number}], return: [Object]}
+            tar2._TYPE = {params: [[{aa: Number}]]}
+            type3._TYPE = {params: arg1}
 
 
             expect(()=> checkType(type1, tar1)).toThrow(/ES069/);    // func 내부 참조변수 오류
