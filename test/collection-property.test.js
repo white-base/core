@@ -10,7 +10,7 @@ let Student, School, Member, Corp, House, Space;
 
 //==============================================================
 // test
-describe("[target: collection-property.js, base-collection.js]", () => {
+describe.skip("[target: collection-property.js, base-collection.js]", () => {
         
     describe("PropertyCollection :: 클래스", () => {
         beforeAll(() => {

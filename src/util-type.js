@@ -137,13 +137,11 @@
      * @returns {object}
      */
     function _getFunInfo(funBody) {
-        // var regChk = /\([,_\w\s]*\)(?:=>|\s*)?{[\s\w;]*}/;  // 제한 규칙
-        var regChk = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;
-        // var regFunc = /(?:function\s)?\(([\s\w,]*)\)(?:=>|\s*)?{(?:\s*return\s+)?([\w]*);?\s*}/; // 제한 규칙
+        var regChk = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;    // 제한 규칙
         var regFunc = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
         // var resParam = /[_\w0-1]*/g;
         var arrFunc, arrParam;
-        var result = {params: [], return: undefined};
+        var result = { params: [], return: undefined };
         var arrParam = [];
         var arrRetrun;
         
@@ -165,8 +163,18 @@
         return result;
     }
 
+    function _hasKind(name) {
+        var arr = [];
+        
+        arr = arr.concat(['null', 'undefined', 'number', 'string', 'boolean']);
+        arr = arr.concat(['array', 'function', 'object']);
+        arr = arr.concat(['choice', 'union', 'class']);
+        arr = arr.concat(['symbol']);
 
-
+        if (typeof name !== 'string') return false;
+        return arr.indexOf(name) > -1;
+    }
+    
     /**
      * 전체 프로퍼티 조회
      * @memberof _L.Common.Util
@@ -242,7 +250,7 @@
      * @returns {object} {name: string, default: [null, any]}
      */
     var typeKind = function(type) {
-        var obj =  {name: '', val: type, default: null, kind: null};
+        var obj =  {name: '', ref: type, default: null, kind: null};
 
         obj.toString = function(){
             var temp = '';
@@ -335,7 +343,18 @@
                 obj.name = 'function';
                 obj['params'] = type['params'] || [];
                 obj['return'] = type['return'];
+            } else if (type['$type'] === 'function') {
+            
             }
+
+            // if (type['$kind']) 
+
+            // var _type = type['$type'];
+
+            if (!_hasKind(_type)) Message.error('ES022', ['type']);
+            obj.name = _type;
+            // if (type['$kind'])
+
             return obj;
         }
 
@@ -383,18 +402,18 @@
         var oriDef = typeKind(ori);
         var tarDef = typeKind(tar);
         
-        if (_isObject(oriDef.val) &&  _isObject(tarDef.val) && deepEqual(oriDef, tarDef)) return;
+        if (_isObject(oriDef.ref) &&  _isObject(tarDef.ref) && deepEqual(oriDef, tarDef)) return;
         // ori seq, opt 필수 검사
         if (oriDef.kind) {
             if ((oriDef.kind === '_SEQ_' || oriDef.kind === '_OPT_') 
-            && (typeof oriDef.val === 'undefined' || oriDef.list.length === 0)) {
+            && (typeof oriDef.ref === 'undefined' || oriDef.list.length === 0)) {
                 Message.error('ES0729', ['origin', oriDef.kind]);
             }
         }
         // tar seq, opt 필수 검사
         if (tarDef.kind) {
             if ((tarDef.kind === '_SEQ_' || tarDef.kind === '_OPT_') 
-            && (typeof tarDef.val === 'undefined' || tarDef.list.length === 0)) {
+            && (typeof tarDef.ref === 'undefined' || tarDef.list.length === 0)) {
                 Message.error('ES0729', ['target', tarDef.kind]);
             }
         }
@@ -438,7 +457,7 @@
             if (oriDef.kind == '_ALL_') {
                 return;
             } else if (oriDef.kind == '_ANY_') {
-                if (typeof tarDef.val !== 'undefined') return;
+                if (typeof tarDef.ref !== 'undefined') return;
                 Message.error('ES0714', ['_ANY_', 'undefined']);
             
             } else if (oriDef.kind == '_SEQ_') {
@@ -457,10 +476,10 @@
                 return;
             
             } else if (oriDef.kind == '_VAL_') {
-                if (tarDef.kind && tarDef.val.length === 0) {
+                if (tarDef.kind && tarDef.ref.length === 0) {
                     Message.error('ES0734');
                 }
-                var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
+                var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.ref];
 
                 if (oriDef.list.length > 0 && arrTarget.length === 0) {
                     Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
@@ -481,8 +500,8 @@
                 return;
 
             } else if (oriDef.kind === '_OPT_') {
-                if (typeof tarDef.val === 'undefined') return;
-                var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.val];
+                if (typeof tarDef.ref === 'undefined') return;
+                var arrTarget = (tarDef.kind) ? tarDef.list : [tarDef.ref];
 
                 if (oriDef.list.length > 0 && arrTarget.length === 0) {
                     Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
@@ -574,9 +593,9 @@
         // function
         if (oriDef.name === 'function') { 
             if (tarDef.name !== 'function')  Message.error('ES0713', [oriDef.name, tarDef.name]);
-            if (oriDef.val === Function) return;
-            var info1 = oriDef.val['_TYPE'] ? oriDef.val['_TYPE'] : _getFunInfo(oriDef.val.toString());
-            var info2 =  tarDef.val['_TYPE'] ? tarDef.val['_TYPE'] : _getFunInfo(tarDef.val.toString());
+            if (oriDef.ref === Function) return;
+            var info1 = oriDef.ref['_TYPE'] ? oriDef.ref['_TYPE'] : _getFunInfo(oriDef.ref.toString());
+            var info2 =  tarDef.ref['_TYPE'] ? tarDef.ref['_TYPE'] : _getFunInfo(tarDef.ref.toString());
             if (!info1.return && info1.params.length === 0) return;
             if (info1.params.length !== info2.params.length) Message.error('ES0721', ['function', 'params', info1.params.length]);
             
@@ -596,22 +615,22 @@
         // object
         if (oriDef.name === 'object') {
             if (tarDef.name !== 'object') Message.error('ES0713', [oriDef.name, tarDef.name]);
-            if (oriDef.val === tarDef.val) return;
-            if (_isEmptyObj(tarDef.val)) return;
-            if (oriDef.val instanceof RegExp) {
-                if (!(tarDef.val instanceof RegExp) || oriDef.val.source !== tarDef.val.source) {
-                    Message.error('ES0723', [oriDef.val.source, tarDef.val.source]);
+            if (oriDef.ref === tarDef.ref) return;
+            if (_isEmptyObj(tarDef.ref)) return;
+            if (oriDef.ref instanceof RegExp) {
+                if (!(tarDef.ref instanceof RegExp) || oriDef.ref.source !== tarDef.ref.source) {
+                    Message.error('ES0723', [oriDef.ref.source, tarDef.ref.source]);
                 }
             }
-            if (deepEqual(oriDef.val, tarDef.val)) return;
+            if (deepEqual(oriDef.ref, tarDef.ref)) return;
                 Message.error('ES0718', ['object']);
         }
         // class
         if (oriDef.name === 'class') {
-            if (oriDef.val === tarDef.val) return;
+            if (oriDef.ref === tarDef.ref) return;
             try {
-                var obj1 = new oriDef.val();
-                var obj2 = new tarDef.val();
+                var obj1 = new oriDef.ref();
+                var obj2 = new tarDef.ref();
                 if (deepEqual(obj1, obj2)) return;
             } catch (error) {
                 Message.error('ES0724', ['object', error]);
@@ -620,11 +639,11 @@
         }
         // union
         if (oriDef.name === 'union') {
-            var list = getAllProperties(oriDef.val);
+            var list = getAllProperties(oriDef.ref);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 try {
-                    _execAllowType(oriDef.val[key], tarDef.val[key])
+                    _execAllowType(oriDef.ref[key], tarDef.ref[key])
                 } catch (error) {
                     Message.error('ES0726', ['union', error]);
                 }
@@ -650,7 +669,7 @@
         // ori seq, opt 필수 검사
         if (defType.kind) {
             if ((defType.kind === '_SEQ_' || defType.kind === '_OPT_') 
-            && (typeof defType.val === 'undefined' || defType.list.length === 0)) {
+            && (typeof defType.ref === 'undefined' || defType.list.length === 0)) {
                 Message.error('ES0729', ['type', defType.kind]);
             }
         }
@@ -696,7 +715,7 @@
             } else if (defType.kind == '_SEQ_') {
                 Message.error('ES077', ['choice', '_SEQ_']);
             } else if (defType.kind === '_OPT_') {
-                if (typeof tarType.val === 'undefined') return;
+                if (typeof tarType.ref === 'undefined') return;
             }
 
             for (var ii = 0; ii < defType.list.length; ii++) {
@@ -732,7 +751,7 @@
             } else if (defType.kind == '_VAL_') {
                 // if (defType.list.length === 0) throw new Error('array(opt) 타입이 없습니다. ');  
                 // if (Array.isArray(target) && target.length === 0) return;
-                // if (defType.val.length === 0) return;
+                // if (defType.ref.length === 0) return;
                 // beginIdx = 1;
             } else if (defType.kind === '_OPT_') {
                 if (Array.isArray(target) && target.length === 0) return;
@@ -807,7 +826,7 @@
         }
         // union
         if (defType.name === 'union') {
-            var list = getAllProperties(defType.val);
+            var list = getAllProperties(defType.ref);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 var listDefType = typeKind(type[key]);

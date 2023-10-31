@@ -47,7 +47,8 @@ var choice1 = {
 }
 
 /**
- * union : 조합
+ * union : 조합   
+ * REVIEW: 확정
  */
 var fun1 = {    // 함수 타입
     $type: 'function',
@@ -78,3 +79,7 @@ var choice1 = {
     $type: 'choice',
     list: [String, Number]
 }
+
+/**
+ * 클래스는 불필요?
+ */
