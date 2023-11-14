@@ -61,6 +61,9 @@ TODO: getObject(3) : 모든 속성,  템플릿에서 활용될듯
 gitPage 블러그 및 광고 만들기
 https://devinlife.com/howto/  
 
+https://wlqmffl0102.github.io/posts/Making-Git-blogs-for-beginners-1/
+ 
+
 23년 11월 6일
 23년 11월 7일
 23년 11월 8일
