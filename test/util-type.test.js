@@ -612,6 +612,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isValidType([['_opt_', String, Number]], 10          )).toBe(T);
             expect(isValidType([['_opt_', String, Number]], 'str'       )).toBe(T);
             expect(isValidType([['_opt_', String, Number]], undefined   )).toBe(T);
+            expect(isValidType([['_opt_', String, undefined]], undefined)).toBe(T);
             expect(isValidType([['_opt_', String, Number]], true        )).toBe(false);
             expect(isValidType([['_opt_', String, Number]], []          )).toBe(false);
             expect(isValidType([['_opt_', String, Number]], {}          )).toBe(false);
