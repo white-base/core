@@ -42,7 +42,7 @@
          * @abstract
          */
         ISchemaControl.prototype.readSchema  = function() {
-            Message.error('ES013', ['readSchema(JSON)']);
+            // Message.error('ES013', ['readSchema(JSON)']);
         };
 
         /**
@@ -50,7 +50,7 @@
          * @abstract
          */
         ISchemaControl.prototype.writeSchema  = function() {
-            Message.error('ES013', ['writeSchema(): JSON']);
+            // Message.error('ES013', ['writeSchema(): JSON']);
         };
     
         return ISchemaControl;

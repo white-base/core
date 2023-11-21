@@ -41,7 +41,7 @@
          * @abstract
          */
         IExportControl.prototype.write  = function() {
-            Message.error('ES013', ['write(any)']);
+            // Message.error('ES013', ['write(any)']);
         };
     
         return IExportControl;

@@ -53,7 +53,7 @@
          * @abstract
          */
         IPropertyCollection.prototype.keyOf  = function() {
-            Message.error('ES013', ['keyOf(idx): str']);
+            // Message.error('ES013', ['keyOf(idx): str']);
         };
 
         return IPropertyCollection;

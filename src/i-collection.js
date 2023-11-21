@@ -53,7 +53,7 @@
          * @abstract
          */
         ICollection.prototype.add  = function() {
-            Message.error('ES013', ['add(any): boolean']);
+            // Message.error('ES013', ['add(any): boolean']);
         };
 
         /**
@@ -61,7 +61,7 @@
          * @abstract
          */
         ICollection.prototype.remove  = function() {
-            Message.error('ES013', ['remove(elem) : boolean']);
+            // Message.error('ES013', ['remove(elem) : boolean']);
         };
 
         /**
@@ -69,7 +69,7 @@
          * @abstract
          */
         ICollection.prototype.contains  = function() {
-            Message.error('ES013', ['contains()']);
+            // Message.error('ES013', ['contains()']);
         };
 
         /**
@@ -77,7 +77,7 @@
          * @abstract
          */
         ICollection.prototype.indexOf  = function() {
-            Message.error('ES013', ['indexOf()']);
+            // Message.error('ES013', ['indexOf()']);
         };
 
         return ICollection;

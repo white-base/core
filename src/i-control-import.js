@@ -41,7 +41,7 @@
          * @abstract
          */
         IImportControl.prototype.read  = function() {
-            Message.error('ES013', ['read(any)']);
+            // Message.error('ES013', ['read(any)']);
         };
     
         return IImportControl;

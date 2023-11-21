@@ -734,6 +734,8 @@
             this.setObject(obj);
         };
 
+        BaseEntity.prototype.load._TYPE = { params: String };
+
         /**
          * 객체 출력(직렬화)
          * @param {number?} p_vOpt 옵션 (0, 1, 2)

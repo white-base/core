@@ -19,39 +19,11 @@ describe("[target: util-type.js.js]", () => {
         
     });
     describe('typeKind(type) : 타입 얻기 ', () => {
-        it('- typeKind() : 자료형별 타입 얻기 ', () => {
-            function User() {};             // object
-            function Corp() {this.nm = 1};  // union
-    
+        it('- typeKind() : 원시 타입 얻기 ', () => {
             // undefined
             expect(typeKind().name                ).toBe('undefined');
             // null
             expect(typeKind(null).name            ).toBe('null');
-            // choice
-            expect(typeKind([[String]]).name      ).toBe('choice');
-            expect(typeKind([[String, Number]]).name).toBe('choice');
-            expect(typeKind([[]]).name            ).toBe('choice');
-            // union
-            expect(typeKind({fill:true}).name     ).toBe('union');
-            expect(typeKind(new Corp).name        ).toBe('union');
-            // array
-            expect(typeKind([]).name              ).toBe('array');
-            expect(typeKind(Array).name           ).toBe('array');
-            // expect(typeKind([[]]).name            ).toBe('array');
-            expect(typeKind(['_seq_']).name       ).toBe('array');
-            expect(typeKind(['_opt_']).name       ).toBe('array');
-            expect(typeKind(['_any_']).name       ).toBe('array');
-            // object
-            expect(typeKind(Object).name          ).toBe('object');
-            expect(typeKind({}).name              ).toBe('object');
-            expect(typeKind(new User).name        ).toBe('object');       // 빈객체
-            expect(typeKind(/reg/).name           ).toBe('object');
-            expect(typeKind(RegExp).name          ).toBe('class');
-            // function
-            expect(typeKind(Function).name        ).toBe('function');
-            // class
-            expect(typeKind(User).name            ).toBe('class');
-            expect(typeKind(Date).name            ).toBe('class');
             // number, NaN
             expect(typeKind(Number).name          ).toBe('number');
             expect(typeKind(1).name               ).toBe('number');
@@ -65,36 +37,74 @@ describe("[target: util-type.js.js]", () => {
             expect(typeKind(Boolean).name         ).toBe('boolean');
             expect(typeKind(true).name            ).toBe('boolean');
             expect(typeKind(true).default         ).toBe(true);
-            // Symbol   => new 생성이 안됨
-            expect(typeKind(Symbol).name          ).toBe('symbol');  
+            // Symbol (ES6+)
+            expect(typeKind(Symbol).name          ).toBe('symbol');
             expect(typeKind(Symbol('a')).name     ).toBe('symbol');
+            // BigInt (ES6+)
+            expect(typeKind(BigInt).name          ).toBe('bigint');    // bigint 로 변경되야함
+            expect(typeKind(BigInt(100)).name     ).toBe('bigint');
         });
-        it('- typeKind() : 특별한 타입 얻기 ', () => {
-            // 
+        it('- typeKind() : 참조 타입 얻기 ', () => {
+            function User() {};             // object
+            
+            // function
+            expect(typeKind(Function).name        ).toBe('function');
+            expect(typeKind(()=>{}).name          ).toBe('function');
+            // object
+            expect(typeKind(Object).name          ).toBe('object');
+            expect(typeKind({}).name              ).toBe('object');
+            expect(typeKind(new User).name        ).toBe('object');       // 빈객체
+            expect(typeKind(new Date()).name      ).toBe('object');
         });
 
-        it('- typeKind() : 자료형별 타입 얻기 ', () => {
-            // object : Date
+        it('- typeKind() : 확장 타입 얻기 ', () => {
+            function Corp() {this.nm = 1};  // union
+            function User() {};             // object
+
+            // choice
+            expect(typeKind([[String]]).name        ).toBe('choice');
+            expect(typeKind([[String, Number]]).name).toBe('choice');
+            expect(typeKind([[]]).name              ).toBe('choice');
+            // union
+            expect(typeKind({fill:true}).name       ).toBe('union');
+            // user class 
+            expect(typeKind(Corp).name              ).toBe('class');
+            expect(typeKind(new Corp).name          ).toBe('union');
+            expect(typeKind(User).name              ).toBe('class');
+            expect(typeKind(new User).name          ).toBe('object');       // 빈객체
+            // array
+            expect(typeKind([]).name                ).toBe('array');
+            expect(typeKind(Array).name             ).toBe('array');
+            expect(typeKind(['_seq_']).name         ).toBe('array');
+            expect(typeKind(['_opt_']).name         ).toBe('array');
+            expect(typeKind(['_any_']).name         ).toBe('array');
+        });
+
+        it('- typeKind() : 확장(built-in) 타입 얻기 ', () => {
+            // RegExp
+            expect(typeKind(RegExp).name            ).toBe('class');    // RegExp
+            expect(typeKind(/reg/).name             ).toBe('object');
+            // Date
             expect(typeKind(Date).name              ).toBe('class');
             expect(typeKind(new Date()).name        ).toBe('object');
-            
+            // Math (union 형태임)
             expect(typeKind(Math).name              ).toBe('union');
             expect(typeKind(Math.E).name            ).toBe('number');
             expect(typeKind(Math.LN2).name          ).toBe('number');
-            
-            expect(typeKind(Map).name               ).toBe('class');
+            // Map
+            expect(typeKind(Map).name               ).toBe('class');    // Map
             expect(typeKind(new Map()).name         ).toBe('union');
-            
+            // Int8Array
             expect(typeKind(Int8Array).name         ).toBe('class');
             expect(typeKind(new Int8Array(2)).name  ).toBe('union');
-            
+            // Promise
             expect(typeKind(Promise).name           ).toBe('class');
-            expect(typeKind(new Promise((r,r2) => {})).name        ).toBe('union');
-       });
+            expect(typeKind(new Promise((r,r2) => {})).name     ).toBe('union');
+        });
 
         it('- 예외 :  ', () => {
             // BigInt는 사용 안함
-            expect(() => typeKind(2n ** 53n).name ).toThrow('ES022');
+            // expect(() => typeKind(2n ** 53n).name ).toThrow('ES022');
         });
 
     });

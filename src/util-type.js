@@ -90,8 +90,14 @@
         return false;
     }
 
+    function _isPrimitiveType(obj) {
+        // 원시타입인지...
+    }
+
+
     function _isUpper(strValue) {
         var firstStr = strValue.charAt(0);
+        if (firstStr === '') return false;
         if(firstStr === firstStr.toUpperCase()) return true;
         else false;
     }
@@ -145,6 +151,8 @@
         var arrParam = [];
         var arrRetrun;
         
+        funBody = skipComment(funBody);
+
         try {
             if (regChk.test(funBody) === false) Message.error('ES071', [funBody]);
             arrFunc = regFunc.exec(funBody);
@@ -161,6 +169,18 @@
         }
 
         return result;
+
+        // inner function
+        // 주석 제거 comment
+        function skipComment(body) {
+            var rBody = body;
+            var bloackComment = /\/\*[^](.*?)\*\//g
+            var lineComment = /\/\/[^](.*?)(\n|$)/g
+
+            rBody = rBody.replace(bloackComment, '');
+            rBody = rBody.replace(lineComment, '');
+            return rBody;
+        }
     }
 
     function _hasKind(name) {
@@ -299,6 +319,14 @@
             obj.name = 'object';
             return obj;
         }
+        if (type === Symbol) {      // ES6+
+            obj.name = 'symbol';
+            return obj;
+        }
+        if (type === BigInt) {      // ES6+
+            obj.name = 'bigint';
+            return obj;
+        }
         // seq 2 : typeof
         if (typeof type === 'undefined') {
             obj.name = 'undefined';
@@ -323,9 +351,13 @@
             obj.name = 'symbol';
             return obj;
         }
+        if (typeof type === 'bigint') { // ES6+
+            obj.name = 'bigint';
+            return obj;
+        }
         if (typeof type === 'function') {
-            if (type.name === 'Symbol') obj.name = 'symbol';
-            else {
+            // if (type.name === 'Symbol') obj.name = 'symbol';
+            // else {
                 var kind = type['_KIND'];
                 if (kind) {
                     kind = kind.toLowerCase();
@@ -334,7 +366,7 @@
                 } else {
                     obj.name = _isUpper(type.name) ? 'class' : 'function';
                 }
-            }
+            // }
             return obj;
         }
         // special type

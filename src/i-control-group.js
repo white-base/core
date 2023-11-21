@@ -41,7 +41,7 @@
          * @abstract
          */
         IGroupControl.prototype.merge  = function() {
-            Message.error('ES013', ['merge(any)']);
+            // Message.error('ES013', ['merge(any)']);
         };
 
         /**
@@ -49,7 +49,7 @@
          * @abstract
          */
         IGroupControl.prototype.copy  = function() {
-            Message.error('ES013', ['copy()']);
+            // Message.error('ES013', ['copy()']);
         };
 
         return IGroupControl;

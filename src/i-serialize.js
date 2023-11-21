@@ -45,15 +45,15 @@
          * @abstract
          */
         ISerialize.prototype.output  = function() {
-            Message.error('ES013', ['output(...)']);
+            // Message.error('ES013', ['output(...)']);
         };
 
         /**
          * 로드 (가져오기)
          * @abstract
          */
-        ISerialize.prototype.load  = function() {
-            Message.error('ES013', ['load(...)']);
+        ISerialize.prototype.load  = function(String) {
+            // Message.error('ES013', ['load(...)']);
         };
 
         return ISerialize;

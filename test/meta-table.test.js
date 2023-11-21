@@ -22,7 +22,7 @@ const { loadNamespace } = require('../src/load-namespace');
 
 //==============================================================
 // test
-describe.skip("[target: meta-table.js]", () => {
+describe("[target: meta-table.js]", () => {
     describe("MetaTable :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();

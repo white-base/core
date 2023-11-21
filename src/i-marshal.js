@@ -57,7 +57,7 @@
          * @abstract
          */
         IMarshal.prototype.getObject = function() {
-            Message.error('ES013', ['getObject(p_vOpt, p_origin?): object']);
+            // Message.error('ES013', ['getObject(p_vOpt, p_origin?): object']);
         };
 
         /**
@@ -65,7 +65,7 @@
          * @abstract
          */
         IMarshal.prototype.setObject  = function() {
-            Message.error('ES013', ['setObject(mObj)']);
+            // Message.error('ES013', ['setObject(mObj)']);
         };
 
         return IMarshal;

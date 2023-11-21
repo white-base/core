@@ -41,7 +41,7 @@
          * @abstract
          */
         IObject.prototype.getTypes  = function() {
-            Message.error('ES013', ['getTypes(): array<function>']);
+            // Message.error('ES013', ['getTypes(): array<function>']);
         };
         
         /**
@@ -49,7 +49,7 @@
          * @abstract
          */
         IObject.prototype.instanceOf  = function() {
-            Message.error('ES013', ['instanceOf(function | string): boolean']);
+            // Message.error('ES013', ['instanceOf(function | string): boolean']);
         };
 
         /**
@@ -57,7 +57,7 @@
          * @abstract
          */
         IObject.prototype.equal  = function() {
-            Message.error('ES013', ['equal(meta): boolean']);
+            // Message.error('ES013', ['equal(meta): boolean']);
         };
         
     

@@ -45,7 +45,6 @@
          * @abstract
          */
         IListControl.prototype.add = function() {
-            Message.error('ES013', ['add(any)']);
         };
 
         /**
@@ -53,7 +52,7 @@
          * @abstract
          */
         IListControl.prototype.del  = function() {
-            Message.error('ES013', ['del(key)']);
+            // Message.error('ES013', ['del(key)']);
         };
 
         /**
@@ -61,7 +60,7 @@
          * @abstract
          */
         IListControl.prototype.has  = function() {
-            Message.error('ES013', ['has(any)']);
+            // Message.error('ES013', ['has(any)']);
         };
 
         /**
@@ -69,7 +68,7 @@
          * @abstract
          */
         IListControl.prototype.find  = function() {
-            Message.error('ES013', ['has(any)']);
+            // Message.error('ES013', ['has(any)']);
         };
 
         return IListControl;
