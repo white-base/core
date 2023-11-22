@@ -145,6 +145,7 @@ describe("[target: util-type.js.js]", () => {
             // undefined
             expect(isValidAllowType(undefined, undefined   )).toBe(T);
             expect(isValidAllowType(undefined,             )).toBe(T);
+            expect(isValidAllowType(undefined              )).toBe(T);
             expect(isValidAllowType(undefined, null        )).toBe(false);
             // null
             expect(isValidAllowType(null,      null        )).toBe(T);
