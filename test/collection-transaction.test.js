@@ -11,7 +11,7 @@ let Student, School, Corp, Member, House, Space;
 
 //==============================================================
 // test
-describe.skip("[target: collection-trans.js]", () => {
+describe("[target: collection-trans.js]", () => {
     describe("TransactionCollection :: 클래스", () => {
         beforeAll(() => {
             jest.resetModules();

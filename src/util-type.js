@@ -353,6 +353,7 @@
         }
         if (typeof type === 'bigint') { // ES6+
             obj.name = 'bigint';
+            obj.default = type;
             return obj;
         }
         if (typeof type === 'function') {
@@ -430,7 +431,7 @@
      * @param {any} tar 대상 타입
      * @returns {throw?}
      */
-    var _execAllowType = function (ori, tar) {
+    var _execAllow = function (ori, tar) {
         var oriDef = typeKind(ori);
         var tarDef = typeKind(tar);
         
@@ -477,7 +478,7 @@
         }
 
         // primitive
-        if (['null', 'undefined', 'number', 'string', 'boolean', 'symbol'].indexOf(oriDef.name) > -1) {
+        if (['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint'].indexOf(oriDef.name) > -1) {
             if(oriDef.default !== null && oriDef.default !== tarDef.default) {
                 Message.error('ES0712', [oriDef.name, oriDef.default, tarDef.default]);
             }
@@ -500,7 +501,7 @@
                 if (oriDef.list.length === 0 && tarDef.list.length > 0) return;
                 for (i = 0; i < oriDef.list.length; i++) {
                     try {
-                        _execAllowType(oriDef.list[i], tarDef.list[i]);
+                        _execAllow(oriDef.list[i], tarDef.list[i]);
                     } catch (error) {
                         Message.error('ES0733', [oriDef.list[i], tarDef.list[i]]);
                     }
@@ -521,7 +522,7 @@
                     for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllowType(oriDef.list[ii], arrTarget[i]);
+                            _execAllow(oriDef.list[ii], arrTarget[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -543,7 +544,7 @@
                     for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllowType(oriDef.list[ii], arrTarget[i]);
+                            _execAllow(oriDef.list[ii], arrTarget[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -573,7 +574,7 @@
                 }
                 for (var i = 0; i < oriDef.list.length; i++) {
                     try {
-                        _execAllowType(oriDef.list[i], tarDef.list[i]);
+                        _execAllow(oriDef.list[i], tarDef.list[i]);
                     } catch (error) {
                         Message.error('ES0711', ['array', '_SEQ_', error]);
                     }
@@ -592,7 +593,7 @@
                     for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllowType(oriDef.list[ii], tarDef.list[i]);
+                            _execAllow(oriDef.list[ii], tarDef.list[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -609,7 +610,7 @@
                     for (var ii = 0; ii < oriDef.list.length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllowType(oriDef.list[ii], tarDef.list[i]);
+                            _execAllow(oriDef.list[ii], tarDef.list[i]);
                             success = true;
                         } catch (error) {
                             continue;
@@ -632,13 +633,13 @@
             if (info1.params.length !== info2.params.length) Message.error('ES0721', ['function', 'params', info1.params.length]);
             
             try {
-                _execAllowType(['_SEQ_'].concat(info1.params), ['_SEQ_'].concat(info2.params));
+                _execAllow(['_SEQ_'].concat(info1.params), ['_SEQ_'].concat(info2.params));
             } catch (error) {
                 Message.error('ES0722', ['function', 'params', error]);
             }
 
             try {
-                _execAllowType(info1.return, info2.return);
+                _execAllow(info1.return, info2.return);
             } catch (error) {
                     Message.error('ES0722', ['function', 'return', error]);
             }
@@ -675,7 +676,7 @@
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 try {
-                    _execAllowType(oriDef.ref[key], tarDef.ref[key])
+                    _execAllow(oriDef.ref[key], tarDef.ref[key])
                 } catch (error) {
                     Message.error('ES0726', ['union', error]);
                 }
@@ -691,7 +692,7 @@
      * @param {string?} parentName '' 공백시 성공
      * @returns {throw?}
      */
-    var _execType = function(type, target, parentName) {
+    var _execMatch = function(type, target, parentName) {
         var parentName = parentName ? parentName : 'this';
         var defType, tarType;
 
@@ -730,8 +731,13 @@
             if (typeof target === 'boolean') return;
             Message.error('ES074', [parentName, 'boolean']);
         }
-        if (defType.name === 'symbol') {
-            if (typeof target === 'symbol') return '';
+        if (defType.name === 'bigint') {    // ES6+
+            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof target === 'bigint') return;
+            Message.error('ES074', [parentName, 'bigint']);
+        }
+        if (defType.name === 'symbol') {    // ES6+
+            if (typeof target === 'symbol') return;
             Message.error('ES074', [parentName, 'symbol']);
         }
         // choice
@@ -752,7 +758,7 @@
 
             for (var ii = 0; ii < defType.list.length; ii++) {
                 try {
-                    _execType(defType.list[ii], target);
+                    _execMatch(defType.list[ii], target);
                     return;
                 } catch (error) {
                     continue;
@@ -777,7 +783,7 @@
                 for(var i = 0; i < defType.list.length; i++) {
                     var tar = tarType.list[i];
                     if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
-                    _execType(defType.list[i], tar);
+                    _execMatch(defType.list[i], tar);
                 }
                 return;
             } else if (defType.kind == '_VAL_') {
@@ -791,7 +797,7 @@
             for (var i = 0; i < target.length; i++) {
                 for (var ii = 0; ii < defType.list.length; ii++) {
                     try {
-                        _execType(defType.list[ii], tarType.list[i]);
+                        _execMatch(defType.list[ii], tarType.list[i]);
                         return;
                     } catch (error) {
                         continue;
@@ -823,7 +829,7 @@
                 try {
                     if (fixType.params.length > tarArgs.length) Message.error('ES0736', [fixType.params, tarArgs]);
 
-                    _execAllowType(['_SEQ_'].concat(fixType.params), ['_SEQ_'].concat(tarArgs))
+                    _execAllow(['_SEQ_'].concat(fixType.params), ['_SEQ_'].concat(tarArgs))
                 } catch (error) {
                     Message.error('ES0711', ['function', 'params', error]);
                 }
@@ -831,7 +837,7 @@
             if (fixReturns.length > 0) {
                 try {
                     if (tarReturns.length === 0) Message.error('ES0737', []);
-                    _execAllowType([fixReturns], [tarReturns])
+                    _execAllow([fixReturns], [tarReturns])
                 } catch (error) {
                     Message.error('ES0711', ['function', 'return', error]);
                 }
@@ -852,7 +858,7 @@
                 else return Message.error('ES032', [parentName, _typeName(type)]);
             } else {
                 if (typeof target === 'object' && target instanceof type) return;
-                if (typeof target === 'object' && target !== null) return _execType(_creator(type), target, parentName);
+                if (typeof target === 'object' && target !== null) return _execMatch(_creator(type), target, parentName);
                 return Message.error('ES032', [parentName, _typeName(type)]);
             }
         }
@@ -873,7 +879,7 @@
                     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
                     else return Message.error('ES031', [parentName + '.' + key]);
                 } 
-                _execType(type[key], target[key], parentName +'.'+ key);
+                _execMatch(type[key], target[key], parentName +'.'+ key);
             }
             return;
         }
@@ -887,10 +893,10 @@
      * @param {any} target 
      * @returns {throw?} 실패시 예외를 던진다.
      */
-    var checkAllowType = function(origin, target) {
+    var allowType = function(origin, target) {
         try {
             if (typeof origin === 'undefined') Message.error('ES026', ['origin']);
-            _execAllowType(origin, target);
+            _execAllow(origin, target);
         } catch (error) {
             Message.error('ES069', ['check allow type', error]);
         }
@@ -904,10 +910,10 @@
      * @param {any} target 
      * @returns {throw?} 실패시 예외를 던진다.
      */
-    var checkType = function(chkType, target) {
+    var matchType = function(chkType, target) {
         try {
             if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
-            _execType(chkType, target);
+            _execMatch(chkType, target);
         } catch (error) {
             Message.error('ES069', ['check type', error]);
         }
@@ -920,9 +926,9 @@
      * @param {any} target 
      * @returns {boolean} 
      */
-    var isValidAllowType = function(origin, target) {
+    var isAllowType = function(origin, target) {
         try {
-            _execAllowType(origin, target);
+            _execAllow(origin, target);
         } catch (error) {
             return false;
         }
@@ -936,10 +942,10 @@
      * @param {any} target 
      * @returns {boolean} 
      */
-    var isValidType = function(chkType, target) {
+    var isMatchType = function(chkType, target) {
         if (typeof chkType === 'undefined') return false;
         try {
-            _execType(chkType, target);
+            _execMatch(chkType, target);
             return true;
         } catch (error) {
             return false;
@@ -953,19 +959,19 @@
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
         exports.typeKind = typeKind;
-        exports.checkType = checkType;
-        exports.checkAllowType = checkAllowType;
-        exports.isValidType = isValidType;
-        exports.isValidAllowType = isValidAllowType;
+        exports.matchType = matchType;
+        exports.allowType = allowType;
+        exports.isMatchType = isMatchType;
+        exports.isAllowType = isAllowType;
     } else {
         var ns = {
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
             typeKind: typeKind,
-            checkType: checkType,
-            checkAllowType: checkAllowType,
-            isValidType: isValidType,
-            isValidAllowType: isValidAllowType
+            matchType: matchType,
+            allowType: allowType,
+            isMatchType: isMatchType,
+            isAllowType: isAllowType
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;

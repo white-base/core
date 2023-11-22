@@ -19,7 +19,7 @@ const { MetaColumn, BaseColumnCollection }              = require('../src/meta-c
 
 //==============================================================
 // test
-describe.skip("[target: meta-column.js]", () => {
+describe("[target: meta-column.js]", () => {
     describe("BaseColumnCollection :: 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();

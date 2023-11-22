@@ -290,7 +290,7 @@
             var ns = oPath['ns'];
 
             sections = _getArray(ns);
-            if (this._elemTypes.length > 0) Util.checkType([this._elemTypes], p_elem);
+            if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
             if (!_validName(key)) Message.error('ES054', [key, '_validName()']);
             if (!this.isOverlap && this.getPath(p_elem)) {
                 Message.error('ES041', ['elem', '[isOverlap=false]']);

@@ -227,7 +227,7 @@
                         var column;
                         // 엔티티 항상 존재함
                         column = _entity.columns[p_idx];
-                        if (column && column._valueTypes.length > 0) Util.checkType([column._valueTypes], nVal);
+                        if (column && column._valueTypes.length > 0) Util.matchType([column._valueTypes], nVal);
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (_entity && !_entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + nVal + ', old:'+ oldValue;
@@ -392,7 +392,7 @@
                 get: function() { return this._elements[p_idx]; },
                 set: function(nVal) {
                     var typeName;
-                    if (this._elemTypes.length > 0) Util.checkType([this._elemTypes], nVal);
+                    if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], nVal);
                     if (nVal._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
@@ -405,22 +405,22 @@
         /**
          * MetaRow 추가 idx 를 기준으로 검사한다.
          * @param {MetaRow} p_row 
-         * @param {boolean?} p_checkType true: 검사 진행, false: 검사 안함
+         * @param {boolean?} p_matchType true: 검사 진행, false: 검사 안함
          * @returns {number}
          */
-        MetaRowCollection.prototype.add  = function(p_row, p_checkType) {
-            return this.insertAt(this._elements.length, p_row, p_checkType);
+        MetaRowCollection.prototype.add  = function(p_row, p_matchType) {
+            return this.insertAt(this._elements.length, p_row, p_matchType);
         };
 
         /**
          * pos 위치에 추가
          * @param {number} p_pos 
          * @param {MetaRow} p_row 
-         * @param {boolean?} p_checkType 유효성 검사 여부 
+         * @param {boolean?} p_matchType 유효성 검사 여부 
          * @returns {boolean}
          */
-        MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_checkType) {
-            var checkType = p_checkType || false;
+        MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_matchType) {
+            var matchType = p_matchType || false;
             var result;
             var entity = p_row._entity;
 
@@ -428,7 +428,7 @@
             if (entity._guid !== this._owner._guid) Message.error('ES034', ['_guid', '_owner._guid']);
             
             // valid 검사
-            if (checkType === true) {
+            if (matchType === true) {
                 for (let i = 0; i < p_row.count; i++) {
                     result = entity.columns[i].valid(p_row[i]);
                     if(result) {

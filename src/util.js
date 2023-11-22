@@ -8,9 +8,9 @@
     var Message;
     var getAllProperties;
     var typeKind;
-    var checkAllowType;
-    var isValidType;
-    var checkType;
+    var allowType;
+    var isMatchType;
+    var matchType;
     var deepEqual;
 
     //==============================================================
@@ -25,17 +25,17 @@
         Message                     = require('./message').Message;
         getAllProperties            = require('./util-type').getAllProperties;
         typeKind                    = require('./util-type').typeKind;
-        checkAllowType              = require('./util-type').checkAllowType;
-        isValidType                   = require('./util-type').isValidType;
-        checkType                   = require('./util-type').checkType;
+        allowType              = require('./util-type').allowType;
+        isMatchType                   = require('./util-type').isMatchType;
+        matchType                   = require('./util-type').matchType;
         deepEqual                   = require('./util-type').deepEqual;
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
         typeKind                    = _global._L.Util.typeKind
-        checkAllowType              = _global._L.Util.checkAllowType
-        isValidType                   = _global._L.Util.isValidType
-        checkType                   = _global._L.Util.checkType
+        allowType              = _global._L.Util.allowType
+        isMatchType                   = _global._L.Util.isMatchType
+        matchType                   = _global._L.Util.matchType
         deepEqual                   = _global._L.Util.deepEqual
     }
 
@@ -43,9 +43,9 @@
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
     if (typeof typeKind === 'undefined') Message.error('ES012', ['typeKind', 'util-type']);
-    if (typeof checkAllowType === 'undefined') Message.error('ES012', ['checkAllowType', 'util-type']);
-    if (typeof isValidType === 'undefined') Message.error('ES012', ['isValidType', 'util-type']);
-    if (typeof checkType === 'undefined') Message.error('ES012', ['checkType', 'util-type']);
+    if (typeof allowType === 'undefined') Message.error('ES012', ['allowType', 'util-type']);
+    if (typeof isMatchType === 'undefined') Message.error('ES012', ['isMatchType', 'util-type']);
+    if (typeof matchType === 'undefined') Message.error('ES012', ['matchType', 'util-type']);
     if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);
     
     //==============================================================
@@ -233,7 +233,7 @@
         try {
             var beginIdx = p_obj._interface.length - addCnt;
             for (var i = beginIdx; i < p_obj._interface.length; i++) {
-                checkType(p_obj._interface[i], p_obj);
+                matchType(p_obj._interface[i], p_obj);
             }
         } catch (error) {
             Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
@@ -343,10 +343,10 @@
         exports.createGuid = createGuid;
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
-        exports.checkAllowType = checkAllowType;
+        exports.allowType = allowType;
         exports.typeKind = typeKind;
-        exports.isValidType = isValidType;
-        exports.checkType = checkType;
+        exports.isMatchType = isMatchType;
+        exports.matchType = matchType;
         exports.deepCopy = deepCopy;
         exports.deepEqual = deepEqual;
     } else {
@@ -358,10 +358,10 @@
             createGuid: createGuid,
             implements: implement,
             getAllProperties: getAllProperties,
-            checkAllowType: checkAllowType,
+            allowType: allowType,
             typeKind: typeKind,
-            isValidType: isValidType,
-            checkType: checkType,
+            isMatchType: isMatchType,
+            matchType: matchType,
             deepCopy: deepCopy,
             deepEqual: deepEqual,
         };

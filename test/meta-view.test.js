@@ -21,7 +21,7 @@ const {MetaRegistry}        = require('../src/meta-registry');
 const { loadNamespace } = require('../src/load-namespace');
 //==============================================================
 // test
-describe.skip("[target: meta-view.js]", () => {
+describe("[target: meta-view.js]", () => {
     describe("MetaView :: 클래스", () => {   
         beforeAll(() => {
             jest.resetModules();

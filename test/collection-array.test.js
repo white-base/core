@@ -15,7 +15,7 @@ let Student, School, Corp, Member, House, Space;
 
 //==============================================================
 // test
-describe.skip("[target: collection-array.js, base-collection.js]", () => {
+describe("[target: collection-array.js, base-collection.js]", () => {
     describe("ArrayCollection :: 클래스", () => {
         beforeAll(() => {
             jest.resetModules();

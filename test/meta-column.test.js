@@ -18,7 +18,7 @@ const { MetaColumn }              = require('../src/meta-column');
 
 //==============================================================
 // test
-describe.skip("[target: meta-column.js ]", () => {
+describe("[target: meta-column.js ]", () => {
     beforeAll(() => {
         // jest.resetModules();
     });
