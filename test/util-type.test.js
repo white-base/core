@@ -92,6 +92,8 @@ describe("[target: util-type.js.js]", () => {
             expect(typeKind(Math).name              ).toBe('union');
             expect(typeKind(Math.E).name            ).toBe('number');
             expect(typeKind(Math.LN2).name          ).toBe('number');
+            // JSON
+            expect(typeKind(JSON).name              ).toBe('union');
             // Map
             expect(typeKind(Map).name               ).toBe('class');    // Map
             expect(typeKind(new Map()).name         ).toBe('union');
@@ -108,6 +110,74 @@ describe("[target: util-type.js.js]", () => {
             // expect(() => typeKind(2n ** 53n).name ).toThrow('ES022');
         });
 
+    });
+
+    describe('matchType() : 타입 검사, 실패시 예외 ', () => {
+        it('- 예외 : function  ', () => {
+            var type1 = ()=> Number
+            var type1_1 = ()=>{}
+            var type2 = (a,b)=> {"A"}
+
+            expect(() => matchType(type1, type1_1)).toThrow(/ES069/);
+            expect(() => matchType(type2, type1_1)).toThrow(/ES069/);
+        });
+        it('- matchType() : function (외부 참조형 타입 비교) ', () => {
+            /**
+             * function 의 args 영역 규칙
+             * - 거부
+             *  + 정수명(0~9) 입력 불가
+             *  + 내부에 function 사용 불가, ()=> {} 또한 불가
+             * - 허용 
+             *  + 객체 및 배열은 가능
+             *  + String 원시함수이름을 사용하면, 변수로 인식한다.
+             */
+            var arg1 = [String, {aa: Number}]
+            var type1 = function(arg1){}
+            var type2 = function(String, {aa: Number}){}  
+            var type3 = function(){}
+            var type4 = function([{aa: Number}]){}
+            var tar1 = function(){}; 
+            var tar2 = function(){};
+            tar1._TYPE = {params: [String, {aa: Number}], return: [Object]}
+            tar2._TYPE = {params: [[{aa: Number}]]}
+            type3._TYPE = {params: arg1}
+
+
+            expect(()=> matchType(type1, tar1)).toThrow(/ES069/);    // func 내부 참조변수 오류
+            expect(matchType(type2, tar1)).toBe(undefined);
+            expect(matchType(type3, tar1)).toBe(undefined);
+            expect(matchType(type4, tar2)).toBe(undefined);
+            
+            // TODO: 확인해야함
+            // expect(matchType(type3, tar1)).toBe(false);  
+            // expect(matchType(type3, tar2)).toBe(true);
+
+        });
+    });
+
+    describe('isMatchType() & matchType() : 검사 ', () => {
+        
+        it('- Object, {} : object 타입 (regex, new, null) ', () => {
+            const Func = function() {};
+            // true
+            expect(isMatchType({}, Object             )).toBe(true);
+            // expect(isMatchType(null, Object)).toBe(true);
+            expect(isMatchType({}, /reg/              )).toBe(true);
+            expect(isMatchType({}, new Func()         )).toBe(true);
+            expect(isMatchType({}, function any(){}   )).toBe(false);   // POINT: 실패해야함, 내용이 있는 함수는 실패해야함
+            expect(isMatchType({}, Number             )).toBe(false);    // false
+            expect(isMatchType({}, Symbol             )).toBe(false);    // false
+            // false (예외)
+            // expect(()=> matchType(function any(){}, Object)).toThrow(/object.*타입/);
+            expect(()=> matchType(Object, 'str'     )).toThrow(/ES024/);
+            expect(()=> matchType(Object, 1         )).toThrow(/ES024/);
+            expect(()=> matchType(Object, Symbol()  )).toThrow(/ES024/);
+            expect(()=> matchType(Object, true      )).toThrow(/ES024/);
+            // expect(()=> matchType(Number, Object)).toThrow(/object.*타입/);
+            // expect(()=> matchType(Symbol, Object)).toThrow(/object.*타입/);
+            expect(()=> matchType(Object, null      )).toThrow(/ES024/);
+        });
+        
     });
 
     describe('isAllowType(), allowType() : 타입 허용 ', () => {
@@ -791,7 +861,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType([[Super, Sub]],  new Sub())).toBe(T);
             expect(isMatchType(Super,           new Sub())).toBe(T);
             expect(isMatchType(Sub,             new Sub())).toBe(T);
-            expect(isMatchType(Object,          new Sub())).toBe(T);       
+            expect(isMatchType(Object,          new Sub())).toBe(false);       
         });
         it('- isMatchType() : array 조건 검사  ', () => {    
             // array
@@ -1074,76 +1144,6 @@ describe("[target: util-type.js.js]", () => {
         });
 
     });
-    describe('matchType() : 타입 검사, 실패시 예외 ', () => {
-        it('- 예외 : function  ', () => {
-            var type1 = ()=> Number
-            var type1_1 = ()=>{}
-            var type2 = (a,b)=> {"A"}
 
-            expect(() => matchType(type1, type1_1)).toThrow(/ES069/);
-            expect(() => matchType(type2, type1_1)).toThrow(/ES069/);
-        });
-        it('- matchType() : function (외부 참조형 타입 비교) ', () => {
-            /**
-             * function 의 args 영역 규칙
-             * - 거부
-             *  + 정수명(0~9) 입력 불가
-             *  + 내부에 function 사용 불가, ()=> {} 또한 불가
-             * - 허용 
-             *  + 객체 및 배열은 가능
-             *  + String 원시함수이름을 사용하면, 변수로 인식한다.
-             */
-            var arg1 = [String, {aa: Number}]
-            var type1 = function(arg1){}
-            var type2 = function(String, {aa: Number}){}  
-            var type3 = function(){}
-            var type4 = function([{aa: Number}]){}
-            var tar1 = function(){}; 
-            var tar2 = function(){};
-            tar1._TYPE = {params: [String, {aa: Number}], return: [Object]}
-            tar2._TYPE = {params: [[{aa: Number}]]}
-            type3._TYPE = {params: arg1}
-
-
-            expect(()=> matchType(type1, tar1)).toThrow(/ES069/);    // func 내부 참조변수 오류
-            expect(matchType(type2, tar1)).toBe(undefined);
-            expect(matchType(type3, tar1)).toBe(undefined);
-            expect(matchType(type4, tar2)).toBe(undefined);
-            
-            // TODO: 확인해야함
-            // expect(matchType(type3, tar1)).toBe(false);  
-            // expect(matchType(type3, tar2)).toBe(true);
-
-        });
-    });
-
-    describe('isMatchType() & matchType() : 검사 ', () => {
-        
-        
-        
-        
-        
-        it('- Object, {} : object 타입 (regex, new, null) ', () => {
-            const Func = function() {};
-            // true
-            expect(isMatchType({}, Object             )).toBe(true);
-            // expect(isMatchType(null, Object)).toBe(true);
-            expect(isMatchType({}, /reg/              )).toBe(true);
-            expect(isMatchType({}, new Func()         )).toBe(true);
-            expect(isMatchType({}, function any(){}   )).toBe(true);
-            expect(isMatchType({}, Number             )).toBe(true);
-            expect(isMatchType({}, Symbol             )).toBe(true);
-            // false (예외)
-            // expect(()=> matchType(function any(){}, Object)).toThrow(/object.*타입/);
-            expect(()=> matchType(Object, 'str'     )).toThrow(/ES024/);
-            expect(()=> matchType(Object, 1         )).toThrow(/ES024/);
-            expect(()=> matchType(Object, Symbol()  )).toThrow(/ES024/);
-            expect(()=> matchType(Object, true      )).toThrow(/ES024/);
-            // expect(()=> matchType(Number, Object)).toThrow(/object.*타입/);
-            // expect(()=> matchType(Symbol, Object)).toThrow(/object.*타입/);
-            expect(()=> matchType(Object, null      )).toThrow(/ES024/);
-        });
-        
-    });
 
 });

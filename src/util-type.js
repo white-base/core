@@ -846,6 +846,9 @@
         }
         // object
         if (defType.name === 'object') {
+            // POINT:  오류 
+            // if (tarType.name !== 'object') return Message.error('ES024', [parentName, 'object']);
+            
             if (type === Object && target instanceof type) return;
             if (type !== Object && target instanceof type.constructor) return;
             return Message.error('ES024', [parentName, 'object']);
