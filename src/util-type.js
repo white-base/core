@@ -648,6 +648,7 @@
         // object
         if (oriDef.name === 'object') {
             if (tarDef.name !== 'object') Message.error('ES0713', [oriDef.name, tarDef.name]);
+            if (oriDef.ref !== tarDef.ref) Message.error('ES0713', [oriDef.name, tarDef.name]);
             if (oriDef.ref === tarDef.ref) return;
             if (_isEmptyObj(tarDef.ref)) return;
             if (oriDef.ref instanceof RegExp) {
@@ -656,7 +657,7 @@
                 }
             }
             if (deepEqual(oriDef.ref, tarDef.ref)) return;
-                Message.error('ES0718', ['object']);
+            Message.error('ES0718', ['object']);
         }
         // class
         if (oriDef.name === 'class') {
@@ -846,11 +847,10 @@
         }
         // object
         if (defType.name === 'object') {
-            // POINT:  오류 
-            // if (tarType.name !== 'object') return Message.error('ES024', [parentName, 'object']);
+            if (tarType.name === 'object' || tarType.name === 'union') return;
             
-            if (type === Object && target instanceof type) return;
-            if (type !== Object && target instanceof type.constructor) return;
+            // if (type === Object && target instanceof type) return;
+            // if (type !== Object && target instanceof type.constructor) return;
             return Message.error('ES024', [parentName, 'object']);
         }
         // class

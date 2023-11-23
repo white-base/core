@@ -560,6 +560,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType({},        new ClassA()    )).toBe(T);
             expect(isAllowType({},        new ClassB()    )).toBe(false);
             expect(isAllowType({},        true            )).toBe(false);
+            expect(isAllowType({},        new Date()      )).toBe(false);
             // 예외 : 오류코드
             expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
             expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
@@ -861,7 +862,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType([[Super, Sub]],  new Sub())).toBe(T);
             expect(isMatchType(Super,           new Sub())).toBe(T);
             expect(isMatchType(Sub,             new Sub())).toBe(T);
-            expect(isMatchType(Object,          new Sub())).toBe(false);       
+            expect(isMatchType(Object,          new Sub())).toBe(T);       
         });
         it('- isMatchType() : array 조건 검사  ', () => {    
             // array
