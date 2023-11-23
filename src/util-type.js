@@ -648,15 +648,16 @@
         // object
         if (oriDef.name === 'object') {
             if (tarDef.name !== 'object') Message.error('ES0713', [oriDef.name, tarDef.name]);
-            if (oriDef.ref !== tarDef.ref) Message.error('ES0713', [oriDef.name, tarDef.name]);
             if (oriDef.ref === tarDef.ref) return;
             if (_isEmptyObj(tarDef.ref)) return;
             if (oriDef.ref instanceof RegExp) {
-                if (!(tarDef.ref instanceof RegExp) || oriDef.ref.source !== tarDef.ref.source) {
-                    Message.error('ES0723', [oriDef.ref.source, tarDef.ref.source]);
-                }
+                if (tarDef.ref instanceof RegExp && oriDef.ref.source === tarDef.ref.source) return;
+                Message.error('ES0723', [oriDef.ref.source, tarDef.ref.source]);
             }
-            if (deepEqual(oriDef.ref, tarDef.ref)) return;
+            if (oriDef.ref instanceof Date) {
+                if (tarDef.ref instanceof Date && oriDef.ref.getTime() === tarDef.ref.getTime()) return;
+                Message.error('ES0723', [oriDef.ref.source, tarDef.ref.source]);
+            }
             Message.error('ES0718', ['object']);
         }
         // class

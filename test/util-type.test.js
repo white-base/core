@@ -164,7 +164,7 @@ describe("[target: util-type.js.js]", () => {
             // expect(isMatchType(null, Object)).toBe(true);
             expect(isMatchType({}, /reg/              )).toBe(true);
             expect(isMatchType({}, new Func()         )).toBe(true);
-            expect(isMatchType({}, function any(){}   )).toBe(false);   // POINT: 실패해야함, 내용이 있는 함수는 실패해야함
+            expect(isMatchType({}, Func               )).toBe(false);   // POINT: 실패해야함, 내용이 있는 함수는 실패해야함
             expect(isMatchType({}, Number             )).toBe(false);    // false
             expect(isMatchType({}, Symbol             )).toBe(false);    // false
             // false (예외)
@@ -549,9 +549,12 @@ describe("[target: util-type.js.js]", () => {
             // 예외 : 오류코드
             expect(()=> allowType(type1, {}          )).toThrow('ES0713')
         }); 
-        it('- isAllowType(a, b) : object ', () => {
+        it('- isAllowType(a, b) : object ', () => {   
             var ClassA = function(){};
             var ClassB = function(){this.aa = 1};
+            var date1 = new Date('2023-01-01');
+            var date2 = new Date('2023-01-01');
+            var date3 = new Date('2023-01-02');
 
             expect(isAllowType(Object,    Object          )).toBe(T);
             expect(isAllowType(Object,    {}              )).toBe(T);
@@ -560,6 +563,9 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType({},        new ClassA()    )).toBe(T);
             expect(isAllowType({},        new ClassB()    )).toBe(false);
             expect(isAllowType({},        true            )).toBe(false);
+            expect(isAllowType(date1,     date1           )).toBe(T);
+            expect(isAllowType(date1,     date2           )).toBe(T);
+            expect(isAllowType(date1,     date3           )).toBe(false);
             expect(isAllowType({},        new Date()      )).toBe(false);
             // 예외 : 오류코드
             expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
