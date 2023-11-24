@@ -29,6 +29,7 @@ var fun = (String, Number)=>{return Object};
 
 var arr = [11, 22]
 
+var f = new function(){}
 
 console.log(bb);
 console.log(aa);
