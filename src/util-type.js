@@ -404,7 +404,7 @@
                 else obj.kind = _getKeyCode(type[0]);
                 obj.list = obj.kind ? type.slice(1) : type;
             }
-            if (!obj.kind) obj.kind = '_VAL_';
+            if (!obj.kind) obj.kind = '_REQ_';
             return obj;
         }
         // seq 4: funciton
@@ -460,12 +460,12 @@
                 Message.error('ES0728', [oriDef.kind, '_NON_', tarDef.kind]);
             }
             if (oriDef.kind === '_ANY_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
-                Message.error('ES0727', [oriDef.kind, '_VAL_, _ALL_, _NON_', tarDef.kind]);
+                Message.error('ES0727', [oriDef.kind, '_REQ_, _ALL_, _NON_', tarDef.kind]);
             }
             if (oriDef.kind === '_OPT_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' || tarDef.kind === '_NON_') ){
                 Message.error('ES0728', [oriDef.kind, '_OPT_, _SEQ_', tarDef.kind]);
             } 
-            if (oriDef.kind === '_VAL_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' ||  tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
+            if (oriDef.kind === '_REQ_' && (tarDef.kind === '_ALL_' || tarDef.kind === '_ANY_' ||  tarDef.kind === '_OPT_' || tarDef.kind === '_NON_')) {
                 Message.error('ES0727', [oriDef.kind, '_ANY_, _ALL_, _OPT_, _NON_', tarDef.kind]);
             }
             if (oriDef.kind === '_SEQ_' && tarDef.kind !== '_SEQ_') { 
@@ -508,7 +508,7 @@
                 }
                 return;
             
-            } else if (oriDef.kind == '_VAL_') {
+            } else if (oriDef.kind == '_REQ_') {
                 if (tarDef.kind && tarDef.ref.length === 0) {
                     Message.error('ES0734');
                 }
@@ -581,7 +581,7 @@
                 }
                 return;
 
-            } else if (oriDef.kind == '_VAL_') {
+            } else if (oriDef.kind == '_REQ_') {
                 if (oriDef.list.length < tarDef.list.length) {
                     Message.error('ES0716', ['array _OPT_', oriDef.toString(), tarDef.toString()]);
                 }
@@ -599,7 +599,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_VAL_)', typeKind(tarDef.list[i]).name]);
+                    if (!success) Message.error('ES0738', ['array(_REQ_)', typeKind(tarDef.list[i]).name]);
                 }
                 return;
             
@@ -749,7 +749,7 @@
             } else if (defType.kind == '_ANY_') {
                 if (typeof target !== 'undefined') return;
                 Message.error('ES075', ['choice', '_ANY_', 'undefined']);
-            } else if (defType.kind == '_VAL_') {
+            } else if (defType.kind == '_REQ_') {
                 if (defType.list.length === 0) return;
                 // beginIdx = 1;
             } else if (defType.kind == '_SEQ_') {
@@ -788,7 +788,7 @@
                     _execMatch(defType.list[i], tar);
                 }
                 return;
-            } else if (defType.kind == '_VAL_') {
+            } else if (defType.kind == '_REQ_') {
                 // if (defType.list.length === 0) throw new Error('array(opt) 타입이 없습니다. ');  
                 // if (Array.isArray(target) && target.length === 0) return;
                 // if (defType.ref.length === 0) return;
