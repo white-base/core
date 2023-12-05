@@ -30,7 +30,7 @@ class AutoA extends Automation {
 // inteface define
 AutoA._TYPE = {
     title: String,                                  // [필수]
-    size: [[Number, Boolean]],                      // 선택
+    size: [['_req_', Number, Boolean]],             // [필수]
     seeView: ([[Number, String]])=>{[[Boolean]]},   // 선택
     proView: (Number, String)=>{},                  // [필수]
     delView: {
