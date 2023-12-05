@@ -89,3 +89,38 @@ var aa = [['_opt_', String, Number]];   // 필수
  * 
  */
 
+var unionType = {       // 조합
+    // union
+    union: Math,        // 조합
+    // primitive
+    num: Number,        // 숫자 필수
+    num: [[Number]],    // 숫자 선택
+    num: 10,            // 숫자 선택(기본값)
+    // function
+    fun: ()=>{},                // 모든 함수
+    fun: (String)=>{Boolean},   // 정의된 함수 
+    // class
+    class: RegExp,      // 클래스(내장)
+    class: Date,        // 클래스(내장)
+    // object  
+    obj: /reg/,         // 객체(정규식)
+    obj: new Date(),    // 객체(날짜)
+    obj: {},            // 객체
+    // array
+    arr: Array,                     // 모든 배열
+    arr: [],                        // 모든 배열
+    arr: [String, Number],          // 문자.숫자 선택 배열 
+    arr: ['_opt_', String, Number], // 문자.숫자 선택 배열 
+    arr: ['_req_', String, Number], // 문자.숫자 필수 배열
+    arr: ['_seq_', String, Number], // 1:문자, 2:숫자 필수 배열
+    arr: ['_all_'],                 // 모든 배열
+    arr: ['_any_'],                 // length > 0  배열
+    arr: ['_non_'],                 // 아니다, 특수한 경우(리턴 타입)
+    // choice
+    opt: [[String, Number]],            // 문자.숫자 선택
+    opt: [['_opt_', String, Number]],   // 문자.숫자 선택
+    opt: [['_req_', String, Number]],   // 문자.숫자 필수
+    opt: [['_all_']],                   // 모든 타입
+    opt: [['_any_']],                   // undefiend 제외 타입
+    opt: [['_non_']],                   // 아니다,  특수한 경우(리턴 타입)
+}
