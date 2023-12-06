@@ -124,3 +124,4 @@ var unionType = {       // 조합
     opt: [['_any_']],                   // undefiend 제외 타입
     opt: [['_non_']],                   // 아니다,  특수한 경우(리턴 타입)
 }
+//
