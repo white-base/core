@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const {typeKind}  = require('../src/util-type');
+const {typeKind, typeOf}  = require('../src/util-type');
 const {isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 const T = true;
@@ -18,96 +18,96 @@ describe("[target: util-type.js.js]", () => {
         // MetaRegistry.init();
         
     });
-    describe('typeKind(type) : 타입 얻기 ', () => {
-        it('- typeKind() : 원시 타입 얻기 ', () => {
+    describe('typeOf(type) : 타입 얻기 ', () => {
+        it('- typeOf() : 원시 타입 얻기 ', () => {
             // undefined
-            expect(typeKind().name                ).toBe('undefined');
+            expect(typeOf()                ).toBe('undefined');
             // null
-            expect(typeKind(null).name            ).toBe('null');
+            expect(typeOf(null)            ).toBe('null');
             // number, NaN
-            expect(typeKind(Number).name          ).toBe('number');
-            expect(typeKind(1).name               ).toBe('number');
-            expect(typeKind(NaN).name             ).toBe('number');
-            expect(typeKind(2).default            ).toBe(2);
+            expect(typeOf(Number)          ).toBe('number');
+            expect(typeOf(1)               ).toBe('number');
+            expect(typeOf(NaN)             ).toBe('number');
+            expect(typeKind(2).default     ).toBe(2);
             // string
-            expect(typeKind(String).name          ).toBe('string');
-            expect(typeKind('str').name           ).toBe('string');
-            expect(typeKind('str').default        ).toBe('str');
+            expect(typeOf(String)          ).toBe('string');
+            expect(typeOf('str')           ).toBe('string');
+            expect(typeKind('str').default ).toBe('str');
             // boolean
-            expect(typeKind(Boolean).name         ).toBe('boolean');
-            expect(typeKind(true).name            ).toBe('boolean');
-            expect(typeKind(true).default         ).toBe(true);
+            expect(typeOf(Boolean)         ).toBe('boolean');
+            expect(typeOf(true)            ).toBe('boolean');
+            expect(typeKind(true).default  ).toBe(true);
             // Symbol (ES6+)
-            expect(typeKind(Symbol).name          ).toBe('symbol');
-            expect(typeKind(Symbol('a')).name     ).toBe('symbol');
+            expect(typeOf(Symbol)          ).toBe('symbol');
+            expect(typeOf(Symbol('a'))     ).toBe('symbol');
             // BigInt (ES6+)
-            expect(typeKind(BigInt).name          ).toBe('bigint');    // bigint 로 변경되야함
-            expect(typeKind(BigInt(100)).name     ).toBe('bigint');
-            expect(typeKind(100n).name            ).toBe('bigint');
+            expect(typeOf(BigInt)          ).toBe('bigint');    // bigint 로 변경되야함
+            expect(typeOf(BigInt(100))     ).toBe('bigint');
+            expect(typeOf(100n)            ).toBe('bigint');
         });
-        it('- typeKind() : 참조 타입 얻기 ', () => {
+        it('- typeOf() : 참조 타입 얻기 ', () => {
             function User() {};             // object
             
             // function
-            expect(typeKind(Function).name        ).toBe('function');
-            expect(typeKind(()=>{}).name          ).toBe('function');
+            expect(typeOf(Function)        ).toBe('function');
+            expect(typeOf(()=>{})          ).toBe('function');
             // object
-            expect(typeKind(Object).name          ).toBe('object');
-            expect(typeKind({}).name              ).toBe('object');
-            expect(typeKind(new User).name        ).toBe('object');       // 빈객체
-            expect(typeKind(new Date()).name      ).toBe('object');
+            expect(typeOf(Object)          ).toBe('object');
+            expect(typeOf({})              ).toBe('object');
+            expect(typeOf(new User)        ).toBe('object');       // 빈객체
+            expect(typeOf(new Date())      ).toBe('object');
         });
 
-        it('- typeKind() : 확장 타입 얻기 ', () => {
+        it('- typeOf() : 확장 타입 얻기 ', () => {
             function Corp() {this.nm = 1};  // union
             function User() {};             // object
 
             // choice
-            expect(typeKind([[String]]).name        ).toBe('choice');
-            expect(typeKind([[String, Number]]).name).toBe('choice');
-            expect(typeKind([[]]).name              ).toBe('choice');
+            expect(typeOf([[String]])        ).toBe('choice');
+            expect(typeOf([[String, Number]])).toBe('choice');
+            expect(typeOf([[]])              ).toBe('choice');
             // union
-            expect(typeKind({fill:true}).name       ).toBe('union');
+            expect(typeOf({fill:true})       ).toBe('union');
             // user class 
-            expect(typeKind(Corp).name              ).toBe('class');
-            expect(typeKind(new Corp).name          ).toBe('union');
-            expect(typeKind(User).name              ).toBe('class');
-            expect(typeKind(new User).name          ).toBe('object');       // 빈객체
+            expect(typeOf(Corp)              ).toBe('class');
+            expect(typeOf(new Corp)          ).toBe('union');
+            expect(typeOf(User)              ).toBe('class');
+            expect(typeOf(new User)          ).toBe('object');       // 빈객체
             // array
-            expect(typeKind([]).name                ).toBe('array');
-            expect(typeKind(Array).name             ).toBe('array');
-            expect(typeKind(['_seq_']).name         ).toBe('array');
-            expect(typeKind(['_opt_']).name         ).toBe('array');
-            expect(typeKind(['_any_']).name         ).toBe('array');
+            expect(typeOf([])                ).toBe('array');
+            expect(typeOf(Array)             ).toBe('array');
+            expect(typeOf(['_seq_'])         ).toBe('array');
+            expect(typeOf(['_opt_'])         ).toBe('array');
+            expect(typeOf(['_any_'])         ).toBe('array');
         });
 
-        it('- typeKind() : 확장(built-in) 타입 얻기 ', () => {
+        it('- typeOf() : 확장(built-in) 타입 얻기 ', () => {
             // RegExp
-            expect(typeKind(RegExp).name            ).toBe('class');    // RegExp
-            expect(typeKind(/reg/).name             ).toBe('object');
+            expect(typeOf(RegExp)            ).toBe('class');    // RegExp
+            expect(typeOf(/reg/)             ).toBe('object');
             // Date
-            expect(typeKind(Date).name              ).toBe('class');
-            expect(typeKind(new Date()).name        ).toBe('object');
+            expect(typeOf(Date)              ).toBe('class');
+            expect(typeOf(new Date())        ).toBe('object');
             // Math (union 형태임)
-            expect(typeKind(Math).name              ).toBe('union');
-            expect(typeKind(Math.E).name            ).toBe('number');
-            expect(typeKind(Math.LN2).name          ).toBe('number');
+            expect(typeOf(Math)              ).toBe('union');
+            expect(typeOf(Math.E)            ).toBe('number');
+            expect(typeOf(Math.LN2)          ).toBe('number');
             // JSON
-            expect(typeKind(JSON).name              ).toBe('union');
+            expect(typeOf(JSON)              ).toBe('union');
             // Map
-            expect(typeKind(Map).name               ).toBe('class');    // Map
-            expect(typeKind(new Map()).name         ).toBe('union');
+            expect(typeOf(Map)               ).toBe('class');    // Map
+            expect(typeOf(new Map())         ).toBe('union');
             // Int8Array
-            expect(typeKind(Int8Array).name         ).toBe('class');
-            expect(typeKind(new Int8Array(2)).name  ).toBe('union');
+            expect(typeOf(Int8Array)         ).toBe('class');
+            expect(typeOf(new Int8Array(2))  ).toBe('union');
             // Promise
-            expect(typeKind(Promise).name           ).toBe('class');
-            expect(typeKind(new Promise((r,r2) => {})).name     ).toBe('union');
+            expect(typeOf(Promise)           ).toBe('class');
+            expect(typeOf(new Promise((r,r2) => {}))     ).toBe('union');
         });
 
         it('- 예외 :  ', () => {
             // BigInt는 사용 안함
-            // expect(() => typeKind(2n ** 53n).name ).toThrow('ES022');
+            // expect(() => typeOf(2n ** 53n) ).toThrow('ES022');
         });
 
     });

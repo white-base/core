@@ -424,6 +424,15 @@
     }
 
     /**
+     * 타입명 얻습니다.
+     * @param {*} type 
+     * @returns {string}
+     */
+    var typeOf = function (type) {
+        return typeKind(type).name;
+    };
+
+    /**
      * 원본타입에 대상타입이 덮어쓰기가 허용 가능한지 검사합니다.  
      * 원본타입에 대상타입으로 캐스팅이 가능하지 확인합니다.
      * @memberof _L.Common.Util
@@ -963,6 +972,7 @@
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
         exports.typeKind = typeKind;
+        exports.typeOf = typeOf;
         exports.matchType = matchType;
         exports.allowType = allowType;
         exports.isMatchType = isMatchType;
@@ -972,6 +982,7 @@
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
             typeKind: typeKind,
+            typeOf: typeOf,
             matchType: matchType,
             allowType: allowType,
             isMatchType: isMatchType,
