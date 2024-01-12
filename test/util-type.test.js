@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const {typeKind, typeOf}  = require('../src/util-type');
+const {typeObject, typeOf}  = require('../src/util-type');
 const {isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 const T = true;
@@ -28,15 +28,15 @@ describe("[target: util-type.js.js]", () => {
             expect(typeOf(Number)          ).toBe('number');
             expect(typeOf(1)               ).toBe('number');
             expect(typeOf(NaN)             ).toBe('number');
-            expect(typeKind(2).default     ).toBe(2);
+            expect(typeObject(2).default     ).toBe(2);
             // string
             expect(typeOf(String)          ).toBe('string');
             expect(typeOf('str')           ).toBe('string');
-            expect(typeKind('str').default ).toBe('str');
+            expect(typeObject('str').default ).toBe('str');
             // boolean
             expect(typeOf(Boolean)         ).toBe('boolean');
             expect(typeOf(true)            ).toBe('boolean');
-            expect(typeKind(true).default  ).toBe(true);
+            expect(typeObject(true).default  ).toBe(true);
             // Symbol (ES6+)
             expect(typeOf(Symbol)          ).toBe('symbol');
             expect(typeOf(Symbol('a'))     ).toBe('symbol');
@@ -776,7 +776,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow(/ES076/)
             expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow(/ES076/)
         });
-        it('- isMatchType() : object ', () => {
+        it('- isMatchType() : class ', () => {
             var Class1 = function() { this.aa = String }
             var Class2 = function() { this.bb = Number }
     

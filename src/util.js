@@ -7,7 +7,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var getAllProperties;
-    var typeKind;
+    var typeObject;
     var allowType;
     var isMatchType;
     var matchType;
@@ -24,7 +24,7 @@
     if (isNode) {
         Message                     = require('./message').Message;
         getAllProperties            = require('./util-type').getAllProperties;
-        typeKind                    = require('./util-type').typeKind;
+        typeObject                    = require('./util-type').typeObject;
         allowType              = require('./util-type').allowType;
         isMatchType                   = require('./util-type').isMatchType;
         matchType                   = require('./util-type').matchType;
@@ -32,7 +32,7 @@
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
-        typeKind                    = _global._L.Util.typeKind
+        typeObject                    = _global._L.Util.typeObject
         allowType              = _global._L.Util.allowType
         isMatchType                   = _global._L.Util.isMatchType
         matchType                   = _global._L.Util.matchType
@@ -42,7 +42,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
-    if (typeof typeKind === 'undefined') Message.error('ES012', ['typeKind', 'util-type']);
+    if (typeof typeObject === 'undefined') Message.error('ES012', ['typeObject', 'util-type']);
     if (typeof allowType === 'undefined') Message.error('ES012', ['allowType', 'util-type']);
     if (typeof isMatchType === 'undefined') Message.error('ES012', ['isMatchType', 'util-type']);
     if (typeof matchType === 'undefined') Message.error('ES012', ['matchType', 'util-type']);
@@ -344,7 +344,7 @@
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
         exports.allowType = allowType;
-        exports.typeKind = typeKind;
+        exports.typeObject = typeObject;
         exports.isMatchType = isMatchType;
         exports.matchType = matchType;
         exports.deepCopy = deepCopy;
@@ -359,7 +359,7 @@
             implements: implement,
             getAllProperties: getAllProperties,
             allowType: allowType,
-            typeKind: typeKind,
+            typeObject: typeObject,
             isMatchType: isMatchType,
             matchType: matchType,
             deepCopy: deepCopy,

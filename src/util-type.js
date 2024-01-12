@@ -269,7 +269,7 @@
      * @param {any} type 대상타입
      * @returns {object} {name: string, default: [null, any]}
      */
-    var typeKind = function(type) {
+    var typeObject = function(type) {
         var obj =  {name: '', ref: type, default: null, kind: null};
 
         obj.toString = function(){
@@ -277,8 +277,8 @@
             var arr = [];
             if (this.name === 'array' || this.name === 'choice') {
                 for (var i = 0; i < this.list.length; i++) {
-                    var _type = typeKind(this.list[i]);
-                    if (_type.kind) arr.push(typeKind(this.list[i]).toString());
+                    var _type = typeObject(this.list[i]);
+                    if (_type.kind) arr.push(typeObject(this.list[i]).toString());
                     else arr.push(_type.name);
                 }
                 temp = arr.join(',');
@@ -429,7 +429,7 @@
      * @returns {string}
      */
     var typeOf = function (type) {
-        return typeKind(type).name;
+        return typeObject(type).name;
     };
 
     /**
@@ -441,8 +441,8 @@
      * @returns {throw?}
      */
     var _execAllow = function (ori, tar) {
-        var oriDef = typeKind(ori);
-        var tarDef = typeKind(tar);
+        var oriDef = typeObject(ori);
+        var tarDef = typeObject(tar);
         
         if (_isObject(oriDef.ref) &&  _isObject(tarDef.ref) && deepEqual(oriDef, tarDef)) return;
         // ori seq, opt 필수 검사
@@ -537,7 +537,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['choice(_OPT_)', typeKind(arrTarget[i]).name]);
+                    if (!success) Message.error('ES0738', ['choice(_OPT_)', typeObject(arrTarget[i]).name]);
                 }
                 return;
 
@@ -559,7 +559,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['_OPT_', typeKind(arrTarget[i]).name]);
+                    if (!success) Message.error('ES0738', ['_OPT_', typeObject(arrTarget[i]).name]);
                 }
                 return;                
             } else {
@@ -608,7 +608,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_REQ_)', typeKind(tarDef.list[i]).name]);
+                    if (!success) Message.error('ES0738', ['array(_REQ_)', typeObject(tarDef.list[i]).name]);
                 }
                 return;
             
@@ -625,7 +625,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_OPT_)', typeKind(tarDef.list[i]).name]);
+                    if (!success) Message.error('ES0738', ['array(_OPT_)', typeObject(tarDef.list[i]).name]);
                 }
 
             } else {              
@@ -707,8 +707,8 @@
         var parentName = parentName ? parentName : 'this';
         var defType, tarType;
 
-        defType = typeKind(type);
-        tarType = typeKind(target);
+        defType = typeObject(type);
+        tarType = typeObject(target);
 
         // ori seq, opt 필수 검사
         if (defType.kind) {
@@ -880,7 +880,7 @@
             var list = getAllProperties(defType.ref);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                var listDefType = typeKind(type[key]);
+                var listDefType = typeObject(type[key]);
                 // REVIEW: for 위쪽으로 이동 검토!
                 if (!_isObject(target)) return Message.error('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
@@ -971,7 +971,7 @@
     if (isNode) {     
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
-        exports.typeKind = typeKind;
+        exports.typeObject = typeObject;
         exports.typeOf = typeOf;
         exports.matchType = matchType;
         exports.allowType = allowType;
@@ -981,7 +981,7 @@
         var ns = {
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
-            typeKind: typeKind,
+            typeObject: typeObject,
             typeOf: typeOf,
             matchType: matchType,
             allowType: allowType,

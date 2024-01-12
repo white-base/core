@@ -48,7 +48,7 @@ describe.skip("[ GROUP]", () => {
             // expect(global._L.Common.Util.checkUnionType).toBeDefined();
             expect(global._L.Common.Util.matchType).toBeDefined();
             // expect(global._L.Common.Util.validUnionType).toBeDefined();
-            expect(global._L.Common.Util.typeKind).toBeDefined();
+            expect(global._L.Common.Util.typeObject).toBeDefined();
         });
     });
     
@@ -68,7 +68,7 @@ describe.skip("[ GROUP]", () => {
             // expect(global._L.Common.Util.checkUnionType).toBeDefined();
             expect(global._L.Common.Util.matchType).toBeDefined();
             // expect(global._L.Common.Util.validUnionType).toBeDefined();
-            expect(global._L.Common.Util.typeKind).toBeDefined();
+            expect(global._L.Common.Util.typeObject).toBeDefined();
             /// util.js
             expect(global._L.Common.Util.inherits).toBeDefined();
             expect(global._L.Common.Util.getArrayDepth).toBeDefined();
@@ -91,11 +91,11 @@ describe.skip("[ GROUP]", () => {
             delete global._L.Common.Util.allowType;
             expect(() => require('../src/util')).toThrow(/allowType/);
         });
-        it("- 예외 : util-type.js : typeKind 제거", () => {
+        it("- 예외 : util-type.js : typeObject 제거", () => {
             require('../src/message');
             require('../src/util-type');
-            delete global._L.Common.Util.typeKind;
-            expect(() => require('../src/util')).toThrow(/typeKind/);
+            delete global._L.Common.Util.typeObject;
+            expect(() => require('../src/util')).toThrow(/typeObject/);
         });
 
         it("- 예외 : util-type.js : isMatchType 제거", () => {
