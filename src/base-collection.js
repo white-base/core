@@ -138,6 +138,14 @@
                 get: function() { return _elemTypes; },
                 set: function(val) {
                     var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
+                    var reg = /^_[a-zA-Z]+_/;
+                    var arr1 = arrType.length > 0 && typeof arrType[0] === 'string' ? arrType[0] : '';
+                    
+                    // var result;
+                    if (arrType.length > 0  && reg.exec(arr1) === null) arrType = ['_req_'].concat(arrType);
+                        
+                    // result = reg.exec(val);
+                    // if (result !== null) return result[0].toUpperCase();
                     _elemTypes = arrType;
                 },
                 configurable: false,
@@ -405,6 +413,9 @@
             return {
                 get: function() { return this.__GET$_elements(this)[p_idx]; },
                 set: function(nVal) {
+                    // var types = ['_req_'];
+                    // types = [types.concat(this._elemTypes)];
+                    // if (this._elemTypes.length > 0) Util.matchType(types, nVal);
                     if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], nVal);
                     this._onChanging(p_idx, nVal);  // before event
                     this.__GET$_elements(this)[p_idx] = nVal;

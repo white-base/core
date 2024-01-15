@@ -1424,7 +1424,7 @@ describe("[target: meta-view.js]", () => {
                         "_guid": obj1.rows._guid,
                         "_type": "Meta.Entity.MetaRowCollection",
                         "_owner": {"$ref":obj1._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1452,7 +1452,7 @@ describe("[target: meta-view.js]", () => {
                         "_guid": obj2.rows._guid,
                         "_type": "Meta.Entity.MetaRowCollection",
                         "_owner": {"$ref":obj2._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1478,7 +1478,7 @@ describe("[target: meta-view.js]", () => {
                         "_guid": obj3.rows._guid,
                         "_type": "Meta.Entity.MetaRowCollection",
                         "_owner": {"$ref":obj3._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1538,7 +1538,7 @@ describe("[target: meta-view.js]", () => {
                         "_guid": obj1.rows._guid,
                         "_type": "Meta.Entity.MetaRowCollection",
                         "_owner": {"$ref":obj1._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1578,7 +1578,7 @@ describe("[target: meta-view.js]", () => {
                         "_guid": obj2.rows._guid,
                         "_type": "Meta.Entity.MetaRowCollection",
                         "_owner": {"$ref":obj2._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1610,7 +1610,7 @@ describe("[target: meta-view.js]", () => {
                         "_guid": obj3.rows._guid,
                         "_type": "Meta.Entity.MetaRowCollection",
                         "_owner": {"$ref":obj3._guid},
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1660,7 +1660,7 @@ describe("[target: meta-view.js]", () => {
                     },
                     "rows": {
                         "_type": "Meta.Entity.MetaRowCollection",
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1689,7 +1689,7 @@ describe("[target: meta-view.js]", () => {
                     },
                     "rows": {
                         "_type": "Meta.Entity.MetaRowCollection",
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },
@@ -1713,7 +1713,7 @@ describe("[target: meta-view.js]", () => {
                     },
                     "rows": {
                         "_type": "Meta.Entity.MetaRowCollection",
-                        "_elemTypes": [{"$ns": "Meta.Entity.MetaRow"}],
+                        "_elemTypes": ['_req_', {"$ns": "Meta.Entity.MetaRow"}],
                         "_elem": [],
                         "autoChanges": true
                     },

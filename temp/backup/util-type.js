@@ -404,7 +404,7 @@
                 else obj.kind = _getKeyCode(type[0]);
                 obj.list = obj.kind ? type.slice(1) : type;
             }
-            if (!obj.kind) obj.kind = '_REQ_';
+            if (!obj.kind) obj.kind = '_OPT_';
             return obj;
         }
         // seq 4: funciton

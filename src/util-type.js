@@ -404,16 +404,16 @@
         if (Array.isArray(type)) {
             if (type.length ===  1 && Array.isArray(type[0])) {
                 obj.name = 'choice';
-                if (type[0].length === 0) obj.kind = '_ALL_';
+                if (type[0].length === 0) obj.kind = '_ANY_';
                 else obj.kind = _getKeyCode(type[0][0]);
                 obj.list = obj.kind ? type[0].slice(1) : type[0];
             } else {
                 obj.name = 'array';
-                if (type.length === 0) obj.kind = '_ALL_';
+                if (type.length === 0) obj.kind = '_ANY_';
                 else obj.kind = _getKeyCode(type[0]);
                 obj.list = obj.kind ? type.slice(1) : type;
             }
-            if (!obj.kind) obj.kind = '_REQ_';
+            if (!obj.kind) obj.kind = '_OPT_';
             return obj;
         }
         // seq 4: funciton
@@ -469,7 +469,7 @@
             }
         }
 
-        if ((oriDef.kind) && (tarDef.kind)) {
+        if ((oriDef.kind) && (tarDef.kind) && oriDef.name === tarDef.name) {
             // 거부조건
             if (oriDef.kind === '_ALL_' && (tarDef.kind === '_NON_')) {
                 Message.error('ES0727', [oriDef.kind, '_NON_', tarDef.kind]);
