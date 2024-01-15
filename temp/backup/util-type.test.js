@@ -83,8 +83,8 @@ describe("[target: util-type.js.js]", () => {
 
         it('- typeOf() : 확장(built-in) 타입 얻기 ', () => {
             // RegExp
-            // expect(typeOf(RegExp)            ).toBe('class');    // RegExp
-            // expect(typeOf(/reg/)             ).toBe('object');
+            expect(typeOf(RegExp)            ).toBe('class');    // RegExp
+            expect(typeOf(/reg/)             ).toBe('object');
             // Date
             expect(typeOf(Date)              ).toBe('class');
             expect(typeOf(new Date())        ).toBe('object');
@@ -162,7 +162,7 @@ describe("[target: util-type.js.js]", () => {
             // true
             expect(isMatchType({}, Object             )).toBe(true);
             // expect(isMatchType(null, Object)).toBe(true);
-            // expect(isMatchType({}, /reg/              )).toBe(true);
+            expect(isMatchType({}, /reg/              )).toBe(true);
             expect(isMatchType({}, new Func()         )).toBe(true);
             expect(isMatchType({}, Func               )).toBe(false);   // POINT: 실패해야함, 내용이 있는 함수는 실패해야함
             expect(isMatchType({}, Number             )).toBe(false);    // false
@@ -559,7 +559,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(Object,    Object          )).toBe(T);
             expect(isAllowType(Object,    {}              )).toBe(T);
             expect(isAllowType(/reg/,     /reg/           )).toBe(T);
-            // expect(isAllowType(/reg/,     /reg2/          )).toBe(false);
+            expect(isAllowType(/reg/,     /reg2/          )).toBe(false);
             expect(isAllowType({},        new ClassA()    )).toBe(T);
             expect(isAllowType({},        new ClassB()    )).toBe(false);
             expect(isAllowType({},        true            )).toBe(false);
@@ -568,7 +568,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(date1,     date3           )).toBe(false);
             expect(isAllowType({},        new Date()      )).toBe(false);
             // 예외 : 오류코드
-            // expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
+            expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
             expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
             expect(()=> allowType({},        true            )).toThrow('ES0713')
         });
@@ -615,10 +615,10 @@ describe("[target: util-type.js.js]", () => {
     });
     describe('isMatchType(type, target)', () => {
         it('- isMatchType() : object (원시 객체 기본값) ', () => {
-            // expect(isMatchType(/reg2/,        /reg/       )).toBe(T);
+            expect(isMatchType(/reg2/,        /reg/       )).toBe(T);
             expect(isMatchType(new Date(),    new Date()  )).toBe(T);
             expect(isMatchType(Symbol(),      Symbol()    )).toBe(T);
-            // expect(isMatchType({},            /reg/       )).toBe(T);
+            expect(isMatchType({},            /reg/       )).toBe(T);
             expect(isMatchType({},            new Date()  )).toBe(T);
             expect(isMatchType({},            Symbol()    )).toBe(false);
             // 예외 오류 코드
@@ -842,7 +842,7 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- isMatchType() : choice 내장 객체 타입 ', () => {
             expect(isMatchType([[RegExp, Date, Symbol]], new Date() )).toBe(T);
-            // expect(isMatchType([[RegExp, Date, Symbol]], /reg/      )).toBe(T);
+            expect(isMatchType([[RegExp, Date, Symbol]], /reg/      )).toBe(T);
             expect(isMatchType([[RegExp, Date, Symbol]], Symbol()   )).toBe(T);            
             expect(isMatchType([[RegExp, Date, Symbol]], 1          )).toBe(false);
             expect(isMatchType([[RegExp, Date, Symbol]], true       )).toBe(false);
@@ -1054,8 +1054,8 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType([[Boolean, Number]],             true        )).toBe(true);
             expect(isMatchType([[Boolean, null  ]],             null        )).toBe(true);
             expect(isMatchType([[Boolean, [['_any_']]]],        /reg/       )).toBe(true);       // any
-            // expect(isMatchType([[Boolean, Object]],             /reg/       )).toBe(true);     // objct 최상위
-            // expect(isMatchType([[Boolean, RegExp]],             /reg/       )).toBe(true);     // 내장 함수
+            expect(isMatchType([[Boolean, Object]],             /reg/       )).toBe(true);     // objct 최상위
+            expect(isMatchType([[Boolean, RegExp]],             /reg/       )).toBe(true);     // 내장 함수
             expect(isMatchType([[Func1, Number]],               new Func1() )).toBe(true);
             expect(isMatchType([[[[String, Func1]], Number]],   new Func1() )).toBe(true);   // 복합 배열
             expect( isMatchType([[[Func1], Number]],            [new Func1()])).toBe(true);         // 복합 하위 배열
@@ -1122,10 +1122,10 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Date, Symbol()            )).toThrow(/ES032/);
             expect(()=> matchType(Date, Symbol              )).toThrow(/ES032/);
         });
-        it.skip('- RegExp : object 타입 (class)', () => {
+        it('- RegExp : object 타입 (class)', () => {
             // true
-            // expect(isMatchType(RegExp, /reg/)).toBe(true);
-            // expect(isMatchType(/reg/, /target/)).toBe(true);
+            expect(isMatchType(RegExp, /reg/)).toBe(true);
+            expect(isMatchType(/reg/, /target/)).toBe(true);
             // false
             expect(()=> matchType(RegExp, function any(){}  )).toThrow(/ES032/);
             expect(()=> matchType(RegExp, null              )).toThrow(/ES032/);

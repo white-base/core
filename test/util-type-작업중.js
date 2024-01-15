@@ -14,52 +14,192 @@ describe("[target: util-type.js.js]", () => {
     beforeAll(() => {
         jest.resetModules();
     });
-    describe('typeOf(target): str  <타입 얻기> ', () => {
+    describe('typeOf(target): str & typeObject(target)  <타입 얻기> ', () => {
         describe('원시 타입 ', () => {
             it('- typeOf() : undefined ', () => {
-                //
+                var type1;
+                var type2 = undefined;
+
+                expect(typeOf(type1)).toBe('undefined');
+                expect(typeOf(type2)).toBe('undefined');
             });
             it('- typeOf() : null ', () => {
-                //
+                var type1 = null;
+                
+                expect(typeOf(type1)).toBe('null');
             });
             it('- typeOf() : string [리터럴] ', () => {
-                //
+                var type1 = String;
+                var type2 = 'str';  // 리터럴
+                
+                expect(typeOf(type1)).toBe('string');
+                expect(typeOf(type2)).toBe('string');
+                // 타입 객체
+                expect(typeObject(type2).default).toBe(type2);
             });
             it('- typeOf() : number [리터럴] ', () => {
-                //
+                var type1 = Number;
+                var type2 = 2;      // 리터럴
+                var type3 = NaN;    // 리터럴
+
+                expect(typeOf(type1)).toBe('number');
+                expect(typeOf(type2)).toBe('number');
+                expect(typeOf(type3)).toBe('number');
+                // 타입 객체
+                expect(typeObject(type2).default).toBe(type2);
+                expect(typeObject(type3).default).toBe(type3);
             });
             it('- typeOf() : boolean [리터럴] ', () => {
-                //
+                var type1 = Boolean;
+                var type2 = true;      // 리터럴
+                var type3 = false;     // 리터럴
+
+                expect(typeOf(type1)).toBe('boolean');
+                expect(typeOf(type2)).toBe('boolean');
+                expect(typeOf(type3)).toBe('boolean');
+                // 타입 객체
+                expect(typeObject(type2).default).toBe(type2);
+                expect(typeObject(type3).default).toBe(type3);
             });
             it('- typeOf() : bigint [리터럴] (ES6+) ', () => {
-                //
+                var type1 = BigInt;
+                var type2 = BigInt(100);    // 리터럴
+                var type3 = 100n;           // 리터럴
+
+                expect(typeOf(type1)).toBe('bigint');
+                expect(typeOf(type2)).toBe('bigint');
+                expect(typeOf(type3)).toBe('bigint');
+                // 타입 객체
+                expect(typeObject(type2).default).toBe(type2);
+                expect(typeObject(type3).default).toBe(type3);
             });
             it('- typeOf() : symbol (ES6+) ', () => {
+                var type1 = Symbol;
+                var type2 = Symbol('a');    // 리터럴로 취급 안함
+                
+                expect(typeOf(type1)).toBe('symbol');
+                expect(typeOf(type2)).toBe('symbol');
+            });
+        });
+        describe('확장 타입 ', () => {
+            it('- typeOf() : function ', () => {
+                expect(typeOf(Function)        ).toBe('function');
+                expect(typeOf(()=>{})          ).toBe('function');
+            });
+            it('- typeOf() : class ', () => {
+                var type1 = function Corp() {this.nm = 1};
+                var type2 = function User() {};
+                var type3 = Date;
+                var type4 = Promise;
+
+                expect(typeOf(type1)).toBe('class');
+                expect(typeOf(type2)).toBe('class');
+                expect(typeOf(type3)).toBe('class');
+                expect(typeOf(type4)).toBe('class');
+            });
+            it('- typeOf() : regexp [리터럴] ', () => {
+                var type1 = RegExp;
+                var type2 = /reg/;
+
+                expect(typeOf(type1)).toBe('regexp');
+                expect(typeOf(type2)).toBe('regexp');
+                // 타입 객체
+                expect(typeObject(type2).default).toEqual(/reg/);
+            });
+            it('- typeOf() : object ', () => {
+                var type1 = new function User() {};
+                var type2 = new Date();
+                var type3 = {};
+
+                expect(typeOf(type1)).toBe('object');
+                expect(typeOf(type2)).toBe('object');
+                expect(typeOf(type3)).toBe('object');
+            });
+            it('- typeOf() : union ', () => {
+                //
+            });
+            it('- typeOf() : choice ', () => {
+                //
+            });
+            it('- typeOf() : array ', () => {
+                //
+            });
+        });
+    });
+    // describe('typeObject(target): obj  <타입 객체 얻기> ', () => {
+    //     // typeOf 와 비슷함
+    // });
+    describe('isMatchType(type, target): bool  <타입 매치 여부> ', () => {
+        describe('원시 타입 ', () => {
+            it('- isMatchType() : undefined ', () => {
+                //
+            });
+            it('- isMatchType() : null ', () => {
+                //
+            });
+            it('- isMatchType() : string [리터럴] ', () => {
+                //
+            });
+            it('- isMatchType() : number [리터럴] ', () => {
+                //
+            });
+            it('- isMatchType() : boolean [리터럴] ', () => {
+                //
+            });
+            it('- isMatchType() : bigint [리터럴] (ES6+) ', () => {
+                //
+            });
+            it('- isMatchType() : symbol (ES6+) ', () => {
                 //
             });
         });
         describe('확장 타입 ', () => {
-            it('- typeOf() : regexp [리터럴] ', () => {
+            it('- isMatchType() : function ', () => {
                 //
             });
-            it('- typeOf() : null ', () => {
+            it('- isMatchType() : class ', () => {
                 //
             });
-            it('- typeOf() : string ', () => {
+            it('- isMatchType() : regexp [리터럴] ', () => {
                 //
             });
-            it('- typeOf() : number ', () => {
+            it('- isMatchType() : object ', () => {
                 //
             });
-            it('- typeOf() : boolean ', () => {
+            it('- isMatchType() : union ', () => {
                 //
             });
-            it('- typeOf() : bigint (ES6+) ', () => {
+            it('- isMatchType() : choice ', () => {
                 //
             });
-            it('- typeOf() : symbol (ES6+) ', () => {
+            it('- isMatchType() : array ', () => {
                 //
             });
         });
+        describe('중첩 구조 ', () => {
+            it('- isMatchType() : function ', () => {
+                //
+            });
+            it('- isMatchType() : union ', () => {
+                //
+            });
+            it('- isMatchType() : choice ', () => {
+                //
+            });
+            it('- isMatchType() : array ', () => {
+                //
+            });
+        });
+        describe('function type ', () => {
+            it('- isMatchType() : function ', () => {
+                //
+            });
+        });                
+    });
+    describe('matchType(type, target): bool  <타입 매치 예외> ', () => {
+    });
+    describe('isAllowType(type, target): bool  <타입 매치 여부> ', () => {
+    });
+    describe('allowType(type, target): bool  <타입 매치 예외> ', () => {
     });
 });

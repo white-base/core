@@ -319,15 +319,6 @@
             obj.name = 'object';
             return obj;
         }
-        if (type === RegExp) {
-            obj.name = 'regexp';
-            return obj;
-        }
-        if (type instanceof RegExp) {
-            obj.name = 'regexp';
-            obj.default = type;
-            return obj;
-        }
         if (type === Symbol) {      // ES6+
             obj.name = 'symbol';
             return obj;
