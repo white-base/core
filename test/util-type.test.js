@@ -636,6 +636,24 @@ describe("[target: util-type.js.js]", () => {
             expect(()=>matchType({aa: undefined},   {aa:null}       )).toThrow('undefined');
             expect(()=>matchType(undefined,         {aa:null}       )).toThrow('ES026');
         });
+        it('- String, "str" : string 타입 ', () => {
+            // true
+            expect(isMatchType('str',     ''        )).toBe(true);
+            expect(isMatchType('str',     undefined )).toBe(true);  // 기본값 설정됨
+            expect(isMatchType(String,    ''        )).toBe(true);
+            // false (예외)
+            expect(()=> matchType('str',    function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(String,   function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(String,   null                )).toThrow(/ES074/);
+            expect(()=> matchType(String,   true                )).toThrow(/ES074/);
+            expect(()=> matchType(String,   /reg/               )).toThrow(/ES074/);
+            expect(()=> matchType(String,   1                   )).toThrow(/ES074/);
+            expect(()=> matchType(String,   Symbol()            )).toThrow(/ES074/);
+            expect(()=> matchType(String,   []                  )).toThrow(/ES074/);
+            expect(()=> matchType(String,   {aa:1}              )).toThrow(/ES074/);
+            expect(()=> matchType(String,   Number              )).toThrow(/ES074/);
+            expect(()=> matchType(String,   Symbol              )).toThrow(/ES074/);
+        });
         it('- Number, 1,2, NaN : number 타입', () => {
             // true
             expect(isMatchType(1,         0   )).toBe(T);
@@ -655,24 +673,6 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Number,   {aa:1}              )).toThrow(/ES074/);
             expect(()=> matchType(Number,   Symbol              )).toThrow(/ES074/);
             expect(()=> matchType(Number,                       )).toThrow(/ES074/);
-        });
-        it('- String, "str" : string 타입 ', () => {
-            // true
-            expect(isMatchType('str',     ''        )).toBe(true);
-            expect(isMatchType('str',     undefined )).toBe(true);  // 기본값 설정됨
-            expect(isMatchType(String,    ''        )).toBe(true);
-            // false (예외)
-            expect(()=> matchType('str',    function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(String,   function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(String,   null                )).toThrow(/ES074/);
-            expect(()=> matchType(String,   true                )).toThrow(/ES074/);
-            expect(()=> matchType(String,   /reg/               )).toThrow(/ES074/);
-            expect(()=> matchType(String,   1                   )).toThrow(/ES074/);
-            expect(()=> matchType(String,   Symbol()            )).toThrow(/ES074/);
-            expect(()=> matchType(String,   []                  )).toThrow(/ES074/);
-            expect(()=> matchType(String,   {aa:1}              )).toThrow(/ES074/);
-            expect(()=> matchType(String,   Number              )).toThrow(/ES074/);
-            expect(()=> matchType(String,   Symbol              )).toThrow(/ES074/);
         });
         it('- Boolean, true, false : boolean 타입 ', () => {
             // true
@@ -737,7 +737,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType([['_any_']],         undefined   )).toBe(false);
             // _seq_[ 
             expect(isMatchType([['_seq_']],                 [[1,2,3]]   )).toBe(false);
-            expect(isMatchType([['_seq_']],                 10          )).toBe(false);
+                expect(isMatchType([['_seq_']],                 10          )).toBe(false);
             expect(isMatchType([['_seq_', String, Number]], [[1,2,3]]   )).toBe(false);
             expect(isMatchType([['_seq_', String, Number]], 10          )).toBe(false);
             // _opt_[
@@ -945,6 +945,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Array, Symbol                 )).toThrow(/ES024/);
         });
 
+        // POINT: : 예외 제외하고
         it('- isMatchType() : function (선언 타입 검사) ', () => { 
             var type1 = function(){};
             var type2 = function(String, Number){Object};
@@ -978,6 +979,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Function, true        )).toThrow(/ES024/);
             expect(()=> matchType(Function, {aa:1}      )).toThrow(/ES024/);
         });
+        // POINT: 예외코드 추가 해야 함
         it('- Function : 정의된 function 타입 1 ', () => {
             var fun1 = function(String, Number){Boolean}
             var tar1 = function(){};

@@ -94,12 +94,25 @@
         // 원시타입인지...
     }
 
-
     function _isUpper(strValue) {
         var firstStr = strValue.charAt(0);
         if (firstStr === '') return false;
         if(firstStr === firstStr.toUpperCase()) return true;
         else false;
+    }
+
+    /**
+     * 리터럴 여부  
+     * number, string, boolean, bigint, RexExp instance
+     * @param {*} obj 
+     * @returns 
+     */
+    function _isLiteral(obj) {
+        if (typeof obj  === 'number') return true;
+        if (typeof obj  === 'string') return true;
+        if (typeof obj  === 'boolean') return true;
+        if (typeof obj  === 'bigint') return true;
+        if (obj instanceof RegExp) return true;
     }
 
     /**
@@ -159,10 +172,10 @@
             if (arrFunc === null) Message.error('ES072', [funBody]);
 
             arrParam = (new Function('return ['+ arrFunc[1] +']'))();
-            result.params = arrParam;
+            result['params'] = arrParam;
             
             if (arrFunc[2] !== '') arrRetrun = (new Function('return '+ arrFunc[2]))()
-            result.return = arrRetrun;
+            result['return'] = arrRetrun;
 
         } catch (error) {
             Message.error('ES073', [error]);
@@ -737,17 +750,17 @@
             Message.error('ES074', [parentName, 'undefined']);
         }
         if (defType.name === 'number') {
-            if (defType.default && typeof target === 'undefined') target = defType.default; 
+            if (typeof defType.default === 'number' && typeof target === 'undefined') target = defType.default; 
             if (typeof target === 'number') return;
             Message.error('ES074', [parentName, 'number']);
         }
         if (defType.name === 'string') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof defType.default === 'string' && defType.default && typeof target === 'undefined') target = defType.default;
             if (typeof target === 'string') return;
             Message.error('ES074', [parentName, 'string']);
         }
         if (defType.name === 'boolean') {
-            if (defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof defType.default === 'boolean' && typeof target === 'undefined') target = defType.default;
             if (typeof target === 'boolean') return;
             Message.error('ES074', [parentName, 'boolean']);
         }
@@ -778,7 +791,16 @@
 
             for (var ii = 0; ii < defType.list.length; ii++) {
                 try {
+                    // POINT: 리터럴 작업중
+                    // var elem = defType.list[ii];
+                    // if (_isLiteral(elem)) {
+                    //     if (elem == target) 
+                    // } else {
+                    //     _execMatch(defType.list[ii], target);
+                    // }
+
                     _execMatch(defType.list[ii], target);
+
                     return;
                 } catch (error) {
                     continue;
@@ -965,7 +987,7 @@
      * @returns {boolean} 
      */
     var isMatchType = function(chkType, target) {
-        if (typeof chkType === 'undefined') return false;
+        // if (typeof chkType === 'undefined') return false;
         try {
             _execMatch(chkType, target);
             return true;
