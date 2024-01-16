@@ -399,7 +399,18 @@ describe("[target: util-type.js.js]", () => {
                 //
             });
             it('- isMatchType() : union ', () => {
-                //
+                var type1 = new function Corp() {this.age = Number};
+                var type2 = {fill:true};
+                var type3 = JSON;
+                var type4 = Math;
+                
+                // 내부에 타입을 나열해서 체크함
+
+                 // type1
+                 expect(isMatchType(type1, {age: 1})        ).toBe(T);
+                 expect(isMatchType(type2, {fill:true})     ).toBe(T);
+                 expect(isMatchType(type3, JSON)            ).toBe(T);
+                 expect(isMatchType(type4, Math)            ).toBe(T);
             });
             
             describe('choice ', () => {
@@ -407,7 +418,7 @@ describe("[target: util-type.js.js]", () => {
                     var type1 = [[String]];
                     var type2 = [[String, Number]];
                     var type3 = [[String, 10]];
-                    var type4 = [['aa', 'bb']];
+                    var type4 = [['aa', /reg/]];
                     var type5 = [['_opt_']];
 
                     // type1
@@ -423,17 +434,17 @@ describe("[target: util-type.js.js]", () => {
                     // type3
                     expect(isMatchType(type3, '')           ).toBe(T);
                     expect(isMatchType(type3, 10)           ).toBe(T);
-                    // expect(isMatchType(type3, 20)           ).toBe(false);   POINT: 소스 반영 필요
+                    expect(isMatchType(type3, 20)           ).toBe(false);
                     expect(isMatchType(type3, undefined)    ).toBe(T);
                     expect(isMatchType(type3, true)         ).toBe(false);
                     // type4
-                    // expect(isMatchType(type4, '')           ).toBe(false);
+                    expect(isMatchType(type4, '')           ).toBe(false);
                     expect(isMatchType(type4, 'aa')         ).toBe(T);
-                    expect(isMatchType(type4, 'bb')         ).toBe(T);
+                    expect(isMatchType(type4, /reg/)        ).toBe(T);
                     expect(isMatchType(type4, 10)           ).toBe(false);
                     expect(isMatchType(type4, undefined)    ).toBe(T);
                     expect(isMatchType(type4, true)         ).toBe(false);
-                    // type5
+                    // type5 : 모두 실패
                     expect(isMatchType(type5, '')           ).toBe(false);
                     expect(isMatchType(type5, 10)           ).toBe(false);
                     expect(isMatchType(type5, undefined)    ).toBe(false);
@@ -443,30 +454,140 @@ describe("[target: util-type.js.js]", () => {
                     var type1 = [['_req_', String]];
                     var type2 = [['_req_', String, Number]];
                     var type3 = [['_req_', String, 10]];
-                    var type4 = [['_req_', 'aa', 'bb']];
+                    var type4 = [['_req_', 'aa', /reg/]];
                     var type5 = [['_req_']];
+
+                    // type1
+                    expect(isMatchType(type1, '')           ).toBe(T);
+                    expect(isMatchType(type1, 10)           ).toBe(false);
+                    expect(isMatchType(type1, undefined)    ).toBe(false);
+                    expect(isMatchType(type1, true)         ).toBe(false);
+                    // type2
+                    expect(isMatchType(type2, '')           ).toBe(T);
+                    expect(isMatchType(type2, 10)           ).toBe(T);
+                    expect(isMatchType(type2, undefined)    ).toBe(false);
+                    expect(isMatchType(type2, true)         ).toBe(false);
+                    // type3
+                    expect(isMatchType(type3, '')           ).toBe(T);
+                    expect(isMatchType(type3, 10)           ).toBe(T);
+                    expect(isMatchType(type3, 20)           ).toBe(false);
+                    expect(isMatchType(type3, undefined)    ).toBe(false);
+                    expect(isMatchType(type3, true)         ).toBe(false);
+                    // type4
+                    expect(isMatchType(type4, '')           ).toBe(false);
+                    expect(isMatchType(type4, 'aa')         ).toBe(T);
+                    expect(isMatchType(type4, /reg/)        ).toBe(T);
+                    expect(isMatchType(type4, 10)           ).toBe(false);
+                    expect(isMatchType(type4, undefined)    ).toBe(false);
+                    expect(isMatchType(type4, true)         ).toBe(false);
+                    // type5 : 모두 실패
+                    expect(isMatchType(type5, '')           ).toBe(false);
+                    expect(isMatchType(type5, 10)           ).toBe(false);
+                    expect(isMatchType(type5, undefined)    ).toBe(false);
+                    expect(isMatchType(type5, true)         ).toBe(false);
                 });
                 it('- isMatchType() : choice _all_ ', () => {
                     var type1 = [['_all_']];
+
+                    expect(isMatchType(type1, '')           ).toBe(T);
+                    expect(isMatchType(type1, 10)           ).toBe(T);
+                    expect(isMatchType(type1, true)         ).toBe(T);
+                    expect(isMatchType(type1, 1n)           ).toBe(T);
+                    expect(isMatchType(type1, Symbol())     ).toBe(T);
+                    expect(isMatchType(type1, /reg/)        ).toBe(T);
+                    expect(isMatchType(type1, {})           ).toBe(T);
+                    expect(isMatchType(type1, {a: 1})       ).toBe(T);
+                    expect(isMatchType(type1, Date)         ).toBe(T);
+                    expect(isMatchType(type1, [[]])         ).toBe(T);
+                    expect(isMatchType(type1, [])           ).toBe(T);
+                    expect(isMatchType(type1, undefined)    ).toBe(T);
                 });
                 it('- isMatchType() : choice _any_ ', () => {
                     var type1 = [['_any_']];
+
+                    expect(isMatchType(type1, '')           ).toBe(T);
+                    expect(isMatchType(type1, 10)           ).toBe(T);
+                    expect(isMatchType(type1, true)         ).toBe(T);
+                    expect(isMatchType(type1, 1n)           ).toBe(T);
+                    expect(isMatchType(type1, Symbol())     ).toBe(T);
+                    expect(isMatchType(type1, /reg/)        ).toBe(T);
+                    expect(isMatchType(type1, {})           ).toBe(T);
+                    expect(isMatchType(type1, {a: 1})       ).toBe(T);
+                    expect(isMatchType(type1, Date)         ).toBe(T);
+                    expect(isMatchType(type1, [[]])         ).toBe(T);
+                    expect(isMatchType(type1, [])           ).toBe(T);
+                    expect(isMatchType(type1, undefined)    ).toBe(false);
                 });
                 it('- isMatchType() : choice _non_ ', () => {
                     var type1 = [['_non_']];
+
+                    expect(isMatchType(type1, '')           ).toBe(false);
+                    expect(isMatchType(type1, 10)           ).toBe(false);
+                    expect(isMatchType(type1, true)         ).toBe(false);
+                    expect(isMatchType(type1, 1n)           ).toBe(false);
+                    expect(isMatchType(type1, Symbol())     ).toBe(false);
+                    expect(isMatchType(type1, /reg/)        ).toBe(false);
+                    expect(isMatchType(type1, {})           ).toBe(false);
+                    expect(isMatchType(type1, {a: 1})       ).toBe(false);
+                    expect(isMatchType(type1, Date)         ).toBe(false);
+                    expect(isMatchType(type1, [[]])         ).toBe(false);
+                    expect(isMatchType(type1, [])           ).toBe(false);
+                    expect(isMatchType(type1, undefined)    ).toBe(T);
                 });
-                it('- isMatchType() : choice _eum_ ', () => {
+                it('- isMatchType() : choice _eum_ ', () => {  
                     var type1 = [['_eum_']];
                     var type2 = [['_eum_', 'aa']];
-                    var type3 = [['_eum_', 'aa', 'bb']];
+                    var type3 = [['_eum_', 'aa', /reg/, 10]];
                     var type4 = [['_eum_', 'aa', Number]];     // 오류
+
+                    // type1
+                    expect(isMatchType(type1, '')           ).toBe(false);
+                    expect(isMatchType(type1, 'aa')         ).toBe(false);
+                    // type2
+                    expect(isMatchType(type2, '')           ).toBe(false);
+                    expect(isMatchType(type2, 'aa')         ).toBe(T);
+                    expect(isMatchType(type2, undefined)    ).toBe(false);
+                    // type3
+                    expect(isMatchType(type3, '')           ).toBe(false);
+                    expect(isMatchType(type3, 'aa')         ).toBe(T);
+                    expect(isMatchType(type3, /reg/)        ).toBe(T);
+                    expect(isMatchType(type3, 10)           ).toBe(T);
+                    expect(isMatchType(type3, undefined)    ).toBe(false);
+                    // type4
+                    expect(isMatchType(type4, 'aa')         ).toBe(false);
+                    expect(isMatchType(type4, 10)           ).toBe(false);
+                    expect(isMatchType(type4, undefined)    ).toBe(false);
                 });
                 it('- isMatchType() : choice _def_ ', () => {
                     var type1 = [['_def_']];
                     var type2 = [['_def_', 'aa']];
-                    var type3 = [['_def_', 'aa', 'bb']];
+                    var type3 = [['_def_', 'aa', /reg/, 10]];
                     var type4 = [['_def_', 'aa', Number]];
-                    var type5 = [['_def_', String, Number]];   // 오류
+                    var type5 = [['_def_', String, 10]];   // 오류
+
+                    // type1
+                    expect(isMatchType(type1, '')           ).toBe(false);
+                    expect(isMatchType(type1, 'aa')         ).toBe(false);
+                    // type2
+                    expect(isMatchType(type2, '')           ).toBe(false);
+                    expect(isMatchType(type2, 'aa')         ).toBe(T);
+                    expect(isMatchType(type2, undefined)    ).toBe(T);
+                    // type3
+                    expect(isMatchType(type3, '')           ).toBe(false);
+                    expect(isMatchType(type3, 'aa')         ).toBe(T);
+                    expect(isMatchType(type3, /reg/)        ).toBe(T);
+                    expect(isMatchType(type3, 10)           ).toBe(T);
+                    expect(isMatchType(type3, undefined)    ).toBe(T);
+                    // type4
+                    expect(isMatchType(type4, '')           ).toBe(false);
+                    expect(isMatchType(type4, 'aa')         ).toBe(T);
+                    expect(isMatchType(type4, /reg/)        ).toBe(false);
+                    expect(isMatchType(type4, 10)           ).toBe(T);
+                    expect(isMatchType(type4, undefined)    ).toBe(T);
+                    // type5
+                    expect(isMatchType(type5, 'aa')         ).toBe(false);
+                    expect(isMatchType(type5, 10)           ).toBe(false);
+                    expect(isMatchType(type5, undefined)    ).toBe(false);
                 });            
             });
             
@@ -492,7 +613,8 @@ describe("[target: util-type.js.js]", () => {
             });
 
         });
-        describe('중첩 구조 ', () => {
+        // TODO: 대상의 하위로 이동
+        describe('중첩 구조 ', () => {  
             it('- isMatchType() : function ', () => {
                 // 다양한 함수의 파싱 방식 
             });
@@ -510,6 +632,7 @@ describe("[target: util-type.js.js]", () => {
             it('- isMatchType() : function ', () => {
                 // 파싱에 대한 분석
             });
+
         });                
     });
     describe('matchType(type, target): bool  <타입 매치 예외> ', () => {

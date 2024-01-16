@@ -780,28 +780,42 @@
             } else if (defType.kind == '_ANY_') {
                 if (typeof target !== 'undefined') return;
                 Message.error('ES075', ['choice', '_ANY_', 'undefined']);
+            } else if (defType.kind == '_NON_') {
+                if (typeof target === 'undefined') return;
+                throw new Error(' 어떤한 값도 설정할 수 없습니다.');
             } else if (defType.kind == '_REQ_') {
-                if (defType.list.length === 0) return;
-                // beginIdx = 1;
-            } else if (defType.kind == '_SEQ_') {
-                Message.error('ES077', ['choice', '_SEQ_']);
+                // if (defType.list.length === 0) return;
+                if (defType.list.length === 0) throw new Error('_req_(require) 필수 항목이 없습니다.');
             } else if (defType.kind === '_OPT_') {
                 if (typeof tarType.ref === 'undefined') return;
+            } else if (defType.kind === '_EUM_') {
+                if (defType.list.length === 0) throw new Error('_eum_(enum) 1개이상 항목이 필요합니디.');
+                for (var ii = 0; ii < defType.list.length; ii++) {
+                    if (!_isLiteral(defType.list[ii])) throw new Error('_eum_(enum)은 리터럴 타입만 가능합니다.');
+                }
+            } else if (defType.kind === '_DEF_') {
+                if (defType.list.length === 0) throw new Error('_def_(default) 1개이상 항목이 필요합니디.');
+                if (!_isLiteral(defType.list[0])) throw new Error('_def_(default) 1번째는 리터럴 타입만 가능합니다.');
+                if (typeof target === 'undefined') {
+                    target = defType.list[0];
+                    return;
+                }
+            } else if (defType.kind === '_SEQ_') {
+                Message.error('ES077', ['choice', '_SEQ_']);
             }
 
             for (var ii = 0; ii < defType.list.length; ii++) {
                 try {
-                    // POINT: 리터럴 작업중
-                    // var elem = defType.list[ii];
-                    // if (_isLiteral(elem)) {
-                    //     if (elem == target) 
-                    // } else {
-                    //     _execMatch(defType.list[ii], target);
-                    // }
-
-                    _execMatch(defType.list[ii], target);
-
-                    return;
+                    // POINT:
+                    var elem = defType.list[ii];
+                    if (_isLiteral(elem)) {
+                        if (typeof elem === typeof target && elem.toString() === target.toString()) return;
+                    } else {
+                        _execMatch(defType.list[ii], target);
+                        return;
+                    }
+                    // _execMatch(defType.list[ii], target);
+                    // return;
                 } catch (error) {
                     continue;
                 }

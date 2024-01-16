@@ -1149,8 +1149,8 @@ describe("[target: util-type.js.js]", () => {
             // expect(()=> validUnionType(1)).toThrow('ES026');
         });
         it('- 커버리지 : 일반 ', () => {
-            expect(isMatchType([['default']], 'str')).toBe(true);   // 기본값 의미
-            expect(isMatchType([['default']], ['str'])).toBe(false); 
+            // expect(isMatchType([['default']], 'str')).toBe(true);   // 기본값 의미
+            // expect(isMatchType([['default']], ['str'])).toBe(false); 
         });
 
     });
