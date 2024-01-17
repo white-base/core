@@ -215,9 +215,53 @@ describe("[target: util-type.js.js]", () => {
         });
         describe('확장 타입 ', () => {
             it('- typeOf() : function ', () => {
-                expect(typeOf(Function)        ).toBe('function');
-                expect(typeOf(()=>{})          ).toBe('function');
-                // TODO:  POINT:
+                var type01 = Function;
+                var type02 = function(){};
+                var type03 = function(String, Number){Object};
+                var type04 = function(){[Object]};
+                var type05 = function(aa, bb){cc};
+                var type06 = ()=>{};
+                var type07 = (String)=>{return Number};
+                var type08 = (String, Boolean)=>{Number};
+                var type09 = ()=>String;
+                var type10 = String=>String;
+
+                
+                expect(typeObject(type01).name   ).toBe('function');
+                expect(typeObject(type01).params ).toEqual([]);
+                expect(typeObject(type01).return ).toEqual(undefined);
+
+                expect(typeObject(type02).name   ).toBe('function');
+                expect(typeObject(type02).params ).toEqual([]);
+                expect(typeObject(type02).return ).toEqual(undefined);
+
+                expect(typeObject(type03).name   ).toBe('function');
+                expect(typeObject(type03).params ).toEqual([String, Number]);
+                expect(typeObject(type03).return ).toEqual(Object);
+
+                expect(typeObject(type04).name   ).toBe('function');
+                expect(typeObject(type04).params ).toEqual([]);
+                expect(typeObject(type04).return ).toEqual([Object]);
+
+                expect(typeObject(type05).name   ).toBe('function');
+                expect(typeObject(type05).params ).toEqual([]);
+                expect(typeObject(type06).return ).toEqual(undefined);
+
+                expect(typeObject(type06).name   ).toBe('function');
+                expect(typeObject(type06).params ).toEqual([]);
+                expect(typeObject(type06).return ).toEqual(undefined);
+
+                expect(typeObject(type07).name   ).toBe('function');
+                expect(typeObject(type07).params ).toEqual([String]);
+                expect(typeObject(type07).return ).toEqual(Number);
+
+                expect(typeObject(type08).name   ).toBe('function');
+                expect(typeObject(type08).params ).toEqual([String]);
+                expect(typeObject(type08).return ).toEqual(Number);
+
+                expect(typeObject(type09).name   ).toBe('function');
+                expect(typeObject(type09).params ).toEqual([]);
+                expect(typeObject(type09).return ).toEqual(String);
             });
             it('- typeOf() : regexp [리터럴] ', () => {
                 var type1 = RegExp;

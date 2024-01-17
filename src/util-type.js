@@ -326,6 +326,7 @@
         }
         if (type === Function) {
             obj['name'] = 'function';
+            obj['params'] = [];
             return obj;
         }
         if (type === Object) {
