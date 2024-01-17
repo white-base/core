@@ -130,8 +130,8 @@
     }
 
     function _typeName(obj) {
-        return obj.name;
-        // if (typeof obj === 'function') return obj.name;
+        return obj['name'];
+        // if (typeof obj === 'function') return obj['name'];
         // if (typeof obj === 'object' && obj !== null) {
         //     var proto = obj.__proto__ || Object.getPrototypeOf(obj); 
         //     return  proto.constructor.name;
@@ -303,99 +303,117 @@
         }
         // seq 1 : === (operation) 
         if (type === null) {
-            obj.name = 'null';
+            obj['name'] = 'null';
             return obj;
         }
         if (type === Number) {
-            obj.name = 'number';
+            obj['name'] = 'number';
             return obj;
         }
         if (type === String) {
-            obj.name = 'string';
+            obj['name'] = 'string';
             return obj;
         }
         if (type === Boolean) {
-            obj.name = 'boolean';
+            obj['name'] = 'boolean';
             return obj;
         }
         if (type === Array) {
-            obj.name = 'array';
-            obj.kind = '_ALL_';
-            obj.list = [];
+            obj['name'] = 'array';
+            obj['kind'] = '_ALL_';
+            obj['list'] = [];
             return obj;
         }
         if (type === Function) {
-            obj.name = 'function';
+            obj['name'] = 'function';
             return obj;
         }
         if (type === Object) {
-            obj.name = 'object';
+            obj['name'] = 'object';
             return obj;
         }
         if (type === RegExp) {
-            obj.name = 'regexp';
+            obj['name'] = 'regexp';
             return obj;
         }
         if (type instanceof RegExp) {
-            obj.name = 'regexp';
-            obj.default = type;
+            obj['name'] = 'regexp';
+            obj['default'] = type;
             return obj;
         }
         if (type === Symbol) {      // ES6+
-            obj.name = 'symbol';
+            obj['name'] = 'symbol';
             return obj;
         }
         if (type === BigInt) {      // ES6+
-            obj.name = 'bigint';
+            obj['name'] = 'bigint';
             return obj;
         }
         // seq 2 : typeof
         if (typeof type === 'undefined') {
-            obj.name = 'undefined';
+            obj['name'] = 'undefined';
             return obj;
         }
         if (typeof type === 'number') {
-            obj.name = 'number';
-            obj.default = type;
+            obj['name'] = 'number';
+            obj['default'] = type;
             return obj;
         }
         if (typeof type === 'string') {
-            obj.name = 'string';
-            obj.default = type;
+            obj['name'] = 'string';
+            obj['default'] = type;
             return obj;
         }
         if (typeof type === 'boolean') {
-            obj.name = 'boolean';
-            obj.default = type;
+            obj['name'] = 'boolean';
+            obj['default'] = type;
             return obj;
         }
         if (typeof type === 'symbol') { // ES6+
-            obj.name = 'symbol';
+            obj['name'] = 'symbol';
             return obj;
         }
         if (typeof type === 'bigint') { // ES6+
-            obj.name = 'bigint';
-            obj.default = type;
+            obj['name'] = 'bigint';
+            obj['default'] = type;
             return obj;
         }
         if (typeof type === 'function') {
-            // if (type.name === 'Symbol') obj.name = 'symbol';
-            // else {
-                var kind = type['_KIND'];
-                if (kind) {
-                    kind = kind.toLowerCase();
-                    if (kind === 'class' || kind === 'interface') obj.name = 'class';
-                    if (kind === 'function') obj.name = 'function';
-                } else {
-                    obj.name = _isUpper(type.name) ? 'class' : 'function';
+            var kind = type['_KIND'];
+            if (kind) {
+                kind = kind.toLowerCase();
+                if (kind === 'class' || kind === 'interface') obj['name'] = 'class';
+                if (kind === 'function') obj['name'] = 'function';
+            } else {
+                obj['name'] = _isUpper(type.name) ? 'class' : 'function';
+            }
+            
+            if (obj['name'] === 'function') {
+                try {
+                    var funcType  = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
+                    obj['params'] = funcType['params'];
+                    obj['return'] = funcType['return'];
+                } catch (err) {
+                    obj['params'] = [];
                 }
+            }
+            // var obj =  {name: '', ref: type, default: null, kind: null};
+            // try {
+            //     type['_TYPE'] = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
+            // } catch (err) {
+            //     return;
+            //     // fixType = {
+            //     //     params: [],
+            //     //     return: null
+            //     // };
             // }
+
             return obj;
         }
-        // special type
+        // special type  => REVIEW: 명료하게 정의 필요
         if (typeof type === 'object' && type['$type']) {
             if (type['$type'] === 'function') {
-                obj.name = 'function';
+                obj['name'] = 'function';
                 obj['params'] = type['params'] || [];
                 obj['return'] = type['return'];
             } else if (type['$type'] === 'function') {
@@ -407,7 +425,7 @@
             // var _type = type['$type'];
 
             if (!_hasKind(_type)) Message.error('ES022', ['type']);
-            obj.name = _type;
+            obj['name'] = _type;
             // if (type['$kind'])
 
             return obj;
@@ -416,30 +434,30 @@
         // seq 3 : instanceof
         if (Array.isArray(type)) {
             if (type.length ===  1 && Array.isArray(type[0])) {
-                obj.name = 'choice';
-                if (type[0].length === 0) obj.kind = '_ANY_';
-                else obj.kind = _getKeyCode(type[0][0]);
-                obj.list = obj.kind ? type[0].slice(1) : type[0];
+                obj['name'] = 'choice';
+                if (type[0].length === 0) obj['kind'] = '_ANY_';
+                else obj['kind'] = _getKeyCode(type[0][0]);
+                obj['list'] = obj['kind'] ? type[0].slice(1) : type[0];
             } else {
-                obj.name = 'array';
-                if (type.length === 0) obj.kind = '_ANY_';
-                else obj.kind = _getKeyCode(type[0]);
-                obj.list = obj.kind ? type.slice(1) : type;
+                obj['name'] = 'array';
+                if (type.length === 0) obj['kind'] = '_ANY_';
+                else obj['kind'] = _getKeyCode(type[0]);
+                obj['list'] = obj['kind'] ? type.slice(1) : type;
             }
-            if (!obj.kind) obj.kind = '_OPT_';
+            if (!obj['kind']) obj['kind'] = '_OPT_';
             return obj;
         }
         // seq 4: funciton
         if (_isFillObj(type)) {
-            obj.name = 'union';
+            obj['name'] = 'union';
             return obj;
         }
         if (_isEmptyObj(type)) {        // {..}, 빈 생성자
-            obj.name = 'object';
+            obj['name'] = 'object';
             return obj;
         }
         if(_isPrimitiveObj(type)) {
-            obj.name = 'object';
+            obj['name'] = 'object';
             return obj;
         }
         Message.error('ES022', ['type']);
@@ -755,7 +773,7 @@
             Message.error('ES074', [parentName, 'number']);
         }
         if (defType.name === 'string') {
-            if (typeof defType.default === 'string' && defType.default && typeof target === 'undefined') target = defType.default;
+            if (typeof defType.default === 'string' && typeof target === 'undefined') target = defType.default;
             if (typeof target === 'string') return;
             Message.error('ES074', [parentName, 'string']);
         }
@@ -772,6 +790,12 @@
         if (defType.name === 'symbol') {    // ES6+
             if (typeof target === 'symbol') return;
             Message.error('ES074', [parentName, 'symbol']);
+        }
+        // regexp
+        if (defType.name === 'regexp') {
+            if (defType.default && defType.default instanceof RegExp && typeof target === 'undefined') target = defType.default;
+            if (target instanceof RegExp) return;
+            Message.error('ES074', [parentName, 'regexp']);
         }
         // choice
         if (defType.name === 'choice') {
@@ -867,33 +891,43 @@
         if (defType.name === 'function') {
             if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
             if (type === Function) return;
-            var fixType = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
-            var fixReturns = [];
-            var tarType = target['_TYPE'];
-            var tarArgs = [];
-            var tarReturns = [];
-            if (!fixType.return && fixType.params.length === 0) return;    // success
-            if ((fixType.return || fixType.params.length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
+            // var fixType = {};
+            // var fixReturns = [];
+            // var tarType = target['_TYPE'];
+            // var tarArgs = [];
+            // var tarReturns = [];
+
+            // try {
+            //     fixType = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
+            // } catch (err) {
+            //     return;
+            //     // fixType = {
+            //     //     params: [],
+            //     //     return: null
+            //     // };
+            // }
+
+            if (!defType.return && defType.params.length === 0) return;    // success
+            if ((defType.return || defType.params.length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
             if (typeof tarType.params === 'undefined' && typeof tarType.return === 'undefined') { 
                 Message.error('ES0710', ['target', 'function', ' {params: [], return: []} ']);
             }
-            tarArgs = (Array.isArray(tarType.params )) ? tarType.params : [tarType.params];
-            if (fixType.return) fixReturns = (Array.isArray(fixType.return )) ? fixType.return : [fixType.return]; 
-            if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];
+            // tarArgs = (Array.isArray(tarType.params )) ? tarType.params : [tarType.params];
+            // if (defType.return) fixReturns = (Array.isArray(defType.return )) ? defType.return : [defType.return]; 
+            // if (tarType.return) tarReturns = (Array.isArray(tarType.return )) ? tarType.return : [tarType.return];
             
-            if (fixType.params.length > 0) {  // params 검사
+            if (defType.params.length > 0) {  // params 검사
                 try {
-                    if (fixType.params.length > tarArgs.length) Message.error('ES0736', [fixType.params, tarArgs]);
-
-                    _execAllow(['_SEQ_'].concat(fixType.params), ['_SEQ_'].concat(tarArgs))
+                    // if (defType.params.length > tarArgs.length) Message.error('ES0736', [defType.params, tarArgs]);
+                    _execAllow(['_SEQ_'].concat(defType.params), ['_SEQ_'].concat(tarType.params));
                 } catch (error) {
                     Message.error('ES0711', ['function', 'params', error]);
                 }
             }
-            if (fixReturns.length > 0) {
+            if (defType.return) {
                 try {
-                    if (tarReturns.length === 0) Message.error('ES0737', []);
-                    _execAllow([fixReturns], [tarReturns])
+                    // if (tarReturns.length === 0) Message.error('ES0737', []);
+                    _execAllow([['_REQ_', defType.return ]], [['_REQ_', tarType.return]])
                 } catch (error) {
                     Message.error('ES0711', ['function', 'return', error]);
                 }
@@ -910,7 +944,6 @@
         }
         // class
         if (defType.name === 'class') {
-        
             if (_isBuiltFunction(type)) {
                 if (target instanceof type) return; 
                 else return Message.error('ES032', [parentName, _typeName(type)]);
