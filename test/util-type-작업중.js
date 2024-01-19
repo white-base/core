@@ -215,17 +215,38 @@ describe("[target: util-type.js.js]", () => {
         });
         describe('확장 타입 ', () => {
             it('- typeOf() : function ', () => {
-                var type01 = Function;
+                var type01 = Function; 
                 var type02 = function(){};
+                var type02 = function( ) {   }; // 공백
                 var type03 = function(String, Number){Object};
                 var type04 = function(){[Object]};
                 var type05 = function(aa, bb){cc};
+
                 var type06 = ()=>{};
-                var type07 = (String)=>{return Number};
+                var type07 = ([String])=>{return Number};
                 var type08 = (String, Boolean)=>{Number};
                 var type09 = ()=>String;
-                var type10 = String=>String;
+                var type10 = String=>Number;
+                var type11 = String=>{Number};
+                var type12 = String=>{return Number /** aaa */};
 
+                /**
+                 * - 함수
+                 *  + 익명 함수
+                 *  + return 포함 및 생략
+                 *  + 배열 리턴 
+                 * 
+                 * - 화살표 함수
+                 *  + 대괄호 생략 {}
+                 *  + 괄호 생략 ()
+                 *  + return 포함 및 생략
+                 *  + 배열 파라메터, 초이스 파라메터, 중첩 파라메터, 배열>배열, 배열>초이스, 초이스>초이스, 초이스>배열
+                 *  + 파라메터, 리터럴은 실패
+                 *  
+                 * - 공통
+                 *  + 주석 있는 경우
+                 *  + 공백 있는 경우 
+                 */
                 
                 expect(typeObject(type01).name   ).toBe('function');
                 expect(typeObject(type01).params ).toEqual([]);
@@ -252,16 +273,28 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeObject(type06).return ).toEqual(undefined);
 
                 expect(typeObject(type07).name   ).toBe('function');
-                expect(typeObject(type07).params ).toEqual([String]);
+                expect(typeObject(type07).params ).toEqual([[String]]);
                 expect(typeObject(type07).return ).toEqual(Number);
 
                 expect(typeObject(type08).name   ).toBe('function');
-                expect(typeObject(type08).params ).toEqual([String]);
+                expect(typeObject(type08).params ).toEqual([String, Boolean]);
                 expect(typeObject(type08).return ).toEqual(Number);
 
                 expect(typeObject(type09).name   ).toBe('function');
                 expect(typeObject(type09).params ).toEqual([]);
                 expect(typeObject(type09).return ).toEqual(String);
+
+                expect(typeObject(type10).name   ).toBe('function');
+                expect(typeObject(type10).params ).toEqual([String]);
+                expect(typeObject(type10).return ).toEqual(Number);
+
+                expect(typeObject(type11).name   ).toBe('function');
+                expect(typeObject(type11).params ).toEqual([String]);
+                expect(typeObject(type11).return ).toEqual(Number);
+
+                expect(typeObject(type12).name   ).toBe('function');
+                expect(typeObject(type12).params ).toEqual([String]);
+                expect(typeObject(type12).return ).toEqual(Number);
             });
             it('- typeOf() : regexp [리터럴] ', () => {
                 var type1 = RegExp;
@@ -509,7 +542,7 @@ describe("[target: util-type.js.js]", () => {
             });
 
             it('- isMatchType() : function 표기법 ', () => {
-                // POINT:
+                // POINT: allow 로 비교함
                 var type1 = function(String, Number){Boolean};
                 
                 var tar11 = function(String, Number){return Boolean}
