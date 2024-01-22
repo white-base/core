@@ -367,6 +367,7 @@ describe("[target: util-type.js.js]", () => {
                 var type5 = ['_seq_', String]
                 var type6 = ['_any_']
                 var type7 = ['_all_'] 
+                var type8 = ['_opt_', String] 
 
                 expect(typeObject(type1).name).toBe('array');
                 expect(typeObject(type1).kind).toBe('_ANY_');
@@ -391,6 +392,10 @@ describe("[target: util-type.js.js]", () => {
                 
                 expect(typeObject(type7).name).toBe('array');
                 expect(typeObject(type7).kind).toBe('_ALL_');
+
+                expect(typeObject(type8).name).toBe('array');
+                expect(typeObject(type8).kind).toBe('_OPT_');
+                expect(typeObject(type8).list).toEqual([String]);
             });
         });
     });
@@ -609,7 +614,7 @@ describe("[target: util-type.js.js]", () => {
                  * - 상속
                  * - 내장클래스 : Date
                  */
-                var type1 = function Type1(){ this.age = 1; this.fun = (aa)=>{} };
+                var type1 = function Type1(){ this.age = 1; this.fun = (a,b)=>{} };
                 var type2 = class Type2 { age = 10; fun = function(){} };
                 var type3 = Date;
 
@@ -620,7 +625,7 @@ describe("[target: util-type.js.js]", () => {
                 var tar05 = new Date();
 
                 expect(isMatchType(type1, tar01)    ).toBe(T);
-                expect(isMatchType(type1, tar02)    ).toBe(T);  // 파싱 실패    
+                expect(isMatchType(type1, tar02)    ).toBe(T);   
                 expect(isMatchType(type1, tar03)    ).toBe(T);
                 expect(isMatchType(type1, tar04)    ).toBe(false);
                 expect(isMatchType(type1, tar05)    ).toBe(false);
@@ -639,21 +644,49 @@ describe("[target: util-type.js.js]", () => {
             });
              
             it('- isMatchType() : object ', () => {
-                //
+                var type1 = {};
+                var type2 = Object;
+                var type3 = new Date;
+                var type4 = Date;  // class type
+
+                // type1
+                expect(isMatchType(type1, {})           ).toBe(T);
+                expect(isMatchType(type1, new Date)     ).toBe(T);
+                expect(isMatchType(type1, /reg/)        ).toBe(false);
+                // type2
+                expect(isMatchType(type2, {})           ).toBe(T);
+                expect(isMatchType(type2, new Date)     ).toBe(T);
+                expect(isMatchType(type2, /reg/)        ).toBe(false);
+                // type3
+                expect(isMatchType(type3, {})           ).toBe(T);
+                expect(isMatchType(type3, new Date)     ).toBe(T);
+                expect(isMatchType(type3, /reg/)        ).toBe(false);
+                // type4
+                expect(isMatchType(type4, {})           ).toBe(false);
+                expect(isMatchType(type4, new Date)     ).toBe(T);
+                expect(isMatchType(type4, /reg/)        ).toBe(false);
             });
             it('- isMatchType() : union ', () => {
-                var type1 = new function Corp() {this.age = Number};
-                var type2 = {fill:true};
-                var type3 = JSON;
-                var type4 = Math;
-                
-                // 내부에 타입을 나열해서 체크함
+                var type1 = {str: '', num: Number, }
+                var type2 = {arr: ['list']}
 
+                var tar11 = {str: 's'}
+                var tar12 = {num: 10}
+                var tar13 = {str: 's', num: 10}
+                var tar14 = {str: 10, num: 10}
+                var tar21 = {arr:['list'] }
+                var tar22 = {arr:['not'] }
+                var tar23 = {arr:[] }
+                
                  // type1
-                 expect(isMatchType(type1, {age: 1})        ).toBe(T);
-                 expect(isMatchType(type2, {fill:true})     ).toBe(T);
-                //  expect(isMatchType(type3, JSON)            ).toBe(T);
-                //  expect(isMatchType(type4, Math)            ).toBe(T);
+                expect(isMatchType(type1, tar11)      ).toBe(false);
+                expect(isMatchType(type1, tar12)      ).toBe(T);
+                expect(isMatchType(type1, tar13)      ).toBe(T);
+                expect(isMatchType(type1, tar14)      ).toBe(false);
+                // type2
+                expect(isMatchType(type2, tar21)      ).toBe(T);
+                expect(isMatchType(type2, tar22)      ).toBe(false);
+                expect(isMatchType(type2, tar23)      ).toBe(T);
             });
             
             describe('choice ', () => {
@@ -837,22 +870,157 @@ describe("[target: util-type.js.js]", () => {
             
             describe('array ', () => {
                 it('- isMatchType() : array _opt_ ', () => {
-                    //
+                    var type1 = ['_opt_', String];
+                    var type2 = [String];
+                    var type3 = [String, Number];
+                    var type4 = [String, 10];
+                    var type5 = ['aa', /reg/];
+                    var type6 = ['_opt_'];  // 내용이 없어서 실패
+
+                    // type1
+                    expect(isMatchType(type1, [])           ).toBe(T);
+                    expect(isMatchType(type1, ['str'])      ).toBe(T);
+                    expect(isMatchType(type1, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type1, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type1, [10])         ).toBe(false);
+                    expect(isMatchType(type1, [1])          ).toBe(false);
+                    expect(isMatchType(type1, undefined)    ).toBe(false);
+                    // type2
+                    expect(isMatchType(type2, [])           ).toBe(T);
+                    expect(isMatchType(type2, ['str'])      ).toBe(T);
+                    expect(isMatchType(type2, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type2, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type2, [10])         ).toBe(false);
+                    expect(isMatchType(type2, [1])          ).toBe(false);
+                    expect(isMatchType(type2, undefined)    ).toBe(false);
+                    // type3
+                    expect(isMatchType(type3, [])           ).toBe(T);
+                    expect(isMatchType(type3, ['str'])      ).toBe(T);
+                    expect(isMatchType(type3, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type3, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type3, [10])         ).toBe(T);
+                    expect(isMatchType(type3, [1])          ).toBe(T);
+                    expect(isMatchType(type3, undefined)    ).toBe(false);
+                    // type4
+                    expect(isMatchType(type4, [])           ).toBe(T);
+                    expect(isMatchType(type4, ['str'])      ).toBe(T);
+                    expect(isMatchType(type4, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type4, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type4, [10])         ).toBe(T);
+                    expect(isMatchType(type4, [1])          ).toBe(false);
+                    expect(isMatchType(type4, undefined)    ).toBe(false);
+                    // type5
+                    expect(isMatchType(type5, [])           ).toBe(T);
+                    expect(isMatchType(type5, ['str'])      ).toBe(false);
+                    expect(isMatchType(type5, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type5, [/reg/])      ).toBe(T);
+                    expect(isMatchType(type5, [10])         ).toBe(false);
+                    expect(isMatchType(type5, [1])          ).toBe(false);
+                    expect(isMatchType(type5, undefined)    ).toBe(false);
+                    // type6
+                    expect(isMatchType(type6, [])           ).toBe(false);
+                    expect(isMatchType(type6, ['str'])      ).toBe(false);
+                    expect(isMatchType(type6, ['aa'])       ).toBe(false);
+                    expect(isMatchType(type6, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type6, [10])         ).toBe(false);
+                    expect(isMatchType(type6, [1])          ).toBe(false);
+                    expect(isMatchType(type6, undefined)    ).toBe(false);
+                    
                 });
                 it('- isMatchType() : array _req_ ', () => {
-                    //
+                    var type1 = ['_req_', String];
+                    var type2 = ['_req_', String, Number];
+                    var type3 = ['_req_', String, 10];
+                    var type4 = ['_req_', 'aa', /reg/];
+                    var type5 = ['_req_'];  // 내용이 없어서 실패
+                    
+                    // type1
+                    expect(isMatchType(type1, [])           ).toBe(false);
+                    expect(isMatchType(type1, ['str'])      ).toBe(T);
+                    expect(isMatchType(type1, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type1, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type1, [10])         ).toBe(false);
+                    expect(isMatchType(type1, [1])          ).toBe(false);
+                    // type2
+                    expect(isMatchType(type2, [])           ).toBe(false);
+                    expect(isMatchType(type2, ['str'])      ).toBe(T);
+                    expect(isMatchType(type2, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type2, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type2, [10])         ).toBe(T);
+                    expect(isMatchType(type2, [1])          ).toBe(T);
+                    // type3
+                    expect(isMatchType(type3, [])           ).toBe(false);
+                    expect(isMatchType(type3, ['str'])      ).toBe(T);
+                    expect(isMatchType(type3, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type3, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type3, [10])         ).toBe(T);
+                    expect(isMatchType(type3, [1])          ).toBe(false);
+                    // type4
+                    expect(isMatchType(type4, [])           ).toBe(false);
+                    expect(isMatchType(type4, ['str'])      ).toBe(false);
+                    expect(isMatchType(type4, ['aa'])       ).toBe(T);
+                    expect(isMatchType(type4, [/reg/])      ).toBe(T);
+                    expect(isMatchType(type4, [10])         ).toBe(false);
+                    expect(isMatchType(type4, [1])          ).toBe(false);
+                    // type5
+                    expect(isMatchType(type5, [])           ).toBe(false);
+                    expect(isMatchType(type5, ['str'])      ).toBe(false);
+                    expect(isMatchType(type5, ['aa'])       ).toBe(false);
+                    expect(isMatchType(type5, [/reg/])      ).toBe(false);
+                    expect(isMatchType(type5, [10])         ).toBe(false);
+                    expect(isMatchType(type5, [1])          ).toBe(false);
                 });
                 it('- isMatchType() : array _seq_ ', () => {
-                    //
+                    var type1 = ['_seq_', String];
+                    var type2 = ['_seq_', String, Number];
+                    var type3 = ['_seq_', String, 10];
+                    var type4 = ['_seq_', 'aa', /reg/];
+                    var type5 = ['_seq_'];  // 내용이 없어서 실패
+
+                    // type1
+                    expect(isMatchType(type1, [])           ).toBe(false);
+                    expect(isMatchType(type1, ['str'])      ).toBe(T);
+                    expect(isMatchType(type1, ['aa', 1])    ).toBe(T);
+                    expect(isMatchType(type1, ['str', 10])  ).toBe(T);
+                    // type2
+                    expect(isMatchType(type2, [])           ).toBe(false);
+                    expect(isMatchType(type2, ['str'])      ).toBe(false);
+                    expect(isMatchType(type2, ['aa', 1])    ).toBe(T);
+                    expect(isMatchType(type2, ['str', 10])  ).toBe(T);
+                    // type3
+                    expect(isMatchType(type3, [])           ).toBe(false);
+                    expect(isMatchType(type3, ['aa', 1])    ).toBe(false);
+                    expect(isMatchType(type3, ['str', 10])  ).toBe(T);
+                    // type4
+                    expect(isMatchType(type4, [])           ).toBe(false);
+                    expect(isMatchType(type4, ['aa'])       ).toBe(false);
+                    expect(isMatchType(type4, ['aa', 10])   ).toBe(false);
+                    expect(isMatchType(type4, ['aa', /reg/])).toBe(T);
+                    // type5
+                    expect(isMatchType(type5, [])           ).toBe(false);
+                    expect(isMatchType(type5, ['aa', 10])   ).toBe(false);
+                    expect(isMatchType(type5, ['aa'])       ).toBe(false);
                 });
                 it('- isMatchType() : array _all_ ', () => {
-                    //
+                    var type1 = ['_all_'];
+
+                    expect(isMatchType(type1, [])           ).toBe(T);
+                    expect(isMatchType(type1, ['str'])      ).toBe(T);
+                    expect(isMatchType(type1, ['aa', 1])    ).toBe(T);
+                    expect(isMatchType(type1, ['str', 10])  ).toBe(T);
+                    expect(isMatchType(type1, undefined)    ).toBe(false);
                 });
                 it('- isMatchType() : array _any_ ', () => {
-                    //
+                    var type1 = ['_any_'];
+
+                    expect(isMatchType(type1, [])           ).toBe(false);
+                    expect(isMatchType(type1, ['str'])      ).toBe(T);
+                    expect(isMatchType(type1, ['aa', 1])    ).toBe(T);
+                    expect(isMatchType(type1, ['str', 10])  ).toBe(T);
+                    expect(isMatchType(type1, undefined)    ).toBe(false);
                 });
                 it('- isMatchType() : array 리터럴 ', () => {
-                    //
+                    // 이전에서 체크 하였음
                 });
             });
 

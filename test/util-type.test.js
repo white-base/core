@@ -886,8 +886,8 @@ describe("[target: util-type.js.js]", () => {
             // _any_
             expect(isMatchType(['_any_'],   [1, 'str']  )).toBe(T);
             expect(isMatchType(['_any_'],   [0]         )).toBe(T);
-            expect(isMatchType(['_any_'],   []          )).toBe(T);
-            expect(isMatchType(['_any_'],   [undefined] )).toBe(false);
+            expect(isMatchType(['_any_'],   []          )).toBe(false);
+            expect(isMatchType(['_any_'],   [undefined] )).toBe(T);
             expect(isMatchType(['_any_'],   10          )).toBe(false);
             // _seq_
             expect(isMatchType(['_seq_'], ['str']           )).toBe(false);
@@ -920,7 +920,7 @@ describe("[target: util-type.js.js]", () => {
             // 예외 오류 코드
             expect(()=> matchType([],           10                  )).toThrow(/ES024/)
             expect(()=> matchType(Array,        10                  )).toThrow(/ES024/)
-            expect(()=> matchType(['_any_'],    [undefined]         )).toThrow(/ES075/)
+            // expect(()=> matchType(['_any_'],    [undefined]         )).toThrow(/ES075/)
             expect(()=> matchType(['_any_'],    10                  )).toThrow(/ES024/)
             expect(()=> matchType(['_seq_'],    10                  )).toThrow(/ES0729/) 
             expect(()=> matchType(['_seq_', String, Number], [10, 'str'])).toThrow(/ES074/)

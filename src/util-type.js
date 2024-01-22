@@ -842,7 +842,7 @@
                     if (_isLiteral(elem)) {
                         if (typeof elem === typeof target && elem.toString() === target.toString()) return;
                     } else {
-                        _execMatch(defType['list'][ii], target);
+                        _execMatch(elem, target);
                         return;
                     }
                     // _execMatch(defType['list'][ii], target);
@@ -861,16 +861,24 @@
             if (defType['kind'] == '_ALL_') {
                 return;
             } else if (defType['kind'] == '_ANY_') {
-                for(var ii = 0; ii < target.length; ii++) {
-                    var tar = target[ii];
-                    if (typeof tar === 'undefined') Message.error('ES075', ['array', '_ANY_', 'undefined']);
-                }
+                if (target.length === 0) throw new Error('array any 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
+                // for(var ii = 0; ii < target.length; ii++) {
+                //     var tar = target[ii];
+                //     if (typeof tar === 'undefined') Message.error('ES075', ['array', '_ANY_', 'undefined']);
+                // }
                 return;
             } else if (defType['kind'] == '_SEQ_') {
                 for(var i = 0; i < defType['list'].length; i++) {
+                    var elem = defType['list'][i];
                     var tar = tarType['list'][i];
                     if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
-                    _execMatch(defType['list'][i], tar);
+                    // _execMatch(defType['list'][i], tar);
+                    if (_isLiteral(elem)) {
+                        if (typeof elem !== typeof tar || elem.toString() !== tar.toString()) throw new Error('array seq 리터럴 타입이 다릅니다.');
+                    } else {
+                        if (_execMatch(elem, tar)) throw new Error('array seq 타입이 다릅니다.');
+                        // return;
+                    }
                 }
                 return;
             } else if (defType['kind'] == '_REQ_') {
@@ -882,10 +890,16 @@
                 if (Array.isArray(target) && target.length === 0) return;
             }
             for (var i = 0; i < target.length; i++) {
+                var tar = target[i];
                 for (var ii = 0; ii < defType['list'].length; ii++) {
                     try {
-                        _execMatch(defType['list'][ii], tarType['list'][i]);
-                        return;
+                        var elem = defType['list'][ii];
+                        if (_isLiteral(elem)) {
+                            if (typeof elem === typeof tar && elem.toString() === tar.toString()) return;
+                        } else {
+                            _execMatch(elem, tar);
+                            return;
+                        }
                     } catch (error) {
                         continue;
                     }
