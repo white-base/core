@@ -214,7 +214,7 @@ describe("[target: util-type.js.js]", () => {
             });
         });
         describe('확장 타입 ', () => {
-            it('- typeOf() : function ', () => {
+            it('- typeObject() : function ', () => {
                 var type01 = Function; 
                 var type02 = function(){};
                 var type02 = function( ) {   }; // 공백
@@ -229,6 +229,10 @@ describe("[target: util-type.js.js]", () => {
                 var type10 = String=>Number;
                 var type11 = String=>{Number};
                 var type12 = String=>{return Number /** aaa */};
+
+                var type13 = function func (aa, bb){cc};
+                var type14 = function func(String){Number};
+                var type15 = function func(String){return Number};
 
                 /**
                  * - 함수
@@ -295,8 +299,59 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeObject(type12).name   ).toBe('function');
                 expect(typeObject(type12).params ).toEqual([String]);
                 expect(typeObject(type12).return ).toEqual(Number);
+
+                expect(typeObject(type13).name   ).toBe('function');
+                expect(typeObject(type13).params ).toEqual([]);
+                expect(typeObject(type13).return ).toEqual(undefined);
+
+                expect(typeObject(type14).name   ).toBe('function');
+                expect(typeObject(type14).params ).toEqual([String]);
+                expect(typeObject(type14).return ).toEqual(Number);
+
+                expect(typeObject(type15).name   ).toBe('function');
+                expect(typeObject(type15).params ).toEqual([String]);
+                expect(typeObject(type15).return ).toEqual(Number);
             });
-            it('- typeOf() : regexp [리터럴] ', () => {
+            it('- typeObject() : function [특수객체] ', () => {
+                var type1 = ()=>{}; 
+                var type1 = ()=>{}; 
+                var type1 = ()=>{}; 
+                var type1 = ()=>{}; 
+                var type1 = ()=>{}; 
+                
+                /**
+                 * 조건
+                 * - params 는 무조건 배열이어야 한다.
+                 */
+                type1._TYPE = {params: [String]};           // 타입
+                type1._TYPE = {params: ['aa']};             // 선택, 기본값
+                type1._TYPE = {params: [[['aa']]]};         // 선택, 리터럴
+                type1._TYPE = {params: [[[String]]]};       // 선택, 타입
+                type1._TYPE = {params: [Function]};         // 함수 타입
+                type1._TYPE = {params: [String => Number]}; // 함수 구문
+                
+                type1._TYPE = {params: String};                 // 배열 아님    >> 오류
+                type1._TYPE = {params: [[String]]};             // >> 혼선
+                type1._TYPE = {params: [[ [[String, Number]] ]]};   // 초이스 > 초이스
+                type1._TYPE = {params: [[ [String, Number] ]]};   // 초이스 > 배열
+                type1._TYPE = {params: [[String], Number]};     // 배열임   >> 오류
+                
+                /**
+                 * 구문을 단축하면, 구문이 모호해지는 단점이 발생한다.
+                 * 구문이 단축되는 장점이 있다, 하지만 배열을 사용시 명시적으로 구현해야 한다.
+                 */
+                type1._TYPE = {params: [[[String, Number]], Number]};             // 배열 아님    >> 혼선
+
+
+                type1._TYPE = {return: [['_non_']]};    // 리턴에 non
+                type1._TYPE = {return: [[String, Number]]};    // 리턴에 non
+                type1._TYPE = {return: [String]};    // 리턴에 string
+
+
+
+            
+            });
+            it('- typeObject() : regexp [리터럴] ', () => {
                 var type1 = RegExp;
                 var type2 = /reg/;
 
@@ -306,7 +361,7 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeObject(type2).name   ).toBe('regexp');
                 expect(typeObject(type2).default).toEqual(/reg/);
             });
-            it('- typeOf() : choice ', () => {
+            it('- typeObject() : choice ', () => {
                 var type01 = [[String]]
                 var type02 = [[String, Number]]
                 var type03 = [['_opt_', String]]
@@ -359,7 +414,7 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeObject(type11).kind).toBe('_DEF_');
                 expect(typeObject(type11).list).toEqual(['blue', 'red']);
             });
-            it('- typeOf() : array ', () => {
+            it('- typeObject() : array ', () => {
                 var type1 = [];
                 var type2 = Array;
                 var type3 = [String]
@@ -560,7 +615,7 @@ describe("[target: util-type.js.js]", () => {
             });
             it('- isMatchType() : function ', () => {
                 var type1 = Function;
-                var type2 = ()=>{}
+                var type2 = ()=>{};
                 var type3 = (String, Number)=>{Object}
                 
                 var tar01 = ()=>{};
@@ -695,9 +750,9 @@ describe("[target: util-type.js.js]", () => {
                     var type2 = [[String, Number]];
                     var type3 = [[String, 10]];
                     var type4 = [['aa', /reg/]];
-                    var type5 = [['_opt_']];
+                    var type5 = [['_opt_']];  
 
-                    // type1
+                    // type1 
                     expect(isMatchType(type1, '')           ).toBe(T);
                     expect(isMatchType(type1, 10)           ).toBe(false);
                     expect(isMatchType(type1, undefined)    ).toBe(T);
