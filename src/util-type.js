@@ -290,8 +290,8 @@
         obj['$type'] = typeObj['$type'];
         // obj['ref'] = typeObj['ref'];
         
-        if (typeObj['default']) obj['default'] = typeObj['default'];
-        if (typeObj['kind']) obj['kind'] = typeObj['kind'];
+        if (typeObj['default'] !== null) obj['default'] = typeObj['default'];
+        if (typeObj['kind'] !== null) obj['kind'] = typeObj['kind'];
         if (typeObj['params']) obj['params'] = typeObj['params'];
         if (typeObj['return']) obj['return'] = typeObj['return'];
         // if (typeObj['list']) obj['list'] = typeObj['list'];
@@ -318,8 +318,8 @@
         if (obj['$type'] === 'class') {
             obj['name'] = typeObj['ref'].name;
             // obj['_union'] = {};
-            var temp = _creator(obj['ref']);
-            obj['_instance'] = typeDetail(temp);
+            var temp = _creator(typeObj['ref']);
+            obj['instance'] = typeDetail(temp);
             // var list = getAllProperties(temp);
             // for (var i = 0; i < list.length; i++) {
             //     var key = list[i];
@@ -329,12 +329,13 @@
             // return obj;
         }
         if (obj['$type'] === 'union') {
-            var temp = obj['ref'];
+            // obj['val'] = {};
+            var temp = typeObj['ref'];
             var list = getAllProperties(temp);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-                obj['val'][key] = typeDetail(temp[key]);
+                obj[key] = typeDetail(temp[key]);
             }
             // return obj;
         }
