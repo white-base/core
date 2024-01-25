@@ -19,7 +19,7 @@ const { BaseColumn } = require('../src/base-column');
 
 //==============================================================
 // test
-describe.skip("[target: meta-row.js]", () => {
+describe("[target: meta-row.js]", () => {
     describe("MetaRow :: 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();

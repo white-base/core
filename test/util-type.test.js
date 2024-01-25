@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const {typeObject, typeOf}  = require('../src/util-type');
+const {getType, typeOf}  = require('../src/util-type');
 const {isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 const T = true;
@@ -28,15 +28,15 @@ describe("[target: util-type.js.js]", () => {
             expect(typeOf(Number)          ).toBe('number');
             expect(typeOf(1)               ).toBe('number');
             expect(typeOf(NaN)             ).toBe('number');
-            expect(typeObject(2).default     ).toBe(2);
+            expect(getType(2).default     ).toBe(2);
             // string
             expect(typeOf(String)          ).toBe('string');
             expect(typeOf('str')           ).toBe('string');
-            expect(typeObject('str').default ).toBe('str');
+            expect(getType('str').default ).toBe('str');
             // boolean
             expect(typeOf(Boolean)         ).toBe('boolean');
             expect(typeOf(true)            ).toBe('boolean');
-            expect(typeObject(true).default  ).toBe(true);
+            expect(getType(true).default  ).toBe(true);
             // Symbol (ES6+)
             expect(typeOf(Symbol)          ).toBe('symbol');
             expect(typeOf(Symbol('a'))     ).toBe('symbol');

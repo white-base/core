@@ -282,9 +282,9 @@
      * 타입의 세부 정보
      * @param {*} type 
      */
-    var typeDetail = function(type) {
+    var typeObject = function(type) {
         var obj = {};
-        var typeObj = typeObject(type);
+        var typeObj = getType(type);
         var leafType = ['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint', 'object', 'regexp'];
 
         obj['$type'] = typeObj['$type'];
@@ -304,27 +304,27 @@
         if (obj['$type'] === 'array' ||  obj['$type'] === 'choice') {
             obj['list'] = [];
             for(var i = 0; i < typeObj['list'].length; i++) {
-                obj['list'][i] = typeDetail(typeObj['list'][i]);
+                obj['list'][i] = typeObject(typeObj['list'][i]);
             }
             // return obj;
         }
         if (obj['$type'] === 'function') {
             for(var i = 0; i < obj['params'].length; i++) {
-                obj['params'][i] = typeDetail(typeObj['params'][i]);
+                obj['params'][i] = typeObject(typeObj['params'][i]);
             }
-            if (typeObj['return']) obj['return'] = typeDetail(typeObj['return']);
+            if (typeObj['return']) obj['return'] = typeObject(typeObj['return']);
             // return obj;
         }
         if (obj['$type'] === 'class') {
-            obj['name'] = typeObj['ref'].name;
+            obj['creator'] = typeObj['ref'].name; 
             // obj['_union'] = {};
             var temp = _creator(typeObj['ref']);
-            obj['instance'] = typeDetail(temp);
+            obj['_instance'] = typeObject(temp);
             // var list = getAllProperties(temp);
             // for (var i = 0; i < list.length; i++) {
             //     var key = list[i];
             //     if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-            //     obj['_union'][key] = typeDetail(temp[key]);
+            //     obj['_union'][key] = typeObject(temp[key]);
             // }
             // return obj;
         }
@@ -335,7 +335,7 @@
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-                obj[key] = typeDetail(temp[key]);
+                obj[key] = typeObject(temp[key]);
             }
             // return obj;
         }
@@ -353,7 +353,7 @@
      * @param {any} type 대상타입
      * @returns {object} {name: string, default: [null, any]}
      */
-    var typeObject = function(type) {
+    var getType = function(type) {
         var obj =  {$type: '', ref: type, default: null, kind: null};
 
         obj.toString = function(){
@@ -361,8 +361,8 @@
             var arr = [];
             if (this['$type'] === 'array' || this['$type'] === 'choice') {
                 for (var i = 0; i < this['list'].length; i++) {
-                    var _type = typeObject(this['list'][i]);
-                    if (_type['kind']) arr.push(typeObject(this['list'][i]).toString());
+                    var _type = getType(this['list'][i]);
+                    if (_type['kind']) arr.push(getType(this['list'][i]).toString());
                     else arr.push(_type['$type']);
                 }
                 temp = arr.join(',');
@@ -524,7 +524,7 @@
      * @returns {string}
      */
     var typeOf = function (type) {
-        return typeObject(type)['$type'];
+        return getType(type)['$type'];
     };
 
     /**
@@ -536,8 +536,8 @@
      * @returns {throw?}
      */
     var _execAllow = function (ori, tar) {
-        var oriDef = typeObject(ori);
-        var tarDef = typeObject(tar);
+        var oriDef = getType(ori);
+        var tarDef = getType(tar);
         
         if (_isObject(oriDef['ref']) &&  _isObject(tarDef['ref']) && deepEqual(oriDef, tarDef)) return;
         // ori seq, opt 필수 검사
@@ -632,7 +632,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['choice(_OPT_)', typeObject(arrTarget[i])['$type']]);
+                    if (!success) Message.error('ES0738', ['choice(_OPT_)', getType(arrTarget[i])['$type']]);
                 }
                 return;
 
@@ -654,7 +654,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['_OPT_', typeObject(arrTarget[i])['$type']]);
+                    if (!success) Message.error('ES0738', ['_OPT_', getType(arrTarget[i])['$type']]);
                 }
                 return;                
             } else {
@@ -703,7 +703,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_REQ_)', typeObject(tarDef['list'][i])['$type']]);
+                    if (!success) Message.error('ES0738', ['array(_REQ_)', getType(tarDef['list'][i])['$type']]);
                 }
                 return;
             
@@ -720,7 +720,7 @@
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_OPT_)', typeObject(tarDef['list'][i])['$type']]);
+                    if (!success) Message.error('ES0738', ['array(_OPT_)', getType(tarDef['list'][i])['$type']]);
                 }
 
             } else {              
@@ -801,8 +801,8 @@
         var parentName = parentName ? parentName : 'this';
         var defType, tarType;
 
-        defType = typeObject(type);
-        tarType = typeObject(target);
+        defType = getType(type);
+        tarType = getType(target);
 
         // ori seq, opt 필수 검사
         if (defType['kind']) {
@@ -1026,7 +1026,7 @@
             var list = getAllProperties(defType.ref);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                var listDefType = typeObject(type[key]);
+                var listDefType = getType(type[key]);
                 // REVIEW: for 위쪽으로 이동 검토!
                 if (!_isObject(target)) return Message.error('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
@@ -1117,8 +1117,8 @@
     if (isNode) {     
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
+        exports.getType = getType;
         exports.typeObject = typeObject;
-        exports.typeDetail = typeDetail;
         exports.typeOf = typeOf;
         exports.matchType = matchType;
         exports.allowType = allowType;
@@ -1128,8 +1128,8 @@
         var ns = {
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
+            getType: getType,
             typeObject: typeObject,
-            typeDetail: typeDetail,
             typeOf: typeOf,
             matchType: matchType,
             allowType: allowType,
