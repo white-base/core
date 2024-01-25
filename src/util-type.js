@@ -116,6 +116,21 @@
     }
 
     /**
+     * 리터럴값 비교
+     * @param {*} obj1 
+     * @param {*} obj2 
+     * @returns 
+     */
+    function _equalLiternal(obj1, obj2) {
+        // var primitiveType = ['number', 'string', 'boolean', 'bigint'];
+        // if (typeof obj1 !== typeof obj2) return false; 
+        // if (primitiveType.indexOf(typeof obj1) > -1 && obj1 === obj2) return true;
+        if (obj1 === obj2) return true;
+        if (obj1 instanceof RegExp && obj2 instanceof RegExp && obj1.source === obj2.source) return true;
+        return false;
+    }
+
+    /**
      * function 생성하는 생성자
      * @param {*} type 
      * @returns {object}
@@ -581,13 +596,16 @@
             if (oriDef['kind'] === '_ANY_' && (tarDef['kind'] === '_ANY_')) return;
         }
 
-        // primitive
-        if (['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint'].indexOf(oriDef['$type']) > -1) {
-            if(oriDef['default'] !== null && oriDef['default'] !== tarDef['default']) {
+        // primitive TODO: regexp 들어가야함
+        if (['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint', 'regexp'].indexOf(oriDef['$type']) > -1) {
+            // if(oriDef['default'] !== null && oriDef['default'] !== tarDef['default']) {
+            //     Message.error('ES0712', [oriDef['$type'], oriDef['default'], tarDef['default']]);
+            // }
+            if(oriDef['default'] !== null && !_equalLiternal(oriDef['default'], tarDef['default'])) {
                 Message.error('ES0712', [oriDef['$type'], oriDef['default'], tarDef['default']]);
             }
             if (oriDef['$type'] === tarDef['$type']) return;
-                Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
+            Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
         }
         // choice
         if (oriDef['$type'] === 'choice') {   
@@ -750,17 +768,19 @@
         }
         // object
         if (oriDef['$type'] === 'object') {
-            if (tarDef['$type'] !== 'object') Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
-            if (oriDef['ref'] === tarDef['ref']) return;
-            if (_isEmptyObj(tarDef['ref'])) return;
-            if (oriDef['ref'] instanceof RegExp) {
-                if (tarDef['ref'] instanceof RegExp && oriDef['ref'].source === tarDef['ref'].source) return;
-                Message.error('ES0723', [oriDef['ref'].source, tarDef['ref'].source]);
-            }
-            if (oriDef['ref'] instanceof Date) {
-                if (tarDef['ref'] instanceof Date && oriDef['ref'].getTime() === tarDef['ref'].getTime()) return;
-                Message.error('ES0723', [oriDef['ref'].source, tarDef['ref'].source]);
-            }
+            // if (tarDef['$type'] !== 'object') Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
+            if (tarDef['$type'] === 'object' || tarDef['$type'] === 'union') return;
+            
+            // if (oriDef['ref'] === tarDef['ref']) return;
+            // if (_isEmptyObj(tarDef['ref'])) return;
+            // if (oriDef['ref'] instanceof RegExp) {
+            //     if (tarDef['ref'] instanceof RegExp && oriDef['ref'].source === tarDef['ref'].source) return;
+            //     Message.error('ES0723', [oriDef['ref'].source, tarDef['ref'].source]);
+            // }
+            // if (oriDef['ref'] instanceof Date) {
+            //     if (tarDef['ref'] instanceof Date && oriDef['ref'].getTime() === tarDef['ref'].getTime()) return;
+            //     Message.error('ES0723', [oriDef['ref'].source, tarDef['ref'].source]);
+            // }
             Message.error('ES0718', ['object']);
         }
         // class
@@ -837,7 +857,7 @@
             Message.error('ES074', [parentName, 'boolean']);
         }
         if (defType['$type'] === 'bigint') {    // ES6+
-            if (defType['default'] && typeof target === 'undefined') target = defType['default'];
+            if (typeof defType['default'] === 'bigint' && typeof target === 'undefined') target = defType['default'];
             if (typeof target === 'bigint') return;
             Message.error('ES074', [parentName, 'bigint']);
         }
@@ -886,12 +906,19 @@
                 try {
                     // POINT:
                     var elem = defType['list'][ii];
+                    // if (_isLiteral(elem)) {
+                    //     if (typeof elem === typeof target && elem.toString() === target.toString()) return;
+                    // } else {
+                    //     _execMatch(elem, target);
+                    //     return;
+                    // }
                     if (_isLiteral(elem)) {
-                        if (typeof elem === typeof target && elem.toString() === target.toString()) return;
+                        if (_equalLiternal(elem, target)) return;
                     } else {
                         _execMatch(elem, target);
                         return;
                     }
+
                     // _execMatch(defType['list'][ii], target);
                     // return;
                 } catch (error) {
@@ -921,7 +948,8 @@
                     if (typeof tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
                     // _execMatch(defType['list'][i], tar);
                     if (_isLiteral(elem)) {
-                        if (typeof elem !== typeof tar || elem.toString() !== tar.toString()) throw new Error('array seq 리터럴 타입이 다릅니다.');
+                        // if (typeof elem !== typeof tar || elem.toString() !== tar.toString()) throw new Error('array seq 리터럴 타입이 다릅니다.');
+                        if (!_equalLiternal(elem, tar)) throw new Error('array seq 리터럴 타입이 다릅니다.');
                     } else {
                         if (_execMatch(elem, tar)) throw new Error('array seq 타입이 다릅니다.');
                         // return;
@@ -942,7 +970,8 @@
                     try {
                         var elem = defType['list'][ii];
                         if (_isLiteral(elem)) {
-                            if (typeof elem === typeof tar && elem.toString() === tar.toString()) return;
+                            // if (typeof elem === typeof tar && elem.toString() === tar.toString()) return;
+                            if (_equalLiternal(elem, tar)) return;
                         } else {
                             _execMatch(elem, tar);
                             return;
@@ -995,7 +1024,8 @@
             if (defType['return']) {
                 try {
                     // if (tarReturns.length === 0) Message.error('ES0737', []);
-                    _execAllow([['_REQ_', defType['return'] ]], [['_REQ_', tarType['return']]])
+                    // _execAllow([['_REQ_', defType['return'] ]], [['_REQ_', tarType['return']]])
+                    _execAllow(defType['return'], tarType['return']);
                 } catch (error) {
                     Message.error('ES0711', ['function', 'return', error]);
                 }

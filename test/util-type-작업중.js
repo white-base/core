@@ -15,73 +15,98 @@ describe("[target: util-type.js.js]", () => {
         jest.resetModules();
     });
     describe('typeOf(target): str <타입 얻기> ', () => {
+        it('- typeOf() : 예외 ', () => {
+            var type1 = {$type: 'Not_Type'}
+            expect(()=> typeOf(type1)).toThrow('ES022')
+        });
         describe('원시 타입 ', () => {
             it('- typeOf() : undefined ', () => {
-                var type1;
-                var type2 = undefined;
+                var type0 = {$type: 'undefined'}
+                var type1
+                var type2 = undefined
 
+                expect(typeOf(type0)).toBe('undefined');
                 expect(typeOf(type1)).toBe('undefined');
                 expect(typeOf(type2)).toBe('undefined');
             });
             it('- typeOf() : null ', () => {
+                var type0 = {$type: 'null'}
                 var type1 = null;
-                
-                expect(typeOf(type1)).toBe('null');
+            
+                expect(typeOf(type0)).toBe('null')
+                expect(typeOf(type1)).toBe('null')
             });
             it('- typeOf() : string [리터럴] ', () => {
-                var type1 = String;
-                var type2 = 'str';  // 리터럴
+                var type0 = {$type: 'string'}
+                var type1 = String
+                var type2 = 'str'  // 리터럴
                 
+                expect(typeOf(type0)).toBe('string');
                 expect(typeOf(type1)).toBe('string');
                 expect(typeOf(type2)).toBe('string');
             });
             it('- typeOf() : number [리터럴] ', () => {
+                var type0 = {$type: 'number'}
                 var type1 = Number;
                 var type2 = 2;      // 리터럴
                 var type3 = NaN;    // 리터럴
 
+                expect(typeOf(type0)).toBe('number');
                 expect(typeOf(type1)).toBe('number');
                 expect(typeOf(type2)).toBe('number');
                 expect(typeOf(type3)).toBe('number');
             });
             it('- typeOf() : boolean [리터럴] ', () => {
+                var type0 = {$type: 'boolean'}
                 var type1 = Boolean;
                 var type2 = true;      // 리터럴
                 var type3 = false;     // 리터럴
 
+                expect(typeOf(type0)).toBe('boolean');
                 expect(typeOf(type1)).toBe('boolean');
                 expect(typeOf(type2)).toBe('boolean');
                 expect(typeOf(type3)).toBe('boolean');
             });
             it('- typeOf() : bigint [리터럴] (ES6+) ', () => {
+                var type0 = {$type: 'bigint'}
                 var type1 = BigInt;
                 var type2 = BigInt(100);    // 리터럴
                 var type3 = 100n;           // 리터럴
 
+                expect(typeOf(type0)).toBe('bigint');
                 expect(typeOf(type1)).toBe('bigint');
                 expect(typeOf(type2)).toBe('bigint');
                 expect(typeOf(type3)).toBe('bigint');
             });
             it('- typeOf() : symbol (ES6+) ', () => {
+                var type0 = {$type: 'symbol'}
                 var type1 = Symbol;
                 var type2 = Symbol('a');    // 리터럴로 취급 안함
                 
+                expect(typeOf(type0)).toBe('symbol');
                 expect(typeOf(type1)).toBe('symbol');
                 expect(typeOf(type2)).toBe('symbol');
             });
         });
         describe('확장 타입 ', () => {
             it('- typeOf() : function ', () => {
-                expect(typeOf(Function)        ).toBe('function');
-                expect(typeOf(()=>{})          ).toBe('function');
+                var type0 = {$type: 'function'}
+                var type1 = function(){};
+                var type2 = ()=>{};
+
+                expect(typeOf(type0)).toBe('function');
+                expect(typeOf(type1)).toBe('function');
+                expect(typeOf(type2)).toBe('function');
             });
             it('- typeOf() : class ', () => {
+                var type0 = {$type: 'class'}
                 var type1 = function Corp() {this.nm = 1};
                 var type2 = function User() {};
                 var type3 = Date;
                 var type4 = Promise;
                 var type5 = Error;
 
+                expect(typeOf(type0)).toBe('class');
                 expect(typeOf(type1)).toBe('class');
                 expect(typeOf(type2)).toBe('class');
                 expect(typeOf(type3)).toBe('class');
@@ -89,33 +114,40 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeOf(type5)).toBe('class');
             });
             it('- typeOf() : regexp [리터럴] ', () => {
+                var type0 = {$type: 'regexp'}
                 var type1 = RegExp;
                 var type2 = /reg/;
 
+                expect(typeOf(type0)).toBe('regexp');
                 expect(typeOf(type1)).toBe('regexp');
                 expect(typeOf(type2)).toBe('regexp');
             });
             it('- typeOf() : object ', () => {
+                var type0 = {$type: 'object'}
                 var type1 = new function User() {};
                 var type2 = new Date();
                 var type3 = {};
 
+                expect(typeOf(type0)).toBe('object');
                 expect(typeOf(type1)).toBe('object');
                 expect(typeOf(type2)).toBe('object');
                 expect(typeOf(type3)).toBe('object');
             });
             it('- typeOf() : union ', () => {
+                var type0 = {$type: 'union'}
                 var type1 = new function Corp() {this.nm = 1};
                 var type2 = {fill:true};
                 var type3 = JSON;
                 var type4 = Math;
 
+                expect(typeOf(type0)).toBe('union');
                 expect(typeOf(type1)).toBe('union');
                 expect(typeOf(type2)).toBe('union');
                 expect(typeOf(type3)).toBe('union');
                 expect(typeOf(type4)).toBe('union');
             });
             it('- typeOf() : choice ', () => {
+                var type00 = {$type: 'choice'}
                 var type01 = [[String]]
                 var type02 = [[String, Number]]
                 var type03 = [['_opt_', String]]
@@ -128,6 +160,7 @@ describe("[target: util-type.js.js]", () => {
                 var type10 = [['_eum_', 'blue', 'red']]
                 var type11 = [['_def_', 'blue', 'red']]
 
+                expect(typeOf(type00)).toBe('choice');
                 expect(typeOf(type01)).toBe('choice');
                 expect(typeOf(type02)).toBe('choice');
                 expect(typeOf(type03)).toBe('choice');
@@ -141,6 +174,7 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeOf(type11)).toBe('choice');
             });
             it('- typeOf() : array ', () => {
+                var type0 = {$type: 'array'}
                 var type1 = [];
                 var type2 = Array;
                 var type3 = [String]
@@ -149,6 +183,7 @@ describe("[target: util-type.js.js]", () => {
                 var type6 = ['_any_']
                 var type7 = ['_all_'] 
 
+                expect(typeOf(type0)).toBe('array');
                 expect(typeOf(type1)).toBe('array');
                 expect(typeOf(type2)).toBe('array');
                 expect(typeOf(type3)).toBe('array');
@@ -236,24 +271,6 @@ describe("[target: util-type.js.js]", () => {
                 var type14 = function func(String){Number};
                 var type15 = function func(String){return Number};
 
-                /**
-                 * - 함수
-                 *  + 익명 함수
-                 *  + return 포함 및 생략
-                 *  + 배열 리턴 
-                 * 
-                 * - 화살표 함수
-                 *  + 대괄호 생략 {}
-                 *  + 괄호 생략 ()
-                 *  + return 포함 및 생략
-                 *  + 배열 파라메터, 초이스 파라메터, 중첩 파라메터, 배열>배열, 배열>초이스, 초이스>초이스, 초이스>배열
-                 *  + 파라메터, 리터럴은 실패
-                 *  
-                 * - 공통
-                 *  + 주석 있는 경우
-                 *  + 공백 있는 경우 
-                 */
-                
                 expect(getType(type01).$type   ).toBe('function');
                 expect(getType(type01).params ).toEqual([]);
                 expect(getType(type01).return ).toEqual(undefined);
@@ -597,13 +614,13 @@ describe("[target: util-type.js.js]", () => {
                 var type07 = [['_any_']]
                 var type08 = [[]];   // any
                 var type09 = [['_non_']]
-                var type10 = [['_eum_', 'blue', 'red']]
-                var type11 = [['_def_', 'blue', 'red']]
+                var type10 = [['_eum_', 'blue', 10]]
+                var type11 = [['_def_', 'blue', 10]]
 
                 var str1 = {$type: 'string'}
                 var str2 = {$type: 'string', default: 'blue'}
-                var str3 = {$type: 'string', default: 'red'}
                 var num1 = {$type: 'number'}
+                var num2 = {$type: 'number', default: 10}
                 var obj1 = {$type: 'object'}
                 var opt1 = {$type: 'choice', kind: '_OPT_', list: [str1]};
                 var opt2 = {$type: 'choice', kind: '_OPT_', list: [str1, num1]};
@@ -611,8 +628,8 @@ describe("[target: util-type.js.js]", () => {
                 var all1 = {$type: 'choice', kind: '_ALL_', list: []};
                 var any1 = {$type: 'choice', kind: '_ANY_', list: []};
                 var non1 = {$type: 'choice', kind: '_NON_', list: []};
-                var eum1 = {$type: 'choice', kind: '_EUM_', list: [str2, str3]};
-                var def1 = {$type: 'choice', kind: '_DEF_', list: [str2, str3]};
+                var eum1 = {$type: 'choice', kind: '_EUM_', list: [str2, num2]};
+                var def1 = {$type: 'choice', kind: '_DEF_', list: [str2, num2]};
 
                 expect(typeObject(type01)).toEqual(opt1);
                 expect(typeObject(type02)).toEqual(opt2);
@@ -657,20 +674,21 @@ describe("[target: util-type.js.js]", () => {
             });
             it('- typeObject() : function ', () => {
                 var type01 = Function; 
+                // 일반 함수, 표현식
                 var type02 = function(){};
                 var type03 = function(String, Number){Object};
-                var type04 = function(){[Object]};
+                var type04 = function(){[Object]};                  // 배열 리턴
                 var type05 = function(aa, bb){cc};
-
+                // 화살표 함수, 표현식
                 var type11 = ()=>{};
-                var type12 = ([String])=>{return Number};
+                var type12 = ([String])=>{return Number};           // 배열 타입, 리턴
                 var type13 = (String, Boolean)=>{Number};
                 var type14 = ()=>String;
-                var type15 = String=>Number;
+                var type15 = String=>Number;                        // 괄호 생략
                 var type16 = String=>{Number};
-                var type17 = String=>{return Number /** aaa */};
-
-                var type21 = function func (aa, bb){cc};
+                var type17 = String=>{return Number /** aaa */};    // 리턴, 주석
+                // 일반 함수, 선언문
+                var type21 = function func (aa, bb){cc};            // 비 해석문
                 var type22 = function func(String){Number};
                 var type23 = function func(String){return Number};
 
@@ -730,31 +748,45 @@ describe("[target: util-type.js.js]", () => {
             });
             it('- isMatchType() : string [리터럴] ', () => {
                 var type1 = String;
-                var type2 = 'str';
+                var type2 = 'str'; 
                 var type3 = {a: 'str'};
+                var type4 = [[String]];
+                var type5 = [['str']];
                 
-                var tar01 = {a: undefined};
+                var tar01 = {a: undefined}; 
                 var tar02 = {};
 
                 expect(isMatchType(type1, '')       ).toBe(T);
                 expect(isMatchType(type1, undefined)).toBe(false);                
                 expect(isMatchType(type1, 0)        ).toBe(false);
                 expect(isMatchType(type1, String)   ).toBe(false);
-                // 리터럴
+                // 기본값
                 expect(isMatchType(type2, '')       ).toBe(T);
                 expect(isMatchType(type2, undefined)).toBe(T);
                 expect(isMatchType(type2, 0)        ).toBe(false);
                 expect(isMatchType(type2, String)   ).toBe(false);
-                // 기본값
                 expect(isMatchType(type3, tar01)    ).toBe(T);
                 expect(tar01                        ).toEqual({a: 'str'});
                 expect(isMatchType(type3, tar02)    ).toBe(T);
                 expect(tar02                        ).toEqual({a: 'str'});
+                // 선택
+                expect(isMatchType(type4, '')       ).toBe(T);
+                expect(isMatchType(type4, 'str')    ).toBe(T);
+                expect(isMatchType(type4, undefined)).toBe(T);
+                expect(isMatchType(type4, 0)        ).toBe(false);
+                // 리터럴
+                expect(isMatchType(type5, '')       ).toBe(false);
+                expect(isMatchType(type5, 'str')    ).toBe(T);
+                expect(isMatchType(type5, undefined)).toBe(T);
+                expect(isMatchType(type5, 0)        ).toBe(false);
+
             });
             it('- isMatchType() : number [리터럴] ', () => {
                 var type1 = Number;
                 var type2 = 1;
                 var type3 = {a: 1};
+                var type4 = [[Number]];
+                var type5 = [[10]];
                 
                 var tar01 = {a: undefined};
                 var tar02 = {};
@@ -763,22 +795,33 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type1, undefined)).toBe(false);                
                 expect(isMatchType(type1, '')       ).toBe(false);
                 expect(isMatchType(type1, Number)   ).toBe(false);
-                // 리터럴 (기본값)
+                // 기본값
                 expect(isMatchType(type2, 0)        ).toBe(T);
                 expect(isMatchType(type2, undefined)).toBe(T);
                 expect(isMatchType(type2, '')       ).toBe(false);
                 expect(isMatchType(type2, Number)   ).toBe(false);
-                // 기본값
                 expect(isMatchType(type3, tar01)    ).toBe(T);
                 expect(tar01                        ).toEqual({a: 1});
                 expect(isMatchType(type3, tar02)    ).toBe(T);
                 expect(tar02                        ).toEqual({a: 1});
+                // 선택
+                expect(isMatchType(type4, 1)        ).toBe(T);
+                expect(isMatchType(type4, 10)       ).toBe(T);
+                expect(isMatchType(type4, undefined)).toBe(T);
+                expect(isMatchType(type4, '')       ).toBe(false);
+                // 리터럴
+                expect(isMatchType(type5, 1)        ).toBe(false);
+                expect(isMatchType(type5, 10)       ).toBe(T);
+                expect(isMatchType(type5, undefined)).toBe(T);
+                expect(isMatchType(type5, '')       ).toBe(false);
             });
             it('- isMatchType() : boolean [리터럴] ', () => {
                 var type1 = Boolean;
                 var type2 = false;
                 var type3 = {a: true};
-                
+                var type4 = [[Boolean]];
+                var type5 = [[true]];                
+
                 var tar01 = {a: undefined};
                 var tar02 = {};
 
@@ -786,21 +829,32 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type1, undefined)).toBe(false);                
                 expect(isMatchType(type1, '')       ).toBe(false);
                 expect(isMatchType(type1, Boolean)  ).toBe(false);
-                // 리터럴 (기본값)
+                // 기본값
                 expect(isMatchType(type2, true)     ).toBe(T);
                 expect(isMatchType(type2, undefined)).toBe(T);
                 expect(isMatchType(type2, '')       ).toBe(false);
                 expect(isMatchType(type2, Boolean)  ).toBe(false);
-                // 기본값
                 expect(isMatchType(type3, tar01)    ).toBe(T);
                 expect(tar01                        ).toEqual({a: true});
                 expect(isMatchType(type3, tar02)    ).toBe(T);
                 expect(tar02                        ).toEqual({a: true});
+                // 선택
+                expect(isMatchType(type4, false)    ).toBe(T);
+                expect(isMatchType(type4, true)     ).toBe(T);
+                expect(isMatchType(type4, undefined)).toBe(T);
+                expect(isMatchType(type4, '')       ).toBe(false);
+                // 리터럴
+                expect(isMatchType(type5, false)    ).toBe(false);
+                expect(isMatchType(type5, true)     ).toBe(T);
+                expect(isMatchType(type5, undefined)).toBe(T);
+                expect(isMatchType(type5, '')       ).toBe(false);
             });
             it('- isMatchType() : bigint [리터럴] (ES6+) ', () => {
                 var type1 = BigInt;
                 var type2 = 10n;
                 var type3 = {a: 10n};
+                var type4 = [[BigInt]];
+                var type5 = [[20n]];
 
                 var tar01 = {a: undefined};
                 var tar02 = {};
@@ -809,16 +863,25 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type1, undefined)).toBe(false);                
                 expect(isMatchType(type1, '')       ).toBe(false);
                 expect(isMatchType(type1, BigInt)   ).toBe(false);
-                // 리터럴 (기본값)
+                // 기본값
                 expect(isMatchType(type2, 20n)      ).toBe(T);
                 expect(isMatchType(type2, undefined)).toBe(T);
                 expect(isMatchType(type2, '')       ).toBe(false);
                 expect(isMatchType(type2, BigInt)   ).toBe(false);
-                // 기본값
                 expect(isMatchType(type3, tar01)    ).toBe(T);
                 expect(tar01                        ).toEqual({a: 10n});
                 expect(isMatchType(type3, tar02)    ).toBe(T);
                 expect(tar02                        ).toEqual({a: 10n});
+                // 선택
+                expect(isMatchType(type4, 10n)      ).toBe(T);
+                expect(isMatchType(type4, 20n)      ).toBe(T);
+                expect(isMatchType(type4, undefined)).toBe(T);
+                expect(isMatchType(type4, '')       ).toBe(false);
+                // 리터럴
+                expect(isMatchType(type5, 10n)      ).toBe(false);
+                expect(isMatchType(type5, 20n)      ).toBe(T);
+                expect(isMatchType(type5, undefined)).toBe(T);
+                expect(isMatchType(type5, '')       ).toBe(false);
             });
             // REVIEW: 확인 필요
             it('- isMatchType() : symbol (ES6+) ', () => {
@@ -836,7 +899,9 @@ describe("[target: util-type.js.js]", () => {
                 var type1 = RegExp;
                 var type2 = /reg/;
                 var type3 = {a: /reg/};
-                
+                var type4 = [[RegExp]];
+                var type5 = [[/bb/]];
+
                 var tar01 = {a: undefined};
                 var tar02 = {};
 
@@ -844,30 +909,27 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type1, undefined)).toBe(false);                
                 expect(isMatchType(type1, '')       ).toBe(false);
                 expect(isMatchType(type1, RegExp)   ).toBe(false);
-                // 리터럴 (기본값)
+                // 기본값
                 expect(isMatchType(type2, /reg2/)   ).toBe(T);
                 expect(isMatchType(type2, undefined)).toBe(T);
                 expect(isMatchType(type2, '')       ).toBe(false);
                 expect(isMatchType(type2, RegExp)   ).toBe(false);
-                // 기본값
                 expect(isMatchType(type3, tar01)    ).toBe(T);
                 expect(tar01                        ).toEqual({a: /reg/});
                 expect(isMatchType(type3, tar02)    ).toBe(T);
                 expect(tar02                        ).toEqual({a: /reg/});
+                // 선택
+                expect(isMatchType(type4, /aa/)     ).toBe(T);
+                expect(isMatchType(type4, /bb/)     ).toBe(T);
+                expect(isMatchType(type4, undefined)).toBe(T);
+                expect(isMatchType(type4, '')       ).toBe(false);
+                // 리터럴
+                expect(isMatchType(type5, /aa/)     ).toBe(false);
+                expect(isMatchType(type5, /bb/)     ).toBe(T);
+                expect(isMatchType(type5, undefined)).toBe(T);
+                expect(isMatchType(type5, '')       ).toBe(false);
             });
 
-            it('- isMatchType() : function 표기법 ', () => {
-                // POINT: allow 로 비교함
-                var type1 = function(String, Number){Boolean};
-                
-                var tar11 = function(String, Number){return Boolean}
-                var tar12 = function fun(String, Number){Boolean}
-                var tar13 = function fun(String, Number){return Boolean }
-                var tar14 = (String, Number) => {Boolean}
-                var tar15 = (String, Number) => {return Boolean}
-
-
-            });
             it('- isMatchType() : function ', () => {
                 var type1 = Function;
                 var type2 = ()=>{};
@@ -913,11 +975,6 @@ describe("[target: util-type.js.js]", () => {
                  * POINT: 함수 부분은 테스트 해야할 항목과 코드 수정할 부분이 많음..세부적으로 검토 필요
                  */
             });
-            it('- isMatchType() : function 모든 타입', () => {
-            });
-            it('- isMatchType() : function 모든 타입', () => {
-            });
-
             it('- isMatchType() : class ', () => {
                 /**
                  * - 사용자클래스 : class, function

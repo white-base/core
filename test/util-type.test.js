@@ -233,7 +233,6 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(10n,     10n           )).toBe(T);
             expect(isAllowType(10n,     20n           )).toBe(false);
             expect(isAllowType(10n,     BigInt        )).toBe(false);
-            
             // Symbol
             expect(isAllowType(Symbol,    Symbol      )).toBe(T);
             expect(isAllowType(Symbol,    Symbol()    )).toBe(T);
@@ -559,21 +558,22 @@ describe("[target: util-type.js.js]", () => {
             var date2 = new Date('2023-01-01');
             var date3 = new Date('2023-01-02');
 
-            expect(isAllowType(Object,    Object          )).toBe(T);
-            expect(isAllowType(Object,    {}              )).toBe(T);
-            expect(isAllowType(/reg/,     /reg/           )).toBe(T);
-            // expect(isAllowType(/reg/,     /reg2/          )).toBe(false);
-            expect(isAllowType({},        new ClassA()    )).toBe(T);
-            expect(isAllowType({},        new ClassB()    )).toBe(false);
-            expect(isAllowType({},        true            )).toBe(false);
-            expect(isAllowType(date1,     date1           )).toBe(T);
-            expect(isAllowType(date1,     date2           )).toBe(T);
-            expect(isAllowType(date1,     date3           )).toBe(false);
-            expect(isAllowType({},        new Date()      )).toBe(false);
+            expect(isAllowType(Object,    Object            )).toBe(T);
+            expect(isAllowType(Object,    {}                )).toBe(T);
+            expect(isAllowType(/reg/,     /reg/             )).toBe(T   );
+            // expect(isAllowType(/reg/,     /reg2/          )).toBe(       false);
+            expect(isAllowType({},        new ClassA()      )).toBe(T       );
+            expect(isAllowType({},        new ClassB()      )).toBe(T   );
+            expect(isAllowType({},        true              )).toBe(    false);
+            expect(isAllowType(date1,     date1             )).toBe(T       );
+            expect(isAllowType(date1,     date2             )).toBe(T       );
+            expect(isAllowType(date1,     date3             )).toBe(T       );
+            expect(isAllowType({},        new Date()        )).toBe(T);     
+            expect(isAllowType({},        {aa:1}            )).toBe(T);
             // 예외 : 오류코드
             // expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
-            expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
-            expect(()=> allowType({},        true            )).toThrow('ES0713')
+            // expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
+            expect(()=> allowType({},        true            )).toThrow('ES0718')
         });
         it('- isAllowType(a, b) : class ', () => {
             var ClassA = function(){this.a = 1}
