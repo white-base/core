@@ -985,11 +985,13 @@ describe("[target: util-type.js.js]", () => {
                 var type2 = class Type2 { age = 10; fun = function(){} };
                 var type3 = Date;
 
-                var tar01 = new type1();
-                var tar02 = new type2();
-                var tar03 = { age: 10, fun: ()=>{} };
-                var tar04 = { age: 10 };
-                var tar05 = new Date();
+                var tar01 = new type1();                // union
+                var tar02 = new type2();                // union
+                var tar03 = { age: 10, fun: ()=>{} };   // union
+                var tar04 = { age: 10 };                // union
+                var tar05 = new Date();                 // object
+
+                // expect(isMatchType(type1, type1)    ).toBe(T);
 
                 expect(isMatchType(type1, tar01)    ).toBe(T);
                 expect(isMatchType(type1, tar02)    ).toBe(T);   

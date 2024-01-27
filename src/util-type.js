@@ -395,6 +395,7 @@
             if (type['kind']) obj['kind'] = type['kind'];
             if (type['ref']) obj['ref'] = type['ref'];
             if (type['list']) obj['list'] = type['list'];
+            if (type['name']) obj['name'] = type['name'];   // REVIEW: 함수명 명시적 지정시
             if (type['params']) obj['params'] = type['params'];
             if (type['return']) obj['return'] = type['return'];
 
@@ -987,6 +988,10 @@
         // function
         if (defType['$type'] === 'function') {
             if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
+            if (defType['name']) {
+                if (defType['name'] === target.name) return;
+                throw new Error('지정한 함수 이름과 다릅니다.');
+            }
             if (type === Function) return;
             // var fixType = {};
             // var fixReturns = [];
@@ -1042,7 +1047,7 @@
         }
         // class
         if (defType['$type'] === 'class') {
-            if (_isBuiltFunction(type)) {
+            if (_isBuiltFunction(type)) {   // 원시 클래스 타입은 union 비교를 하지 않음!
                 if (target instanceof type) return; 
                 else return Message.error('ES032', [parentName, _typeName(type)]);
             } else {
