@@ -978,12 +978,13 @@ describe("[target: util-type.js.js]", () => {
             it('- isMatchType() : class ', () => {
                 /**
                  * - 사용자클래스 : class, function
-                 * - 상속
+                 * - 상속 
                  * - 내장클래스 : Date
                  */
                 var type1 = function Type1(){ this.age = 1; this.fun = (a,b)=>{} };
                 var type2 = class Type2 { age = 10; fun = function(){} };
                 var type3 = Date;
+                var type4 = class Type4 {};
 
                 var tar01 = new type1();                // union
                 var tar02 = new type2();                // union
@@ -1010,6 +1011,17 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type3, tar03)    ).toBe(false);
                 expect(isMatchType(type3, tar04)    ).toBe(false);
                 expect(isMatchType(type3, tar05)    ).toBe(T);
+
+                // expect(isMatchType(type4, tar01)    ).toBe(T);
+                // expect(isMatchType(type4, tar02)    ).toBe(T);
+                // expect(isMatchType(type4, tar03)    ).toBe(T);
+                // expect(isMatchType(type4, tar04)    ).toBe(T);
+                // expect(isMatchType(type4, tar05)    ).toBe(T);
+                // expect(isMatchType(type4, tar01)    ).toBe(false);
+                // expect(isMatchType(type4, tar02)    ).toBe(false);
+                // expect(isMatchType(type4, tar03)    ).toBe(false);
+                // expect(isMatchType(type4, tar04)    ).toBe(false);
+                // expect(isMatchType(type4, tar05)    ).toBe(T);
             });
              
             it('- isMatchType() : object ', () => {

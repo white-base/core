@@ -872,6 +872,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType(Super,           new Sub())).toBe(T);
             expect(isMatchType(Sub,             new Sub())).toBe(T);
             expect(isMatchType(Object,          new Sub())).toBe(T);       
+            // expect(isMatchType(Object,          new Sub())).toBe(false);       
         });
         it('- isMatchType() : array 조건 검사  ', () => {    
             // array
