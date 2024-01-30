@@ -11,6 +11,7 @@ const {MetaElement}           = require('../src/meta-element');
 const { MetaTable, MetaTableCollection }    = require('../src/meta-table');
 const { loadNamespace } = require('../src/load-namespace');
 const { replacer, reviver, stringify, parse }              = require('telejson');
+const { MetaColumn } = require('../src/meta-column');
 
 //==============================================================
 // test
@@ -499,6 +500,11 @@ describe("[target: meta-registry.js]", () => {
                 const table1 = new MetaTable('T1');
                 table1.columns.add('c1');
                 table1.columns['c1']._valueTypes = Object
+                // REVIEW: 강제로 _elemTypes 에 테이블 타입 등록
+                // table1.rows._elemTypes.push(MetaTable)
+                // MetaColumn._VALUE_TYPE.push(MetaTable)
+                table1.columns['c1']._valueTypes.push(MetaTable)
+
                 table1.rows.add(table1.newRow());
                 table1.rows[0]['c1'] = table1;
                 const e1 = elem1.getObject();

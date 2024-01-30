@@ -80,7 +80,7 @@
 
         ObjectColumn._NS = 'Meta.Entity';     // namespace
         ObjectColumn._PARAMS = ['columnName', '_entity', '_property'];    // creator parameter
-        ObjectColumn._VALUE_TYPE = [Object];
+        ObjectColumn._VALUE_TYPE = [Object, {$type: 'union'}];
 
 
         /**

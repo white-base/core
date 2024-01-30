@@ -1040,8 +1040,8 @@
         // object
         if (defType['$type'] === 'object') {
             
-            if (tarType['$type'] === 'object' || tarType['$type'] === 'union') return;   // REVIEW: union 타입의 허용 여부 검토 필요
-            // if (tarType['$type'] === 'object') return;
+            // if (tarType['$type'] === 'object' || tarType['$type'] === 'union') return;   // REVIEW: union 타입의 허용 여부 검토 필요
+            if (tarType['$type'] === 'object') return;
             
             // if (type === Object && target instanceof type) return;
             // if (type !== Object && target instanceof type.constructor) return;
