@@ -438,7 +438,7 @@
      * @returns {object} {name: string, default: [null, any]}
      */
     var extendType = function(type) {
-        var obj =  {$type: '', ref: type, default: null, kind: null};
+        var obj =  {$type: '', ref: undefined, default: null, kind: null};
 
         obj.toString = function(){
             var temp = '';
@@ -470,6 +470,8 @@
 
             if (!_hasType(obj['$type'])) Message.error('ES022', ['type']);
             return obj;
+        } else {
+            obj['ref'] = type;
         }
         // seq 1 : === (operation) 
         if (type === null) {
@@ -553,7 +555,7 @@
             var kind = type['_KIND'];
             if (kind) {
                 kind = kind.toLowerCase();
-                if (kind === 'class' || kind === 'interface') obj['$type'] = 'class';
+                if (kind === 'class' || kind === 'interface' || kind === 'abstract') obj['$type'] = 'class';
                 if (kind === 'function') obj['$type'] = 'function';
             } else {
                 obj['$type'] = _isUpper(type.name) ? 'class' : 'function';
@@ -617,108 +619,108 @@
      * 원본타입에 대상타입이 덮어쓰기가 허용 가능한지 검사합니다.  
      * 원본타입에 대상타입으로 캐스팅이 가능하지 확인합니다.
      * @memberof _L.Common.Util
-     * @param {any} ori 원본 타입
-     * @param {any} tar 대상 타입
+     * @param {any} origin 원본 타입
+     * @param {any} target 대상 타입
      * @param {number} opt 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
      * @returns {throw?}
      */
-    var _execAllow = function (ori, tar, opt) {
-        var oriDef = extendType(ori);
-        var tarDef = extendType(tar);
+    var _execAllow = function (origin, target, opt) {
+        var oriType = extendType(origin);
+        var tarType = extendType(target);
         
         opt = opt || 0;
 
-        if (_isObject(oriDef['ref']) &&  _isObject(tarDef['ref']) && deepEqual(oriDef, tarDef)) return;
-        // ori seq, opt 필수 검사
-        if (oriDef['kind']) {
-            if ((oriDef['kind'] === '_SEQ_' || oriDef['kind'] === '_OPT_') 
-            && (typeof oriDef['ref'] === 'undefined' || oriDef['list'].length === 0)) {
-                Message.error('ES0729', ['origin', oriDef['kind']]);
+        if (_isObject(oriType['ref']) &&  _isObject(tarType['ref']) && deepEqual(oriType, tarType)) return;
+        // seq, opt 필수 검사
+        if (oriType['kind']) {
+            if ((oriType['kind'] === '_SEQ_' || oriType['kind'] === '_OPT_') 
+            && (typeof oriType['ref'] === 'undefined' || oriType['list'].length === 0)) {
+                Message.error('ES0729', ['origin', oriType['kind']]);
             }
         }
         // tar seq, opt 필수 검사
-        if (tarDef['kind']) {
-            if ((tarDef['kind'] === '_SEQ_' || tarDef['kind'] === '_OPT_') 
-            && (typeof tarDef['ref'] === 'undefined' || tarDef['list'].length === 0)) {
-                Message.error('ES0729', ['target', tarDef['kind']]);
+        if (tarType['kind']) {
+            if ((tarType['kind'] === '_SEQ_' || tarType['kind'] === '_OPT_') 
+            && (typeof tarType['ref'] === 'undefined' || tarType['list'].length === 0)) {
+                Message.error('ES0729', ['target', tarType['kind']]);
             }
         }
 
-        if ((oriDef['kind']) && (tarDef['kind']) && oriDef['$type'] === tarDef['$type']) {
+        if ((oriType['kind']) && (tarType['kind']) && oriType['$type'] === tarType['$type']) {
             // 거부조건
-            if (oriDef['kind'] === '_ALL_' && (tarDef['kind'] === '_NON_')) {
-                Message.error('ES0727', [oriDef['kind'], '_NON_', tarDef['kind']]);
+            if (oriType['kind'] === '_ALL_' && (tarType['kind'] === '_NON_')) {
+                Message.error('ES0727', [oriType['kind'], '_NON_', tarType['kind']]);
             } 
-            if (oriDef['kind'] === '_NON_' && tarDef['kind'] !== '_NON_') { 
-                Message.error('ES0728', [oriDef['kind'], '_NON_', tarDef['kind']]);
+            if (oriType['kind'] === '_NON_' && tarType['kind'] !== '_NON_') { 
+                Message.error('ES0728', [oriType['kind'], '_NON_', tarType['kind']]);
             }
-            if (oriDef['kind'] === '_ANY_' && (tarDef['kind'] === '_ALL_' || tarDef['kind'] === '_OPT_' || tarDef['kind'] === '_NON_')) {
-                Message.error('ES0727', [oriDef['kind'], '_REQ_, _ALL_, _NON_', tarDef['kind']]);
+            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_')) {
+                Message.error('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]);
             }
-            if (oriDef['kind'] === '_OPT_' && (tarDef['kind'] === '_ALL_' || tarDef['kind'] === '_ANY_' || tarDef['kind'] === '_NON_') ){
-                Message.error('ES0728', [oriDef['kind'], '_OPT_, _SEQ_', tarDef['kind']]);
+            if (oriType['kind'] === '_OPT_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_ANY_' || tarType['kind'] === '_NON_') ){
+                Message.error('ES0728', [oriType['kind'], '_OPT_, _SEQ_', tarType['kind']]);
             } 
-            if (oriDef['kind'] === '_REQ_' && (tarDef['kind'] === '_ALL_' || tarDef['kind'] === '_ANY_' ||  tarDef['kind'] === '_OPT_' || tarDef['kind'] === '_NON_')) {
-                Message.error('ES0727', [oriDef['kind'], '_ANY_, _ALL_, _OPT_, _NON_', tarDef['kind']]);
+            if (oriType['kind'] === '_REQ_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_ANY_' ||  tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_')) {
+                Message.error('ES0727', [oriType['kind'], '_ANY_, _ALL_, _OPT_, _NON_', tarType['kind']]);
             }
-            if (oriDef['kind'] === '_SEQ_' && tarDef['kind'] !== '_SEQ_') { 
-                Message.error('ES0728', [oriDef['kind'], '_SEQ_', tarDef['kind']]);
+            if (oriType['kind'] === '_SEQ_' && tarType['kind'] !== '_SEQ_') { 
+                Message.error('ES0728', [oriType['kind'], '_SEQ_', tarType['kind']]);
             }
             // 허용 조건
-            if (oriDef['kind'] === '_ALL_' && (tarDef['kind'] !== '_NON_')) return;
-            if (oriDef['kind'] === '_NON_' && (tarDef['kind'] === '_NON_')) return;
-            if (oriDef['kind'] === '_ANY_' && (tarDef['kind'] === '_ANY_')) return;
+            if (oriType['kind'] === '_ALL_' && (tarType['kind'] !== '_NON_')) return;
+            if (oriType['kind'] === '_NON_' && (tarType['kind'] === '_NON_')) return;
+            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ANY_')) return;
         }
 
         // primitive TODO: regexp 들어가야함
-        if (['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint', 'regexp'].indexOf(oriDef['$type']) > -1) {
-            // if(oriDef['default'] !== null && oriDef['default'] !== tarDef['default']) {
-            //     Message.error('ES0712', [oriDef['$type'], oriDef['default'], tarDef['default']]);
+        if (['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint', 'regexp'].indexOf(oriType['$type']) > -1) {
+            // if(oriType['default'] !== null && oriType['default'] !== tarType['default']) {
+            //     Message.error('ES0712', [oriType['$type'], oriType['default'], tarType['default']]);
             // }
-            if(oriDef['default'] !== null && !_equalLiternal(oriDef['default'], tarDef['default'])) {
-                Message.error('ES0712', [oriDef['$type'], oriDef['default'], tarDef['default']]);
+            if(oriType['default'] !== null && !_equalLiternal(oriType['default'], tarType['default'])) {
+                Message.error('ES0712', [oriType['$type'], oriType['default'], tarType['default']]);
             }
-            if (oriDef['$type'] === tarDef['$type']) return;
-            Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
+            if (oriType['$type'] === tarType['$type']) return;
+            Message.error('ES0713', [oriType['$type'], tarType['$type']]);
         }
         // choice
-        if (oriDef['$type'] === 'choice') {   
-            if (oriDef['kind'] == '_ALL_') {
+        if (oriType['$type'] === 'choice') {   
+            if (oriType['kind'] == '_ALL_') {
                 return;
-            } else if (oriDef['kind'] == '_ANY_') {
-                if (typeof tarDef['ref'] !== 'undefined') return;
+            } else if (oriType['kind'] == '_ANY_') {
+                if (typeof tarType['ref'] !== 'undefined') return;
                 Message.error('ES0714', ['_ANY_', 'undefined']);
             
-            } else if (oriDef['kind'] == '_SEQ_') {
-                if (tarDef['kind'] !== '_SEQ_') Message.error('ES0731', ['target', tarDef['kind']]);
-                if (oriDef['list'].length > tarDef['list'].length) {
-                    Message.error('ES0732', [oriDef.toString(), tarDef.toString()]);
+            } else if (oriType['kind'] == '_SEQ_') {
+                if (tarType['kind'] !== '_SEQ_') Message.error('ES0731', ['target', tarType['kind']]);
+                if (oriType['list'].length > tarType['list'].length) {
+                    Message.error('ES0732', [oriType.toString(), tarType.toString()]);
                 }
-                if (oriDef['list'].length === 0 && tarDef['list'].length > 0) return;
-                for (i = 0; i < oriDef['list'].length; i++) {
+                if (oriType['list'].length === 0 && tarType['list'].length > 0) return;
+                for (i = 0; i < oriType['list'].length; i++) {
                     try {
-                        _execAllow(oriDef['list'][i], tarDef['list'][i], opt);
+                        _execAllow(oriType['list'][i], tarType['list'][i], opt);
                     } catch (error) {
-                        Message.error('ES0733', [oriDef['list'][i], tarDef['list'][i]]);
+                        Message.error('ES0733', [oriType['list'][i], tarType['list'][i]]);
                     }
                 }
                 return;
             
-            } else if (oriDef['kind'] == '_REQ_') {
-                if (tarDef['kind'] && tarDef['ref'].length === 0) {
+            } else if (oriType['kind'] == '_REQ_') {
+                if (tarType['kind'] && tarType['ref'].length === 0) {
                     Message.error('ES0734');
                 }
-                var arrTarget = (tarDef['kind']) ? tarDef['list'] : [tarDef['ref']];
+                var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
 
-                if (oriDef['list'].length > 0 && arrTarget.length === 0) {
-                    Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
+                if (oriType['list'].length > 0 && arrTarget.length === 0) {
+                    Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
                 }
                 for (i = 0; i < arrTarget.length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef['list'].length; ii++) {
+                    for (var ii = 0; ii < oriType['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], arrTarget[i], opt);
+                            _execAllow(oriType['list'][ii], arrTarget[i], opt);
                             success = true;
                         } catch (error) {
                             continue;
@@ -728,19 +730,19 @@
                 }
                 return;
 
-            } else if (oriDef['kind'] === '_OPT_') {
-                if (typeof tarDef['ref'] === 'undefined') return;
-                var arrTarget = (tarDef['kind']) ? tarDef['list'] : [tarDef['ref']];
+            } else if (oriType['kind'] === '_OPT_') {
+                if (typeof tarType['ref'] === 'undefined') return;
+                var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
 
-                if (oriDef['list'].length > 0 && arrTarget.length === 0) {
-                    Message.error('ES0717', [oriDef.toString(), arrTarget.toString(),]);
+                if (oriType['list'].length > 0 && arrTarget.length === 0) {
+                    Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
                 }
                 for (i = 0; i < arrTarget.length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef['list'].length; ii++) {
+                    for (var ii = 0; ii < oriType['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], arrTarget[i], opt);
+                            _execAllow(oriType['list'][ii], arrTarget[i], opt);
                             success = true;
                         } catch (error) {
                             continue;
@@ -750,124 +752,124 @@
                 }
                 return;                
             } else {
-                    Message.error('ES0735', [oriDef['kind']]);
+                    Message.error('ES0735', [oriType['kind']]);
             }
         }
         // array
-        if (oriDef['$type'] === 'array') {    
-            if (oriDef['list'].length === 0 && !oriDef['kind'] && tarDef['$type'] === 'array') return;      // [], [[]], Array
-            if (!Array.isArray(tarDef['list'])) Message.error('ES0719', ['array']);
-            if (oriDef['kind'] == '_ALL_') {
+        if (oriType['$type'] === 'array') {    
+            if (oriType['list'].length === 0 && !oriType['kind'] && tarType['$type'] === 'array') return;      // [], [[]], Array
+            if (!Array.isArray(tarType['list'])) Message.error('ES0719', ['array']);
+            if (oriType['kind'] == '_ALL_') {
                 return;
-            } else if (oriDef['kind'] == '_ANY_') {
-                if (tarDef['kind'] && tarDef['list'].length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
-                if (tarDef['list'].length > 0) return;
+            } else if (oriType['kind'] == '_ANY_') {
+                if (tarType['kind'] && tarType['list'].length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
+                if (tarType['list'].length > 0) return;
                 
-            } else if (oriDef['kind'] == '_SEQ_') {
-                if (oriDef['kind'] !== tarDef['kind'])  Message.error('ES0719', ['_SEQ_']);
-                if (oriDef['list'].length > tarDef['list'].length) {
-                    Message.error('ES0720', [oriDef.toString(), tarDef.toString()]);
+            } else if (oriType['kind'] == '_SEQ_') {
+                if (oriType['kind'] !== tarType['kind'])  Message.error('ES0719', ['_SEQ_']);
+                if (oriType['list'].length > tarType['list'].length) {
+                    Message.error('ES0720', [oriType.toString(), tarType.toString()]);
                 }
-                for (var i = 0; i < oriDef['list'].length; i++) {
+                for (var i = 0; i < oriType['list'].length; i++) {
                     try {
-                        _execAllow(oriDef['list'][i], tarDef['list'][i], opt);
+                        _execAllow(oriType['list'][i], tarType['list'][i], opt);
                     } catch (error) {
                         Message.error('ES0711', ['array', '_SEQ_', error]);
                     }
                 }
                 return;
 
-            } else if (oriDef['kind'] == '_REQ_') {
-                if (oriDef['list'].length < tarDef['list'].length) {
-                    Message.error('ES0716', ['array _OPT_', oriDef.toString(), tarDef.toString()]);
+            } else if (oriType['kind'] == '_REQ_') {
+                if (oriType['list'].length < tarType['list'].length) {
+                    Message.error('ES0716', ['array _OPT_', oriType.toString(), tarType.toString()]);
                 }
-                if (oriDef['list'].length > 0 && tarDef['list'].length === 0) {
+                if (oriType['list'].length > 0 && tarType['list'].length === 0) {
                     Message.error('ES0717', ['array']);
                 }
-                for (var i = 0; i < tarDef['list'].length; i++) {
+                for (var i = 0; i < tarType['list'].length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef['list'].length; ii++) {
+                    for (var ii = 0; ii < oriType['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], tarDef['list'][i], opt);
+                            _execAllow(oriType['list'][ii], tarType['list'][i], opt);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_REQ_)', extendType(tarDef['list'][i])['$type']]);
+                    if (!success) Message.error('ES0738', ['array(_REQ_)', extendType(tarType['list'][i])['$type']]);
                 }
                 return;
             
-            } else if (oriDef['kind'] === '_OPT_') {
-                if (Array.isArray(tarDef['list']) && tarDef['list'].length === 0) return;
-                for (var i = 0; i < tarDef['list'].length; i++) {
+            } else if (oriType['kind'] === '_OPT_') {
+                if (Array.isArray(tarType['list']) && tarType['list'].length === 0) return;
+                for (var i = 0; i < tarType['list'].length; i++) {
                     var success = false;
-                    for (var ii = 0; ii < oriDef['list'].length; ii++) {
+                    for (var ii = 0; ii < oriType['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], tarDef['list'][i], opt);
+                            _execAllow(oriType['list'][ii], tarType['list'][i], opt);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_OPT_)', extendType(tarDef['list'][i])['$type']]);
+                    if (!success) Message.error('ES0738', ['array(_OPT_)', extendType(tarType['list'][i])['$type']]);
                 }
 
             } else {              
-                Message.error('ES0735', [oriDef['kind']]);
+                Message.error('ES0735', [oriType['kind']]);
             }
         }
         // function
-        if (oriDef['$type'] === 'function') { 
-            if (tarDef['$type'] !== 'function')  Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
-            if (oriDef['ref'] === Function) return;
+        if (oriType['$type'] === 'function') { 
+            if (tarType['$type'] !== 'function')  Message.error('ES0713', [oriType['$type'], tarType['$type']]);
+            if (oriType['ref'] === Function) return;
             
-            if (!oriDef['return'] && oriDef['params'].length === 0) return;    // success
-            if (oriDef['params'].length !== tarDef['params'].length) Message.error('ES0721', ['function', 'params', oriDef['params'].length]);
+            if (!oriType['return'] && oriType['params'].length === 0) return;    // success
+            if (oriType['params'].length !== tarType['params'].length) Message.error('ES0721', ['function', 'params', oriType['params'].length]);
             
             try {
-                _execAllow(['_SEQ_'].concat(oriDef['params']), ['_SEQ_'].concat(tarDef['params']), opt);
+                _execAllow(['_SEQ_'].concat(oriType['params']), ['_SEQ_'].concat(tarType['params']), opt);
             } catch (error) {
                 Message.error('ES0722', ['function', 'params', error]);
             }
 
             try {
-                _execAllow(oriDef['return'], tarDef['return'], opt);
+                _execAllow(oriType['return'], tarType['return'], opt);
             } catch (error) {
                     Message.error('ES0722', ['function', 'return', error]);
             }
             return;
         }
         // object
-        if (oriDef['$type'] === 'object') {
-            // if (tarDef['$type'] !== 'object') Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
-            // if (tarDef['$type'] === 'object' || tarDef['$type'] === 'union') return;
-            if (tarDef['$type'] === 'object') return;
+        if (oriType['$type'] === 'object') {
+            // if (tarType['$type'] !== 'object') Message.error('ES0713', [oriType['$type'], tarType['$type']]);
+            // if (tarType['$type'] === 'object' || tarType['$type'] === 'union') return;
+            if (tarType['$type'] === 'object') return;
             
-            // if (oriDef['ref'] === tarDef['ref']) return;
-            // if (_isEmptyObj(tarDef['ref'])) return;
-            // if (oriDef['ref'] instanceof RegExp) {
-            //     if (tarDef['ref'] instanceof RegExp && oriDef['ref'].source === tarDef['ref'].source) return;
-            //     Message.error('ES0723', [oriDef['ref'].source, tarDef['ref'].source]);
+            // if (oriType['ref'] === tarType['ref']) return;
+            // if (_isEmptyObj(tarType['ref'])) return;
+            // if (oriType['ref'] instanceof RegExp) {
+            //     if (tarType['ref'] instanceof RegExp && oriType['ref'].source === tarType['ref'].source) return;
+            //     Message.error('ES0723', [oriType['ref'].source, tarType['ref'].source]);
             // }
-            // if (oriDef['ref'] instanceof Date) {
-            //     if (tarDef['ref'] instanceof Date && oriDef['ref'].getTime() === tarDef['ref'].getTime()) return;
-            //     Message.error('ES0723', [oriDef['ref'].source, tarDef['ref'].source]);
+            // if (oriType['ref'] instanceof Date) {
+            //     if (tarType['ref'] instanceof Date && oriType['ref'].getTime() === tarType['ref'].getTime()) return;
+            //     Message.error('ES0723', [oriType['ref'].source, tarType['ref'].source]);
             // }
             Message.error('ES0718', ['object']);
         }
         // class
-        if (oriDef['$type'] === 'class') {
+        if (oriType['$type'] === 'class') {
             
-            if (tarDef['$type'] === 'class') {
-                if (isType(tarDef['ref'], oriDef['ref'])) return;   // 1.proto check
+            if (tarType['$type'] === 'class') {
+                if (isType(tarType['ref'], oriType['ref'])) return;   // 1.proto check
                 if (opt === 1) {
                     try {
                         // 생성비교
-                        var oriObj = new oriDef['ref']();
-                        var tarObj = new tarDef['ref']();
+                        var oriObj = new oriType['ref']();
+                        var tarObj = new tarType['ref']();
                         return _execAllow(oriObj, tarObj, opt);
                     } catch (error) {
                         Message.error('ES0724', ['object', error]);
@@ -877,10 +879,10 @@
             Message.error('ES0725', ['object']);
 
             
-            // if (oriDef['ref'] === tarDef['ref']) return;
+            // if (oriType['ref'] === tarType['ref']) return;
             // try {
-            //     var obj1 = new oriDef['ref']();
-            //     var obj2 = new tarDef['ref']();
+            //     var obj1 = new oriType['ref']();
+            //     var obj2 = new tarType['ref']();
             //     if (deepEqual(obj1, obj2)) return;  // REVIEW: allow 로 변화 해야함
             // } catch (error) {
             //     Message.error('ES0724', ['object', error]);
@@ -888,13 +890,13 @@
             // Message.error('ES0725', ['object']);
         }
         // union
-        if (oriDef['$type'] === 'union') {
-            if (tarDef['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
-            var list = getAllProperties(oriDef['ref']);
+        if (oriType['$type'] === 'union') {
+            if (tarType['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
+            var list = getAllProperties(oriType['ref']);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 try {
-                    _execAllow(oriDef['ref'][key], tarDef['ref'][key], opt);
+                    _execAllow(oriType['ref'][key], tarType['ref'][key], opt);
                 } catch (error) {
                     Message.error('ES0726', ['union', error]);
                 }
@@ -912,17 +914,15 @@
      */
     var _execMatch = function(type, target, parentName, opt) {
         var parentName = parentName ? parentName : 'this';
-        var defType, tarType;
-
+        var defType = extendType(type);
+        var tarType = extendType(target);
+        
         opt = opt || 0;
 
-        defType = extendType(type);
-        tarType = extendType(target);
-
-        // ori seq, opt 필수 검사
+        // seq, opt 필수 검사
         if (defType['kind']) {
             if ((defType['kind'] === '_SEQ_' || defType['kind'] === '_OPT_') 
-            && (typeof defType.ref === 'undefined' || defType['list'].length === 0)) {
+            && (typeof defType['ref'] === 'undefined' || defType['list'].length === 0)) {
                 Message.error('ES0729', ['type', defType['kind']]);
             }
         }
@@ -980,7 +980,7 @@
                 // if (defType['list'].length === 0) return;
                 if (defType['list'].length === 0) throw new Error('_req_(require) 필수 항목이 없습니다.');
             } else if (defType['kind'] === '_OPT_') {
-                if (typeof tarType.ref === 'undefined') return;
+                if (typeof target === 'undefined') return;
             } else if (defType['kind'] === '_EUM_') {
                 if (defType['list'].length === 0) throw new Error('_eum_(enum) 1개이상 항목이 필요합니디.');
                 for (var ii = 0; ii < defType['list'].length; ii++) {
@@ -1067,8 +1067,7 @@
                             // if (typeof elem === typeof tar && elem.toString() === tar.toString()) return;
                             if (_equalLiternal(elem, tar)) return;
                         } else {
-                            _execMatch(elem, tar, parentName, opt);
-                            return;
+                            return _execMatch(elem, tar, parentName, opt);
                         }
                     } catch (error) {
                         continue;
@@ -1080,11 +1079,16 @@
         }
         // function
         if (defType['$type'] === 'function') {
-            if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
+            // if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
+            if (tarType['$type'] !== 'function') return Message.error('ES024', [parentName, 'function']);
             if (defType['name']) {
                 if (defType['name'] === target.name) return;
                 throw new Error('지정한 함수 이름과 다릅니다.');
             }
+            // if (defType['func']) {
+            //     if (isType(tarType['ref'], defType['ref'])) return;
+            //     throw new Error('지정한 함수 이름과 다릅니다.');
+            // }
             if (type === Function) return;
             // var fixType = {};
             // var fixReturns = [];
@@ -1147,8 +1151,10 @@
              * 2. tar == object : instanceof
              * 3. tar == union : match
              */
-            if (tarType['$type'] === 'class' && isType(tarType['ref'], defType['ref'])) return;
-            else if (typeof target === 'object') {
+            if (tarType['$type'] === 'class') {
+                if (typeof defType['ref'] === 'undefined') return;
+                if (isType(tarType['ref'], defType['ref'])) return;
+            } else if (typeof target === 'object') {
                 if (target instanceof type) return;
                 if (!_isBuiltFunction(type) && target !== null) {
                     return _execMatch(_creator(type), target, parentName, opt);

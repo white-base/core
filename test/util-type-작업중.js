@@ -139,12 +139,14 @@ describe("[target: util-type.js.js]", () => {
                 var type2 = {fill:true};
                 var type3 = JSON;
                 var type4 = Math;
+                var type5 = {};
 
                 expect(typeOf(type0)).toBe('union');
                 expect(typeOf(type1)).toBe('union');
                 expect(typeOf(type2)).toBe('union');
                 expect(typeOf(type3)).toBe('union');
                 expect(typeOf(type4)).toBe('union');
+                expect(typeOf(type5)).toBe('union');
             });
             it('- typeOf() : choice ', () => {
                 var type00 = {$type: 'choice'}
@@ -331,7 +333,8 @@ describe("[target: util-type.js.js]", () => {
                 expect(extendType(type15).params ).toEqual([String]);
                 expect(extendType(type15).return ).toEqual(Number);
             });
-            it('- extendType() : function [특수객체] ', () => {
+            // TODO: 
+            it('- extendType() : function [특수객체] ', () => { 
                 var type1 = ()=>{}; 
                 var type1 = ()=>{}; 
                 var type1 = ()=>{}; 
@@ -362,15 +365,9 @@ describe("[target: util-type.js.js]", () => {
                  * 구문이 단축되는 장점이 있다, 하지만 배열을 사용시 명시적으로 구현해야 한다.
                  */
                 type1._TYPE = {params: [[[String, Number]], Number]};             // 배열 아님    >> 혼선
-
-
                 type1._TYPE = {return: [['_non_']]};    // 리턴에 non
                 type1._TYPE = {return: [[String, Number]]};    // 리턴에 non
                 type1._TYPE = {return: [String]};    // 리턴에 string
-
-
-
-            
             });
             it('- extendType() : regexp [리터럴] ', () => {
                 var type1 = RegExp;
@@ -577,6 +574,7 @@ describe("[target: util-type.js.js]", () => {
             it('- typeObject() : union ', () => {
                 var type1 = {str: 'blue', num: Number, }
                 var type2 = {arr: [String], sub: {bool: true}}
+                var type3 = {}
 
                 var str1 = {$type: 'string'}
                 var str2 = {$type: 'string', default: 'blue'}
@@ -586,9 +584,11 @@ describe("[target: util-type.js.js]", () => {
                 var boo1 = {$type: 'boolean', default: true}
                 var obj1 = {$type: 'union', str: str2, num: num1}
                 var obj2 = {$type: 'union', arr: arr1, sub: {$type: 'union', bool: boo1}}
+                var obj3 = {$type: 'union'}
 
                 expect(typeObject(type1)   ).toEqual(obj1);
                 expect(typeObject(type2)   ).toEqual(obj2);
+                expect(typeObject(type3)   ).toEqual(obj3);
             });
             it('- typeObject() : class ', () => {
                 var type1 = function Class1(){this.age = 1; this.fun = (a,b)=>{}};
@@ -975,12 +975,7 @@ describe("[target: util-type.js.js]", () => {
                  * POINT: 함수 부분은 테스트 해야할 항목과 코드 수정할 부분이 많음..세부적으로 검토 필요
                  */
             });
-            it('- isMatchType() : class ', () => {
-                /**
-                 * - 사용자클래스 : class, function
-                 * - 상속 
-                 * - 내장클래스 : Date
-                 */
+            it('- isMatchType() : class, 내장함수 ', () => {
                 var type1 = function Type1(){ this.age = 1; this.fun = (a,b)=>{} };
                 var type2 = class Type2 { age = 10; fun = function(){} };
                 var type3 = Date;
@@ -1009,7 +1004,7 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type3, tar04)    ).toBe(false);
                 expect(isMatchType(type3, tar05)    ).toBe(T);
             });
-            it('- isMatchType() : class 상속', () => {
+            it('- isMatchType() : class, 상속', () => {
                 var tar01 = class Tar01 { age = Number };
                 var tar02 = class Tar02 extends tar01 { color = String };
                 var tar03 = class Tar03 { color = String; age = Number };
@@ -1407,11 +1402,7 @@ describe("[target: util-type.js.js]", () => {
                     expect(isMatchType(type1, ['str', 10])  ).toBe(T);
                     expect(isMatchType(type1, undefined)    ).toBe(false);
                 });
-                it('- isMatchType() : array 리터럴 ', () => {
-                    // 이전에서 체크 하였음
-                });
             });
-
         });
         // TODO: 대상의 하위로 이동
         describe('중첩 구조 ', () => {  
@@ -1419,6 +1410,9 @@ describe("[target: util-type.js.js]", () => {
                 // 다양한 함수의 파싱 방식 
             });
             it('- isMatchType() : union ', () => {
+                // union + union
+            });
+            it('- isMatchType() : class ', () => {
                 // union + union
             });
             it('- isMatchType() : choice ', () => {

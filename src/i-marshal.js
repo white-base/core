@@ -46,7 +46,7 @@
              * 타입
              * @member {string} _L.Interface.IMarshal#_type
              */
-            this._type = Function;
+            this._type = [['_req_', Function, {$type: 'class'} ]];
         }
 
         IMarshal._NS = 'Interface';    // namespace
