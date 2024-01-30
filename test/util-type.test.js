@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const {getType, typeOf}  = require('../src/util-type');
+const {extendType, typeOf}  = require('../src/util-type');
 const {isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 const T = true;
@@ -28,15 +28,15 @@ describe("[target: util-type.js.js]", () => {
             expect(typeOf(Number)          ).toBe('number');
             expect(typeOf(1)               ).toBe('number');
             expect(typeOf(NaN)             ).toBe('number');
-            expect(getType(2).default     ).toBe(2);
+            expect(extendType(2).default     ).toBe(2);
             // string
             expect(typeOf(String)          ).toBe('string');
             expect(typeOf('str')           ).toBe('string');
-            expect(getType('str').default ).toBe('str');
+            expect(extendType('str').default ).toBe('str');
             // boolean
             expect(typeOf(Boolean)         ).toBe('boolean');
             expect(typeOf(true)            ).toBe('boolean');
-            expect(getType(true).default  ).toBe(true);
+            expect(extendType(true).default  ).toBe(true);
             // Symbol (ES6+)
             expect(typeOf(Symbol)          ).toBe('symbol');
             expect(typeOf(Symbol('a'))     ).toBe('symbol');
@@ -162,7 +162,7 @@ describe("[target: util-type.js.js]", () => {
         it('- Object, {} : object 타입 (regex, new, null) ', () => {
             const Func = function() {};
             // true
-            expect(isMatchType({}, Object             )).toBe(true);
+            expect(isMatchType({}, Object             )).toBe(false);
             // expect(isMatchType(null, Object)).toBe(true);
             // expect(isMatchType({}, /reg/              )).toBe(true);
             expect(isMatchType({}, new Func()         )).toBe(true);
@@ -559,21 +559,21 @@ describe("[target: util-type.js.js]", () => {
             var date3 = new Date('2023-01-02');
 
             expect(isAllowType(Object,    Object            )).toBe(T);
-            expect(isAllowType(Object,    {}                )).toBe(T);
+            expect(isAllowType(Object,    {}                )).toBe(false);
             expect(isAllowType(/reg/,     /reg/             )).toBe(T   );
             // expect(isAllowType(/reg/,     /reg2/          )).toBe(       false);
             expect(isAllowType({},        new ClassA()      )).toBe(T       );
             expect(isAllowType({},        new ClassB()      )).toBe(T   );
-            expect(isAllowType({},        true              )).toBe(    false);
+            expect(isAllowType({},        true              )).toBe(false);
             expect(isAllowType(date1,     date1             )).toBe(T       );
             expect(isAllowType(date1,     date2             )).toBe(T       );
             expect(isAllowType(date1,     date3             )).toBe(T       );
-            expect(isAllowType({},        new Date()        )).toBe(T);     
+            expect(isAllowType({},        new Date()        )).toBe(false);     
             expect(isAllowType({},        {aa:1}            )).toBe(T);
             // 예외 : 오류코드
             // expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
             // expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
-            expect(()=> allowType({},        true            )).toThrow('ES0718')
+            expect(()=> allowType({},        true            )).toThrow('ES069')
         });
         it('- isAllowType(a, b) : class ', () => {
             var ClassA = function(){this.a = 1}
@@ -585,13 +585,14 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(ClassA,       ClassA)).toBe(T);
             expect(isAllowType(ClassA,       ClassB)).toBe(false);
             expect(isAllowType(ClassA,       ClassC)).toBe(false);
-            expect(isAllowType(ClassC,       ClassD)).toBe(T );
+            expect(isAllowType(ClassC,       ClassD, 0)).toBe(false);
+            expect(isAllowType(ClassC,       ClassD, 1)).toBe(T );
             expect(isAllowType(String,       String)).toBe(T );
             expect(isAllowType(ClassA,       ClassE)).toBe(false );
             // 예외 : 오류코드
             expect(()=> allowType(ClassA,       ClassB)).toThrow('ES0725')
             expect(()=> allowType(ClassA,       ClassC)).toThrow('ES0725')
-            expect(()=> allowType(ClassA,       ClassE)).toThrow('ES0724')
+            expect(()=> allowType(ClassA,       ClassE)).toThrow('ES0725')
         }); 
         it('- isAllowType(a, b) : union (기본) ', () => {
             var type1      = {str: String, num: Number};
@@ -622,10 +623,10 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType(new Date(),    new Date()  )).toBe(T);
             expect(isMatchType(Symbol(),      Symbol()    )).toBe(T);
             // expect(isMatchType({},            /reg/       )).toBe(T);
-            expect(isMatchType({},            new Date()  )).toBe(T);
+            expect(isMatchType({},            new Date()  )).toBe(false);
             expect(isMatchType({},            Symbol()    )).toBe(false);
             // 예외 오류 코드
-            expect(()=> matchType({},         Symbol()    )).toThrow(/ES024/)
+            expect(()=> matchType({},         Symbol()    )).toThrow(/ES069/)
 
         });
         it('- null, undefined ', () => {
@@ -1090,7 +1091,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Func1, function any(){}   )).toThrow(/ES032/);
             expect(()=> matchType(Func1, null               )).toThrow(/ES032/);
             expect(()=> matchType(Func1, 'str'              )).toThrow(/ES032/);
-            expect(()=> matchType(Func1, /reg/              )).toThrow(/ES031/);
+            expect(()=> matchType(Func1, /reg/              )).toThrow(/ES069/);
             expect(()=> matchType(Func1, 1                  )).toThrow(/ES032/);
             expect(()=> matchType(Func1, Symbol()           )).toThrow(/ES032/);
             expect(()=> matchType(Func1, true               )).toThrow(/ES032/);

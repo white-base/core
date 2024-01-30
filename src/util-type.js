@@ -230,6 +230,16 @@
         return arr.indexOf(name) > -1;
     }
     
+    // function _parentFunction(obj) {
+    //     var list = [];
+    //     var proto = obj.__proto__ || Object.getPrototypeOf(obj);
+    //     if (proto) {
+    //         list.push(proto.constructor);
+    //         list = list.concat(_parentFunction(proto));
+    //     }
+    //     return list;
+    // }
+
     /**
      * 전체 프로퍼티 조회
      * @memberof _L.Common.Util
@@ -255,6 +265,7 @@
         } while (cur = Object.getPrototypeOf(cur))
         return allProps;
     };
+
 
     /**
      * 객체를 비교합니다.
@@ -294,12 +305,70 @@
     }
 
     /**
+     * 대상의 상위를 포함하여 '_UNION'과 자신의 타입 목록을 가져옵니다.
+     * @memberof _L.Common.Util
+     * @param {function} ctor 생성자
+     * @returns {array<function>}
+     */
+    var getTypes = function (ctor) {
+        var arr = [];
+        var tempArr = [];
+        var union;
+        var proto;
+
+        if (typeof ctor !== 'function') return;
+        
+        arr.push(ctor);
+        union = ctor['_UNION'] || [];
+        proto = getPrototype(ctor);        
+        
+        if (proto !== Function.prototype) {
+            arr = arr.concat(getTypes(proto));
+        }
+        for (var i = 0; i < union.length; i++) {
+            arr = arr.concat(getTypes(union[i]));
+        }
+        for (var i = 0; i < arr.length; i++) {
+            var idx = tempArr.indexOf(arr[i]);
+            if (idx < 0) tempArr.push(arr[i]);
+        }
+        return tempArr;
+
+        // innner function
+        function getPrototype(ctor) {
+            if (ctor.hasOwnProperty('super')) return ctor.super;
+            return  Object.getPrototypeOf(ctor) || ctor.__proto__;
+        }
+    }
+
+    /**
+     * 생성자의 상위 또는 _UNION 에 지정된 생성자의 타입과 같은지 검사합니다.
+     * @memberof _L.Common.Util
+     * @param {function} ctor 생성자
+     * @param {function | string} target 검사 대상
+     * @returns {boolean}
+     */
+    var isType = function(ctor, target) {
+        if (typeof ctor !== 'function') return false;
+        var arr = getTypes(ctor);
+        
+        for (var i = 0; i < arr.length; i++) {
+            if (typeof target === 'string') {
+                if (target === arr[i].name) return true;    // Line:
+            } else if (typeof target === 'function') {
+                if (target === arr[i]) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 타입의 세부 정보
      * @param {*} type 
      */
     var typeObject = function(type) {
         var obj = {};
-        var typeObj = getType(type);
+        var typeObj = extendType(type);
         var leafType = ['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint', 'object', 'regexp'];
 
         obj['$type'] = typeObj['$type'];
@@ -368,7 +437,7 @@
      * @param {any} type 대상타입
      * @returns {object} {name: string, default: [null, any]}
      */
-    var getType = function(type) {
+    var extendType = function(type) {
         var obj =  {$type: '', ref: type, default: null, kind: null};
 
         obj.toString = function(){
@@ -376,8 +445,8 @@
             var arr = [];
             if (this['$type'] === 'array' || this['$type'] === 'choice') {
                 for (var i = 0; i < this['list'].length; i++) {
-                    var _type = getType(this['list'][i]);
-                    if (_type['kind']) arr.push(getType(this['list'][i]).toString());
+                    var _type = extendType(this['list'][i]);
+                    if (_type['kind']) arr.push(extendType(this['list'][i]).toString());
                     else arr.push(_type['$type']);
                 }
                 temp = arr.join(',');
@@ -524,7 +593,8 @@
             return obj;
         }
         if (_isEmptyObj(type)) {        // {..}, 빈 생성자
-            obj['$type'] = 'object';
+            // obj['$type'] = 'object';
+            obj['$type'] = 'union';
             return obj;
         }
         if(_isPrimitiveObj(type)) {
@@ -540,7 +610,7 @@
      * @returns {string}
      */
     var typeOf = function (type) {
-        return getType(type)['$type'];
+        return extendType(type)['$type'];
     };
 
     /**
@@ -549,12 +619,15 @@
      * @memberof _L.Common.Util
      * @param {any} ori 원본 타입
      * @param {any} tar 대상 타입
+     * @param {number} opt 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
      * @returns {throw?}
      */
-    var _execAllow = function (ori, tar) {
-        var oriDef = getType(ori);
-        var tarDef = getType(tar);
+    var _execAllow = function (ori, tar, opt) {
+        var oriDef = extendType(ori);
+        var tarDef = extendType(tar);
         
+        opt = opt || 0;
+
         if (_isObject(oriDef['ref']) &&  _isObject(tarDef['ref']) && deepEqual(oriDef, tarDef)) return;
         // ori seq, opt 필수 검사
         if (oriDef['kind']) {
@@ -624,7 +697,7 @@
                 if (oriDef['list'].length === 0 && tarDef['list'].length > 0) return;
                 for (i = 0; i < oriDef['list'].length; i++) {
                     try {
-                        _execAllow(oriDef['list'][i], tarDef['list'][i]);
+                        _execAllow(oriDef['list'][i], tarDef['list'][i], opt);
                     } catch (error) {
                         Message.error('ES0733', [oriDef['list'][i], tarDef['list'][i]]);
                     }
@@ -645,13 +718,13 @@
                     for (var ii = 0; ii < oriDef['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], arrTarget[i]);
+                            _execAllow(oriDef['list'][ii], arrTarget[i], opt);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['choice(_OPT_)', getType(arrTarget[i])['$type']]);
+                    if (!success) Message.error('ES0738', ['choice(_OPT_)', extendType(arrTarget[i])['$type']]);
                 }
                 return;
 
@@ -667,13 +740,13 @@
                     for (var ii = 0; ii < oriDef['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], arrTarget[i]);
+                            _execAllow(oriDef['list'][ii], arrTarget[i], opt);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['_OPT_', getType(arrTarget[i])['$type']]);
+                    if (!success) Message.error('ES0738', ['_OPT_', extendType(arrTarget[i])['$type']]);
                 }
                 return;                
             } else {
@@ -697,7 +770,7 @@
                 }
                 for (var i = 0; i < oriDef['list'].length; i++) {
                     try {
-                        _execAllow(oriDef['list'][i], tarDef['list'][i]);
+                        _execAllow(oriDef['list'][i], tarDef['list'][i], opt);
                     } catch (error) {
                         Message.error('ES0711', ['array', '_SEQ_', error]);
                     }
@@ -716,13 +789,13 @@
                     for (var ii = 0; ii < oriDef['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], tarDef['list'][i]);
+                            _execAllow(oriDef['list'][ii], tarDef['list'][i], opt);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_REQ_)', getType(tarDef['list'][i])['$type']]);
+                    if (!success) Message.error('ES0738', ['array(_REQ_)', extendType(tarDef['list'][i])['$type']]);
                 }
                 return;
             
@@ -733,13 +806,13 @@
                     for (var ii = 0; ii < oriDef['list'].length; ii++) {
                         try {
                             if (success) continue;
-                            _execAllow(oriDef['list'][ii], tarDef['list'][i]);
+                            _execAllow(oriDef['list'][ii], tarDef['list'][i], opt);
                             success = true;
                         } catch (error) {
                             continue;
                         }
                     }
-                    if (!success) Message.error('ES0738', ['array(_OPT_)', getType(tarDef['list'][i])['$type']]);
+                    if (!success) Message.error('ES0738', ['array(_OPT_)', extendType(tarDef['list'][i])['$type']]);
                 }
 
             } else {              
@@ -755,13 +828,13 @@
             if (oriDef['params'].length !== tarDef['params'].length) Message.error('ES0721', ['function', 'params', oriDef['params'].length]);
             
             try {
-                _execAllow(['_SEQ_'].concat(oriDef['params']), ['_SEQ_'].concat(tarDef['params']));
+                _execAllow(['_SEQ_'].concat(oriDef['params']), ['_SEQ_'].concat(tarDef['params']), opt);
             } catch (error) {
                 Message.error('ES0722', ['function', 'params', error]);
             }
 
             try {
-                _execAllow(oriDef['return'], tarDef['return']);
+                _execAllow(oriDef['return'], tarDef['return'], opt);
             } catch (error) {
                     Message.error('ES0722', ['function', 'return', error]);
             }
@@ -770,7 +843,8 @@
         // object
         if (oriDef['$type'] === 'object') {
             // if (tarDef['$type'] !== 'object') Message.error('ES0713', [oriDef['$type'], tarDef['$type']]);
-            if (tarDef['$type'] === 'object' || tarDef['$type'] === 'union') return;
+            // if (tarDef['$type'] === 'object' || tarDef['$type'] === 'union') return;
+            if (tarDef['$type'] === 'object') return;
             
             // if (oriDef['ref'] === tarDef['ref']) return;
             // if (_isEmptyObj(tarDef['ref'])) return;
@@ -786,23 +860,41 @@
         }
         // class
         if (oriDef['$type'] === 'class') {
-            if (oriDef['ref'] === tarDef['ref']) return;
-            try {
-                var obj1 = new oriDef['ref']();
-                var obj2 = new tarDef['ref']();
-                if (deepEqual(obj1, obj2)) return;
-            } catch (error) {
-                Message.error('ES0724', ['object', error]);
+            
+            if (tarDef['$type'] === 'class') {
+                if (isType(tarDef['ref'], oriDef['ref'])) return;   // 1.proto check
+                if (opt === 1) {
+                    try {
+                        // 생성비교
+                        var oriObj = new oriDef['ref']();
+                        var tarObj = new tarDef['ref']();
+                        return _execAllow(oriObj, tarObj, opt);
+                    } catch (error) {
+                        Message.error('ES0724', ['object', error]);
+                    }                    
+                }
             }
             Message.error('ES0725', ['object']);
+
+            
+            // if (oriDef['ref'] === tarDef['ref']) return;
+            // try {
+            //     var obj1 = new oriDef['ref']();
+            //     var obj2 = new tarDef['ref']();
+            //     if (deepEqual(obj1, obj2)) return;  // REVIEW: allow 로 변화 해야함
+            // } catch (error) {
+            //     Message.error('ES0724', ['object', error]);
+            // }
+            // Message.error('ES0725', ['object']);
         }
         // union
         if (oriDef['$type'] === 'union') {
+            if (tarDef['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
             var list = getAllProperties(oriDef['ref']);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 try {
-                    _execAllow(oriDef['ref'][key], tarDef['ref'][key])
+                    _execAllow(oriDef['ref'][key], tarDef['ref'][key], opt);
                 } catch (error) {
                     Message.error('ES0726', ['union', error]);
                 }
@@ -818,12 +910,14 @@
      * @param {string?} parentName '' 공백시 성공
      * @returns {throw?}
      */
-    var _execMatch = function(type, target, parentName) {
+    var _execMatch = function(type, target, parentName, opt) {
         var parentName = parentName ? parentName : 'this';
         var defType, tarType;
 
-        defType = getType(type);
-        tarType = getType(target);
+        opt = opt || 0;
+
+        defType = extendType(type);
+        tarType = extendType(target);
 
         // ori seq, opt 필수 검사
         if (defType['kind']) {
@@ -916,8 +1010,7 @@
                     if (_isLiteral(elem)) {
                         if (_equalLiternal(elem, target)) return;
                     } else {
-                        _execMatch(elem, target);
-                        return;
+                        return _execMatch(elem, target, parentName, opt);
                     }
 
                     // _execMatch(defType['list'][ii], target);
@@ -952,7 +1045,7 @@
                         // if (typeof elem !== typeof tar || elem.toString() !== tar.toString()) throw new Error('array seq 리터럴 타입이 다릅니다.');
                         if (!_equalLiternal(elem, tar)) throw new Error('array seq 리터럴 타입이 다릅니다.');
                     } else {
-                        if (_execMatch(elem, tar)) throw new Error('array seq 타입이 다릅니다.');
+                        if (_execMatch(elem, tar, parentName, opt)) throw new Error('array seq 타입이 다릅니다.');
                         // return;
                     }
                 }
@@ -974,7 +1067,7 @@
                             // if (typeof elem === typeof tar && elem.toString() === tar.toString()) return;
                             if (_equalLiternal(elem, tar)) return;
                         } else {
-                            _execMatch(elem, tar);
+                            _execMatch(elem, tar, parentName, opt);
                             return;
                         }
                     } catch (error) {
@@ -1049,21 +1142,40 @@
         }
         // class
         if (defType['$type'] === 'class') {
-            if (_isBuiltFunction(type)) {   // 원시 클래스 타입은 union 비교를 하지 않음!
-                if (target instanceof type) return; 
-                else return Message.error('ES032', [parentName, _typeName(type)]);
-            } else {
-                if (typeof target === 'object' && target instanceof type) return;
-                if (typeof target === 'object' && target !== null) return _execMatch(_creator(type), target, parentName);
-                return Message.error('ES032', [parentName, _typeName(type)]);
+            /**
+             * 1. tar == class : proto
+             * 2. tar == object : instanceof
+             * 3. tar == union : match
+             */
+            if (tarType['$type'] === 'class' && isType(tarType['ref'], defType['ref'])) return;
+            else if (typeof target === 'object') {
+                if (target instanceof type) return;
+                if (!_isBuiltFunction(type) && target !== null) {
+                    return _execMatch(_creator(type), target, parentName, opt);
+                }
             }
+            return Message.error('ES032', [parentName, _typeName(type)]);
+            
+            // else if (tarType['$type'] === 'union' || tarType['$type'] === 'object') 
+
+            // if (_isBuiltFunction(type)) {   // 원시 클래스 타입은 union 비교를 하지 않음!
+            //     if (target instanceof type) return; 
+            //     else return Message.error('ES032', [parentName, _typeName(type)]);
+            // } else {
+            //     if (typeof target === 'object' && target instanceof type) return;
+            //     if (typeof target === 'object' && target !== null) return _execMatch(_creator(type), target, parentName);
+
+            //     return Message.error('ES032', [parentName, _typeName(type)]);
+            // }
         }
         // union
         if (defType['$type'] === 'union') {
+            // if (tarType['$type'] === 'class') return _execMatch(_creator(tarType['ref']), defType['ref'], parentName);
+            if (tarType['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
             var list = getAllProperties(defType.ref);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                var listDefType = getType(type[key]);
+                var listDefType = extendType(type[key]);
                 // REVIEW: for 위쪽으로 이동 검토!
                 if (!_isObject(target)) return Message.error('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
@@ -1075,7 +1187,7 @@
                     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
                     else return Message.error('ES031', [parentName + '.' + key]);
                 } 
-                _execMatch(type[key], target[key], parentName +'.'+ key);
+                _execMatch(type[key], target[key], parentName +'.'+ key, opt);
             }
             return;
         }
@@ -1120,11 +1232,12 @@
      * @memberof _L.Common.Util
      * @param {any} origin 
      * @param {any} target 
+     * @param {number} opt 
      * @returns {boolean} 
      */
-    var isAllowType = function(origin, target) {
+    var isAllowType = function(origin, target, opt) {
         try {
-            _execAllow(origin, target);
+            _execAllow(origin, target, opt);
         } catch (error) {
             return false;
         }
@@ -1151,10 +1264,14 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
+    if (isNode) {
+        // exports.isType = isType;
+        // exports.extendTypes = extendTypes;             
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
-        exports.getType = getType;
+        exports.isType = isType;
+        exports.getTypes = getTypes;
+        exports.extendType = extendType;
         exports.typeObject = typeObject;
         exports.typeOf = typeOf;
         exports.matchType = matchType;
@@ -1163,9 +1280,13 @@
         exports.isAllowType = isAllowType;
     } else {
         var ns = {
+            // isType: isType,
+            // extendTypes: extendTypes,
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
-            getType: getType,
+            isType: isType,
+            getTypes: getTypes,
+            extendType: extendType,
             typeObject: typeObject,
             typeOf: typeOf,
             matchType: matchType,

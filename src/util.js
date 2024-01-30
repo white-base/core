@@ -7,11 +7,13 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var getAllProperties;
-    var getType;
+    var extendType;
     var allowType;
     var isMatchType;
     var matchType;
     var deepEqual;
+    var isType;
+    var getTypes;
 
     //==============================================================
     // 1. 의존 모듈 선언
@@ -24,29 +26,35 @@
     if (isNode) {
         Message                     = require('./message').Message;
         getAllProperties            = require('./util-type').getAllProperties;
-        getType                    = require('./util-type').getType;
+        extendType                    = require('./util-type').extendType;
         allowType              = require('./util-type').allowType;
         isMatchType                   = require('./util-type').isMatchType;
         matchType                   = require('./util-type').matchType;
         deepEqual                   = require('./util-type').deepEqual;
+        isType                   = require('./util-type').isType;
+        getTypes                   = require('./util-type').getTypes;
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
-        getType                    = _global._L.Util.getType
+        extendType                    = _global._L.Util.extendType
         allowType              = _global._L.Util.allowType
         isMatchType                   = _global._L.Util.isMatchType
         matchType                   = _global._L.Util.matchType
         deepEqual                   = _global._L.Util.deepEqual
+        isType                   = _global._L.Util.isType
+        getTypes                   = _global._L.Util.getTypes
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
-    if (typeof getType === 'undefined') Message.error('ES012', ['getType', 'util-type']);
+    if (typeof extendType === 'undefined') Message.error('ES012', ['extendType', 'util-type']);
     if (typeof allowType === 'undefined') Message.error('ES012', ['allowType', 'util-type']);
     if (typeof isMatchType === 'undefined') Message.error('ES012', ['isMatchType', 'util-type']);
     if (typeof matchType === 'undefined') Message.error('ES012', ['matchType', 'util-type']);
     if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);
+    if (typeof isType === 'undefined') Message.error('ES012', ['isType', 'util-type']);
+    if (typeof getTypes === 'undefined') Message.error('ES012', ['getTypes', 'util-type']);
     
     //==============================================================
     // 4. module implementation   
@@ -264,74 +272,18 @@
         function typeName(obj) {
             if (typeof obj === 'function') return obj.name;
             if (_isObject(obj)) {
-                var constructor = getType(obj);
+                var constructor = extendType(obj);
                 return  constructor.name;
             }
             // return 'unknown';
         }
-        function getType(obj) {
+        function extendType(obj) {
             var proto = obj.__proto__ || Object.getPrototypeOf(obj);
             return proto.constructor;
         }
     };
 
-    /**
-     * 대상의 상위를 포함하여 '_UNION'과 자신의 타입 목록을 가져옵니다.
-     * @memberof _L.Common.Util
-     * @param {function} ctor 생성자
-     * @returns {array<function>}
-     */
-    var getTypes = function (ctor) {
-        var arr = [];
-        var tempArr = [];
-        var union;
-        var proto;
-
-        if (typeof ctor !== 'function') return;
-        
-        arr.push(ctor);
-        union = ctor['_UNION'] || [];
-        proto = getPrototype(ctor);        
-        
-        if (proto !== Function.prototype) {
-            arr = arr.concat(getTypes(proto));
-        }
-        for (var i = 0; i < union.length; i++) {
-            arr = arr.concat(getTypes(union[i]));
-        }
-        for (var i = 0; i < arr.length; i++) {
-            var idx = tempArr.indexOf(arr[i]);
-            if (idx < 0) tempArr.push(arr[i]);
-        }
-        return tempArr;
-
-        // innner function
-        function getPrototype(ctor) {
-            if (ctor.hasOwnProperty('super')) return ctor.super;
-            return  Object.getPrototypeOf(ctor) || ctor.__proto__;
-        }
-    }
-
-    /**
-     * 생성자의 상위 또는 _UNION 에 지정된 생성자의 타입과 같은지 검사합니다.
-     * @memberof _L.Common.Util
-     * @param {function} ctor 생성자
-     * @param {function | string} target 검사 대상
-     * @returns {boolean}
-     */
-    var isType = function(ctor, target) {
-        if (typeof ctor !== 'function') return false;
-        var arr = getTypes(ctor);
-        
-        for (var i = 0; i < arr.length; i++) {
-            if (typeof target === 'string') {
-                if (target === arr[i].name) return true;    // Line:
-            } else if (typeof target === 'function') {
-                if (target === arr[i]) return true;
-            }
-        }
-        return false;
-    }
+    
 
     //==============================================================
     // 5. module export
@@ -344,7 +296,7 @@
         exports.implements = implement;
         exports.getAllProperties = getAllProperties;
         exports.allowType = allowType;
-        exports.getType = getType;
+        exports.extendType = extendType;
         exports.isMatchType = isMatchType;
         exports.matchType = matchType;
         exports.deepCopy = deepCopy;
@@ -359,7 +311,7 @@
             implements: implement,
             getAllProperties: getAllProperties,
             allowType: allowType,
-            getType: getType,
+            extendType: extendType,
             isMatchType: isMatchType,
             matchType: matchType,
             deepCopy: deepCopy,

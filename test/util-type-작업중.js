@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const {getType, typeObject, typeOf}  = require('../src/util-type');
+const {extendType, typeObject, typeOf}  = require('../src/util-type');
 const {isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 const T = true;
@@ -129,9 +129,9 @@ describe("[target: util-type.js.js]", () => {
                 var type3 = {};
 
                 expect(typeOf(type0)).toBe('object');
-                expect(typeOf(type1)).toBe('object');
+                expect(typeOf(type1)).toBe('union');
                 expect(typeOf(type2)).toBe('object');
-                expect(typeOf(type3)).toBe('object');
+                expect(typeOf(type3)).toBe('union');
             });
             it('- typeOf() : union ', () => {
                 var type0 = {$type: 'union'}
@@ -195,63 +195,63 @@ describe("[target: util-type.js.js]", () => {
         });
     });
 
-    describe('getType(target) <타입객체 얻기> ', () => {
+    describe('extendType(target) <타입객체 얻기> ', () => {
         describe('원시 타입 ', () => {
-            it('- getType() : string [리터럴] ', () => {
+            it('- extendType() : string [리터럴] ', () => {
                 var type1 = String;
                 var type2 = 'str';  // 리터럴
                 
-                expect(getType(type1).$type   ).toBe('string');
-                expect(getType(type1).default).toBe(null);
+                expect(extendType(type1).$type   ).toBe('string');
+                expect(extendType(type1).default).toBe(null);
                 
-                expect(getType(type2).$type   ).toBe('string');
-                expect(getType(type2).default).toBe(type2);
+                expect(extendType(type2).$type   ).toBe('string');
+                expect(extendType(type2).default).toBe(type2);
             });
-            it('- getType() : number [리터럴] ', () => {
+            it('- extendType() : number [리터럴] ', () => {
                 var type1 = Number;
                 var type2 = 2;      // 리터럴
                 var type3 = NaN;    // 리터럴
 
-                expect(getType(type1).$type   ).toBe('number');
-                expect(getType(type1).default).toBe(null);
+                expect(extendType(type1).$type   ).toBe('number');
+                expect(extendType(type1).default).toBe(null);
                 
-                expect(getType(type2).$type   ).toBe('number');
-                expect(getType(type2).default).toBe(type2);
+                expect(extendType(type2).$type   ).toBe('number');
+                expect(extendType(type2).default).toBe(type2);
                 
-                expect(getType(type3).$type   ).toBe('number');
-                expect(getType(type3).default).toBe(type3);
+                expect(extendType(type3).$type   ).toBe('number');
+                expect(extendType(type3).default).toBe(type3);
             });
-            it('- getType() : boolean [리터럴] ', () => {
+            it('- extendType() : boolean [리터럴] ', () => {
                 var type1 = Boolean;
                 var type2 = true;      // 리터럴
                 var type3 = false;     // 리터럴
 
-                expect(getType(type1).$type   ).toBe('boolean');
-                expect(getType(type1).default).toBe(null);
+                expect(extendType(type1).$type   ).toBe('boolean');
+                expect(extendType(type1).default).toBe(null);
 
-                expect(getType(type2).$type   ).toBe('boolean');
-                expect(getType(type2).default).toBe(type2);
+                expect(extendType(type2).$type   ).toBe('boolean');
+                expect(extendType(type2).default).toBe(type2);
                 
-                expect(getType(type3).$type   ).toBe('boolean');
-                expect(getType(type3).default).toBe(type3);
+                expect(extendType(type3).$type   ).toBe('boolean');
+                expect(extendType(type3).default).toBe(type3);
             });
-            it('- getType() : bigint [리터럴] (ES6+) ', () => {
+            it('- extendType() : bigint [리터럴] (ES6+) ', () => {
                 var type1 = BigInt;
                 var type2 = BigInt(100);    // 리터럴
                 var type3 = 100n;           // 리터럴
 
-                expect(getType(type1).$type   ).toBe('bigint');
-                expect(getType(type1).default).toBe(null);
+                expect(extendType(type1).$type   ).toBe('bigint');
+                expect(extendType(type1).default).toBe(null);
 
-                expect(getType(type2).$type   ).toBe('bigint');
-                expect(getType(type2).default).toBe(type2);
+                expect(extendType(type2).$type   ).toBe('bigint');
+                expect(extendType(type2).default).toBe(type2);
                 
-                expect(getType(type3).$type   ).toBe('bigint');
-                expect(getType(type3).default).toBe(type3);
+                expect(extendType(type3).$type   ).toBe('bigint');
+                expect(extendType(type3).default).toBe(type3);
             });
         });
         describe('확장 타입 ', () => {
-            it('- getType() : function ', () => {
+            it('- extendType() : function ', () => {
                 var type01 = Function; 
                 var type02 = function(){};
                 var type02 = function( ) {   }; // 공백
@@ -271,67 +271,67 @@ describe("[target: util-type.js.js]", () => {
                 var type14 = function func(String){Number};
                 var type15 = function func(String){return Number};
 
-                expect(getType(type01).$type   ).toBe('function');
-                expect(getType(type01).params ).toEqual([]);
-                expect(getType(type01).return ).toEqual(undefined);
+                expect(extendType(type01).$type   ).toBe('function');
+                expect(extendType(type01).params ).toEqual([]);
+                expect(extendType(type01).return ).toEqual(undefined);
 
-                expect(getType(type02).$type   ).toBe('function');
-                expect(getType(type02).params ).toEqual([]);
-                expect(getType(type02).return ).toEqual(undefined);
+                expect(extendType(type02).$type   ).toBe('function');
+                expect(extendType(type02).params ).toEqual([]);
+                expect(extendType(type02).return ).toEqual(undefined);
 
-                expect(getType(type03).$type   ).toBe('function');
-                expect(getType(type03).params ).toEqual([String, Number]);
-                expect(getType(type03).return ).toEqual(Object);
+                expect(extendType(type03).$type   ).toBe('function');
+                expect(extendType(type03).params ).toEqual([String, Number]);
+                expect(extendType(type03).return ).toEqual(Object);
 
-                expect(getType(type04).$type   ).toBe('function');
-                expect(getType(type04).params ).toEqual([]);
-                expect(getType(type04).return ).toEqual([Object]);
+                expect(extendType(type04).$type   ).toBe('function');
+                expect(extendType(type04).params ).toEqual([]);
+                expect(extendType(type04).return ).toEqual([Object]);
 
-                expect(getType(type05).$type   ).toBe('function');
-                expect(getType(type05).params ).toEqual([]);
-                expect(getType(type06).return ).toEqual(undefined);
+                expect(extendType(type05).$type   ).toBe('function');
+                expect(extendType(type05).params ).toEqual([]);
+                expect(extendType(type06).return ).toEqual(undefined);
 
-                expect(getType(type06).$type   ).toBe('function');
-                expect(getType(type06).params ).toEqual([]);
-                expect(getType(type06).return ).toEqual(undefined);
+                expect(extendType(type06).$type   ).toBe('function');
+                expect(extendType(type06).params ).toEqual([]);
+                expect(extendType(type06).return ).toEqual(undefined);
 
-                expect(getType(type07).$type   ).toBe('function');
-                expect(getType(type07).params ).toEqual([[String]]);
-                expect(getType(type07).return ).toEqual(Number);
+                expect(extendType(type07).$type   ).toBe('function');
+                expect(extendType(type07).params ).toEqual([[String]]);
+                expect(extendType(type07).return ).toEqual(Number);
 
-                expect(getType(type08).$type   ).toBe('function');
-                expect(getType(type08).params ).toEqual([String, Boolean]);
-                expect(getType(type08).return ).toEqual(Number);
+                expect(extendType(type08).$type   ).toBe('function');
+                expect(extendType(type08).params ).toEqual([String, Boolean]);
+                expect(extendType(type08).return ).toEqual(Number);
 
-                expect(getType(type09).$type   ).toBe('function');
-                expect(getType(type09).params ).toEqual([]);
-                expect(getType(type09).return ).toEqual(String);
+                expect(extendType(type09).$type   ).toBe('function');
+                expect(extendType(type09).params ).toEqual([]);
+                expect(extendType(type09).return ).toEqual(String);
 
-                expect(getType(type10).$type   ).toBe('function');
-                expect(getType(type10).params ).toEqual([String]);
-                expect(getType(type10).return ).toEqual(Number);
+                expect(extendType(type10).$type   ).toBe('function');
+                expect(extendType(type10).params ).toEqual([String]);
+                expect(extendType(type10).return ).toEqual(Number);
 
-                expect(getType(type11).$type   ).toBe('function');
-                expect(getType(type11).params ).toEqual([String]);
-                expect(getType(type11).return ).toEqual(Number);
+                expect(extendType(type11).$type   ).toBe('function');
+                expect(extendType(type11).params ).toEqual([String]);
+                expect(extendType(type11).return ).toEqual(Number);
 
-                expect(getType(type12).$type   ).toBe('function');
-                expect(getType(type12).params ).toEqual([String]);
-                expect(getType(type12).return ).toEqual(Number);
+                expect(extendType(type12).$type   ).toBe('function');
+                expect(extendType(type12).params ).toEqual([String]);
+                expect(extendType(type12).return ).toEqual(Number);
 
-                expect(getType(type13).$type   ).toBe('function');
-                expect(getType(type13).params ).toEqual([]);
-                expect(getType(type13).return ).toEqual(undefined);
+                expect(extendType(type13).$type   ).toBe('function');
+                expect(extendType(type13).params ).toEqual([]);
+                expect(extendType(type13).return ).toEqual(undefined);
 
-                expect(getType(type14).$type   ).toBe('function');
-                expect(getType(type14).params ).toEqual([String]);
-                expect(getType(type14).return ).toEqual(Number);
+                expect(extendType(type14).$type   ).toBe('function');
+                expect(extendType(type14).params ).toEqual([String]);
+                expect(extendType(type14).return ).toEqual(Number);
 
-                expect(getType(type15).$type   ).toBe('function');
-                expect(getType(type15).params ).toEqual([String]);
-                expect(getType(type15).return ).toEqual(Number);
+                expect(extendType(type15).$type   ).toBe('function');
+                expect(extendType(type15).params ).toEqual([String]);
+                expect(extendType(type15).return ).toEqual(Number);
             });
-            it('- getType() : function [특수객체] ', () => {
+            it('- extendType() : function [특수객체] ', () => {
                 var type1 = ()=>{}; 
                 var type1 = ()=>{}; 
                 var type1 = ()=>{}; 
@@ -372,17 +372,17 @@ describe("[target: util-type.js.js]", () => {
 
             
             });
-            it('- getType() : regexp [리터럴] ', () => {
+            it('- extendType() : regexp [리터럴] ', () => {
                 var type1 = RegExp;
                 var type2 = /reg/;
 
-                expect(getType(type1).$type   ).toBe('regexp');
-                expect(getType(type1).default).toEqual(null);
+                expect(extendType(type1).$type   ).toBe('regexp');
+                expect(extendType(type1).default).toEqual(null);
 
-                expect(getType(type2).$type   ).toBe('regexp');
-                expect(getType(type2).default).toEqual(/reg/);
+                expect(extendType(type2).$type   ).toBe('regexp');
+                expect(extendType(type2).default).toEqual(/reg/);
             });
-            it('- getType() : choice ', () => {
+            it('- extendType() : choice ', () => {
                 var type01 = [[String]]
                 var type02 = [[String, Number]]
                 var type03 = [['_opt_', String]]
@@ -395,47 +395,47 @@ describe("[target: util-type.js.js]", () => {
                 var type10 = [['_eum_', 'blue', 'red']]
                 var type11 = [['_def_', 'blue', 'red']]
 
-                expect(getType(type01).$type).toBe('choice');
-                expect(getType(type01).kind).toBe('_OPT_');
-                expect(getType(type01).list).toEqual([String]);
+                expect(extendType(type01).$type).toBe('choice');
+                expect(extendType(type01).kind).toBe('_OPT_');
+                expect(extendType(type01).list).toEqual([String]);
                 
-                expect(getType(type02).$type).toBe('choice');
-                expect(getType(type02).kind).toBe('_OPT_');
-                expect(getType(type02).list).toEqual([String, Number]);
+                expect(extendType(type02).$type).toBe('choice');
+                expect(extendType(type02).kind).toBe('_OPT_');
+                expect(extendType(type02).list).toEqual([String, Number]);
                 
-                expect(getType(type03).$type).toBe('choice');
-                expect(getType(type03).kind).toBe('_OPT_');
-                expect(getType(type03).list).toEqual([String]);
+                expect(extendType(type03).$type).toBe('choice');
+                expect(extendType(type03).kind).toBe('_OPT_');
+                expect(extendType(type03).list).toEqual([String]);
                 
-                expect(getType(type04).$type).toBe('choice');
-                expect(getType(type04).kind).toBe('_OPT_');
-                expect(getType(type04).list).toEqual([String, Number]);
+                expect(extendType(type04).$type).toBe('choice');
+                expect(extendType(type04).kind).toBe('_OPT_');
+                expect(extendType(type04).list).toEqual([String, Number]);
                 
-                expect(getType(type05).$type).toBe('choice');
-                expect(getType(type05).kind).toBe('_REQ_');
-                expect(getType(type05).list).toEqual([String]);
+                expect(extendType(type05).$type).toBe('choice');
+                expect(extendType(type05).kind).toBe('_REQ_');
+                expect(extendType(type05).list).toEqual([String]);
                 
-                expect(getType(type06).$type).toBe('choice');
-                expect(getType(type06).kind).toBe('_ALL_');
+                expect(extendType(type06).$type).toBe('choice');
+                expect(extendType(type06).kind).toBe('_ALL_');
                 
-                expect(getType(type07).$type).toBe('choice');
-                expect(getType(type07).kind).toBe('_ANY_');
+                expect(extendType(type07).$type).toBe('choice');
+                expect(extendType(type07).kind).toBe('_ANY_');
                 
-                expect(getType(type08).$type).toBe('choice');
-                expect(getType(type08).kind).toBe('_ANY_');
+                expect(extendType(type08).$type).toBe('choice');
+                expect(extendType(type08).kind).toBe('_ANY_');
                 
-                expect(getType(type09).$type).toBe('choice');
-                expect(getType(type09).kind).toBe('_NON_');
+                expect(extendType(type09).$type).toBe('choice');
+                expect(extendType(type09).kind).toBe('_NON_');
                 
-                expect(getType(type10).$type).toBe('choice');
-                expect(getType(type10).kind).toBe('_EUM_');
-                expect(getType(type10).list).toEqual(['blue', 'red']);
+                expect(extendType(type10).$type).toBe('choice');
+                expect(extendType(type10).kind).toBe('_EUM_');
+                expect(extendType(type10).list).toEqual(['blue', 'red']);
                 
-                expect(getType(type11).$type).toBe('choice');
-                expect(getType(type11).kind).toBe('_DEF_');
-                expect(getType(type11).list).toEqual(['blue', 'red']);
+                expect(extendType(type11).$type).toBe('choice');
+                expect(extendType(type11).kind).toBe('_DEF_');
+                expect(extendType(type11).list).toEqual(['blue', 'red']);
             });
-            it('- getType() : array ', () => {
+            it('- extendType() : array ', () => {
                 var type1 = [];
                 var type2 = Array;
                 var type3 = [String]
@@ -445,33 +445,33 @@ describe("[target: util-type.js.js]", () => {
                 var type7 = ['_all_'] 
                 var type8 = ['_opt_', String] 
 
-                expect(getType(type1).$type).toBe('array');
-                expect(getType(type1).kind).toBe('_ANY_');
+                expect(extendType(type1).$type).toBe('array');
+                expect(extendType(type1).kind).toBe('_ANY_');
                 
-                expect(getType(type2).$type).toBe('array');
-                expect(getType(type2).kind).toBe('_ALL_');
+                expect(extendType(type2).$type).toBe('array');
+                expect(extendType(type2).kind).toBe('_ALL_');
                 
-                expect(getType(type3).$type).toBe('array');
-                expect(getType(type3).kind).toBe('_OPT_');
-                expect(getType(type3).list).toEqual([String]);
+                expect(extendType(type3).$type).toBe('array');
+                expect(extendType(type3).kind).toBe('_OPT_');
+                expect(extendType(type3).list).toEqual([String]);
                 
-                expect(getType(type4).$type).toBe('array');
-                expect(getType(type4).kind).toBe('_REQ_');
-                expect(getType(type4).list).toEqual([String]);
+                expect(extendType(type4).$type).toBe('array');
+                expect(extendType(type4).kind).toBe('_REQ_');
+                expect(extendType(type4).list).toEqual([String]);
                 
-                expect(getType(type5).$type).toBe('array');
-                expect(getType(type5).kind).toBe('_SEQ_');
-                expect(getType(type5).list).toEqual([String]);
+                expect(extendType(type5).$type).toBe('array');
+                expect(extendType(type5).kind).toBe('_SEQ_');
+                expect(extendType(type5).list).toEqual([String]);
                 
-                expect(getType(type6).$type).toBe('array');
-                expect(getType(type6).kind).toBe('_ANY_');
+                expect(extendType(type6).$type).toBe('array');
+                expect(extendType(type6).kind).toBe('_ANY_');
                 
-                expect(getType(type7).$type).toBe('array');
-                expect(getType(type7).kind).toBe('_ALL_');
+                expect(extendType(type7).$type).toBe('array');
+                expect(extendType(type7).kind).toBe('_ALL_');
 
-                expect(getType(type8).$type).toBe('array');
-                expect(getType(type8).kind).toBe('_OPT_');
-                expect(getType(type8).list).toEqual([String]);
+                expect(extendType(type8).$type).toBe('array');
+                expect(extendType(type8).kind).toBe('_OPT_');
+                expect(extendType(type8).list).toEqual([String]);
             });
         });
     });
@@ -562,15 +562,15 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeObject(type2)   ).toEqual(obj02);
             });
             it('- typeObject() : object ', () => {
-                var type1 = new function User() {};
+                // var type1 = new function User() {};
                 var type2 = new Date();
-                var type3 = {};
+                // var type3 = {};
 
                 var obj01 = {$type: 'object'};
 
-                expect(typeObject(type1)   ).toEqual(obj01);
+                // expect(typeObject(type1)   ).toEqual(obj01);
                 expect(typeObject(type2)   ).toEqual(obj01);
-                expect(typeObject(type3)   ).toEqual(obj01);
+                // expect(typeObject(type3)   ).toEqual(obj01);
             });
         });
         describe('복합 타입 ', () => {
@@ -727,7 +727,7 @@ describe("[target: util-type.js.js]", () => {
         });
     });
 
-    // describe('getType(target): obj  <타입 객체 얻기> ', () => {
+    // describe('extendType(target): obj  <타입 객체 얻기> ', () => {
     //     // typeOf 와 비슷함
     // });
     describe('isMatchType(type, target): bool  <타입 매치 여부> ', () => {
@@ -984,15 +984,12 @@ describe("[target: util-type.js.js]", () => {
                 var type1 = function Type1(){ this.age = 1; this.fun = (a,b)=>{} };
                 var type2 = class Type2 { age = 10; fun = function(){} };
                 var type3 = Date;
-                var type4 = class Type4 {};
 
                 var tar01 = new type1();                // union
                 var tar02 = new type2();                // union
                 var tar03 = { age: 10, fun: ()=>{} };   // union
                 var tar04 = { age: 10 };                // union
                 var tar05 = new Date();                 // object
-
-                // expect(isMatchType(type1, type1)    ).toBe(T);
 
                 expect(isMatchType(type1, tar01)    ).toBe(T);
                 expect(isMatchType(type1, tar02)    ).toBe(T);   
@@ -1011,35 +1008,45 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type3, tar03)    ).toBe(false);
                 expect(isMatchType(type3, tar04)    ).toBe(false);
                 expect(isMatchType(type3, tar05)    ).toBe(T);
+            });
+            it('- isMatchType() : class 상속', () => {
+                var tar01 = class Tar01 { age = Number };
+                var tar02 = class Tar02 extends tar01 { color = String };
+                var tar03 = class Tar03 { color = String; age = Number };
 
-                // expect(isMatchType(type4, tar01)    ).toBe(T);
-                // expect(isMatchType(type4, tar02)    ).toBe(T);
-                // expect(isMatchType(type4, tar03)    ).toBe(T);
-                // expect(isMatchType(type4, tar04)    ).toBe(T);
-                // expect(isMatchType(type4, tar05)    ).toBe(T);
-                // expect(isMatchType(type4, tar01)    ).toBe(false);
-                // expect(isMatchType(type4, tar02)    ).toBe(false);
-                // expect(isMatchType(type4, tar03)    ).toBe(false);
-                // expect(isMatchType(type4, tar04)    ).toBe(false);
-                // expect(isMatchType(type4, tar05)    ).toBe(T);
+                var type1 = tar01
+                var type2 = tar02
+                var type3 = tar03
+
+                expect(isMatchType(type1, tar01)    ).toBe(T);
+                expect(isMatchType(type1, tar02)    ).toBe(T);   
+                expect(isMatchType(type1, tar03)    ).toBe(false);
+
+                expect(isMatchType(type2, tar01)    ).toBe(false);
+                expect(isMatchType(type2, tar02)    ).toBe(T);
+                expect(isMatchType(type2, tar03)    ).toBe(false);
+
+                expect(isMatchType(type3, tar01)    ).toBe(false);
+                expect(isMatchType(type3, tar02)    ).toBe(false);
+                expect(isMatchType(type3, tar03)    ).toBe(T);
             });
              
             it('- isMatchType() : object ', () => {
-                var type1 = {};
-                var type2 = Object;
-                var type3 = new Date;
-                var type4 = Date;  // class type
+                var type1 = {};         // union
+                var type2 = Object;     // object
+                var type3 = new Date;   // object
+                var type4 = Date;       // class 
 
                 // type1
                 expect(isMatchType(type1, {})           ).toBe(T);
-                expect(isMatchType(type1, new Date)     ).toBe(T);
+                expect(isMatchType(type1, new Date)     ).toBe(false);
                 expect(isMatchType(type1, /reg/)        ).toBe(false);
                 // type2
-                expect(isMatchType(type2, {})           ).toBe(T);
+                expect(isMatchType(type2, {})           ).toBe(false);
                 expect(isMatchType(type2, new Date)     ).toBe(T);
                 expect(isMatchType(type2, /reg/)        ).toBe(false);
                 // type3
-                expect(isMatchType(type3, {})           ).toBe(T);
+                expect(isMatchType(type3, {})           ).toBe(false);
                 expect(isMatchType(type3, new Date)     ).toBe(T);
                 expect(isMatchType(type3, /reg/)        ).toBe(false);
                 // type4

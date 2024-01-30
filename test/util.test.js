@@ -133,7 +133,21 @@ describe('Util.*', () => {
         expect(i.foo).toBe(1);
         expect(i.bar).toBe(10);
     });
+    it('- Util.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
+        const Util      = require('../src/util');
+        // const IClassA = function IClassA() {this.a = true}
+        // const IClassB = function IClassB() {this.b = true}
+        // const IClassC = function IClassC() {this.c = true}
+        // Util.inherits(IClassB, IClassC);
+        const ClassA = function ClassA() {this.a = true}
+        const ClassB = function ClassB() {this.b = true}
+        Util.inherits(ClassB, ClassA);
+        // ClassA._UNION = [IClassA, IClassB]
+        // ClassB._UNION = [IClassB]
 
+        var arr = Util.getTypes(ClassB);
+        expect(arr.length).toBe(2);
+    });
     it('- Util.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
         const Util      = require('../src/util');
         const IClassA = function IClassA() {this.a = true}
