@@ -473,7 +473,7 @@
         } else {
             obj['ref'] = type;
         }
-        // seq 1 : === (operation) 
+        // step : (operation) 
         if (type === null) {
             obj['$type'] = 'null';
             return obj;
@@ -522,7 +522,7 @@
             obj['$type'] = 'bigint';
             return obj;
         }
-        // seq 2 : typeof
+        // step : typeof
         if (typeof type === 'undefined') {
             obj['$type'] = 'undefined';
             return obj;
@@ -551,12 +551,14 @@
             obj['default'] = type;
             return obj;
         }
+        // step : function
         if (typeof type === 'function') {
             var kind = type['_KIND'];
             if (kind) {
                 kind = kind.toLowerCase();
-                if (kind === 'class' || kind === 'interface' || kind === 'abstract') obj['$type'] = 'class';
+                // if (kind === 'class' || kind === 'interface' || kind === 'abstract') obj['$type'] = 'class';
                 if (kind === 'function') obj['$type'] = 'function';
+                else obj['$type'] = 'class';
             } else {
                 obj['$type'] = _isUpper(type.name) ? 'class' : 'function';
             }
@@ -568,12 +570,10 @@
                 } catch (err) {
                     obj['params'] = [];
                 }
-            } else if (obj['$type'] === 'class') {
-                // TODO::
             }
             return obj;
         }
-        // seq 3 : instanceof
+        // step : instanceof
         if (Array.isArray(type)) {
             if (type.length ===  1 && Array.isArray(type[0])) {
                 obj['$type'] = 'choice';
@@ -589,13 +589,8 @@
             if (!obj['kind']) obj['kind'] = '_OPT_';
             return obj;
         }
-        // seq 4: funciton
-        if (_isFillObj(type)) {
-            obj['$type'] = 'union';
-            return obj;
-        }
-        if (_isEmptyObj(type)) {        // {..}, 빈 생성자
-            // obj['$type'] = 'object';
+        // step : object
+        if (_isFillObj(type) || _isEmptyObj(type)) {
             obj['$type'] = 'union';
             return obj;
         }
@@ -603,6 +598,11 @@
             obj['$type'] = 'object';
             return obj;
         }
+        // if (_isEmptyObj(type)) {        // {..}, 빈 생성자
+        //     // obj['$type'] = 'object';
+        //     obj['$type'] = 'union';
+        //     return obj;
+        // }
         Message.error('ES022', ['type']);
     }
 
@@ -909,11 +909,11 @@
      * 타입을 검사하여 메세지를 리턴
      * @param {any} type 검사할 타입 , origin
      * @param {any} target 검사대상
-     * @param {string?} parentName '' 공백시 성공
+     * @param {string?} tarName '' 공백시 성공
      * @returns {throw?}
      */
-    var _execMatch = function(type, target, parentName, opt) {
-        var parentName = parentName ? parentName : 'this';
+    var _execMatch = function(type, target, tarName, opt) {
+        var tarName = tarName ? tarName : 'this';
         var defType = extendType(type);
         var tarType = extendType(target);
         
@@ -930,41 +930,41 @@
         // primitive
         if (defType['$type'] === 'null') {
             if (target === null) return;
-            Message.error('ES074', [parentName, 'null']);
+            Message.error('ES074', [tarName, 'null']);
         }
         if (defType['$type'] === 'undefined') {
             if (typeof target === 'undefined') return;
-            Message.error('ES074', [parentName, 'undefined']);
+            Message.error('ES074', [tarName, 'undefined']);
         }
         if (defType['$type'] === 'number') {
             if (typeof defType['default'] === 'number' && typeof target === 'undefined') target = defType['default']; 
             if (typeof target === 'number') return;
-            Message.error('ES074', [parentName, 'number']);
+            Message.error('ES074', [tarName, 'number']);
         }
         if (defType['$type'] === 'string') {
             if (typeof defType['default'] === 'string' && typeof target === 'undefined') target = defType['default'];
             if (typeof target === 'string') return;
-            Message.error('ES074', [parentName, 'string']);
+            Message.error('ES074', [tarName, 'string']);
         }
         if (defType['$type'] === 'boolean') {
             if (typeof defType['default'] === 'boolean' && typeof target === 'undefined') target = defType['default'];
             if (typeof target === 'boolean') return;
-            Message.error('ES074', [parentName, 'boolean']);
+            Message.error('ES074', [tarName, 'boolean']);
         }
         if (defType['$type'] === 'bigint') {    // ES6+
             if (typeof defType['default'] === 'bigint' && typeof target === 'undefined') target = defType['default'];
             if (typeof target === 'bigint') return;
-            Message.error('ES074', [parentName, 'bigint']);
+            Message.error('ES074', [tarName, 'bigint']);
         }
         if (defType['$type'] === 'symbol') {    // ES6+
             if (typeof target === 'symbol') return;
-            Message.error('ES074', [parentName, 'symbol']);
+            Message.error('ES074', [tarName, 'symbol']);
         }
         // regexp
         if (defType['$type'] === 'regexp') {
-            if (defType['default'] && defType['default'] instanceof RegExp && typeof target === 'undefined') target = defType['default'];
+            if (defType['default'] && typeof target === 'undefined') target = defType['default'];
             if (target instanceof RegExp) return;
-            Message.error('ES074', [parentName, 'regexp']);
+            Message.error('ES074', [tarName, 'regexp']);
         }
         // choice
         if (defType['$type'] === 'choice') {
@@ -1010,7 +1010,7 @@
                     if (_isLiteral(elem)) {
                         if (_equalLiternal(elem, target)) return;
                     } else {
-                        return _execMatch(elem, target, parentName, opt);
+                        return _execMatch(elem, target, tarName, opt);
                     }
 
                     // _execMatch(defType['list'][ii], target);
@@ -1025,7 +1025,7 @@
         // array
         if (defType['$type'] === 'array') {
             if ((type === Array || type.length === 0) && (Array.isArray(target) || target === Array)) return;
-            if (!Array.isArray(target)) return Message.error('ES024', [parentName, 'array']);
+            if (!Array.isArray(target)) return Message.error('ES024', [tarName, 'array']);
             if (defType['kind'] == '_ALL_') {
                 return;
             } else if (defType['kind'] == '_ANY_') {
@@ -1045,7 +1045,7 @@
                         // if (typeof elem !== typeof tar || elem.toString() !== tar.toString()) throw new Error('array seq 리터럴 타입이 다릅니다.');
                         if (!_equalLiternal(elem, tar)) throw new Error('array seq 리터럴 타입이 다릅니다.');
                     } else {
-                        if (_execMatch(elem, tar, parentName, opt)) throw new Error('array seq 타입이 다릅니다.');
+                        if (_execMatch(elem, tar, tarName, opt)) throw new Error('array seq 타입이 다릅니다.');
                         // return;
                     }
                 }
@@ -1067,7 +1067,7 @@
                             // if (typeof elem === typeof tar && elem.toString() === tar.toString()) return;
                             if (_equalLiternal(elem, tar)) return;
                         } else {
-                            return _execMatch(elem, tar, parentName, opt);
+                            return _execMatch(elem, tar, tarName, opt);
                         }
                     } catch (error) {
                         continue;
@@ -1079,8 +1079,8 @@
         }
         // function
         if (defType['$type'] === 'function') {
-            // if (typeof target !== 'function') return Message.error('ES024', [parentName, 'function']);
-            if (tarType['$type'] !== 'function') return Message.error('ES024', [parentName, 'function']);
+            // if (typeof target !== 'function') return Message.error('ES024', [tarName, 'function']);
+            if (tarType['$type'] !== 'function') return Message.error('ES024', [tarName, 'function']);
             if (defType['name']) {
                 if (defType['name'] === target.name) return;
                 throw new Error('지정한 함수 이름과 다릅니다.');
@@ -1142,7 +1142,7 @@
             
             // if (type === Object && target instanceof type) return;
             // if (type !== Object && target instanceof type.constructor) return;
-            return Message.error('ES024', [parentName, 'object']);
+            return Message.error('ES024', [tarName, 'object']);
         }
         // class
         if (defType['$type'] === 'class') {
@@ -1157,43 +1157,43 @@
             } else if (typeof target === 'object') {
                 if (target instanceof type) return;
                 if (!_isBuiltFunction(type) && target !== null) {
-                    return _execMatch(_creator(type), target, parentName, opt);
+                    return _execMatch(_creator(type), target, tarName, opt);
                 }
             }
-            return Message.error('ES032', [parentName, _typeName(type)]);
+            return Message.error('ES032', [tarName, _typeName(type)]);
             
             // else if (tarType['$type'] === 'union' || tarType['$type'] === 'object') 
 
             // if (_isBuiltFunction(type)) {   // 원시 클래스 타입은 union 비교를 하지 않음!
             //     if (target instanceof type) return; 
-            //     else return Message.error('ES032', [parentName, _typeName(type)]);
+            //     else return Message.error('ES032', [tarName, _typeName(type)]);
             // } else {
             //     if (typeof target === 'object' && target instanceof type) return;
-            //     if (typeof target === 'object' && target !== null) return _execMatch(_creator(type), target, parentName);
+            //     if (typeof target === 'object' && target !== null) return _execMatch(_creator(type), target, tarName);
 
-            //     return Message.error('ES032', [parentName, _typeName(type)]);
+            //     return Message.error('ES032', [tarName, _typeName(type)]);
             // }
         }
         // union
         if (defType['$type'] === 'union') {
-            // if (tarType['$type'] === 'class') return _execMatch(_creator(tarType['ref']), defType['ref'], parentName);
+            // if (tarType['$type'] === 'class') return _execMatch(_creator(tarType['ref']), defType['ref'], tarName);
             if (tarType['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
             var list = getAllProperties(defType.ref);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 var listDefType = extendType(type[key]);
                 // REVIEW: for 위쪽으로 이동 검토!
-                if (!_isObject(target)) return Message.error('ES031', [parentName + '.' + key]);                 // target 객체유무 검사
+                if (!_isObject(target)) return Message.error('ES031', [tarName + '.' + key]);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
                 if (listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
                     target[key] = listDefType['default'];
-                if (target !== null && !(key in target)) return Message.error('ES027', [listDefType['$type'], parentName + '.' + key]);    
+                if (target !== null && !(key in target)) return Message.error('ES027', [listDefType['$type'], tarName + '.' + key]);    
                 if (listDefType['$type'] === 'class'){
                     if (typeof target[key] === 'function') continue;                        // class method
                     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
-                    else return Message.error('ES031', [parentName + '.' + key]);
+                    else return Message.error('ES031', [tarName + '.' + key]);
                 } 
-                _execMatch(type[key], target[key], parentName +'.'+ key, opt);
+                _execMatch(type[key], target[key], tarName +'.'+ key, opt);
             }
             return;
         }
