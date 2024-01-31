@@ -477,7 +477,7 @@ describe("[target: util-type.js.js]", () => {
         describe('단일 타입 ', () => {
             it('- typeObject() : undefined ', () => {
                 var type1 = undefined;
-                var type2;
+                var type2; 
 
                 var obj01 = {$type: 'undefined'};
 
@@ -559,7 +559,7 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeObject(type2)   ).toEqual(obj02);
             });
             it('- typeObject() : object ', () => {
-                // var type1 = new function User() {};
+                // var type1 = new function User() {}; 
                 var type2 = new Date();
                 // var type3 = {};
 
@@ -1258,7 +1258,7 @@ describe("[target: util-type.js.js]", () => {
                     var type3 = [String, Number];
                     var type4 = [String, 10];
                     var type5 = ['aa', /reg/];
-                    var type6 = ['_opt_'];  // 내용이 없어서 실패
+                    var type6 = ['_opt_'];  // 내용이 없어서 실패 
 
                     // type1
                     expect(isMatchType(type1, [])           ).toBe(T);
@@ -1406,28 +1406,22 @@ describe("[target: util-type.js.js]", () => {
         });
         // TODO: 대상의 하위로 이동
         describe('중첩 구조 ', () => {  
-            it('- isMatchType() : function ', () => {
+            it('- isMatchType() : function  TODO:', () => {
                 // 다양한 함수의 파싱 방식 
             });
-            it('- isMatchType() : union ', () => {
+            it('- isMatchType() : union TODO:', () => {
                 // union + union
             });
-            it('- isMatchType() : class ', () => {
+            it('- isMatchType() : class TODO:', () => {
                 // union + union
             });
-            it('- isMatchType() : choice ', () => {
+            it('- isMatchType() : choice TODO:', () => {
                 // choice + union
             });
-            it('- isMatchType() : array ', () => {
+            it('- isMatchType() : array TODO:', () => {
                 // choice + union
             });
         });
-        describe('function type ', () => {
-            it('- isMatchType() : function ', () => {
-                // 파싱에 대한 분석
-            });
-
-        });                
     });
     describe('matchType(type, target): bool  <타입 매치 예외> ', () => {
     });

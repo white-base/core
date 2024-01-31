@@ -12,7 +12,7 @@
     var isMatchType;
     var matchType;
     var deepEqual;
-    var isType;
+    var isProtoChain;
     var getTypes;
 
     //==============================================================
@@ -31,7 +31,7 @@
         isMatchType                   = require('./util-type').isMatchType;
         matchType                   = require('./util-type').matchType;
         deepEqual                   = require('./util-type').deepEqual;
-        isType                   = require('./util-type').isType;
+        isProtoChain                   = require('./util-type').isProtoChain;
         getTypes                   = require('./util-type').getTypes;
     } else {    
         Message                     = _global._L.Message;
@@ -41,7 +41,7 @@
         isMatchType                   = _global._L.Util.isMatchType
         matchType                   = _global._L.Util.matchType
         deepEqual                   = _global._L.Util.deepEqual
-        isType                   = _global._L.Util.isType
+        isProtoChain                   = _global._L.Util.isProtoChain
         getTypes                   = _global._L.Util.getTypes
     }
 
@@ -53,7 +53,7 @@
     if (typeof isMatchType === 'undefined') Message.error('ES012', ['isMatchType', 'util-type']);
     if (typeof matchType === 'undefined') Message.error('ES012', ['matchType', 'util-type']);
     if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);
-    if (typeof isType === 'undefined') Message.error('ES012', ['isType', 'util-type']);
+    if (typeof isProtoChain === 'undefined') Message.error('ES012', ['isProtoChain', 'util-type']);
     if (typeof getTypes === 'undefined') Message.error('ES012', ['getTypes', 'util-type']);
     
     //==============================================================
@@ -289,7 +289,7 @@
     // 5. module export
     if (isNode) {     
         exports.inherits = inherits;
-        exports.isType = isType;
+        exports.isProtoChain = isProtoChain;
         exports.getTypes = getTypes;
         exports.getArrayDepth = getArrayDepth;
         exports.createGuid = createGuid;
@@ -304,7 +304,7 @@
     } else {
         var ns = {
             inherits: inherits,
-            isType: isType,
+            isProtoChain: isProtoChain,
             getTypes: getTypes,
             getArrayDepth: getArrayDepth,
             createGuid: createGuid,

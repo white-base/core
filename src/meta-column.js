@@ -499,7 +499,7 @@
                 set: function(nVal) { 
                     if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
                     // if (!(new nVal('temp') instanceof BaseColumn)) Message.error('ES032', ['_baseType', 'BaseColumn']);
-                    if (!(Util.isType(nVal, BaseColumn))) Message.error('ES032', ['_baseType', 'BaseColumn']);
+                    if (!(Util.isProtoChain(nVal, BaseColumn))) Message.error('ES032', ['_baseType', 'BaseColumn']);
                     _baseType = nVal;
                 },
                 enumerable: false,

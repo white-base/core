@@ -246,7 +246,7 @@
                 set: function(nVal) { 
                     if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
                     // if (!(new nVal('temp') instanceof MetaTable)) Message.error('ES032', ['_baseType', 'MetaTable']);
-                    if (!(Util.isType(nVal, MetaTable))) Message.error('ES032', ['_baseType', 'MetaTable']);
+                    if (!(Util.isProtoChain(nVal, MetaTable))) Message.error('ES032', ['_baseType', 'MetaTable']);
                     _baseType = nVal;
                 },
                 configurable: false,

@@ -186,7 +186,7 @@ describe('Util.*', () => {
         expect(arr.length).toBe(5);
     });
 
-    it('- Util.isType() : 상속 또는 인터페이스 여부 검사 ', () => {
+    it('- Util.isProtoChain() : 상속 또는 인터페이스 여부 검사 ', () => {
         const Util      = require('../src/util');
         const IClassA = function IClassA() {this.ia = true}
         const IClassA1 = function IClassA1() {this.ia1 = true}
@@ -198,8 +198,8 @@ describe('Util.*', () => {
         ClassA._UNION = [IClassA, IClassB]
         ClassB._UNION = [IClassB]
 
-        expect(Util.isType(ClassB, ClassA)).toBe(true);
-        expect(Util.isType(ClassB, IClassA1)).toBe(true);
+        expect(Util.isProtoChain(ClassB, ClassA)).toBe(true);
+        expect(Util.isProtoChain(ClassB, IClassA1)).toBe(true);
     });
 
     describe("예외, 커버리지 ", () => {
