@@ -51,27 +51,24 @@
         }
         return false;
     }
+    
     /**
      * 공백객체 인지 확인
      * @param {*} obj 검사대상
      * @returns {boolean}
      */
     function _isEmptyObj(obj)  {
-        if(_isObject(obj) && Object.keys(obj).length === 0 && getAllProperties(obj).length === 0) {
-          return true;
-        }
+        if(_isObject(obj) && Object.keys(obj).length === 0 && getAllProperties(obj).length === 0) return true;
         return false;
     }
+
     /**
      * 공백이 아닌 객체 (prototype 및 속성 있는것)
      * @param {*} obj 대상 
      * @returns {boolean}
      */
     function _isFillObj(obj)  {
-        // if(typeof obj === 'object' && getAllProperties(obj).length > 0 && !(obj instanceof RegExp)) {
-        if(_isObject(obj) && getAllProperties(obj).length > 0) {
-          return true;
-        }
+        if(_isObject(obj) && getAllProperties(obj).length > 0) return true;
         return false;
     }
 
@@ -344,16 +341,18 @@
      */
     var typeObject = function(type) {
         var obj = {};
-        var typeObj = extendType(type);
+        var typeObj = _isObject(type) && type['$type'] ? type : extendType(type);
         var leafType = ['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint', 'object', 'regexp'];
 
         obj['$type'] = typeObj['$type'];
         // obj['ref'] = typeObj['ref'];
         
-        if (typeObj['default'] !== null) obj['default'] = typeObj['default'];
-        if (typeObj['kind'] !== null) obj['kind'] = typeObj['kind'];
+        if (typeObj['default'] !== null && typeof typeObj['default'] !== 'undefined') obj['default'] = typeObj['default'];
+        if (typeObj['kind'] !== null && typeof typeObj['kind'] !== 'undefined') obj['kind'] = typeObj['kind'];
         if (typeObj['params']) obj['params'] = typeObj['params'];
         if (typeObj['return']) obj['return'] = typeObj['return'];
+        if (typeObj['creator']) obj['creator'] = typeObj['creator'];
+        if (typeObj['_instance']) obj['_instance'] = typeObj['_instance'];
 
         if (leafType.indexOf(obj['$type']) > -1) {
             if (typeObj['return']) obj['default'] = typeObj['default'];
@@ -372,17 +371,20 @@
             if (typeObj['return']) obj['return'] = typeObject(typeObj['return']);
         }
         if (obj['$type'] === 'class') {
-            if (typeof typeObj['ref'] === 'function') obj['creator'] = typeObj['ref'].name; 
-            var temp = _creator(typeObj['ref']);
-            obj['_instance'] = typeObject(temp);
+            if (typeof typeObj['ref'] === 'function') {
+                obj['creator'] = typeObj['ref'].name; 
+                var temp = _creator(typeObj['ref']);
+                obj['_instance'] = typeObject(temp);
+            }
         }
         if (obj['$type'] === 'union') {
-            var temp = typeObj['ref'];
+            obj['_prop'] = {};
+            var temp = typeObj['ref'] || typeObj['_prop'];
             var list = getAllProperties(temp);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-                obj[key] = typeObject(temp[key]);
+                obj['_prop'][key] = typeObject(temp[key]);
             }
         }
         return obj;
@@ -440,6 +442,7 @@
             if (type['func']) obj['func'] = type['func'];
             if (type['params']) obj['params'] = type['params'];
             if (type['return']) obj['return'] = type['return'];
+            // if (type['_prop']) obj['return'] = type['return'];
 
             if (!_hasType(obj['$type'])) Message.error('ES022', ['type']);
             return obj;

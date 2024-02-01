@@ -273,68 +273,68 @@ describe("[target: util-type.js.js]", () => {
                 var type14 = function func(String){Number};
                 var type15 = function func(String){return Number};
 
-                expect(extendType(type01).$type   ).toBe('function');
+                expect(extendType(type01).$type  ).toBe('function');
                 expect(extendType(type01).params ).toEqual([]);
                 expect(extendType(type01).return ).toEqual(undefined);
 
-                expect(extendType(type02).$type   ).toBe('function');
+                expect(extendType(type02).$type  ).toBe('function');
                 expect(extendType(type02).params ).toEqual([]);
                 expect(extendType(type02).return ).toEqual(undefined);
 
-                expect(extendType(type03).$type   ).toBe('function');
+                expect(extendType(type03).$type  ).toBe('function');
                 expect(extendType(type03).params ).toEqual([String, Number]);
                 expect(extendType(type03).return ).toEqual(Object);
 
-                expect(extendType(type04).$type   ).toBe('function');
+                expect(extendType(type04).$type  ).toBe('function');
                 expect(extendType(type04).params ).toEqual([]);
                 expect(extendType(type04).return ).toEqual([Object]);
 
-                expect(extendType(type05).$type   ).toBe('function');
+                expect(extendType(type05).$type  ).toBe('function');
                 expect(extendType(type05).params ).toEqual([]);
                 expect(extendType(type06).return ).toEqual(undefined);
 
-                expect(extendType(type06).$type   ).toBe('function');
+                expect(extendType(type06).$type  ).toBe('function');
                 expect(extendType(type06).params ).toEqual([]);
                 expect(extendType(type06).return ).toEqual(undefined);
 
-                expect(extendType(type07).$type   ).toBe('function');
+                expect(extendType(type07).$type  ).toBe('function');
                 expect(extendType(type07).params ).toEqual([[String]]);
                 expect(extendType(type07).return ).toEqual(Number);
 
-                expect(extendType(type08).$type   ).toBe('function');
+                expect(extendType(type08).$type  ).toBe('function');
                 expect(extendType(type08).params ).toEqual([String, Boolean]);
                 expect(extendType(type08).return ).toEqual(Number);
 
-                expect(extendType(type09).$type   ).toBe('function');
+                expect(extendType(type09).$type  ).toBe('function');
                 expect(extendType(type09).params ).toEqual([]);
                 expect(extendType(type09).return ).toEqual(String);
 
-                expect(extendType(type10).$type   ).toBe('function');
+                expect(extendType(type10).$type  ).toBe('function');
                 expect(extendType(type10).params ).toEqual([String]);
                 expect(extendType(type10).return ).toEqual(Number);
 
-                expect(extendType(type11).$type   ).toBe('function');
+                expect(extendType(type11).$type  ).toBe('function');
                 expect(extendType(type11).params ).toEqual([String]);
                 expect(extendType(type11).return ).toEqual(Number);
 
-                expect(extendType(type12).$type   ).toBe('function');
+                expect(extendType(type12).$type  ).toBe('function');
                 expect(extendType(type12).params ).toEqual([String]);
                 expect(extendType(type12).return ).toEqual(Number);
 
-                expect(extendType(type13).$type   ).toBe('function');
+                expect(extendType(type13).$type  ).toBe('function');
                 expect(extendType(type13).params ).toEqual([]);
                 expect(extendType(type13).return ).toEqual(undefined);
 
-                expect(extendType(type14).$type   ).toBe('function');
+                expect(extendType(type14).$type  ).toBe('function');
                 expect(extendType(type14).params ).toEqual([String]);
                 expect(extendType(type14).return ).toEqual(Number);
 
-                expect(extendType(type15).$type   ).toBe('function');
+                expect(extendType(type15).$type  ).toBe('function');
                 expect(extendType(type15).params ).toEqual([String]);
                 expect(extendType(type15).return ).toEqual(Number);
             });
             // TODO: 
-            it('- extendType() : function [특수객체] ', () => { 
+            it.skip('- extendType() : function [특수객체] ', () => { 
                 var type1 = ()=>{}; 
                 var type1 = ()=>{}; 
                 var type1 = ()=>{}; 
@@ -373,10 +373,10 @@ describe("[target: util-type.js.js]", () => {
                 var type1 = RegExp;
                 var type2 = /reg/;
 
-                expect(extendType(type1).$type   ).toBe('regexp');
+                expect(extendType(type1).$type  ).toBe('regexp');
                 expect(extendType(type1).default).toEqual(null);
 
-                expect(extendType(type2).$type   ).toBe('regexp');
+                expect(extendType(type2).$type  ).toBe('regexp');
                 expect(extendType(type2).default).toEqual(/reg/);
             });
             it('- extendType() : choice ', () => {
@@ -571,158 +571,391 @@ describe("[target: util-type.js.js]", () => {
             });
         });
         describe('복합 타입 ', () => {
-            it('- typeObject() : union ', () => {
-                var type1 = {str: 'blue', num: Number, }
-                var type2 = {arr: [String], sub: {bool: true}}
-                var type3 = {}
+            describe('union', () => {
+                it('- typeObject() : union ', () => {
+                    var type1 = {str: 'blue', num: Number, }
+                    var type2 = {arr: [String], sub: {bool: true}}
+                    var type3 = {}
 
-                var str1 = {$type: 'string'}
-                var str2 = {$type: 'string', default: 'blue'}
-                var num1 = {$type: 'number'}
-                var arr1 = {$type: 'array', kind: '_OPT_', list: [str1]}
+                    var str1 = {$type: 'string'}
+                    var str2 = {$type: 'string', default: 'blue'}
+                    var num1 = {$type: 'number'}
+                    var arr1 = {$type: 'array', kind: '_OPT_', list: [str1]}
 
-                var boo1 = {$type: 'boolean', default: true}
-                var obj1 = {$type: 'union', str: str2, num: num1}
-                var obj2 = {$type: 'union', arr: arr1, sub: {$type: 'union', bool: boo1}}
-                var obj3 = {$type: 'union'}
+                    var boo1 = {$type: 'boolean', default: true}
+                    var obj1 = {$type: 'union', _prop: {str: str2, num: num1}}
+                    var obj2 = {$type: 'union', _prop: {arr: arr1, sub: {$type: 'union', _prop: {bool: boo1}}}}
+                    var obj3 = {$type: 'union', _prop: {}}
 
-                expect(typeObject(type1)   ).toEqual(obj1);
-                expect(typeObject(type2)   ).toEqual(obj2);
-                expect(typeObject(type3)   ).toEqual(obj3);
+                    expect(typeObject(type1)   ).toEqual(obj1);
+                    expect(typeObject(type2)   ).toEqual(obj2);
+                    expect(typeObject(type3)   ).toEqual(obj3);
+                });
+                it('- typeObject() : union (중첩 구조) ', () => {
+                    /**
+                     * - 대상 > 배열
+                     * - 대상 > 초이스
+                     * - 대상 > 객체
+                     * - 대상 > 함수
+                     * - 대상 > 클래스
+                     */
+                    class ClassA { aa = String;}
+                    class ClassB { bb = Number;}
+                    
+                    var type1 = {aa: [ String ]}
+                    var type2 = {aa: [[ String ]]}
+                    var type3 = {aa: {bb: Number}}
+                    var type4 = {aa: String=>Number}
+                    var type5 = {aa: ClassA}
+                    var type6 = {aa: [[ClassA, ClassB]]}
+
+                    var str1 = {$type: 'string'}
+                    var num1 = {$type: 'number'}
+                    var arr0 = {$type: 'array', kind: '_OPT_', list: [str1]}
+                    var cho1 = {$type: 'choice', kind: '_OPT_', list: [str1]}
+                    var uni1 = {$type: 'union', _prop: {aa: str1}}
+                    var uni2 = {$type: 'union', _prop: {bb: num1}}
+                    var fun1 = {$type: 'function', params: [str1], return: num1}
+                    var cls1 = {$type: 'class', creator: 'ClassA', _instance: uni1 }
+                    var cls2 = {$type: 'class', creator: 'ClassB', _instance: uni2 }
+                    var cho2 = {$type: 'choice', kind: '_OPT_', list: [cls1, cls2]}
+
+                    var tar01 = {$type: 'union', _prop: {aa: arr0}}
+                    var tar02 = {$type: 'union', _prop: {aa: cho1}}
+                    var tar03 = {$type: 'union', _prop: {aa: uni2}}
+                    var tar04 = {$type: 'union', _prop: {aa: fun1}}
+                    var tar05 = {$type: 'union', _prop: {aa: cls1}}
+                    var tar06 = {$type: 'union', _prop: {aa: cho2}}
+
+                    expect(typeObject(type1)).toEqual(tar01);
+                    expect(typeObject(type2)).toEqual(tar02);
+                    expect(typeObject(type3)).toEqual(tar03);
+                    expect(typeObject(type4)).toEqual(tar04);
+                    expect(typeObject(type5)).toEqual(tar05);
+                    expect(typeObject(type6)).toEqual(tar06);
+
+                    // 재검수
+                    expect(typeObject(tar01)).toEqual(tar01);
+                    expect(typeObject(tar02)).toEqual(tar02);
+                    expect(typeObject(tar03)).toEqual(tar03);
+                    expect(typeObject(tar04)).toEqual(tar04);
+                    expect(typeObject(tar05)).toEqual(tar05);
+                    expect(typeObject(tar06)).toEqual(tar06);
+                });
             });
-            it('- typeObject() : class ', () => {
-                var type1 = function Class1(){this.age = 1; this.fun = (a,b)=>{}};
-                var type2 = Date;
+            describe('class', () => {
+                it('- typeObject() : class ', () => {
+                    var type1 = function Class1(){this.age = 1; this.fun = (a,b)=>{}};
+                    var type2 = Date;
 
-                var num1 = {$type: 'number', default: 1}
-                var obj0 = {$type: 'object'}
-                var fun1 = {$type: 'function', params: []}
-                var obj1 = {$type: 'class', creator: 'Class1', _instance: {$type: 'union', age: num1, fun: fun1 }};
-                var obj2 = {$type: 'class', creator: 'Date', _instance: obj0};
+                    var num1 = {$type: 'number', default: 1}
+                    var obj0 = {$type: 'object'}
+                    var fun1 = {$type: 'function', params: []}
+                    var obj1 = {$type: 'class', creator: 'Class1', _instance: {$type: 'union', _prop: {age: num1, fun: fun1}}};
+                    var obj2 = {$type: 'class', creator: 'Date', _instance: obj0};
 
-                expect(typeObject(type1)   ).toEqual(obj1);
-                expect(typeObject(type2)   ).toEqual(obj2);
+                    expect(typeObject(type1)   ).toEqual(obj1);
+                    expect(typeObject(type2)   ).toEqual(obj2);
+                });                
+                it('- typeObject() : class (중첩 구조) ', () => {
+                    /**
+                     * - 대상 > 클래스
+                     * - 대상 > 배열
+                     * - 대상 > 초이스
+                     * - 대상 > 객체
+                     * - 대상 > 함수
+                     */
+                    class ClassA { aa = String;}
+                    class ClassB { aa = Number;}
+                    class ClassC { aa = ClassB;}
+                    class ClassD { aa = [ClassA];}
+                    class ClassE { aa = [[ ClassA, ClassB ]];}
+                    class ClassF { aa = {bb: String};}
+                    class ClassG { aa = String=>Number;}
+
+                    var type1 = ClassC
+                    var type2 = ClassD
+                    var type3 = ClassE
+                    var type4 = ClassF
+                    var type5 = ClassG
+
+                    var str1 = {$type: 'string'}
+                    var num1 = {$type: 'number'}
+                    var uni1 = {$type: 'union', _prop: {bb: str1}}
+                    var cls1 = {$type: 'class', creator: 'ClassB', _instance: {$type: 'union', _prop: {aa: num1}} }
+                    var cls2 = {$type: 'class', creator: 'ClassA', _instance: {$type: 'union', _prop: {aa: str1}} }                    
+                    var arr1 = {$type: 'array', kind: '_OPT_', list: [cls2]}
+                    var cho1 = {$type: 'choice', kind: '_OPT_', list: [cls2, cls1]}
+                    var fun1 = {$type: 'function', params: [str1], return: num1}
+                    
+                    var tar01 = {$type: 'class', creator: 'ClassC', _instance: {$type: 'union', _prop: {aa: cls1}} }
+                    var tar02 = {$type: 'class', creator: 'ClassD', _instance: {$type: 'union', _prop: {aa: arr1}} }
+                    var tar03 = {$type: 'class', creator: 'ClassE', _instance: {$type: 'union', _prop: {aa: cho1}} }
+                    var tar04 = {$type: 'class', creator: 'ClassF', _instance: {$type: 'union', _prop: {aa: uni1}} }
+                    var tar05 = {$type: 'class', creator: 'ClassG', _instance: {$type: 'union', _prop: {aa: fun1}} }
+
+                    expect(typeObject(type1)).toEqual(tar01);
+                    expect(typeObject(type2)).toEqual(tar02);
+                    expect(typeObject(type3)).toEqual(tar03);
+                    expect(typeObject(type4)).toEqual(tar04);
+                    expect(typeObject(type5)).toEqual(tar05);
+                    // 재검수
+                    expect(typeObject(tar01)).toEqual(tar01);
+                    expect(typeObject(tar02)).toEqual(tar02);
+                    expect(typeObject(tar03)).toEqual(tar03);
+                    expect(typeObject(tar04)).toEqual(tar04);
+                    expect(typeObject(tar05)).toEqual(tar05);
+                });
             });
-            
-            it('- typeObject() : choice ', () => { 
-                var type01 = [[String]]
-                var type02 = [[String, Number]]
-                var type03 = [['_opt_', String]]
-                var type04 = [['_opt_', String, Number]]
-                var type05 = [['_req_', String]]
-                var type06 = [['_all_']]
-                var type07 = [['_any_']]
-                var type08 = [[]];   // any
-                var type09 = [['_non_']]
-                var type10 = [['_eum_', 'blue', 10]]
-                var type11 = [['_def_', 'blue', 10]]
+            describe('choice', () => {
+                it('- typeObject() : choice ', () => { 
+                    var type01 = [[String]]
+                    var type02 = [[String, Number]]
+                    var type03 = [['_opt_', String]]
+                    var type04 = [['_opt_', String, Number]]
+                    var type05 = [['_req_', String]]
+                    var type06 = [['_all_']]
+                    var type07 = [['_any_']]
+                    var type08 = [[]];   // any
+                    var type09 = [['_non_']]
+                    var type10 = [['_eum_', 'blue', 10]]
+                    var type11 = [['_def_', 'blue', 10]]
+    
+                    var str1 = {$type: 'string'}
+                    var str2 = {$type: 'string', default: 'blue'}
+                    var num1 = {$type: 'number'}
+                    var num2 = {$type: 'number', default: 10}
+                    var obj1 = {$type: 'object'}
+                    var opt1 = {$type: 'choice', kind: '_OPT_', list: [str1]}
+                    var opt2 = {$type: 'choice', kind: '_OPT_', list: [str1, num1]}
+                    var req1 = {$type: 'choice', kind: '_REQ_', list: [str1]}
+                    var all1 = {$type: 'choice', kind: '_ALL_', list: []}
+                    var any1 = {$type: 'choice', kind: '_ANY_', list: []}
+                    var non1 = {$type: 'choice', kind: '_NON_', list: []}
+                    var eum1 = {$type: 'choice', kind: '_EUM_', list: [str2, num2]}
+                    var def1 = {$type: 'choice', kind: '_DEF_', list: [str2, num2]}
+    
+                    expect(typeObject(type01)).toEqual(opt1);
+                    expect(typeObject(type02)).toEqual(opt2);
+                    expect(typeObject(type03)).toEqual(opt1);
+                    expect(typeObject(type04)).toEqual(opt2);
+                    expect(typeObject(type05)).toEqual(req1);
+                    expect(typeObject(type06)).toEqual(all1);
+                    expect(typeObject(type07)).toEqual(any1);
+                    expect(typeObject(type08)).toEqual(any1);
+                    expect(typeObject(type09)).toEqual(non1);
+                    expect(typeObject(type10)).toEqual(eum1);
+                    expect(typeObject(type11)).toEqual(def1);
+                });
+                it('- typeObject() : choice (중첩 구조) ', () => { 
+                    var type01 = [[ String, Number ]]
+                    var type02 = [[ [[ String, Number ]] ]]
+                    var type03 = [[ [ String, Number ] ]]
+                    var type04 = [[ ['_opt_', [ String, Number ] ] ]]
+                    var type05 = [[ Function, (String)=>Number ]]
 
-                var str1 = {$type: 'string'}
-                var str2 = {$type: 'string', default: 'blue'}
-                var num1 = {$type: 'number'}
-                var num2 = {$type: 'number', default: 10}
-                var obj1 = {$type: 'object'}
-                var opt1 = {$type: 'choice', kind: '_OPT_', list: [str1]};
-                var opt2 = {$type: 'choice', kind: '_OPT_', list: [str1, num1]};
-                var req1 = {$type: 'choice', kind: '_REQ_', list: [str1]};
-                var all1 = {$type: 'choice', kind: '_ALL_', list: []};
-                var any1 = {$type: 'choice', kind: '_ANY_', list: []};
-                var non1 = {$type: 'choice', kind: '_NON_', list: []};
-                var eum1 = {$type: 'choice', kind: '_EUM_', list: [str2, num2]};
-                var def1 = {$type: 'choice', kind: '_DEF_', list: [str2, num2]};
+                    var str1 = {$type: 'string'}
+                    var num1 = {$type: 'number'}
+                    var arr1 = {$type: 'array', kind: '_OPT_', list: [str1, num1]}
+                    var arr2 = {$type: 'array', kind: '_OPT_', list: [arr1]}
+                    var fun1 = {$type: 'function', params: []}
+                    var fun2 = {$type: 'function', params: [str1], return: num1}
 
-                expect(typeObject(type01)).toEqual(opt1);
-                expect(typeObject(type02)).toEqual(opt2);
-                expect(typeObject(type03)).toEqual(opt1);
-                expect(typeObject(type04)).toEqual(opt2);
-                expect(typeObject(type05)).toEqual(req1);
-                expect(typeObject(type06)).toEqual(all1);
-                expect(typeObject(type07)).toEqual(any1);
-                expect(typeObject(type08)).toEqual(any1);
-                expect(typeObject(type09)).toEqual(non1);
-                expect(typeObject(type10)).toEqual(eum1);
-                expect(typeObject(type11)).toEqual(def1);
+                    var tar01 = {$type: 'choice', kind: '_OPT_', list: [str1, num1]}
+                    var tar02 = {$type: 'choice', kind: '_OPT_', list: [tar01]}
+                    var tar03 = {$type: 'choice', kind: '_OPT_', list: [arr1]}
+                    var tar04 = {$type: 'choice', kind: '_OPT_', list: [arr2]}
+                    var tar05 = {$type: 'choice', kind: '_OPT_', list: [fun1, fun2]}
+
+                    expect(typeObject(type01)).toEqual(tar01);
+                    expect(typeObject(type02)).toEqual(tar02);
+                    expect(typeObject(type03)).toEqual(tar03);
+                    expect(typeObject(type04)).toEqual(tar04);
+                    expect(typeObject(type05)).toEqual(tar05);
+                    // 재검수
+                    expect(typeObject(tar01)).toEqual(tar01);
+                    expect(typeObject(tar02)).toEqual(tar02);
+                    expect(typeObject(tar03)).toEqual(tar03);
+                    expect(typeObject(tar04)).toEqual(tar04);
+                    expect(typeObject(tar05)).toEqual(tar05);
+                });
             });
-            it('- typeObject() : array ', () => {
-                var type1 = [];
-                var type2 = ['_any_']
-                var type3 = Array;
-                var type4 = ['_all_'] 
-                var type5 = [String]
-                var type6 = ['blue', 10]
-                var type7 = ['_req_', String]
-                var type8 = ['_seq_', String]
+            describe('array', () => {
+                it('- typeObject() : array ', () => {
+                    var type1 = [];
+                    var type2 = ['_any_']
+                    var type3 = Array;
+                    var type4 = ['_all_'] 
+                    var type5 = [String]
+                    var type6 = ['blue', 10]
+                    var type7 = ['_req_', String]
+                    var type8 = ['_seq_', String]
+    
+                    var str1 = {$type: 'string'}
+                    var str2 = {$type: 'string', default: 'blue'}
+                    var num1 = {$type: 'number',  default: 10}
+                    var any1 = {$type: 'array', kind: '_ANY_', list: []}
+                    var all1 = {$type: 'array', kind: '_ALL_', list: []}
+                    var opt1 = {$type: 'array', kind: '_OPT_', list: [str1]}
+                    var opt2 = {$type: 'array', kind: '_OPT_', list: [str2, num1]}
+                    var req1 = {$type: 'array', kind: '_REQ_', list: [str1]}
+                    var seq1 = {$type: 'array', kind: '_SEQ_', list: [str1]}
+    
+                    expect(typeObject(type1)).toEqual(any1);
+                    expect(typeObject(type2)).toEqual(any1);
+                    expect(typeObject(type3)).toEqual(all1);
+                    expect(typeObject(type4)).toEqual(all1);
+                    expect(typeObject(type5)).toEqual(opt1);
+                    expect(typeObject(type6)).toEqual(opt2);
+                    expect(typeObject(type7)).toEqual(req1);
+                    expect(typeObject(type8)).toEqual(seq1);
+                });
+                it('- typeObject() : array (중첩 구조) ', () => {
+                    /**
+                     * - 대상 > 배열
+                     * - 대상 > 초이스
+                     * - 대상 > 객체
+                     * - 대상 > 함수
+                     * - 대상 > 클래스
+                     */
+                    class ClassA { aa = String;}
+                    class ClassB { aa = Number;}
+                    
+                    var type1 = [ '_req_', [ String ] ];
+                    var type2 = [ '_req_', [[ String ]] ];
+                    var type3 = [ '_opt_', [[ String ]] ];
+                    var type4 = [ {aa: String}, {aa: Number} ];
+                    var type5 = [ (String)=>Number, Number=>String ];
+                    var type6 = [ ClassA, ClassB ];
+                    
+                    var str1 = {$type: 'string'}
+                    var num1 = {$type: 'number'}
+                    var cho1 = {$type: 'choice', kind: '_OPT_', list: [str1]}
+                    var arr0 = {$type: 'array', kind: '_OPT_', list: [str1]}
+                    var uni1 = {$type: 'union', _prop: {aa: str1}}
+                    var uni2 = {$type: 'union', _prop: {aa: num1}}
+                    var fun1 = {$type: 'function', params: [str1], return: num1}
+                    var fun2 = {$type: 'function', params: [num1], return: str1}
+                    var cls1 = {$type: 'class', creator: 'ClassA', _instance: uni1 }
+                    var cls2 = {$type: 'class', creator: 'ClassB', _instance: uni2 }
+                    
+                    var tar01 = {$type: 'array', kind: '_REQ_', list: [arr0]}
+                    var tar02 = {$type: 'array', kind: '_REQ_', list: [cho1]}
+                    var tar03 = {$type: 'array', kind: '_OPT_', list: [cho1]}
+                    var tar04 = {$type: 'array', kind: '_OPT_', list: [uni1, uni2]}
+                    var tar05 = {$type: 'array', kind: '_OPT_', list: [fun1, fun2]}
+                    var tar06 = {$type: 'array', kind: '_OPT_', list: [cls1, cls2]}
 
-                var str1 = {$type: 'string'}
-                var str2 = {$type: 'string', default: 'blue'}
-                var num1 = {$type: 'number',  default: 10}
-                var any1 = {$type: 'array', kind: '_ANY_', list: []}
-                var all1 = {$type: 'array', kind: '_ALL_', list: []}
-                var opt1 = {$type: 'array', kind: '_OPT_', list: [str1]}
-                var opt2 = {$type: 'array', kind: '_OPT_', list: [str2, num1]}
-                var req1 = {$type: 'array', kind: '_REQ_', list: [str1]}
-                var seq1 = {$type: 'array', kind: '_SEQ_', list: [str1]}
-
-                expect(typeObject(type1)).toEqual(any1);
-                expect(typeObject(type2)).toEqual(any1);
-                expect(typeObject(type3)).toEqual(all1);
-                expect(typeObject(type4)).toEqual(all1);
-                expect(typeObject(type5)).toEqual(opt1);
-                expect(typeObject(type6)).toEqual(opt2);
-                expect(typeObject(type7)).toEqual(req1);
-                expect(typeObject(type8)).toEqual(seq1);
+                    expect(typeObject(type1)).toEqual(tar01);
+                    expect(typeObject(type2)).toEqual(tar02);
+                    expect(typeObject(type3)).toEqual(tar03);
+                    expect(typeObject(type4)).toEqual(tar04);
+                    expect(typeObject(type5)).toEqual(tar05);
+                    expect(typeObject(type6)).toEqual(tar06);
+                    // 재검수
+                    expect(typeObject(tar01)).toEqual(tar01);
+                    expect(typeObject(tar02)).toEqual(tar02);
+                    expect(typeObject(tar03)).toEqual(tar03);
+                    expect(typeObject(tar04)).toEqual(tar04);
+                    expect(typeObject(tar05)).toEqual(tar05);
+                    expect(typeObject(tar06)).toEqual(tar06);
+                });            
             });
-            it('- typeObject() : function ', () => {
-                var type01 = Function; 
-                // 일반 함수, 표현식
-                var type02 = function(){};
-                var type03 = function(String, Number){Object};
-                var type04 = function(){[Object]};                  // 배열 리턴
-                var type05 = function(aa, bb){cc};
-                // 화살표 함수, 표현식
-                var type11 = ()=>{};
-                var type12 = ([String])=>{return Number};           // 배열 타입, 리턴
-                var type13 = (String, Boolean)=>{Number};
-                var type14 = ()=>String;
-                var type15 = String=>Number;                        // 괄호 생략
-                var type16 = String=>{Number};
-                var type17 = String=>{return Number /** aaa */};    // 리턴, 주석
-                // 일반 함수, 선언문
-                var type21 = function func (aa, bb){cc};            // 비 해석문
-                var type22 = function func(String){Number};
-                var type23 = function func(String){return Number};
+            describe('function', () => {
+                it('- typeObject() : function ', () => {
+                    var type01 = Function; 
+                    // 일반 함수, 표현식
+                    var type02 = function(){};
+                    var type03 = function(String, Number){Object};
+                    var type04 = function(){[Object]};                  // 배열 리턴
+                    var type05 = function(aa, bb){cc};
+                    // 화살표 함수, 표현식
+                    var type11 = ()=>{};
+                    var type12 = ([String])=>{return Number};           // 배열 타입, 리턴
+                    var type13 = (String, Boolean)=>{Number};
+                    var type14 = ()=>String;
+                    var type15 = String=>Number;                        // 괄호 생략
+                    var type16 = String=>{Number};
+                    var type17 = String=>{return Number /** aaa */};    // 리턴, 주석
+                    // 일반 함수, 선언문
+                    var type21 = function func (aa, bb){cc};            // 비 해석문
+                    var type22 = function func(String){Number};
+                    var type23 = function func(String){return Number};
+    
+                    var str1 = {$type: 'string'}
+                    var num1 = {$type: 'number'}
+                    var obj1 = {$type: 'object'}
+                    var boo1 = {$type: 'boolean'}
+                    var arr1 = {$type: 'array', kind: '_OPT_', list: [obj1]}
+                    var arr2 = {$type: 'array', kind: '_OPT_', list: [str1]}
+                    var fun1 = {$type: 'function', params: []}
+                    var fun2 = {$type: 'function', params: [str1, num1], return: obj1}
+                    var fun3 = {$type: 'function', params: [], return: arr1}
+                    var fun4 = {$type: 'function', params: [arr2], return: num1}
+                    var fun5 = {$type: 'function', params: [str1, boo1], return: num1}
+                    var fun6 = {$type: 'function', params: [], return: str1}
+                    var fun7 = {$type: 'function', params: [str1], return: num1}
+                    
+                    expect(typeObject(type01)).toEqual(fun1);
+                    expect(typeObject(type02)).toEqual(fun1);
+                    expect(typeObject(type03)).toEqual(fun2);
+                    expect(typeObject(type04)).toEqual(fun3);
+                    expect(typeObject(type05)).toEqual(fun1);
+    
+                    expect(typeObject(type11)).toEqual(fun1);
+                    expect(typeObject(type12)).toEqual(fun4);
+                    expect(typeObject(type13)).toEqual(fun5);
+                    expect(typeObject(type14)).toEqual(fun6);
+                    expect(typeObject(type15)).toEqual(fun7);
+                    expect(typeObject(type16)).toEqual(fun7);
+                    expect(typeObject(type17)).toEqual(fun7);
+    
+                    expect(typeObject(type21)).toEqual(fun1);
+                    expect(typeObject(type22)).toEqual(fun7);
+                    expect(typeObject(type23)).toEqual(fun7);
+                });
+                it('- typeObject() : function (중첩 구조) ', () => {
+                    /**
+                     * - 대상 > 배열
+                     * - 대상 > 초이스
+                     * - 대상 > 객체
+                     * - 대상 > 함수
+                     * - 대상 > 클래스
+                     */
+                    class ClassA { aa = String;}
 
-                var str1 = {$type: 'string'}
-                var num1 = {$type: 'number'}
-                var obj1 = {$type: 'object'}
-                var boo1 = {$type: 'boolean'}
-                var arr1 = {$type: 'array', kind: '_OPT_', list: [obj1]}
-                var arr2 = {$type: 'array', kind: '_OPT_', list: [str1]}
-                var fun1 = {$type: 'function', params: []}
-                var fun2 = {$type: 'function', params: [str1, num1], return: obj1}
-                var fun3 = {$type: 'function', params: [], return: arr1}
-                var fun4 = {$type: 'function', params: [arr2], return: num1}
-                var fun5 = {$type: 'function', params: [str1, boo1], return: num1}
-                var fun6 = {$type: 'function', params: [], return: str1}
-                var fun7 = {$type: 'function', params: [str1], return: num1}
-                
-                expect(typeObject(type01) ).toEqual(fun1);
-                expect(typeObject(type02) ).toEqual(fun1);
-                expect(typeObject(type03) ).toEqual(fun2);
-                expect(typeObject(type04) ).toEqual(fun3);
-                expect(typeObject(type05) ).toEqual(fun1);
+                    var type1 = ([String], [[Number]])=>{};
+                    var type2 = ({aa: String}, [[{bb: Number}]])=>{};
+                    var type3 = {$type: 'function', params: [['_req_', [String]], [['_req_', Number]]]};
+                    var type4 = {$type: 'function', params: [ClassA, String=>Number]};
+    
+                    var str1 = {$type: 'string'}
+                    var num1 = {$type: 'number'}
+                    var arr1 = {$type: 'array', kind: '_OPT_', list: [str1]}
+                    var arr2 = {$type: 'array', kind: '_REQ_', list: [arr1]}
+                    var cho1 = {$type: 'choice', kind: '_OPT_', list: [num1]}
+                    var uni1 = {$type: 'union', _prop: {aa: str1}}
+                    var uni2 = {$type: 'union', _prop: {bb: num1}}
+                    var cho2 = {$type: 'choice', kind: '_OPT_', list: [uni2]}
+                    var cho3 = {$type: 'choice', kind: '_REQ_', list: [num1]}
+                    var cls1 = {$type: 'class', creator: 'ClassA', _instance: uni1 }
+                    var fun1 = {$type: 'function', params: [str1], return: num1}
 
-                expect(typeObject(type11) ).toEqual(fun1);
-                expect(typeObject(type12) ).toEqual(fun4);
-                expect(typeObject(type13) ).toEqual(fun5);
-                expect(typeObject(type14) ).toEqual(fun6);
-                expect(typeObject(type15) ).toEqual(fun7);
-                expect(typeObject(type16) ).toEqual(fun7);
-                expect(typeObject(type17) ).toEqual(fun7);
-
-                expect(typeObject(type21) ).toEqual(fun1);
-                expect(typeObject(type22) ).toEqual(fun7);
-                expect(typeObject(type23) ).toEqual(fun7);
+                    var tar01 = {$type: 'function', params: [arr1, cho1]}
+                    var tar02 = {$type: 'function', params: [uni1, cho2]}
+                    var tar03 = {$type: 'function', params: [arr2, cho3]}
+                    var tar04 = {$type: 'function', params: [cls1, fun1]}
+    
+                    expect(typeObject(type1)).toEqual(tar01);
+                    expect(typeObject(type2)).toEqual(tar02);
+                    expect(typeObject(type3)).toEqual(tar03);
+                    expect(typeObject(type4)).toEqual(tar04);
+                    // 재검수
+                    expect(typeObject(tar01)).toEqual(tar01);
+                    expect(typeObject(tar02)).toEqual(tar02);
+                    expect(typeObject(tar03)).toEqual(tar03);
+                    expect(typeObject(tar04)).toEqual(tar04);
+                });
             });
         });
     });
@@ -930,37 +1163,36 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type5, '')       ).toBe(false);
             });
 
-            it('- isMatchType() : function ', () => {
+            /**
+             * REVIEW: 함수는 파라메터, 리턴 구분해서 테스트
+             */
+            it('- isMatchType() : function 파라메터 ', () => {
                 var type1 = Function;
                 var type2 = ()=>{};
                 var type3 = (String, Number)=>{Object}
                 
-                var tar01 = ()=>{};
-                var tar02 = ()=>{}; tar02._TYPE = {params: [String, Number], return: [Object]};
-                var tar03 = ()=>{}; tar03._TYPE = {params: [String, Number], return: Object};
-                var tar04 = ()=>{}; tar04._TYPE = {params: [], return: [Object, String]};
-                var tar05 = ()=>{}; tar05._TYPE = {param: [], return: [Object]};
+                var tar01 = {$type: 'function'}
+                var tar02 = {$type: 'function', params: [String, Number], return: [Object]};
+                var tar03 = {$type: 'function', params: [String, Number], return: Object};
+                var tar04 = {$type: 'function', params: [], return: [Object, String]};
 
                 // type1
                 expect(isMatchType(type1,tar01) ).toBe(T);
                 expect(isMatchType(type1,tar02) ).toBe(T);
                 expect(isMatchType(type1,tar03) ).toBe(T);
                 expect(isMatchType(type1,tar04) ).toBe(T);
-                expect(isMatchType(type1,tar05) ).toBe(T);
                 // type2
                 expect(isMatchType(type2,tar01) ).toBe(T);
                 expect(isMatchType(type2,tar02) ).toBe(T);
                 expect(isMatchType(type2,tar03) ).toBe(T);
                 expect(isMatchType(type2,tar04) ).toBe(T);
-                expect(isMatchType(type2,tar05) ).toBe(T);
                 // type3
                 expect(isMatchType(type3,tar01) ).toBe(false);
                 expect(isMatchType(type3,tar02) ).toBe(false);
                 expect(isMatchType(type3,tar03) ).toBe(T);
                 expect(isMatchType(type3,tar04) ).toBe(false);
-                expect(isMatchType(type3,tar05) ).toBe(false);
             });
-            it('- isMatchType() : function return 종류별 ', () => {
+            it('- isMatchType() : function 리턴 ', () => {
                 var type1 = ()=>{[String, Number]}      // return array
                 var type2 = ()=>{{a: String}}           // return union
                 var type3 = ()=>{[[String, Number]]}    // return choice
@@ -1406,9 +1638,6 @@ describe("[target: util-type.js.js]", () => {
         });
         // TODO: 대상의 하위로 이동
         describe('중첩 구조 ', () => {  
-            it('- isMatchType() : function  TODO:', () => {
-                // 다양한 함수의 파싱 방식 
-            });
             it('- isMatchType() : union TODO:', () => {
                 // union + union
             });
@@ -1420,6 +1649,46 @@ describe("[target: util-type.js.js]", () => {
             });
             it('- isMatchType() : array TODO:', () => {
                 // choice + union
+            });
+            describe('function', () => {  
+                it('- isMatchType() : function  배열, 초이스 ', () => {
+                    var type1 = ([String], [[Number]])=>{};
+    
+                    var tar11 = {$type: 'function', params: [ [String] ]}
+                    var tar12 = {$type: 'function', params: [ [String], Number]}
+                    var tar13 = {$type: 'function', params: [ [String], Boolean]}
+                    var tar14 = {$type: 'function', params: [ ['str'] ]}
+                    var tar15 = {$type: 'function', params: [ ['str'], 10]}
+                    var tar16 = {$type: 'function', params: [ ['str'], false]}
+                    var tar17 = {$type: 'function', params: [ [10] ]}
+    
+                    expect(isMatchType(type1, tar11)).toBe(false);
+                    expect(isMatchType(type1, tar12)).toBe(T);
+                    expect(isMatchType(type1, tar13)).toBe(false);
+                    expect(isMatchType(type1, tar14)).toBe(false);
+                    expect(isMatchType(type1, tar15)).toBe(T);
+                    expect(isMatchType(type1, tar16)).toBe(false);
+                    expect(isMatchType(type1, tar17)).toBe(false);
+                });
+                // it('- isMatchType() : function  객체, 초이스(배열) ', () => {
+                //     var type2 = ({aa: String}, [[{bb: Number}]])=>{};
+    
+                //     var tar11 = {$type: 'function', params: [ [String] ]}
+                //     var tar12 = {$type: 'function', params: [ [String], Number]}
+                //     var tar13 = {$type: 'function', params: [ [String], Boolean]}
+                //     var tar14 = {$type: 'function', params: [ ['str'] ]}
+                //     var tar15 = {$type: 'function', params: [ ['str'], 10]}
+                //     var tar16 = {$type: 'function', params: [ ['str'], false]}
+                //     var tar17 = {$type: 'function', params: [ [10] ]}
+    
+                //     expect(isMatchType(type1, tar11)).toBe(false);
+                //     expect(isMatchType(type1, tar12)).toBe(T);
+                //     expect(isMatchType(type1, tar13)).toBe(false);
+                //     expect(isMatchType(type1, tar14)).toBe(false);
+                //     expect(isMatchType(type1, tar15)).toBe(T);
+                //     expect(isMatchType(type1, tar16)).toBe(false);
+                //     expect(isMatchType(type1, tar17)).toBe(false);
+                // });
             });
         });
     });
