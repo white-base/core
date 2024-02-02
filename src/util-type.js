@@ -412,7 +412,7 @@
      * @returns {object} {name: string, default: [null, any]}
      */
     var extendType = function(type) {
-        var obj =  {$type: '', ref: undefined, default: null, kind: null};
+        var obj =  {$type: '', ref: undefined};
 
         obj.toString = function(){
             var temp = '';
@@ -456,14 +456,17 @@
         }
         if (type === Number) {
             obj['$type'] = 'number';
+            obj['default'] = null;            
             return obj;
         }
         if (type === String) {
             obj['$type'] = 'string';
+            obj['default'] = null;
             return obj;
         }
         if (type === Boolean) {
             obj['$type'] = 'boolean';
+            obj['default'] = null;
             return obj;
         }
         if (type === Array) {
@@ -483,11 +486,7 @@
         }
         if (type === RegExp) {
             obj['$type'] = 'regexp';
-            return obj;
-        }
-        if (type instanceof RegExp) {
-            obj['$type'] = 'regexp';
-            obj['default'] = type;
+            obj['default'] = null;
             return obj;
         }
         if (type === Symbol) {      // ES6+
@@ -496,6 +495,12 @@
         }
         if (type === BigInt) {      // ES6+
             obj['$type'] = 'bigint';
+            obj['default'] = null;
+            return obj;
+        }
+        if (type instanceof RegExp) {
+            obj['$type'] = 'regexp';
+            obj['default'] = type;
             return obj;
         }
         // step : typeof
@@ -518,13 +523,13 @@
             obj['default'] = type;
             return obj;
         }
-        if (typeof type === 'symbol') { // ES6+
-            obj['$type'] = 'symbol';
-            return obj;
-        }
         if (typeof type === 'bigint') { // ES6+
             obj['$type'] = 'bigint';
             obj['default'] = type;
+            return obj;
+        }
+        if (typeof type === 'symbol') { // ES6+
+            obj['$type'] = 'symbol';
             return obj;
         }
         // step : function
@@ -849,10 +854,11 @@
      * 타입을 검사하여 메세지를 리턴
      * @param {any} type 검사할 타입 , origin
      * @param {any} target 검사대상
+     * @param {number} opt 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
      * @param {string?} tarName '' 공백시 성공
      * @returns {throw?}
      */
-    var _execMatch = function(type, target, tarName, opt) {
+    var _execMatch = function(type, target, opt, tarName) {
         var tarName = tarName ? tarName : 'this';
         var defType = extendType(type);
         var tarType = extendType(target);
@@ -902,7 +908,7 @@
         }
         // regexp
         if (defType['$type'] === 'regexp') {
-            if (defType['default'] && typeof target === 'undefined') target = defType['default'];
+            if (defType['default'] && defType['default'] !== null && typeof target === 'undefined') target = defType['default'];
             if (target instanceof RegExp) return;
             Message.error('ES074', [tarName, 'regexp']);
         }
@@ -942,7 +948,7 @@
                     if (_isLiteral(elem)) {
                         if (_equalLiternal(elem, target)) return;
                     } else {
-                        return _execMatch(elem, target, tarName, opt);
+                        return _execMatch(elem, target, opt, tarName);
                     }
                 } catch (error) {
                     continue;
@@ -967,7 +973,7 @@
                     if (_isLiteral(_elem)) {
                         if (!_equalLiternal(_elem, _tar)) throw new Error('array seq 리터럴 타입이 다릅니다.');
                     } else {
-                        if (_execMatch(_elem, _tar, tarName, opt)) throw new Error('array seq 타입이 다릅니다.');
+                        if (_execMatch(_elem, _tar, opt, tarName)) throw new Error('array seq 타입이 다릅니다.');
                     }
                 }
                 return;
@@ -985,7 +991,7 @@
                         if (_isLiteral(elem)) {
                             if (_equalLiternal(elem, tar)) return;
                         } else {
-                            return _execMatch(elem, tar, tarName, opt);
+                            return _execMatch(elem, tar, opt, tarName);
                         }
                     } catch (error) {
                         continue;
@@ -1024,7 +1030,7 @@
             }
             if (defType['return']) {            // return check
                 try {
-                    _execAllow(defType['return'], tarType['return']);
+                    _execAllow(defType['return'], tarType['return'], opt);
                 } catch (error) {
                     Message.error('ES0711', ['function', 'return', error]);
                 }
@@ -1044,7 +1050,7 @@
             } else if (typeof target === 'object') {
                 if (target instanceof type) return;
                 if (!_isBuiltFunction(type) && target !== null) {       // passing built-in function
-                    return _execMatch(_creator(type), target, tarName, opt);
+                    return _execMatch(_creator(type), target, opt, tarName);
                 }
             }
             return Message.error('ES032', [tarName, _typeName(type)]);
@@ -1059,7 +1065,7 @@
                 // REVIEW: for 위쪽으로 이동 검토!
                 if (!_isObject(target)) return Message.error('ES031', [tarName + '.' + key]);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-                if (listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
+                if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
                     target[key] = listDefType['default'];
                 if (target !== null && !(key in target)) return Message.error('ES027', [listDefType['$type'], tarName + '.' + key]);    
                 if (listDefType['$type'] === 'class'){
@@ -1067,7 +1073,7 @@
                     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
                     else return Message.error('ES031', [tarName + '.' + key]);
                 } 
-                _execMatch(type[key], target[key], tarName +'.'+ key, opt);
+                _execMatch(type[key], target[key], opt, tarName +'.'+ key);
             }
             return;
         }
@@ -1081,10 +1087,10 @@
      * @param {any} target 
      * @returns {throw?} 실패시 예외를 던진다.
      */
-    var allowType = function(origin, target) {
+    var allowType = function(origin, target, opt) {
         try {
             if (typeof origin === 'undefined') Message.error('ES026', ['origin']);
-            _execAllow(origin, target);
+            _execAllow(origin, target, opt);
         } catch (error) {
             Message.error('ES069', ['check allow type', error]);
         }
@@ -1097,10 +1103,10 @@
      * @param {any} target 
      * @returns {throw?} 실패시 예외를 던진다.
      */
-    var matchType = function(chkType, target) {
+    var matchType = function(chkType, target, opt) {
         try {
             if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
-            _execMatch(chkType, target);
+            _execMatch(chkType, target, opt);
         } catch (error) {
             Message.error('ES069', ['check type', error]);
         }
@@ -1130,10 +1136,10 @@
      * @param {any} target 
      * @returns {boolean} 
      */
-    var isMatchType = function(chkType, target) {
+    var isMatchType = function(chkType, target, opt) {
         // if (typeof chkType === 'undefined') return false;
         try {
-            _execMatch(chkType, target);
+            _execMatch(chkType, target, opt);
             return true;
         } catch (error) {
             return false;

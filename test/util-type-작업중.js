@@ -19,7 +19,7 @@ describe("[target: util-type.js.js]", () => {
             var type1 = {$type: 'Not_Type'}
             expect(()=> typeOf(type1)).toThrow('ES022')
         });
-        describe('원시 타입 ', () => {
+        describe('원시타입 ', () => {
             it('- typeOf() : undefined ', () => {
                 var type0 = {$type: 'undefined'}
                 var type1
@@ -88,7 +88,7 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeOf(type2)).toBe('symbol');
             });
         });
-        describe('확장 타입 ', () => {
+        describe('확장타입 ', () => {
             it('- typeOf() : function ', () => {
                 var type0 = {$type: 'function'}
                 var type1 = function(){};
@@ -198,7 +198,7 @@ describe("[target: util-type.js.js]", () => {
     });
 
     describe('extendType(target) <타입객체 얻기> ', () => {
-        describe('원시 타입 ', () => {
+        describe('리터럴타입 ', () => {
             it('- extendType() : string [리터럴] ', () => {
                 var type1 = String;
                 var type2 = 'str';  // 리터럴
@@ -251,8 +251,18 @@ describe("[target: util-type.js.js]", () => {
                 expect(extendType(type3).$type   ).toBe('bigint');
                 expect(extendType(type3).default).toBe(type3);
             });
+            it('- extendType() : regexp [리터럴] ', () => {
+                var type1 = RegExp;
+                var type2 = /reg/;
+
+                expect(extendType(type1).$type  ).toBe('regexp');
+                expect(extendType(type1).default).toEqual(null);
+
+                expect(extendType(type2).$type  ).toBe('regexp');
+                expect(extendType(type2).default).toEqual(/reg/);
+            });
         });
-        describe('확장 타입 ', () => {
+        describe('복합타입 ', () => {
             it('- extendType() : function ', () => {
                 var type01 = Function; 
                 var type02 = function(){};
@@ -332,52 +342,6 @@ describe("[target: util-type.js.js]", () => {
                 expect(extendType(type15).$type  ).toBe('function');
                 expect(extendType(type15).params ).toEqual([String]);
                 expect(extendType(type15).return ).toEqual(Number);
-            });
-            // TODO: 
-            it.skip('- extendType() : function [특수객체] ', () => { 
-                var type1 = ()=>{}; 
-                var type1 = ()=>{}; 
-                var type1 = ()=>{}; 
-                var type1 = ()=>{}; 
-                var type1 = ()=>{}; 
-                
-                /**
-                 * 조건
-                 * - params 는 무조건 배열이어야 한다.
-                 */
-                type1._TYPE = {params: [ String ]};             // 타입
-                type1._TYPE = {params: [ 'aa' ]};               // 선택, 기본값
-                type1._TYPE = {params: [ [[ 'aa' ]] ]};         // 선택, 리터럴
-                type1._TYPE = {params: [ [[ String ]] ]};       // 선택, 타입
-                type1._TYPE = {params: [ [ String ] ]};         // 배열
-                type1._TYPE = {params: [ Function ]};           // 함수타입
-                type1._TYPE = {params: [ String => Number ]};   // 함수구문
-                type1._TYPE = {params: String};                 // 배열 아님    >> 오류
-                
-                type1._TYPE = {params: [ [[ [[ String, Number ]] ]] ]};   // 초이스 > 초이스
-                type1._TYPE = {params: [[ [[String, Number]] ]]};   // 초이스 > 초이스
-
-                type1._TYPE = {params: [[ [String, Number] ]]};   // 초이스 > 배열
-                type1._TYPE = {params: [[String], Number]};     // 배열임   >> 오류
-                
-                /**
-                 * 구문을 단축하면, 구문이 모호해지는 단점이 발생한다.
-                 * 구문이 단축되는 장점이 있다, 하지만 배열을 사용시 명시적으로 구현해야 한다.
-                 */
-                type1._TYPE = {params: [[[String, Number]], Number]};             // 배열 아님    >> 혼선
-                type1._TYPE = {return: [['_non_']]};    // 리턴에 non
-                type1._TYPE = {return: [[String, Number]]};    // 리턴에 non
-                type1._TYPE = {return: [String]};    // 리턴에 string
-            });
-            it('- extendType() : regexp [리터럴] ', () => {
-                var type1 = RegExp;
-                var type2 = /reg/;
-
-                expect(extendType(type1).$type  ).toBe('regexp');
-                expect(extendType(type1).default).toEqual(null);
-
-                expect(extendType(type2).$type  ).toBe('regexp');
-                expect(extendType(type2).default).toEqual(/reg/);
             });
             it('- extendType() : choice ', () => {
                 var type01 = [[String]]
@@ -470,6 +434,30 @@ describe("[target: util-type.js.js]", () => {
                 expect(extendType(type8).kind).toBe('_OPT_');
                 expect(extendType(type8).list).toEqual([String]);
             });
+            it('- extendType() : class ', () => {
+                var type1 = function Class1(){this.age = 1; this.fun = (a,b)=>{}};
+                var type2 = Date;
+
+                var tar01 = {age: 1, fun: (a,b)=>{}}
+
+                expect(extendType(type1).$type      ).toBe('class');
+                expect(extendType(type1).ref        ).toBe(type1);
+            });
+            it('- extendType() : union ', () => {
+                var type1 = {str: 'blue', num: Number, }
+                var type2 = {arr: [String], sub: {bool: true}}
+                var type3 = {}
+
+                expect(extendType(type1).$type      ).toBe('union');
+                expect(extendType(type1).ref        ).toBe(type1);
+
+                expect(extendType(type2).$type      ).toBe('union');
+                expect(extendType(type2).ref        ).toBe(type2);
+
+                expect(extendType(type3).$type      ).toBe('union');
+                expect(extendType(type3).ref        ).toBe(type3);
+            });
+
         });
     });
 
@@ -539,15 +527,6 @@ describe("[target: util-type.js.js]", () => {
                 expect(typeObject(type2)   ).toEqual(obj02);
                 expect(typeObject(type3)   ).toEqual(obj02);
             });
-            it('- typeObject() : symbol (ES6+)  ', () => {
-                var type1 = Symbol;
-                var type2 = Symbol('a');    // 리터럴로 취급 안함
-
-                var obj01 = {$type: 'symbol'};
-
-                expect(typeObject(type1)   ).toEqual(obj01);
-                expect(typeObject(type2)   ).toEqual(obj01);
-            });
             it('- typeObject() : regexp [리터럴] ', () => {
                 var type1 = RegExp;
                 var type2 = /reg/;
@@ -557,6 +536,15 @@ describe("[target: util-type.js.js]", () => {
 
                 expect(typeObject(type1)   ).toEqual(obj01);
                 expect(typeObject(type2)   ).toEqual(obj02);
+            });
+            it('- typeObject() : symbol (ES6+)  ', () => {
+                var type1 = Symbol;
+                var type2 = Symbol('a');    // 리터럴로 취급 안함
+
+                var obj01 = {$type: 'symbol'};
+
+                expect(typeObject(type1)   ).toEqual(obj01);
+                expect(typeObject(type2)   ).toEqual(obj01);
             });
             it('- typeObject() : object ', () => {
                 // var type1 = new function User() {}; 
@@ -964,7 +952,7 @@ describe("[target: util-type.js.js]", () => {
     //     // typeOf 와 비슷함
     // });
     describe('isMatchType(type, target): bool  <타입 매치 여부> ', () => {
-        describe('원시 타입 ', () => {
+        describe('단일 타입(Leaf) ', () => {
             it('- isMatchType() : undefined ', () => {
                 var type1 = undefined;
                 var type2 = {aa: undefined};
@@ -1126,18 +1114,16 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type1, '')       ).toBe(false);
                 expect(isMatchType(type1, BigInt)   ).toBe(false);
             });
-        });
-        describe('확장 타입 ', () => {
             it('- isMatchType() : regexp [리터럴] ', () => {
                 var type1 = RegExp;
                 var type2 = /reg/;
                 var type3 = {a: /reg/};
                 var type4 = [[RegExp]];
                 var type5 = [[/bb/]];
-
+    
                 var tar01 = {a: undefined};
                 var tar02 = {};
-
+    
                 expect(isMatchType(type1, /reg2/)   ).toBe(T);
                 expect(isMatchType(type1, undefined)).toBe(false);                
                 expect(isMatchType(type1, '')       ).toBe(false);
@@ -1162,102 +1148,6 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type5, undefined)).toBe(T);
                 expect(isMatchType(type5, '')       ).toBe(false);
             });
-
-            /**
-             * REVIEW: 함수는 파라메터, 리턴 구분해서 테스트
-             */
-            it('- isMatchType() : function 파라메터 ', () => {
-                var type1 = Function;
-                var type2 = ()=>{};
-                var type3 = (String, Number)=>{Object}
-                
-                var tar01 = {$type: 'function'}
-                var tar02 = {$type: 'function', params: [String, Number], return: [Object]};
-                var tar03 = {$type: 'function', params: [String, Number], return: Object};
-                var tar04 = {$type: 'function', params: [], return: [Object, String]};
-
-                // type1
-                expect(isMatchType(type1,tar01) ).toBe(T);
-                expect(isMatchType(type1,tar02) ).toBe(T);
-                expect(isMatchType(type1,tar03) ).toBe(T);
-                expect(isMatchType(type1,tar04) ).toBe(T);
-                // type2
-                expect(isMatchType(type2,tar01) ).toBe(T);
-                expect(isMatchType(type2,tar02) ).toBe(T);
-                expect(isMatchType(type2,tar03) ).toBe(T);
-                expect(isMatchType(type2,tar04) ).toBe(T);
-                // type3
-                expect(isMatchType(type3,tar01) ).toBe(false);
-                expect(isMatchType(type3,tar02) ).toBe(false);
-                expect(isMatchType(type3,tar03) ).toBe(T);
-                expect(isMatchType(type3,tar04) ).toBe(false);
-            });
-            it('- isMatchType() : function 리턴 ', () => {
-                var type1 = ()=>{[String, Number]}      // return array
-                var type2 = ()=>{{a: String}}           // return union
-                var type3 = ()=>{[[String, Number]]}    // return choice
-
-                var tar01 = ()=>{}; tar01._TYPE = {params: [String, Number], return: [String, String]};
-                var tar02 = ()=>{}; tar02._TYPE = {params: [String, Number]};
-
-                expect(isMatchType(type1,tar01) ).toBe(T);
-                expect(isMatchType(type1,tar02) ).toBe(false);
-
-                /**
-                 * POINT: 함수 부분은 테스트 해야할 항목과 코드 수정할 부분이 많음..세부적으로 검토 필요
-                 */
-            });
-            it('- isMatchType() : class, 내장함수 ', () => {
-                var type1 = function Type1(){ this.age = 1; this.fun = (a,b)=>{} };
-                var type2 = class Type2 { age = 10; fun = function(){} };
-                var type3 = Date;
-
-                var tar01 = new type1();                // union
-                var tar02 = new type2();                // union
-                var tar03 = { age: 10, fun: ()=>{} };   // union
-                var tar04 = { age: 10 };                // union
-                var tar05 = new Date();                 // object
-
-                expect(isMatchType(type1, tar01)    ).toBe(T);
-                expect(isMatchType(type1, tar02)    ).toBe(T);   
-                expect(isMatchType(type1, tar03)    ).toBe(T);
-                expect(isMatchType(type1, tar04)    ).toBe(false);
-                expect(isMatchType(type1, tar05)    ).toBe(false);
-
-                expect(isMatchType(type2, tar01)    ).toBe(T);
-                expect(isMatchType(type2, tar02)    ).toBe(T);
-                expect(isMatchType(type2, tar03)    ).toBe(T);
-                expect(isMatchType(type2, tar04)    ).toBe(false);
-                expect(isMatchType(type2, tar05)    ).toBe(false);
-
-                expect(isMatchType(type3, tar01)    ).toBe(false);
-                expect(isMatchType(type3, tar02)    ).toBe(false);
-                expect(isMatchType(type3, tar03)    ).toBe(false);
-                expect(isMatchType(type3, tar04)    ).toBe(false);
-                expect(isMatchType(type3, tar05)    ).toBe(T);
-            });
-            it('- isMatchType() : class, 상속', () => {
-                var tar01 = class Tar01 { age = Number };
-                var tar02 = class Tar02 extends tar01 { color = String };
-                var tar03 = class Tar03 { color = String; age = Number };
-
-                var type1 = tar01
-                var type2 = tar02
-                var type3 = tar03
-
-                expect(isMatchType(type1, tar01)    ).toBe(T);
-                expect(isMatchType(type1, tar02)    ).toBe(T);   
-                expect(isMatchType(type1, tar03)    ).toBe(false);
-
-                expect(isMatchType(type2, tar01)    ).toBe(false);
-                expect(isMatchType(type2, tar02)    ).toBe(T);
-                expect(isMatchType(type2, tar03)    ).toBe(false);
-
-                expect(isMatchType(type3, tar01)    ).toBe(false);
-                expect(isMatchType(type3, tar02)    ).toBe(false);
-                expect(isMatchType(type3, tar03)    ).toBe(T);
-            });
-             
             it('- isMatchType() : object ', () => {
                 var type1 = {};         // union
                 var type2 = Object;     // object
@@ -1281,28 +1171,185 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type4, new Date)     ).toBe(T);
                 expect(isMatchType(type4, /reg/)        ).toBe(false);
             });
-            it('- isMatchType() : union ', () => {
-                var type1 = {str: '', num: Number, }
-                var type2 = {arr: ['list']}
+        });
+        describe('복합 타입 ', () => {
 
-                var tar11 = {str: 's'}
-                var tar12 = {num: 10}
-                var tar13 = {str: 's', num: 10}
-                var tar14 = {str: 10, num: 10}
-                var tar21 = {arr:['list'] }
-                var tar22 = {arr:['not'] }
-                var tar23 = {arr:[] }
-                
-                 // type1
-                expect(isMatchType(type1, tar11)      ).toBe(false);
-                expect(isMatchType(type1, tar12)      ).toBe(T);
-                expect(isMatchType(type1, tar13)      ).toBe(T);
-                expect(isMatchType(type1, tar14)      ).toBe(false);
-                // type2
-                expect(isMatchType(type2, tar21)      ).toBe(T);
-                expect(isMatchType(type2, tar22)      ).toBe(false);
-                expect(isMatchType(type2, tar23)      ).toBe(T);
+            /**
+             * TODO: 함수는 파라메터, 리턴 구분해서 테스트
+             */
+            describe('function', () => {
+                it('- isMatchType() : function 파라메터 ', () => {
+                    var type1 = Function;
+                    var type2 = ()=>{};
+                    var type3 = (String, Number)=>{Object}
+                    
+                    var tar01 = {$type: 'function'}
+                    var tar02 = {$type: 'function', params: [String, Number], return: [Object]};
+                    var tar03 = {$type: 'function', params: [String, Number], return: Object};
+                    var tar04 = {$type: 'function', params: [], return: [Object, String]};
+    
+                    // type1
+                    expect(isMatchType(type1,tar01) ).toBe(T);
+                    expect(isMatchType(type1,tar02) ).toBe(T);
+                    expect(isMatchType(type1,tar03) ).toBe(T);
+                    expect(isMatchType(type1,tar04) ).toBe(T);
+                    // type2
+                    expect(isMatchType(type2,tar01) ).toBe(T);
+                    expect(isMatchType(type2,tar02) ).toBe(T);
+                    expect(isMatchType(type2,tar03) ).toBe(T);
+                    expect(isMatchType(type2,tar04) ).toBe(T);
+                    // type3
+                    expect(isMatchType(type3,tar01) ).toBe(false);
+                    expect(isMatchType(type3,tar02) ).toBe(false);
+                    expect(isMatchType(type3,tar03) ).toBe(T);
+                    expect(isMatchType(type3,tar04) ).toBe(false);
+                });
+                it('- isMatchType() : function 리턴 ', () => {
+                    var type1 = ()=>{[String, Number]}      // return array
+                    var type2 = ()=>{{a: String}}           // return union
+                    var type3 = ()=>{[[String, Number]]}    // return choice
+    
+                    var tar01 = ()=>{}; tar01._TYPE = {params: [String, Number], return: [String, String]};
+                    var tar02 = ()=>{}; tar02._TYPE = {params: [String, Number]};
+    
+                    expect(isMatchType(type1,tar01) ).toBe(T);
+                    expect(isMatchType(type1,tar02) ).toBe(false);
+    
+                    /**
+                     * POINT: 함수 부분은 테스트 해야할 항목과 코드 수정할 부분이 많음..세부적으로 검토 필요
+                     */
+                });
+                it('- isMatchType() : function  중첩타입, 배열, 초이스 ', () => {
+                    var type1 = ([String], [[Number]])=>{};
+    
+                    var tar11 = {$type: 'function', params: [ [String] ]}
+                    var tar12 = {$type: 'function', params: [ [String], Number]}
+                    var tar13 = {$type: 'function', params: [ [String], Boolean]}
+                    var tar14 = {$type: 'function', params: [ ['str'] ]}
+                    var tar15 = {$type: 'function', params: [ ['str'], 10]}
+                    var tar16 = {$type: 'function', params: [ ['str'], false]}
+                    var tar17 = {$type: 'function', params: [ [10] ]}
+    
+                    expect(isMatchType(type1, tar11)).toBe(false);
+                    expect(isMatchType(type1, tar12)).toBe(T);
+                    expect(isMatchType(type1, tar13)).toBe(false);
+                    expect(isMatchType(type1, tar14)).toBe(false);
+                    expect(isMatchType(type1, tar15)).toBe(T);
+                    expect(isMatchType(type1, tar16)).toBe(false);
+                    expect(isMatchType(type1, tar17)).toBe(false);
+                });
             });
+            describe('class', () => {
+                it('- isMatchType() : class, 내장함수 ', () => {
+                    function ClassA(){ this.age = 1; this.fun = (a,b)=>{} };
+                    class ClassB { age = 10; fun = function(){} };
+    
+                    var tar01 = new ClassA();               // union
+                    var tar02 = new ClassB();               // union
+                    var tar03 = { age: 10, fun: ()=>{} };   // union
+                    var tar04 = { age: 10 };                // union
+                    var tar05 = new Date();                 // object
+    
+                    expect(isMatchType(ClassA, tar01)    ).toBe(T);
+                    expect(isMatchType(ClassA, tar02)    ).toBe(T);   
+                    expect(isMatchType(ClassA, tar03)    ).toBe(T);
+                    expect(isMatchType(ClassA, tar04)    ).toBe(false);
+                    expect(isMatchType(ClassA, tar05)    ).toBe(false);
+    
+                    expect(isMatchType(ClassB, tar01)    ).toBe(T);
+                    expect(isMatchType(ClassB, tar02)    ).toBe(T);
+                    expect(isMatchType(ClassB, tar03)    ).toBe(T);
+                    expect(isMatchType(ClassB, tar04)    ).toBe(false);
+                    expect(isMatchType(ClassB, tar05)    ).toBe(false);
+    
+                    expect(isMatchType(Date, tar01)    ).toBe(false);
+                    expect(isMatchType(Date, tar02)    ).toBe(false);
+                    expect(isMatchType(Date, tar03)    ).toBe(false);
+                    expect(isMatchType(Date, tar04)    ).toBe(false);
+                    expect(isMatchType(Date, tar05)    ).toBe(T);
+                });
+                it('- isMatchType() : class, 상속', () => {
+                    class ClassA { age = Number };
+                    class ClassB extends ClassA { color = String };
+                    class ClassC { color = String; age = Number };
+    
+                    expect(isMatchType(ClassA, ClassA)    ).toBe(T);
+                    expect(isMatchType(ClassA, ClassB)    ).toBe(T);   
+                    expect(isMatchType(ClassA, ClassC)    ).toBe(false);
+    
+                    expect(isMatchType(ClassB, ClassA)    ).toBe(false);
+                    expect(isMatchType(ClassB, ClassB)    ).toBe(T);
+                    expect(isMatchType(ClassB, ClassC)    ).toBe(false);
+    
+                    expect(isMatchType(ClassC, ClassA)    ).toBe(false);
+                    expect(isMatchType(ClassC, ClassB)    ).toBe(false);
+                    expect(isMatchType(ClassC, ClassC)    ).toBe(T);
+                });
+                it('- isMatchType() : class, 중첩타입', () => {
+                    class ClassA { aa = String;}
+                    class ClassB { aa = Number;}
+                    class ClassC { aa = ClassB;}
+                    class ClassD { aa = [ClassA];}
+                    class ClassE { aa = [[ ClassA, ClassB ]];}
+                    class ClassF { aa = {bb: String};}
+                    class ClassG { aa = String=>Number;}
+
+                    var obj1 = {aa: 'str'}
+                    var obj2 = {aa: 10}
+                    var obj3 = {bb: 'str'}
+                    // var type2 = ClassD
+                    // var type3 = ClassE
+                    // var type4 = ClassF
+                    // var type5 = ClassG
+
+                    // var tar01 = new type1();                // union
+                    // var tar02 = new type2();                // union
+                    // var tar03 = { age: 10, fun: ()=>{} };   // union
+                    // var tar04 = { age: 10 };                // union
+                    // var tar05 = new Date();                 // object
+
+                    expect(isMatchType(ClassA, ClassA)  ).toBe(T);
+                    expect(isMatchType(ClassA, obj1)    ).toBe(T);
+                    expect(isMatchType(ClassA, obj2)    ).toBe(false);
+                    expect(isMatchType(ClassA, obj3)    ).toBe(false);
+
+                    expect(isMatchType(ClassC, ClassC)  ).toBe(T);
+                    expect(isMatchType(ClassC, ClassB)  ).toBe(false);
+
+                    // expect(isMatchType(ClassD, ClassC)    ).toBe(T);
+
+                    // expect(isMatchType(type1, tar02)    ).toBe(T);   
+                    // expect(isMatchType(type1, tar03)    ).toBe(false);
+
+                });
+
+            });
+             
+            describe('union', () => {
+                it('- isMatchType() : union ', () => {
+                    var type1 = {str: '', num: Number, }
+                    var type2 = {arr: ['list']}
+    
+                    var tar11 = {str: 's'}
+                    var tar12 = {num: 10}
+                    var tar13 = {str: 's', num: 10}
+                    var tar14 = {str: 10, num: 10}
+                    var tar21 = {arr:['list'] }
+                    var tar22 = {arr:['not'] }
+                    var tar23 = {arr:[] }
+                    
+                     // type1
+                    expect(isMatchType(type1, tar11)      ).toBe(false);
+                    expect(isMatchType(type1, tar12)      ).toBe(T);
+                    expect(isMatchType(type1, tar13)      ).toBe(T);
+                    expect(isMatchType(type1, tar14)      ).toBe(false);
+                    // type2
+                    expect(isMatchType(type2, tar21)      ).toBe(T);
+                    expect(isMatchType(type2, tar22)      ).toBe(false);
+                    expect(isMatchType(type2, tar23)      ).toBe(T);
+                });
+            });
+
             
             describe('choice ', () => {
                 it('- isMatchType() : choice _opt_ ', () => {
@@ -1634,61 +1681,6 @@ describe("[target: util-type.js.js]", () => {
                     expect(isMatchType(type1, ['str', 10])  ).toBe(T);
                     expect(isMatchType(type1, undefined)    ).toBe(false);
                 });
-            });
-        });
-        // TODO: 대상의 하위로 이동
-        describe('중첩 구조 ', () => {  
-            it('- isMatchType() : union TODO:', () => {
-                // union + union
-            });
-            it('- isMatchType() : class TODO:', () => {
-                // union + union
-            });
-            it('- isMatchType() : choice TODO:', () => {
-                // choice + union
-            });
-            it('- isMatchType() : array TODO:', () => {
-                // choice + union
-            });
-            describe('function', () => {  
-                it('- isMatchType() : function  배열, 초이스 ', () => {
-                    var type1 = ([String], [[Number]])=>{};
-    
-                    var tar11 = {$type: 'function', params: [ [String] ]}
-                    var tar12 = {$type: 'function', params: [ [String], Number]}
-                    var tar13 = {$type: 'function', params: [ [String], Boolean]}
-                    var tar14 = {$type: 'function', params: [ ['str'] ]}
-                    var tar15 = {$type: 'function', params: [ ['str'], 10]}
-                    var tar16 = {$type: 'function', params: [ ['str'], false]}
-                    var tar17 = {$type: 'function', params: [ [10] ]}
-    
-                    expect(isMatchType(type1, tar11)).toBe(false);
-                    expect(isMatchType(type1, tar12)).toBe(T);
-                    expect(isMatchType(type1, tar13)).toBe(false);
-                    expect(isMatchType(type1, tar14)).toBe(false);
-                    expect(isMatchType(type1, tar15)).toBe(T);
-                    expect(isMatchType(type1, tar16)).toBe(false);
-                    expect(isMatchType(type1, tar17)).toBe(false);
-                });
-                // it('- isMatchType() : function  객체, 초이스(배열) ', () => {
-                //     var type2 = ({aa: String}, [[{bb: Number}]])=>{};
-    
-                //     var tar11 = {$type: 'function', params: [ [String] ]}
-                //     var tar12 = {$type: 'function', params: [ [String], Number]}
-                //     var tar13 = {$type: 'function', params: [ [String], Boolean]}
-                //     var tar14 = {$type: 'function', params: [ ['str'] ]}
-                //     var tar15 = {$type: 'function', params: [ ['str'], 10]}
-                //     var tar16 = {$type: 'function', params: [ ['str'], false]}
-                //     var tar17 = {$type: 'function', params: [ [10] ]}
-    
-                //     expect(isMatchType(type1, tar11)).toBe(false);
-                //     expect(isMatchType(type1, tar12)).toBe(T);
-                //     expect(isMatchType(type1, tar13)).toBe(false);
-                //     expect(isMatchType(type1, tar14)).toBe(false);
-                //     expect(isMatchType(type1, tar15)).toBe(T);
-                //     expect(isMatchType(type1, tar16)).toBe(false);
-                //     expect(isMatchType(type1, tar17)).toBe(false);
-                // });
             });
         });
     });

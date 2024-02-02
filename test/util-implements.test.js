@@ -16,16 +16,17 @@ describe("[target: util.js]", () => {
                 this.m1 = Function;
             }
             function CoClass() {
-                Util.implements(CoClass, this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);
             }
     
             expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
+            // expect(() => new CoClass()).toThrow(/ES017/);
         });
         it('- prototype 인터페이스 선언 : 예외 (인터페이스 미구현) ', () => {
             function ISuper() {}
             ISuper.prototype.m1 = Function;
             function CoClass() {
-                Util.implements(CoClass, this, ISuper);    /** @implements */
+                Util.implements(CoClass, this, ISuper);
             }
             
             expect(() => new CoClass()).toThrow(/ES017(.|\s)*ES027/);
@@ -37,7 +38,7 @@ describe("[target: util.js]", () => {
             }
             class CoClass {
                 constructor() {
-                    Util.implements(CoClass, this, ISuper);    /** @implements */
+                    Util.implements(CoClass, this, ISuper);
                 }
             }
     
