@@ -271,9 +271,9 @@ describe("[target: util.js]", () => {
                 Util.implements(CoClass3, this, ISuper);    /** @implements */
             }
     
-            expect(()=> new CoClass1()).toThrow(/ES017(.|\s)*ES069(.|\s)*ES074/);
+            expect(()=> new CoClass1()).toThrow(/ES017(.|\s)*ES069/);
             expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES031/);
-            expect(()=> new CoClass3()).toThrow(/ES017(.|\s)*ES027/);
+            expect(()=> new CoClass3()).toThrow(/ES017(.|\s)*ES069/);
         });
         
         it('- this 인터페이스 선언 <-- 구현 : 예외 (복합 타입) ', () => {
@@ -321,7 +321,7 @@ describe("[target: util.js]", () => {
                 Util.implements(CoClass, this, ISuper);    /** @implements */
             }
             
-            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES027/);
+            expect(()=> new CoClass()).toThrow(/ES017(.|\s)*ES069/);
         });
         
         it('- class 다중 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
@@ -332,7 +332,7 @@ describe("[target: util.js]", () => {
                 m1 = Function;
             }
             class ISuper2 {
-                arr = [];
+                arr = Array;
                 m2 = Function;
             }
             // 클래스 구현
@@ -352,7 +352,7 @@ describe("[target: util.js]", () => {
             let obj = new CoClass1();
     
             expect(obj.m1()).toBe('M1');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
+            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES069/);
         });
         it('- class 다중 인터페이스 선언 : 중복 등록', () => {
             // 인터페이스
@@ -362,7 +362,7 @@ describe("[target: util.js]", () => {
                 m1 = Function;
             }
             class ISuper2 {
-                arr = [];
+                arr = Array;
                 m2 = Function;
             }
             // 클래스 구현
@@ -385,7 +385,7 @@ describe("[target: util.js]", () => {
                 m1 = Function;
             }
             class ISub {
-                arr = [];           // 재정의
+                arr = Array;           // 재정의
                 fun = Function;
                 constructor() { Util.implements(ISub, this, ISuper); }
                 m1 = Function;            // 재정의
@@ -414,11 +414,11 @@ describe("[target: util.js]", () => {
         it('- function 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
             function ISuper() {
-                this.arr = [];
+                this.arr = Array;
             }
             ISuper.prototype.m1 = function() {};
             function ISub() {
-                this.arr = [];                  // 재정의
+                this.arr = Array;                  // 재정의
                 this.fun = function() {};
                 Util.implements(ISub, this, ISuper);
             }
@@ -447,7 +447,7 @@ describe("[target: util.js]", () => {
         it('- function 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
             function ISuper() {
-                this.arr = [];
+                this.arr = Array;
             }
             ISuper.prototype.m1 = function() {};
             function ISub() {
@@ -479,7 +479,7 @@ describe("[target: util.js]", () => {
         it('- class 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
             class ISuper {
-                arr = [];
+                arr = Array;
                 m1() {};
             }
             class ISub extends ISuper {
@@ -509,10 +509,10 @@ describe("[target: util.js]", () => {
         it('- isImplementOf() : 예외 및 검사 ', () => {
             // 인터페이스
             class ISuper1 {
-                arr = [];
+                arr = Array;
             }
             class ISuper2 {
-                arr2 = [];
+                arr2 = Array;
             }
             // 클래스 정의
             function CoClass1() {

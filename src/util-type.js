@@ -959,8 +959,8 @@
         }
         // array
         if (defType['$type'] === 'array') {
-            if ((type === Array || type.length === 0) && (Array.isArray(target) || target === Array)) return;
-            if (!Array.isArray(target)) return Message.error('ES024', [tarName, 'array']);
+            // if ((type === Array || type.length === 0) && (Array.isArray(target) || target === Array)) return;
+            if (tarType['$type'] !== 'array') return Message.error('ES024', [tarName, 'array']);
             if (defType['kind'] == '_ALL_') return;
             else if (defType['kind'] == '_ANY_') {
                 if (target.length === 0) throw new Error('array any 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
@@ -978,28 +978,56 @@
                 }
                 return;
             } else if (defType['kind'] == '_REQ_') {
-                // Empty
+                if (target.length === 0) throw new Error('array req 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
             } else if (defType['kind'] === '_OPT_') {
                 if (Array.isArray(target) && target.length === 0) return;
             }
             // element check
             for (var i = 0; i < target.length; i++) {
                 var tar = target[i];
+                var success = false;
                 for (var ii = 0; ii < defType['list'].length; ii++) {
                     try {
                         var elem = defType['list'][ii];
                         if (_isLiteral(elem)) {
-                            if (_equalLiternal(elem, tar)) return;
+                            if (_equalLiternal(elem, tar)) {
+                                success = true;
+                                break;
+                            }
+                            // throw new Error('리터럴 타입이 다릅니다.');
                         } else {
-                            return _execMatch(elem, tar, opt, tarName);
+                            _execMatch(elem, tar, opt, tarName);
+                            success = true;
+                            break;
                         }
                     } catch (error) {
                         continue;
                     }
                 }
-                var logTitle = defType['kind'] ? 'array('+defType['kind']+')' : 'array';
-                Message.error('ES076', [logTitle, defType.toString(), tarType.toString()]);
+                if (!success) {
+                    var logTitle = defType['kind'] ? 'array('+defType['kind']+')' : 'array';
+                    Message.error('ES076', [logTitle, defType.toString(), tarType.toString()]);
+                }
             }
+            return;
+
+            // for (var i = 0; i < target.length; i++) {
+            //     var tar = target[i];
+            //     for (var ii = 0; ii < defType['list'].length; ii++) {
+            //         try {
+            //             var elem = defType['list'][ii];
+            //             if (_isLiteral(elem)) {
+            //                 if (_equalLiternal(elem, tar)) return;
+            //             } else {
+            //                 return _execMatch(elem, tar, opt, tarName);
+            //             }
+            //         } catch (error) {
+            //             continue;
+            //         }
+            //     }
+            //     var logTitle = defType['kind'] ? 'array('+defType['kind']+')' : 'array';
+            //     Message.error('ES076', [logTitle, defType.toString(), tarType.toString()]);
+            // }
         }
         // function
         if (defType['$type'] === 'function') {
