@@ -1093,14 +1093,16 @@
                 // REVIEW: for 위쪽으로 이동 검토!
                 if (!_isObject(target)) return Message.error('ES031', [tarName + '.' + key]);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+                // REVIEW: 재귀로 구현 체크
                 if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
                     target[key] = listDefType['default'];
                 if (target !== null && !(key in target)) return Message.error('ES027', [listDefType['$type'], tarName + '.' + key]);    
-                if (listDefType['$type'] === 'class'){
-                    if (typeof target[key] === 'function') continue;                        // class method
-                    if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
-                    else return Message.error('ES031', [tarName + '.' + key]);
-                } 
+                // ?
+                // if (listDefType['$type'] === 'class'){
+                //     if (typeof target[key] === 'function') continue;                        // class method
+                //     if (typeof target[key] === 'object' && target[key] instanceof type[key]) continue;
+                //     else return Message.error('ES031', [tarName + '.' + key]);
+                // } 
                 _execMatch(type[key], target[key], opt, tarName +'.'+ key);
             }
             return;
