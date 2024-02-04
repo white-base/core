@@ -380,8 +380,7 @@ describe("[target: util.js]", () => {
         it('- class 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
             class ISuper {
-                arr = [];
-                // m1() {};
+                arr = Array;
                 m1 = Function;
             }
             class ISub {
@@ -391,6 +390,7 @@ describe("[target: util.js]", () => {
                 m1 = Function;            // 재정의
                 m2 = Function;
             }
+            ISub._KIND = 'interface';
             // 클래스 구현
             class CoClass1 {
                 arr = [];
@@ -409,7 +409,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.m1()).toBe('M1');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
+            expect(()=> new CoClass2()).toThrow(/ES017/);
         });
         it('- function 인터페이스 구현 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
@@ -422,6 +422,7 @@ describe("[target: util.js]", () => {
                 this.fun = function() {};
                 Util.implements(ISub, this, ISuper);
             }
+            ISub._KIND = 'interface';
             ISub.prototype.m1 = function() {};  // 재정의
             ISub.prototype.m2 = function() {};
             // 클래스 구현
@@ -442,7 +443,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
+            expect(()=> new CoClass2()).toThrow(/ES017/);
         });
         it('- function 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스

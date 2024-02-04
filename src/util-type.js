@@ -167,7 +167,7 @@
         var syntax1 = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;    // 제한 규칙
         var syntax2 = /(\(.*\)|\w+)\s*(?:=>).*/;
         var regFunc1 = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
-        var regFunc2 = /\(?([\[\]{:}\s\w,]*)\)?\s*(?:=>)\s*{?(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}?/;
+        var regFunc2 = /\(?([\[\]{:}\s\w,]*)\)?\s*(?:=>)\s*{?(?:\s*return\s+|\s*)?([\[\]\s\w,]*);?\s*}?/;
         
         var arrFunc, arrParam;
         var result = { params: [], return: undefined };
@@ -819,7 +819,7 @@
         // class
         if (oriType['$type'] === 'class') {
             
-            if (tarType['$type'] === 'class') {
+            if (tarType['$type'] === 'class') {         // # class to class
                 if (isProtoChain(tarType['ref'], oriType['ref'])) return;   // 1.proto check
                 if (opt === 1) {
                     try {
@@ -827,6 +827,16 @@
                         var oriObj = new oriType['ref']();
                         var tarObj = new tarType['ref']();
                         return _execAllow(oriObj, tarObj, opt);
+                    } catch (error) {
+                        Message.error('ES0724', ['object', error]);
+                    }                    
+                }
+            } else if (tarType['$type'] === 'union') {  // # class to union
+                if (opt === 1) {
+                    try {
+                        // 생성비교
+                        var oriObj = new oriType['ref']();
+                        return _execAllow(oriObj, tarType['ref'], opt);
                     } catch (error) {
                         Message.error('ES0724', ['object', error]);
                     }                    
@@ -960,7 +970,8 @@
         // array
         if (defType['$type'] === 'array') {
             // if ((type === Array || type.length === 0) && (Array.isArray(target) || target === Array)) return;
-            if (tarType['$type'] !== 'array') return Message.error('ES024', [tarName, 'array']);
+            // if (tarType['$type'] !== 'array') return Message.error('ES024', [tarName, 'array']);
+            if (!Array.isArray(target)) return Message.error('ES024', [tarName, 'array']);
             if (defType['kind'] == '_ALL_') return;
             else if (defType['kind'] == '_ANY_') {
                 if (target.length === 0) throw new Error('array any 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
@@ -1049,7 +1060,7 @@
             if (typeof tarType['params'] === 'undefined' && typeof tarType['return'] === 'undefined') { 
                 Message.error('ES0710', ['target', 'function', ' {params: [], return: []} ']);
             }
-            if (defType['params'].length > 0) {  // params check
+            if (Array.isArray(defType['params']) && defType['params'].length > 0) {  // params check
                 try {
                     _execAllow(['_SEQ_'].concat(defType['params']), ['_SEQ_'].concat(tarType['params']));
                 } catch (error) {
@@ -1072,12 +1083,12 @@
         }
         // class
         if (defType['$type'] === 'class') {
-            if (tarType['$type'] === 'class') {
-                if (typeof defType['ref'] === 'undefined') return;      // function all
-                if (isProtoChain(tarType['ref'], defType['ref'])) return;     // function proto
-            } else if (typeof target === 'object') {
-                if (target instanceof type) return;
-                if (!_isBuiltFunction(type) && target !== null) {       // passing built-in function
+            if (tarType['$type'] === 'class') {         // # class to class
+                if (typeof defType['ref'] === 'undefined') return;
+                if (isProtoChain(tarType['ref'], defType['ref'])) return;
+            } else if (typeof target === 'object') {    // # class to typeof 'object'
+                if (target instanceof type) return;     
+                if (!_isBuiltFunction(type) && target !== null && opt === 1) {
                     return _execMatch(_creator(type), target, opt, tarName);
                 }
             }

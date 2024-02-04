@@ -241,7 +241,9 @@
         try {
             var beginIdx = p_obj._interface.length - addCnt;
             for (var i = beginIdx; i < p_obj._interface.length; i++) {
-                matchType(p_obj._interface[i], p_obj);
+                // POINT: 타입과 인터페이스 분리
+                if (p_ctor['_KIND'] === 'interface') allowType(p_obj._interface[i], p_obj, 1);
+                else matchType(p_obj._interface[i], p_obj, 1);
             }
         } catch (error) {
             Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);

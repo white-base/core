@@ -784,48 +784,48 @@ describe("[target: util-type.js.js]", () => {
             var Class1 = function() { this.aa = String }
             var Class2 = function() { this.bb = Number }
     
-            expect(isMatchType([[Class1, Class2]], {aa: 'STR', bb: 10}      )).toBe(T);
-            expect(isMatchType(Class1,             {aa: 'STR', bb: 10}      )).toBe(T);
-            expect(isMatchType(Class2,             {aa: 'STR', bb: 10}      )).toBe(T);
-            expect(isMatchType([[Class1, Class2]], {aa: 'STR'}              )).toBe(T);
-            expect(isMatchType(Class1,             {aa: 'STR'}              )).toBe(T);
-            expect(isMatchType(Class2,             {aa: 'STR'}              )).toBe(false);
-            expect(isMatchType([[Class1, Class2]], {aa: 'STR', bb: 'STR'}   )).toBe(T);
-            expect(isMatchType(Class1,             {aa: 'STR', bb: 'STR'}   )).toBe(T);
-            expect(isMatchType(Class2,             {aa: 'STR', bb: 'STR'}   )).toBe(false);
-            expect(isMatchType([[Class1, Class2]], {cc: 'STR'}              )).toBe(false);
-            expect(isMatchType(Class1,             {cc: 'STR'}              )).toBe(false);
-            expect(isMatchType(Class2,             {cc: 'STR'}              )).toBe(false);
+            expect(isMatchType([[Class1, Class2]], {aa: 'STR', bb: 10}      , 1)).toBe(T);
+            expect(isMatchType(Class1,             {aa: 'STR', bb: 10}      , 1)).toBe(T);
+            expect(isMatchType(Class2,             {aa: 'STR', bb: 10}      , 1)).toBe(T);
+            expect(isMatchType([[Class1, Class2]], {aa: 'STR'}              , 1)).toBe(T);
+            expect(isMatchType(Class1,             {aa: 'STR'}              , 1)).toBe(T);
+            expect(isMatchType(Class2,             {aa: 'STR'}              , 1)).toBe(false);
+            expect(isMatchType([[Class1, Class2]], {aa: 'STR', bb: 'STR'}   , 1)).toBe(T);
+            expect(isMatchType(Class1,             {aa: 'STR', bb: 'STR'}   , 1)).toBe(T);
+            expect(isMatchType(Class2,             {aa: 'STR', bb: 'STR'}   , 1)).toBe(false);
+            expect(isMatchType([[Class1, Class2]], {cc: 'STR'}              , 1)).toBe(false);
+            expect(isMatchType(Class1,             {cc: 'STR'}              , 1)).toBe(false);
+            expect(isMatchType(Class2,             {cc: 'STR'}              , 1)).toBe(false);
             // 예외 오류 코드
-            expect(()=> matchType(Class2,             {aa: 'STR'}           )).toThrow(/ES027/)
-            expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'})).toThrow(/ES074/)
-            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           )).toThrow(/ES076/)
-            expect(()=> matchType(Class1,             {cc: 'STR'}           )).toThrow(/ES027/)
-            expect(()=> matchType(Class2,             {cc: 'STR'}           )).toThrow(/ES027/)            
+            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow(/ES074/)
+            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow(/ES076/)
+            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow(/ES027/)            
         });
         it('- isMatchType() : object (객체 기본값) ', () => {
             var Class1 = function() { this.aa = String };
             var Class2 = function() { this.bb = 10 };
 
-            expect(isMatchType([[Class1, Class2]],{aa: 'str', bb: 2}  )).toBe(T);
-            expect(isMatchType(Class1,            {aa: 'str', bb: 2}  )).toBe(T);
-            expect(isMatchType(Class2,            {aa: 'str', bb: 2}  )).toBe(T);
-            expect(isMatchType([[Class1, Class2]],{aa: 'str'}         )).toBe(T);
-            expect(isMatchType(Class1,            {aa: 'str'}         )).toBe(T);
-            expect(isMatchType(Class2,            {aa: 'str'}         )).toBe(T);
-            expect(isMatchType([[Class1, Class2]],{bb: 5}             )).toBe(T);
-            expect(isMatchType(Class1,            {bb: 5}             )).toBe(false);
-            expect(isMatchType(Class2,            {bb: 5}             )).toBe(T);
-            expect(isMatchType([[Class1, Class2]],{cc: 'STR'}         )).toBe(T);
-            expect(isMatchType(Class1,            {cc: 'STR'}         )).toBe(false);
-            expect(isMatchType(Class2,            {cc: 'STR'}         )).toBe(T);
-            expect(isMatchType([[Class1, Class2]],{aa: 'STR', bb: 'STR'})).toBe(T);
-            expect(isMatchType(Class1,            {aa: 'STR', bb: 'STR'})).toBe(T);
-            expect(isMatchType(Class2,            {aa: 'STR', bb: 'STR'})).toBe(false);
+            expect(isMatchType([[Class1, Class2]],{aa: 'str', bb: 2}  , 1)).toBe(T);
+            expect(isMatchType(Class1,            {aa: 'str', bb: 2}  , 1)).toBe(T);
+            expect(isMatchType(Class2,            {aa: 'str', bb: 2}  , 1)).toBe(T);
+            expect(isMatchType([[Class1, Class2]],{aa: 'str'}         , 1)).toBe(T);
+            expect(isMatchType(Class1,            {aa: 'str'}         , 1)).toBe(T);
+            expect(isMatchType(Class2,            {aa: 'str'}         , 1)).toBe(T);
+            expect(isMatchType([[Class1, Class2]],{bb: 5}             , 1)).toBe(T);
+            expect(isMatchType(Class1,            {bb: 5}             , 1)).toBe(false);
+            expect(isMatchType(Class2,            {bb: 5}             , 1)).toBe(T);
+            expect(isMatchType([[Class1, Class2]],{cc: 'STR'}         , 1)).toBe(T);
+            expect(isMatchType(Class1,            {cc: 'STR'}         , 1)).toBe(false);
+            expect(isMatchType(Class2,            {cc: 'STR'}         , 1)).toBe(T);
+            expect(isMatchType([[Class1, Class2]],{aa: 'STR', bb: 'STR'}, 1)).toBe(T);
+            expect(isMatchType(Class1,            {aa: 'STR', bb: 'STR'}, 1)).toBe(T);
+            expect(isMatchType(Class2,            {aa: 'STR', bb: 'STR'}, 1)).toBe(false);
             // 예외 오류 코드
-            expect(()=> matchType(Class1,         {bb: 5}               )).toThrow(/ES027/)
-            expect(()=> matchType(Class1,         {cc: 'STR'}           )).toThrow(/ES027/)
-            expect(()=> matchType(Class2,         {aa: 'STR', bb: 'STR'})).toThrow(/ES074/)
+            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class2,         {aa: 'STR', bb: 'STR'}, 1)).toThrow(/ES074/)
         });
         
         it('- isMatchType() : choice 원시 타입 ', () => {
@@ -1081,11 +1081,11 @@ describe("[target: util-type.js.js]", () => {
             const Func2 = function() { this.aa = 1 };   // 기본값으로 설정
             const Func3 = function() { this.aa = Date };
             // true
-            expect(isMatchType(Func1, new Func2()         )).toBe(true);
-            expect(isMatchType(Func1, new Func1()         )).toBe(true);
-            expect(isMatchType(Func1, { aa:10 }           )).toBe(true);
-            expect(isMatchType(Func2, { aa:10 }           )).toBe(true);
-            expect(isMatchType(Func3, { aa: new Date() }  )).toBe(true);
+            expect(isMatchType(Func1, new Func2()         , 1)).toBe(true);
+            expect(isMatchType(Func1, new Func1()         , 1)).toBe(true);
+            expect(isMatchType(Func1, { aa:10 }           , 1)).toBe(true);
+            expect(isMatchType(Func2, { aa:10 }           , 1)).toBe(true);
+            expect(isMatchType(Func3, { aa: new Date() }  , 1)).toBe(true);
             // false (예외)
                 // expect(()=> matchType(new Func1(), Func1)).toThrow(/aa.*number.*타입/);   // function 으로 생각하므로 오류
             expect(()=> matchType(Func1, function any(){}   )).toThrow(/ES032/);
