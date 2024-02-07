@@ -577,14 +577,14 @@
         if (_isObject(oriType['ref']) &&  _isObject(tarType['ref']) && deepEqual(oriType, tarType)) return;
         // origin seq, opt 필수 검사
         if (oriType['kind']) {
-            if ((oriType['kind'] === '_SEQ_' || oriType['kind'] === '_OPT_') 
+            if ((oriType['kind'] === '_SEQ_' || oriType['kind'] === '_OPT_' || oriType['kind'] === '_REQ_') 
             && (typeof oriType['ref'] === 'undefined' || oriType['list'].length === 0)) {
                 Message.error('ES0729', ['origin', oriType['kind']]);
             }
         }
         // target seq, opt 필수 검사
         if (tarType['kind']) {
-            if ((tarType['kind'] === '_SEQ_' || tarType['kind'] === '_OPT_') 
+            if ((tarType['kind'] === '_SEQ_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_REQ_') 
             && (typeof tarType['ref'] === 'undefined' || tarType['list'].length === 0)) {
                 Message.error('ES0729', ['target', tarType['kind']]);
             }
@@ -592,14 +592,17 @@
         // all, non, any, req, opt, seq 타입 검사
         if (oriType['kind'] && tarType['kind'] && oriType['$type'] === tarType['$type']) {
             // 거부조건
-            if (oriType['kind'] === '_ALL_' && (tarType['kind'] === '_NON_')) {
-                Message.error('ES0727', [oriType['kind'], '_NON_', tarType['kind']]);
-            } 
+            // if (oriType['kind'] === '_ALL_' && (tarType['kind'] === '_NON_')) {
+            //     Message.error('ES0727', [oriType['kind'], '_NON_', tarType['kind']]);
+            // } 
             if (oriType['kind'] === '_NON_' && tarType['kind'] !== '_NON_') { 
                 Message.error('ES0728', [oriType['kind'], '_NON_', tarType['kind']]);
             }
-            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_')) {
-                Message.error('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]);
+            // if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_')) {
+            //     Message.error('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]);
+            // }
+            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_NON_')) {
+                Message.error('ES0727', [oriType['kind'], '_ALL_, _NON_', tarType['kind']]);
             }
             if (oriType['kind'] === '_OPT_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_ANY_' || tarType['kind'] === '_NON_') ){
                 Message.error('ES0728', [oriType['kind'], '_OPT_, _SEQ_', tarType['kind']]);

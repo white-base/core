@@ -285,7 +285,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(Array,                     []                         )).toBe(T);
             expect(isAllowType(Array,                     Array                      )).toBe(T);
             expect(isAllowType(Array,                     [[]]                       )).toBe(T);
-            expect(isAllowType(Array,                     ['_non_']                  )).toBe(false);
+            expect(isAllowType(Array,                     ['_non_']                  )).toBe(T);
             // any
             expect(isAllowType(['_any_'],                 ['_req_', null]                     )).toBe(T);
             expect(isAllowType(['_any_'],                 ['_req_', String]                   )).toBe(T);
@@ -354,7 +354,7 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- allowType(a, b) : array choice : 예외', () => {        
             // all 
-            expect(()=> allowType(Array,                     ['_non_']                  )).toThrow('ES069')
+            // expect(()=> allowType(Array,                     ['_non_']                  )).toThrow('ES069')
             // any
             // expect(()=> allowType(['_any_'],                 []                         )).toThrow('ES0727')
             expect(()=> allowType(['_any_'],                 undefined                  )).toThrow('ES0719')
@@ -408,9 +408,9 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType([['_any_']],                  [['_req_', Number]]            )).toBe(T);
             expect(isAllowType([['_any_']],                  [['_req_', null]]              )).toBe(T);
             expect(isAllowType([['_any_']],                  [['_req_', undefined]]         )).toBe(T);
-            expect(isAllowType([['_any_']],                  [[Number]]            )).toBe(false);
-            expect(isAllowType([['_any_']],                  [[null]]              )).toBe(false);
-            expect(isAllowType([['_any_']],                  [[undefined]]         )).toBe(false);
+            expect(isAllowType([['_any_']],                  [[Number]]            )).toBe(T);
+            expect(isAllowType([['_any_']],                  [[null]]              )).toBe(T);
+            expect(isAllowType([['_any_']],                  [[undefined]]         )).toBe(T);
             expect(isAllowType([['_any_']],                  undefined             )).toBe(false);
             expect(isAllowType([['_any_']],                                        )).toBe(false);
             expect(isAllowType([['_seq_']],                  [['_seq_']]           )).toBe(false);
