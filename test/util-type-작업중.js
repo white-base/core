@@ -472,7 +472,6 @@ describe("[target: util-type.js.js]", () => {
             });
         });
     });
-
     describe('typeObject(target) <타입객체 얻기> ', () => {
         describe('단일타입 ', () => {
             it('- typeObject() : undefined ', () => {
@@ -2716,7 +2715,7 @@ describe("[target: util-type.js.js]", () => {
                 var type1 = Number
                 var type2 = 1
                 var type3 = [[Number]]
-                var type4 = [[10]]
+                var type4 = [[1]]
                 
                 // type1
                 expect(isAllowType(type1, 0)        ).toBe(T);
@@ -2731,14 +2730,14 @@ describe("[target: util-type.js.js]", () => {
                 expect(isAllowType(type2, undefined)).toBe(false);
                 expect(isAllowType(type2, '')       ).toBe(false);
                 // type3
+                expect(isAllowType(type3, 0)        ).toBe(T);
                 expect(isAllowType(type3, 1)        ).toBe(T);
-                expect(isAllowType(type3, 10)       ).toBe(T);
                 expect(isAllowType(type3, Number)   ).toBe(T);
                 expect(isAllowType(type3, undefined)).toBe(T);
                 expect(isAllowType(type3, '')       ).toBe(false);
                 // type4
-                expect(isAllowType(type4, 1)        ).toBe(false);
-                expect(isAllowType(type4, 10)       ).toBe(T);
+                expect(isAllowType(type4, 0)        ).toBe(false);
+                expect(isAllowType(type4, 1)        ).toBe(T);
                 expect(isAllowType(type4, Number)   ).toBe(false);
                 expect(isAllowType(type4, undefined)).toBe(T);
                 expect(isAllowType(type4, '')       ).toBe(false);
@@ -2780,27 +2779,27 @@ describe("[target: util-type.js.js]", () => {
                 var type3 = [[RegExp]]
                 var type4 = [[/aa/]]
     
-                expect(isAllowType(type1, /aa/)     ).toBe(T);
                 expect(isAllowType(type1, /bb/)     ).toBe(T);
-                expect(isAllowType(type1, RegExp)   ).toBe(false);
+                expect(isAllowType(type1, /aa/)     ).toBe(T);
+                expect(isAllowType(type1, RegExp)   ).toBe(T);
                 expect(isAllowType(type1, undefined)).toBe(false);                
                 expect(isAllowType(type1, '')       ).toBe(false);
                 // 기본값
-                expect(isAllowType(type1, /aa/)     ).toBe(T);
-                expect(isAllowType(type2, /bb/)   ).toBe(T);
+                expect(isAllowType(type2, /bb/)     ).toBe(false);
+                expect(isAllowType(type2, /aa/)     ).toBe(T);
                 expect(isAllowType(type2, RegExp)   ).toBe(false);
-                expect(isAllowType(type2, undefined)).toBe(T);
+                expect(isAllowType(type2, undefined)).toBe(false);
                 expect(isAllowType(type2, '')       ).toBe(false);
                 // 선택
-                expect(isAllowType(type3, /aa/)     ).toBe(T);
                 expect(isAllowType(type3, /bb/)     ).toBe(T);
-                expect(isAllowType(type1, RegExp)   ).toBe(false);
+                expect(isAllowType(type3, /aa/)     ).toBe(T);
+                expect(isAllowType(type3, RegExp)   ).toBe(T);
                 expect(isAllowType(type3, undefined)).toBe(T);
                 expect(isAllowType(type3, '')       ).toBe(false);
                 // 리터럴
-                expect(isAllowType(type4, /aa/)     ).toBe(false);
-                expect(isAllowType(type4, /bb/)     ).toBe(T);
-                expect(isAllowType(type1, RegExp)   ).toBe(false);
+                expect(isAllowType(type4, /bb/)     ).toBe(false);
+                expect(isAllowType(type4, /aa/)     ).toBe(T);
+                expect(isAllowType(type4, RegExp)   ).toBe(false);
                 expect(isAllowType(type4, undefined)).toBe(T);
                 expect(isAllowType(type4, '')       ).toBe(false);
             });
