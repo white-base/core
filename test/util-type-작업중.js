@@ -3841,7 +3841,7 @@ describe("[target: util-type.js.js]", () => {
                 });
                 it('- isAllowType() : array _any_ vs req, opt, seq  ', () => {
                     var type1 = ['_any_']  // === []
-                    var type2 = []
+                    var type2 = [] 
 
                     var tar01 = []
                     var tar02 = [String]
@@ -3854,7 +3854,7 @@ describe("[target: util-type.js.js]", () => {
                     var tar09 = String
 
                     expect(isAllowType(type1, tar01)).toBe(T);
-                    expect(isAllowType(type1, tar02)).toBe(T);
+                    expect(isAllowType(type1, tar02)).toBe(false);
                     expect(isAllowType(type1, tar03)).toBe(T); 
                     expect(isAllowType(type1, tar04)).toBe(T);
                     expect(isAllowType(type1, tar05)).toBe(false);
@@ -3864,7 +3864,7 @@ describe("[target: util-type.js.js]", () => {
                     expect(isAllowType(type1, tar09)).toBe(false);
 
                     expect(isAllowType(type2, tar01)).toBe(T);
-                    expect(isAllowType(type2, tar02)).toBe(T);
+                    expect(isAllowType(type2, tar02)).toBe(false);
                     expect(isAllowType(type2, tar03)).toBe(T);
                     expect(isAllowType(type2, tar04)).toBe(T);
                     expect(isAllowType(type2, tar05)).toBe(false);
@@ -3908,7 +3908,7 @@ describe("[target: util-type.js.js]", () => {
                     expect(isAllowType(type2, tar07)).toBe(false);
                     expect(isAllowType(type2, tar08)).toBe(false);
                 });
-                it('- isAllowType() : array 중첩타입 choice, opt ', () => {
+                it('- isAllowType() : array 중첩타입 choice, opt ', () => { 
                     var type1 = [ '_opt_', [[String, Number]] ]   // === type2
                     var type2 = [ '_opt_', String, Number ]
                     var type3 = [ '_opt_', [[String]], [[Number]] ]
@@ -4100,7 +4100,7 @@ describe("[target: util-type.js.js]", () => {
                     expect(isAllowType(type4, tar10)).toBe(false);
                     expect(isAllowType(type4, tar11)).toBe(false);
                 });
-                it('- isMatchType() : array 중첩타입 class ', () => {
+                it('- isAllowType() : array 중첩타입 class ', () => {
                     class ClassA { aa = String }
                     class ClassB { aa = Number }
                     class ClassC { aa = Boolean }
@@ -4112,17 +4112,17 @@ describe("[target: util-type.js.js]", () => {
                     var tar03 = [ {aa: 'str'}, {aa: 10} ]
                     var tar04 = [ {aa: true} ]
 
-                    expect(isMatchType(type1, tar01)).toBe(T);
-                    expect(isMatchType(type1, tar02)).toBe(false);
-                    expect(isMatchType(type1, tar03)).toBe(false);
-                    expect(isMatchType(type1, tar04)).toBe(false);
+                    expect(isAllowType(type1, tar01)).toBe(T);
+                    expect(isAllowType(type1, tar02)).toBe(false);
+                    expect(isAllowType(type1, tar03)).toBe(false);
+                    expect(isAllowType(type1, tar04)).toBe(false);
                     // opt === 1 (확장모드)
-                    expect(isMatchType(type1, tar01, 1)).toBe(T);
-                    expect(isMatchType(type1, tar02, 1)).toBe(false);
-                    expect(isMatchType(type1, tar03, 1)).toBe(T);
-                    expect(isMatchType(type1, tar04, 1)).toBe(false);
+                    expect(isAllowType(type1, tar01, 1)).toBe(T);
+                    expect(isAllowType(type1, tar02, 1)).toBe(false);
+                    expect(isAllowType(type1, tar03, 1)).toBe(T);
+                    expect(isAllowType(type1, tar04, 1)).toBe(false);
                 });
-                it('- isMatchType() : array 중첩타입 union ', () => {
+                it('- isAllowType() : array 중첩타입 union ', () => {
                     var type1 = [ { aa: String }, { aa: Number } ]
 
                     var tar01 = [ { aa: 'str' } ]
@@ -4131,13 +4131,13 @@ describe("[target: util-type.js.js]", () => {
                     var tar04 = [ { aa: true } ]
                     var tar05 = [ { aa: 'str' }, { aa: 10 }, { aa: true } ]
 
-                    expect(isMatchType(type1, tar01)).toBe(T);
-                    expect(isMatchType(type1, tar02)).toBe(T);
-                    expect(isMatchType(type1, tar03)).toBe(T);
-                    expect(isMatchType(type1, tar04)).toBe(false);
-                    expect(isMatchType(type1, tar05)).toBe(false);
+                    expect(isAllowType(type1, tar01)).toBe(T);
+                    expect(isAllowType(type1, tar02)).toBe(T);
+                    expect(isAllowType(type1, tar03)).toBe(T);
+                    expect(isAllowType(type1, tar04)).toBe(false);
+                    expect(isAllowType(type1, tar05)).toBe(false);
                 });
-                it('- isMatchType() : array 중첩타입 function ', () => {
+                it('- isAllowType() : array 중첩타입 function ', () => {
                     var type1 = [String=>Number, String=>Boolean];
 
                     var tar01 = [String=>Number]
@@ -4145,119 +4145,329 @@ describe("[target: util-type.js.js]", () => {
                     var tar03 = [String=>{}]
                     var tar04 = [String=>Number, String=>Boolean]
 
-                    expect(isMatchType(type1, tar01)).toBe(T);
-                    expect(isMatchType(type1, tar02)).toBe(T);
-                    expect(isMatchType(type1, tar03)).toBe(false);
-                    expect(isMatchType(type1, tar04)).toBe(T);
+                    expect(isAllowType(type1, tar01)).toBe(T);
+                    expect(isAllowType(type1, tar02)).toBe(T);
+                    expect(isAllowType(type1, tar03)).toBe(false);
+                    expect(isAllowType(type1, tar04)).toBe(T);
                 });
             });
             describe('choice ', () => {
-                it('- isMatchType() : choice _opt_ ', () => {
+                it('- isAllowType() : choice _opt_ ', () => {
                     var type1 = [[String]]
                     var type2 = [[String, Number]]
-                    var type3 = [[String, 10]]
-                    var type4 = [['aa', /reg/]]
-                    var type5 = [['_opt_']]
 
-                    // type1 
-                    expect(isMatchType(type1, '')           ).toBe(T);
-                    expect(isMatchType(type1, 10)           ).toBe(false);
-                    expect(isMatchType(type1, undefined)    ).toBe(T);
-                    expect(isMatchType(type1, true)         ).toBe(false);
-                    // type2
-                    expect(isMatchType(type2, '')           ).toBe(T);
-                    expect(isMatchType(type2, 10)           ).toBe(T);
-                    expect(isMatchType(type2, undefined)    ).toBe(T);
-                    expect(isMatchType(type2, true)         ).toBe(false);
-                    // type3
-                    expect(isMatchType(type3, '')           ).toBe(T);
-                    expect(isMatchType(type3, 10)           ).toBe(T);
-                    expect(isMatchType(type3, 20)           ).toBe(false);
-                    expect(isMatchType(type3, undefined)    ).toBe(T);
-                    expect(isMatchType(type3, true)         ).toBe(false);
-                    // type4
-                    expect(isMatchType(type4, '')           ).toBe(false);
-                    expect(isMatchType(type4, 'aa')         ).toBe(T);
-                    expect(isMatchType(type4, /reg2/)       ).toBe(false);
-                    expect(isMatchType(type4, /reg/)        ).toBe(T);
-                    expect(isMatchType(type4, 10)           ).toBe(false);
-                    expect(isMatchType(type4, undefined)    ).toBe(T);
-                    expect(isMatchType(type4, true)         ).toBe(false);
-                    // type5 : 모두 실패
-                    expect(isMatchType(type5, '')           ).toBe(false);
-                    expect(isMatchType(type5, 10)           ).toBe(false);
-                    expect(isMatchType(type5, undefined)    ).toBe(false);
-                    expect(isMatchType(type5, true)         ).toBe(false);
+                    var tar01 = [['_any_']]    // === [[]]
+                    var tar02 = [['_all_']]    //
+                    var tar03 = [['_non_']]    //
+                    var tar04 = [['_eum_']]    //
+                    var tar05 = [['_def_']]    //
+
+                    var tar11 = [[String]]
+                    var tar12 = [[Number]]
+                    var tar13 = [[String, Number]]
+                    var tar14 = [[String, Number, Boolean]]
+
+                    var tar21 = [['_req_', String]]
+                    var tar22 = [['_req_', Number]]
+                    var tar23 = [['_req_', String, Number]]
+                    var tar24 = [['_req_', String, Number, Boolean]]
+
+                    var tar31 = [['_seq_', String]]
+                    var tar32 = [['_seq_', Number]]
+                    var tar33 = [['_seq_', String, Number]]
+                    var tar34 = [['_seq_', String, Number, Boolean]]
+
+                    // all, any, non, eum, def
+                    expect(isAllowType(type1, tar01)).toBe(false);
+                    expect(isAllowType(type1, tar02)).toBe(false);
+                    expect(isAllowType(type1, tar03)).toBe(false);
+                    expect(isAllowType(type1, tar04)).toBe(false); 
+                    expect(isAllowType(type1, tar05)).toBe(false);
+                    // type1 _opt_
+                    expect(isAllowType(type1, tar11)).toBe(T);
+                    expect(isAllowType(type1, tar12)).toBe(false);
+                    expect(isAllowType(type1, tar13)).toBe(false);
+                    expect(isAllowType(type1, tar14)).toBe(false);
+                    // type1 _req_
+                    expect(isAllowType(type1, tar21)).toBe(T);
+                    expect(isAllowType(type1, tar22)).toBe(false);
+                    expect(isAllowType(type1, tar23)).toBe(false);
+                    expect(isAllowType(type1, tar24)).toBe(false);
+                    // type1 _seq_
+                    expect(isAllowType(type1, tar31)).toBe(T);
+                    expect(isAllowType(type1, tar32)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    // type2 all, any, non, eum, def
+                    expect(isAllowType(type2, tar01)).toBe(false);
+                    expect(isAllowType(type2, tar02)).toBe(false);
+                    expect(isAllowType(type2, tar03)).toBe(false);
+                    expect(isAllowType(type2, tar04)).toBe(false);
+                    expect(isAllowType(type2, tar05)).toBe(false);
+                    // type2 _opt_
+                    expect(isAllowType(type2, tar11)).toBe(T);
+                    expect(isAllowType(type2, tar12)).toBe(T);
+                    expect(isAllowType(type2, tar13)).toBe(T);
+                    expect(isAllowType(type2, tar14)).toBe(false);
+                    // type2 _req_ 
+                    expect(isAllowType(type2, tar21)).toBe(T);
+                    expect(isAllowType(type2, tar22)).toBe(T);
+                    expect(isAllowType(type2, tar23)).toBe(T);
+                    expect(isAllowType(type2, tar24)).toBe(false);
+                    // type2 _seq_
+                    expect(isAllowType(type2, tar31)).toBe(T);
+                    expect(isAllowType(type2, tar32)).toBe(T);
+                    expect(isAllowType(type2, tar33)).toBe(T);
+                    expect(isAllowType(type2, tar34)).toBe(false);
                 });
-                it('- isMatchType() : choice _req_ ', () => {
-                    var type1 = [['_req_', String]]
+                it('- isAllowType() : choice _opt_ 리터럴 ', () => {
+                    var type1 = [['aa']]
+                    var type2 = [['aa', 'bb']]
+
+                    var tar01 = [['_any_']]    // === [[]]
+                    var tar02 = [['_all_']]    //
+                    var tar03 = [['_non_']]    //
+                    var tar04 = [['_eum_']]    //
+                    var tar05 = [['_def_']]    //
+
+                    var tar11 = [['aa']]
+                    var tar12 = [['bb']]
+                    var tar13 = [['aa', 'bb']]
+                    var tar14 = [['aa', 'bb', 'cc']]
+
+                    var tar21 = [['_req_', 'aa']]
+                    var tar22 = [['_req_', 'bb']]
+                    var tar23 = [['_req_', 'aa', 'bb']]
+                    var tar24 = [['_req_', 'aa', 'bb', 'cc']]
+
+                    var tar31 = [['_seq_', 'aa']]
+                    var tar32 = [['_seq_', 'bb']]
+                    var tar33 = [['_seq_', 'aa', 'bb']]
+                    var tar34 = [['_seq_', 'aa', 'bb', 'cc']]
+
+                    // all, any, non, eum, def
+                    expect(isAllowType(type1, tar01)).toBe(false);
+                    expect(isAllowType(type1, tar02)).toBe(false);
+                    expect(isAllowType(type1, tar03)).toBe(false);
+                    expect(isAllowType(type1, tar04)).toBe(false); 
+                    expect(isAllowType(type1, tar05)).toBe(false);
+                    // type1 _opt_
+                    expect(isAllowType(type1, tar11)).toBe(T);
+                    expect(isAllowType(type1, tar12)).toBe(false);
+                    expect(isAllowType(type1, tar13)).toBe(false);
+                    expect(isAllowType(type1, tar14)).toBe(false);
+                    // type1 _req_
+                    expect(isAllowType(type1, tar21)).toBe(T);
+                    expect(isAllowType(type1, tar22)).toBe(false);
+                    expect(isAllowType(type1, tar23)).toBe(false);
+                    expect(isAllowType(type1, tar24)).toBe(false);
+                    // type1 _seq_
+                    expect(isAllowType(type1, tar31)).toBe(T);
+                    expect(isAllowType(type1, tar32)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    // type2 all, any, non, eum, def
+                    expect(isAllowType(type2, tar01)).toBe(false);
+                    expect(isAllowType(type2, tar02)).toBe(false);
+                    expect(isAllowType(type2, tar03)).toBe(false);
+                    expect(isAllowType(type2, tar04)).toBe(false);
+                    expect(isAllowType(type2, tar05)).toBe(false);
+                    // type2 _opt_
+                    expect(isAllowType(type2, tar11)).toBe(T);
+                    expect(isAllowType(type2, tar12)).toBe(T);
+                    expect(isAllowType(type2, tar13)).toBe(T);
+                    expect(isAllowType(type2, tar14)).toBe(false);
+                    // type2 _req_ 
+                    expect(isAllowType(type2, tar21)).toBe(T);
+                    expect(isAllowType(type2, tar22)).toBe(T);
+                    expect(isAllowType(type2, tar23)).toBe(T);
+                    expect(isAllowType(type2, tar24)).toBe(false);
+                    // type2 _seq_
+                    expect(isAllowType(type2, tar31)).toBe(T);
+                    expect(isAllowType(type2, tar32)).toBe(T);
+                    expect(isAllowType(type2, tar33)).toBe(T);
+                    expect(isAllowType(type2, tar34)).toBe(false);
+                });
+                it('- isAllowType() : choice _req_ ', () => {
+                    var type1 = String
+                    // var type1 = [['_req_', String]]  // === String 
                     var type2 = [['_req_', String, Number]]
-                    var type3 = [['_req_', String, 10]]
-                    var type4 = [['_req_', 'aa', /reg/]]
-                    var type5 = [['_req_']]
 
-                    // type1
-                    expect(isMatchType(type1, '')           ).toBe(T);
-                    expect(isMatchType(type1, 10)           ).toBe(false);
-                    expect(isMatchType(type1, undefined)    ).toBe(false);
-                    expect(isMatchType(type1, true)         ).toBe(false);
-                    // type2
-                    expect(isMatchType(type2, '')           ).toBe(T);
-                    expect(isMatchType(type2, 10)           ).toBe(T);
-                    expect(isMatchType(type2, undefined)    ).toBe(false);
-                    expect(isMatchType(type2, true)         ).toBe(false);
-                    // type3
-                    expect(isMatchType(type3, '')           ).toBe(T);
-                    expect(isMatchType(type3, 10)           ).toBe(T);
-                    expect(isMatchType(type3, 20)           ).toBe(false);
-                    expect(isMatchType(type3, undefined)    ).toBe(false);
-                    expect(isMatchType(type3, true)         ).toBe(false);
-                    // type4
-                    expect(isMatchType(type4, '')           ).toBe(false);
-                    expect(isMatchType(type4, 'aa')         ).toBe(T);
-                    expect(isMatchType(type4, /reg/)        ).toBe(T);
-                    expect(isMatchType(type4, 10)           ).toBe(false);
-                    expect(isMatchType(type4, undefined)    ).toBe(false);
-                    expect(isMatchType(type4, true)         ).toBe(false);
-                    // type5 : 모두 실패
-                    expect(isMatchType(type5, '')           ).toBe(false);
-                    expect(isMatchType(type5, 10)           ).toBe(false);
-                    expect(isMatchType(type5, undefined)    ).toBe(false);
-                    expect(isMatchType(type5, true)         ).toBe(false);
+                    var tar01 = [['_any_']]    // === [[]]
+                    var tar02 = [['_all_']]    //
+                    var tar03 = [['_non_']]    //
+                    var tar04 = [['_eum_']]    //
+                    var tar05 = [['_def_']]    //
+
+                    var tar11 = [[String]]
+                    var tar12 = [[Number]]
+                    var tar13 = [[String, Number]]
+                    var tar14 = [[String, Number, Boolean]]
+
+                    var tar21 = [['_req_', String]]
+                    var tar22 = [['_req_', Number]]
+                    var tar23 = [['_req_', String, Number]]
+                    var tar24 = [['_req_', String, Number, Boolean]]
+
+                    var tar31 = [['_seq_', String]]
+                    var tar32 = [['_seq_', Number]]
+                    var tar33 = [['_seq_', String, Number]]
+                    var tar34 = [['_seq_', String, Number, Boolean]]
+
+                    // all, any, non, eum, def ** 모두 실패 **
+                    expect(isAllowType(type1, tar01)).toBe(false);
+                    expect(isAllowType(type1, tar02)).toBe(false);
+                    expect(isAllowType(type1, tar03)).toBe(false);
+                    expect(isAllowType(type1, tar04)).toBe(false); 
+                    expect(isAllowType(type1, tar05)).toBe(false);
+                    // type1 _opt_ ** 모두 실패 **
+                    expect(isAllowType(type1, tar11)).toBe(false);
+                    expect(isAllowType(type1, tar12)).toBe(false);
+                    expect(isAllowType(type1, tar13)).toBe(false);
+                    expect(isAllowType(type1, tar14)).toBe(false);
+                    // type1 _req_
+                    expect(isAllowType(type1, tar21)).toBe(T);
+                    expect(isAllowType(type1, tar22)).toBe(false);
+                    expect(isAllowType(type1, tar23)).toBe(false);
+                    expect(isAllowType(type1, tar24)).toBe(false);
+                    // type1 _seq_
+                    expect(isAllowType(type1, tar31)).toBe(T);
+                    expect(isAllowType(type1, tar32)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    // type2 all, any, non, eum, def ** 모두 실패 **
+                    expect(isAllowType(type2, tar01)).toBe(false);
+                    expect(isAllowType(type2, tar02)).toBe(false);
+                    expect(isAllowType(type2, tar03)).toBe(false);
+                    expect(isAllowType(type2, tar04)).toBe(false);
+                    expect(isAllowType(type2, tar05)).toBe(false);
+                    // type2 _opt_ ** 모두 실패 **
+                    expect(isAllowType(type2, tar11)).toBe(false);
+                    expect(isAllowType(type2, tar12)).toBe(false);
+                    expect(isAllowType(type2, tar13)).toBe(false);
+                    expect(isAllowType(type2, tar14)).toBe(false);
+                    // type2 _req_ 
+                    expect(isAllowType(type2, tar21)).toBe(T);
+                    expect(isAllowType(type2, tar22)).toBe(T);
+                    expect(isAllowType(type2, tar23)).toBe(T);
+                    expect(isAllowType(type2, tar24)).toBe(false);
+                    // type2 _seq_
+                    expect(isAllowType(type2, tar31)).toBe(T);
+                    expect(isAllowType(type2, tar32)).toBe(T);
+                    expect(isAllowType(type2, tar33)).toBe(T);
+                    expect(isAllowType(type2, tar34)).toBe(false);
                 });
-                it('- isMatchType() : choice _all_ ', () => {
+                it('- isAllowType() : choice _req_ 리터럴 ', () => {
+                    var type1 = [['_req_', 'aa']]
+                    var type2 = [['_req_', 'aa', 'bb']]
+
+                    var tar01 = [['_any_']]    // === [[]]
+                    var tar02 = [['_all_']]    //
+                    var tar03 = [['_non_']]    //
+                    var tar04 = [['_eum_']]    //
+                    var tar05 = [['_def_']]    //
+
+                    var tar11 = [['aa']]
+                    var tar12 = [['bb']]
+                    var tar13 = [['aa', 'bb']]
+                    var tar14 = [['aa', 'bb', 'cc']]
+
+                    var tar21 = [['_req_', 'aa']]
+                    var tar22 = [['_req_', 'bb']]
+                    var tar23 = [['_req_', 'aa', 'bb']]
+                    var tar24 = [['_req_', 'aa', 'bb', 'cc']]
+
+                    var tar31 = [['_seq_', 'aa']]
+                    var tar32 = [['_seq_', 'bb']]
+                    var tar33 = [['_seq_', 'aa', 'bb']]
+                    var tar34 = [['_seq_', 'aa', 'bb', 'cc']]
+
+                    // all, any, non, eum, def  ** 모두 실패 **
+                    expect(isAllowType(type1, tar01)).toBe(false);
+                    expect(isAllowType(type1, tar02)).toBe(false);
+                    expect(isAllowType(type1, tar03)).toBe(false);
+                    expect(isAllowType(type1, tar04)).toBe(false); 
+                    expect(isAllowType(type1, tar05)).toBe(false);
+                    // type1 _opt_ ** 모두 실패 **
+                    expect(isAllowType(type1, tar11)).toBe(false);
+                    expect(isAllowType(type1, tar12)).toBe(false);
+                    expect(isAllowType(type1, tar13)).toBe(false);
+                    expect(isAllowType(type1, tar14)).toBe(false);
+                    // type1 _req_
+                    expect(isAllowType(type1, tar21)).toBe(T);
+                    expect(isAllowType(type1, tar22)).toBe(false);
+                    expect(isAllowType(type1, tar23)).toBe(false);
+                    expect(isAllowType(type1, tar24)).toBe(false);
+                    // type1 _seq_
+                    expect(isAllowType(type1, tar31)).toBe(T);
+                    expect(isAllowType(type1, tar32)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    expect(isAllowType(type1, tar33)).toBe(false);
+                    // type2 all, any, non, eum, def    ** 모두 실패 **
+                    expect(isAllowType(type2, tar01)).toBe(false);
+                    expect(isAllowType(type2, tar02)).toBe(false);
+                    expect(isAllowType(type2, tar03)).toBe(false);
+                    expect(isAllowType(type2, tar04)).toBe(false);
+                    expect(isAllowType(type2, tar05)).toBe(false);
+                    // type2 _opt_ ** 모두 실패 **
+                    expect(isAllowType(type2, tar11)).toBe(false);
+                    expect(isAllowType(type2, tar12)).toBe(false);
+                    expect(isAllowType(type2, tar13)).toBe(false);
+                    expect(isAllowType(type2, tar14)).toBe(false);
+                    // type2 _req_ 
+                    expect(isAllowType(type2, tar21)).toBe(T);
+                    expect(isAllowType(type2, tar22)).toBe(T);
+                    expect(isAllowType(type2, tar23)).toBe(T);
+                    expect(isAllowType(type2, tar24)).toBe(false);
+                    // type2 _seq_
+                    expect(isAllowType(type2, tar31)).toBe(T);
+                    expect(isAllowType(type2, tar32)).toBe(T);
+                    expect(isAllowType(type2, tar33)).toBe(T);
+                    expect(isAllowType(type2, tar34)).toBe(false);
+                });
+                it('- isAllowType() : choice _all_ ', () => {
                     var type1 = [['_all_']]
 
                     // 모든 타입 허용
-                    expect(isMatchType(type1, '')           ).toBe(T);
-                    expect(isMatchType(type1, 10)           ).toBe(T);
-                    expect(isMatchType(type1, true)         ).toBe(T);
-                    expect(isMatchType(type1, 1n)           ).toBe(T);
-                    expect(isMatchType(type1, Symbol())     ).toBe(T);
-                    expect(isMatchType(type1, /reg/)        ).toBe(T);
-                    expect(isMatchType(type1, {})           ).toBe(T);
-                    expect(isMatchType(type1, {a: 1})       ).toBe(T);
-                    expect(isMatchType(type1, Date)         ).toBe(T);
-                    expect(isMatchType(type1, [[]])         ).toBe(T);
-                    expect(isMatchType(type1, [])           ).toBe(T);
-                    expect(isMatchType(type1, undefined)    ).toBe(T);
+                    expect(isAllowType(type1, '')           ).toBe(T);
+                    expect(isAllowType(type1, 10)           ).toBe(T);
+                    expect(isAllowType(type1, true)         ).toBe(T);
+                    expect(isAllowType(type1, 1n)           ).toBe(T);
+                    expect(isAllowType(type1, Symbol())     ).toBe(T);
+                    expect(isAllowType(type1, /reg/)        ).toBe(T);
+                    expect(isAllowType(type1, {})           ).toBe(T);
+                    expect(isAllowType(type1, {a: 1})       ).toBe(T);
+                    expect(isAllowType(type1, Date)         ).toBe(T);
+                    expect(isAllowType(type1, [[]])         ).toBe(T);
+                    expect(isAllowType(type1, [])           ).toBe(T);
+                    expect(isAllowType(type1, undefined)    ).toBe(T);
+                    expect(isAllowType(type1, [[String]])   ).toBe(T);
+                    expect(isAllowType(type1, [['_non_']])  ).toBe(T);
+                    expect(isAllowType(type1, [['_any_']])  ).toBe(T);
+                    expect(isAllowType(type1, [['_all_']])  ).toBe(T);
+                    expect(isAllowType(type1, [['_err_']])  ).toBe(false);
                 });
-                it('- isMatchType() : choice _any_ ', () => {
+                it('- isAllowType() : choice _any_ ', () => {
                     var type1 = [['_any_']]
 
                     // undefined 제외 허용, 필수값 의미
-                    expect(isMatchType(type1, '')           ).toBe(T);
-                    expect(isMatchType(type1, 10)           ).toBe(T);
-                    expect(isMatchType(type1, true)         ).toBe(T);
-                    expect(isMatchType(type1, 1n)           ).toBe(T);
-                    expect(isMatchType(type1, Symbol())     ).toBe(T);
-                    expect(isMatchType(type1, /reg/)        ).toBe(T);
-                    expect(isMatchType(type1, {})           ).toBe(T);
-                    expect(isMatchType(type1, {a: 1})       ).toBe(T);
-                    expect(isMatchType(type1, Date)         ).toBe(T);
-                    expect(isMatchType(type1, [[]])         ).toBe(T);
-                    expect(isMatchType(type1, [])           ).toBe(T);
-                    expect(isMatchType(type1, undefined)    ).toBe(false);
+                    expect(isAllowType(type1, '')           ).toBe(T);
+                    expect(isAllowType(type1, 10)           ).toBe(T);
+                    expect(isAllowType(type1, true)         ).toBe(T);
+                    expect(isAllowType(type1, 1n)           ).toBe(T);
+                    expect(isAllowType(type1, Symbol())     ).toBe(T);
+                    expect(isAllowType(type1, /reg/)        ).toBe(T);
+                    expect(isAllowType(type1, {})           ).toBe(T);
+                    expect(isAllowType(type1, {a: 1})       ).toBe(T);
+                    expect(isAllowType(type1, Date)         ).toBe(T);
+                    expect(isAllowType(type1, [[]])         ).toBe(T);
+                    expect(isAllowType(type1, [])           ).toBe(T);
+                    expect(isAllowType(type1, undefined)    ).toBe(false);
+                    expect(isAllowType(type1, [[String]])   ).toBe(false);
+                    expect(isAllowType(type1, [['_non_']])  ).toBe(false);
+                    expect(isAllowType(type1, [['_any_']])  ).toBe(T);
+                    expect(isAllowType(type1, [['_all_']])  ).toBe(false);
+                    expect(isAllowType(type1, [['_err_']])  ).toBe(false);
                 });
                 it('- isMatchType() : choice _non_ ', () => {
                     var type1 = [['_non_']]    // === undfined
@@ -4275,63 +4485,107 @@ describe("[target: util-type.js.js]", () => {
                     expect(isMatchType(type1, [[]])         ).toBe(false);
                     expect(isMatchType(type1, [])           ).toBe(false);
                     expect(isMatchType(type1, undefined)    ).toBe(T);
+                    expect(isAllowType(type1, [[String]])   ).toBe(false);
+                    expect(isAllowType(type1, [['_non_']])  ).toBe(T);
+                    expect(isAllowType(type1, [['_any_']])  ).toBe(false);
+                    expect(isAllowType(type1, [['_all_']])  ).toBe(false);
+                    expect(isAllowType(type1, [['_err_']])  ).toBe(false);
                 });
-                it('- isMatchType() : choice _eum_ ', () => {  
-                    var type1 = [['_eum_']]
+                it('- isAllowType() : choice _eum_ ', () => {  
+                    var type1 = [['_eum_']]                     // 오류
                     var type2 = [['_eum_', 'aa']]
                     var type3 = [['_eum_', 'aa', /reg/, 10]]
-                    var type4 = [['_eum_', 'aa', Number]]     // 오류
+                    var type4 = [['_eum_', 'aa', Number]]       // 오류 
 
-                    // type1
-                    expect(isMatchType(type1, '')           ).toBe(false);
-                    expect(isMatchType(type1, 'aa')         ).toBe(false);
+                    var tar01 = [['_eum_', 'aa']]
+                    var tar02 = [['_eum_', 'bb']]
+                    var tar03 = [['_eum_', 'aa', /reg/]]
+                    var tar04 = [['_eum_', 'aa', /reg/, 10]]
+                    var tar05 = [['_opt_', 'aa']]
+                    var tar06 = [['_req_', 'aa']]
+                    var tar07 = [['_seq_', 'aa']]
+                    var tar08 = [['_def_', 'aa']]
+
+                    // type1    ** 모두 실패 **
+                    expect(isAllowType(type1, tar01)).toBe(false);
+                    expect(isAllowType(type1, tar02)).toBe(false);
+                    expect(isAllowType(type1, tar03)).toBe(false);
+                    expect(isAllowType(type1, tar04)).toBe(false);
+                    expect(isAllowType(type1, tar05)).toBe(false);
+                    expect(isAllowType(type1, tar06)).toBe(false);
+                    expect(isAllowType(type1, tar07)).toBe(false);
+                    expect(isAllowType(type1, tar08)).toBe(false);
                     // type2
-                    expect(isMatchType(type2, '')           ).toBe(false);
-                    expect(isMatchType(type2, 'aa')         ).toBe(T);
-                    expect(isMatchType(type2, undefined)    ).toBe(false);
+                    expect(isAllowType(type2, tar01)).toBe(T);
+                    expect(isAllowType(type2, tar02)).toBe(false);
+                    expect(isAllowType(type2, tar03)).toBe(false);
+                    expect(isAllowType(type2, tar04)).toBe(false);
+                    expect(isAllowType(type2, tar05)).toBe(false);
+                    expect(isAllowType(type2, tar06)).toBe(false);
+                    expect(isAllowType(type2, tar07)).toBe(false);
+                    expect(isAllowType(type2, tar08)).toBe(false);
                     // type3
-                    expect(isMatchType(type3, '')           ).toBe(false);
-                    expect(isMatchType(type3, 'aa')         ).toBe(T);
-                    expect(isMatchType(type3, /reg/)        ).toBe(T);
-                    expect(isMatchType(type3, 10)           ).toBe(T);
-                    expect(isMatchType(type3, undefined)    ).toBe(false);
-                    // type4, 리터럴값만 허용
-                    expect(isMatchType(type4, 'aa')         ).toBe(false);
-                    expect(isMatchType(type4, 10)           ).toBe(false);
-                    expect(isMatchType(type4, undefined)    ).toBe(false);
+                    expect(isAllowType(type3, tar01)).toBe(T);
+                    expect(isAllowType(type3, tar02)).toBe(false);
+                    expect(isAllowType(type3, tar03)).toBe(T);
+                    expect(isAllowType(type3, tar04)).toBe(T);
+                    expect(isAllowType(type3, tar05)).toBe(false);
+                    expect(isAllowType(type3, tar06)).toBe(false);
+                    expect(isAllowType(type3, tar07)).toBe(false);
+                    expect(isAllowType(type3, tar08)).toBe(false);
+                    // type4    ** 모두 실패 **
+                    expect(isAllowType(type4, tar01)).toBe(false);
+                    expect(isAllowType(type4, tar02)).toBe(false);
+                    expect(isAllowType(type4, tar03)).toBe(false);
+                    expect(isAllowType(type4, tar04)).toBe(false);
+                    expect(isAllowType(type4, tar05)).toBe(false);
+                    expect(isAllowType(type4, tar06)).toBe(false);
+                    expect(isAllowType(type4, tar07)).toBe(false);
+                    expect(isAllowType(type4, tar08)).toBe(false);
                 });
-                it('- isMatchType() : choice _def_ ', () => {
-                    var type1 = [['_def_']]
+                it('- isAllowType() : choice _def_ ', () => {
+                    var type1 = [['_def_']]                 // 오류
                     var type2 = [['_def_', 'aa']]
                     var type3 = [['_def_', 'aa', /reg/, 10]]
                     var type4 = [['_def_', 'aa', Number]]
-                    var type5 = [['_def_', String, 10]]   // 오류
+                    var type5 = [['_def_', String, 10]]     // 오류 
 
-                    // type1
-                    expect(isMatchType(type1, '')           ).toBe(false);
-                    expect(isMatchType(type1, 'aa')         ).toBe(false);
-                    // type2
-                    expect(isMatchType(type2, '')           ).toBe(false);
-                    expect(isMatchType(type2, 'aa')         ).toBe(T);
-                    expect(isMatchType(type2, undefined)    ).toBe(T);
-                    // type3
-                    expect(isMatchType(type3, '')           ).toBe(false);
-                    expect(isMatchType(type3, 'aa')         ).toBe(T);
-                    expect(isMatchType(type3, /reg/)        ).toBe(T);
-                    expect(isMatchType(type3, 10)           ).toBe(T);
-                    expect(isMatchType(type3, undefined)    ).toBe(T);
-                    // type4
-                    expect(isMatchType(type4, '')           ).toBe(false);
-                    expect(isMatchType(type4, 'aa')         ).toBe(T);
-                    expect(isMatchType(type4, /reg/)        ).toBe(false);
-                    expect(isMatchType(type4, 10)           ).toBe(T);
-                    expect(isMatchType(type4, undefined)    ).toBe(T);
-                    // type5, 첫째 값은 리터럴만 허용
-                    expect(isMatchType(type5, 'aa')         ).toBe(false);
-                    expect(isMatchType(type5, 10)           ).toBe(false);
-                    expect(isMatchType(type5, undefined)    ).toBe(false);
+                    var tar01 = [['_eum_', 'aa']]
+                    var tar02 = [['_eum_', 'bb']]
+                    var tar03 = [['_eum_', 'aa', /reg/]]
+                    var tar04 = [['_eum_', 'aa', /reg/, 10]]
+                    var tar05 = [['_opt_', 'aa']]
+                    var tar06 = [['_req_', 'aa']]
+                    var tar07 = [['_seq_', 'aa']]
+                    var tar08 = [['_def_', 'aa']]
+                    
+                //     // type1    ** 모두 실패 **
+                //     expect(isAllowType(type1, '')           ).toBe(false);
+                //     expect(isAllowType(type1, 'aa')         ).toBe(false);
+                //     // type2
+                //     expect(isAllowType(type2, '')           ).toBe(false);
+                //     expect(isAllowType(type2, 'aa')         ).toBe(T);
+                //     expect(isAllowType(type2, undefined)    ).toBe(T);
+                //     // type3
+                //     expect(isAllowType(type3, '')           ).toBe(false);
+                //     expect(isAllowType(type3, 'aa')         ).toBe(T);
+                //     expect(isAllowType(type3, /reg/)        ).toBe(T);
+                //     expect(isAllowType(type3, 10)           ).toBe(T);
+                //     expect(isAllowType(type3, undefined)    ).toBe(T);
+                //     // type4
+                //     expect(isAllowType(type4, '')           ).toBe(false);
+                //     expect(isAllowType(type4, 'aa')         ).toBe(T);
+                //     expect(isAllowType(type4, /reg/)        ).toBe(false);
+                //     expect(isAllowType(type4, 10)           ).toBe(T);
+                //     expect(isAllowType(type4, undefined)    ).toBe(T);
+                //     // type5, 첫째 값은 리터럴만 허용
+                //     expect(isAllowType(type5, 'aa')         ).toBe(false);
+                //     expect(isAllowType(type5, 10)           ).toBe(false);
+                //     expect(isAllowType(type5, undefined)    ).toBe(false);
                 });
-                
+                it('- isMatchType() : choice _err_ ', () => {
+                });
+
                 it('- isMatchType() : choice 중첩타입 array ', () => {
                     var type1 = [[ [String], [Number] ]]
                     var type2 = [[ [String, Number] ]]

@@ -592,18 +592,18 @@
         // all, non, any, req, opt, seq 타입 검사
         if (oriType['kind'] && tarType['kind'] && oriType['$type'] === tarType['$type']) {
             // 거부조건
-            // if (oriType['kind'] === '_ALL_' && (tarType['kind'] === '_NON_')) {
-            //     Message.error('ES0727', [oriType['kind'], '_NON_', tarType['kind']]);
-            // } 
+            if (oriType['kind'] === '_ALL_' && (tarType['kind'] === '_ERR_')) {
+                Message.error('ES0727', [oriType['kind'], '_NON_', tarType['kind']]);
+            } 
             if (oriType['kind'] === '_NON_' && tarType['kind'] !== '_NON_') { 
                 Message.error('ES0728', [oriType['kind'], '_NON_', tarType['kind']]);
             }
-            // if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_')) {
-            //     Message.error('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]);
-            // }
-            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_NON_')) {
-                Message.error('ES0727', [oriType['kind'], '_ALL_, _NON_', tarType['kind']]);
+            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_' || tarType['kind'] === '_ERR_')) {
+                Message.error('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]);
             }
+            // if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_NON_')) {
+            //     Message.error('ES0727', [oriType['kind'], '_ALL_, _NON_', tarType['kind']]);
+            // }
             if (oriType['kind'] === '_OPT_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_ANY_' || tarType['kind'] === '_NON_') ){
                 Message.error('ES0728', [oriType['kind'], '_OPT_, _SEQ_', tarType['kind']]);
             } 
@@ -751,70 +751,123 @@
                 if (typeof tarType['ref'] !== 'undefined') return;
                 Message.error('ES0714', ['_ANY_', 'undefined']);
             
+            // _EUN_ (enumeration)
+            } else if (oriType['kind'] === '_EUM_') {
+                if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
+                    throw new Error('target 은 _eum_ 타입만 가능합니다.');
+                }
+                if (oriType['list'].length === 0) throw new Error('origin _eum_(enum) 1개이상 항목이 필요합니디.');
+                if (tarType['list'].length === 0) throw new Error('target _eum_(enum) 1개이상 항목이 필요합니디.');
+                for (var ii = 0; ii < oriType['list'].length; ii++) {
+                    if (!_isLiteral(oriType['list'][ii])) throw new Error('origin _eum_(enum)은 리터럴 타입만 가능합니다.');
+                }
+                for (var ii = 0; ii < tarType['list'].length; ii++) {
+                    if (!_isLiteral(tarType['list'][ii])) throw new Error('target _eum_(enum)은 리터럴 타입만 가능합니다.');
+                }
+
+            // _DEF_ (default)
+            } else if (oriType['kind'] === '_DEF_') {
+                if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
+                    throw new Error('target 은 _def_ 타입만 가능합니다.');
+                }
+                if (oriType['list'].length === 0) throw new Error('origin _def_(default) 1개이상 항목이 필요합니디.');
+                if (tarType['list'].length === 0) throw new Error('target _def_(default) 1개이상 항목이 필요합니디.');
+                if (!_isLiteral(oriType['list'][0])) throw new Error('origin _def_(default) 1번째는 리터럴 타입만 가능합니다.');
+                if (!_isLiteral(tarType['list'][0])) throw new Error('target _def_(default) 1번째는 리터럴 타입만 가능합니다.');
+                // if (typeof target === 'undefined') {
+                //     target = oriType['list'][0];
+                //     return;
+                // }
+
+            // _ERR_ (error)
+            } else if (oriType['kind'] === '_ERR_') {
+                if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
+                    throw new Error('target 은 _err_ 타입만 가능합니다.');
+                }
             // _SEQ_ (sequence)
-            } else if (oriType['kind'] === '_SEQ_') {   // REVIEW: 필요성 검토 필요
-                if (tarType['kind'] !== '_SEQ_') Message.error('ES0731', ['target', tarType['kind']]);
-                if (oriType['list'].length > tarType['list'].length) {
-                    Message.error('ES0732', [oriType.toString(), tarType.toString()]);
-                }
-                if (oriType['list'].length === 0 && tarType['list'].length > 0) return;
-                for (i = 0; i < oriType['list'].length; i++) {
-                    try {
-                        _execAllow(oriType['list'][i], tarType['list'][i], opt);
-                    } catch (error) {
-                        Message.error('ES0733', [oriType['list'][i], tarType['list'][i]]);
-                    }
-                }
+            // } else if (oriType['kind'] === '_SEQ_') {   // REVIEW: 필요성 검토 필요 
+            //     if (tarType['kind'] !== '_SEQ_') Message.error('ES0731', ['target', tarType['kind']]);
+            //     if (oriType['list'].length > tarType['list'].length) {
+            //         Message.error('ES0732', [oriType.toString(), tarType.toString()]);
+            //     }
+            //     if (oriType['list'].length === 0 && tarType['list'].length > 0) return;
+            //     for (i = 0; i < oriType['list'].length; i++) {
+            //         try {
+            //             _execAllow(oriType['list'][i], tarType['list'][i], opt);
+            //         } catch (error) {
+            //             Message.error('ES0733', [oriType['list'][i], tarType['list'][i]]);
+            //         }
+            //     }
 
             // _REQ_ (require)
             } else if (oriType['kind'] === '_REQ_') {
                 if (tarType['kind'] && tarType['ref'].length === 0) {
                     Message.error('ES0734');
                 }
-                var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
+                // var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
 
-                if (oriType['list'].length > 0 && arrTarget.length === 0) {
-                    Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
-                }
-                for (var i = 0; i < arrTarget.length; i++) {
-                    var success = false;
-                    for (var ii = 0; ii < oriType['list'].length; ii++) {
-                        try {
-                            if (success) continue;
-                            _execAllow(oriType['list'][ii], arrTarget[i], opt);
-                            success = true;
-                        } catch (error) {
-                            continue;
-                        }
-                    }
-                    if (!success) Message.error('ES0738', ['choice(_OPT_)', extendType(arrTarget[i])['$type']]);
-                }
+                // if (oriType['list'].length > 0 && arrTarget.length === 0) {
+                //     Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
+                // }
+                // for (var i = 0; i < arrTarget.length; i++) {
+                //     var success = false;
+                //     for (var ii = 0; ii < oriType['list'].length; ii++) {
+                //         try {
+                //             if (success) continue;
+                //             _execAllow(oriType['list'][ii], arrTarget[i], opt);
+                //             success = true;
+                //         } catch (error) {
+                //             continue;
+                //         }
+                //     }
+                //     if (!success) Message.error('ES0738', ['choice(_OPT_)', extendType(arrTarget[i])['$type']]);
+                // }
 
             // _OPT_ (option)
             } else if (oriType['kind'] === '_OPT_') {
                 if (typeof tarType['ref'] === 'undefined') return;
-                var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
+                // var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
 
-                if (oriType['list'].length > 0 && arrTarget.length === 0) {
-                    Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
-                }
-                for (i = 0; i < arrTarget.length; i++) {
-                    var success = false;
-                    for (var ii = 0; ii < oriType['list'].length; ii++) {
-                        try {
-                            if (success) continue;
-                            _execAllow(oriType['list'][ii], arrTarget[i], opt);
-                            success = true;
-                        } catch (error) {
-                            continue;
-                        }
-                    }
-                    if (!success) Message.error('ES0738', ['_OPT_', extendType(arrTarget[i])['$type']]);
-                }
+                // if (oriType['list'].length > 0 && arrTarget.length === 0) {
+                //     Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
+                // }
+                // for (i = 0; i < arrTarget.length; i++) {
+                //     var success = false;
+                //     for (var ii = 0; ii < oriType['list'].length; ii++) {
+                //         try {
+                //             if (success) continue;
+                //             _execAllow(oriType['list'][ii], arrTarget[i], opt);
+                //             success = true;
+                //         } catch (error) {
+                //             continue;
+                //         }
+                //     }
+                //     if (!success) Message.error('ES0738', ['_OPT_', extendType(arrTarget[i])['$type']]);
+                // }
 
             // TODO: default, enum 구현해야함                
             } else {
                     Message.error('ES0735', [oriType['kind']]);
+            }
+
+            // element check
+            var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
+
+            if (oriType['list'].length > 0 && arrTarget.length === 0) {
+                Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
+            }
+            for (var i = 0; i < arrTarget.length; i++) {
+                var success = false;
+                for (var ii = 0; ii < oriType['list'].length; ii++) {
+                    try {
+                        if (success) continue;
+                        _execAllow(oriType['list'][ii], arrTarget[i], opt);
+                        success = true;
+                    } catch (error) {
+                        continue;
+                    }
+                }
+                if (!success) Message.error('ES0738', ['_OPT_', extendType(arrTarget[i])['$type']]);
             }
         }
         
@@ -1052,8 +1105,9 @@
                 }
             
             // _SEQ_ (sequence) 
-            } else if (defType['kind'] === '_SEQ_') {   // REVIEW: 필요성 검토 필요
-                Message.error('ES077', ['choice', '_SEQ_']);
+            // } else if (defType['kind'] === '_SEQ_') {   // REVIEW: 필요성 검토 필요
+            //     Message.error('ES077', ['choice', '_SEQ_']);
+
             }
 
             // element check
