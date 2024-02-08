@@ -284,7 +284,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType([],                        ['_any_']                  )).toBe(T);
             expect(isAllowType(Array,                     []                         )).toBe(T);
             expect(isAllowType(Array,                     Array                      )).toBe(T);
-            expect(isAllowType(Array,                     [[]]                       )).toBe(T);
+            expect(isAllowType(Array,                     [[]]                       )).toBe(false);
             expect(isAllowType(Array,                     ['_non_']                  )).toBe(T);
             // any
             expect(isAllowType(['_any_'],                 ['_req_', null]                     )).toBe(T);
@@ -391,7 +391,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType(['_opt_', String, Number], [undefined]                )).toThrow('ES0738')
             expect(()=> allowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('ES0738')
             // val
-            expect(()=> allowType(['_req_', String, Number],          ['_req_', String, Boolean, Number]  )).toThrow('ES0716')
+            expect(()=> allowType(['_req_', String, Number],          ['_req_', String, Boolean, Number]  )).toThrow('ES0738')
             expect(()=> allowType(['_req_', String, Number],          ['_opt_']                  )).toThrow('ES0729')
             expect(()=> allowType(['_req_', String, Number],          ['_any_']                  )).toThrow('ES0727')
             // non 

@@ -2680,206 +2680,538 @@ describe("[target: util-type.js.js]", () => {
                 expect(isAllowType(type1, null)     ).toBe(T);
                 expect(isAllowType(type1, undefined)).toBe(false); 
             });
-            it('- isAllowType() : string 선택, 리터럴 ', () => {
+            it('- isAllowType() : string ', () => {
                 var type1 = String
-                var type2 = 'str'
-                var type3 = [[String]]
-                var type4 = [['str']]
-                
+                var type2 = [['_req_', String]]
+                var type3 = [['_opt_', String]]
+                var type4 = [['_opt_', String, Number]]
+
+                var tar01 = String
+                var tar02 = [['_req_', String]]
+                var tar03 = [['_opt_', String]]
+                var tar04 = [['_opt_', String, Number]]
+                var tar05 = undefined
+                var tar06 = Number
+                 
                 // type1
-                expect(isAllowType(type1, '')       ).toBe(T);
-                expect(isAllowType(type1, 'str')    ).toBe(T);
-                expect(isAllowType(type1, String)   ).toBe(T);
-                expect(isAllowType(type1, undefined)).toBe(false);                
-                expect(isAllowType(type1, 0)        ).toBe(false);
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
                 // type2
-                expect(isAllowType(type2, '')       ).toBe(false);
-                expect(isAllowType(type2, 'str')    ).toBe(T);
-                expect(isAllowType(type2, String)   ).toBe(false);
-                expect(isAllowType(type2, undefined)).toBe(false);
-                expect(isAllowType(type2, 0)        ).toBe(false);
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
                 // type3
-                expect(isAllowType(type3, '')       ).toBe(T);
-                expect(isAllowType(type3, 'str')    ).toBe(T);
-                expect(isAllowType(type3, String)   ).toBe(T);
-                expect(isAllowType(type3, undefined)).toBe(T);
-                expect(isAllowType(type3, 0)        ).toBe(false);
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
                 // type4
-                expect(isAllowType(type4, '')       ).toBe(false);
-                expect(isAllowType(type4, 'str')    ).toBe(T);
-                expect(isAllowType(type4, String)   ).toBe(false);
-                expect(isAllowType(type4, undefined)).toBe(T);
-                expect(isAllowType(type4, 0)        ).toBe(false);
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
             });
-            it('- isAllowType() : number 선택, 리터럴 ', () => {
+            it('- isAllowType() : string  리터럴 ', () => {
+                var type1 = 'aa'
+                var type2 = [['_req_', 'aa']]
+                var type3 = [['_opt_', 'aa']]
+                var type4 = [['_opt_', 'aa', 10]]
+
+                var tar01 = 'aa'
+                var tar02 = [['_req_', 'aa']]
+                var tar03 = [['_opt_', 'aa']]
+                var tar04 = [['_opt_', 'aa', 10]]
+                var tar05 = undefined
+                var tar06 = 10
+                 
+                // type1
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                // type2
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                // type3
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
+                // type4
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+            });
+            it('- isAllowType() : number ', () => {
                 var type1 = Number
-                var type2 = 1
-                var type3 = [[Number]]
-                var type4 = [[1]]
-                
+                var type2 = [['_req_', Number]]
+                var type3 = [['_opt_', Number]]
+                var type4 = [['_opt_', Number, String]]
+
+                var tar01 = Number
+                var tar02 = [['_req_', Number]]
+                var tar03 = [['_opt_', Number]]
+                var tar04 = [['_opt_', Number, String]]
+                var tar05 = undefined
+                var tar06 = String
+                 
                 // type1
-                expect(isAllowType(type1, 0)        ).toBe(T);
-                expect(isAllowType(type1, 1)        ).toBe(T);
-                expect(isAllowType(type1, Number)   ).toBe(T);
-                expect(isAllowType(type1, undefined)).toBe(false);                
-                expect(isAllowType(type1, '')       ).toBe(false);
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
                 // type2
-                expect(isAllowType(type2, 0)        ).toBe(false);
-                expect(isAllowType(type2, 1)        ).toBe(T);
-                expect(isAllowType(type2, Number)   ).toBe(false);
-                expect(isAllowType(type2, undefined)).toBe(false);
-                expect(isAllowType(type2, '')       ).toBe(false);
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
                 // type3
-                expect(isAllowType(type3, 0)        ).toBe(T);
-                expect(isAllowType(type3, 1)        ).toBe(T);
-                expect(isAllowType(type3, Number)   ).toBe(T);
-                expect(isAllowType(type3, undefined)).toBe(T);
-                expect(isAllowType(type3, '')       ).toBe(false);
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
                 // type4
-                expect(isAllowType(type4, 0)        ).toBe(false);
-                expect(isAllowType(type4, 1)        ).toBe(T);
-                expect(isAllowType(type4, Number)   ).toBe(false);
-                expect(isAllowType(type4, undefined)).toBe(T);
-                expect(isAllowType(type4, '')       ).toBe(false);
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
             });
-            it('- isAllowType() : boolean 선택, 리터럴 ', () => {
+            it('- isAllowType() : number  리터럴 ', () => {
+                var type1 = 10
+                var type2 = [['_req_', 10]]
+                var type3 = [['_opt_', 10]]
+                var type4 = [['_opt_', 10, 20]]
+
+                var tar01 = 10
+                var tar02 = [['_req_', 10]]
+                var tar03 = [['_opt_', 10]]
+                var tar04 = [['_opt_', 10, 20]]
+                var tar05 = undefined
+                var tar06 = 20
+                 
+                // type1
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                // type2
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                // type3
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
+                // type4
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+            });
+            it('- isAllowType() : boolean ', () => {
                 var type1 = Boolean
-                var type2 = false
-                var type3 = [[Boolean]]
-                var type4 = [[false]]               
+                var type2 = [['_req_', Boolean]]
+                var type3 = [['_opt_', Boolean]]
+                var type4 = [['_opt_', Boolean, String]]
 
+                var tar01 = Boolean
+                var tar02 = [['_req_', Boolean]]
+                var tar03 = [['_opt_', Boolean]]
+                var tar04 = [['_opt_', Boolean, String]]
+                var tar05 = undefined
+                var tar06 = 'aa'
+                 
                 // type1
-                expect(isAllowType(type1, true)     ).toBe(T);
-                expect(isAllowType(type1, false)    ).toBe(T);
-                expect(isAllowType(type1, Boolean)  ).toBe(T);
-                expect(isAllowType(type1, undefined)).toBe(false);                
-                expect(isAllowType(type1, '')       ).toBe(false);
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
                 // type2
-                expect(isAllowType(type2, true)     ).toBe(false);
-                expect(isAllowType(type2, false)    ).toBe(T);
-                expect(isAllowType(type2, undefined)).toBe(false);
-                expect(isAllowType(type2, Boolean)  ).toBe(false);
-                expect(isAllowType(type2, '')       ).toBe(false);
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
                 // type3
-                expect(isAllowType(type3, true)     ).toBe(T);
-                expect(isAllowType(type3, false)    ).toBe(T);
-                expect(isAllowType(type3, Boolean)  ).toBe(T);
-                expect(isAllowType(type3, undefined)).toBe(T);
-                expect(isAllowType(type3, '')       ).toBe(false);
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
                 // type4
-                expect(isAllowType(type4, true)     ).toBe(false);
-                expect(isAllowType(type4, false)    ).toBe(T);
-                expect(isAllowType(type4, Boolean)  ).toBe(false);
-                expect(isAllowType(type4, undefined)).toBe(T);
-                expect(isAllowType(type4, '')       ).toBe(false);
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
             });
-            it('- isAllowType() : regexp 선택, 리터럴, 기본값 ', () => {
+            it('- isAllowType() : boolean  리터럴 ', () => {
+                var type1 = true
+                var type2 = [['_req_', true]]
+                var type3 = [['_opt_', true]]
+                var type4 = [['_opt_', true, false]]
+
+                var tar01 = true
+                var tar02 = [['_req_', true]]
+                var tar03 = [['_opt_', true]]
+                var tar04 = [['_opt_', true, false]]
+                var tar05 = undefined
+                var tar06 = false
+                 
+                // type1
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                // type2
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                // type3
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
+                // type4
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+            });
+            it('- isAllowType() : regexp ', () => {
                 var type1 = RegExp
-                var type2 = /aa/
-                var type3 = [[RegExp]]
-                var type4 = [[/aa/]]
-    
-                // type1
-                expect(isAllowType(type1, /bb/)     ).toBe(T);
-                expect(isAllowType(type1, /aa/)     ).toBe(T);
-                expect(isAllowType(type1, RegExp)   ).toBe(T);
-                expect(isAllowType(type1, undefined)).toBe(false);                
-                expect(isAllowType(type1, '')       ).toBe(false);
-                // type2
-                expect(isAllowType(type2, /bb/)     ).toBe(false);
-                expect(isAllowType(type2, /aa/)     ).toBe(T);
-                expect(isAllowType(type2, RegExp)   ).toBe(false);
-                expect(isAllowType(type2, undefined)).toBe(false);
-                expect(isAllowType(type2, '')       ).toBe(false);
-                // type3
-                expect(isAllowType(type3, /bb/)     ).toBe(T);
-                expect(isAllowType(type3, /aa/)     ).toBe(T);
-                expect(isAllowType(type3, RegExp)   ).toBe(T);
-                expect(isAllowType(type3, undefined)).toBe(T);
-                expect(isAllowType(type3, '')       ).toBe(false);
-                // type4
-                expect(isAllowType(type4, /bb/)     ).toBe(false);
-                expect(isAllowType(type4, /aa/)     ).toBe(T);
-                expect(isAllowType(type4, RegExp)   ).toBe(false);
-                expect(isAllowType(type4, undefined)).toBe(T);
-                expect(isAllowType(type4, '')       ).toBe(false);
-            });
-            it('- isAllowType() : bigint 선택, 리터럴, 기본값 (ES6+) ', () => {
-                var type1 = BigInt
-                var type2 = 20n
-                var type3 = [[BigInt]]
-                var type4 = [[20n]]
+                var type2 = [['_req_', RegExp]]
+                var type3 = [['_opt_', RegExp]]
+                var type4 = [['_opt_', RegExp, String]]
 
+                var tar01 = RegExp
+                var tar02 = [['_req_', RegExp]]
+                var tar03 = [['_opt_', RegExp]]
+                var tar04 = [['_opt_', RegExp, String]]
+                var tar05 = undefined
+                var tar06 = 'aa'
+                 
                 // type1
-                expect(isAllowType(type1, 10n)      ).toBe(T);
-                expect(isAllowType(type1, 20n)      ).toBe(T);
-                expect(isAllowType(type1, BigInt)   ).toBe(T);
-                expect(isAllowType(type1, undefined)).toBe(false);                
-                expect(isAllowType(type1, '')       ).toBe(false);
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
                 // type2
-                expect(isAllowType(type2, 10n)      ).toBe(false);
-                expect(isAllowType(type2, 20n)      ).toBe(T);
-                expect(isAllowType(type2, BigInt)   ).toBe(false);
-                expect(isAllowType(type2, undefined)).toBe(false);
-                expect(isAllowType(type2, '')       ).toBe(false);
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
                 // type3
-                expect(isAllowType(type3, 10n)      ).toBe(T);
-                expect(isAllowType(type3, 20n)      ).toBe(T);
-                expect(isAllowType(type3, BigInt)   ).toBe(T);
-                expect(isAllowType(type3, undefined)).toBe(T);
-                expect(isAllowType(type3, '')       ).toBe(false);
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
                 // type4
-                expect(isAllowType(type4, 10n)      ).toBe(false);
-                expect(isAllowType(type4, 20n)      ).toBe(T);
-                expect(isAllowType(type4, BigInt)   ).toBe(false);
-                expect(isAllowType(type4, undefined)).toBe(T);
-                expect(isAllowType(type4, '')       ).toBe(false);
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
             });
+            it('- isAllowType() : regexp  리터럴 ', () => {
+                var type1 = /aa/
+                var type2 = [['_req_', /aa/]]
+                var type3 = [['_opt_', /aa/]]
+                var type4 = [['_opt_', /aa/, /bb/]]
+
+                var tar01 = /aa/
+                var tar02 = [['_req_', /aa/]]
+                var tar03 = [['_opt_', /aa/]]
+                var tar04 = [['_opt_', /aa/, /bb/]]
+                var tar05 = undefined
+                var tar06 = /bb/
+                 
+                // type1
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                // type2
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                // type3
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
+                // type4
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+            });
+            it('- isAllowType() : bigint (ES6+) ', () => {
+                var type1 = BigInt
+                var type2 = [['_req_', BigInt]]
+                var type3 = [['_opt_', BigInt]]
+                var type4 = [['_opt_', BigInt, String]]
+
+                var tar01 = BigInt
+                var tar02 = [['_req_', BigInt]]
+                var tar03 = [['_opt_', BigInt]]
+                var tar04 = [['_opt_', BigInt, String]]
+                var tar05 = undefined
+                var tar06 = 'aa'
+                 
+                // type1
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                // type2
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                // type3
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
+                // type4
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+            });
+            it('- isAllowType() : bigint  리터럴 (ES6+) ', () => {
+                var type1 = 10n
+                var type2 = [['_req_', 10n]]
+                var type3 = [['_opt_', 10n]]
+                var type4 = [['_opt_', 10n, 20n]]
+
+                var tar01 = 10n
+                var tar02 = [['_req_', 10n]]
+                var tar03 = [['_opt_', 10n]]
+                var tar04 = [['_opt_', 10n, 20n]]
+                var tar05 = undefined
+                var tar06 = 20n
+                 
+                // type1
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(false);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                // type2
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(false);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                // type3
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(false);
+                // type4
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+            });
+
             it('- isAllowType() : symbol (ES6+) ', () => {
                 var type1 = Symbol
-                var type2 = Symbol()
+                var type2 = [['_req_', Symbol]]
+                var type3 = [['_opt_', Symbol]]
+                var type4 = [['_opt_', Symbol, String]]
+                var type5 = Symbol()
+
+                var tar01 = Symbol
+                var tar02 = [['_req_', Symbol]]
+                var tar03 = [['_opt_', Symbol]]
+                var tar04 = [['_opt_', Symbol, String]]
+                var tar05 = Symbol()
+                var tar06 = undefined
+                var tar07 = 'aa'
 
                 // type1
-                expect(isAllowType(type1, Symbol()) ).toBe(T);
-                expect(isAllowType(type1, Symbol)   ).toBe(T);
-                expect(isAllowType(type1, undefined)).toBe(false);                
-                expect(isAllowType(type1, '')       ).toBe(false);
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(T);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                expect(isAllowType(type1, tar07)).toBe(false);
                 // type2
-                expect(isAllowType(type2, Symbol()) ).toBe(T);
-                expect(isAllowType(type2, Symbol)   ).toBe(T);      // ** REVIEW: 검토 필요
-                expect(isAllowType(type2, undefined)).toBe(false);                
-                expect(isAllowType(type2, '')       ).toBe(false);
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(T);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                expect(isAllowType(type2, tar07)).toBe(false);
+                // type3
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(T);
+                expect(isAllowType(type3, tar07)).toBe(false);
+                // type4
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+                expect(isAllowType(type4, tar07)).toBe(T);
+                // type5  ** type1 과 같음 **
+                expect(isAllowType(type5, tar01)).toBe(T);  // ** REVIEW: 검토 필요
+                expect(isAllowType(type5, tar02)).toBe(T);
+                expect(isAllowType(type5, tar03)).toBe(false);
+                expect(isAllowType(type5, tar04)).toBe(false);
+                expect(isAllowType(type5, tar05)).toBe(T);
+                expect(isAllowType(type5, tar06)).toBe(false);
+                expect(isAllowType(type5, tar07)).toBe(false);
             });
             it('- isAllowType() : object ', () => {
-                var type1 = Object     // object
-                var type2 = new Date   // object
-                var type3 = {}         // union 
-                var type4 = Date       // class 
+                var type1 = Object
+                var type2 = [['_req_', Object]]
+                var type3 = [['_opt_', Object]]
+                var type4 = [['_opt_', Object, String]]
+                var type5 = new Date()
+
+                var tar01 = Object
+                var tar02 = [['_req_', Object]]
+                var tar03 = [['_opt_', Object]]
+                var tar04 = [['_opt_', Object, String]]
+                var tar05 = new Date()
+                var tar06 = undefined
+                var tar07 = 'aa'
 
                 // type1
-                expect(isAllowType(type1, Object)       ).toBe(T);
-                expect(isAllowType(type1, new Date)     ).toBe(T);
-                expect(isAllowType(type1, Date)         ).toBe(false);
-                expect(isAllowType(type1, {})           ).toBe(false);
-                expect(isAllowType(type1, /reg/)        ).toBe(false);
+                expect(isAllowType(type1, tar01)).toBe(T);
+                expect(isAllowType(type1, tar02)).toBe(T);
+                expect(isAllowType(type1, tar03)).toBe(false);
+                expect(isAllowType(type1, tar04)).toBe(false);
+                expect(isAllowType(type1, tar05)).toBe(T);
+                expect(isAllowType(type1, tar06)).toBe(false);
+                expect(isAllowType(type1, tar07)).toBe(false);
                 // type2
-                expect(isAllowType(type2, Object)       ).toBe(T);
-                expect(isAllowType(type2, new Date)     ).toBe(T);      // REVIEW: 검토 필요
-                expect(isAllowType(type2, Date)         ).toBe(false);
-                expect(isAllowType(type2, {})           ).toBe(false);
-                expect(isAllowType(type2, /reg/)        ).toBe(false);
+                expect(isAllowType(type2, tar01)).toBe(T);
+                expect(isAllowType(type2, tar02)).toBe(T);
+                expect(isAllowType(type2, tar03)).toBe(false);
+                expect(isAllowType(type2, tar04)).toBe(false);
+                expect(isAllowType(type2, tar05)).toBe(T);
+                expect(isAllowType(type2, tar06)).toBe(false);
+                expect(isAllowType(type2, tar07)).toBe(false);
                 // type3
-                expect(isAllowType(type3, Object)       ).toBe(false);
-                expect(isAllowType(type3, new Date)     ).toBe(false);
-                expect(isAllowType(type3, Date)         ).toBe(false);
-                expect(isAllowType(type3, {})           ).toBe(T);
-                expect(isAllowType(type3, /reg/)        ).toBe(false);
+                expect(isAllowType(type3, tar01)).toBe(T);
+                expect(isAllowType(type3, tar02)).toBe(T);
+                expect(isAllowType(type3, tar03)).toBe(T);
+                expect(isAllowType(type3, tar04)).toBe(false);
+                expect(isAllowType(type3, tar05)).toBe(T);
+                expect(isAllowType(type3, tar06)).toBe(T);
+                expect(isAllowType(type3, tar07)).toBe(false);
                 // type4
-                expect(isAllowType(type4, Object)       ).toBe(false);
-                expect(isAllowType(type4, new Date)     ).toBe(false);
-                expect(isAllowType(type4, Date)         ).toBe(T);
-                expect(isAllowType(type4, {})           ).toBe(false);
-                expect(isAllowType(type4, /reg/)        ).toBe(false);
+                expect(isAllowType(type4, tar01)).toBe(T);
+                expect(isAllowType(type4, tar02)).toBe(T);
+                expect(isAllowType(type4, tar03)).toBe(T);
+                expect(isAllowType(type4, tar04)).toBe(T);
+                expect(isAllowType(type4, tar05)).toBe(T);
+                expect(isAllowType(type4, tar06)).toBe(T);
+                expect(isAllowType(type4, tar07)).toBe(T);
+                // type5  ** type1 과 같음 **
+                expect(isAllowType(type5, tar01)).toBe(T);
+                expect(isAllowType(type5, tar02)).toBe(T);
+                expect(isAllowType(type5, tar03)).toBe(false);
+                expect(isAllowType(type5, tar04)).toBe(false);
+                expect(isAllowType(type5, tar05)).toBe(T);        // REVIEW: 검토 필요
+                expect(isAllowType(type5, tar06)).toBe(false);
+                expect(isAllowType(type5, tar07)).toBe(false);
             });
         });
         describe('복합타입 ', () => {
@@ -2893,12 +3225,12 @@ describe("[target: util-type.js.js]", () => {
                     var type6 = [null]
                     var type7 = [undefined]
                     var type8 = [Symbol]
-                    var type9 = [Object]
+                    var type9 = [Object] 
 
                     // type1
                     expect(isAllowType(type1, [])               ).toBe(false);     // ** any 의미가 아님 **
                     expect(isAllowType(type1, [''])             ).toBe(T);
-                    expect(isAllowType(type1, [String])         ).toBe(T);
+                    expect(isAllowType(type1, [String])         ).toBe(T); 
                     expect(isAllowType(type1, [10])             ).toBe(false);
                     expect(isAllowType(type1, ['', 10])         ).toBe(false);
                     // type2
@@ -2929,7 +3261,7 @@ describe("[target: util-type.js.js]", () => {
                     expect(isAllowType(type6, [])               ).toBe(false);
                     expect(isAllowType(type6, [null])           ).toBe(T);
                     expect(isAllowType(type6, [''])             ).toBe(false);
-                    expect(isAllowType(type6, ['', null])       ).toBe(false);
+                    expect(isAllowType(type6, ['', null])       ).toBe(false); 
                     // type7
                     expect(isAllowType(type7, [])               ).toBe(false);
                     expect(isAllowType(type7, [undefined])      ).toBe(T);
@@ -3507,7 +3839,7 @@ describe("[target: util-type.js.js]", () => {
                     expect(isAllowType(type2, tar08)).toBe(T);
                     expect(isAllowType(type2, tar09)).toBe(false);
                 });
-                it('- isMatchType() : array _any_ vs req, opt, seq  ', () => {
+                it('- isAllowType() : array _any_ vs req, opt, seq  ', () => {
                     var type1 = ['_any_']  // === []
                     var type2 = []
 
@@ -3543,8 +3875,8 @@ describe("[target: util-type.js.js]", () => {
                 });
                 
                 it('- isAllowType() : array 중첩타입 array ', () => { 
-                    // ** req, seq 타입은 테스트 제외함, 필요시 추가
-                    var type1 = [ [String], [Number] ]
+                    // ** REVIEW: req, seq 타입은 테스트 제외함, 필요시 추가
+                    var type1 = ['_opt_', [String], [Number] ]
                     var type2 = ['_opt_', [String, Number] ]
 
                     var tar01 = []                              // any
@@ -3576,82 +3908,197 @@ describe("[target: util-type.js.js]", () => {
                     expect(isAllowType(type2, tar07)).toBe(false);
                     expect(isAllowType(type2, tar08)).toBe(false);
                 });
-                it('- isMatchType() : array 중첩타입 choice ', () => {
-                    var type1 = [ '_opt_', [[Boolean, Number]] ]   // === type2
-                    var type2 = [ Boolean, Number ]
-                    var type3 = [ [[Boolean, Number]], [['aa', 'bb']] ]
+                it('- isAllowType() : array 중첩타입 choice, opt ', () => {
+                    var type1 = [ '_opt_', [[String, Number]] ]   // === type2
+                    var type2 = [ '_opt_', String, Number ]
+                    var type3 = [ '_opt_', [[String]], [[Number]] ]
+                    var type4 = [ '_opt_', [[String, Number]], [['aa', 'bb']] ] 
 
-                    var tar01 = [ [[Boolean]] ]
-                    var tar02 = [ Boolean ]
-                    var tar03 = [ Boolean, Number ]
-                    var tar04 = [ [[Boolean, Number]] ]
-                    var tar05 = [ Boolean, Number, Boolean ]
-                    var tar06 = [ [[Boolean, Number, Boolean]] ]
-                    var tar07 = [ Boolean, Number, 'aa', 'bb' ]
-                    var tar08 = [ [[Boolean, Number, 'aa', 'bb']] ]
+                    var tar01 = [ '_opt_', [[String]] ]
+                    var tar02 = [ '_opt_', String ]
+                    var tar03 = [ '_opt_', String, Number ]
+                    var tar04 = [ '_opt_',[[String, Number]] ]
+                    var tar05 = [ '_opt_', String, Number, Boolean ] 
+                    var tar06 = [ '_opt_',[[String, Number, Boolean]] ]
+                    var tar07 = [ '_opt_', String, Number, 'aa', 'bb' ]
+                    var tar08 = [ '_opt_',[[String, Number, 'aa', 'bb']] ]
+                    var tar09 = [ '_opt_',[[String, Number]], [['aa', 'bb']] ]
+                    var tar10 = [ '_opt_', String, Number, 'aa', 'bb', true ]
                     
                     // type1
                     expect(isAllowType(type1, tar01)).toBe(T);
-                    expect(isAllowType(type1, tar02)).toBe(T);
+                    expect(isAllowType(type1, tar02)).toBe(T); 
                     expect(isAllowType(type1, tar03)).toBe(T);
-                    expect(isAllowType(type1, tar04)).toBe(T);
+                    expect(isAllowType(type1, tar04)).toBe(T); 
                     expect(isAllowType(type1, tar05)).toBe(false);
                     expect(isAllowType(type1, tar06)).toBe(false);
-                    expect(isAllowType(type1, tar07)).toBe(false);
-                    expect(isAllowType(type1, tar08)).toBe(false);
-                    // type2
+                    expect(isAllowType(type1, tar07)).toBe(T); 
+                    expect(isAllowType(type1, tar08)).toBe(T);
+                    expect(isAllowType(type1, tar09)).toBe(T);
+                    expect(isAllowType(type1, tar10)).toBe(false);
+                    // type2 
                     expect(isAllowType(type2, tar01)).toBe(T);
-                    expect(isAllowType(type2, tar02)).toBe(T);
+                    expect(isAllowType(type2, tar02)).toBe(T); 
                     expect(isAllowType(type2, tar03)).toBe(T);
                     expect(isAllowType(type2, tar04)).toBe(T);
                     expect(isAllowType(type2, tar05)).toBe(false);
                     expect(isAllowType(type2, tar06)).toBe(false);
-                    expect(isAllowType(type2, tar07)).toBe(false);
-                    expect(isAllowType(type2, tar08)).toBe(false);
+                    expect(isAllowType(type2, tar07)).toBe(T);
+                    expect(isAllowType(type2, tar08)).toBe(T);
+                    expect(isAllowType(type2, tar09)).toBe(T);
+                    expect(isAllowType(type2, tar10)).toBe(false);
                     // type3
                     expect(isAllowType(type3, tar01)).toBe(T);
-                    expect(isAllowType(type3, tar02)).toBe(T);
+                    expect(isAllowType(type3, tar02)).toBe(T); 
                     expect(isAllowType(type3, tar03)).toBe(T);
-                    expect(isAllowType(type3, tar04)).toBe(T);
+                    expect(isAllowType(type3, tar04)).toBe(false);  // ** 그룹 조건 실패
                     expect(isAllowType(type3, tar05)).toBe(false);
                     expect(isAllowType(type3, tar06)).toBe(false);
                     expect(isAllowType(type3, tar07)).toBe(T);
-                    expect(isAllowType(type3, tar08)).toBe(false);
+                    expect(isAllowType(type3, tar08)).toBe(false);  // ** 그룹 조건 실패
+                    expect(isAllowType(type3, tar09)).toBe(false);  // ** 그룹 조건 실패
+                    expect(isAllowType(type3, tar10)).toBe(false);
+                    // type4
+                    expect(isAllowType(type4, tar01)).toBe(T);
+                    expect(isAllowType(type4, tar02)).toBe(T);
+                    expect(isAllowType(type4, tar03)).toBe(T);
+                    expect(isAllowType(type4, tar04)).toBe(T);
+                    expect(isAllowType(type4, tar05)).toBe(false);
+                    expect(isAllowType(type4, tar06)).toBe(false);
+                    expect(isAllowType(type4, tar07)).toBe(T);
+                    expect(isAllowType(type4, tar08)).toBe(T);
+                    expect(isAllowType(type4, tar09)).toBe(T);
+                    expect(isAllowType(type4, tar10)).toBe(false);
+                });
+                // ** opt 와 동일한 결과
+                it('- isAllowType() : array 중첩타입 choice, req ', () => {
+                    var type1 = [ '_req_', [[String, Number]] ]   // === type2
+                    var type2 = [ '_req_', String, Number ]
+                    var type3 = [ '_req_', [[String]], [[Number]] ]
+                    var type4 = [ '_req_', [[String, Number]], [['aa', 'bb']] ] 
 
+                    var tar01 = [ '_req_', [[String]] ]
+                    var tar02 = [ '_req_', String ]
+                    var tar03 = [ '_req_', String, Number ]
+                    var tar04 = [ '_req_',[[String, Number]] ]
+                    var tar05 = [ '_req_', String, Number, Boolean ] 
+                    var tar06 = [ '_req_',[[String, Number, Boolean]] ]
+                    var tar07 = [ '_req_', String, Number, 'aa', 'bb' ]
+                    var tar08 = [ '_req_',[[String, Number, 'aa', 'bb']] ]
+                    var tar09 = [ '_req_',[[String, Number]], [['aa', 'bb']] ]
+                    var tar10 = [ '_req_', String, Number, 'aa', 'bb', true ]
                     
+                    // type1
+                    expect(isAllowType(type1, tar01)).toBe(T);
+                    expect(isAllowType(type1, tar02)).toBe(T); 
+                    expect(isAllowType(type1, tar03)).toBe(T);
+                    expect(isAllowType(type1, tar04)).toBe(T); 
+                    expect(isAllowType(type1, tar05)).toBe(false);
+                    expect(isAllowType(type1, tar06)).toBe(false);
+                    expect(isAllowType(type1, tar07)).toBe(T); 
+                    expect(isAllowType(type1, tar08)).toBe(T);
+                    expect(isAllowType(type1, tar09)).toBe(T);
+                    expect(isAllowType(type1, tar10)).toBe(false);
+                    // type2 
+                    expect(isAllowType(type2, tar01)).toBe(T);
+                    expect(isAllowType(type2, tar02)).toBe(T); 
+                    expect(isAllowType(type2, tar03)).toBe(T);
+                    expect(isAllowType(type2, tar04)).toBe(T);
+                    expect(isAllowType(type2, tar05)).toBe(false);
+                    expect(isAllowType(type2, tar06)).toBe(false);
+                    expect(isAllowType(type2, tar07)).toBe(T);
+                    expect(isAllowType(type2, tar08)).toBe(T);
+                    expect(isAllowType(type2, tar09)).toBe(T);
+                    expect(isAllowType(type2, tar10)).toBe(false);
+                    // type3
+                    expect(isAllowType(type3, tar01)).toBe(T);
+                    expect(isAllowType(type3, tar02)).toBe(T); 
+                    expect(isAllowType(type3, tar03)).toBe(T);
+                    expect(isAllowType(type3, tar04)).toBe(false);  // ** 그룹 조건 실패
+                    expect(isAllowType(type3, tar05)).toBe(false);
+                    expect(isAllowType(type3, tar06)).toBe(false);
+                    expect(isAllowType(type3, tar07)).toBe(T);
+                    expect(isAllowType(type3, tar08)).toBe(false);  // ** 그룹 조건 실패
+                    expect(isAllowType(type3, tar09)).toBe(false);  // ** 그룹 조건 실패
+                    expect(isAllowType(type3, tar10)).toBe(false);
+                    // type4
+                    expect(isAllowType(type4, tar01)).toBe(T);
+                    expect(isAllowType(type4, tar02)).toBe(T);
+                    expect(isAllowType(type4, tar03)).toBe(T);
+                    expect(isAllowType(type4, tar04)).toBe(T);
+                    expect(isAllowType(type4, tar05)).toBe(false);
+                    expect(isAllowType(type4, tar06)).toBe(false);
+                    expect(isAllowType(type4, tar07)).toBe(T);
+                    expect(isAllowType(type4, tar08)).toBe(T);
+                    expect(isAllowType(type4, tar09)).toBe(T);
+                    expect(isAllowType(type4, tar10)).toBe(false);
+                });
+                it('- isAllowType() : array 중첩타입 choice, seq ', () => {
+                    var type1 = [ '_seq_', [[String, Number]] ]   // === type2
+                    var type2 = [ '_seq_', String, Number ]
+                    var type3 = [ '_seq_', [[String]], [[Number]] ]
+                    var type4 = [ '_seq_', [[String, Number]], [['aa', 'bb']] ] 
 
-                    // var tar01 = []
-                    // var tar02 = [true, false]
-                    // var tar03 = [10]
-                    // var tar04 = [true, false, 10]
-                    // var tar05 = ['aa']
-                    // var tar06 = [true, false, 10, 'aa', 'bb']
-                    // var tar07 = [true, false, 10, 'cc']
-
-                    // // type1
-                    // expect(isMatchType(type1, tar01)).toBe(T);
-                    // expect(isMatchType(type1, tar02)).toBe(T);
-                    // expect(isMatchType(type1, tar03)).toBe(T);
-                    // expect(isMatchType(type1, tar04)).toBe(T);
-                    // expect(isMatchType(type1, tar05)).toBe(false);
-                    // expect(isMatchType(type1, tar06)).toBe(false);
-                    // expect(isMatchType(type1, tar07)).toBe(false);
-                    // // type2
-                    // expect(isMatchType(type2, tar01)).toBe(T);
-                    // expect(isMatchType(type2, tar02)).toBe(T);
-                    // expect(isMatchType(type2, tar03)).toBe(T);
-                    // expect(isMatchType(type2, tar04)).toBe(T);
-                    // expect(isMatchType(type2, tar05)).toBe(false);
-                    // expect(isMatchType(type2, tar06)).toBe(false);
-                    // expect(isMatchType(type2, tar07)).toBe(false);
-                    // // type3
-                    // expect(isMatchType(type3, tar01)).toBe(T);
-                    // expect(isMatchType(type3, tar02)).toBe(T);
-                    // expect(isMatchType(type3, tar03)).toBe(T);
-                    // expect(isMatchType(type3, tar04)).toBe(T);
-                    // expect(isMatchType(type3, tar05)).toBe(T);
-                    // expect(isMatchType(type3, tar06)).toBe(T);
-                    // expect(isMatchType(type3, tar07)).toBe(false);
+                    var tar01 = [ '_seq_', [[String]] ]
+                    var tar02 = [ '_seq_', String ]
+                    var tar03 = [ '_seq_', String, Number ]
+                    var tar04 = [ '_seq_',[[String, Number]] ]
+                    var tar05 = [ '_seq_', String, Number, Boolean ] 
+                    var tar06 = [ '_seq_',[[String, Number, Boolean]] ]
+                    var tar07 = [ '_seq_', String, Number, 'aa', 'bb' ]
+                    var tar08 = [ '_seq_',[[String, Number, 'aa', 'bb']] ]
+                    var tar09 = [ '_seq_',[[String, Number]], [['aa', 'bb']] ]
+                    var tar10 = [ '_seq_', String, Number, 'aa', 'bb', true ]
+                    var tar11 = [ '_seq_', Number ]
+                    
+                    // type1
+                    expect(isAllowType(type1, tar01)).toBe(T);
+                    expect(isAllowType(type1, tar02)).toBe(T); 
+                    expect(isAllowType(type1, tar03)).toBe(T);
+                    expect(isAllowType(type1, tar04)).toBe(T); 
+                    expect(isAllowType(type1, tar05)).toBe(T);
+                    expect(isAllowType(type1, tar06)).toBe(false);
+                    expect(isAllowType(type1, tar07)).toBe(T); 
+                    expect(isAllowType(type1, tar08)).toBe(T);
+                    expect(isAllowType(type1, tar09)).toBe(T);
+                    expect(isAllowType(type1, tar10)).toBe(T);
+                    expect(isAllowType(type1, tar11)).toBe(T);
+                    // type2 
+                    expect(isAllowType(type2, tar01)).toBe(false);
+                    expect(isAllowType(type2, tar02)).toBe(false); 
+                    expect(isAllowType(type2, tar03)).toBe(T);
+                    expect(isAllowType(type2, tar04)).toBe(false);
+                    expect(isAllowType(type2, tar05)).toBe(T);
+                    expect(isAllowType(type2, tar06)).toBe(false);
+                    expect(isAllowType(type2, tar07)).toBe(T);
+                    expect(isAllowType(type2, tar08)).toBe(false);
+                    expect(isAllowType(type2, tar09)).toBe(false);
+                    expect(isAllowType(type2, tar10)).toBe(T);
+                    expect(isAllowType(type2, tar11)).toBe(false);
+                    // type3  ** type2 와 동일
+                    expect(isAllowType(type3, tar01)).toBe(false);
+                    expect(isAllowType(type3, tar02)).toBe(false); 
+                    expect(isAllowType(type3, tar03)).toBe(T);
+                    expect(isAllowType(type3, tar04)).toBe(false);
+                    expect(isAllowType(type3, tar05)).toBe(T);
+                    expect(isAllowType(type3, tar06)).toBe(false);
+                    expect(isAllowType(type3, tar07)).toBe(T);
+                    expect(isAllowType(type3, tar08)).toBe(false);
+                    expect(isAllowType(type3, tar09)).toBe(false);
+                    expect(isAllowType(type3, tar10)).toBe(T);
+                    expect(isAllowType(type3, tar11)).toBe(false);
+                    // type4
+                    expect(isAllowType(type4, tar01)).toBe(false);
+                    expect(isAllowType(type4, tar02)).toBe(false);
+                    expect(isAllowType(type4, tar03)).toBe(false);
+                    expect(isAllowType(type4, tar04)).toBe(false);
+                    expect(isAllowType(type4, tar05)).toBe(false);
+                    expect(isAllowType(type4, tar06)).toBe(false);
+                    expect(isAllowType(type4, tar07)).toBe(false);
+                    expect(isAllowType(type4, tar08)).toBe(false);
+                    expect(isAllowType(type4, tar09)).toBe(T);
+                    expect(isAllowType(type4, tar10)).toBe(false);
+                    expect(isAllowType(type4, tar11)).toBe(false);
                 });
                 it('- isMatchType() : array 중첩타입 class ', () => {
                     class ClassA { aa = String }
