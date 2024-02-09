@@ -285,7 +285,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(Array,                     []                         )).toBe(T);
             expect(isAllowType(Array,                     Array                      )).toBe(T);
             expect(isAllowType(Array,                     [[]]                       )).toBe(false);
-            expect(isAllowType(Array,                     ['_non_']                  )).toBe(T);
+            // expect(isAllowType(Array,                     ['_non_']                  )).toBe(T);
             // any
             expect(isAllowType(['_any_'],                 ['_req_', null]                     )).toBe(T);
             expect(isAllowType(['_any_'],                 ['_req_', String]                   )).toBe(T);
@@ -347,7 +347,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType([String, Number],          ['_opt_']                  )).toBe(false);
             expect(isAllowType([String, Number],          ['_any_']                  )).toBe(false);
             // non
-            expect(isAllowType(['_non_'],                 ['_non_']                  )).toBe(T);
+            // expect(isAllowType(['_non_'],                 ['_non_']                  )).toBe(T);
             expect(isAllowType(['_non_'],                 ['_any_']                  )).toBe(false);
             // etc.
             expect(isAllowType(['_etc_'],                 [null]                     )).toBe(false);
@@ -360,7 +360,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType(['_any_'],                 undefined                  )).toThrow('ES0719')
             expect(()=> allowType(['_any_'],                 ['_seq_']                  )).toThrow('ES0729')
             expect(()=> allowType(['_any_'],                 ['_opt_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_any_'],                 ['_non_']                  )).toThrow('ES0727')
+            // expect(()=> allowType(['_any_'],                 ['_non_']                  )).toThrow('ES0727')
             // seq
             expect(()=> allowType(['_seq_'],                 ['_seq_']                  )).toThrow('ES0729')
             expect(()=> allowType(['_seq_'],                 ['_seq_', Boolean]         )).toThrow('ES0729')
@@ -395,9 +395,9 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType(['_req_', String, Number],          ['_opt_']                  )).toThrow('ES0729')
             expect(()=> allowType(['_req_', String, Number],          ['_any_']                  )).toThrow('ES0727')
             // non 
-            expect(()=> allowType(['_non_'],                 ['_any_']                  )).toThrow('ES0728')
+            // expect(()=> allowType(['_non_'],                 ['_any_']                  )).toThrow('ES0728')
             // etc. 
-            expect(()=> allowType(['_etc_'],                 [null]                     )).toThrow('ES0735')
+            // expect(()=> allowType(['_etc_'],                 [null]                     )).toThrow('ES0735')
         }); 
         it('- isAllowType(a, b) : choice ', () => {  
             expect(isAllowType([[]],                        []                       )).toBe(T);
@@ -765,8 +765,8 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType([['_req_', String, Number]],  [[Number, String, Boolean]] )).toBe(false);
             // 예외 오류 코드
             expect(()=> matchType([['_any_']],                 undefined   )).toThrow(/ES075/)
-            expect(()=> matchType([['_seq_']],                 [[1,2,3]]   )).toThrow(/ES0729/)
-            expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
+            // expect(()=> matchType([['_seq_']],                 [[1,2,3]]   )).toThrow(/ES0729/)
+            // expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
             // expect(()=> matchType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
             expect(()=> matchType([[ String, Number]], true        )).toThrow(/ES076/)

@@ -227,6 +227,36 @@
     }
 
     /**
+     * choice type kind 여부
+     * @param {string} name 
+     * @returns {boolean}
+     */
+    function _hasKindChoice(name) {
+        var arr = [];
+        
+        arr = arr.concat(['_ALL_', '_NON_', '_ANY_', '_ERR_']);
+        arr = arr.concat(['_REQ_', '_OPT_', '_DEF_', '_EUM_']);
+
+        if (typeof name !== 'string') return false;
+        return arr.indexOf(name) > -1;
+    }
+
+    /**
+     * choice type kind 여부
+     * @param {string} name 
+     * @returns {boolean}
+     */
+    function _hasKindArray(name) {
+        var arr = [];
+        
+        arr = arr.concat(['_ALL_', '_ANY_']);
+        arr = arr.concat(['_REQ_', '_OPT_', '_SEQ_']);
+
+        if (typeof name !== 'string') return false;
+        return arr.indexOf(name) > -1;
+    }
+
+    /**
      * 타입 여부
      * @param {string} name 
      * @returns {boolean}
@@ -463,6 +493,13 @@
             if (type['params']) obj['params'] = type['params'];
             if (type['return']) obj['return'] = type['return'];
             if (!_hasType(obj['$type'])) Message.error('ES022', ['type']);
+            if (obj['$type'] === 'array') {
+                obj['kind'] = obj['kind'] || '_ALL_';
+                if (!_hasKindArray(obj['kind'])) Message.error('ES022', ['array kind']);
+            }
+            if (obj['$type'] === 'choice') {
+                if (!_hasKindChoice(obj['kind'])) Message.error('ES022', ['choice kind']);
+            }
             return obj;
         } else {
             obj['ref'] = type;
@@ -549,6 +586,10 @@
                 obj['list'] = obj['kind'] ? type.slice(1) : type;
             }
             if (!obj['kind']) obj['kind'] = '_OPT_';
+            // kind 검사
+            if (obj['$type'] === 'array' && !_hasKindArray(obj['kind'])) Message.error('ES022', ['array kind']);
+            if (obj['$type'] === 'choice' && !_hasKindChoice(obj['kind'])) Message.error('ES022', ['choice kind']);
+
         // step : object
         } else if (_isFillObj(type) || _isEmptyObj(type)) {
             obj['$type'] = 'union';
@@ -601,6 +642,10 @@
             if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_' || tarType['kind'] === '_ERR_')) {
                 Message.error('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]);
             }
+            if (oriType['kind'] === '_ERR_' && tarType['kind'] !== '_ERR_') { 
+                Message.error('ES0728', [oriType['kind'], '_ERR_', tarType['kind']]);
+            }
+            
             // if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_NON_')) {
             //     Message.error('ES0727', [oriType['kind'], '_ALL_, _NON_', tarType['kind']]);
             // }
@@ -657,7 +702,8 @@
             } else if (oriType['kind'] === '_ANY_') {
                 if (tarType['kind'] && tarType['list'].length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
                 if (tarType['list'].length > 0) return;
-            
+                throw new Error('array any 는 하나 이싱 요소가 존재해야 합니다.');
+
             // _SEQ_ (sequence)
             } else if (oriType['kind'] === '_SEQ_') {
                 if (oriType['kind'] !== tarType['kind'])  Message.error('ES0719', ['_SEQ_']);
@@ -673,6 +719,7 @@
                         Message.error('ES0711', ['array', '_SEQ_', error]);
                     }
                 }
+                return;
             
             // _REQ_ (require)
             } else if (oriType['kind'] == '_REQ_') {
@@ -681,67 +728,97 @@
                 // }
                 if (oriType['list'].length > 0 && tarType['list'].length === 0) {
                     Message.error('ES0717', ['array']);
-
                 }
                 // element check
-                for (var i = 0; i < tarType['list'].length; i++) {
-                    var success = false;
-                    for (var ii = 0; ii < oriType['list'].length; ii++) {
-                        try {
-                            if (success) break;
-                            if (extendType(tarType['list'][i])['$type'] === 'choice' && extendType(oriType['list'][ii])['$type'] !== 'choice' ) {
-                                var oriChoice = { $type: 'choice', kind: '_OPT_', list: oriType['list'] };
-                                _execAllow(oriChoice, tarType['list'][i], opt);
-                            } else {
-                                _execAllow(oriType['list'][ii], tarType['list'][i], opt);
-                            }
-                            success = true;
+                // for (var i = 0; i < tarType['list'].length; i++) {
+                //     var success = false;
+                //     for (var ii = 0; ii < oriType['list'].length; ii++) {
+                //         try {
+                //             if (success) break;
+                //             if (extendType(tarType['list'][i])['$type'] === 'choice' && extendType(oriType['list'][ii])['$type'] !== 'choice' ) {
+                //                 var oriChoice = { $type: 'choice', kind: '_OPT_', list: oriType['list'] };
+                //                 _execAllow(oriChoice, tarType['list'][i], opt);
+                //             } else {
+                //                 _execAllow(oriType['list'][ii], tarType['list'][i], opt);
+                //             }
+                //             success = true;
 
-                            // if (success) continue;
-                            // _execAllow(oriType['list'][ii], tarType['list'][i], opt);
-                            // success = true;
-                        } catch (error) {
-                            continue;
-                        }
-                    }
-                    if (!success) Message.error('ES0738', ['array(_REQ_)', extendType(tarType['list'][i])['$type']]);
-                }
+                //             // if (success) continue;
+                //             // _execAllow(oriType['list'][ii], tarType['list'][i], opt);
+                //             // success = true;
+                //         } catch (error) {
+                //             continue;
+                //         }
+                //     }
+                //     if (!success) Message.error('ES0738', ['array(_REQ_)', extendType(tarType['list'][i])['$type']]);
+                // }
 
             // _OPT_ (option)
             } else if (oriType['kind'] === '_OPT_') {
                 if (Array.isArray(tarType['list']) && tarType['list'].length === 0) return;
 
                 // element check
-                for (var i = 0; i < tarType['list'].length; i++) {
-                    var success = false;
-                    for (var ii = 0; ii < oriType['list'].length; ii++) {
-                        try {
-                            if (success) break;
-                            if (extendType(tarType['list'][i])['$type'] === 'choice' && extendType(oriType['list'][ii])['$type'] !== 'choice' ) {
-                                var oriChoice = { $type: 'choice', kind: '_OPT_', list: oriType['list'] };
-                                _execAllow(oriChoice, tarType['list'][i], opt);
-                            } else {
-                                _execAllow(oriType['list'][ii], tarType['list'][i], opt);
-                            }
-                            success = true;
+                // for (var i = 0; i < tarType['list'].length; i++) {
+                //     var success = false;
+                //     for (var ii = 0; ii < oriType['list'].length; ii++) {
+                //         try {
+                //             if (success) break;
+                //             if (extendType(tarType['list'][i])['$type'] === 'choice' && extendType(oriType['list'][ii])['$type'] !== 'choice' ) {
+                //                 var oriChoice = { $type: 'choice', kind: '_OPT_', list: oriType['list'] };
+                //                 _execAllow(oriChoice, tarType['list'][i], opt);
+                //             } else {
+                //                 _execAllow(oriType['list'][ii], tarType['list'][i], opt);
+                //             }
+                //             success = true;
 
-                            // if (success) continue;
-                            // _execAllow(oriType['list'][ii], tarType['list'][i], opt);
-                            // success = true;
-                        } catch (error) {
-                            continue;
-                        }
-                    }
-                    if (!success) Message.error('ES0738', ['array(_OPT_)', extendType(tarType['list'][i])['$type']]);
-                }
+                //             // if (success) continue;
+                //             // _execAllow(oriType['list'][ii], tarType['list'][i], opt);
+                //             // success = true;
+                //         } catch (error) {
+                //             continue;
+                //         }
+                //     }
+                //     if (!success) Message.error('ES0738', ['array(_OPT_)', extendType(tarType['list'][i])['$type']]);
+                // }
             
             // throw 
             } else {              
                 Message.error('ES0735', [oriType['kind']]);
             }
+
+            // element check
+            for (var i = 0; i < tarType['list'].length; i++) {
+                var success = false;
+                for (var ii = 0; ii < oriType['list'].length; ii++) {
+                    try {
+                        if (success) break;
+                        if (extendType(tarType['list'][i])['$type'] === 'choice' && extendType(oriType['list'][ii])['$type'] !== 'choice' ) {
+                            var oriChoice = { $type: 'choice', kind: '_OPT_', list: oriType['list'] };
+                            _execAllow(oriChoice, tarType['list'][i], opt);
+                        } else {
+                            _execAllow(oriType['list'][ii], tarType['list'][i], opt);
+                        }
+                        success = true;
+
+                        // if (success) continue;
+                        // _execAllow(oriType['list'][ii], tarType['list'][i], opt);
+                        // success = true;
+                    } catch (error) {
+                        continue;
+                    }
+                }
+                if (!success) Message.error('ES0738', ['array(_REQ_)', extendType(tarType['list'][i])['$type']]);
+            }
         }
         
         function choiceAllow() {
+
+            // if (oriType['$type'] === 'choice' && tarType['$type'] !== 'choice' ) {
+            //     var choType = { $type: 'choice', kind: '_REQ_', list: [target] };
+            //     _execAllow(origin,  choType, opt);
+            //     return;
+            // }
+
             // _ALL_ (all)
             if (oriType['kind'] === '_ALL_') {
                 return;
@@ -784,6 +861,7 @@
                 if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
                     throw new Error('target 은 _err_ 타입만 가능합니다.');
                 }
+                return;
             // _SEQ_ (sequence)
             // } else if (oriType['kind'] === '_SEQ_') {   // REVIEW: 필요성 검토 필요 
             //     if (tarType['kind'] !== '_SEQ_') Message.error('ES0731', ['target', tarType['kind']]);
@@ -825,7 +903,8 @@
 
             // _OPT_ (option)
             } else if (oriType['kind'] === '_OPT_') {
-                if (typeof tarType['ref'] === 'undefined') return;
+                // if (typeof tarType['ref'] === 'undefined') return;
+                if (typeof target === 'undefined') return;
                 // var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
 
                 // if (oriType['list'].length > 0 && arrTarget.length === 0) {
@@ -851,7 +930,10 @@
             }
 
             // element check
-            var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
+
+
+            // var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
+            var arrTarget = (tarType['kind']) ? tarType['list'] : [target];
 
             if (oriType['list'].length > 0 && arrTarget.length === 0) {
                 Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
@@ -918,21 +1000,30 @@
             if (tarType['$type'] !== 'function')  Message.error('ES0713', [oriType['$type'], tarType['$type']]);
             if (oriType['ref'] === Function) return;
             // TODO: special type check
-            if (!oriType['return'] && oriType['params'].length === 0) return;    // success
-            if (oriType['params'].length !== tarType['params'].length) {
-                Message.error('ES0721', ['function', 'params', oriType['params'].length]);
-            }
 
-            try {   // params check
-                _execAllow(['_SEQ_'].concat(oriType['params']), ['_SEQ_'].concat(tarType['params']), opt);
-            } catch (error) {
-                Message.error('ES0722', ['function', 'params', error]);
+            if (!oriType['return'] && (!oriType['params'] || oriType['params'].length === 0)) return;
+            if ((oriType['return'] || oriType['params'].length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
+            if (typeof tarType['params'] === 'undefined' && typeof tarType['return'] === 'undefined') { 
+                Message.error('ES0710', ['target', 'function', ' {params: [], return: []} ']);
             }
+            // if (!oriType['return'] && oriType['params'].length === 0) return;    // success
+            // if (oriType['params'].length !== tarType['params'].length) {
+            //     Message.error('ES0721', ['function', 'params', oriType['params'].length]);
+            // }
 
-            try {   // return check
-                _execAllow(oriType['return'], tarType['return'], opt);
-            } catch (error) {
-                    Message.error('ES0722', ['function', 'return', error]);
+            if (Array.isArray(oriType['params']) && oriType['params'].length > 0) {  
+                try {   // params check
+                    _execAllow(['_SEQ_'].concat(oriType['params']), ['_SEQ_'].concat(tarType['params']), opt);
+                } catch (error) {
+                    Message.error('ES0722', ['function', 'params', error]);
+                }
+            }
+            if (oriType['return']) {            
+                try {   // return check
+                    _execAllow(oriType['return'], tarType['return'], opt);
+                } catch (error) {
+                        Message.error('ES0722', ['function', 'return', error]);
+                }
             }
         }
     };
@@ -1129,7 +1220,7 @@
 
         function classMatch() {
             if (tarType['$type'] === 'class') {         // # class to class
-                if (typeof defType['ref'] === 'undefined') return;
+                // if (typeof defType['ref'] === 'undefined') return;
                 if (isProtoChain(tarType['ref'], defType['ref'])) return;
             } else if (typeof target === 'object') {    // # class to typeof 'object'
                 if (target instanceof type) return;     
