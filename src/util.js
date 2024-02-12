@@ -218,8 +218,8 @@
                 configurable: false,
                 enumerable: false,
             });
-        }
-
+        }    
+ 
         if (!p_ctor['_UNION']) p_ctor['_UNION'] = [];
         
         for(var i = 2; i < arguments.length; i++) {
@@ -229,7 +229,7 @@
                     addCnt++;
                 }
             } else Message.error('ES021', ['arguments', 'function']);
-        }
+        } 
 
         for (var i = 0; i < p_ctor['_UNION'].length; i++) {
             if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {
@@ -242,10 +242,12 @@
             var beginIdx = p_obj._interface.length - addCnt;
             for (var i = beginIdx; i < p_obj._interface.length; i++) {
                 // POINT: 타입과 인터페이스 분리
-                if (p_ctor['_KIND'] === 'interface') allowType(p_obj._interface[i], p_obj, 1);
-                else matchType(p_obj._interface[i], p_obj, 1);
+                // if (typeof p_obj._interface[i]['_KIND'] === 'string' && p_obj._interface[i]['_KIND'] === 'interface') {
+                if (p_ctor['_KIND'] === 'interface') {
+                    allowType(p_obj._interface[i], p_obj, 1);
+                } else matchType(p_obj._interface[i], p_obj, 1);
             }
-        } catch (error) {
+        } catch (error) { 
             Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
         }
 

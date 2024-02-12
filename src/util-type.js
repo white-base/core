@@ -999,7 +999,18 @@
         function functionAllow() {
             if (tarType['$type'] !== 'function')  Message.error('ES0713', [oriType['$type'], tarType['$type']]);
             if (oriType['ref'] === Function) return;
-            // TODO: special type check
+            // special type check
+            if (oriType['name']) {
+                if (oriType['name'] === target.name  
+                || oriType['name'] === tarType['name'] 
+                || (tarType['func'] && oriType['name'] === tarType['func'].name)) return;
+                throw new Error('지정한 함수 이름과 다릅니다.');
+            }
+            if (oriType['func']) {
+                if (typeof tarType['func'] !== 'function') throw new Error('func = function 타입이 아닙니다.');
+                if (isProtoChain(tarType['func'], oriType['func'])) return;
+                throw new Error('지정한 함수 prop 타입이 다릅니다.');
+            }
 
             if (!oriType['return'] && (!oriType['params'] || oriType['params'].length === 0)) return;
             if ((oriType['return'] || oriType['params'].length > 0) && !tarType) Message.error('ES079', ['target', 'function', '_TYPE']);
@@ -1220,7 +1231,7 @@
 
         function classMatch() {
             if (tarType['$type'] === 'class') {         // # class to class
-                // if (typeof defType['ref'] === 'undefined') return;
+                if (typeof defType['ref'] === 'undefined') return;  // 전역 클래스 타입
                 if (isProtoChain(tarType['ref'], defType['ref'])) return;
             } else if (typeof target === 'object') {    // # class to typeof 'object'
                 if (target instanceof type) return;     

@@ -32,12 +32,12 @@ describe("[target: meta-object.js, meta-element.js]", () => {
         // it("- getTypeNames() : array<string> ", () => {
         //     const c = new MetaObjectSub();
         //     const typeNames = c.getTyps();
-
+  
         //     expect(typeNames[0]).toBe('Object');
         //     expect(typeNames[1]).toBe('MetaObject');
         //     expect(typeNames[2]).toBe('MetaObjectSub');
         //     expect(typeNames.length).toBe(3);
-        // });
+        // });   
         describe("MetaObject._type: fun <타입>", () => {
             it("- _type : function ", () => {
                 const c = new MetaObjectSub();
