@@ -53,7 +53,7 @@
          * @abstract
          */
         IArrayCollection.prototype.insertAt  = function() {
-            // Message.error('ES013', ['insertAt(pos, val, ...): bool']);
+            Message.error('ES013', ['insertAt(pos, val, ...): bool']);
         };
     
         return IArrayCollection;

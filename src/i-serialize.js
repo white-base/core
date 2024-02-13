@@ -45,7 +45,7 @@
          * @abstract
          */
         ISerialize.prototype.output  = function() {
-            // Message.error('ES013', ['output(...)']);
+            Message.error('ES013', ['output(...)']);
         };
 
         /**
@@ -53,7 +53,7 @@
          * @abstract
          */
         ISerialize.prototype.load  = function(String) {
-            // Message.error('ES013', ['load(...)']);
+            Message.error('ES013', ['load(...)']);
         };
 
         return ISerialize;

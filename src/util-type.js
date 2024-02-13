@@ -378,7 +378,7 @@
         arr = getTypes(ctor);
         for (var i = 0; i < arr.length; i++) {
             if (typeof target === 'string') {
-                if (target === arr[i].name) return true;
+                if (target === arr[i].name) return true;    // Line:
             } else if (typeof target === 'function') {
                 if (target === arr[i]) return true;
             }
@@ -595,7 +595,7 @@
             obj['$type'] = 'union';
         } else if(_isPrimitiveObj(type)) {
             obj['$type'] = 'object';
-        } else Message.error('ES022', ['type']);
+        } else Message.error('ES022', ['type']);    // Line:
         
         return obj;
     }
@@ -687,7 +687,7 @@
         else if (oriType['$type'] === 'class') classAllow();
         else if (oriType['$type'] === 'union') unionAllow();
         else if (oriType['$type'] === 'function') functionAllow();
-        else throw new Error('allow 처리할 타입이 없습니다.');
+        else throw new Error('allow 처리할 타입이 없습니다.');      // Line:
 
         // inner function
         function arrayAllow() {
@@ -696,13 +696,13 @@
             
             // _ALL_ (all)
             if (oriType['kind'] === '_ALL_') {
-                return;
+                return;     // Line:
 
             // _ANY_ (any)
             } else if (oriType['kind'] === '_ANY_') {
                 if (tarType['kind'] && tarType['list'].length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
                 if (tarType['list'].length > 0) return;
-                throw new Error('array any 는 하나 이싱 요소가 존재해야 합니다.');
+                throw new Error('array any 는 하나 이싱 요소가 존재해야 합니다.');  // Line:
 
             // _SEQ_ (sequence)
             } else if (oriType['kind'] === '_SEQ_') {
@@ -727,7 +727,7 @@
                 //     Message.error('ES0716', ['array _OPT_', oriType.toString(), tarType.toString()]);
                 // }
                 if (oriType['list'].length > 0 && tarType['list'].length === 0) {
-                    Message.error('ES0717', ['array']);
+                    Message.error('ES0717', ['array']);     // Line:
                 }
                 // element check
                 // for (var i = 0; i < tarType['list'].length; i++) {
@@ -783,7 +783,7 @@
             
             // throw 
             } else {              
-                Message.error('ES0735', [oriType['kind']]);
+                Message.error('ES0735', [oriType['kind']]);     // Line:
             }
 
             // element check
@@ -880,7 +880,7 @@
             // _REQ_ (require)
             } else if (oriType['kind'] === '_REQ_') {
                 if (tarType['kind'] && tarType['ref'].length === 0) {
-                    Message.error('ES0734');
+                    Message.error('ES0734');    // Line:
                 }
                 // var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
 
@@ -924,7 +924,6 @@
                 //     if (!success) Message.error('ES0738', ['_OPT_', extendType(arrTarget[i])['$type']]);
                 // }
 
-            // TODO: default, enum 구현해야함                
             } else {
                     Message.error('ES0735', [oriType['kind']]);
             }
@@ -1100,7 +1099,7 @@
         else if (defType['$type'] === 'function') functionMatch();        
         else if (defType['$type'] === 'class') classMatch();
         else if (defType['$type'] === 'union') unionMatch();
-        else Message.error('ES022', [defType['$type']]);
+        else Message.error('ES022', [defType['$type']]);        // Line:
 
 
         // inner function

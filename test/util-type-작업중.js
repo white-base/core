@@ -5618,7 +5618,387 @@ describe("[target: util-type.js.js]", () => {
         });
     });
     describe('matchType(type, target): bool  <타입 매치 예외> ', () => {
+        it('- Object, {} : object 타입 (regex, new, null) ', () => {
+            expect(()=> matchType(Object, 'str'     )).toThrow(/ES024/);
+            expect(()=> matchType(Object, 1         )).toThrow(/ES024/);
+            expect(()=> matchType(Object, Symbol()  )).toThrow(/ES024/);
+            expect(()=> matchType(Object, true      )).toThrow(/ES024/);
+            expect(()=> matchType(Object, null      )).toThrow(/ES024/);
+        });
+        it('- isMatchType() : object (원시 객체 기본값) ', () => {
+            expect(()=> matchType({},         Symbol()    )).toThrow(/ES069/)
+        });
+        it('- null, undefined ', () => {
+            expect(()=>matchType(null,              false           )).toThrow('null');
+            expect(()=>matchType({aa: undefined},   {aa:null}       )).toThrow('undefined');
+            expect(()=>matchType(undefined,         {aa:null}       )).toThrow('ES026');
+        });
+        it('- String, "str" : string 타입 ', () => {
+            expect(()=> matchType('str',    function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(String,   function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(String,   null                )).toThrow(/ES074/);
+            expect(()=> matchType(String,   true                )).toThrow(/ES074/);
+            expect(()=> matchType(String,   /reg/               )).toThrow(/ES074/);
+            expect(()=> matchType(String,   1                   )).toThrow(/ES074/);
+            expect(()=> matchType(String,   Symbol()            )).toThrow(/ES074/);
+            expect(()=> matchType(String,   []                  )).toThrow(/ES074/);
+            expect(()=> matchType(String,   {aa:1}              )).toThrow(/ES074/);
+            expect(()=> matchType(String,   Number              )).toThrow(/ES074/);
+            expect(()=> matchType(String,   Symbol              )).toThrow(/ES074/);
+        });
+        it('- Number, 1,2, NaN : number 타입', () => {
+            expect(()=> matchType(1,        function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(NaN,      function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   null                )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   true                )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   /reg/               )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   'str'               )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   Symbol()            )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   []                  )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   {aa:1}              )).toThrow(/ES074/);
+            expect(()=> matchType(Number,   Symbol              )).toThrow(/ES074/);
+            expect(()=> matchType(Number,                       )).toThrow(/ES074/);
+        });
+        it('- Boolean, true, false : boolean 타입 ', () => {
+            expect(()=> matchType(true,     function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  null                )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  'str'               )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  /reg/               )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  1                   )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  Symbol()            )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  []                  )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  {aa:1}              )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  Number              )).toThrow(/ES074/);
+            expect(()=> matchType(Boolean,  Symbol              )).toThrow(/ES074/);
+        });
+        it('- bigint 타입 (ES6+)', () => { 
+            expect(()=> matchType(BigInt,  function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  null                )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  'str'               )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  /reg/               )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  1                   )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  Symbol()            )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  []                  )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  {aa:1}              )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  Number              )).toThrow(/ES074/);
+        });
+        it('- symbol 타입 (ES6+) ', () => {
+            expect(()=> matchType(Symbol,  function any(){}    )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  null                )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  'str'               )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  /reg/               )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  1                   )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  []                  )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  {aa:1}              )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  Number              )).toThrow(/ES074/);
+        });
+        it('- isMatchType() : choice ', () => {      
+            expect(()=> matchType([['_any_']],                 undefined   )).toThrow(/ES075/)
+            // expect(()=> matchType([['_seq_']],                 [[1,2,3]]   )).toThrow(/ES0729/)
+            // expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
+            // expect(()=> matchType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
+            // expect(()=> matchType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
+            expect(()=> matchType([[ String, Number]], true        )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]], []          )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]], {}          )).toThrow(/ES076/)            
+            // expect(()=> matchType([[String, Number]],  undefined           )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]],  true                )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]],  {}                  )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow(/ES076/) // 당연히 실패
+            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow(/ES076/)
+        });
+        it('- isMatchType() : class ', () => {
+            var Class1 = function() { this.aa = String }
+            var Class2 = function() { this.bb = Number }
+    
+            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow(/ES074/)
+            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow(/ES076/)
+            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow(/ES027/)            
+        });
+        it('- isMatchType() : object (객체 기본값) ', () => {
+            var Class1 = function() { this.aa = String };
+            var Class2 = function() { this.bb = 10 };
+
+            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow(/ES027/)
+            expect(()=> matchType(Class2,         {aa: 'STR', bb: 'STR'}, 1)).toThrow(/ES074/)
+        });
+        
+        it('- isMatchType() : choice 원시 타입 ', () => {
+            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow(/ES076/)
+            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow(/ES076/)
+            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow(/ES076/)
+            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow(/ES076/)
+            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow(/ES076/)
+        });
+        it('- isMatchType() : choice 내장 객체 타입 ', () => {
+            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow(/ES076/)
+            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow(/ES076/)
+            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow(/ES076/)       
+            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow(/ES076/)       
+            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow(/ES076/)       
+        });
+        it('- isMatchType() : array 조건 검사  ', () => {    
+            expect(()=> matchType([],           10                  )).toThrow(/ES024/)
+            expect(()=> matchType(Array,        10                  )).toThrow(/ES024/)
+            // expect(()=> matchType(['_any_'],    [undefined]         )).toThrow(/ES075/)
+            expect(()=> matchType(['_any_'],    10                  )).toThrow(/ES024/)
+            expect(()=> matchType(['_seq_'],    10                  )).toThrow(/ES0729/) 
+            expect(()=> matchType(['_seq_', String, Number], [10, 'str'])).toThrow(/ES074/)
+            expect(()=> matchType(['_seq_', String, Number], ['str']    )).toThrow(/ES075/)
+            expect(()=> matchType(['_seq_', String, Number], 10         )).toThrow(/ES024/)
+            expect(()=> matchType(['_opt_'],    10                  )).toThrow(/ES0729/)
+            expect(()=> matchType(['_opt_', String, Number], [true] )).toThrow(/ES076/)
+            expect(()=> matchType(['_opt_', String, Number], [{}]   )).toThrow(/ES076/)
+            expect(()=> matchType(['_opt_', String, Number], 10     )).toThrow(/ES024/)
+            // expect(()=> matchType(['_req_', String, Number], []              )).toThrow(/ES022/)
+            expect(()=> matchType(['_req_', String, Number], [true]          )).toThrow(/ES076/)
+            expect(()=> matchType(['_req_', String, Number], [{}]            )).toThrow(/ES076/)
+            expect(()=> matchType(['_req_', String, Number], 10              )).toThrow(/ES024/)
+            expect(()=> matchType(Array, function any(){}       )).toThrow(/ES024/);
+            expect(()=> matchType(Array, function any(){}, []   )).toThrow(/ES024/);
+            expect(()=> matchType(Array, null                   )).toThrow(/ES024/);
+            expect(()=> matchType(Array, 'str'                  )).toThrow(/ES024/);
+            expect(()=> matchType(Array, /reg/                  )).toThrow(/ES024/);
+            expect(()=> matchType(Array, 1                      )).toThrow(/ES024/);
+            expect(()=> matchType(Array, Symbol()               )).toThrow(/ES024/);
+            expect(()=> matchType(Array, true                   )).toThrow(/ES024/);
+            expect(()=> matchType(Array, {aa:1}                 )).toThrow(/ES024/);
+            expect(()=> matchType(Array, Number                 )).toThrow(/ES024/);
+            expect(()=> matchType(Array, Symbol                 )).toThrow(/ES024/);
+        });
+        it('- choice : or 타입 (내장 타입) ', () => {
+            expect(()=> matchType([[Array, String]],          1               )).toThrow(/ES076/);
+            expect(()=> matchType([[Array]],                  function any(){})).toThrow(/ES076/);
+            expect(()=> matchType([[String]],                 function any(){})).toThrow(/ES076/);
+            expect(()=> matchType([[String, Number]],         null            )).toThrow(/ES076/);
+            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow(/ES076/);
+        });
+        it('- function() : class 타입', () => {
+            const Func1 = function() { this.aa = Number };
+            const Func2 = function() { this.aa = 1 };   // 기본값으로 설정
+            const Func3 = function() { this.aa = Date };
+
+            expect(()=> matchType(Func1, function any(){}   )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, null               )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, 'str'              )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, /reg/              )).toThrow(/ES069/);
+            expect(()=> matchType(Func1, 1                  )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, Symbol()           )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, true               )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, Number             )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, Symbol             )).toThrow(/ES032/);
+        });
+        it('- Symbol() : symbol 타입', () => {
+            expect(()=> matchType(Symbol, function any(){}  )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, function any(){}  )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, null              )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, 'str'             )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, /reg/             )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, 1                 )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, true              )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, []                )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, {aa:1}            )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, Number            )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, Symbol            )).toThrow(/ES074/);
+        });
+        it('- Date : object 타입 (class) ', () => {    
+            expect(()=> matchType(Date, function any(){}    )).toThrow(/ES032/);
+            expect(()=> matchType(Date, null                )).toThrow(/ES032/);
+            expect(()=> matchType(Date, true                )).toThrow(/ES032/);
+            expect(()=> matchType(Date, 1                   )).toThrow(/ES032/);
+            expect(()=> matchType(Date, 'str'               )).toThrow(/ES032/);
+            expect(()=> matchType(Date, []                  )).toThrow(/ES032/);
+            expect(()=> matchType(Date, {aa:1}              )).toThrow(/ES032/);
+            expect(()=> matchType(Date, Number              )).toThrow(/ES032/);
+            expect(()=> matchType(Date, /reg/               )).toThrow(/ES032/);
+            expect(()=> matchType(Date, Symbol()            )).toThrow(/ES032/);
+            expect(()=> matchType(Date, Symbol              )).toThrow(/ES032/);
+        });
     });
     describe('allowType(type, target): bool  <타입 매치 예외> ', () => {
+        it('- allowType(a, b) : 원시 자료형 : 예외 ', () => { 
+            // null
+            expect(()=> allowType(null,      undefined   )).toThrow('ES0713')
+            // Number
+            expect(()=> allowType(Number,    String      )).toThrow('ES0713')
+            expect(()=> allowType(Number,    true        )).toThrow('ES0713')
+            expect(()=> allowType(NaN,       Number      )).toThrow('ES0712')
+            expect(()=> allowType(NaN,       NaN         )).toThrow('ES0712')
+            expect(()=> allowType(NaN,       10          )).toThrow('ES0712')
+            expect(()=> allowType(10,        20          )).toThrow('ES0712')
+            expect(()=> allowType(10,        Number      )).toThrow('ES0712')
+            expect(()=> allowType(10,        NaN         )).toThrow('ES0712') 
+            // String
+            expect(()=> allowType(String,    10          )).toThrow('ES0713')
+            expect(()=> allowType(String,    Boolean     )).toThrow('ES0713')
+            expect(()=> allowType('str',     ''          )).toThrow('ES0712')
+            expect(()=> allowType('str',     String      )).toThrow('ES0712')
+            // Boolean
+            expect(()=> allowType(Boolean,   'str'       )).toThrow('ES0713')
+            expect(()=> allowType(true,      false       )).toThrow('ES0712')
+            expect(()=> allowType(true,      Boolean     )).toThrow('ES0712')
+            // undefined
+            expect(()=> allowType(undefined, null        )).toThrow('ES069')
+            // null
+            expect(()=> allowType(null,      undefined   )).toThrow('ES0713')
+            expect(()=> allowType(null,      {}          )).toThrow('ES0713')
+            expect(()=> allowType(null,      Object      )).toThrow('ES0713')
+            // Symbol
+            expect(()=> allowType(Symbol,    null        )).toThrow('ES0713')
+            expect(()=> allowType(Symbol,    Object      )).toThrow('ES0713')
+            expect(()=> allowType(Symbol(),  null        )).toThrow('ES0713')
+            expect(()=> allowType(Symbol(),  Object      )).toThrow('ES0713')
+        });
+        it('- allowType(a, b) : array choice : 예외', () => {        
+            // all 
+            // expect(()=> allowType(Array,                     ['_non_']                  )).toThrow('ES069')
+            // any
+            // expect(()=> allowType(['_any_'],                 []                         )).toThrow('ES0727')
+            expect(()=> allowType(['_any_'],                 undefined                  )).toThrow('ES0719')
+            expect(()=> allowType(['_any_'],                 ['_seq_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_any_'],                 ['_opt_']                  )).toThrow('ES0729')
+            // expect(()=> allowType(['_any_'],                 ['_non_']                  )).toThrow('ES0727')
+            // seq
+            expect(()=> allowType(['_seq_'],                 ['_seq_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_seq_'],                 ['_seq_', Boolean]         )).toThrow('ES0729')
+            expect(()=> allowType(['_seq_'],                 []                         )).toThrow('ES0729')
+            expect(()=> allowType(['_seq_', Number],         ['_seq_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_seq_', Number],         ['_seq_', Boolean]         )).toThrow('ES0713')
+            expect(()=> allowType(['_seq_', Number],         [Number]                   )).toThrow('ES0728')
+            expect(()=> allowType(['_seq_', Number, String], ['_seq_', Number]          )).toThrow('ES0720')
+            expect(()=> allowType(['_seq_', Number, String], [Number]                   )).toThrow('ES0728')
+            // opt
+            expect(()=> allowType(['_opt_'],                 ['_opt_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_opt_'],                 ['_opt_', String]          )).toThrow('ES0729')
+            expect(()=> allowType(['_opt_'],                 ['_any_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_opt_'],                 []                         )).toThrow('ES0729') 
+            expect(()=> allowType(['_opt_'],                 [String]                   )).toThrow('ES0729')
+            expect(()=> allowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('ES0738')
+            expect(()=> allowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('ES0738')
+            expect(()=> allowType(['_opt_', String],         ['_opt_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('ES0728')
+            expect(()=> allowType(['_opt_', String],         [Number]                   )).toThrow('ES0738')
+            expect(()=> allowType(['_opt_', String],         [undefined]                )).toThrow('ES0738')   // length > 0 이면 true
+            expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('ES0728')
+            expect(()=> allowType(['_opt_', String],         []                         )).toThrow('ES0728')
+            expect(()=> allowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('ES0738')
+            expect(()=> allowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('ES0738')
+            expect(()=> allowType(['_opt_', String, Number], ['_opt_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_opt_', String, Number], ['_any_']                  )).toThrow('ES0728')
+            expect(()=> allowType(['_opt_', String, Number], [undefined]                )).toThrow('ES0738')
+            expect(()=> allowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('ES0738')
+            // val
+            expect(()=> allowType(['_req_', String, Number],          ['_req_', String, Boolean, Number]  )).toThrow('ES0738')
+            expect(()=> allowType(['_req_', String, Number],          ['_opt_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_req_', String, Number],          ['_any_']                  )).toThrow('ES0727')
+            // non 
+            // expect(()=> allowType(['_non_'],                 ['_any_']                  )).toThrow('ES0728')
+            // etc. 
+            // expect(()=> allowType(['_etc_'],                 [null]                     )).toThrow('ES0735')
+        }); 
+        it('- allowType(a, b) : choice : 예외', () => {     
+            expect(()=> allowType([['_any_']],                  undefined             )).toThrow('ES0714')
+            expect(()=> allowType([['_any_']],                                        )).toThrow('ES0714')
+            // expect(()=> allowType([['_seq_']],                  [['_seq_']]           )).toThrow('ES0729')
+            // expect(()=> allowType([['_seq_']],                  [['_seq_', String]]   )).toThrow('ES0729') 
+            // expect(()=> allowType([['_seq_']],                  [['_seq_', Number]]   )).toThrow('ES0729')
+            // expect(()=> allowType([['_seq_', Number]],          [['_seq_']]                   )).toThrow('ES0729')
+            // expect(()=> allowType([['_seq_', Number]],          [['_seq_', Boolean]]          )).toThrow('ES0733')
+            // expect(()=> allowType([['_seq_', Number]],          [[Number]]                    )).toThrow('ES0728')
+            // expect(()=> allowType([['_seq_', Number, String]],  [['_seq_', Number]]           )).toThrow('ES0732')
+            // expect(()=> allowType([['_seq_', Number, String]],  [[Number]]                    )).toThrow('ES0728')
+            expect(()=> allowType([['_opt_']],                  [['_opt_']]                   )).toThrow('ES0729')
+            expect(()=> allowType([['_opt_']],                  [['_opt_', String]]           )).toThrow('ES0729')
+            expect(()=> allowType([['_opt_']],                  [['_any_']]                   )).toThrow('ES0729')
+            expect(()=> allowType([['_opt_']],                  undefined                     )).toThrow('ES0729')
+            expect(()=> allowType([['_opt_']],                  [[String]]                    )).toThrow('ES0729')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('ES0738')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('ES0738')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_']]                   )).toThrow('ES0729')
+            expect(()=> allowType([['_opt_', String]],          [['_any_']]                   )).toThrow('ES0728')
+            expect(()=> allowType([['_opt_', String]],          [[Number]]                    )).toThrow('ES0738')
+            expect(()=> allowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('ES0738')
+            expect(()=> allowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('ES0738')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_']]                   )).toThrow('ES0729')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('ES0728')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('ES0738')
+            expect(()=> allowType([['_req_', String, Number]],           [['_req_', String, Boolean, Number]]   )).toThrow('ES0738')
+            expect(()=> allowType([['_req_', String, Number]],           [['_opt_']]                   )).toThrow('ES0729')
+            expect(()=> allowType([['_req_', String, Number]],           [['_any_']]                   )).toThrow('ES0727')
+        });
+        it('- isAllowType(a, b) : function ', () => {
+            var type1   = function(String, Number){Boolean}
+            var type2   = function(){}
+            type2._TYPE = {params: [String, Number], return: Boolean}
+            var tar1    = function(){}
+            tar1._TYPE  = {params: [String, Number], return: Boolean}
+
+            expect(isAllowType(Function, Function    )).toBe(T);
+            expect(isAllowType(type1, {}             )).toBe(false);
+            expect(isAllowType(type1, tar1           )).toBe(T);
+            expect(isAllowType(type2, tar1           )).toBe(T);
+            // 예외 : 오류코드
+            expect(()=> allowType(type1, {}          )).toThrow('ES0713')
+        }); 
+        it('- isAllowType(a, b) : object ', () => {   
+            var ClassA = function(){};
+            var ClassB = function(){this.aa = 1};
+            var date1 = new Date('2023-01-01');
+            var date2 = new Date('2023-01-01');
+            var date3 = new Date('2023-01-02');
+
+            // 예외 : 오류코드
+            // expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
+            // expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
+            expect(()=> allowType({},        true            )).toThrow('ES069')
+        });
+        it('- isAllowType(a, b) : class ', () => {
+            var ClassA = function(){this.a = 1}
+            var ClassB = function(){this.a = 10}
+            var ClassC = function(){this.b = 10}
+            var ClassD = function(){this.b = 10}
+            var ClassE = function(){throw new Error('강제예외')}
+
+            expect(isAllowType(ClassA,       ClassA)).toBe(T);
+            expect(isAllowType(ClassA,       ClassB)).toBe(false);
+            expect(isAllowType(ClassA,       ClassC)).toBe(false);
+            expect(isAllowType(ClassC,       ClassD, 0)).toBe(false);
+            expect(isAllowType(ClassC,       ClassD, 1)).toBe(T );
+            expect(isAllowType(String,       String)).toBe(T );
+            expect(isAllowType(ClassA,       ClassE)).toBe(false );
+            // 예외 : 오류코드
+            expect(()=> allowType(ClassA,       ClassB)).toThrow('ES0725')
+            expect(()=> allowType(ClassA,       ClassC)).toThrow('ES0725')
+            expect(()=> allowType(ClassA,       ClassE)).toThrow('ES0725')
+        }); 
+        it('- isAllowType(a, b) : union (기본) ', () => {
+            var type1      = {str: String, num: Number};
+
+            expect(isAllowType(type1,    {str: String, num: Number}  )).toBe(true);
+            expect(isAllowType(type1,    {str: '', num: 0}           )).toBe(true);
+            expect(isAllowType(type1,    {str: ''}                   )).toBe(false);
+            // 예외 : 오류코드
+            expect(()=> allowType(type1,    {str: ''}                )).toThrow('ES0713')
+        });
+        it('- isAllowType(a, b) : union (choice) ', () => {        
+            var type1   = {str: [[String, Number]], bool: [['_any_']], num: [['_opt_', Number]]}; 
+
+            expect(isAllowType(type1, {str: String, bool: null, num: Number}           )).toBe(T);
+            expect(isAllowType(type1, {str: '', bool: true, num: [['_opt_', Number]]}  )).toBe(T);
+            expect(isAllowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toBe(false);
+            expect(isAllowType(type1, {str: String, bool: false, num: String}          )).toBe(false);
+            expect(isAllowType(type1, {str: String}                                    )).toBe(false);
+            // 예외 : 오류코드
+            expect(()=> allowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('ES0738')
+            expect(()=> allowType(type1, {str: String, bool: false, num: String}          )).toThrow('ES0738')
+            expect(()=> allowType(type1, {str: String}                                    )).toThrow('ES0714')
+        });
     });
 });

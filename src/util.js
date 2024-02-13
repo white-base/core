@@ -8,12 +8,17 @@
     var Message;
     var getAllProperties;
     var extendType;
+    var matchType;
     var allowType;
     var isMatchType;
+    var isAllowType;
     var matchType;
     var deepEqual;
     var isProtoChain;
     var getTypes;
+    var typeObject;
+    var typeOf;
+
 
     //==============================================================
     // 1. 의존 모듈 선언
@@ -29,32 +34,41 @@
         extendType                    = require('./util-type').extendType;
         allowType              = require('./util-type').allowType;
         isMatchType                   = require('./util-type').isMatchType;
+        isAllowType                   = require('./util-type').isAllowType;
         matchType                   = require('./util-type').matchType;
         deepEqual                   = require('./util-type').deepEqual;
         isProtoChain                   = require('./util-type').isProtoChain;
         getTypes                   = require('./util-type').getTypes;
+        typeObject                   = require('./util-type').typeObject;
+        typeOf                   = require('./util-type').typeOf;
     } else {    
         Message                     = _global._L.Message;
         getAllProperties            = _global._L.Util.getAllProperties
         extendType                    = _global._L.Util.extendType
         allowType              = _global._L.Util.allowType
         isMatchType                   = _global._L.Util.isMatchType
+        isAllowType                   = _global._L.Util.isAllowType
         matchType                   = _global._L.Util.matchType
         deepEqual                   = _global._L.Util.deepEqual
         isProtoChain                   = _global._L.Util.isProtoChain
         getTypes                   = _global._L.Util.getTypes
+        typeObject                   = _global._L.Util.typeObject
+        typeOf                   = _global._L.Util.typeOf
     }
 
     //==============================================================
     // 3. module dependency check
     if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
-    if (typeof extendType === 'undefined') Message.error('ES012', ['extendType', 'util-type']);
+    if (typeof extendType === 'undefined') Message.error('ES012', ['extendType', 'util-type']);     // Branch:
     if (typeof allowType === 'undefined') Message.error('ES012', ['allowType', 'util-type']);
     if (typeof isMatchType === 'undefined') Message.error('ES012', ['isMatchType', 'util-type']);
+    if (typeof isAllowType === 'undefined') Message.error('ES012', ['isAllowType', 'util-type']);   // Branch:
     if (typeof matchType === 'undefined') Message.error('ES012', ['matchType', 'util-type']);
-    if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);
-    if (typeof isProtoChain === 'undefined') Message.error('ES012', ['isProtoChain', 'util-type']);
+    if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);       // Branch:
+    if (typeof isProtoChain === 'undefined') Message.error('ES012', ['isProtoChain', 'util-type']); // Branch:
     if (typeof getTypes === 'undefined') Message.error('ES012', ['getTypes', 'util-type']);
+    if (typeof typeObject === 'undefined') Message.error('ES012', ['typeObject', 'util-type']);     // Branch:
+    if (typeof typeOf === 'undefined') Message.error('ES012', ['typeOf', 'util-type']);             // Branch:
     
     //==============================================================
     // 4. module implementation   
@@ -146,7 +160,7 @@
             }
         } else {
             for (var key in object) {
-                if (object.hasOwnProperty(key)) {
+                if (object.hasOwnProperty(key)) {   // Branch:
                     copy[key] = deepCopy(object[key]);
                 }
             }
@@ -232,7 +246,7 @@
         } 
 
         for (var i = 0; i < p_ctor['_UNION'].length; i++) {
-            if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {
+            if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {        // Branch:
                 p_obj._interface.push(p_ctor['_UNION'][i]);
                 addCnt++;
             }
@@ -275,14 +289,14 @@
         }
         function typeName(obj) {
             if (typeof obj === 'function') return obj.name;
-            if (_isObject(obj)) {
+            if (_isObject(obj)) {                       // Branch: ~
                 var constructor = extendType(obj);
                 return  constructor.name;
             }
             // return 'unknown';
         }
         function extendType(obj) {
-            var proto = obj.__proto__ || Object.getPrototypeOf(obj);
+            var proto = obj.__proto__ || Object.getPrototypeOf(obj);        // ~ Branch:
             return proto.constructor;
         }
     };
@@ -302,9 +316,14 @@
         exports.allowType = allowType;
         exports.extendType = extendType;
         exports.isMatchType = isMatchType;
+        exports.isAllowType = isAllowType;
         exports.matchType = matchType;
         exports.deepCopy = deepCopy;
         exports.deepEqual = deepEqual;
+        exports.isProtoChain = isProtoChain;
+        exports.typeObject = typeObject;
+        exports.typeOf = typeOf;
+
     } else {
         var ns = {
             inherits: inherits,
@@ -317,9 +336,13 @@
             allowType: allowType,
             extendType: extendType,
             isMatchType: isMatchType,
+            isAllowType: isAllowType,
             matchType: matchType,
             deepCopy: deepCopy,
             deepEqual: deepEqual,
+            isProtoChain: isProtoChain,
+            typeObject: typeObject,
+            typeOf: typeOf,
         };
         _global._L.Util = ns;
         _global._L.Common.Util = ns;

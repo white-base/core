@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe.skip("[ GROUP]", () => {
+describe("[ GROUP]", () => {
     describe("load: observer.js <Observer>", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -44,11 +44,16 @@ describe.skip("[ GROUP]", () => {
             require('../src/util-type');
             
             expect(global._L.Common.Util.getAllProperties).toBeDefined();
+            expect(global._L.Common.Util.deepEqual).toBeDefined();
             expect(global._L.Common.Util.isMatchType).toBeDefined();
-            // expect(global._L.Common.Util.checkUnionType).toBeDefined();
+            expect(global._L.Common.Util.isAllowType).toBeDefined();
             expect(global._L.Common.Util.matchType).toBeDefined();
-            // expect(global._L.Common.Util.validUnionType).toBeDefined();
-            expect(global._L.Common.Util.getType).toBeDefined();
+            expect(global._L.Common.Util.allowType).toBeDefined();
+            expect(global._L.Common.Util.getTypes).toBeDefined();
+            expect(global._L.Common.Util.extendType).toBeDefined();
+            expect(global._L.Common.Util.typeObject).toBeDefined();
+            expect(global._L.Common.Util.typeOf).toBeDefined();
+            expect(global._L.Common.Util.isProtoChain).toBeDefined();
         });
     });
     
@@ -58,22 +63,26 @@ describe.skip("[ GROUP]", () => {
             global._L = null;
          });
         it("- namespace : util.js ", () => {
-            require('../src/message');
+            require('../src/message'); 
             require('../src/util-type');
             require('../src/util');
             
-            // util-type.js
             expect(global._L.Common.Util.getAllProperties).toBeDefined();
+            expect(global._L.Common.Util.deepEqual).toBeDefined();
             expect(global._L.Common.Util.isMatchType).toBeDefined();
-            // expect(global._L.Common.Util.checkUnionType).toBeDefined();
+            expect(global._L.Common.Util.isAllowType).toBeDefined();
             expect(global._L.Common.Util.matchType).toBeDefined();
-            // expect(global._L.Common.Util.validUnionType).toBeDefined();
-            expect(global._L.Common.Util.getType).toBeDefined();
+            expect(global._L.Common.Util.allowType).toBeDefined();
+            expect(global._L.Common.Util.getTypes).toBeDefined();
+            expect(global._L.Common.Util.extendType).toBeDefined();
+            expect(global._L.Common.Util.typeObject).toBeDefined();
+            expect(global._L.Common.Util.typeOf).toBeDefined();
+            expect(global._L.Common.Util.isProtoChain).toBeDefined();
             /// util.js
             expect(global._L.Common.Util.inherits).toBeDefined();
             expect(global._L.Common.Util.getArrayDepth).toBeDefined();
             expect(global._L.Common.Util.createGuid).toBeDefined();
-            expect(global._L.Common.Util.implements).toBeDefined();
+            expect(global._L.Common.Util.implements).toBeDefined(); 
         });
         it("- 예외 : util-type.js 로딩이 인된경우", () => {
             require('../src/message');
@@ -94,8 +103,8 @@ describe.skip("[ GROUP]", () => {
         it("- 예외 : util-type.js : getType 제거", () => {
             require('../src/message');
             require('../src/util-type');
-            delete global._L.Common.Util.getType;
-            expect(() => require('../src/util')).toThrow(/getType/);
+            delete global._L.Common.Util.getTypes;
+            expect(() => require('../src/util')).toThrow(/getTypes/);
         });
 
         it("- 예외 : util-type.js : isMatchType 제거", () => {

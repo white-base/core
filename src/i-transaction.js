@@ -42,7 +42,7 @@
          * @abstract
          */
         ITransaction.prototype.acceptChanges  = function() {
-            // Message.error('ES013', ['acceptChanges()']);
+            Message.error('ES013', ['acceptChanges()']);
         };
 
         /**
@@ -50,7 +50,7 @@
          * @abstract
          */
         ITransaction.prototype.rejectChanges  = function() {
-            // Message.error('ES013', ['rejectChanges()']);
+            Message.error('ES013', ['rejectChanges()']);
         };
 
         return ITransaction;

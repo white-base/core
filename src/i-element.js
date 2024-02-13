@@ -50,7 +50,7 @@
          * @abstract
          */
         IElement.prototype.clone  = function() {
-            // Message.error('ES013', ['clone()']);
+            Message.error('ES013', ['clone()']);
         };
 
         return IElement;
