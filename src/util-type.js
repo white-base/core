@@ -687,7 +687,7 @@
         else if (oriType['$type'] === 'class') classAllow();
         else if (oriType['$type'] === 'union') unionAllow();
         else if (oriType['$type'] === 'function') functionAllow();
-        else throw new Error('allow 처리할 타입이 없습니다.');      // Line:
+        else Message.error('ES022', ['type']);    // Line:
 
         // inner function
         function arrayAllow() {
@@ -702,7 +702,8 @@
             } else if (oriType['kind'] === '_ANY_') {
                 if (tarType['kind'] && tarType['list'].length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
                 if (tarType['list'].length > 0) return;
-                throw new Error('array any 는 하나 이싱 요소가 존재해야 합니다.');  // Line:
+                Message.error('ES0738', ['array(any)', error]); // Line:
+                // throw new Error('array any 는 하나 이싱 요소가 존재해야 합니다.');  
 
             // _SEQ_ (sequence)
             } else if (oriType['kind'] === '_SEQ_') {
@@ -828,38 +829,13 @@
                 if (typeof tarType['ref'] !== 'undefined') return;
                 Message.error('ES0714', ['_ANY_', 'undefined']);
             
-            // _EUN_ (enumeration)
-            } else if (oriType['kind'] === '_EUM_') {
-                if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
-                    throw new Error('target 은 _eum_ 타입만 가능합니다.');
-                }
-                if (oriType['list'].length === 0) throw new Error('origin _eum_(enum) 1개이상 항목이 필요합니디.');
-                if (tarType['list'].length === 0) throw new Error('target _eum_(enum) 1개이상 항목이 필요합니디.');
-                for (var ii = 0; ii < oriType['list'].length; ii++) {
-                    if (!_isLiteral(oriType['list'][ii])) throw new Error('origin _eum_(enum)은 리터럴 타입만 가능합니다.');
-                }
-                for (var ii = 0; ii < tarType['list'].length; ii++) {
-                    if (!_isLiteral(tarType['list'][ii])) throw new Error('target _eum_(enum)은 리터럴 타입만 가능합니다.');
-                }
-
-            // _DEF_ (default)
-            } else if (oriType['kind'] === '_DEF_') {
-                if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
-                    throw new Error('target 은 _def_ 타입만 가능합니다.');
-                }
-                if (oriType['list'].length === 0) throw new Error('origin _def_(default) 1개이상 항목이 필요합니디.');
-                if (tarType['list'].length === 0) throw new Error('target _def_(default) 1개이상 항목이 필요합니디.');
-                if (!_isLiteral(oriType['list'][0])) throw new Error('origin _def_(default) 1번째는 리터럴 타입만 가능합니다.');
-                if (!_isLiteral(tarType['list'][0])) throw new Error('target _def_(default) 1번째는 리터럴 타입만 가능합니다.');
-                // if (typeof target === 'undefined') {
-                //     target = oriType['list'][0];
-                //     return;
-                // }
+            // _NON_ TODO: 확인 팔요, 공통적으로 
 
             // _ERR_ (error)
             } else if (oriType['kind'] === '_ERR_') {
                 if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
-                    throw new Error('target 은 _err_ 타입만 가능합니다.');
+                    Message.error('ES021', ['target', 'choice(err)']);
+                    // throw new Error('target 은 _err_ 타입만 가능합니다.');
                 }
                 return;
             // _SEQ_ (sequence)
@@ -924,6 +900,44 @@
                 //     if (!success) Message.error('ES0738', ['_OPT_', extendType(arrTarget[i])['$type']]);
                 // }
 
+            // _EUN_ (enumeration)
+            } else if (oriType['kind'] === '_EUM_') {
+                if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
+                    Message.error('ES021', ['target', 'choice(eum)']);
+                    // throw new Error('target 은 _eum_ 타입만 가능합니다.');
+                }
+                if (oriType['list'].length === 0) Message.error('ES0738', ['origin']);
+                // if (oriType['list'].length === 0) throw new Error('origin _eum_(enum) 1개이상 항목이 필요합니디.');
+                if (tarType['list'].length === 0) Message.error('ES0738', ['target']);
+                // if (tarType['list'].length === 0) throw new Error('target _eum_(enum) 1개이상 항목이 필요합니디.');
+                for (var ii = 0; ii < oriType['list'].length; ii++) {
+                    if (!_isLiteral(oriType['list'][ii])) Message.error('ES021', ['origin choice(eum)', '리터럴']);
+                    // if (!_isLiteral(oriType['list'][ii])) throw new Error('origin _eum_(enum)은 리터럴 타입만 가능합니다.');
+                }
+                for (var ii = 0; ii < tarType['list'].length; ii++) {
+                    if (!_isLiteral(tarType['list'][ii])) Message.error('ES021', ['target choice(eum)', '리터럴']);
+                    // if (!_isLiteral(tarType['list'][ii])) throw new Error('target _eum_(enum)은 리터럴 타입만 가능합니다.');
+                }
+
+            // _DEF_ (default)
+            } else if (oriType['kind'] === '_DEF_') {
+                if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
+                    Message.error('ES021', ['target choice', 'choice(def)']);
+                    // throw new Error('target 은 _def_ 타입만 가능합니다.');
+                }
+                if (oriType['list'].length === 0) Message.error('ES0738', ['origin choice(def)']);
+                // if (oriType['list'].length === 0) throw new Error('origin _def_(default) 1개이상 항목이 필요합니디.');
+                if (tarType['list'].length === 0) Message.error('ES0738', ['target choice(def)']);
+                // if (tarType['list'].length === 0) throw new Error('target _def_(default) 1개이상 항목이 필요합니디.');
+                if (!_isLiteral(oriType['list'][0])) Message.error('ES021', ['origin choice(def)', '1번재는 리터럴타입']);
+                // if (!_isLiteral(oriType['list'][0])) throw new Error('origin _def_(default) 1번째는 리터럴 타입만 가능합니다.');
+                if (!_isLiteral(tarType['list'][0])) Message.error('ES021', ['target choice(def)', '1번재는 리터럴타입']);
+                // if (!_isLiteral(tarType['list'][0])) throw new Error('target _def_(default) 1번째는 리터럴 타입만 가능합니다.');
+                // if (typeof target === 'undefined') {
+                //     target = oriType['list'][0];
+                //     return;
+                // }
+
             } else {
                     Message.error('ES0735', [oriType['kind']]);
             }
@@ -982,7 +996,8 @@
         function unionAllow() {
             var list;
 
-            if (tarType['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
+            if (tarType['$type'] !== 'union') Message.error('ES024', ['target', 'union']);
+            // if (tarType['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
             list = getAllProperties(oriType['ref']);
 
             for (var i = 0; i < list.length; i++) {
@@ -1003,12 +1018,15 @@
                 if (oriType['name'] === target.name  
                 || oriType['name'] === tarType['name'] 
                 || (tarType['func'] && oriType['name'] === tarType['func'].name)) return;
-                throw new Error('지정한 함수 이름과 다릅니다.');
+                Message.error('ES0740', [oriType['name'], 'target name']);
+                // throw new Error('지정한 함수 이름과 다릅니다.');
             }
             if (oriType['func']) {
-                if (typeof tarType['func'] !== 'function') throw new Error('func = function 타입이 아닙니다.');
+                if (typeof tarType['func'] !== 'function') Message.error('ES024', ['target func', 'function']);
+                // if (typeof tarType['func'] !== 'function') throw new Error('func = function 타입이 아닙니다.');
                 if (isProtoChain(tarType['func'], oriType['func'])) return;
-                throw new Error('지정한 함수 prop 타입이 다릅니다.');
+                Message.error('ES0740', ['origin', 'func 타입']);
+                // throw new Error('지정한 함수 func 타입이 다릅니다.');
             }
 
             if (!oriType['return'] && (!oriType['params'] || oriType['params'].length === 0)) return;
@@ -1112,7 +1130,8 @@
 
             // _ANY_ (any)
             } else if (defType['kind'] === '_ANY_') {
-                if (target.length === 0) throw new Error('array any 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
+                if (target.length === 0) Message.error('ES0738', ['array(any)', error]);
+                // if (target.length === 0) throw new Error('array any 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
                 return;
 
             // _SEQ_ (sequence)
@@ -1122,16 +1141,19 @@
                     var _tar    = tarType['list'][i];
                     if (typeof _tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
                     if (_isLiteral(_elem)) {
-                        if (!_equalLiternal(_elem, _tar)) throw new Error('array seq 리터럴 타입이 다릅니다.');
+                        if (!_equalLiternal(_elem, _tar)) Message.error('ES0740', ['array(seq)', '리터럴 타입']);
+                        // if (!_equalLiternal(_elem, _tar)) throw new Error('array seq 리터럴 타입이 다릅니다.');
                     } else {
-                        if (_execMatch(_elem, _tar, opt, tarName)) throw new Error('array seq 타입이 다릅니다.');
+                        if (_execMatch(_elem, _tar, opt, tarName)) Message.error('ES0740', ['array(seq)', '리터럴 타입']);
+                        // if (_execMatch(_elem, _tar, opt, tarName)) throw new Error('array seq 타입이 다릅니다.');
                     }
                 }
                 return;
 
             // _REQ_ (require)
             } else if (defType['kind'] === '_REQ_') {
-                if (target.length === 0) throw new Error('array req 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
+                if (target.length === 0) Message.error('ES0717', ['array']);
+                // if (target.length === 0) throw new Error('array req 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
 
             // _OPT_ (option)
             } else if (defType['kind'] === '_OPT_') {
@@ -1174,16 +1196,20 @@
             // _ANY_ (any)
             } else if (defType['kind'] === '_ANY_') {
                 if (typeof target !== 'undefined') return;
-                Message.error('ES075', ['choice', '_ANY_', 'undefined']);
+                Message.error('', ['choice', '_ANY_', 'undefined']);
 
             // _NON_ (none)
             } else if (defType['kind'] === '_NON_') {
                 if (typeof target === 'undefined') return;
-                throw new Error(' 어떤한 값도 설정할 수 없습니다.');
+                Message.error('ES0741', ['choice(non)']);
+                // throw new Error(' 어떤한 값도 설정할 수 없습니다.');
+
+            // _ERR_ (error) TODO: 테스트 필요
 
             // _REQ_ (require)
             } else if (defType['kind'] === '_REQ_') {
-                if (defType['list'].length === 0) throw new Error('_req_(require) 필수 항목이 없습니다.');
+                if (defType['list'].length === 0) Message.error('ES0734');
+                // if (defType['list'].length === 0) throw new Error('_req_(require) 필수 항목이 없습니다.');
 
             // _OPT_ (option)
             } else if (defType['kind'] === '_OPT_') {
@@ -1191,15 +1217,19 @@
 
             // _EUN_ (enumeration)
             } else if (defType['kind'] === '_EUM_') {
-                if (defType['list'].length === 0) throw new Error('_eum_(enum) 1개이상 항목이 필요합니디.');
+                if (defType['list'].length === 0) Message.error('ES0738', ['origin']);
+                // if (defType['list'].length === 0) throw new Error('_eum_(enum) 1개이상 항목이 필요합니디.');
                 for (var ii = 0; ii < defType['list'].length; ii++) {
-                    if (!_isLiteral(defType['list'][ii])) throw new Error('_eum_(enum)은 리터럴 타입만 가능합니다.');
+                    if (!_isLiteral(defType['list'][ii])) Message.error('ES021', ['origin choice(eum)', '리터럴']);
+                    // if (!_isLiteral(defType['list'][ii])) throw new Error('_eum_(enum)은 리터럴 타입만 가능합니다.');
                 }
 
             // _DEF_ (default)
             } else if (defType['kind'] === '_DEF_') {
-                if (defType['list'].length === 0) throw new Error('_def_(default) 1개이상 항목이 필요합니디.');
-                if (!_isLiteral(defType['list'][0])) throw new Error('_def_(default) 1번째는 리터럴 타입만 가능합니다.');
+                if (defType['list'].length === 0) Message.error('ES0738', ['origin choice(def)']);
+                // if (defType['list'].length === 0) throw new Error('_def_(default) 1개이상 항목이 필요합니디.');
+                if (!_isLiteral(defType['list'][0])) Message.error('', ['origin choice(def)', '1번재는 리터럴타입']);
+                // if (!_isLiteral(defType['list'][0])) throw new Error('_def_(default) 1번째는 리터럴 타입만 가능합니다.');
                 if (typeof target === 'undefined') {
                     target = defType['list'][0];
                     return;
@@ -1244,7 +1274,8 @@
         function unionMatch() {
             var list;
             
-            if (tarType['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
+            if (tarType['$type'] !== 'union') Message.error('ES024', ['target', 'union']);
+            // if (tarType['$type'] !== 'union') throw new Error('union 타입이 아닙니다.');
             list = getAllProperties(defType.ref);
 
             for (var i = 0; i < list.length; i++) {
@@ -1269,12 +1300,15 @@
                 if (defType['name'] === target.name 
                 || defType['name'] === tarType['name'] 
                 || (tarType['func'] && defType['name'] === tarType['func'].name)) return;
-                throw new Error('지정한 함수 이름과 다릅니다.');
+                Message.error('ES0740', [defType['name'], 'target name']);
+                // throw new Error('지정한 함수 이름과 다릅니다.');
             }
             if (defType['func']) {
-                if (typeof tarType['func'] !== 'function') throw new Error('func = function 타입이 아닙니다.');
+                if (typeof tarType['func'] !== 'function') Message.error('ES024', ['target func', 'function']);
+                // if (typeof tarType['func'] !== 'function') throw new Error('func = function 타입이 아닙니다.');
                 if (isProtoChain(tarType['func'], defType['func'])) return;
-                throw new Error('지정한 함수 prop 타입이 다릅니다.');
+                Message.error('ES0740', ['origin', 'func 타입']);
+                // throw new Error('지정한 함수 prop 타입이 다릅니다.');
             }
 
             if (!defType['return'] && (!defType['params'] || defType['params'].length === 0)) return;
@@ -1329,7 +1363,7 @@
             if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
             _execMatch(chkType, target, opt);
         } catch (error) {
-            Message.error('ES069', ['check type', error]);
+            Message.error('ES069', ['check type', error.message]);
         }
     };
 

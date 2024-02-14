@@ -18,7 +18,7 @@ describe.skip("[target: util-type.js.js]", () => {
         // MetaRegistry.init();
         
     });
-    describe.skip('typeOf(type) : 타입 얻기 ', () => {
+    describe('typeOf(type) : 타입 얻기 ', () => {
         it('- typeOf() : 원시 타입 얻기 ', () => {
             // undefined
             expect(typeOf()                ).toBe('undefined');

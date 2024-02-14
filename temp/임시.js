@@ -34,6 +34,9 @@ var f = new function(){}
 var s1 = Symbol('a');
 var s2 = Symbol('b');
 
+
+a = 10n
+
 console.log(bb);
 console.log(aa);
 console.log(0);

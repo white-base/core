@@ -5618,6 +5618,7 @@ describe("[target: util-type.js.js]", () => {
         });
     });
     describe('matchType(type, target): bool  <타입 매치 예외> ', () => {
+        // ES024
         it('- Object, {} : object 타입 (regex, new, null) ', () => {
             expect(()=> matchType(Object, 'str'     )).toThrow(/ES024/);
             expect(()=> matchType(Object, 1         )).toThrow(/ES024/);
@@ -5625,14 +5626,17 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Object, true      )).toThrow(/ES024/);
             expect(()=> matchType(Object, null      )).toThrow(/ES024/);
         });
+        // ES069
         it('- isMatchType() : object (원시 객체 기본값) ', () => {
             expect(()=> matchType({},         Symbol()    )).toThrow(/ES069/)
         });
+        // ES026
         it('- null, undefined ', () => {
             expect(()=>matchType(null,              false           )).toThrow('null');
             expect(()=>matchType({aa: undefined},   {aa:null}       )).toThrow('undefined');
             expect(()=>matchType(undefined,         {aa:null}       )).toThrow('ES026');
         });
+        // ES074
         it('- String, "str" : string 타입 ', () => {
             expect(()=> matchType('str',    function any(){}    )).toThrow(/ES074/);
             expect(()=> matchType(String,   function any(){}    )).toThrow(/ES074/);
@@ -5694,8 +5698,9 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Symbol,  {aa:1}              )).toThrow(/ES074/);
             expect(()=> matchType(Symbol,  Number              )).toThrow(/ES074/);
         });
+        // ES076
         it('- isMatchType() : choice ', () => {      
-            expect(()=> matchType([['_any_']],                 undefined   )).toThrow(/ES075/)
+            expect(()=> matchType([['_any_']],                 undefined   )).toThrow(/ES069/)
             // expect(()=> matchType([['_seq_']],                 [[1,2,3]]   )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
@@ -5823,6 +5828,12 @@ describe("[target: util-type.js.js]", () => {
         });
     });
     describe('allowType(type, target): bool  <타입 매치 예외> ', () => {
+        it('- allowType() : S0739, 처리할 타입이 없습니다.  ', () => { 
+            var type1  = { $type: 'err' }
+
+            // expect(()=> allowType(type1, null)).toThrow('S0739')
+        });
+
         it('- allowType(a, b) : 원시 자료형 : 예외 ', () => { 
             // null
             expect(()=> allowType(null,      undefined   )).toThrow('ES0713')
