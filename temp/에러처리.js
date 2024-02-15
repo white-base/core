@@ -4,7 +4,7 @@ const {extendType, typeObject, typeOf}  = require('../src/util-type');
 const {isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 
-
+ 
 
 
 // matchType([[Array, String]], 1)
@@ -40,20 +40,46 @@ class MyError extends Error {
 //     throw new MyError('1')
 //     // throw new CustomError('2')
 //   }
-  
+
+
+class Type2Error extends Error {
+  constructor(message) {
+    super(message);
+  }
+}
+class ExtendTypeError extends Error {
+
+  constructor(message) {
+    super(message);
+  }
+}
+
+
+
+try {
+
   try {
     // start()
     // throw new MyError('생성메세지')
-    throw new MyError()
+    // throw new MyError()
+    throw new ExtendTypeError()
+
   } catch (e) {
     // if (e instanceof MyError) {
     //   console.log('catch MyError')
     // } else if (e instanceof CustomError) {
     //   console.log('catch CustomError')
     // }
-    e.msg.push('외부')
+    console.log('2')
+    // e.msg.push('외부')
     throw e;
   }
+
+} catch(ee) {
+  console.log('22')
+  throw ee;
+}
+
 
 
 
