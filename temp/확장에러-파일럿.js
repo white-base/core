@@ -26,7 +26,7 @@ function call(arr) {
         var or = [];
         or.push('aa:choice(opt) [typ1, type2] ')
 
-        console.error('multi path: '+ or.join(' / '))
+        // console.error('multi path: '+ or.join(' / '))
         console.error('fail path: '+ rev.join(' / '))   // unoin 의 경우, 이름의 있는 경우만
         // console.warn(e.list.join(' - '))
         // console.log(e.list.join(' - '))

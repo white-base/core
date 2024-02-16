@@ -9,7 +9,7 @@ const { isMatchType, matchType }  = require('../src/util-type');
 
 // matchType([[Array, String]], 1)
 
-// allowType(['_seq_', Number], ['_seq_', Boolean])
+allowType(['_seq_', Number], ['_seq_', Boolean])
 
 // a  / b
 
@@ -56,29 +56,29 @@ class ExtendTypeError extends Error {
 
 
 
-try {
+// try {
 
-  try {
-    // start()
-    // throw new MyError('생성메세지')
-    // throw new MyError()
-    throw new ExtendTypeError()
+//   try {
+//     // start()
+//     // throw new MyError('생성메세지')
+//     // throw new MyError()
+//     throw new ExtendTypeError()
 
-  } catch (e) {
-    // if (e instanceof MyError) {
-    //   console.log('catch MyError')
-    // } else if (e instanceof CustomError) {
-    //   console.log('catch CustomError')
-    // }
-    console.log('2')
-    // e.msg.push('외부')
-    throw e;
-  }
+//   } catch (e) {
+//     // if (e instanceof MyError) {
+//     //   console.log('catch MyError')
+//     // } else if (e instanceof CustomError) {
+//     //   console.log('catch CustomError')
+//     // }
+//     console.log('2')
+//     // e.msg.push('외부')
+//     throw e;
+//   }
 
-} catch(ee) {
-  console.log('22')
-  throw ee;
-}
+// } catch(ee) {
+//   console.log('22')
+//   throw ee;
+// }
 
 
 
