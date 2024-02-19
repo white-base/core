@@ -1363,7 +1363,7 @@
             if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
             _execMatch(chkType, target, opt);
         } catch (error) {
-            console.error(error.message);
+            // console.error(error.message);
             // throw new Error(Message.get('ES069', ['check type', 'path: aa / bb ']));
             throw new Error(Message.get('ES069', ['check type', error.message]));
         }
