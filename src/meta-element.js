@@ -37,7 +37,8 @@
     if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
 
     //==============================================================
-    // 4. 모듈 구현
+    // 4. module implementation   
+    
     // private variable
     
     var MetaElement  = (function (_super) {

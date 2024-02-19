@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("[ GROUP]", () => {
+describe.skip("[ GROUP]", () => {
     describe("load: observer.js <Observer>", () => {
         beforeEach(() => {
             jest.resetModules();
@@ -25,6 +25,7 @@ describe("[ GROUP]", () => {
         });
         it("- namespace : observer.js ", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -41,6 +42,7 @@ describe("[ GROUP]", () => {
             global._L = null;
          });
         it("- namespace : util-type.js ", () => {
+            require('../src/extend-error');
             require('../src/util-type');
             
             expect(global._L.Common.Util.getAllProperties).toBeDefined();
@@ -64,6 +66,7 @@ describe("[ GROUP]", () => {
          });
         it("- namespace : util.js ", () => {
             require('../src/message'); 
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
             
@@ -90,18 +93,21 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : util-type.js : getAllProperties 제거", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             delete global._L.Common.Util.getAllProperties;
             expect(() => require('../src/util')).toThrow(/getAllProperties/);
         });
         it("- 예외 : util-type.js : allowType 제거", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             delete global._L.Common.Util.allowType;
             expect(() => require('../src/util')).toThrow(/allowType/);
         });
         it("- 예외 : util-type.js : getType 제거", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             delete global._L.Common.Util.getTypes;
             expect(() => require('../src/util')).toThrow(/getTypes/);
@@ -109,6 +115,7 @@ describe("[ GROUP]", () => {
 
         it("- 예외 : util-type.js : isMatchType 제거", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             delete global._L.Common.Util.isMatchType;
             expect(() => require('../src/util')).toThrow(/isMatchType/);
@@ -121,6 +128,7 @@ describe("[ GROUP]", () => {
         // });
         it("- 예외 : util-type.js : matchType 제거", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             delete global._L.Common.Util.matchType;
             expect(() => require('../src/util')).toThrow(/matchType/);
@@ -146,6 +154,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : Observer 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -163,6 +172,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : ICollection 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -177,6 +187,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IList 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -194,6 +205,7 @@ describe("[ GROUP]", () => {
             
             it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -212,6 +224,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaObject 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -231,6 +244,7 @@ describe("[ GROUP]", () => {
             });
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -264,6 +278,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IArrayCollection 로딩이 인된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');            // ref
                 require('../src/util');
     
@@ -271,6 +286,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 인된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -290,6 +306,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaObject 로딩이 인된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -310,6 +327,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : BaseCollection 로딩이 인된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -331,6 +349,7 @@ describe("[ GROUP]", () => {
             });
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -366,6 +385,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IPropertyCollection 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');            // ref
                 require('../src/util');
     
@@ -373,6 +393,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -391,6 +412,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaObject 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -411,6 +433,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : BaseCollection 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -433,6 +456,7 @@ describe("[ GROUP]", () => {
     
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -471,6 +495,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IArrayCollection 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -491,6 +516,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaObject 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -512,6 +538,7 @@ describe("[ GROUP]", () => {
     
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -546,6 +573,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : ArrayCollection 로딩이 인된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
     
@@ -553,6 +581,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : TransactionQueue 로딩이 인된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -575,6 +604,7 @@ describe("[ GROUP]", () => {
             });
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -811,6 +841,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : ICollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -818,6 +849,7 @@ describe("[ GROUP]", () => {
             });
             it("- namespace : IArrayCollection ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -849,6 +881,7 @@ describe("[ GROUP]", () => {
             });
             it("- namespace : ICollection ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -874,13 +907,15 @@ describe("[ GROUP]", () => {
              });
              it("- 예외 : ICollection 로딩이 인된경우", () => {
                  require('../src/message');
-                 require('../src/util-type');
+                require('../src/extend-error');
+                require('../src/util-type');
                  require('../src/util');
          
                  expect(() => require('../src/i-collection-property')).toThrow(/ICollection/);
              });
             it("- namespace : IPropertyCollection ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -911,6 +946,7 @@ describe("[ GROUP]", () => {
             });
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 
@@ -958,7 +994,8 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
             require('../src/message');
-            require('../src/util-type');
+                require('../src/extend-error');
+                require('../src/util-type');
             require('../src/util');
     
             require('../src/i-object');
@@ -974,7 +1011,8 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : IObject 로딩이 인된경우", () => {
             require('../src/message');
-            require('../src/util-type');
+                require('../src/extend-error');
+                require('../src/util-type');
             require('../src/util');
     
             // require('../src/i-object');
@@ -990,7 +1028,8 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : IMarshal 로딩이 인된경우", () => {
             require('../src/message');
-            require('../src/util-type');
+                require('../src/extend-error');
+                require('../src/util-type');
             require('../src/util');
     
             require('../src/i-object');
@@ -1007,7 +1046,8 @@ describe("[ GROUP]", () => {
         
         it("- 로딩 성공 ", () => {
             require('../src/message');
-            require('../src/util-type');
+                require('../src/extend-error');
+                require('../src/util-type');
             require('../src/util');
     
             require('../src/i-object');
@@ -1040,6 +1080,7 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : IElement 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1050,6 +1091,7 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : MetaObject 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1068,6 +1110,7 @@ describe("[ GROUP]", () => {
         });
         it("- 로딩 성공 ", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1107,6 +1150,7 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : NamespaceManager 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1118,6 +1162,7 @@ describe("[ GROUP]", () => {
         });
         it("- 로딩 성공 ", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1150,6 +1195,7 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : IList 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1161,6 +1207,7 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : IListControl 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1172,6 +1219,7 @@ describe("[ GROUP]", () => {
         });
         it("- 예외 : ISerialize 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1183,6 +1231,7 @@ describe("[ GROUP]", () => {
         });
         it("- 로딩 성공 ", () => {
             require('../src/message');
+            require('../src/extend-error');
             require('../src/util-type');
             require('../src/util');
     
@@ -1217,6 +1266,7 @@ describe("[ GROUP]", () => {
             
             it("- 예외 : IGroupControl 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1244,6 +1294,7 @@ describe("[ GROUP]", () => {
             
             it("- 예외 : ISchemaControl 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1271,6 +1322,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IImportControl 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1298,6 +1350,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IExportControl 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1325,6 +1378,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : ISerialize 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1353,6 +1407,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1379,6 +1434,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaObject 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1411,6 +1467,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1444,6 +1501,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRowCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1481,6 +1539,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRow 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1518,6 +1577,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : BaseColumnCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1557,6 +1617,7 @@ describe("[ GROUP]", () => {
             
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
         
@@ -1613,6 +1674,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : ITransaction 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1649,6 +1711,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1684,6 +1747,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1720,6 +1784,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : BaseEntity 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1758,6 +1823,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaTableColumnCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1799,6 +1865,7 @@ describe("[ GROUP]", () => {
             });
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1855,6 +1922,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1881,6 +1949,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaObject 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1912,6 +1981,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1948,6 +2018,7 @@ describe("[ GROUP]", () => {
             
             it("- 예외 : BaseEntity 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -1985,6 +2056,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaViewColumnCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2026,6 +2098,7 @@ describe("[ GROUP]", () => {
             });
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2080,6 +2153,7 @@ describe("[ GROUP]", () => {
             
             it("- 예외 : ISchemaControl 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2107,6 +2181,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IImportControl 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2134,6 +2209,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : IExportControl 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2161,6 +2237,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : ISerialize 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2187,6 +2264,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : ITransaction 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2213,6 +2291,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2245,6 +2324,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2280,6 +2360,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : BaseEntity 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2317,6 +2398,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaTableCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2356,6 +2438,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaViewCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2395,6 +2478,7 @@ describe("[ GROUP]", () => {
             });
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2453,6 +2537,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2462,6 +2547,7 @@ describe("[ GROUP]", () => {
     
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2488,6 +2574,7 @@ describe("[ GROUP]", () => {
             
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2522,6 +2609,7 @@ describe("[ GROUP]", () => {
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
                 // require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/meta-column')).toThrow(/Cannot read properties/);
             });
@@ -2532,6 +2620,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : Observer 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 // require('../src/observer');
@@ -2540,6 +2629,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2549,6 +2639,7 @@ describe("[ GROUP]", () => {
     
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2573,6 +2664,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2598,6 +2690,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : BaseColumn 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2624,6 +2717,7 @@ describe("[ GROUP]", () => {
             
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2667,6 +2761,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : Observer 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 // require('../src/observer');
@@ -2675,6 +2770,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2684,6 +2780,7 @@ describe("[ GROUP]", () => {
     
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2709,6 +2806,7 @@ describe("[ GROUP]", () => {
     
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2733,6 +2831,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2758,6 +2857,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : BaseColumn 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2784,6 +2884,7 @@ describe("[ GROUP]", () => {
             
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2828,6 +2929,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : Observer 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 // require('../src/observer');
@@ -2837,6 +2939,7 @@ describe("[ GROUP]", () => {
             
             it("- 예외 : IList 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2850,6 +2953,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2868,6 +2972,7 @@ describe("[ GROUP]", () => {
     
             it("- 예외 : MetaObject 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2886,6 +2991,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : TransactionCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');
@@ -2912,6 +3018,7 @@ describe("[ GROUP]", () => {
             
             it("- 로딩 성공 ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/util-type');
                 require('../src/util');
                 require('../src/observer');

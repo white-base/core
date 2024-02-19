@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var getAllProperties;
     var extendType;
     var matchType;
@@ -30,6 +31,7 @@
     // 2. import module
     if (isNode) {
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         getAllProperties            = require('./util-type').getAllProperties;
         extendType                    = require('./util-type').extendType;
         allowType              = require('./util-type').allowType;
@@ -43,6 +45,7 @@
         typeOf                   = require('./util-type').typeOf;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         getAllProperties            = _global._L.Util.getAllProperties
         extendType                    = _global._L.Util.extendType
         allowType              = _global._L.Util.allowType
@@ -58,17 +61,18 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof getAllProperties === 'undefined') Message.error('ES012', ['getAllProperties', 'util-type']);
-    if (typeof extendType === 'undefined') Message.error('ES012', ['extendType', 'util-type']);     // Branch:
-    if (typeof allowType === 'undefined') Message.error('ES012', ['allowType', 'util-type']);
-    if (typeof isMatchType === 'undefined') Message.error('ES012', ['isMatchType', 'util-type']);
-    if (typeof isAllowType === 'undefined') Message.error('ES012', ['isAllowType', 'util-type']);   // Branch:
-    if (typeof matchType === 'undefined') Message.error('ES012', ['matchType', 'util-type']);
-    if (typeof deepEqual === 'undefined') Message.error('ES012', ['deepEqual', 'util-type']);       // Branch:
-    if (typeof isProtoChain === 'undefined') Message.error('ES012', ['isProtoChain', 'util-type']); // Branch:
-    if (typeof getTypes === 'undefined') Message.error('ES012', ['getTypes', 'util-type']);
-    if (typeof typeObject === 'undefined') Message.error('ES012', ['typeObject', 'util-type']);     // Branch:
-    if (typeof typeOf === 'undefined') Message.error('ES012', ['typeOf', 'util-type']);             // Branch:
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof getAllProperties === 'undefined') throw new Error(Message.get('ES012', ['getAllProperties', 'util-type']));
+    if (typeof extendType === 'undefined') throw new Error(Message.get('ES012', ['extendType', 'util-type']));     // Branch:
+    if (typeof allowType === 'undefined')throw new Error(Message.get('ES012', ['allowType', 'util-type']));
+    if (typeof isMatchType === 'undefined') throw new Error(Message.get('ES012', ['isMatchType', 'util-type']));
+    if (typeof isAllowType === 'undefined') throw new Error(Message.get('ES012', ['isAllowType', 'util-type']));   // Branch:
+    if (typeof matchType === 'undefined') throw new Error(Message.get('ES012', ['matchType', 'util-type']));
+    if (typeof deepEqual === 'undefined') throw new Error(Message.get('ES012', ['deepEqual', 'util-type']));       // Branch:
+    if (typeof isProtoChain === 'undefined') throw new Error(Message.get('ES012', ['isProtoChain', 'util-type'])); // Branch:
+    if (typeof getTypes === 'undefined') throw new Error(Message.get('ES012', ['getTypes', 'util-type']));
+    if (typeof typeObject === 'undefined') throw new Error(Message.get('ES012', ['typeObject', 'util-type']));     // Branch:
+    if (typeof typeOf === 'undefined') throw new Error(Message.get('ES012', ['typeOf', 'util-type']));             // Branch:
     
     //==============================================================
     // 4. module implementation   
@@ -221,8 +225,8 @@
         var addCnt = 0;
         // var union = [];
 
-        if (typeof p_ctor !== 'function') Message.error('ES024', ['p_ctor', 'function']);
-        if (!_isObject(p_obj)) Message.error('ES024', ['p_obj', 'obj']);
+        if (typeof p_ctor !== 'function') throw new Error(Message.get('ES024', ['p_ctor', 'function']));
+        if (!_isObject(p_obj)) throw new Error(Message.get('ES024', ['p_obj', 'obj']));
 
         if (typeof p_obj._interface === 'undefined') {
             Object.defineProperty(p_obj, '_interface', {
@@ -242,7 +246,7 @@
                     p_obj._interface.push(arguments[i]);
                     addCnt++;
                 }
-            } else Message.error('ES021', ['arguments', 'function']);
+            } else throw new Error(Message.get('ES021', ['arguments', 'function']));
         } 
 
         for (var i = 0; i < p_ctor['_UNION'].length; i++) {
@@ -262,7 +266,7 @@
                 } else matchType(p_obj._interface[i], p_obj, 1);
             }
         } catch (error) { 
-            throw new Error(Message.get('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]));
+            throw new ExtendError(Message.get('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]));
             // Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
         }
 
@@ -285,7 +289,7 @@
                 for (var i = 0; i < this._interface.length; i++) {
                     if (this._interface[i].name === target) return true;  
                 }
-            } else Message.error('ES021', ['isImplementOf()', 'function, string']);
+            } else throw new Error(Message.get('ES021', ['isImplementOf()', 'function, string']));
             return false;
         }
         function typeName(obj) {

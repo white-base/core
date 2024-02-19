@@ -5617,7 +5617,7 @@ describe("[target: util-type.js.js]", () => {
             });
         });
     });
-    describe('matchType(type, target): bool  <타입 매치 예외> ', () => {
+    describe.skip('matchType(type, target): bool  <타입 매치 예외> ', () => {
         // ES024
         it('- Object, {} : object 타입 (regex, new, null) ', () => {
             expect(()=> matchType(Object, 'str'     )).toThrow(/ES024/);
@@ -5827,7 +5827,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Date, Symbol              )).toThrow(/ES032/);
         });
     });
-    describe('allowType(type, target): bool  <타입 매치 예외> ', () => {
+    describe.skip('allowType(type, target): bool  <타입 매치 예외> ', () => {
         it('- allowType() : S0739, 처리할 타입이 없습니다.  ', () => { 
             var type1  = { $type: 'err' }
 

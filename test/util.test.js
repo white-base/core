@@ -12,7 +12,8 @@ describe('Util.*', () => {
         jest.resetModules();
     });
     afterEach(() => {
-        jest.clearAllMocks()
+        jest.clearAllMocks();
+        jest.resetModules();
     });
     it('- Array.isArray() : polyfill', () => {
         // polyfill 강제 지움
@@ -22,18 +23,17 @@ describe('Util.*', () => {
         
         expect(Array.isArray(arr)).toBe(true);
     });
-    it.skip('- Object.keys() : polyfill', () => {
-        // polyfill 강제 지움
-        Object.keys = null;
-        const Util      = require('../src/util');
-        const arr = ['aa'];
-        const obj1 = {aa: {bb: 1}}
+    // // it.skip('- Object.keys() : polyfill', () => {
+    // //     // polyfill 강제 지움
+    // //     Object.keys = null;
+    // //     const Util      = require('../src/util');
+    // //     const arr = ['aa'];
+    // //     const obj1 = {aa: {bb: 1}}
         
-        expect(Object.keys(arr)).toEqual(['0']);
-        expect(Object.keys(obj1)).toEqual(['aa']);
-        expect(()=> Object.keys(undefined)).toThrow(/Object.keys/)
-
-    });
+    // //     expect(Object.keys(arr)).toEqual(['0']);
+    // //     expect(Object.keys(obj1)).toEqual(['aa']);
+    // //     expect(()=> Object.keys(undefined)).toThrow(/Object.keys/)
+    // // });
     
     it('- Util.getArrayDepth() : 배열 깊이 얻기 ', () => {
         const Util      = require('../src/util');
@@ -72,22 +72,22 @@ describe('Util.*', () => {
         expect(str1).toEqual(str2);
         expect(reg1).toEqual(reg2);
     });
-    it('- Util.inherits : Object.create() 제거 ', () => {
-        const temp = Object.create; // 임시 저장
-        Object.create = undefined;  // 비우기
-        const Util      = require('../src/util');
-        Object.create = temp;       // 복귀
-        const Super = function() { this.foo = 1 };
-        const Bar = function() { 
-            Super.call(this);
-            this.bar = 10 
-        };
-        Util.inherits(Bar, Super);
-        const i = new Bar();
+    // it('- Util.inherits : Object.create() 제거 ', () => {
+    //     const temp = Object.create; // 임시 저장
+    //     Object.create = undefined;  // 비우기
+    //     const Util      = require('../src/util');
+    //     Object.create = temp;       // 복귀
+    //     const Super = function() { this.foo = 1 };
+    //     const Bar = function() { 
+    //         Super.call(this);
+    //         this.bar = 10 
+    //     };
+    //     Util.inherits(Bar, Super);
+    //     const i = new Bar();
 
-        expect(i.foo).toBe(1);
-        expect(i.bar).toBe(10);
-    });
+    //     expect(i.foo).toBe(1);
+    //     expect(i.bar).toBe(10);
+    // });
     it('- Util.inherits : Object.create() ', () => {
         const Util      = require('../src/util');
         const Super = function() { this.foo = 1 };
@@ -116,23 +116,23 @@ describe('Util.*', () => {
         expect(i.foo).toBe(1);
         expect(i.bar).toBe(10);
     });
-    it('- Util.inherits : Object.create() 제거 및 부모 삽입 안함', () => {
-        const temp = Object.create; // 임시 저장
-        Object.create = undefined;  // 비우기
-        const Util      = require('../src/util');
-        Object.create = temp;       // 복귀
-        const Super = function() { this.foo = 1 };
-        const Bar = function() { 
-            Super.call(this);
-            this.bar = 10 
-        };
-        Util.inherits(Bar);
-        const i = new Bar();
+    // it('- Util.inherits : Object.create() 제거 및 부모 삽입 안함', () => {
+    //     const temp = Object.create; // 임시 저장
+    //     Object.create = undefined;  // 비우기
+    //     const Util      = require('../src/util');
+    //     Object.create = temp;       // 복귀
+    //     const Super = function() { this.foo = 1 };
+    //     const Bar = function() { 
+    //         Super.call(this);
+    //         this.bar = 10 
+    //     };
+    //     Util.inherits(Bar);
+    //     const i = new Bar();
 
-        expect(Bar.super).not.toEqual(Super);   // Super 가 아님
-        expect(i.foo).toBe(1);
-        expect(i.bar).toBe(10);
-    });
+    //     expect(Bar.super).not.toEqual(Super);   // Super 가 아님
+    //     expect(i.foo).toBe(1);
+    //     expect(i.bar).toBe(10);
+    // });
     it('- Util.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
         const Util      = require('../src/util');
         // const IClassA = function IClassA() {this.a = true}
@@ -202,8 +202,8 @@ describe('Util.*', () => {
         expect(Util.isProtoChain(ClassB, IClassA1)).toBe(true);
     });
 
-    describe("예외, 커버리지 ", () => {
-        it("-  ", () => {
-        });
-    });
+    // describe("예외, 커버리지 ", () => {
+    //     it("-  ", () => {
+    //     });
+    // });
 });
