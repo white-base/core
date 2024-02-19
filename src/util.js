@@ -262,7 +262,8 @@
                 } else matchType(p_obj._interface[i], p_obj, 1);
             }
         } catch (error) { 
-            Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
+            throw new Error(Message.get('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]));
+            // Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
         }
 
         if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정

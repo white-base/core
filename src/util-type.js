@@ -181,9 +181,9 @@
         try {
             if (syntax1.test(funBody)) arrFunc = regFunc1.exec(funBody);
             else if (syntax2.test(funBody)) arrFunc = regFunc2.exec(funBody);
-            else Message.error('ES071', [funBody]);
+            else throw new Error(Message.get('ES071', [funBody]));
             
-            if (arrFunc === null) Message.error('ES072', [funBody]);
+            if (arrFunc === null) throw new Error(Message.get('ES072', [funBody]));
 
             arrParam = (new Function('return ['+ arrFunc[1] +']'))();
             result['params'] = arrParam;
@@ -192,7 +192,7 @@
             result['return'] = arrRetrun;
 
         } catch (error) {
-            Message.error('ES073', [error]);
+            throw new Error(Message.get('ES073', [error]));
         }
 
         return result;
@@ -492,13 +492,13 @@
             if (type['func']) obj['func'] = type['func'];
             if (type['params']) obj['params'] = type['params'];
             if (type['return']) obj['return'] = type['return'];
-            if (!_hasType(obj['$type'])) Message.error('ES022', ['type']);
+            if (!_hasType(obj['$type'])) throw new Error(Message.get('ES022', ['type']));
             if (obj['$type'] === 'array') {
                 obj['kind'] = obj['kind'] || '_ALL_';
-                if (!_hasKindArray(obj['kind'])) Message.error('ES022', ['array kind']);
+                if (!_hasKindArray(obj['kind'])) throw new Error(Message.get('ES022', ['array kind']));
             }
             if (obj['$type'] === 'choice') {
-                if (!_hasKindChoice(obj['kind'])) Message.error('ES022', ['choice kind']);
+                if (!_hasKindChoice(obj['kind'])) throw new Error(Message.get('ES022', ['choice kind']));
             }
             return obj;
         } else {
@@ -587,15 +587,15 @@
             }
             if (!obj['kind']) obj['kind'] = '_OPT_';
             // kind 검사
-            if (obj['$type'] === 'array' && !_hasKindArray(obj['kind'])) Message.error('ES022', ['array kind']);
-            if (obj['$type'] === 'choice' && !_hasKindChoice(obj['kind'])) Message.error('ES022', ['choice kind']);
+            if (obj['$type'] === 'array' && !_hasKindArray(obj['kind'])) throw new Error(Message.get('ES022', ['array kind']));
+            if (obj['$type'] === 'choice' && !_hasKindChoice(obj['kind'])) throw new Error(Message.get('ES022', ['choice kind']));
 
         // step : object
         } else if (_isFillObj(type) || _isEmptyObj(type)) {
             obj['$type'] = 'union';
         } else if(_isPrimitiveObj(type)) {
             obj['$type'] = 'object';
-        } else Message.error('ES022', ['type']);    // Line:
+        } else throw new Error(Message.get('ES022', ['type']));    // Line:
         
         return obj;
     }
@@ -620,24 +620,24 @@
         if (oriType['kind']) {
             if ((oriType['kind'] === '_SEQ_' || oriType['kind'] === '_OPT_' || oriType['kind'] === '_REQ_') 
             && (/*typeof oriType['ref'] === 'undefined' || */ oriType['list'].length === 0)) {
-                Message.error('ES0729', ['origin', oriType['kind']]);
+                throw new Error(Message.get('ES0729', ['origin', oriType['kind']]));
             }
         }
         // target seq, opt 필수 검사
         if (tarType['kind']) {
             if ((tarType['kind'] === '_SEQ_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_REQ_') 
             && (/*typeof tarType['ref'] === 'undefined' || */ tarType['list'].length === 0)) {
-                Message.error('ES0729', ['target', tarType['kind']]);
+                throw new Error(Message.get('ES0729', ['target', tarType['kind']]));
             }
         }
         // all, non, any, req, opt, seq 타입 검사
         if (oriType['kind'] && tarType['kind'] && oriType['$type'] === tarType['$type']) {
             // 거부조건
             if (oriType['kind'] === '_ALL_' && (tarType['kind'] === '_ERR_')) {
-                Message.error('ES0727', [oriType['kind'], '_NON_', tarType['kind']]);
+                throw new Error(Message.get('ES0727', [oriType['kind'], '_NON_', tarType['kind']]));
             } 
             if (oriType['kind'] === '_NON_' && tarType['kind'] !== '_NON_') { 
-                Message.error('ES0728', [oriType['kind'], '_NON_', tarType['kind']]);
+                throw new Error(Message.get('ES0728', [oriType['kind'], '_NON_', tarType['kind']]));
             }
             if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_' || tarType['kind'] === '_ERR_')) {
                 Message.error('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]);
@@ -1092,7 +1092,7 @@
         
         } else if (defType['$type'] === 'string') {
             if (typeof defType['default'] === 'string' && typeof target === 'undefined') target = defType['default'];
-            if (typeof target !== 'string') Message.error('ES074', [tarName, 'string']);
+            if (typeof target !== 'string') throw new Error(Message.get('ES074', [tarName, 'string']));
         
         } else if (defType['$type'] === 'boolean') {
             if (typeof defType['default'] === 'boolean' && typeof target === 'undefined') target = defType['default'];
@@ -1347,7 +1347,7 @@
             if (typeof origin === 'undefined') Message.error('ES026', ['origin']);
             _execAllow(origin, target, opt);
         } catch (error) {
-            Message.error('ES069', ['check allow type', error]);
+            throw new Error(Message.get('ES069', ['check allow type', error]));
         }
     };    
 
@@ -1363,7 +1363,9 @@
             if (typeof chkType === 'undefined') Message.error('ES026', ['chkType']);
             _execMatch(chkType, target, opt);
         } catch (error) {
-            Message.error('ES069', ['check type', error.message]);
+            console.error(error.message);
+            throw new Error(Message.get('ES069', ['check type', 'path: aa / bb ']));
+            // throw new Error(Message.get('ES069', ['check type', error.message]));
         }
     };
 

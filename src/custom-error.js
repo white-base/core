@@ -54,7 +54,7 @@
              * 에러 메세지
              * @member {Object} 
              */
-            this.message = p_message;    
+            // this.message = p_message;    
 
             /**
              * 에러 구분자
