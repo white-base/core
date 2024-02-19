@@ -7,8 +7,8 @@ const { isMatchType, matchType }  = require('../src/util-type');
  
 
 
-// matchType([[Array, String]], 1)
-
+matchType([[Array, String]], 1)
+// 
 allowType(['_seq_', Number], ['_seq_', Boolean])
 
 // a  / b

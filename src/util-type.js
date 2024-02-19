@@ -1139,7 +1139,7 @@
                 for(var i = 0; i < defType['list'].length; i++) {
                     var _elem   = defType['list'][i];
                     var _tar    = tarType['list'][i];
-                    if (typeof _tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);
+                    if (typeof _tar === 'undefined') Message.error('ES075', ['array', '_SEQ_', 'index['+i+']']);    // REVIEW: 세부정보 표현
                     if (_isLiteral(_elem)) {
                         if (!_equalLiternal(_elem, _tar)) Message.error('ES0740', ['array(seq)', '리터럴 타입']);
                         // if (!_equalLiternal(_elem, _tar)) throw new Error('array seq 리터럴 타입이 다릅니다.');
@@ -1173,7 +1173,7 @@
                                 break;
                             }
                         } else {
-                            _execMatch(elem, tar, opt, tarName);
+                            _execMatch(elem, tar, opt, tarName);    // REVIEW: tarName + '['+i+']'  이렇게 들어가야 함
                             success = true;
                             break;
                         }
@@ -1364,8 +1364,8 @@
             _execMatch(chkType, target, opt);
         } catch (error) {
             console.error(error.message);
-            throw new Error(Message.get('ES069', ['check type', 'path: aa / bb ']));
-            // throw new Error(Message.get('ES069', ['check type', error.message]));
+            // throw new Error(Message.get('ES069', ['check type', 'path: aa / bb ']));
+            throw new Error(Message.get('ES069', ['check type', error.message]));
         }
     };
 

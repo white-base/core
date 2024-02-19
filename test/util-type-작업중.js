@@ -5638,7 +5638,7 @@ describe("[target: util-type.js.js]", () => {
         });
         // ES074
         it('- String, "str" : string 타입 ', () => {
-            expect(()=> matchType('str',    function any(){}    )).toThrow(/ES074a/);
+            expect(()=> matchType('str',    function any(){}    )).toThrow(/ES074/);
             expect(()=> matchType(String,   function any(){}    )).toThrow(/ES074/);  
             expect(()=> matchType(String,   null                )).toThrow(/ES074/);
             expect(()=> matchType(String,   true                )).toThrow(/ES074/);
