@@ -494,7 +494,7 @@ describe("[target: meta-view.js]", () => {
                 view3.rows.add(view3.getValue());
                 view1.merge(view2, 0, true);
                 
-                expect(()=> view1.merge(view3, 0, true)).toThrow(/ES054(.|\s)*ES055/);
+                expect(()=> view1.merge(view3, 0, true)).toThrow(/ES054/);
                 expect(view1.columns.count).toBe(3);
                 expect(view1.rows.count).toBe(2);
                 expect(view1.rows[0]['c1']).toBe('R1');

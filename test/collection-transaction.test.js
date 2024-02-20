@@ -599,7 +599,7 @@ describe("[target: collection-trans.js]", () => {
             const result1 = elem.rows.add( c1);
             const result2 = elem.rows.add('str');
             
-            expect(() => elem.rows.add()).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => elem.rows.add()).toThrow(/ES019/);
             expect(elem.rows[0].level).toBe(1);
             elem.rows[0] = 'OVER';
             expect(elem.rows[0]).toBe('OVER');
@@ -629,8 +629,8 @@ describe("[target: collection-trans.js]", () => {
             const result1 = elem.rows.add(c1);
             const result2 = elem.rows.add(m1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES019(\s|.)*ES069/);
-            expect(() => elem.rows.add('str')).toThrow(/ES019(\s|.)*ES069/);
+            expect(() => elem.rows.add(null)).toThrow(/ES019/);
+            expect(() => elem.rows.add('str')).toThrow(/ES019/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -684,10 +684,10 @@ describe("[target: collection-trans.js]", () => {
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
-            expect(() => i.rows.add(undefined)).toThrow(/ES019(.|\s)*ES069/);  // 값이 없음
-            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);    // 공백 예외
-            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES069/);// 타입 예외
-            expect(() => i.rows.add({})).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows.add(undefined)).toThrow(/ES019/);  // 값이 없음
+            expect(() => i.rows.add(null)).toThrow(/ES019/);    // 공백 예외
+            expect(() => i.rows.add(10)).toThrow(/ES019/);// 타입 예외
+            expect(() => i.rows.add({})).toThrow(/ES019/);
             expect(() => i.rows[0] = 10).toThrow(/ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();

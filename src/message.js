@@ -745,9 +745,9 @@
 
                 if (typeof code === 'string' && code.length > 0) {
                     div = code.substring(0, 1);
-                    if (div === 'E') intro = '[Err:'+code+'] ';
-                    else if (div === 'W') intro = '[Warn:'+code+'] ';
-                    else if (div === 'I') intro = '[Info:'+code+'] ';
+                    if (div === 'E') intro = '['+code+'] ';
+                    else if (div === 'W') intro = '['+code+'] ';
+                    else if (div === 'I') intro = '['+code+'] ';
                     else intro = '['+code+'] ';
                 }
                 return intro;

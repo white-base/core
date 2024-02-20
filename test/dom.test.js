@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe.skip("[ GROUP]", () => {
+describe("[ GROUP]", () => {
     describe("load: observer.js <Observer>", () => {
         beforeEach(() => {
             jest.resetModules();

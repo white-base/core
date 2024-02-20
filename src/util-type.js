@@ -197,7 +197,7 @@
             result['return'] = arrRetrun;
 
         } catch (error) {
-            throw new ExtendError(Message.get('ES073', [error]), error);
+            throw new ExtendError(Message.get('ES073', ['']), error);
         }
 
         return result;
@@ -722,7 +722,7 @@
                     try {
                         _execAllow(oriType['list'][i], tarType['list'][i], opt);
                     } catch (error) {
-                        throw new ExtendError(Message.get('ES0711', ['array', '_SEQ_', error]), error);
+                        throw new ExtendError(Message.get('ES0711', ['array', '_SEQ_', '']), error);
                     }
                 }
                 return;
@@ -817,6 +817,8 @@
             }
         }
         
+
+
         function choiceAllow() {
 
             // if (oriType['$type'] === 'choice' && tarType['$type'] !== 'choice' ) {
@@ -981,7 +983,7 @@
                         var tarObj = new tarType['ref']();
                         return _execAllow(oriObj, tarObj, opt);
                     } catch (error) {
-                        throw new ExtendError(Message.get('ES0724', ['object', error]), error);
+                        throw new ExtendError(Message.get('ES0724', ['object', '']), error);
                     }                    
                 }
             } else if (tarType['$type'] === 'union') {  // # class to union
@@ -991,7 +993,7 @@
                         var oriObj = new oriType['ref']();
                         return _execAllow(oriObj, tarType['ref'], opt);
                     } catch (error) {
-                        throw new ExtendError(Message.get('ES0724', ['object', error]), error);
+                        throw new ExtendError(Message.get('ES0724', ['object', '']), error);
                     }                    
                 }
             }
@@ -1010,7 +1012,7 @@
                 try {
                     _execAllow(oriType['ref'][key], tarType['ref'][key], opt);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0726', ['union', error]), error);
+                    throw new ExtendError(Message.get('ES0726', ['union', '']), error);
                 }
             }
         }
@@ -1048,14 +1050,14 @@
                 try {   // params check
                     _execAllow(['_SEQ_'].concat(oriType['params']), ['_SEQ_'].concat(tarType['params']), opt);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0722', ['function', 'params', error]), error);
+                    throw new ExtendError(Message.get('ES0722', ['function', 'params', '']), error);
                 }
             }
             if (oriType['return']) {            
                 try {   // return check
                     _execAllow(oriType['return'], tarType['return'], opt);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0722', ['function', 'return', error]), error);
+                    throw new ExtendError(Message.get('ES0722', ['function', 'return', '']), error);
                 }
             }
         }
@@ -1261,7 +1263,9 @@
             }
             var logTitle = defType['kind'] ? 'choice('+defType['kind']+')' : 'choice';
             
-            throw new ExtendError(Message.get('ES076', [logTitle, defType.toString(), tarType.toString()]));
+            // throw new ExtendError(Message.get('ES076', [logTitle, defType.toString(), tarType.toString()]));
+            throw new ExtendError('[ES076] choice(_OPT_) 타입 검사에 실패하였습니다. origin: ['+ defType.toString() +'], target: ['+ tarType.toString()+']',
+            {'target path': tarName});
         }
 
         function classMatch() {
@@ -1327,7 +1331,7 @@
                 try {
                     _execAllow(['_SEQ_'].concat(defType['params']), ['_SEQ_'].concat(tarType['params']));
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0711', ['function', 'params', error]), error);
+                    throw new ExtendError(Message.get('ES0711', ['function', 'params', '']), error);
                 }
             }
             // return check
@@ -1335,7 +1339,7 @@
                 try {
                     _execAllow(defType['return'], tarType['return'], opt);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0711', ['function', 'return', error]), error);
+                    throw new ExtendError(Message.get('ES0711', ['function', 'return', '']), error);
                 }
             }
         }
@@ -1353,7 +1357,8 @@
             if (typeof origin === 'undefined') throw new ExtendError(Message.get('ES026', ['origin']));
             _execAllow(origin, target, opt);
         } catch (error) {
-            throw new ExtendError(Message.get('ES069', ['check allow type']), error);
+            throw new ExtendError('[ES069] allowType() 검사가 실패하였습니다.', error);
+            // throw new ExtendError(Message.get('ES069', ['check allow type']), error);
         }
     };    
 
@@ -1371,7 +1376,8 @@
         } catch (error) {
             // console.error(error.message);
             // throw new ExtendError(Message.get('ES069', ['check type', 'path: aa / bb ']));
-            throw new ExtendError(Message.get('ES069', ['check type', error.message]), error);
+            // throw new ExtendError(Message.get('ES069', ['check type', error.message]), error);
+            throw new ExtendError('[ES069] matchType() 검사가 실패하였습니다.', error);
         }
     };
 

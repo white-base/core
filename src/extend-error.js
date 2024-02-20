@@ -34,8 +34,11 @@
          * 확장 에러   
          * ES5 이상 호환성 지원을 위해서 특수한 방식으로 상속진행함
          * @constructs _L.Common.ExtendError
-         * @param {string} p_message 사용자 메세지 내용
+         * @param {string | Regexp} p_message 사용자 메세지 내용
          * @param {ExtendError | object} p_object  상위 Error 객체 또는 속성 객체
+         * @example
+         * new ExtendError({code:'', ctx: []})
+         * new ExtendError(/E0011/, [''])
          */
         function ExtendError(p_message, p_object) {
             var _build = '';

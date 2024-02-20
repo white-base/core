@@ -691,8 +691,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const c1 = new Student(1);
             const result = elem.rows.add(c1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => elem.rows.add('str')).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => elem.rows.add(null)).toThrow(/ES019/);
+            expect(() => elem.rows.add('str')).toThrow(/ES019/);
             expect(result > -1).toBeTruthy();
         });
         it("- 단일 타입 : rows.요소명 = obj ", () => {
@@ -743,8 +743,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result1 = elem.rows.add(c1);
             const result2 = elem.rows.add(m1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => elem.rows.add('str')).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => elem.rows.add(null)).toThrow(/ES019/);
+            expect(() => elem.rows.add('str')).toThrow(/ES019/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -787,8 +787,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             i.rows[0] = 'AA1';
             i.rows[1] = 'AA2';
     
-            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows.add(null)).toThrow(/ES019/);
+            expect(() => i.rows.add(10)).toThrow(/ES019/);
             expect(() => i.rows[0] = 10).toThrow(/ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
@@ -798,10 +798,10 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
-            expect(() => i.rows.add(undefined)).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => i.rows.add(null)).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => i.rows.add(10)).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => i.rows.add({})).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.rows.add(undefined)).toThrow(/ES019/);
+            expect(() => i.rows.add(null)).toThrow(/ES019/);
+            expect(() => i.rows.add(10)).toThrow(/ES019/);
+            expect(() => i.rows.add({})).toThrow(/ES019/);
             expect(() => i.rows[0] = 10).toThrow(/ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();

@@ -852,8 +852,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             const result1 = elem.columns.add('a1', c1);
             const result2 = elem.columns.add('a2', m1);
             
-            expect(() => elem.columns.add('a3')).toThrow(/ES019(\s|.)*ES069/);
-            expect(() => elem.columns.add('a3', 'str')).toThrow(/ES019(\s|.)*ES069/);
+            expect(() => elem.columns.add('a3')).toThrow(/ES019/);
+            expect(() => elem.columns.add('a3', 'str')).toThrow(/ES019/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -896,8 +896,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             i.columns['a1'] = 'AA1';
             i.columns['a2'] = 'AA2';
     
-            expect(() => i.columns.add('a3')).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => i.columns.add('a3', 10)).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.columns.add('a3')).toThrow(/ES019/);
+            expect(() => i.columns.add('a3', 10)).toThrow(/ES019/);
             expect(() => i.columns['a1'] = 10).toThrow(/ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
@@ -907,9 +907,9 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             const result1 = i.columns.add('a1', 'A1');
             const result2 = i.columns.add('a2', true);
             
-            expect(() => i.columns.add('a3')).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => i.columns.add('a3', 10)).toThrow(/ES019(.|\s)*ES069/);
-            expect(() => i.columns.add('a3', {})).toThrow(/ES019(.|\s)*ES069/);
+            expect(() => i.columns.add('a3')).toThrow(/ES019/);
+            expect(() => i.columns.add('a3', 10)).toThrow(/ES019/);
+            expect(() => i.columns.add('a3', {})).toThrow(/ES019/);
             expect(() => i.columns['a1'] = 10).toThrow(/ES069/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();

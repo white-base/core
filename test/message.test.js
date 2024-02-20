@@ -63,8 +63,8 @@ describe("[target: message.js]", () => {
                 const msg3 = Message.get('QS011', []);  // 없는 코드
 
                 // console.warn(msg);
-                expect(msg1).toMatch(/Warn:/);
-                expect(msg2).toMatch(/Info:/);
+                expect(msg1).toMatch(/WS011/);
+                expect(msg2).toMatch(/IS011/);
                 expect(msg3).toMatch(/There are no messages about the code./);
             });
             it("- get() : 오류 객체 코드", () => {
