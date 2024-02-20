@@ -1075,12 +1075,14 @@
         var tarName = tarName ? tarName : 'this';
         var defType = extendType(type);
         var tarType = extendType(target);
-        
+        var prop = {};
+
+
         opt = opt || 0;
 
         // seq, opt 필수 검사
         if (defType['kind']) {
-            if ((defType['kind'] === '_SEQ_' || defType['kind'] === '_OPT_') 
+            if ((defType['kind'] === '_SEQ_' || defType['kind'] === '_OPT_' || defType['kind'] === '_REQ_') 
             && (typeof defType['ref'] === 'undefined' || defType['list'].length === 0)) {
                 throw new ExtendError(Message.get('ES0729', ['type', defType['kind']]));
             }
@@ -1117,13 +1119,13 @@
             if (!(target instanceof RegExp)) throw new ExtendError(Message.get('ES074', [tarName, 'regexp']));
         
         } else if (defType['$type'] === 'object') {
-            if (tarType['$type'] !== 'object') throw new ExtendError(Message.get('ES024', [tarName, 'object']));
+            if (tarType['$type'] !== 'object') throw new ExtendError(Message.get('ES074', [tarName, 'object']));
 
-        } else if (defType['$type'] === 'choice') choiceMatch();
-        else if (defType['$type'] === 'array') arrayMatch();
-        else if (defType['$type'] === 'function') functionMatch();        
+        } else if (defType['$type'] === 'array') arrayMatch();
+        else if (defType['$type'] === 'choice') choiceMatch();
         else if (defType['$type'] === 'class') classMatch();
         else if (defType['$type'] === 'union') unionMatch();
+        else if (defType['$type'] === 'function') functionMatch();        
         else throw new ExtendError(Message.get('ES022', [defType['$type']]));        // Line:
 
 
@@ -1203,7 +1205,7 @@
             // _ANY_ (any)
             } else if (defType['kind'] === '_ANY_') {
                 if (typeof target !== 'undefined') return;
-                throw new ExtendError(Message.get('', ['choice', '_ANY_', 'undefined']));
+                throw new ExtendError(Message.get('ES0714', ['choice', '_ANY_', 'undefined']));
 
             // _NON_ (none)
             } else if (defType['kind'] === '_NON_') {
@@ -1235,7 +1237,7 @@
             } else if (defType['kind'] === '_DEF_') {
                 if (defType['list'].length === 0) throw new ExtendError(Message.get('ES0738', ['origin choice(def)']));
                 // if (defType['list'].length === 0) throw new ExtendError('_def_(default) 1개이상 항목이 필요합니디.');
-                if (!_isLiteral(defType['list'][0])) throw new ExtendError(Message.get('', ['origin choice(def)', '1번재는 리터럴타입']));
+                if (!_isLiteral(defType['list'][0])) throw new ExtendError(Message.get('ES021', ['origin choice(def)', '1번재는 리터럴타입']));
                 // if (!_isLiteral(defType['list'][0])) throw new ExtendError('_def_(default) 1번째는 리터럴 타입만 가능합니다.');
                 if (typeof target === 'undefined') {
                     target = defType['list'][0];
@@ -1377,7 +1379,7 @@
             // console.error(error.message);
             // throw new ExtendError(Message.get('ES069', ['check type', 'path: aa / bb ']));
             // throw new ExtendError(Message.get('ES069', ['check type', error.message]), error);
-            throw new ExtendError('[ES069] matchType() 검사가 실패하였습니다.', error);
+            throw new ExtendError('[ES069] matchType(type, target) 검사가 실패하였습니다.', error);
         }
     };
 

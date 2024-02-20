@@ -5620,11 +5620,11 @@ describe("[target: util-type.js.js]", () => {
     describe('matchType(type, target): bool  <타입 매치 예외> ', () => {
         // ES024
         it('- Object, {} : object 타입 (regex, new, null) ', () => {
-            expect(()=> matchType(Object, 'str'     )).toThrow(/ES024/);
-            expect(()=> matchType(Object, 1         )).toThrow(/ES024/);
-            expect(()=> matchType(Object, Symbol()  )).toThrow(/ES024/);
-            expect(()=> matchType(Object, true      )).toThrow(/ES024/);
-            expect(()=> matchType(Object, null      )).toThrow(/ES024/);
+            expect(()=> matchType(Object, 'str'     )).toThrow(/ES074/);
+            expect(()=> matchType(Object, 1         )).toThrow(/ES074/);
+            expect(()=> matchType(Object, Symbol()  )).toThrow(/ES074/);
+            expect(()=> matchType(Object, true      )).toThrow(/ES074/);
+            expect(()=> matchType(Object, null      )).toThrow(/ES074/);
         });
         // ES069
         it('- isMatchType() : object (원시 객체 기본값) ', () => {
