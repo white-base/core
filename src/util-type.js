@@ -664,12 +664,12 @@
                 throw new ExtendError(Message.get('ES0728', [oriType['kind'], '_SEQ_', tarType['kind']]));
             }
             // 허용 조건
-            if (oriType['kind'] === '_ALL_' && (tarType['kind'] !== '_NON_')) return;
-            if (oriType['kind'] === '_NON_' && (tarType['kind'] === '_NON_')) return;
-            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ANY_')) return;
+            if (oriType['kind'] === '_ALL_' && (tarType['kind'] !== '_NON_')) return;   // REVIEW: 상단으로 통합 대기
+            if (oriType['kind'] === '_NON_' && (tarType['kind'] === '_NON_')) return;   // REVIEW: 상단에서 걸러짐, 제거 검토
+            if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ANY_')) return;   
         }
         
-        //  원본은 초인스가 아니고, target choice 의 인 경우
+        //  원본은 초이스가 아니고, target choice 의 인 경우
         if (oriType['$type'] !== 'choice' && tarType['$type'] === 'choice' ) {
             var choType = { $type: 'choice', kind: '_REQ_', list: [origin] };
             _execAllow(choType, target, opt);
@@ -696,7 +696,8 @@
 
         // inner function
         function arrayAllow() {
-            if (oriType['list'].length === 0 && !oriType['kind'] && tarType['$type'] === 'array') return;      // [], [[]], Array
+            // if (oriType['list'].length === 0 && !oriType['kind'] && tarType['$type'] === 'array') return;      // [], [[]], Array
+            if (oriType['list'].length === 0 && tarType['$type'] === 'array') return;      // [], [[]], Array
             if (!Array.isArray(tarType['list'])) Message.error('ES0719', ['array']);
             
             // _ALL_ (all)

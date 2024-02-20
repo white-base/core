@@ -5716,6 +5716,29 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow(/ES076/)
             expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow(/ES076/)
         });
+        it('- 복합 샘플 : 에러 문구 구성 ', () => {
+            var type1 = { aa: { bb: [['_req_', ['_req_', [[String, [['str', 10]], {}]] ] ]] } }
+
+            var tar01 = {aa: { bb: ['aa'] } }
+            var tar02 = {aa: { bb: [10] } }
+            var tar03 = {aa: { bb: [] } }
+            
+            /**
+             * 1차
+             * union
+             *  choice opt
+             *      array(opt)
+             *  
+             */
+
+
+            // expect(()=> matchType(type1, 10)).toThrow(/aaa/)
+            // expect(()=> matchType(type1, tar01)).toThrow(/aaa/)
+            expect(()=> matchType(type1, tar02)).toThrow(/aaa/)
+            expect(()=> matchType(type1, tar03)).toThrow(/aaa/)
+
+        });
+
         it('- isMatchType() : class ', () => {
             var Class1 = function() { this.aa = String }
             var Class2 = function() { this.bb = Number }
