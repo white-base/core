@@ -5717,26 +5717,51 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow(/ES076/)
         });
         it('- 복합 샘플 : 에러 문구 구성 ', () => {
-            var type1 = { aa: { bb: [['_req_', ['_req_', [[String, [['str', 10]], {}]] ] ]] } }
-
-            var tar01 = {aa: { bb: ['aa'] } }
-            var tar02 = {aa: { bb: [10] } }
-            var tar03 = {aa: { bb: [] } }
-            
+            var type1 = { aa: { bb: [['_req_', ['_req_', [[String, [['str', 10]], {} ]] ], Boolean ]] } }
             /**
-             * 1차
-             * union
-             *  choice opt
-             *      array(opt)
-             *  
+             * 1차 테스트
+             *  union('aa')
+             *      union('bb')
+             *          choice(req)
+             *              array(req)
+             *                  choice(opt)
+             *                      string('str')
+             *                      choice(opt)
+             *                          string('str')
+             *                          number(10)
+             *                      union
+             *              boolean
              */
+            var type2 = { aa: (String, [[RegExp, Number]])=>Boolean }
+            
+            class ClassA{
+                bb = String
+                cc = [[ Boolean, 10 ]]
+            }
+            var type3 = { aa: ClassA }
 
+            var tar11 = { aa: { bb: 'aa' } }
+            var tar12 = { aa: { bb: [20] } }
+            var tar13 = { aa: { bb: [] } }
+            var tar14 = { aa: 'str' }
+            var tar15 = 10
 
-            // expect(()=> matchType(type1, 10)).toThrow(/aaa/)
-            // expect(()=> matchType(type1, tar01)).toThrow(/aaa/)
-            expect(()=> matchType(type1, tar02)).toThrow(/aaa/)
-            expect(()=> matchType(type1, tar03)).toThrow(/aaa/)
+            var tar21 = { aa: (String, [[RegExp, Number, Boolean]])=>Boolean}
+            var tar22 = { aa: (String, [[RegExp]])=>String}
+            
+            var tar31 = { aa: { bb: 'str', cc: 20 } }
 
+            expect(()=> matchType(type1, tar11)).toThrow(/ES076/)
+            expect(()=> matchType(type1, tar12)).toThrow(/ES076/)
+            expect(()=> matchType(type1, tar13)).toThrow(/ES076/)
+            expect(()=> matchType(type1, tar14)).toThrow(/ES024/)
+            expect(()=> matchType(type1, tar15)).toThrow(/ES024/)
+
+            expect(()=> matchType(type2, tar21)).toThrow(/ES0738/)
+            expect(()=> matchType(type2, tar22)).toThrow(/ES0713/)
+
+            expect(()=> matchType(type3, tar31)).toThrow(/ES032/) 
+            expect(()=> matchType(type3, tar31, 1)).toThrow(/ES076/)
         });
 
         it('- isMatchType() : class ', () => {
@@ -5813,15 +5838,15 @@ describe("[target: util-type.js.js]", () => {
             const Func2 = function() { this.aa = 1 };   // 기본값으로 설정
             const Func3 = function() { this.aa = Date };
 
-            expect(()=> matchType(Func1, function any(){}   )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, function any(){}   )).toThrow(/EE001/);
             expect(()=> matchType(Func1, null               )).toThrow(/ES032/);
-            expect(()=> matchType(Func1, 'str'              )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, 'str'              )).toThrow(/EE001/);
             expect(()=> matchType(Func1, /reg/              )).toThrow(/ES069/);
-            expect(()=> matchType(Func1, 1                  )).toThrow(/ES032/);
-            expect(()=> matchType(Func1, Symbol()           )).toThrow(/ES032/);
-            expect(()=> matchType(Func1, true               )).toThrow(/ES032/);
-            expect(()=> matchType(Func1, Number             )).toThrow(/ES032/);
-            expect(()=> matchType(Func1, Symbol             )).toThrow(/ES032/);
+            expect(()=> matchType(Func1, 1                  )).toThrow(/EE001/);
+            expect(()=> matchType(Func1, Symbol()           )).toThrow(/EE001/);
+            expect(()=> matchType(Func1, true               )).toThrow(/EE001/);
+            expect(()=> matchType(Func1, Number             )).toThrow(/EE001/);
+            expect(()=> matchType(Func1, Symbol             )).toThrow(/EE001/);
         });
         it('- Symbol() : symbol 타입', () => {
             expect(()=> matchType(Symbol, function any(){}  )).toThrow(/ES074/);
@@ -5837,17 +5862,17 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Symbol, Symbol            )).toThrow(/ES074/);
         });
         it('- Date : object 타입 (class) ', () => {    
-            expect(()=> matchType(Date, function any(){}    )).toThrow(/ES032/);
+            expect(()=> matchType(Date, function any(){}    )).toThrow(/EE001/);
             expect(()=> matchType(Date, null                )).toThrow(/ES032/);
-            expect(()=> matchType(Date, true                )).toThrow(/ES032/);
-            expect(()=> matchType(Date, 1                   )).toThrow(/ES032/);
-            expect(()=> matchType(Date, 'str'               )).toThrow(/ES032/);
+            expect(()=> matchType(Date, true                )).toThrow(/EE001/);
+            expect(()=> matchType(Date, 1                   )).toThrow(/EE001/);
+            expect(()=> matchType(Date, 'str'               )).toThrow(/EE001/);
             expect(()=> matchType(Date, []                  )).toThrow(/ES032/);
             expect(()=> matchType(Date, {aa:1}              )).toThrow(/ES032/);
-            expect(()=> matchType(Date, Number              )).toThrow(/ES032/);
+            expect(()=> matchType(Date, Number              )).toThrow(/EE001/);
             expect(()=> matchType(Date, /reg/               )).toThrow(/ES032/);
-            expect(()=> matchType(Date, Symbol()            )).toThrow(/ES032/);
-            expect(()=> matchType(Date, Symbol              )).toThrow(/ES032/);
+            expect(()=> matchType(Date, Symbol()            )).toThrow(/EE001/);
+            expect(()=> matchType(Date, Symbol              )).toThrow(/EE001/);
         });
     });
     describe('allowType(type, target): bool  <타입 매치 예외> ', () => {
