@@ -5733,12 +5733,12 @@ describe("[target: util-type.js.js]", () => {
              *              boolean
              */
             var type2 = { aa: (String, [[RegExp, Number]])=>Boolean }
-            
             class ClassA{
                 bb = String
                 cc = [[ Boolean, 10 ]]
             }
             var type3 = { aa: ClassA }
+            var type4 = { aa: [String, {aa: String}] }
 
             var tar11 = { aa: { bb: 'aa' } }
             var tar12 = { aa: { bb: [20] } }
@@ -5751,6 +5751,8 @@ describe("[target: util-type.js.js]", () => {
             
             var tar31 = { aa: { bb: 'str', cc: 20 } }
 
+            var tar41 = { aa: [true] }
+
             expect(()=> matchType(type1, tar11)).toThrow(/ES076/)
             expect(()=> matchType(type1, tar12)).toThrow(/ES076/)
             expect(()=> matchType(type1, tar13)).toThrow(/ES076/)
@@ -5760,8 +5762,10 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(type2, tar21)).toThrow(/ES0738/)
             expect(()=> matchType(type2, tar22)).toThrow(/ES0713/)
 
-            expect(()=> matchType(type3, tar31)).toThrow(/ES032/) 
+            expect(()=> matchType(type3, tar31)).toThrow(/ES032ㅁ/) // 테스트
             expect(()=> matchType(type3, tar31, 1)).toThrow(/ES076/)
+
+            expect(()=> matchType(type4, tar41)).toThrow(/ES076/) 
         });
 
         it('- isMatchType() : class ', () => {

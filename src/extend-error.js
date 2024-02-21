@@ -30,17 +30,34 @@
     //==============================================================
     // 4. module implementation   
     var ExtendError = (function () {
+        
+        /**
+         * @overload
+         * @param {string} p_message 사용자 메세지 내용
+         * @param {ExtendError | object} p_object  상위 Error 객체
+         * @returns {Error}
+         */
+
+        /**
+         * @overload
+         * @param {Regexp} p_message 메세지 코드
+         * @param {ExtendError | object} p_object  메세지 코드 전달 파라메터
+         * @param {array<string>} p_arrVal  메세지 코드 전달 파라메터
+         * @returns {Error}
+         */
+
         /**
          * 확장 에러   
          * ES5 이상 호환성 지원을 위해서 특수한 방식으로 상속진행함
          * @constructs _L.Common.ExtendError
          * @param {string | Regexp} p_message 사용자 메세지 내용
          * @param {ExtendError | object} p_object  상위 Error 객체 또는 속성 객체
+         * @param {array<string>} p_arrVal  메세지 코드값
          * @example
          * new ExtendError({code:'', ctx: []})
          * new ExtendError(/E0011/, [''])
          */
-        function ExtendError(p_message, p_object) {
+        function ExtendError(p_message, p_object, p_arrVal) {
             var _build = '';
             var _prop;
             var _queue;    
@@ -53,7 +70,11 @@
                 _prop = p_object;
             }
             
-            _message = typeof p_message === 'string' ? p_message : '';
+            if (typeof p_message === 'string') _message = p_message;
+            else if (p_message instanceof RegExp) {
+                _message = Message.get(p_message.source, p_arrVal);
+            } 
+            // _message = typeof p_message === 'string' ? p_message : '';
             _build = _message + '\n';
             
             if (_prop) _build += buildMessageProp(_prop);
