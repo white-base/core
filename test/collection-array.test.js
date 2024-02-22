@@ -702,7 +702,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result = elem.rows.add(c1);
             elem.rows[0] = c2;
     
-            expect(() => elem.rows[0] = 10 ).toThrow(/ES069/);
+            expect(() => elem.rows[0] = 10 ).toThrow(/EL01310/);
             expect(elem.rows[0].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result > -1).toBeTruthy();
@@ -758,7 +758,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             elem.rows[0] = c2;
             elem.rows[1] = c2;
     
-            expect(() => elem.rows[0] = 'str' ).toThrow(/ES069/);
+            expect(() => elem.rows[0] = 'str' ).toThrow(/EL01310/);
             expect(elem.rows[0].level).toBe(2);                   // 교체된 객체
             expect(elem.rows[0] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(elem.rows[1].level).toBe(2);                   // 교체된 객체
@@ -789,7 +789,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
     
             expect(() => i.rows.add(null)).toThrow(/ES019/);
             expect(() => i.rows.add(10)).toThrow(/ES019/);
-            expect(() => i.rows[0] = 10).toThrow(/ES069/);
+            expect(() => i.rows[0] = 10).toThrow(/EL01310/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -802,7 +802,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             expect(() => i.rows.add(null)).toThrow(/ES019/);
             expect(() => i.rows.add(10)).toThrow(/ES019/);
             expect(() => i.rows.add({})).toThrow(/ES019/);
-            expect(() => i.rows[0] = 10).toThrow(/ES069/);
+            expect(() => i.rows[0] = 10).toThrow(/EL01310/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });

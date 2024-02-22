@@ -5628,13 +5628,13 @@ describe("[target: util-type.js.js]", () => {
         });
         // ES069
         it('- isMatchType() : object (원시 객체 기본값) ', () => {
-            expect(()=> matchType({},         Symbol()    )).toThrow(/ES069/)
+            expect(()=> matchType({},         Symbol()    )).toThrow('EL01141')
         });
         // ES026
         it('- null, undefined ', () => {
             expect(()=>matchType(null,              false           )).toThrow('null');
             expect(()=>matchType({aa: undefined},   {aa:null}       )).toThrow('undefined');
-            expect(()=>matchType(undefined,         {aa:null}       )).toThrow('ES026');
+            expect(()=>matchType(undefined,         {aa:null}       )).toThrow('EL01102');
         });
         // ES074
         it('- String, "str" : string 타입 ', () => { 
@@ -5762,7 +5762,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(type2, tar21)).toThrow('EL0122G')
             expect(()=> matchType(type2, tar22)).toThrow('EL0120A')
 
-            expect(()=> matchType(type3, tar31)).toThrow('EL01132ㅁ') // 테스트
+            expect(()=> matchType(type3, tar31)).toThrow('EL01132') // 테스트
             expect(()=> matchType(type3, tar31, 1)).toThrow('EL01127')
 
             expect(()=> matchType(type4, tar41)).toThrow('EL01117') 
@@ -5908,7 +5908,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType(true,      false       )).toThrow('EL01209')
             expect(()=> allowType(true,      Boolean     )).toThrow('EL01209')
             // undefined
-            expect(()=> allowType(undefined, null        )).toThrow('ES026')
+            expect(()=> allowType(undefined, null        )).toThrow('EL0120A')
             // null
             expect(()=> allowType(null,      undefined   )).toThrow('EL0120A')
             expect(()=> allowType(null,      {}          )).toThrow('EL0120A')
@@ -5924,7 +5924,7 @@ describe("[target: util-type.js.js]", () => {
             // expect(()=> allowType(Array,                     ['_non_']                  )).toThrow('ES069')
             // any
             // expect(()=> allowType(['_any_'],                 []                         )).toThrow('ES0727')
-            expect(()=> allowType(['_any_'],                 undefined                  )).toThrow('ES069')
+            expect(()=> allowType(['_any_'],                 undefined                  )).toThrow('EL01211')
             expect(()=> allowType(['_any_'],                 ['_seq_']                  )).toThrow('EL01201')
             expect(()=> allowType(['_any_'],                 ['_opt_']                  )).toThrow('EL01201')
             // expect(()=> allowType(['_any_'],                 ['_non_']                  )).toThrow('ES0727')
@@ -6020,7 +6020,7 @@ describe("[target: util-type.js.js]", () => {
             // 예외 : 오류코드
             // expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
             // expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
-            expect(()=> allowType({},        true            )).toThrow('ES069')
+            expect(()=> allowType({},        true            )).toThrow('EL01241')
         });
         it('- isAllowType(a, b) : class ', () => {
             var ClassA = function(){this.a = 1}
@@ -6068,14 +6068,52 @@ describe("[target: util-type.js.js]", () => {
         it('- [EL01101] ', () => {
             var type1 = ['_SEQ_'];
             var tar01 = null;
-            expect(()=> matchType(type1, tar01)).toThrow('EL01101')
+            var thr01 = '[EL01101] 타입매치검사 : extType의 세부 타입을 지정해야 합니다. extType: array(_SEQ_)[]'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
         });
         it('- [EL01102] ', () => {
             var type1 = null;
-            var tar01 = 'a';
-            var tar02 = 10;
-            expect(()=> matchType(type1, tar01)).toThrow('EL01102')
-            expect(()=> matchType(type1, tar02)).toThrow('EL01102')
+            var type2 = undefined;
+            var type3 = 'str';
+            var type4 = 10;
+            var type5 = true;
+            var type6 = 10n;
+            var type7 = Symbol;
+            var type8 = /reg/;
+            var type9 = new Date();
+            var tar01 = [['_NON_']];
+            var thr01 = '[EL01102] 타입매치검사 : target 은 \'null\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr02 = '[EL01102] 타입매치검사 : target 은 \'undefined\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr03 = '[EL01102] 타입매치검사 : target 은 \'string\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr04 = '[EL01102] 타입매치검사 : target 은 \'number\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr05 = '[EL01102] 타입매치검사 : target 은 \'boolean\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr06 = '[EL01102] 타입매치검사 : target 은 \'bigint\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr07 = '[EL01102] 타입매치검사 : target 은 \'symbol\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr08 = '[EL01102] 타입매치검사 : target 은 \'regexp\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr09 = '[EL01102] 타입매치검사 : target 은 \'object\' 타입이 아닙니다. tarType: choice(_NON_)'
+            
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            expect(()=> matchType(type2, tar01)).toThrow(thr02)
+            expect(()=> matchType(type3, tar01)).toThrow(thr03)
+            expect(()=> matchType(type4, tar01)).toThrow(thr04)
+            expect(()=> matchType(type5, tar01)).toThrow(thr05)
+            expect(()=> matchType(type6, tar01)).toThrow(thr06)
+            expect(()=> matchType(type7, tar01)).toThrow(thr07)
+            expect(()=> matchType(type8, tar01)).toThrow(thr08)
+            expect(()=> matchType(type9, tar01)).toThrow(thr09)
+        });
+        it.skip('- [EL01103] ', () => {
+            var type1 = { $type: 'not type'};
+            var tar01 = null;
+            var thr01 = '타입매치검사 : 처리할 수 없는 타입니다.'
+            // 사전에 검사해서 처리할 수 없는 타입임
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01111] ', () => {
+            var type1 = [];
+            var tar01 = null;
+            var thr01 = 'EL01111] 타입매치검사 : target 은 array 타입이 아닙니다. tarType: null'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
         });
     });
 

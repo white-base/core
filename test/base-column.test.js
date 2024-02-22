@@ -43,10 +43,10 @@ describe("[target: base-column.js]", () => {
                 expect(s1._valueTypes).toEqual([Number, String])
                 s1.default = 10
                 s1.default = 'STR'
-                expect(()=> s1.default = {}).toThrow(/ES069/)
+                expect(()=> s1.default = {}).toThrow(/EL01310/)
                 s1.value = 10
                 s1.value = 'STR'
-                expect(()=> s1.value = {}).toThrow(/ES069/)
+                expect(()=> s1.value = {}).toThrow(/EL01310/)
 
             });
             it("- 설정 및 조회 : _valueTypes 미 설정시 ", () => {

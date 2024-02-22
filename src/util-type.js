@@ -723,7 +723,7 @@
         function arrayAllow() {
             // if (oriType['list'].length === 0 && !oriType['kind'] && tType['$type'] === 'array') return;      // [], [[]], Array
             if (eType['list'].length === 0 && tType['$type'] === 'array') return;      // [], [[]], Array
-            if (!Array.isArray(tType['list'])) throw new ExtendError(Message.error('EL01211', ['array'])+ typeMsg, prop);
+            if (tType['$type'] !== 'array' || !Array.isArray(tType['list'])) throw new ExtendError(Message.get('EL01211', ['array'])+ typeMsg, prop);
             
             // _ALL_ (all)
             if (eType['kind'] === '_ALL_') {
@@ -1118,48 +1118,56 @@
 
         // check match type
         if (eType['$type'] === 'null') {
-            if (target !== null) throw new ExtendError(Message.get('EL01102', [sTar]), prop);
+            if (target !== null) throw new ExtendError(/EL01102/, prop, ['null', sTar]);
+            // if (target !== null) throw new ExtendError(Message.get('EL01102', [sTar]), prop);
         
         } else if (eType['$type'] === 'undefined') {
-            if (typeof target !== 'undefined') throw new ExtendError(Message.get('EL01102', [pathName, 'undefined']) + typeMsg, prop);
-        
-        } else if (eType['$type'] === 'number') {
-            if (typeof eType['default'] === 'number' && typeof target === 'undefined') target = eType['default']; 
-            if (typeof target !== 'number') throw new ExtendError(Message.get('EL01102', [pathName, 'number']) + typeMsg, prop);
+            if (typeof target !== 'undefined') throw new ExtendError(/EL01102/, prop, ['undefined', sTar]);
+            // if (typeof target !== 'undefined') throw new ExtendError(Message.get('EL01102', [pathName, 'undefined']) + typeMsg, prop);
         
         } else if (eType['$type'] === 'string') {
             if (typeof eType['default'] === 'string' && typeof target === 'undefined') target = eType['default'];
-            if (typeof target !== 'string') throw new ExtendError(Message.get('EL01102', [pathName, 'string']) + typeMsg, prop);
+            if (typeof target !== 'string') throw new ExtendError(/EL01102/, prop, ['string', sTar]);
+            // if (typeof target !== 'string') throw new ExtendError(Message.get('EL01102', [pathName, 'string']) + typeMsg, prop);
+        
+        } else if (eType['$type'] === 'number') {
+            if (typeof eType['default'] === 'number' && typeof target === 'undefined') target = eType['default']; 
+            if (typeof target !== 'number') throw new ExtendError(/EL01102/, prop, ['number', sTar]);
+            // if (typeof target !== 'number') throw new ExtendError(Message.get('EL01102', [pathName, 'number']) + typeMsg, prop);
         
         } else if (eType['$type'] === 'boolean') {
             if (typeof eType['default'] === 'boolean' && typeof target === 'undefined') target = eType['default'];
-            if (typeof target !== 'boolean') throw new ExtendError(Message.get('EL01102', [pathName, 'boolean']) + typeMsg, prop);
+            if (typeof target !== 'boolean') throw new ExtendError(/EL01102/, prop, ['boolean', sTar]);
+            // if (typeof target !== 'boolean') throw new ExtendError(Message.get('EL01102', [pathName, 'boolean']) + typeMsg, prop);
         
         } else if (eType['$type'] === 'bigint') {    // ES6+
             if (typeof eType['default'] === 'bigint' && typeof target === 'undefined') target = eType['default'];
-            if (typeof target !== 'bigint') throw new ExtendError(Message.get('EL01102', [pathName, 'bigint']) + typeMsg, prop);
+            if (typeof target !== 'bigint') throw new ExtendError(/EL01102/, prop, ['bigint', sTar]);
+            // if (typeof target !== 'bigint') throw new ExtendError(Message.get('EL01102', [pathName, 'bigint']) + typeMsg, prop);
         
         } else if(eType['$type'] === 'symbol') {    // ES6+
-            if (typeof target !== 'symbol') throw new ExtendError(Message.get('EL01102', [pathName, 'symbol']) + typeMsg, prop);
+            if (typeof target !== 'symbol') throw new ExtendError(/EL01102/, prop, ['symbol', sTar]);
+            // if (typeof target !== 'symbol') throw new ExtendError(Message.get('EL01102', [pathName, 'symbol']) + typeMsg, prop);
         
         } else if (eType['$type'] === 'regexp') {
             if (eType['default'] && eType['default'] !== null && typeof target === 'undefined') target = eType['default'];
-            if (!(target instanceof RegExp)) throw new ExtendError(Message.get('EL01102', [pathName, 'regexp']) + typeMsg, prop);
+            if (!(target instanceof RegExp)) throw new ExtendError(/EL01102/, prop, ['regexp', sTar]);
+            // if (!(target instanceof RegExp)) throw new ExtendError(Message.get('EL01102', [pathName, 'regexp']) + typeMsg, prop);
         
         } else if (eType['$type'] === 'object') {
-            if (tType['$type'] !== 'object') throw new ExtendError(Message.get('EL01102', [pathName, 'object']) + typeMsg, prop);
+            if (tType['$type'] !== 'object') throw new ExtendError(/EL01102/, prop, ['object', sTar]);
+            // if (tType['$type'] !== 'object') throw new ExtendError(Message.get('EL01102', [pathName, 'object']) + typeMsg, prop);
 
         } else if (eType['$type'] === 'array') arrayMatch();
         else if (eType['$type'] === 'choice') choiceMatch();
         else if (eType['$type'] === 'class') classMatch();
         else if (eType['$type'] === 'union') unionMatch();
         else if (eType['$type'] === 'function') functionMatch();        
-        else throw new ExtendError(Message.get('EL01103', [eType['$type']]) + typeMsg, prop);        // Line:
-
+        else throw new ExtendError(/EL01103/, prop, []);        // Line:    의미적으로 걸러짐
 
         // inner function
         function arrayMatch() {
-            if (!Array.isArray(target)) throw new ExtendError(Message.get('EL01111', [pathName, 'array']) + typeMsg, prop);
+            if (!Array.isArray(target)) throw new ExtendError(/EL01111/, prop, [sTar]);
             
             // _ALL_ (all)
             if (eType['kind'] === '_ALL_') {      
@@ -1404,10 +1412,10 @@
      */
     var allowType = function(extType, target, opt) {
         try {
-            if (typeof extType === 'undefined') throw new ExtendError(Message.get('ES026', ['extType']));
+            // if (typeof extType === 'undefined') throw new ExtendError(Message.get('ES026', ['extType']));
             _execAllow(extType, target, opt);
         } catch (error) {
-            throw new ExtendError('[ES069] allowType() 검사가 실패하였습니다.', error);
+            throw new ExtendError('[EL01309] allowType() 검사가 실패하였습니다.', error);
             // throw new ExtendError(Message.get('ES069', ['check allow type']), error);
         }
     };    
@@ -1421,14 +1429,14 @@
      */
     var matchType = function(chkType, target, opt) {
         try {
-            if (typeof chkType === 'undefined') throw new ExtendError(Message.get('ES026', ['chkType']));
+            // if (typeof chkType === 'undefined') throw new ExtendError(Message.get('ES026', ['chkType']));
             _execMatch(chkType, target, opt);
         } catch (error) {
             // console.error(error.message);
             // throw new ExtendError(Message.get('ES069', ['check type', 'path: aa / bb ']));
             // throw new ExtendError(Message.get('ES069', ['check type', error.message]), error);
             // error.prop['type map'] = JSON.stringify(typeObject(chkType), null, '\t');  
-            throw new ExtendError('[ES069] matchType(extType, target) 검사가 실패하였습니다.', error);
+            throw new ExtendError('[EL01310] matchType(extType, target) 검사가 실패하였습니다.', error);
         }
     };
 

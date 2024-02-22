@@ -573,7 +573,7 @@ describe("[target: util-type.js.js]", () => {
             // 예외 : 오류코드
             // expect(()=> allowType(/reg/,     /reg2/          )).toThrow('ES0723')
             // expect(()=> allowType({},        new ClassB()    )).toThrow('ES0713')
-            expect(()=> allowType({},        true            )).toThrow('ES069')
+            expect(()=> allowType({},        true            )).toThrow('EL01241')
         });
         it('- isAllowType(a, b) : class ', () => {
             var ClassA = function(){this.a = 1}
@@ -626,7 +626,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isMatchType({},            new Date()  )).toBe(false);
             expect(isMatchType({},            Symbol()    )).toBe(false);
             // 예외 오류 코드
-            expect(()=> matchType({},         Symbol()    )).toThrow(/ES069/)
+            expect(()=> matchType({},         Symbol()    )).toThrow(/EL01141/)
 
         });
         it('- null, undefined ', () => {
@@ -637,7 +637,7 @@ describe("[target: util-type.js.js]", () => {
             // false (예외)
             expect(()=>matchType(null,              false           )).toThrow('null');
             expect(()=>matchType({aa: undefined},   {aa:null}       )).toThrow('undefined');
-            expect(()=>matchType(undefined,         {aa:null}       )).toThrow('ES026');
+            expect(()=>matchType(undefined,         {aa:null}       )).toThrow('EL01102');
         });
         it('- String, "str" : string 타입 ', () => {
             // true
