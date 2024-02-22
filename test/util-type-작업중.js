@@ -5759,10 +5759,10 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(type1, tar14)).toThrow('EL01141')
             expect(()=> matchType(type1, tar15)).toThrow('EL01141')
 
-            expect(()=> matchType(type2, tar21)).toThrow('EL0122Ga')
+            expect(()=> matchType(type2, tar21)).toThrow('EL0122G')
             expect(()=> matchType(type2, tar22)).toThrow('EL0120A')
 
-            expect(()=> matchType(type3, tar31)).toThrow('EL01132') // 테스트
+            expect(()=> matchType(type3, tar31)).toThrow('EL01132ㅁ') // 테스트
             expect(()=> matchType(type3, tar31, 1)).toThrow('EL01127')
 
             expect(()=> matchType(type4, tar41)).toThrow('EL01117') 
@@ -6064,4 +6064,19 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType(type1, {str: String}                                    )).toThrow('EL01221')
         });
     });
+    describe('예외 코드 ', () => {
+        it('- [EL01101] ', () => {
+            var type1 = ['_SEQ_'];
+            var tar01 = null;
+            expect(()=> matchType(type1, tar01)).toThrow('EL01101')
+        });
+        it('- [EL01102] ', () => {
+            var type1 = null;
+            var tar01 = 'a';
+            var tar02 = 10;
+            expect(()=> matchType(type1, tar01)).toThrow('EL01102')
+            expect(()=> matchType(type1, tar02)).toThrow('EL01102')
+        });
+    });
+
 });
