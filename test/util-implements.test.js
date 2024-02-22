@@ -475,7 +475,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
+            expect(()=> new CoClass2()).toThrow(/EL01143/);
         });
         it('- class 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
@@ -505,7 +505,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/ES017(.|\s)*ES027/);
+            expect(()=> new CoClass2()).toThrow(/EL01143/);
         });
         it('- isImplementOf() : 예외 및 검사 ', () => {
             // 인터페이스

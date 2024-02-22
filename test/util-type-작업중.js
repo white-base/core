@@ -17,7 +17,7 @@ describe("[target: util-type.js.js]", () => {
     describe('typeOf(target): str <타입 얻기> ', () => {
         it('- typeOf() : 예외 ', () => {
             var type1 = { $type: 'Not_Type' }
-            expect(()=> typeOf(type1)).toThrow('ES022');
+            expect(()=> typeOf(type1)).toThrow('EL01303');
         });
         describe('단일타입 ', () => {
             it('- typeOf() : undefined ', () => {
@@ -5620,11 +5620,11 @@ describe("[target: util-type.js.js]", () => {
     describe('matchType(type, target): bool  <타입 매치 예외> ', () => {
         // ES024
         it('- Object, {} : object 타입 (regex, new, null) ', () => {
-            expect(()=> matchType(Object, 'str'     )).toThrow(/ES074/);
-            expect(()=> matchType(Object, 1         )).toThrow(/ES074/);
-            expect(()=> matchType(Object, Symbol()  )).toThrow(/ES074/);
-            expect(()=> matchType(Object, true      )).toThrow(/ES074/);
-            expect(()=> matchType(Object, null      )).toThrow(/ES074/);
+            expect(()=> matchType(Object, 'str'     )).toThrow('EL01102');
+            expect(()=> matchType(Object, 1         )).toThrow('EL01102');
+            expect(()=> matchType(Object, Symbol()  )).toThrow('EL01102');
+            expect(()=> matchType(Object, true      )).toThrow('EL01102');
+            expect(()=> matchType(Object, null      )).toThrow('EL01102');
         });
         // ES069
         it('- isMatchType() : object (원시 객체 기본값) ', () => {
@@ -5637,84 +5637,84 @@ describe("[target: util-type.js.js]", () => {
             expect(()=>matchType(undefined,         {aa:null}       )).toThrow('ES026');
         });
         // ES074
-        it('- String, "str" : string 타입 ', () => {
-            expect(()=> matchType('str',    function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(String,   function any(){}    )).toThrow(/ES074/);  
-            expect(()=> matchType(String,   null                )).toThrow(/ES074/);
-            expect(()=> matchType(String,   true                )).toThrow(/ES074/);
-            expect(()=> matchType(String,   /reg/               )).toThrow(/ES074/);
-            expect(()=> matchType(String,   1                   )).toThrow(/ES074/);
-            expect(()=> matchType(String,   Symbol()            )).toThrow(/ES074/);
-            expect(()=> matchType(String,   []                  )).toThrow(/ES074/);
-            expect(()=> matchType(String,   {aa:1}              )).toThrow(/ES074/);
-            expect(()=> matchType(String,   Number              )).toThrow(/ES074/);
-            expect(()=> matchType(String,   Symbol              )).toThrow(/ES074/);
+        it('- String, "str" : string 타입 ', () => { 
+            expect(()=> matchType('str',    function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(String,   function any(){}    )).toThrow('EL01102');  
+            expect(()=> matchType(String,   null                )).toThrow('EL01102');
+            expect(()=> matchType(String,   true                )).toThrow('EL01102');
+            expect(()=> matchType(String,   /reg/               )).toThrow('EL01102');
+            expect(()=> matchType(String,   1                   )).toThrow('EL01102');
+            expect(()=> matchType(String,   Symbol()            )).toThrow('EL01102');
+            expect(()=> matchType(String,   []                  )).toThrow('EL01102');
+            expect(()=> matchType(String,   {aa:1}              )).toThrow('EL01102');
+            expect(()=> matchType(String,   Number              )).toThrow('EL01102');
+            expect(()=> matchType(String,   Symbol              )).toThrow('EL01102');
         });
         it('- Number, 1,2, NaN : number 타입', () => {
-            expect(()=> matchType(1,        function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(NaN,      function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   null                )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   true                )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   /reg/               )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   'str'               )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   Symbol()            )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   []                  )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   {aa:1}              )).toThrow(/ES074/);
-            expect(()=> matchType(Number,   Symbol              )).toThrow(/ES074/);
-            expect(()=> matchType(Number,                       )).toThrow(/ES074/);
+            expect(()=> matchType(1,        function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(NaN,      function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(Number,   function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(Number,   null                )).toThrow('EL01102');
+            expect(()=> matchType(Number,   true                )).toThrow('EL01102');
+            expect(()=> matchType(Number,   /reg/               )).toThrow('EL01102');
+            expect(()=> matchType(Number,   'str'               )).toThrow('EL01102');
+            expect(()=> matchType(Number,   Symbol()            )).toThrow('EL01102');
+            expect(()=> matchType(Number,   []                  )).toThrow('EL01102');
+            expect(()=> matchType(Number,   {aa:1}              )).toThrow('EL01102');
+            expect(()=> matchType(Number,   Symbol              )).toThrow('EL01102');
+            expect(()=> matchType(Number,                       )).toThrow('EL01102');
         });
         it('- Boolean, true, false : boolean 타입 ', () => {
-            expect(()=> matchType(true,     function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  null                )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  'str'               )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  /reg/               )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  1                   )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  Symbol()            )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  []                  )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  {aa:1}              )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  Number              )).toThrow(/ES074/);
-            expect(()=> matchType(Boolean,  Symbol              )).toThrow(/ES074/);
+            expect(()=> matchType(true,     function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  null                )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  'str'               )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  /reg/               )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  1                   )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  Symbol()            )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  []                  )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  {aa:1}              )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  Number              )).toThrow('EL01102');
+            expect(()=> matchType(Boolean,  Symbol              )).toThrow('EL01102');
         });
         it('- bigint 타입 (ES6+)', () => { 
-            expect(()=> matchType(BigInt,  function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  null                )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  'str'               )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  /reg/               )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  1                   )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  Symbol()            )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  []                  )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  {aa:1}              )).toThrow(/ES074/);
-            expect(()=> matchType(BigInt,  Number              )).toThrow(/ES074/);
+            expect(()=> matchType(BigInt,  function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  null                )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  'str'               )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  /reg/               )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  1                   )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  Symbol()            )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  []                  )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  {aa:1}              )).toThrow('EL01102');
+            expect(()=> matchType(BigInt,  Number              )).toThrow('EL01102');
         });
         it('- symbol 타입 (ES6+) ', () => {
-            expect(()=> matchType(Symbol,  function any(){}    )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol,  null                )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol,  'str'               )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol,  /reg/               )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol,  1                   )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol,  []                  )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol,  {aa:1}              )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol,  Number              )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol,  function any(){}    )).toThrow('EL01102');
+            expect(()=> matchType(Symbol,  null                )).toThrow('EL01102');
+            expect(()=> matchType(Symbol,  'str'               )).toThrow('EL01102');
+            expect(()=> matchType(Symbol,  /reg/               )).toThrow('EL01102');
+            expect(()=> matchType(Symbol,  1                   )).toThrow('EL01102');
+            expect(()=> matchType(Symbol,  []                  )).toThrow('EL01102');
+            expect(()=> matchType(Symbol,  {aa:1}              )).toThrow('EL01102');
+            expect(()=> matchType(Symbol,  Number              )).toThrow('EL01102');
         });
         // ES076
         it('- isMatchType() : choice ', () => {      
-            expect(()=> matchType([['_any_']],                 undefined   )).toThrow(/ES069/)
+            expect(()=> matchType([['_any_']],                 undefined   )).toThrow('EL01121')
             // expect(()=> matchType([['_seq_']],                 [[1,2,3]]   )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
             // expect(()=> matchType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
-            expect(()=> matchType([[ String, Number]], true        )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]], []          )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]], {}          )).toThrow(/ES076/)            
+            expect(()=> matchType([[ String, Number]], true       )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]], []          )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]], {}          )).toThrow('EL01127')            
             // expect(()=> matchType([[String, Number]],  undefined           )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  true                )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  {}                  )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow(/ES076/) // 당연히 실패
-            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow(/ES076/)
+            expect(()=> matchType([[String, Number]],  true                )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  {}                  )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow('EL01127') // 당연히 실패
+            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow('EL01127')
         });
         it('- 복합 샘플 : 에러 문구 구성 ', () => {
             var type1 = { aa: { bb: [['_req_', ['_req_', [[String, [['str', 10]], {} ]] ], Boolean ]] } }
@@ -5753,130 +5753,130 @@ describe("[target: util-type.js.js]", () => {
 
             var tar41 = { aa: [true] }
 
-            expect(()=> matchType(type1, tar11)).toThrow(/ES076/)
-            expect(()=> matchType(type1, tar12)).toThrow(/ES076/)
-            expect(()=> matchType(type1, tar13)).toThrow(/ES076/)
-            expect(()=> matchType(type1, tar14)).toThrow(/ES024/)
-            expect(()=> matchType(type1, tar15)).toThrow(/ES024/)
+            expect(()=> matchType(type1, tar11)).toThrow('EL01127')
+            expect(()=> matchType(type1, tar12)).toThrow('EL01127')
+            expect(()=> matchType(type1, tar13)).toThrow('EL01127')
+            expect(()=> matchType(type1, tar14)).toThrow('EL01141')
+            expect(()=> matchType(type1, tar15)).toThrow('EL01141')
 
-            expect(()=> matchType(type2, tar21)).toThrow(/ES0738/)
-            expect(()=> matchType(type2, tar22)).toThrow(/ES0713/)
+            expect(()=> matchType(type2, tar21)).toThrow('EL0122Ga')
+            expect(()=> matchType(type2, tar22)).toThrow('EL0120A')
 
-            expect(()=> matchType(type3, tar31)).toThrow(/ES032ㅁ/) // 테스트
-            expect(()=> matchType(type3, tar31, 1)).toThrow(/ES076/)
+            expect(()=> matchType(type3, tar31)).toThrow('EL01132') // 테스트
+            expect(()=> matchType(type3, tar31, 1)).toThrow('EL01127')
 
-            expect(()=> matchType(type4, tar41)).toThrow(/ES076/) 
+            expect(()=> matchType(type4, tar41)).toThrow('EL01117') 
         });
 
         it('- isMatchType() : class ', () => {
             var Class1 = function() { this.aa = String }
             var Class2 = function() { this.bb = Number }
     
-            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow(/ES027/)
-            expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow(/ES074/)
-            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow(/ES076/)
-            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow(/ES027/)
-            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow(/ES027/)            
+            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow('EL01143')
+            expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
+            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01127')
+            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow('EL01143')
+            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow('EL01143')            
         });
         it('- isMatchType() : object (객체 기본값) ', () => {
             var Class1 = function() { this.aa = String };
             var Class2 = function() { this.bb = 10 };
 
-            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow(/ES027/)
-            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow(/ES027/)
-            expect(()=> matchType(Class2,         {aa: 'STR', bb: 'STR'}, 1)).toThrow(/ES074/)
+            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow('EL01143')
+            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow('EL01143')
+            expect(()=> matchType(Class2,         {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
         });
         
         it('- isMatchType() : choice 원시 타입 ', () => {
-            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow(/ES076/)
-            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow(/ES076/)
-            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow(/ES076/)
-            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow(/ES076/)
-            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow(/ES076/)
+            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow('EL01127')
         });
         it('- isMatchType() : choice 내장 객체 타입 ', () => {
-            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow(/ES076/)
-            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow(/ES076/)
-            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow(/ES076/)       
-            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow(/ES076/)       
-            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow(/ES076/)       
+            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow('EL01127')
+            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow('EL01127')
+            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow('EL01127')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow('EL01127')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow('EL01127')       
         });
         it('- isMatchType() : array 조건 검사  ', () => {    
-            expect(()=> matchType([],           10                  )).toThrow(/ES024/)
-            expect(()=> matchType(Array,        10                  )).toThrow(/ES024/)
+            expect(()=> matchType([],           10                  )).toThrow('EL01111')
+            expect(()=> matchType(Array,        10                  )).toThrow('EL01111')
             // expect(()=> matchType(['_any_'],    [undefined]         )).toThrow(/ES075/)
-            expect(()=> matchType(['_any_'],    10                  )).toThrow(/ES024/)
-            expect(()=> matchType(['_seq_'],    10                  )).toThrow(/ES0729/) 
-            expect(()=> matchType(['_seq_', String, Number], [10, 'str'])).toThrow(/ES074/)
-            expect(()=> matchType(['_seq_', String, Number], ['str']    )).toThrow(/ES075/)
-            expect(()=> matchType(['_seq_', String, Number], 10         )).toThrow(/ES024/)
-            expect(()=> matchType(['_opt_'],    10                  )).toThrow(/ES0729/)
-            expect(()=> matchType(['_opt_', String, Number], [true] )).toThrow(/ES076/)
-            expect(()=> matchType(['_opt_', String, Number], [{}]   )).toThrow(/ES076/)
-            expect(()=> matchType(['_opt_', String, Number], 10     )).toThrow(/ES024/)
+            expect(()=> matchType(['_any_'],    10                  )).toThrow('EL01111')
+            expect(()=> matchType(['_seq_'],    10                  )).toThrow('EL01101') 
+            expect(()=> matchType(['_seq_', String, Number], [10, 'str'])).toThrow('EL01102')
+            expect(()=> matchType(['_seq_', String, Number], ['str']    )).toThrow('EL01113')
+            expect(()=> matchType(['_seq_', String, Number], 10         )).toThrow('EL01111')
+            expect(()=> matchType(['_opt_'],    10                  )).toThrow('EL01101')
+            expect(()=> matchType(['_opt_', String, Number], [true] )).toThrow('EL01117')
+            expect(()=> matchType(['_opt_', String, Number], [{}]   )).toThrow('EL01117')
+            expect(()=> matchType(['_opt_', String, Number], 10     )).toThrow('EL01111')
             // expect(()=> matchType(['_req_', String, Number], []              )).toThrow(/ES022/)
-            expect(()=> matchType(['_req_', String, Number], [true]          )).toThrow(/ES076/)
-            expect(()=> matchType(['_req_', String, Number], [{}]            )).toThrow(/ES076/)
-            expect(()=> matchType(['_req_', String, Number], 10              )).toThrow(/ES024/)
-            expect(()=> matchType(Array, function any(){}       )).toThrow(/ES024/);
-            expect(()=> matchType(Array, function any(){}, []   )).toThrow(/ES024/);
-            expect(()=> matchType(Array, null                   )).toThrow(/ES024/);
-            expect(()=> matchType(Array, 'str'                  )).toThrow(/ES024/);
-            expect(()=> matchType(Array, /reg/                  )).toThrow(/ES024/);
-            expect(()=> matchType(Array, 1                      )).toThrow(/ES024/);
-            expect(()=> matchType(Array, Symbol()               )).toThrow(/ES024/);
-            expect(()=> matchType(Array, true                   )).toThrow(/ES024/);
-            expect(()=> matchType(Array, {aa:1}                 )).toThrow(/ES024/);
-            expect(()=> matchType(Array, Number                 )).toThrow(/ES024/);
-            expect(()=> matchType(Array, Symbol                 )).toThrow(/ES024/);
+            expect(()=> matchType(['_req_', String, Number], [true]          )).toThrow('EL01117')
+            expect(()=> matchType(['_req_', String, Number], [{}]            )).toThrow('EL01117')
+            expect(()=> matchType(['_req_', String, Number], 10              )).toThrow('EL01111')
+            expect(()=> matchType(Array, function any(){}       )).toThrow('EL01111');
+            expect(()=> matchType(Array, function any(){}, []   )).toThrow('EL01111');
+            expect(()=> matchType(Array, null                   )).toThrow('EL01111');
+            expect(()=> matchType(Array, 'str'                  )).toThrow('EL01111');
+            expect(()=> matchType(Array, /reg/                  )).toThrow('EL01111');
+            expect(()=> matchType(Array, 1                      )).toThrow('EL01111');
+            expect(()=> matchType(Array, Symbol()               )).toThrow('EL01111');
+            expect(()=> matchType(Array, true                   )).toThrow('EL01111');
+            expect(()=> matchType(Array, {aa:1}                 )).toThrow('EL01111');
+            expect(()=> matchType(Array, Number                 )).toThrow('EL01111');
+            expect(()=> matchType(Array, Symbol                 )).toThrow('EL01111');
         });
         it('- choice : or 타입 (내장 타입) ', () => {
-            expect(()=> matchType([[Array, String]],          1               )).toThrow(/ES076/);
-            expect(()=> matchType([[Array]],                  function any(){})).toThrow(/ES076/);
-            expect(()=> matchType([[String]],                 function any(){})).toThrow(/ES076/);
-            expect(()=> matchType([[String, Number]],         null            )).toThrow(/ES076/);
-            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow(/ES076/);
+            expect(()=> matchType([[Array, String]],          1               )).toThrow('EL01127');
+            expect(()=> matchType([[Array]],                  function any(){})).toThrow('EL01127');
+            expect(()=> matchType([[String]],                 function any(){})).toThrow('EL01127');
+            expect(()=> matchType([[String, Number]],         null            )).toThrow('EL01127');
+            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow('EL01127');
         });
         it('- function() : class 타입', () => {
             const Func1 = function() { this.aa = Number };
             const Func2 = function() { this.aa = 1 };   // 기본값으로 설정
             const Func3 = function() { this.aa = Date };
 
-            expect(()=> matchType(Func1, function any(){}   )).toThrow(/EE001/);
-            expect(()=> matchType(Func1, null               )).toThrow(/ES032/);
-            expect(()=> matchType(Func1, 'str'              )).toThrow(/EE001/);
-            expect(()=> matchType(Func1, /reg/              )).toThrow(/ES069/);
-            expect(()=> matchType(Func1, 1                  )).toThrow(/EE001/);
-            expect(()=> matchType(Func1, Symbol()           )).toThrow(/EE001/);
-            expect(()=> matchType(Func1, true               )).toThrow(/EE001/);
-            expect(()=> matchType(Func1, Number             )).toThrow(/EE001/);
-            expect(()=> matchType(Func1, Symbol             )).toThrow(/EE001/);
+            expect(()=> matchType(Func1, function any(){}   )).toThrow('EL01133');
+            expect(()=> matchType(Func1, null               )).toThrow('EL01132');
+            expect(()=> matchType(Func1, 'str'              )).toThrow('EL01133');
+            expect(()=> matchType(Func1, /reg/              )).toThrow('EL01132');
+            expect(()=> matchType(Func1, 1                  )).toThrow('EL01133');
+            expect(()=> matchType(Func1, Symbol()           )).toThrow('EL01133');
+            expect(()=> matchType(Func1, true               )).toThrow('EL01133');
+            expect(()=> matchType(Func1, Number             )).toThrow('EL01133');
+            expect(()=> matchType(Func1, Symbol             )).toThrow('EL01133');
         });
         it('- Symbol() : symbol 타입', () => {
-            expect(()=> matchType(Symbol, function any(){}  )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, function any(){}  )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, null              )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, 'str'             )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, /reg/             )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, 1                 )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, true              )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, []                )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, {aa:1}            )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, Number            )).toThrow(/ES074/);
-            expect(()=> matchType(Symbol, Symbol            )).toThrow(/ES074/);
+            expect(()=> matchType(Symbol, function any(){}  )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, function any(){}  )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, null              )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, 'str'             )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, /reg/             )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, 1                 )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, true              )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, []                )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, {aa:1}            )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, Number            )).toThrow('EL01102');
+            expect(()=> matchType(Symbol, Symbol            )).toThrow('EL01102');
         });
         it('- Date : object 타입 (class) ', () => {    
-            expect(()=> matchType(Date, function any(){}    )).toThrow(/EE001/);
-            expect(()=> matchType(Date, null                )).toThrow(/ES032/);
-            expect(()=> matchType(Date, true                )).toThrow(/EE001/);
-            expect(()=> matchType(Date, 1                   )).toThrow(/EE001/);
-            expect(()=> matchType(Date, 'str'               )).toThrow(/EE001/);
-            expect(()=> matchType(Date, []                  )).toThrow(/ES032/);
-            expect(()=> matchType(Date, {aa:1}              )).toThrow(/ES032/);
-            expect(()=> matchType(Date, Number              )).toThrow(/EE001/);
-            expect(()=> matchType(Date, /reg/               )).toThrow(/ES032/);
-            expect(()=> matchType(Date, Symbol()            )).toThrow(/EE001/);
-            expect(()=> matchType(Date, Symbol              )).toThrow(/EE001/);
+            expect(()=> matchType(Date, function any(){}    )).toThrow('EL01133');
+            expect(()=> matchType(Date, null                )).toThrow('EL01132');
+            expect(()=> matchType(Date, true                )).toThrow('EL01133');
+            expect(()=> matchType(Date, 1                   )).toThrow('EL01133');
+            expect(()=> matchType(Date, 'str'               )).toThrow('EL01133');
+            expect(()=> matchType(Date, []                  )).toThrow('EL01132');
+            expect(()=> matchType(Date, {aa:1}              )).toThrow('EL01132');
+            expect(()=> matchType(Date, Number              )).toThrow('EL01133');
+            expect(()=> matchType(Date, /reg/               )).toThrow('EL01132');
+            expect(()=> matchType(Date, Symbol()            )).toThrow('EL01133');
+            expect(()=> matchType(Date, Symbol              )).toThrow('EL01133');
         });
     });
     describe('allowType(type, target): bool  <타입 매치 예외> ', () => {
@@ -5888,36 +5888,36 @@ describe("[target: util-type.js.js]", () => {
 
         it('- allowType(a, b) : 원시 자료형 : 예외 ', () => { 
             // null
-            expect(()=> allowType(null,      undefined   )).toThrow('ES0713')
+            expect(()=> allowType(null,      undefined   )).toThrow('EL0120A')
             // Number
-            expect(()=> allowType(Number,    String      )).toThrow('ES0713')
-            expect(()=> allowType(Number,    true        )).toThrow('ES0713')
-            expect(()=> allowType(NaN,       Number      )).toThrow('ES0712')
-            expect(()=> allowType(NaN,       NaN         )).toThrow('ES0712')
-            expect(()=> allowType(NaN,       10          )).toThrow('ES0712')
-            expect(()=> allowType(10,        20          )).toThrow('ES0712')
-            expect(()=> allowType(10,        Number      )).toThrow('ES0712')
-            expect(()=> allowType(10,        NaN         )).toThrow('ES0712') 
+            expect(()=> allowType(Number,    String      )).toThrow('EL0120A')
+            expect(()=> allowType(Number,    true        )).toThrow('EL0120A')
+            expect(()=> allowType(NaN,       Number      )).toThrow('EL01209')
+            expect(()=> allowType(NaN,       NaN         )).toThrow('EL01209')
+            expect(()=> allowType(NaN,       10          )).toThrow('EL01209')
+            expect(()=> allowType(10,        20          )).toThrow('EL01209')
+            expect(()=> allowType(10,        Number      )).toThrow('EL01209')
+            expect(()=> allowType(10,        NaN         )).toThrow('EL01209') 
             // String
-            expect(()=> allowType(String,    10          )).toThrow('ES0713')
-            expect(()=> allowType(String,    Boolean     )).toThrow('ES0713')
-            expect(()=> allowType('str',     ''          )).toThrow('ES0712')
-            expect(()=> allowType('str',     String      )).toThrow('ES0712')
+            expect(()=> allowType(String,    10          )).toThrow('EL0120A')
+            expect(()=> allowType(String,    Boolean     )).toThrow('EL0120A')
+            expect(()=> allowType('str',     ''          )).toThrow('EL01209')
+            expect(()=> allowType('str',     String      )).toThrow('EL01209')
             // Boolean
-            expect(()=> allowType(Boolean,   'str'       )).toThrow('ES0713')
-            expect(()=> allowType(true,      false       )).toThrow('ES0712')
-            expect(()=> allowType(true,      Boolean     )).toThrow('ES0712')
+            expect(()=> allowType(Boolean,   'str'       )).toThrow('EL0120A')
+            expect(()=> allowType(true,      false       )).toThrow('EL01209')
+            expect(()=> allowType(true,      Boolean     )).toThrow('EL01209')
             // undefined
-            expect(()=> allowType(undefined, null        )).toThrow('ES069')
+            expect(()=> allowType(undefined, null        )).toThrow('ES026')
             // null
-            expect(()=> allowType(null,      undefined   )).toThrow('ES0713')
-            expect(()=> allowType(null,      {}          )).toThrow('ES0713')
-            expect(()=> allowType(null,      Object      )).toThrow('ES0713')
+            expect(()=> allowType(null,      undefined   )).toThrow('EL0120A')
+            expect(()=> allowType(null,      {}          )).toThrow('EL0120A')
+            expect(()=> allowType(null,      Object      )).toThrow('EL0120A')
             // Symbol
-            expect(()=> allowType(Symbol,    null        )).toThrow('ES0713')
-            expect(()=> allowType(Symbol,    Object      )).toThrow('ES0713')
-            expect(()=> allowType(Symbol(),  null        )).toThrow('ES0713')
-            expect(()=> allowType(Symbol(),  Object      )).toThrow('ES0713')
+            expect(()=> allowType(Symbol,    null        )).toThrow('EL0120A')
+            expect(()=> allowType(Symbol,    Object      )).toThrow('EL0120A')
+            expect(()=> allowType(Symbol(),  null        )).toThrow('EL0120A')
+            expect(()=> allowType(Symbol(),  Object      )).toThrow('EL0120A')
         });
         it('- allowType(a, b) : array choice : 예외', () => {        
             // all 
@@ -5925,50 +5925,50 @@ describe("[target: util-type.js.js]", () => {
             // any
             // expect(()=> allowType(['_any_'],                 []                         )).toThrow('ES0727')
             expect(()=> allowType(['_any_'],                 undefined                  )).toThrow('ES069')
-            expect(()=> allowType(['_any_'],                 ['_seq_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_any_'],                 ['_opt_']                  )).toThrow('ES0729')
+            expect(()=> allowType(['_any_'],                 ['_seq_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_any_'],                 ['_opt_']                  )).toThrow('EL01201')
             // expect(()=> allowType(['_any_'],                 ['_non_']                  )).toThrow('ES0727')
             // seq
-            expect(()=> allowType(['_seq_'],                 ['_seq_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_seq_'],                 ['_seq_', Boolean]         )).toThrow('ES0729')
-            expect(()=> allowType(['_seq_'],                 []                         )).toThrow('ES0729')
-            expect(()=> allowType(['_seq_', Number],         ['_seq_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_seq_', Number],         ['_seq_', Boolean]         )).toThrow('ES0713')
-            expect(()=> allowType(['_seq_', Number],         [Number]                   )).toThrow('ES0728')
-            expect(()=> allowType(['_seq_', Number, String], ['_seq_', Number]          )).toThrow('ES0720')
-            expect(()=> allowType(['_seq_', Number, String], [Number]                   )).toThrow('ES0728')
+            expect(()=> allowType(['_seq_'],                 ['_seq_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_seq_'],                 ['_seq_', Boolean]         )).toThrow('EL01201')
+            expect(()=> allowType(['_seq_'],                 []                         )).toThrow('EL01201')
+            expect(()=> allowType(['_seq_', Number],         ['_seq_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_seq_', Number],         ['_seq_', Boolean]         )).toThrow('EL0120A')
+            expect(()=> allowType(['_seq_', Number],         [Number]                   )).toThrow('EL01208')
+            expect(()=> allowType(['_seq_', Number, String], ['_seq_', Number]          )).toThrow('EL01215')
+            expect(()=> allowType(['_seq_', Number, String], [Number]                   )).toThrow('EL01208')
             // opt
-            expect(()=> allowType(['_opt_'],                 ['_opt_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_opt_'],                 ['_opt_', String]          )).toThrow('ES0729')
-            expect(()=> allowType(['_opt_'],                 ['_any_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_opt_'],                 []                         )).toThrow('ES0729') 
-            expect(()=> allowType(['_opt_'],                 [String]                   )).toThrow('ES0729')
-            expect(()=> allowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('ES0738')
-            expect(()=> allowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('ES0738')
-            expect(()=> allowType(['_opt_', String],         ['_opt_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('ES0728')
-            expect(()=> allowType(['_opt_', String],         [Number]                   )).toThrow('ES0738')
-            expect(()=> allowType(['_opt_', String],         [undefined]                )).toThrow('ES0738')   // length > 0 이면 true
-            expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('ES0728')
-            expect(()=> allowType(['_opt_', String],         []                         )).toThrow('ES0728')
-            expect(()=> allowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('ES0738')
-            expect(()=> allowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('ES0738')
-            expect(()=> allowType(['_opt_', String, Number], ['_opt_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_opt_', String, Number], ['_any_']                  )).toThrow('ES0728')
-            expect(()=> allowType(['_opt_', String, Number], [undefined]                )).toThrow('ES0738')
-            expect(()=> allowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('ES0738')
+            expect(()=> allowType(['_opt_'],                 ['_opt_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_opt_'],                 ['_opt_', String]          )).toThrow('EL01201')
+            expect(()=> allowType(['_opt_'],                 ['_any_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_opt_'],                 []                         )).toThrow('EL01201') 
+            expect(()=> allowType(['_opt_'],                 [String]                   )).toThrow('EL01201')
+            expect(()=> allowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String],         ['_opt_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('EL01206')
+            expect(()=> allowType(['_opt_', String],         [Number]                   )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String],         [undefined]                )).toThrow('EL01219')   // length > 0 이면 true
+            expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('EL01206')
+            expect(()=> allowType(['_opt_', String],         []                         )).toThrow('EL01206')
+            expect(()=> allowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String, Number], ['_opt_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_opt_', String, Number], ['_any_']                  )).toThrow('EL01206')
+            expect(()=> allowType(['_opt_', String, Number], [undefined]                )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('EL01219')
             // val
-            expect(()=> allowType(['_req_', String, Number],          ['_req_', String, Boolean, Number]  )).toThrow('ES0738')
-            expect(()=> allowType(['_req_', String, Number],          ['_opt_']                  )).toThrow('ES0729')
-            expect(()=> allowType(['_req_', String, Number],          ['_any_']                  )).toThrow('ES0727')
+            expect(()=> allowType(['_req_', String, Number],          ['_req_', String, Boolean, Number]  )).toThrow('EL01219')
+            expect(()=> allowType(['_req_', String, Number],          ['_opt_']                  )).toThrow('EL01201')
+            expect(()=> allowType(['_req_', String, Number],          ['_any_']                  )).toThrow('EL01207')
             // non 
             // expect(()=> allowType(['_non_'],                 ['_any_']                  )).toThrow('ES0728')
             // etc. 
             // expect(()=> allowType(['_etc_'],                 [null]                     )).toThrow('ES0735')
         }); 
         it('- allowType(a, b) : choice : 예외', () => {     
-            expect(()=> allowType([['_any_']],                  undefined             )).toThrow('ES0714')
-            expect(()=> allowType([['_any_']],                                        )).toThrow('ES0714')
+            expect(()=> allowType([['_any_']],                  undefined             )).toThrow('EL01221')
+            expect(()=> allowType([['_any_']],                                        )).toThrow('EL01221')
             // expect(()=> allowType([['_seq_']],                  [['_seq_']]           )).toThrow('ES0729')
             // expect(()=> allowType([['_seq_']],                  [['_seq_', String]]   )).toThrow('ES0729') 
             // expect(()=> allowType([['_seq_']],                  [['_seq_', Number]]   )).toThrow('ES0729')
@@ -5977,24 +5977,24 @@ describe("[target: util-type.js.js]", () => {
             // expect(()=> allowType([['_seq_', Number]],          [[Number]]                    )).toThrow('ES0728')
             // expect(()=> allowType([['_seq_', Number, String]],  [['_seq_', Number]]           )).toThrow('ES0732')
             // expect(()=> allowType([['_seq_', Number, String]],  [[Number]]                    )).toThrow('ES0728')
-            expect(()=> allowType([['_opt_']],                  [['_opt_']]                   )).toThrow('ES0729')
-            expect(()=> allowType([['_opt_']],                  [['_opt_', String]]           )).toThrow('ES0729')
-            expect(()=> allowType([['_opt_']],                  [['_any_']]                   )).toThrow('ES0729')
-            expect(()=> allowType([['_opt_']],                  undefined                     )).toThrow('ES0729')
-            expect(()=> allowType([['_opt_']],                  [[String]]                    )).toThrow('ES0729')
-            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('ES0738')
-            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('ES0738')
-            expect(()=> allowType([['_opt_', String]],          [['_opt_']]                   )).toThrow('ES0729')
-            expect(()=> allowType([['_opt_', String]],          [['_any_']]                   )).toThrow('ES0728')
-            expect(()=> allowType([['_opt_', String]],          [[Number]]                    )).toThrow('ES0738')
-            expect(()=> allowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('ES0738')
-            expect(()=> allowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('ES0738')
-            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_']]                   )).toThrow('ES0729')
-            expect(()=> allowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('ES0728')
-            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('ES0738')
-            expect(()=> allowType([['_req_', String, Number]],           [['_req_', String, Boolean, Number]]   )).toThrow('ES0738')
-            expect(()=> allowType([['_req_', String, Number]],           [['_opt_']]                   )).toThrow('ES0729')
-            expect(()=> allowType([['_req_', String, Number]],           [['_any_']]                   )).toThrow('ES0727')
+            expect(()=> allowType([['_opt_']],                  [['_opt_']]                   )).toThrow('EL01201')
+            expect(()=> allowType([['_opt_']],                  [['_opt_', String]]           )).toThrow('EL01201')
+            expect(()=> allowType([['_opt_']],                  [['_any_']]                   )).toThrow('EL01201')
+            expect(()=> allowType([['_opt_']],                  undefined                     )).toThrow('EL01201')
+            expect(()=> allowType([['_opt_']],                  [[String]]                    )).toThrow('EL01201')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_']]                   )).toThrow('EL01201')
+            expect(()=> allowType([['_opt_', String]],          [['_any_']]                   )).toThrow('EL01206')
+            expect(()=> allowType([['_opt_', String]],          [[Number]]                    )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_']]                   )).toThrow('EL01201')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('EL01206')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('EL0122G')
+            expect(()=> allowType([['_req_', String, Number]],           [['_req_', String, Boolean, Number]]   )).toThrow('EL0122G')
+            expect(()=> allowType([['_req_', String, Number]],           [['_opt_']]                   )).toThrow('EL01201')
+            expect(()=> allowType([['_req_', String, Number]],           [['_any_']]                   )).toThrow('EL01207')
         });
         it('- isAllowType(a, b) : function ', () => {
             var type1   = function(String, Number){Boolean}
@@ -6037,9 +6037,9 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(String,       String)).toBe(T );
             expect(isAllowType(ClassA,       ClassE)).toBe(false );
             // 예외 : 오류코드
-            expect(()=> allowType(ClassA,       ClassB)).toThrow('ES0725')
-            expect(()=> allowType(ClassA,       ClassC)).toThrow('ES0725')
-            expect(()=> allowType(ClassA,       ClassE)).toThrow('ES0725')
+            expect(()=> allowType(ClassA,       ClassB)).toThrow('EL01233')
+            expect(()=> allowType(ClassA,       ClassC)).toThrow('EL01233')
+            expect(()=> allowType(ClassA,       ClassE)).toThrow('EL01233')
         }); 
         it('- isAllowType(a, b) : union (기본) ', () => {
             var type1      = {str: String, num: Number};
@@ -6048,7 +6048,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(type1,    {str: '', num: 0}           )).toBe(true);
             expect(isAllowType(type1,    {str: ''}                   )).toBe(false);
             // 예외 : 오류코드
-            expect(()=> allowType(type1,    {str: ''}                )).toThrow('ES0713')
+            expect(()=> allowType(type1,    {str: ''}                )).toThrow('EL0120A')
         });
         it('- isAllowType(a, b) : union (choice) ', () => {        
             var type1   = {str: [[String, Number]], bool: [['_any_']], num: [['_opt_', Number]]}; 
@@ -6059,9 +6059,9 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(type1, {str: String, bool: false, num: String}          )).toBe(false);
             expect(isAllowType(type1, {str: String}                                    )).toBe(false);
             // 예외 : 오류코드
-            expect(()=> allowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('ES0738')
-            expect(()=> allowType(type1, {str: String, bool: false, num: String}          )).toThrow('ES0738')
-            expect(()=> allowType(type1, {str: String}                                    )).toThrow('ES0714')
+            expect(()=> allowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('EL0122G')
+            expect(()=> allowType(type1, {str: String, bool: false, num: String}          )).toThrow('EL0122G')
+            expect(()=> allowType(type1, {str: String}                                    )).toThrow('EL01221')
         });
     });
 });

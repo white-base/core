@@ -186,9 +186,9 @@
         try {
             if (syntax1.test(funBody)) arrFunc = regFunc1.exec(funBody);
             else if (syntax2.test(funBody)) arrFunc = regFunc2.exec(funBody);
-            else throw new ExtendError(Message.get('ES071', [funBody]));
+            else throw new ExtendError(/EL01301/, null, [funBody]);
             
-            if (arrFunc === null) throw new ExtendError(Message.get('ES072', [funBody]));
+            if (arrFunc === null) throw new ExtendError(/EL01302/, null, [funBody]);
 
             arrParam = (new Function('return ['+ arrFunc[1] +']'))();
             result['params'] = arrParam;
@@ -197,7 +197,7 @@
             result['return'] = arrRetrun;
 
         } catch (error) {
-            throw new ExtendError(Message.get('ES073', ['']), error);
+            throw new ExtendError(/EL01303/, null, [''], error);
         }
 
         return result;
@@ -509,13 +509,13 @@
             if (type['func']) obj['func'] = type['func'];
             if (type['params']) obj['params'] = type['params'];
             if (type['return']) obj['return'] = type['return'];
-            if (!_hasType(obj['$type'])) throw new ExtendError(Message.get('ES022', ['type']));
+            if (!_hasType(obj['$type'])) throw new ExtendError(/EL01303/, null, ['type']);
             if (obj['$type'] === 'array') {
                 obj['kind'] = obj['kind'] || '_ALL_';
-                if (!_hasKindArray(obj['kind'])) throw new ExtendError(Message.get('ES022', ['array kind']));
+                if (!_hasKindArray(obj['kind'])) throw new ExtendError(/EL01304/, null, ['array kind']);
             }
             if (obj['$type'] === 'choice') {
-                if (!_hasKindChoice(obj['kind'])) throw new ExtendError(Message.get('ES022', ['choice kind']));
+                if (!_hasKindChoice(obj['kind'])) throw new ExtendError(/EL01305/, null, ['choice kind']);
             }
             return obj;
         } else {
@@ -604,15 +604,15 @@
             }
             if (!obj['kind']) obj['kind'] = '_OPT_';
             // kind 검사
-            if (obj['$type'] === 'array' && !_hasKindArray(obj['kind'])) throw new ExtendError(Message.get('ES022', ['array kind']));
-            if (obj['$type'] === 'choice' && !_hasKindChoice(obj['kind'])) throw new ExtendError(Message.get('ES022', ['choice kind']));
+            if (obj['$type'] === 'array' && !_hasKindArray(obj['kind'])) throw new ExtendError(/EL01306/, null, ['array kind']);
+            if (obj['$type'] === 'choice' && !_hasKindChoice(obj['kind'])) throw new ExtendError(/EL01307/, null, ['choice kind']);
 
         // step : object
         } else if (_isFillObj(type) || _isEmptyObj(type)) {
             obj['$type'] = 'union';
         } else if(_isPrimitiveObj(type)) {
             obj['$type'] = 'object';
-        } else throw new ExtendError(Message.get('ES022', ['type']));    // Line:
+        } else throw new ExtendError(/EL01308/, null, ['type']);    // Line:
         
         return obj;
     }
@@ -624,12 +624,18 @@
      * @param {any} origin 원본 타입
      * @param {any} target 대상 타입
      * @param {number} opt 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
+     * @param {string?} pathName '' 공백시 성공
      * @returns {throw?}
      */
-    var _execAllow = function (origin, target, opt) {
+    var _execAllow = function (origin, target, opt, pathName) {
         var oriType = extendType(origin);
         var tarType = extendType(target);
+        var prop = {};
+        var sExt = oriType.toString(), sTar = tarType.toString();
+        var typeMsg = 'extType:['+ sExt +'], tarType:['+ sTar +']';
         
+        pathName = pathName ? pathName : 'extType';
+        if (pathName !== 'extType' || !pathName) prop['error path'] = pathName;    // TODO: 'target' 명칭의 중복 수정필요
         opt = opt || 0;
 
         if (_isObject(oriType['ref']) &&  _isObject(tarType['ref']) && deepEqual(oriType, tarType)) return;
@@ -637,43 +643,43 @@
         if (oriType['kind']) {
             if ((oriType['kind'] === '_SEQ_' || oriType['kind'] === '_OPT_' || oriType['kind'] === '_REQ_') 
             && (/*typeof oriType['ref'] === 'undefined' || */ oriType['list'].length === 0)) {
-                throw new ExtendError(Message.get('ES0729', ['origin', oriType['kind']]));
+                throw new ExtendError(Message.get('EL01201', ['origin', oriType['kind']])+ typeMsg, prop);
             }
         }
         // target seq, opt 필수 검사
         if (tarType['kind']) {
             if ((tarType['kind'] === '_SEQ_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_REQ_') 
             && (/*typeof tarType['ref'] === 'undefined' || */ tarType['list'].length === 0)) {
-                throw new ExtendError(Message.get('ES0729', ['target', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01201', ['target', tarType['kind']])+ typeMsg, prop);
             }
         }
         // all, non, any, req, opt, seq 타입 검사
         if (oriType['kind'] && tarType['kind'] && oriType['$type'] === tarType['$type']) {
             // 거부조건
             if (oriType['kind'] === '_ALL_' && (tarType['kind'] === '_ERR_')) {
-                throw new ExtendError(Message.get('ES0727', [oriType['kind'], '_NON_', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01202', [oriType['kind'], '_NON_', tarType['kind']])+ typeMsg, prop);
             } 
             if (oriType['kind'] === '_NON_' && tarType['kind'] !== '_NON_') { 
-                throw new ExtendError(Message.get('ES0728', [oriType['kind'], '_NON_', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01203', [oriType['kind'], '_NON_', tarType['kind']])+ typeMsg, prop);
             }
             if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_' || tarType['kind'] === '_ERR_')) {
-                throw new ExtendError(Message.get('ES0727', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01204', [oriType['kind'], '_REQ_, _ALL_, _NON_', tarType['kind']])+ typeMsg, prop);
             }
             if (oriType['kind'] === '_ERR_' && tarType['kind'] !== '_ERR_') { 
-                throw new ExtendError(Message.get('ES0728', [oriType['kind'], '_ERR_', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01205', [oriType['kind'], '_ERR_', tarType['kind']])+ typeMsg, prop);
             }
             
             // if (oriType['kind'] === '_ANY_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_NON_')) {
             //     Message.error('ES0727', [oriType['kind'], '_ALL_, _NON_', tarType['kind']]);
             // }
             if (oriType['kind'] === '_OPT_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_ANY_' || tarType['kind'] === '_NON_') ){
-                throw new ExtendError(Message.get('ES0728', [oriType['kind'], '_OPT_, _SEQ_', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01206', [oriType['kind'], '_OPT_, _SEQ_', tarType['kind']])+ typeMsg, prop);
             } 
             if (oriType['kind'] === '_REQ_' && (tarType['kind'] === '_ALL_' || tarType['kind'] === '_ANY_' ||  tarType['kind'] === '_OPT_' || tarType['kind'] === '_NON_')) {
-                throw new ExtendError(Message.get('ES0727', [oriType['kind'], '_ANY_, _ALL_, _OPT_, _NON_', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01207', [oriType['kind'], '_ANY_, _ALL_, _OPT_, _NON_', tarType['kind']])+ typeMsg, prop);
             }
             if (oriType['kind'] === '_SEQ_' && tarType['kind'] !== '_SEQ_') { 
-                throw new ExtendError(Message.get('ES0728', [oriType['kind'], '_SEQ_', tarType['kind']]));
+                throw new ExtendError(Message.get('EL01208', [oriType['kind'], '_SEQ_', tarType['kind']])+ typeMsg, prop);
             }
             // 허용 조건
             if (oriType['kind'] === '_ALL_' && (tarType['kind'] !== '_NON_')) return;   // REVIEW: 상단으로 통합 대기
@@ -684,33 +690,33 @@
         //  원본은 초이스가 아니고, target choice 의 인 경우
         if (oriType['$type'] !== 'choice' && tarType['$type'] === 'choice' ) {
             var choType = { $type: 'choice', kind: '_REQ_', list: [origin] };
-            _execAllow(choType, target, opt);
+            _execAllow(choType, target, opt, pathName);
             return;
         }
 
         // check allow type
         if (_isLeafType(oriType['$type'])) {
             if(typeof oriType['default'] !== 'undefined' && oriType['default'] !== null && !_equalLiternal(oriType['default'], tarType['default'])) {
-                throw new ExtendError(Message.get('ES0712', [oriType['$type'], oriType['default'], tarType['default']]));
+                throw new ExtendError(Message.get('EL01209', [oriType['$type'], oriType['default'], tarType['default']])+ typeMsg, prop);
             }
             // if (tarType['$type'] === 'choice') {
             //     var choType = { $type: 'choice', kind: '_OPT_', list: [oriType] };
             //     _execAllow(choType, tarType, opt);
             // } else if (oriType['$type'] !== tarType['$type']) Message.error('ES0713', [oriType['$type'], tarType['$type']]);
-            if (oriType['$type'] !== tarType['$type']) throw new ExtendError(Message.get('ES0713', [oriType['$type'], tarType['$type']]));
+            if (oriType['$type'] !== tarType['$type']) throw new ExtendError(Message.get('EL0120A', [oriType['$type'], tarType['$type']])+ typeMsg, prop);
         
         } else if (oriType['$type'] === 'array')  arrayAllow();
         else if (oriType['$type'] === 'choice') choiceAllow();
         else if (oriType['$type'] === 'class') classAllow();
         else if (oriType['$type'] === 'union') unionAllow();
         else if (oriType['$type'] === 'function') functionAllow();
-        else throw new ExtendError(Message.get('ES022', ['type']));    // Line:
+        else throw new ExtendError(Message.get('ES022', ['type'])+ typeMsg, prop);    // Line:
 
         // inner function
         function arrayAllow() {
             // if (oriType['list'].length === 0 && !oriType['kind'] && tarType['$type'] === 'array') return;      // [], [[]], Array
             if (oriType['list'].length === 0 && tarType['$type'] === 'array') return;      // [], [[]], Array
-            if (!Array.isArray(tarType['list'])) Message.error('ES0719', ['array']);
+            if (!Array.isArray(tarType['list'])) throw new ExtendError(Message.error('EL01211', ['array'])+ typeMsg, prop);
             
             // _ALL_ (all)
             if (oriType['kind'] === '_ALL_') {
@@ -718,24 +724,24 @@
 
             // _ANY_ (any)
             } else if (oriType['kind'] === '_ANY_') {
-                if (tarType['kind'] && tarType['list'].length === 0) Message.error('ES075', ['array _ANY_', 'undefined']);
+                if (tarType['kind'] && tarType['list'].length === 0) throw new ExtendError(Message.get('EL01212', ['array _ANY_', 'undefined'])+ typeMsg, prop);
                 if (tarType['list'].length > 0) return;
-                throw new ExtendError(Message.get('ES0738', ['array(any)', error])); // Line:
+                throw new ExtendError(Message.get('EL01213', ['array(any)', error])+ typeMsg, prop); // Line:
                 // throw new ExtendError('array any 는 하나 이싱 요소가 존재해야 합니다.');  
 
             // _SEQ_ (sequence)
             } else if (oriType['kind'] === '_SEQ_') {
-                if (oriType['kind'] !== tarType['kind'])  throw new ExtendError(Message.get('ES0719', ['_SEQ_']));
+                if (oriType['kind'] !== tarType['kind'])  throw new ExtendError(Message.get('EL01214', ['_SEQ_'])+ typeMsg, prop);
                 if (oriType['list'].length > tarType['list'].length) {
-                    throw new ExtendError(Message.get('ES0720', [oriType.toString(), tarType.toString()]));
+                    throw new ExtendError(Message.get('EL01215', [oriType.toString(), tarType.toString()])+ typeMsg, prop);
                 }
 
                 // element check
                 for (var i = 0; i < oriType['list'].length; i++) {
                     try {
-                        _execAllow(oriType['list'][i], tarType['list'][i], opt);
+                        _execAllow(oriType['list'][i], tarType['list'][i], opt, pathName);
                     } catch (error) {
-                        throw new ExtendError(Message.get('ES0711', ['array', '_SEQ_', '']), error);
+                        throw new ExtendError(Message.get('EL01216', ['array', '_SEQ_', '']), error);
                     }
                 }
                 return;
@@ -746,7 +752,7 @@
                 //     Message.error('ES0716', ['array _OPT_', oriType.toString(), tarType.toString()]);
                 // }
                 if (oriType['list'].length > 0 && tarType['list'].length === 0) {
-                    throw new ExtendError(Message.get('ES0717', ['array']));     // Line:
+                    throw new ExtendError(Message.get('EL01217', ['array'])+ typeMsg, prop);     // Line:
                 }
                 // element check
                 // for (var i = 0; i < tarType['list'].length; i++) {
@@ -802,7 +808,7 @@
             
             // throw 
             } else {              
-                throw new ExtendError(Message.get('ES0735', [oriType['kind']]));     // Line:
+                throw new ExtendError(Message.get('EL01218', [oriType['kind']])+ typeMsg, prop);     // Line:
             }
 
             // element check
@@ -813,9 +819,9 @@
                         if (success) break;
                         if (extendType(tarType['list'][i])['$type'] === 'choice' && extendType(oriType['list'][ii])['$type'] !== 'choice' ) {
                             var oriChoice = { $type: 'choice', kind: '_OPT_', list: oriType['list'] };
-                            _execAllow(oriChoice, tarType['list'][i], opt);
+                            _execAllow(oriChoice, tarType['list'][i], opt, pathName);
                         } else {
-                            _execAllow(oriType['list'][ii], tarType['list'][i], opt);
+                            _execAllow(oriType['list'][ii], tarType['list'][i], opt, pathName);
                         }
                         success = true;
 
@@ -826,7 +832,7 @@
                         continue;
                     }
                 }
-                if (!success) throw new ExtendError(Message.get('ES0738', ['array(_REQ_)', extendType(tarType['list'][i])['$type']]));
+                if (!success) throw new ExtendError(Message.get('EL01219', ['array(_REQ_)', extendType(tarType['list'][i])['$type']])+ typeMsg, prop);
             }
         }
         
@@ -847,14 +853,14 @@
             // _ANY_ (any)
             } else if (oriType['kind'] === '_ANY_') {
                 if (typeof tarType['ref'] !== 'undefined') return;
-                throw new ExtendError(Message.get('ES0714', ['_ANY_', 'undefined']));
+                throw new ExtendError(Message.get('EL01221', ['_ANY_', 'undefined'])+ typeMsg, prop);
             
             // _NON_ TODO: 확인 팔요, 공통적으로 
 
             // _ERR_ (error)
             } else if (oriType['kind'] === '_ERR_') {
                 if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
-                    throw new ExtendError(Message.get('ES021', ['target', 'choice(err)']));
+                    throw new ExtendError(Message.get('EL01222', ['target', 'choice(err)'])+ typeMsg, prop);
                     // throw new ExtendError('target 은 _err_ 타입만 가능합니다.');
                 }
                 return;
@@ -876,7 +882,7 @@
             // _REQ_ (require)
             } else if (oriType['kind'] === '_REQ_') {
                 if (tarType['kind'] && tarType['ref'].length === 0) {
-                    throw new ExtendError(Message.get('ES0734'));    // Line:
+                    throw new ExtendError(Message.get('EL01223')+ typeMsg, prop);    // Line:
                 }
                 // var arrTarget = (tarType['kind']) ? tarType['list'] : [tarType['ref']];
 
@@ -923,35 +929,35 @@
             // _EUN_ (enumeration)
             } else if (oriType['kind'] === '_EUM_') {
                 if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
-                    throw new ExtendError(Message.get('ES021', ['target', 'choice(eum)']));
+                    throw new ExtendError(Message.get('EL01224', ['target', 'choice(eum)'])+ typeMsg, prop);
                     // throw new ExtendError('target 은 _eum_ 타입만 가능합니다.');
                 }
-                if (oriType['list'].length === 0) throw new ExtendError(Message.get('ES0738', ['origin']));
+                if (oriType['list'].length === 0) throw new ExtendError(Message.get('EL01225', ['origin'])+ typeMsg, prop);
                 // if (oriType['list'].length === 0) throw new ExtendError('origin _eum_(enum) 1개이상 항목이 필요합니디.');
-                if (tarType['list'].length === 0) throw new ExtendError(Message.get('ES0738', ['target']));
+                if (tarType['list'].length === 0) throw new ExtendError(Message.get('EL01226', ['target'])+ typeMsg, prop);
                 // if (tarType['list'].length === 0) throw new ExtendError('target _eum_(enum) 1개이상 항목이 필요합니디.');
                 for (var ii = 0; ii < oriType['list'].length; ii++) {
-                    if (!_isLiteral(oriType['list'][ii])) throw new ExtendError(Message.get('ES021', ['origin choice(eum)', '리터럴']));
+                    if (!_isLiteral(oriType['list'][ii])) throw new ExtendError(Message.get('EL01227', ['origin choice(eum)', '리터럴'])+ typeMsg, prop);
                     // if (!_isLiteral(oriType['list'][ii])) throw new ExtendError('origin _eum_(enum)은 리터럴 타입만 가능합니다.');
                 }
                 for (var ii = 0; ii < tarType['list'].length; ii++) {
-                    if (!_isLiteral(tarType['list'][ii])) throw new ExtendError(Message.get('ES021', ['target choice(eum)', '리터럴']));
+                    if (!_isLiteral(tarType['list'][ii])) throw new ExtendError(Message.get('EL01228', ['target choice(eum)', '리터럴'])+ typeMsg, prop);
                     // if (!_isLiteral(tarType['list'][ii])) throw new ExtendError('target _eum_(enum)은 리터럴 타입만 가능합니다.');
                 }
 
             // _DEF_ (default)
             } else if (oriType['kind'] === '_DEF_') {
                 if (oriType['$type'] !== tarType['$type'] || oriType['kind'] !== tarType['kind']) {
-                    throw new ExtendError(Message.get('ES021', ['target choice', 'choice(def)']));
+                    throw new ExtendError(Message.get('EL01229', ['target choice', 'choice(def)'])+ typeMsg, prop);
                     // throw new ExtendError('target 은 _def_ 타입만 가능합니다.');
                 }
-                if (oriType['list'].length === 0) throw new ExtendError(Message.get('ES0738', ['origin choice(def)']));
+                if (oriType['list'].length === 0) throw new ExtendError(Message.get('EL0122A', ['origin choice(def)'])+ typeMsg, prop);
                 // if (oriType['list'].length === 0) throw new ExtendError('origin _def_(default) 1개이상 항목이 필요합니디.');
-                if (tarType['list'].length === 0) throw new ExtendError(Message.get('ES0738', ['target choice(def)']));
+                if (tarType['list'].length === 0) throw new ExtendError(Message.get('EL0122B', ['target choice(def)'])+ typeMsg, prop);
                 // if (tarType['list'].length === 0) throw new ExtendError('target _def_(default) 1개이상 항목이 필요합니디.');
-                if (!_isLiteral(oriType['list'][0])) throw new ExtendError(Message.get('ES021', ['origin choice(def)', '1번재는 리터럴타입']));
+                if (!_isLiteral(oriType['list'][0])) throw new ExtendError(Message.get('EL0122C', ['origin choice(def)', '1번재는 리터럴타입'])+ typeMsg, prop);
                 // if (!_isLiteral(oriType['list'][0])) throw new ExtendError('origin _def_(default) 1번째는 리터럴 타입만 가능합니다.');
-                if (!_isLiteral(tarType['list'][0])) throw new ExtendError(Message.get('ES021', ['target choice(def)', '1번재는 리터럴타입']));
+                if (!_isLiteral(tarType['list'][0])) throw new ExtendError(Message.get('EL0122D', ['target choice(def)', '1번재는 리터럴타입'])+ typeMsg, prop);
                 // if (!_isLiteral(tarType['list'][0])) throw new ExtendError('target _def_(default) 1번째는 리터럴 타입만 가능합니다.');
                 // if (typeof target === 'undefined') {
                 //     target = oriType['list'][0];
@@ -959,7 +965,7 @@
                 // }
 
             } else {
-                throw new ExtendError(Message.get('ES0735', [oriType['kind']]));
+                throw new ExtendError(Message.get('EL0122E', [oriType['kind']])+ typeMsg, prop);
             }
 
             // element check
@@ -969,20 +975,20 @@
             var arrTarget = (tarType['kind']) ? tarType['list'] : [target];
 
             if (oriType['list'].length > 0 && arrTarget.length === 0) {
-                throw new ExtendError(Message.get('ES0717', [oriType.toString(), arrTarget.toString(),]));
+                throw new ExtendError(Message.get('EL0122F', [oriType.toString(), arrTarget.toString(),])+ typeMsg, prop);
             }
             for (var i = 0; i < arrTarget.length; i++) {
                 var success = false;
                 for (var ii = 0; ii < oriType['list'].length; ii++) {
                     try {
                         if (success) continue;
-                        _execAllow(oriType['list'][ii], arrTarget[i], opt);
+                        _execAllow(oriType['list'][ii], arrTarget[i], opt, pathName);
                         success = true;
                     } catch (error) {
                         continue;
                     }
                 }
-                if (!success) throw new ExtendError(Message.get('ES0738', ['_OPT_', extendType(arrTarget[i])['$type']]));
+                if (!success) throw new ExtendError(Message.get('EL0122G', ['_OPT_', extendType(arrTarget[i])['$type']])+ typeMsg, prop);
             }
         }
         
@@ -994,9 +1000,9 @@
                         // 생성비교
                         var oriObj = new oriType['ref']();
                         var tarObj = new tarType['ref']();
-                        return _execAllow(oriObj, tarObj, opt);
+                        return _execAllow(oriObj, tarObj, opt, pathName);
                     } catch (error) {
-                        throw new ExtendError(Message.get('ES0724', ['object', '']), error);
+                        throw new ExtendError(Message.get('EL01231', ['object', '']), error);
                     }                    
                 }
             } else if (tarType['$type'] === 'union') {  // # class to union
@@ -1004,55 +1010,55 @@
                     try {
                         // 생성비교
                         var oriObj = new oriType['ref']();
-                        return _execAllow(oriObj, tarType['ref'], opt);
+                        return _execAllow(oriObj, tarType['ref'], opt, pathName);
                     } catch (error) {
-                        throw new ExtendError(Message.get('ES0724', ['object', '']), error);
+                        throw new ExtendError(Message.get('EL01232', ['object', '']), error);
                     }                    
                 }
             }
-            throw new ExtendError(Message.get('ES0725', ['object']));
+            throw new ExtendError(Message.get('EL01233', ['object'])+ typeMsg, prop);
         }
 
         function unionAllow() {
             var list;
 
-            if (tarType['$type'] !== 'union') throw new ExtendError(Message.get('ES024', ['target', 'union']));
+            if (tarType['$type'] !== 'union') throw new ExtendError(Message.get('EL01241', ['target', 'union'])+ typeMsg, prop);
             // if (tarType['$type'] !== 'union') throw new ExtendError('union 타입이 아닙니다.');
             list = getAllProperties(oriType['ref']);
 
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
                 try {
-                    _execAllow(oriType['ref'][key], tarType['ref'][key], opt);
+                    _execAllow(oriType['ref'][key], tarType['ref'][key], opt, pathName);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0726', ['union', '']), error);
+                    throw new ExtendError(Message.get('EL01242', ['union', '']), error);
                 }
             }
         }
 
         function functionAllow() {
-            if (tarType['$type'] !== 'function')  throw new ExtendError(Message.get('ES0713', [oriType['$type'], tarType['$type']]));
+            if (tarType['$type'] !== 'function')  throw new ExtendError(Message.get('ES0713', [oriType['$type'], tarType['$type']])+ typeMsg, prop);
             if (oriType['ref'] === Function) return;
             // special type check
             if (oriType['name']) {
                 if (oriType['name'] === target.name  
                 || oriType['name'] === tarType['name'] 
                 || (tarType['func'] && oriType['name'] === tarType['func'].name)) return;
-                throw new ExtendError(Message.get('ES0740', [oriType['name'], 'target name']));
+                throw new ExtendError(Message.get('EL01252', [oriType['name'], 'target name'])+ typeMsg, prop);
                 // throw new ExtendError('지정한 함수 이름과 다릅니다.');
             }
             if (oriType['func']) {
-                if (typeof tarType['func'] !== 'function') throw new ExtendError(Message.get('ES024', ['target func', 'function']));
+                if (typeof tarType['func'] !== 'function') throw new ExtendError(Message.get('EL01258', ['target func', 'function'])+ typeMsg, prop);
                 // if (typeof tarType['func'] !== 'function') throw new ExtendError('func = function 타입이 아닙니다.');
                 if (isProtoChain(tarType['func'], oriType['func'])) return;
-                throw new ExtendError(Message.get('ES0740', ['origin', 'func 타입']));
+                throw new ExtendError(Message.get('EL01253', ['origin', 'func 타입'])+ typeMsg, prop);
                 // throw new ExtendError('지정한 함수 func 타입이 다릅니다.');
             }
 
             if (!oriType['return'] && (!oriType['params'] || oriType['params'].length === 0)) return;
-            if ((oriType['return'] || oriType['params'].length > 0) && !tarType) throw new ExtendError(Message.get('ES079', ['target', 'function', '_TYPE']));
+            if ((oriType['return'] || oriType['params'].length > 0) && !tarType) throw new ExtendError(Message.get('EL01254', ['target', 'function', '_TYPE'])+ typeMsg, prop);
             if (typeof tarType['params'] === 'undefined' && typeof tarType['return'] === 'undefined') { 
-                throw new ExtendError(Message.get('ES0710', ['target', 'function', ' {params: [], return: []} ']));
+                throw new ExtendError(Message.get('EL01255', ['target', 'function', ' {params: [], return: []} '])+ typeMsg, prop);
             }
             // if (!oriType['return'] && oriType['params'].length === 0) return;    // success
             // if (oriType['params'].length !== tarType['params'].length) {
@@ -1061,16 +1067,16 @@
 
             if (Array.isArray(oriType['params']) && oriType['params'].length > 0) {  
                 try {   // params check
-                    _execAllow(['_SEQ_'].concat(oriType['params']), ['_SEQ_'].concat(tarType['params']), opt);
+                    _execAllow(['_SEQ_'].concat(oriType['params']), ['_SEQ_'].concat(tarType['params']), opt, pathName);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0722', ['function', 'params', '']), error);
+                    throw new ExtendError(Message.get('EL01256', ['function', 'params', '']), error);
                 }
             }
             if (oriType['return']) {            
                 try {   // return check
-                    _execAllow(oriType['return'], tarType['return'], opt);
+                    _execAllow(oriType['return'], tarType['return'], opt, pathName);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0722', ['function', 'return', '']), error);
+                    throw new ExtendError(Message.get('EL01257', ['function', 'return', '']), error);
                 }
             }
         }
@@ -1085,13 +1091,13 @@
      * @returns {throw?}
      */
     var _execMatch = function(extType, target, opt, pathName) {
-        var pathName = pathName ? pathName : 'extType';
         var defType = extendType(extType);
         var tarType = extendType(target);
         var prop = {};
         var sExt = defType.toString(), sTar = tarType.toString();
-        var typeMsg = 'extType:['+ defType.toString() +'], tarType:['+ tarType.toString()+']';
-
+        var typeMsg = 'extType:['+ sExt +'], tarType:['+ sTar +']';
+        
+        pathName = pathName ? pathName : 'extType';
         if (pathName !== 'extType') prop['error path'] = pathName;    // TODO: 'target' 명칭의 중복 수정필요
         opt = opt || 0;
 
@@ -1099,54 +1105,54 @@
         if (defType['kind']) {
             if ((defType['kind'] === '_SEQ_' || defType['kind'] === '_OPT_' || defType['kind'] === '_REQ_') 
             && (typeof defType['ref'] === 'undefined' || defType['list'].length === 0)) {
-                throw new ExtendError(Message.get('ES0729', ['type', defType['kind']]) + typeMsg, prop);
+                throw new ExtendError(Message.get('EL01101', ['type', defType['kind']]) + typeMsg, prop);
             }
         }
 
         // check match type
         if (defType['$type'] === 'null') {
-            if (target !== null) throw new ExtendError(Message.get('ES074', [pathName, 'null']) + typeMsg, prop);
+            if (target !== null) throw new ExtendError(Message.get('EL01102', [pathName, 'null']) + typeMsg, prop);
         
         } else if (defType['$type'] === 'undefined') {
-            if (typeof target !== 'undefined') throw new ExtendError(Message.get('ES074', [pathName, 'undefined']) + typeMsg, prop);
+            if (typeof target !== 'undefined') throw new ExtendError(Message.get('EL01102', [pathName, 'undefined']) + typeMsg, prop);
         
         } else if (defType['$type'] === 'number') {
             if (typeof defType['default'] === 'number' && typeof target === 'undefined') target = defType['default']; 
-            if (typeof target !== 'number') throw new ExtendError(Message.get('ES074', [pathName, 'number']) + typeMsg, prop);
+            if (typeof target !== 'number') throw new ExtendError(Message.get('EL01102', [pathName, 'number']) + typeMsg, prop);
         
         } else if (defType['$type'] === 'string') {
             if (typeof defType['default'] === 'string' && typeof target === 'undefined') target = defType['default'];
-            if (typeof target !== 'string') throw new ExtendError(Message.get('ES074', [pathName, 'string']) + typeMsg, prop);
+            if (typeof target !== 'string') throw new ExtendError(Message.get('EL01102', [pathName, 'string']) + typeMsg, prop);
         
         } else if (defType['$type'] === 'boolean') {
             if (typeof defType['default'] === 'boolean' && typeof target === 'undefined') target = defType['default'];
-            if (typeof target !== 'boolean') throw new ExtendError(Message.get('ES074', [pathName, 'boolean']) + typeMsg, prop);
+            if (typeof target !== 'boolean') throw new ExtendError(Message.get('EL01102', [pathName, 'boolean']) + typeMsg, prop);
         
         } else if (defType['$type'] === 'bigint') {    // ES6+
             if (typeof defType['default'] === 'bigint' && typeof target === 'undefined') target = defType['default'];
-            if (typeof target !== 'bigint') throw new ExtendError(Message.get('ES074', [pathName, 'bigint']) + typeMsg, prop);
+            if (typeof target !== 'bigint') throw new ExtendError(Message.get('EL01102', [pathName, 'bigint']) + typeMsg, prop);
         
         } else if(defType['$type'] === 'symbol') {    // ES6+
-            if (typeof target !== 'symbol') throw new ExtendError(Message.get('ES074', [pathName, 'symbol']) + typeMsg, prop);
+            if (typeof target !== 'symbol') throw new ExtendError(Message.get('EL01102', [pathName, 'symbol']) + typeMsg, prop);
         
         } else if (defType['$type'] === 'regexp') {
             if (defType['default'] && defType['default'] !== null && typeof target === 'undefined') target = defType['default'];
-            if (!(target instanceof RegExp)) throw new ExtendError(Message.get('ES074', [pathName, 'regexp']) + typeMsg, prop);
+            if (!(target instanceof RegExp)) throw new ExtendError(Message.get('EL01102', [pathName, 'regexp']) + typeMsg, prop);
         
         } else if (defType['$type'] === 'object') {
-            if (tarType['$type'] !== 'object') throw new ExtendError(Message.get('ES074', [pathName, 'object']) + typeMsg, prop);
+            if (tarType['$type'] !== 'object') throw new ExtendError(Message.get('EL01102', [pathName, 'object']) + typeMsg, prop);
 
         } else if (defType['$type'] === 'array') arrayMatch();
         else if (defType['$type'] === 'choice') choiceMatch();
         else if (defType['$type'] === 'class') classMatch();
         else if (defType['$type'] === 'union') unionMatch();
         else if (defType['$type'] === 'function') functionMatch();        
-        else throw new ExtendError(Message.get('ES022', [defType['$type']]) + typeMsg, prop);        // Line:
+        else throw new ExtendError(Message.get('EL01103', [defType['$type']]) + typeMsg, prop);        // Line:
 
 
         // inner function
         function arrayMatch() {
-            if (!Array.isArray(target)) throw new ExtendError(Message.get('ES024', [pathName, 'array']) + typeMsg, prop);
+            if (!Array.isArray(target)) throw new ExtendError(Message.get('EL01111', [pathName, 'array']) + typeMsg, prop);
             
             // _ALL_ (all)
             if (defType['kind'] === '_ALL_') {      
@@ -1154,7 +1160,7 @@
 
             // _ANY_ (any)
             } else if (defType['kind'] === '_ANY_') {
-                if (target.length === 0) throw new ExtendError(Message.get('ES0738', ['array(any)', error]) + typeMsg, prop);
+                if (target.length === 0) throw new ExtendError(Message.get('EL01112', ['array(any)', error]) + typeMsg, prop);
                 // if (target.length === 0) throw new ExtendError('array any 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
                 return;
 
@@ -1163,12 +1169,12 @@
                 for(var i = 0; i < defType['list'].length; i++) {
                     var _elem   = defType['list'][i];
                     var _tar    = tarType['list'][i];
-                    if (typeof _tar === 'undefined') throw new ExtendError(Message.get('ES075', ['array', '_SEQ_', 'index['+i+']']) + typeMsg, prop);    // REVIEW: 세부정보 표현
+                    if (typeof _tar === 'undefined') throw new ExtendError(Message.get('EL01113', ['array', '_SEQ_', 'index['+i+']']) + typeMsg, prop);    // REVIEW: 세부정보 표현
                     if (_isLiteral(_elem)) {
-                        if (!_equalLiternal(_elem, _tar)) throw new ExtendError(Message.get('ES0740', ['array(seq)', '리터럴 타입']) + typeMsg, prop);
+                        if (!_equalLiternal(_elem, _tar)) throw new ExtendError(Message.get('EL01114', ['array(seq)', '리터럴 타입']) + typeMsg, prop);
                         // if (!_equalLiternal(_elem, _tar)) throw new ExtendError('array seq 리터럴 타입이 다릅니다.');
                     } else {
-                        if (_execMatch(_elem, _tar, opt, pathName)) throw new ExtendError(Message.get('ES0740', ['array(seq)', '리터럴 타입']) + typeMsg, prop);
+                        if (_execMatch(_elem, _tar, opt, pathName)) throw new ExtendError(Message.get('EL01115', ['array(seq)', '리터럴 타입']) + typeMsg, prop);
                         // if (_execMatch(_elem, _tar, opt, pathName)) throw new ExtendError('array seq 타입이 다릅니다.');
                     }
                 }
@@ -1176,7 +1182,7 @@
 
             // _REQ_ (require)
             } else if (defType['kind'] === '_REQ_') {
-                if (target.length === 0) throw new ExtendError(Message.get('ES0717', ['array']) + typeMsg, prop);
+                if (target.length === 0) throw new ExtendError(Message.get('EL01116', ['array']) + typeMsg, prop);
                 // if (target.length === 0) throw new ExtendError('array req 타입에는 요소를 하나 이상 가지고 있어야 합니다.');
 
             // _OPT_ (option)
@@ -1209,7 +1215,7 @@
                     // var logTitle = defType['kind'] ? 'array('+defType['kind']+')' : 'array';
                     // throw new ExtendError(Message.get('ES076', [logTitle, defType.toString(), tarType.toString()]), prop);
                     // throw new ExtendError('[ES076] array('+defType['kind']+') 타입 검사에 실패하였습니다. type: ['+ defType.toString() +'], target: ['+ tarType.toString()+']', prop);
-                    throw new ExtendError('[ES076] array('+defType['kind']+') 타입 검사에 실패하였습니다. '+ typeMsg, prop);
+                    throw new ExtendError('[EL01117] array('+defType['kind']+') 타입 검사에 실패하였습니다. '+ typeMsg, prop);
                 }
             }
         }
@@ -1222,19 +1228,19 @@
             // _ANY_ (any)
             } else if (defType['kind'] === '_ANY_') {
                 if (typeof target !== 'undefined') return;
-                throw new ExtendError(Message.get('ES0714', ['choice', '_ANY_', 'undefined']) + typeMsg, prop);
+                throw new ExtendError(Message.get('EL01121', ['choice', '_ANY_', 'undefined']) + typeMsg, prop);
 
             // _NON_ (none)
             } else if (defType['kind'] === '_NON_') {
                 if (typeof target === 'undefined') return;
-                throw new ExtendError(Message.get('ES0741', ['choice(non)']) + typeMsg, prop);
+                throw new ExtendError(Message.get('EL01122', ['choice(non)']) + typeMsg, prop);
                 // throw new ExtendError(' 어떤한 값도 설정할 수 없습니다.');
 
             // _ERR_ (error) TODO: 테스트 필요
 
             // _REQ_ (require)
             } else if (defType['kind'] === '_REQ_') {
-                if (defType['list'].length === 0) throw new ExtendError(Message.get('ES0734') + typeMsg, prop);
+                if (defType['list'].length === 0) throw new ExtendError(Message.get('ES0734') + typeMsg, prop);     // POINT:
                 // if (defType['list'].length === 0) throw new ExtendError('_req_(require) 필수 항목이 없습니다.');
 
             // _OPT_ (option)
@@ -1243,18 +1249,18 @@
 
             // _EUN_ (enumeration)
             } else if (defType['kind'] === '_EUM_') {
-                if (defType['list'].length === 0) throw new ExtendError(Message.get('ES0738', ['origin']) + typeMsg, prop);
+                if (defType['list'].length === 0) throw new ExtendError(Message.get('EL01123', ['origin']) + typeMsg, prop);
                 // if (defType['list'].length === 0) throw new ExtendError('_eum_(enum) 1개이상 항목이 필요합니디.');
                 for (var ii = 0; ii < defType['list'].length; ii++) {
-                    if (!_isLiteral(defType['list'][ii])) throw new ExtendError(Message.get('ES021', ['origin choice(eum)', '리터럴']) + typeMsg, prop);
+                    if (!_isLiteral(defType['list'][ii])) throw new ExtendError(Message.get('EL01124', ['origin choice(eum)', '리터럴']) + typeMsg, prop);
                     // if (!_isLiteral(defType['list'][ii])) throw new ExtendError('_eum_(enum)은 리터럴 타입만 가능합니다.');
                 }
 
             // _DEF_ (default)
             } else if (defType['kind'] === '_DEF_') {
-                if (defType['list'].length === 0) throw new ExtendError(Message.get('ES0738', ['origin choice(def)']) + typeMsg, prop);
+                if (defType['list'].length === 0) throw new ExtendError(Message.get('EL01125', ['origin choice(def)']) + typeMsg, prop);
                 // if (defType['list'].length === 0) throw new ExtendError('_def_(default) 1개이상 항목이 필요합니디.');
-                if (!_isLiteral(defType['list'][0])) throw new ExtendError(Message.get('ES021', ['origin choice(def)', '1번재는 리터럴타입']) + typeMsg, prop);
+                if (!_isLiteral(defType['list'][0])) throw new ExtendError(Message.get('EL01126', ['origin choice(def)', '1번재는 리터럴타입']) + typeMsg, prop);
                 // if (!_isLiteral(defType['list'][0])) throw new ExtendError('_def_(default) 1번째는 리터럴 타입만 가능합니다.');
                 if (typeof target === 'undefined') {
                     target = defType['list'][0];
@@ -1284,7 +1290,7 @@
             
             // throw new ExtendError(Message.get('ES076', [logTitle, defType.toString(), tarType.toString()]));
             // throw new ExtendError('[ES076] choice('+defType['kind']+') 타입 검사에 실패하였습니다. type: ['+ defType.toString() +'], target: ['+ tarType.toString()+']', prop);
-            throw new ExtendError('[ES076] choice('+defType['kind']+') 타입 검사에 실패하였습니다. '+ typeMsg, prop);
+            throw new ExtendError('[EL01127] choice('+defType['kind']+') 타입 검사에 실패하였습니다. '+ typeMsg, prop);
         }
 
         function classMatch() {
@@ -1299,13 +1305,13 @@
                             var subPath = pathName === 'target' ? '<instance>' : pathName + '<instance>';
                             return _execMatch(_creator(extType), target, opt, subPath);
                         } catch (error) {
-                            throw new ExtendError('ES000 class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1) ' + typeMsg, error);            
+                            throw new ExtendError('EL01131 class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1) ' + typeMsg, error);            
                         }
                     }
                     // throw new ExtendError(Message.get('ES032', [pathName, _typeName(extType)])+ typeMsg, prop);
-                    throw new ExtendError(/ES032/, prop, [pathName, _typeName(extType), sExt, sTar]);
+                    throw new ExtendError(/EL01132/, prop, [pathName, _typeName(extType), sExt, sTar]);
                 }
-                throw new ExtendError('EE001 대상이 class, object, union 타입이 아닙니다. ' + typeMsg, prop);                
+                throw new ExtendError('EL01133 대상이 class, object, union 타입이 아닙니다. ' + typeMsg, prop);                
 
             // } catch (error) {
             //     throw new ExtendError('ES000 클래스 타입 검사에 실패하였습니다. class: '+ _typeName(type), error);                
@@ -1315,7 +1321,7 @@
         function unionMatch() {
             var list;
             
-            if (tarType['$type'] !== 'union') throw new ExtendError(Message.get('ES024', ['target', 'union']) + typeMsg, prop);
+            if (tarType['$type'] !== 'union') throw new ExtendError(Message.get('EL01141', ['target', 'union']) + typeMsg, prop);
             // if (tarType['$type'] !== 'union') throw new ExtendError('union 타입이 아닙니다.');
             list = getAllProperties(defType.ref);
 
@@ -1323,17 +1329,17 @@
                 var key = list[i];
                 var listDefType = extendType(extType[key]);
                 // REVIEW: for 위쪽으로 이동 검토!
-                if (!_isObject(target)) throw new ExtendError(Message.get('ES031', [pathName + '.' + key]) + typeMsg, prop);                 // target 객체유무 검사
+                if (!_isObject(target)) throw new ExtendError(Message.get('EL01142', [pathName + '.' + key]) + typeMsg, prop);                 // target 객체유무 검사
                 if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
                 // REVIEW: 재귀로 구현 체크
                 if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
                 target[key] = listDefType['default'];
-                if (target !== null && !(key in target)) throw new ExtendError(Message.get('ES027', [listDefType['$type'], pathName + '.' + key]) + typeMsg, prop);    
+                if (target !== null && !(key in target)) throw new ExtendError(Message.get('EL01143', [listDefType['$type'], pathName + '.' + key]) + typeMsg, prop);    
                     try {
                         var subPath = pathName +'[\''+ key+'\']';
                         _execMatch(extType[key], target[key], opt, subPath);
                     } catch (error) {
-                        throw new ExtendError('[ES000] \''+ key+'\' union 객체 타입 검사가 실패하였습니다. '+ typeMsg, error);
+                        throw new ExtendError('[EL01144] \''+ key+'\' union 객체 타입 검사가 실패하였습니다. '+ typeMsg, error);
                     }
                 }
         }
@@ -1346,11 +1352,11 @@
                 if (defType['name'] === target.name 
                 || defType['name'] === tarType['name'] 
                 || (tarType['func'] && defType['name'] === tarType['func'].name)) return;
-                throw new ExtendError(Message.get('ES0740', [defType['name'], 'target name']) + typeMsg, prop);
+                throw new ExtendError(Message.get('EL01153', [defType['name'], 'target name']) + typeMsg, prop);
                 // throw new ExtendError('지정한 함수 이름과 다릅니다.');
             }
             if (defType['func']) {
-                if (typeof tarType['func'] !== 'function') throw new ExtendError(Message.get('ES024', ['target func', 'function']) + typeMsg, prop);
+                if (typeof tarType['func'] !== 'function') throw new ExtendError(Message.get('EL01152', ['target func', 'function']) + typeMsg, prop);
                 // if (typeof tarType['func'] !== 'function') throw new ExtendError('func = function 타입이 아닙니다.');
                 if (isProtoChain(tarType['func'], defType['func'])) return;
                 throw new ExtendError(Message.get('ES0740', ['origin', 'func 타입']), prop);
@@ -1360,23 +1366,23 @@
             if (!defType['return'] && (!defType['params'] || defType['params'].length === 0)) return;
             if ((defType['return'] || defType['params'].length > 0) && !tarType) throw new ExtendError(Message.get('ES079', ['target', 'function', '_TYPE']) + typeMsg, prop);
             if (typeof tarType['params'] === 'undefined' && typeof tarType['return'] === 'undefined') { 
-                throw new ExtendError(Message.get('ES0710', ['target', 'function', ' {params: [], return: []} ']) + typeMsg, prop);
+                throw new ExtendError(Message.get('EL01155', ['target', 'function', ' {params: [], return: []} ']) + typeMsg, prop);
             }
             // params check
             if (Array.isArray(defType['params']) && defType['params'].length > 0) {  
                 try {
-                    _execAllow(['_SEQ_'].concat(defType['params']), ['_SEQ_'].concat(tarType['params']));
+                    _execAllow(['_SEQ_'].concat(defType['params']), ['_SEQ_'].concat(tarType['params']), opt, pathName);
                 } catch (error) {
-                    throw new ExtendError('[ES0711] 타입검사 : function params 를 array(seq) 변환한 검사에 실패하였습니다.' + typeMsg, error);
+                    throw new ExtendError('[EL01156] 타입검사 : function params 를 array(seq) 변환한 검사에 실패하였습니다.' + typeMsg, error);
                     // throw new ExtendError(Message.get('ES0711', ['function', 'params', '']), error);
                 }
             }
             // return check
             if (defType['return']) {            
                 try {
-                    _execAllow(defType['return'], tarType['return'], opt);
+                    _execAllow(defType['return'], tarType['return'], opt, pathName);
                 } catch (error) {
-                    throw new ExtendError(Message.get('ES0711', ['function', 'return', '']) + typeMsg, error);
+                    throw new ExtendError(Message.get('EL01157', ['function', 'return', '']) + typeMsg, error);
                 }
             }
         }
