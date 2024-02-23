@@ -5705,16 +5705,16 @@ describe("[target: util-type.js.js]", () => {
             // expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
             // expect(()=> matchType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
-            expect(()=> matchType([[ String, Number]], true       )).toThrow('EL01127')
-            expect(()=> matchType([[String, Number]], []          )).toThrow('EL01127')
-            expect(()=> matchType([[String, Number]], {}          )).toThrow('EL01127')            
+            expect(()=> matchType([[ String, Number]], true       )).toThrow('EL01129')
+            expect(()=> matchType([[String, Number]], []          )).toThrow('EL01129')
+            expect(()=> matchType([[String, Number]], {}          )).toThrow('EL01129')            
             // expect(()=> matchType([[String, Number]],  undefined           )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  true                )).toThrow('EL01127')
-            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow('EL01127')
-            expect(()=> matchType([[String, Number]],  {}                  )).toThrow('EL01127')
-            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow('EL01127') // 당연히 실패
-            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow('EL01127')
-            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  true                )).toThrow('EL01129')
+            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow('EL01129')
+            expect(()=> matchType([[String, Number]],  {}                  )).toThrow('EL01129')
+            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow('EL01129') // 당연히 실패
+            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow('EL01129')
+            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow('EL01129')
         });
         it('- 복합 샘플 : 에러 문구 구성 ', () => {
             var type1 = { aa: { bb: [['_req_', ['_req_', [[String, [['str', 10]], {} ]] ], Boolean ]] } }
@@ -5753,9 +5753,9 @@ describe("[target: util-type.js.js]", () => {
 
             var tar41 = { aa: [true] }
 
-            expect(()=> matchType(type1, tar11)).toThrow('EL01127')
-            expect(()=> matchType(type1, tar12)).toThrow('EL01127')
-            expect(()=> matchType(type1, tar13)).toThrow('EL01127')
+            expect(()=> matchType(type1, tar11)).toThrow('EL01129')
+            expect(()=> matchType(type1, tar12)).toThrow('EL01129')
+            expect(()=> matchType(type1, tar13)).toThrow('EL01129')
             expect(()=> matchType(type1, tar14)).toThrow('EL01141')
             expect(()=> matchType(type1, tar15)).toThrow('EL01141')
 
@@ -5763,7 +5763,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(type2, tar22)).toThrow('EL0120A')
 
             expect(()=> matchType(type3, tar31)).toThrow('EL01132') // 테스트
-            expect(()=> matchType(type3, tar31, 1)).toThrow('EL01127')
+            expect(()=> matchType(type3, tar31, 1)).toThrow('EL01129')
 
             expect(()=> matchType(type4, tar41)).toThrow('EL01117') 
         });
@@ -5772,34 +5772,34 @@ describe("[target: util-type.js.js]", () => {
             var Class1 = function() { this.aa = String }
             var Class2 = function() { this.bb = Number }
     
-            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow('EL01143')
+            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow('EL01142')
             expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
-            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01127')
-            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow('EL01143')
-            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow('EL01143')            
+            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01129')
+            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow('EL01142')
+            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow('EL01142')            
         });
         it('- isMatchType() : object (객체 기본값) ', () => {
             var Class1 = function() { this.aa = String };
             var Class2 = function() { this.bb = 10 };
 
-            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow('EL01143')
-            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow('EL01143')
+            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow('EL01142')
+            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow('EL01142')
             expect(()=> matchType(Class2,         {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
         });
         
         it('- isMatchType() : choice 원시 타입 ', () => {
-            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow('EL01127')
-            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow('EL01127')
-            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow('EL01127')
-            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow('EL01127')
-            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow('EL01129')
+            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow('EL01129')
+            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow('EL01129')
+            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow('EL01129')
+            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow('EL01129')
         });
         it('- isMatchType() : choice 내장 객체 타입 ', () => {
-            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow('EL01127')
-            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow('EL01127')
-            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow('EL01127')       
-            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow('EL01127')       
-            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow('EL01127')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow('EL01129')
+            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow('EL01129')
+            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow('EL01129')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow('EL01129')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow('EL01129')       
         });
         it('- isMatchType() : array 조건 검사  ', () => {    
             expect(()=> matchType([],           10                  )).toThrow('EL01111')
@@ -5831,11 +5831,11 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Array, Symbol                 )).toThrow('EL01111');
         });
         it('- choice : or 타입 (내장 타입) ', () => {
-            expect(()=> matchType([[Array, String]],          1               )).toThrow('EL01127');
-            expect(()=> matchType([[Array]],                  function any(){})).toThrow('EL01127');
-            expect(()=> matchType([[String]],                 function any(){})).toThrow('EL01127');
-            expect(()=> matchType([[String, Number]],         null            )).toThrow('EL01127');
-            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow('EL01127');
+            expect(()=> matchType([[Array, String]],          1               )).toThrow('EL01129');
+            expect(()=> matchType([[Array]],                  function any(){})).toThrow('EL01129');
+            expect(()=> matchType([[String]],                 function any(){})).toThrow('EL01129');
+            expect(()=> matchType([[String, Number]],         null            )).toThrow('EL01129');
+            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow('EL01129');
         });
         it('- function() : class 타입', () => {
             const Func1 = function() { this.aa = Number };
@@ -6067,10 +6067,24 @@ describe("[target: util-type.js.js]", () => {
     describe('예외 코드 ', () => {
         it('- [EL01101] ', () => {
             var type1 = ['_SEQ_'];
+            var type2 = ['_OPT_'];
+            var type3 = ['_REQ_'];
+            var type4 = [['_EUM_']];
+            var type5 = [['_DEF_']];
             var tar01 = null;
-            var thr01 = '[EL01101] 타입매치검사 : extType의 세부 타입을 지정해야 합니다. extType: array(_SEQ_)[]'
+            var thr01 = '[EL01101] 타입 매치검사 : extType의 세부 타입을 지정해야 합니다. extType: array(_SEQ_)[]'
+            var thr02 = '[EL01101] 타입 매치검사 : extType의 세부 타입을 지정해야 합니다. extType: array(_OPT_)[]'
+            var thr03 = '[EL01101] 타입 매치검사 : extType의 세부 타입을 지정해야 합니다. extType: array(_REQ_)[]'
+            var thr04 = '[EL01101] 타입 매치검사 : extType의 세부 타입을 지정해야 합니다. extType: choice(_EUM_)[]'
+            var thr05 = '[EL01101] 타입 매치검사 : extType의 세부 타입을 지정해야 합니다. extType: choice(_DEF_)[]'
+           
             expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            expect(()=> matchType(type2, tar01)).toThrow(thr02)
+            expect(()=> matchType(type3, tar01)).toThrow(thr03)
+            expect(()=> matchType(type4, tar01)).toThrow(thr04)
+            expect(()=> matchType(type5, tar01)).toThrow(thr05)
         });
+        // match primitve
         it('- [EL01102] ', () => {
             var type1 = null;
             var type2 = undefined;
@@ -6082,15 +6096,15 @@ describe("[target: util-type.js.js]", () => {
             var type8 = /reg/;
             var type9 = new Date();
             var tar01 = [['_NON_']];
-            var thr01 = '[EL01102] 타입매치검사 : target 은 \'null\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr02 = '[EL01102] 타입매치검사 : target 은 \'undefined\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr03 = '[EL01102] 타입매치검사 : target 은 \'string\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr04 = '[EL01102] 타입매치검사 : target 은 \'number\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr05 = '[EL01102] 타입매치검사 : target 은 \'boolean\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr06 = '[EL01102] 타입매치검사 : target 은 \'bigint\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr07 = '[EL01102] 타입매치검사 : target 은 \'symbol\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr08 = '[EL01102] 타입매치검사 : target 은 \'regexp\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr09 = '[EL01102] 타입매치검사 : target 은 \'object\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr01 = '[EL01102] 타입 매치검사 : target 은 \'null\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr02 = '[EL01102] 타입 매치검사 : target 은 \'undefined\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr03 = '[EL01102] 타입 매치검사 : target 은 \'string\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr04 = '[EL01102] 타입 매치검사 : target 은 \'number\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr05 = '[EL01102] 타입 매치검사 : target 은 \'boolean\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr06 = '[EL01102] 타입 매치검사 : target 은 \'bigint\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr07 = '[EL01102] 타입 매치검사 : target 은 \'symbol\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr08 = '[EL01102] 타입 매치검사 : target 은 \'regexp\' 타입이 아닙니다. tarType: choice(_NON_)'
+            var thr09 = '[EL01102] 타입 매치검사 : target 은 \'object\' 타입이 아닙니다. tarType: choice(_NON_)'
             
             expect(()=> matchType(type1, tar01)).toThrow(thr01)
             expect(()=> matchType(type2, tar01)).toThrow(thr02)
@@ -6105,14 +6119,148 @@ describe("[target: util-type.js.js]", () => {
         it.skip('- [EL01103] ', () => {
             var type1 = { $type: 'not type'};
             var tar01 = null;
-            var thr01 = '타입매치검사 : 처리할 수 없는 타입니다.'
+            var thr01 = '타입 매치검사 : 처리할 수 없는 타입니다.'
             // 사전에 검사해서 처리할 수 없는 타입임
             expect(()=> matchType(type1, tar01)).toThrow(thr01)
         });
+        // match array
         it('- [EL01111] ', () => {
-            var type1 = [];
-            var tar01 = null;
-            var thr01 = 'EL01111] 타입매치검사 : target 은 array 타입이 아닙니다. tarType: null'
+            var type1 = []
+            var tar01 = null
+            var thr01 = 'EL01111] 배열 매치검사 : target 은 array 타입이 아닙니다. tarType: null'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01112] ', () => {
+            var type1 = ['_any_']
+            var tar01 = []
+            var thr01 = '[EL01112] 배열 매치검사 : array(_ANY_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = 0'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01113] ', () => {
+            var type1 = ['_seq_', String]
+            var tar01 = []
+            var thr01 = '[EL01113] 배열 매치검사 : array(_SEQ_) 타입의 길이보다 target array 의 길이가 작습니다. extType.length = 1, target.length = 0'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01114] ', () => {
+            var type1 = ['_seq_', 10]
+            var tar01 = [20]
+            var thr01 = '[EL01114] 배열 매치검사 : array(_SEQ_) [0]번째 리터럴 타입이 target 값과 다릅니다. extType[0] = 10, target[0] = 20'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01115] ', () => {
+            var type1 = ['_seq_', String]
+            var tar01 = [10]
+            var thr01 = '[EL01115] 배열 매치검사 : array(_SEQ_) [0]번째 타입 검사가 실패하였습니다. extType[0] = string'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01116] ', () => {
+            var type1 = ['_req_', String]
+            var tar01 = []
+            var thr01 = '[EL01116] 배열 매치검사 : array(_REQ_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = 0'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01117] ', () => {
+            var type1 = [String, Number]
+            var tar01 = [true]
+            var thr01 = '[EL01117] 배열 매치검사 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        // match choice
+        it('- [EL01121] ', () => {
+            var type1 = [['_any_']]
+            var tar01 = undefined
+            var thr01 = '[EL01121] 초이스 매치검사 : choice(_ANY_) 타입에 \'undefined\' 은 사용할 수 없습니다.'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01122] ', () => {
+            var type1 = [['_non_']]
+            var tar01 = [true]
+            var thr01 = '[EL01122] 초이스 매치검사 : choice(_NON_) 타입에 \'undefined\' 만 가능합니다.'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01123] ', () => {
+            var type1 = [['_err_']]
+            var tar01 = [true]
+            var thr01 = '[EL01123] 초이스 매치검사 : choice(_ERR_) 타입에 Errror 인스턴스 만 가능합니다.'
+            expect(matchType(type1, new Error())).toBe(undefined);
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        // it('- [EL01124] ', () => {
+        //     var type1 = [['_req_']]
+        //     var tar01 = [true];
+        //     var thr01 = '[EL01117] 타입매치검사 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+        //     expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        // });
+        // it('- [EL01125] ', () => {
+        //     var type1 = [String, Number];
+        //     var tar01 = [true];
+        //     var thr01 = '[EL01117] 타입매치검사 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+        //     expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        // });
+        it('- [EL01126] ', () => {
+            var type1 = [['_EUM_', 10, 'str', String]]
+            var tar01 = [true]
+            var thr01 = '[EL01126] 초이스 매치검사 : choice(_EUM_) 타입의 세부 타입은 리터럴만 가능합니다. extType[2]: string'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        // it('- [EL01127] ', () => {
+        //     var type1 = [String, Number];
+        //     var tar01 = [true];
+        //     var thr01 = '[EL01117] 타입매치검사 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+        //     expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        // });
+        it('- [EL01128] ', () => {
+            var type1 = [['_DEF_', String, 10, 'str']]
+            var tar01 = [true]
+            var thr01 = '[EL01128] 초이스 매치검사 : choice(_DEF_) 타입의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: string'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01129] ', () => {
+            var type1 = [[String, Number]]
+            var tar01 = [true]
+            var thr01 = '[EL01129] 초이스 매치검사 : choice 세부 타입 검사가 실패하였습니다. extType: choice(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        // match class
+        it('- [EL01131] ', () => {
+            class ClassA { aa = String }
+            var type1 = ClassA
+            var tar01 = { aa: 10 }
+            var thr01 = '[EL01131] 클래스 매치검사 : class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)'
+            expect(()=> matchType(type1, tar01, 1)).toThrow(thr01)
+        });
+        it('- [EL01132] ', () => {
+            class ClassA { aa = String }
+            var type1 = ClassA
+            var tar01 = { aa: 10 }
+            var thr01 = '[EL01132] 클래스 매치검사 : target은 [ClassA]의 인스턴스가 아닙니다.'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01133] ', () => {
+            class ClassA { aa = String }
+            var type1 = ClassA
+            var tar01 = 10
+            var thr01 = '[EL01133] 클래스 매치검사 : target 이 class, object, union 타입이 아닙니다. tarType: number(10)'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        // match union
+        it('- [EL01141] ', () => {
+            var type1 = {}
+            var tar01 = 10
+            var thr01 = '[EL01141] 유니언 매치검사 : target 은 union 타입이 아닙니다. tarType: number(10)'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01142] ', () => {
+            var type1 = {aa: String}
+            var tar01 = {}
+            var thr01 = '[EL01142] 유니언 매치검사 : target[\'aa\'] 키가 존재하지 않습니다. extType[\'aa\'] = string'
+            expect(()=> matchType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01143] ', () => {
+            var type1 = {aa: String}
+            var tar01 = {aa: 10}
+            var thr01 = '[EL01143] 유니언 매치검사 : \'aa\' 타입 검사가 실패하였습니다.'
             expect(()=> matchType(type1, tar01)).toThrow(thr01)
         });
     });
