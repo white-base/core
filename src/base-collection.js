@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Observer;    
     var Util;
     var ICollection;
@@ -22,6 +23,7 @@
     // 2. import module
     if (isNode) {
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         ICollection                 = require('./i-collection').ICollection;
@@ -30,6 +32,7 @@
         MetaObject                  = require('./meta-object').MetaObject;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         ICollection                 = _global._L.ICollection;
@@ -40,12 +43,13 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
-    if (typeof ICollection === 'undefined') throw Message.error('ES011', ['ICollection', 'i-collection']);
-    if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
+    if (typeof ICollection === 'undefined') throw new Error( Message.get('ES011', ['ICollection', 'i-collection']));
+    if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
+    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+    if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
     //==============================================================
     // 4. module implementation
@@ -431,7 +435,7 @@
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
-            Message.error('ES013', ['_remove(idx): boolean ']);
+            throw new ExtendError(/ES013/, null, ['_remove(idx): boolean ']);
         };
 
         /**

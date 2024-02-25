@@ -66,7 +66,7 @@
             if (p_object instanceof ExtendError) {
                 _queue = p_object.queue;
                 _prop = p_object.prop;
-            } else if (typeof p_object  === 'object') {
+            } else if (typeof p_object  === 'object' && p_object !== null) {
                 _prop = p_object;
             }
             

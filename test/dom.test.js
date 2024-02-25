@@ -150,6 +150,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 expect(() => require('../src/base-collection')).toThrow(/Util/);
             });
             it("- 예외 : Observer 로딩이 인된경우", () => {

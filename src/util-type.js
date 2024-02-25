@@ -197,7 +197,7 @@
             result['return'] = arrRetrun;
 
         } catch (error) {
-            throw new ExtendError(/EL01303/, null, [''], error);
+            throw new ExtendError(/EL01303/, error, ['']);
         }
 
         return result;
@@ -731,7 +731,7 @@
 
             // _ANY_ (any)
             } else if (eType['kind'] === '_ANY_') {
-                if (tType['kind'] && tType['list'].length === 0) throw new ExtendError(/EL01212/, prop, ['array _ANY_', 'undefined']);  // REVIEW: 발생하지 않음
+                if (tType['kind'] && tType['list'].length === 0) throw new ExtendError(/EL01212/, prop, []);  // REVIEW: 발생하지 않음
                 if (tType['list'].length > 0) return;
                 throw new ExtendError(/EL01213/, prop, ['array(any)', error]); // Line: // REVIEW: 발생하지 않음
                 // throw new ExtendError('array any 는 하나 이싱 요소가 존재해야 합니다.');  
@@ -815,7 +815,7 @@
             
             // throw 
             } else {              
-                throw new ExtendError(/EL01218/, prop, [eType['kind']]);     // Line:
+                throw new ExtendError(/EL01218/, prop, [eType['kind']]);     // Line:   REVIEW: 발생하지 않음!!
             }
 
             // element check

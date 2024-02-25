@@ -5762,7 +5762,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(type2, tar21)).toThrow('EL0122G')
             expect(()=> matchType(type2, tar22)).toThrow('EL01157')
 
-            expect(()=> matchType(type3, tar31)).toThrow('EL01132') // 테스트
+            expect(()=> matchType(type3, tar31)).toThrow('EL01132')
             expect(()=> matchType(type3, tar31, 1)).toThrow('EL01129')
 
             expect(()=> matchType(type4, tar41)).toThrow('EL01117') 
@@ -6695,10 +6695,10 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- [EL01303] ', () => {
             // REVIEW: 오류 조건을 찾아야함
-            // var type1 = (String, {aa: Number})=>{}
+            // var type1 = function (aa, bb) { cc; }
             // var tar01 = ()=>{}
-            // var thr01 = '[EL01301]'
-            // expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            // var thr01 = '[EL01301]aaaa'
+            // expect(()=> extendType(type1)).toThrow(thr01)
         });
         it('- [EL01304] ', () => {
             var type1 = { $type: 'Not_Type' }
@@ -6739,13 +6739,13 @@ describe("[target: util-type.js.js]", () => {
         it('- [EL0130A] ', () => {
             var type1 = ''
             var tar01 = 10
-            var thr01 = '[EL0130A] allowType(extType, tarType) 검사가 실패하였습니다.'
+            var thr01 = '[EL0130A] 타입 허용 : allowType(extType, tarType) 검사가 실패하였습니다.'
             expect(()=> allowType('', 10)).toThrow(thr01)
         });
         it('- [EL0130B] ', () => {
             var type1 = ''
             var tar01 = 10
-            var thr01 = '[EL0130B] matchType(extType, target) 검사가 실패하였습니다.'
+            var thr01 = '[EL0130B] 타입 매치 : matchType(extType, target) 검사가 실패하였습니다.'
             expect(()=> matchType('', 10)).toThrow(thr01)
         });
     });

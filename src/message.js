@@ -938,14 +938,14 @@
                         308: {  // EL01308  
                             msg: '타입 검사 : choice($1) 타입은 처리할 수 없는 타입 입니다.',
                         },
-                        309: {  // EL01309  
-                            msg: '[$1]는 처리할 수 없는 타입니다. ',
-                        },
+                        // 309: {  // EL01309  
+                        //     msg: '[$1]는 처리할 수 없는 타입니다. ',
+                        // },
                         '30A': {  // EL0130A  
-                            msg: 'allowType(extType, tarType) 검사가 실패하였습니다.'
+                            msg: '타입 허용 : allowType(extType, tarType) 검사가 실패하였습니다.'
                         },
                         '30B': {  // EL0131B  
-                            msg: 'matchType(extType, target) 검사가 실패하였습니다.'
+                            msg: '타입 매치 : matchType(extType, target) 검사가 실패하였습니다.'
                         },
                     }
                 },
