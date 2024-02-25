@@ -549,7 +549,7 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(type1, tar1           )).toBe(T);
             expect(isAllowType(type2, tar1           )).toBe(T);
             // 예외 : 오류코드
-            expect(()=> allowType(type1, {}          )).toThrow('ES0713')
+            expect(()=> allowType(type1, {}          )).toThrow('EL01251')
         }); 
         it('- isAllowType(a, b) : object ', () => {   
             var ClassA = function(){};

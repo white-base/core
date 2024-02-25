@@ -160,8 +160,8 @@ describe("[target: meta-column.js]", () => {
             it("- addValue(?, ?) : 예외 ", () => {
                 var table1 = new MetaTable('T1');
 
-                expect(() => table1.columns.addValue('c1', {})).toThrow(/EL01310/);
-                expect(() => table1.columns.addValue('c1', /reg/)).toThrow(/EL01310/);
+                expect(() => table1.columns.addValue('c1', {})).toThrow(/EL0130B/);
+                expect(() => table1.columns.addValue('c1', /reg/)).toThrow(/EL0130B/);
                 expect(()=> table1.columns.addValue(10)).toThrow(/ES021/)
                 expect(()=> table1.columns.addValue({})).toThrow(/ES021/)
             });
@@ -294,8 +294,8 @@ describe("[target: meta-column.js]", () => {
             it("- addValue(?, ?) : 예외 ", () => {
                 var view1 = new MetaView('T1');
 
-                expect(()=> view1.columns.addValue('c2', {})).toThrow(/EL01310/)
-                expect(()=> view1.columns.addValue('c2', /reg/)).toThrow(/EL01310/)
+                expect(()=> view1.columns.addValue('c2', {})).toThrow(/EL0130B/)
+                expect(()=> view1.columns.addValue('c2', /reg/)).toThrow(/EL0130B/)
                 expect(()=> view1.columns.addValue(10, 10)).toThrow(/ES021/)
             });
         });

@@ -805,7 +805,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             const result = elem.columns.add('a1', c1);
             elem.columns['a1'] = s2;
     
-            expect(() => elem.columns['a1'] = 10 ).toThrow(/EL01310/);
+            expect(() => elem.columns['a1'] = 10 ).toThrow(/EL0130B/);
             expect(elem.columns['a1'].level).toBe(2);                   // 교체된 객체
             expect(elem.columns['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(result > -1).toBeTruthy();
@@ -816,7 +816,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             const result1 = elem.columns.add('a1', c1);
             const result2 = elem.columns.add('a2', 'str');
             
-            expect(() => elem.columns.add('a3')).toThrow(/EL01310/);
+            expect(() => elem.columns.add('a3')).toThrow(/EL0130B/);
             expect(elem.columns[0].level).toBe(1);
             expect(elem.columns['a1'].level).toBe(1);
             elem.columns['a1'] = 'OVER';
@@ -867,7 +867,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             elem.columns['a1'] = s2;
             elem.columns['a2'] = s2;
     
-            expect(() => elem.columns['a1'] = 'str' ).toThrow(/EL01310/);
+            expect(() => elem.columns['a1'] = 'str' ).toThrow(/EL0130B/);
             expect(elem.columns['a1'].level).toBe(2);                   // 교체된 객체
             expect(elem.columns['a1'] instanceof Student).toBeTruthy(); // 인스턴스 검사
             expect(elem.columns['a2'].level).toBe(2);                   // 교체된 객체
@@ -898,7 +898,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
     
             expect(() => i.columns.add('a3')).toThrow(/ES019/);
             expect(() => i.columns.add('a3', 10)).toThrow(/ES019/);
-            expect(() => i.columns['a1'] = 10).toThrow(/EL01310/);
+            expect(() => i.columns['a1'] = 10).toThrow(/EL0130B/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -910,7 +910,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             expect(() => i.columns.add('a3')).toThrow(/ES019/);
             expect(() => i.columns.add('a3', 10)).toThrow(/ES019/);
             expect(() => i.columns.add('a3', {})).toThrow(/ES019/);
-            expect(() => i.columns['a1'] = 10).toThrow(/EL01310/);
+            expect(() => i.columns['a1'] = 10).toThrow(/EL0130B/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
