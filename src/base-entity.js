@@ -63,7 +63,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
-    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (typeof IGroupControl === 'undefined') throw new ExtendError(/ES011/, null, ['IGroupControl', 'i-control-group']);
     if (typeof ISchemaControl === 'undefined') throw new ExtendError(/ES011/, null, ['ISchemaControl', 'i-control-schema']);
     if (typeof IImportControl === 'undefined') throw new ExtendError(/ES011/, null, ['IImportControl', 'i-control-import']);

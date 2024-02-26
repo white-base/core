@@ -26,9 +26,8 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
-
-
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    
     //==============================================================
     // 4. module implementation 
     
@@ -226,6 +225,7 @@
         arr = arr.concat(['array', 'function', 'object']);
         arr = arr.concat(['choice', 'union', 'class']);
         arr = arr.concat(['symbol', 'bigint', 'regexp']);
+        arr = arr.concat(['etc']);  // 예외 오류 코드 검출 
 
         if (typeof name !== 'string') return false;
         return arr.indexOf(name) > -1;
@@ -619,7 +619,7 @@
             obj['$type'] = 'union';
         } else if(_isPrimitiveObj(type)) {
             obj['$type'] = 'object';
-        } else throw new ExtendError(/EL01309/, null, ['type']);    // Line:
+        } else throw new ExtendError(/EL01309/, null, []);    // Line:
         
         return obj;
     }
@@ -717,7 +717,7 @@
         else if (eType['$type'] === 'class') classAllow();
         else if (eType['$type'] === 'union') unionAllow();
         else if (eType['$type'] === 'function') functionAllow();
-        else throw new ExtendError(/EL0120B/, prop, ['type']);    // Line:
+        else throw new ExtendError(/EL0120B/, prop, []);
 
         // inner function
         function arrayAllow() {
@@ -814,8 +814,8 @@
                 // }
             
             // throw 
-            } else {              
-                throw new ExtendError(/EL01218/, prop, [eType['kind']]);     // Line:   REVIEW: 발생하지 않음!!
+            // } else {              
+            //     throw new ExtendError(/EL01218/, prop, [eType['kind']]);    
             }
 
             // element check
@@ -867,7 +867,7 @@
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
                     throw new ExtendError(/EL01223/, prop, []);
                 }
-                return;
+                return; // Line:
 
             // _ERR_ (error)
             } else if (eType['kind'] === '_ERR_') {
@@ -894,7 +894,7 @@
             // _REQ_ (require)
             } else if (eType['kind'] === '_REQ_') {
                 if (tType['kind'] && tType['ref'].length === 0) {
-                    // throw new ExtendError(/EL01223/, prop, []);    // Line:  REVIEW: 발생할 수 없음
+                    // throw new ExtendError(/EL01223/, prop, []);    // REVIEW: 발생할 수 없음
                 }
                 // var arrTarget = (tType['kind']) ? tType['list'] : [tType['ref']];
 
@@ -976,8 +976,8 @@
                 //     return;
                 // }
 
-            } else {
-                throw new ExtendError(/EL0122E/, prop, [eType['kind']]);    // REVIEW: 발생하지 않음
+            // } else {
+            //     throw new ExtendError(/EL0122E/, prop, [eType['kind']]);    // REVIEW: 발생하지 않음
             }
 
             // element check
@@ -987,7 +987,7 @@
             var arrTarget = (tType['kind']) ? tType['list'] : [tarType];
 
             if (eType['list'].length > 0 && arrTarget.length === 0) {
-                throw new ExtendError(/EL0122F/, prop, [eType.toString(), arrTarget.toString(),]);  // REVIEW: 발생하지 않음
+                throw new ExtendError(/EL0122F/, prop, [eType.toString(), arrTarget.toString(),]);  // Line: REVIEW: 발생하지 않음
             }
             for (var i = 0; i < arrTarget.length; i++) {
                 var success = false;
@@ -1173,7 +1173,7 @@
         else if (eType['$type'] === 'class') classMatch();
         else if (eType['$type'] === 'union') unionMatch();
         else if (eType['$type'] === 'function') functionMatch();        
-        else throw new ExtendError(/EL01103/, prop, []);        // Line:    의미적으로 걸러짐
+        else throw new ExtendError(/EL01103/, prop, []);
 
         // inner function
         function arrayMatch() {

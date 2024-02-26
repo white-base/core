@@ -35,7 +35,7 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
     if (typeof IElement === 'undefined') throw new ExtendError(/ES011/, null, ['IElement', 'i-element']);
     if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);

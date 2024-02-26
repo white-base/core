@@ -43,13 +43,13 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
-    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
-    if (typeof Observer === 'undefined') throw new ExtendError(/ES011/, null, ['Observer', 'observer']);
-    if (typeof ICollection === 'undefined') throw new ExtendError(/ES011/, null, ['ICollection', 'i-collection']);
-    if (typeof IList === 'undefined') throw new ExtendError(/ES011/, null, ['IList', 'i-list']);
-    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011' ['ExtendError', 'extend-error']));
+    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
+    if (typeof ICollection === 'undefined') throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
+    if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
+    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+    if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
     //==============================================================
     // 4. module implementation

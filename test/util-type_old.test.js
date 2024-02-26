@@ -350,7 +350,7 @@ describe("[target: util-type.js.js]", () => {
             // expect(isAllowType(['_non_'],                 ['_non_']                  )).toBe(T);
             expect(isAllowType(['_non_'],                 ['_any_']                  )).toBe(false);
             // etc.
-            expect(isAllowType(['_etc_'],                 [null]                     )).toBe(false);
+            expect(isAllowType(['_etc2_'],                 [null]                     )).toBe(false);
         });
         it('- allowType(a, b) : array choice : 예외', () => {        
             // all 

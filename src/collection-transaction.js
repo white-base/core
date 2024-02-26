@@ -34,7 +34,7 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
     if (typeof ArrayCollection === 'undefined') throw new ExtendError(/ES011/, null, ['ArrayCollection', 'i-collection-array']);
     if (typeof TransactionQueue === 'undefined') throw new ExtendError(/ES011/, null, ['TransactionQueue', 'trans-queue']);

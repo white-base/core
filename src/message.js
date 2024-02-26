@@ -777,9 +777,9 @@
                         '20A': {    // EL0120A  
                             msg: '타입 허용 : $1 타입이 아닙니다. tarType = $2',
                         },
-                        // '20B': {    // EL0120A  
-                        //     msg: '타입 허용 : 원본타입은 $1, 대상타입 $2 입니다. ',
-                        // },
+                        '20B': {    // EL0120B  
+                            msg: '타입 허용 : 처리할 수 없는 타입입니다.',
+                        },
                         211: {  // EL01211  
                             msg: '배열 허용 : array 타입이 아닙니다. tarType: $1',
                         },
@@ -948,6 +948,18 @@
                             msg: '타입 매치 : matchType(extType, target) 검사가 실패하였습니다.'
                         },
                     }
+                    /**
+                     * 네임스페이스 기준으로 분리하면 적합할 듯
+                     * L01 : Common.*       message.js<제외>, extend-error.js<자체>, util.js, util-type.js, observer.js, load-namespace.js <없음>
+                     *  - 100 : util-type match
+                     *  - 200 : util-type allow
+                     *  - 300 : util-type etc
+                     *  - 
+                     * L02 : Interface.*    i-*.js 
+                     * L03 : Meta.*         meta-object.js, meta-element.js, namespace-manager.js, meta-register.js
+                     * L04 : Collection.*   trans-queue.js, base-collection.js, collection-*.js
+                     * L05 : Meta.Entity.*  base-column.js, base-entity.js, meta-column.js, object-column.js, meta-row.js, meta-set.js, meta-table.js, meta-view.js
+                     */
                 },
                 W: {    // warning
                     S01: {  // 범위

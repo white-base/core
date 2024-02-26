@@ -33,30 +33,30 @@
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
         getAllProperties            = require('./util-type').getAllProperties;
-        extendType                    = require('./util-type').extendType;
-        allowType              = require('./util-type').allowType;
-        isMatchType                   = require('./util-type').isMatchType;
-        isAllowType                   = require('./util-type').isAllowType;
+        extendType                  = require('./util-type').extendType;
+        allowType                   = require('./util-type').allowType;
+        isMatchType                 = require('./util-type').isMatchType;
+        isAllowType                 = require('./util-type').isAllowType;
         matchType                   = require('./util-type').matchType;
         deepEqual                   = require('./util-type').deepEqual;
-        isProtoChain                   = require('./util-type').isProtoChain;
-        getTypes                   = require('./util-type').getTypes;
-        typeObject                   = require('./util-type').typeObject;
-        typeOf                   = require('./util-type').typeOf;
+        isProtoChain                = require('./util-type').isProtoChain;
+        getTypes                    = require('./util-type').getTypes;
+        typeObject                  = require('./util-type').typeObject;
+        typeOf                      = require('./util-type').typeOf;
     } else {    
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
         getAllProperties            = _global._L.Util.getAllProperties
-        extendType                    = _global._L.Util.extendType
-        allowType              = _global._L.Util.allowType
-        isMatchType                   = _global._L.Util.isMatchType
-        isAllowType                   = _global._L.Util.isAllowType
+        extendType                  = _global._L.Util.extendType
+        allowType                   = _global._L.Util.allowType
+        isMatchType                 = _global._L.Util.isMatchType
+        isAllowType                 = _global._L.Util.isAllowType
         matchType                   = _global._L.Util.matchType
         deepEqual                   = _global._L.Util.deepEqual
-        isProtoChain                   = _global._L.Util.isProtoChain
-        getTypes                   = _global._L.Util.getTypes
-        typeObject                   = _global._L.Util.typeObject
-        typeOf                   = _global._L.Util.typeOf
+        isProtoChain                = _global._L.Util.isProtoChain
+        getTypes                    = _global._L.Util.getTypes
+        typeObject                  = _global._L.Util.typeObject
+        typeOf                      = _global._L.Util.typeOf
     }
 
     //==============================================================

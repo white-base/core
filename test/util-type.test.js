@@ -6116,8 +6116,8 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(type8, tar01)).toThrow(thr08)
             expect(()=> matchType(type9, tar01)).toThrow(thr09)
         });
-        it.skip('- [EL01103] ', () => {
-            var type1 = { $type: 'not type'};
+        it('- [EL01103] ', () => {
+            var type1 = { $type: 'etc'};
             var tar01 = null;
             var thr01 = '타입 매치 : 처리할 수 없는 타입니다.'
             // 사전에 검사해서 처리할 수 없는 타입임
@@ -6408,12 +6408,11 @@ describe("[target: util-type.js.js]", () => {
             var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
             expect(()=> allowType(type1, tar01)).toThrow(thr01)
         });
-        // 발생할 수 없읍
-        it('- [EL0120B] ', () => {
-        //     var type1 = { $type: 'etc', return: String }
-        //     var tar01 = null
-        //     var thr01 = '[EL01157] 함수 매치 : return 허용검사가 거부되었습니다.'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
+        it('- [EL0120B] ', () => {      // 타입 강제 발생
+            var type1 = { $type: 'etc'}
+            var tar01 = null
+            var thr01 = '[EL0120B] 타입 허용 : 처리할 수 없는 타입입니다.'
+            expect(()=> allowType(type1, tar01)).toThrow(thr01)
         });
         // allow array
         it('- [EL01211] ', () => {
@@ -6730,9 +6729,9 @@ describe("[target: util-type.js.js]", () => {
             var thr01 = '[EL01308] 타입 검사 : choice(_SEQ_) 타입은 처리할 수 없는 타입 입니다.'
             expect(()=> extendType(type1)).toThrow(thr01)
         });
-        // 조건 찾아야함!!
         it('- [EL01309] ', () => {
-            // var type1 = [['_seq_']]
+            // REVIEW: 오류 조건을 찾아야함
+            // var type1 =  { $type: 'etc' }
             // var thr01 = '[EL01308] 타입 검사 : choice(_SEQ_) 타입은 처리할 수 없는 타입 입니다.'
             // expect(()=> extendType(type1)).toThrow(thr01)
         });
