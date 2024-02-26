@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var ArrayCollection;
     var TransactionQueue;
@@ -19,11 +20,13 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         ArrayCollection             = require('./collection-array').ArrayCollection;
         TransactionQueue            = require('./trans-queue').TransactionQueue;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         ArrayCollection             = _global._L.ArrayCollection;
         TransactionQueue            = _global._L.TransactionQueue;
@@ -31,9 +34,10 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof ArrayCollection === 'undefined') Message.error('ES011', ['ArrayCollection', 'i-collection-array']);
-    if (typeof TransactionQueue === 'undefined') Message.error('ES011', ['TransactionQueue', 'trans-queue']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof ArrayCollection === 'undefined') throw new ExtendError(/ES011/, null, ['ArrayCollection', 'i-collection-array']);
+    if (typeof TransactionQueue === 'undefined') throw new ExtendError(/ES011/, null, ['TransactionQueue', 'trans-queue']);
 
     //==============================================================
     // 4. module implementation
@@ -71,7 +75,7 @@
                 get: function() { return autoChanges; },
                 set: function(nVal) { 
                     if (typeof nVal !== 'boolean') {
-                        Message.error('ES021', ['autoChanges', 'boolean']);
+                        throw new ExtendError(/ES021/, null, ['autoChanges', 'boolean']);
                     }
                     autoChanges = nVal;
                 },

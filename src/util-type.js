@@ -5,7 +5,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
+    // var Message;
     var ExtendError;
 
     //==============================================================
@@ -17,16 +17,16 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
+        // Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
     } else {    
-        Message                     = _global._L.Message;
+        // Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
 
 
     //==============================================================

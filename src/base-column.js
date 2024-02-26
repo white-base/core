@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var Observer;
     var CustomError;
@@ -22,12 +23,14 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
         MetaElement                 = require('./meta-element').MetaElement;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         CustomError                 = _global._L.CustomError;
@@ -37,9 +40,10 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaElement === 'undefined') throw new ExtendError(/ES011/, null, ['MetaElement', 'meta-element']);
 
     //==============================================================
     // 4. module implementation
@@ -86,7 +90,7 @@
                 get: function() { return _entity; },
                 set: function(nVal) { 
                     if (typeof nVal !== 'undefined' && !(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
-                        Message.error('ES032', ['_entity', 'BaseEntity']);
+                        throw new ExtendError(/ES032/, null, ['_entity', 'BaseEntity']);
                     }
                     _entity = nVal;
                 },
@@ -120,9 +124,9 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (nVal === this.columnName) return;
-                    if (typeof nVal !== 'string') Message.error('ES021', ['columnName', 'string']); 
-                    if (_entity && _entity.columns.existColumnName(nVal)) Message.error('ES042', [nVal, 'columnName']);
-                    if (_entity && _entity.columns.existAlias(nVal)) Message.error('ES042', [nVal, 'alias']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['columnName', 'string']); 
+                    if (_entity && _entity.columns.existColumnName(nVal)) throw new ExtendError(/ES042/, null, [nVal, 'columnName']);
+                    if (_entity && _entity.columns.existAlias(nVal)) throw new ExtendError(/ES042/, null, [nVal, 'alias']);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -142,8 +146,8 @@
                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
                 set: function(nVal) { 
                    var entity = this._entity;
-                   if(typeof nVal !== 'string') Message.error('ES021', ['alias', 'string']);
-                   if (entity && entity.columns.existAlias(nVal)) Message.error('ES042', [nVal, 'alias']);
+                   if(typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['alias', 'string']);
+                   if (entity && entity.columns.existAlias(nVal)) throw new ExtendError(/ES042/, null, [nVal, 'alias']);
                    alias = nVal;
                 },
                 configurable: false,
@@ -173,7 +177,7 @@
             {
                 get: function() { return caption; },
                 set: function(nVal) { 
-                    if(typeof nVal !== 'string') Message.error('ES021', ['caption', 'string']); 
+                    if(typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['caption', 'string']); 
                     caption = nVal; 
                 },
                 configurable: false,
@@ -262,7 +266,7 @@
 
             if (p_oGuid['_entity']) {
                 entity = MetaRegistry.findSetObject(p_oGuid['_entity']['$ref'], origin);
-                if (!entity) Message.error('ES015', [p_oGuid['name'], '_entity']);
+                if (!entity) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_entity']);
                 this._entity = entity;
             } 
             this.columnName = p_oGuid['columnName'];
@@ -277,7 +281,7 @@
          * @abstract 
          */
         BaseColumn.prototype.clone = function() {
-            Message.error('ES013', ['clone()']);
+            throw new ExtendError(/ES013/, null, ['clone()']);
         };
 
         return BaseColumn;

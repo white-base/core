@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var IPropertyCollection;
     var BaseCollection;
@@ -21,6 +22,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
         BaseCollection              = require('./base-collection').BaseCollection;
@@ -28,6 +30,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         IPropertyCollection         = _global._L.IPropertyCollection;
         BaseCollection              = _global._L.BaseCollection;
@@ -37,11 +40,12 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IPropertyCollection === 'undefined') Message.error('ES011', ['IPropertyCollection', 'i-collection-property']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
-    if (typeof BaseCollection === 'undefined') Message.error('ES011', ['BaseCollection', 'base-collection']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof IPropertyCollection === 'undefined') throw new ExtendError(/ES011/, null, ['IPropertyCollection', 'i-collection-property']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
+    if (typeof BaseCollection === 'undefined') throw new ExtendError(/ES011/, null, ['BaseCollection', 'base-collection']);
     
     //==============================================================
     // 4. module implementation   
@@ -184,10 +188,10 @@
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
 
-            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) Message.error('ES063', ['_elem', '_key']);
+            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) throw new ExtendError(/ES063/, null, ['_elem', '_key']);
             
             if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
-                if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) Message.error('ES063', ['_elem', '_desc']);
+                if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) throw new ExtendError(/ES063/, null, ['_elem', '_desc']);
                 for (var i = 0; i < p_oGuid['_desc'].length; i++) {
                     this.__GET$_descriptors(this).push(p_oGuid['_desc'][i]);
                 }
@@ -210,7 +214,7 @@
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
+                    if (!meta) throw new ExtendError(/ES015/, null, ['_elem['+ i +']', '$ref']);
                     this.__GET$_elements(this).push(meta);
                     
                 } else this.__GET$_elements(this).push(elem);
@@ -228,7 +232,7 @@
             
             if (!isKey) return this._elements.indexOf(p_obj);
             else {
-                if (!_isString(p_obj))  Message.error('ES021', ['p_isKey = true', 'string']);
+                if (!_isString(p_obj))  throw new ExtendError(/ES021/, null, ['p_isKey = true', 'string']);
                 return this._keys.indexOf(p_obj);
             }
         };
@@ -248,10 +252,10 @@
 
                 // types = [types.concat(this._elemTypes)];
                 
-                if (!_isString(p_name)) Message.error('ES021', ['name', 'string']);
-                if(!regex.test(p_name)) Message.error('ES068', [p_name, 'Propery.name']);
-                if (this.__KEYWORD.indexOf(p_name) > -1) Message.error('ES048', [p_name, 'Symbol word']);
-                if (this.exist(p_name)) Message.error('ES042', [p_name, 'property._keys']);
+                if (!_isString(p_name)) throw new ExtendError(/ES021/, null, ['name', 'string']);
+                if(!regex.test(p_name)) throw new ExtendError(/ES068/, null, [p_name, 'Propery.name']);
+                if (this.__KEYWORD.indexOf(p_name) > -1) throw new ExtendError(/ES048/, null, [p_name, 'Symbol word']);
+                if (this.exist(p_name)) throw new ExtendError(/ES042/, null, [p_name, 'property._keys']);
                 if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_value);
                 // if (this._elemTypes.length > 0) Util.matchType(types, p_value);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
@@ -279,7 +283,7 @@
                 return index;
 
             } catch (error) {
-                Message.error('ES019', ['insertAt()', error.message]);
+                throw new ExtendError(/ES019/, null, ['insertAt()', error.message]);
             }
         };
 
@@ -308,7 +312,7 @@
          * @returns {string}
          */
         PropertyCollection.prototype.keyOf = function(p_idx) {
-            if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
+            if (typeof p_idx !== 'number') throw new ExtendError(/ES021/, null, ['idx', 'number']);
             return this._keys[p_idx];
         };
 
@@ -318,7 +322,7 @@
          * @returns {boolean}
          */
         PropertyCollection.prototype.exist = function(p_key) {
-            if (!_isString(p_key)) Message.error('ES021', ['key', 'string']);
+            if (!_isString(p_key)) throw new ExtendError(/ES021/, null, ['key', 'string']);
             return this.hasOwnProperty(p_key);
         };
 

@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var MetaObject;
     var MetaElement;
@@ -29,6 +30,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         IGroupControl               = require('./i-control-group').IGroupControl;
         ISchemaControl              = require('./i-control-schema').ISchemaControl;
@@ -43,6 +45,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         IGroupControl               = _global._L.IGroupControl;
         ISchemaControl              = _global._L.ISchemaControl;
@@ -59,18 +62,19 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IGroupControl === 'undefined') Message.error('ES011', ['IGroupControl', 'i-control-group']);
-    if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
-    if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
-    if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
-    if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
-    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
-    if (typeof MetaRowCollection === 'undefined') Message.error('ES011', ['MetaRowCollection', 'meta-row']);
-    if (typeof MetaRow === 'undefined') Message.error('ES011', ['MetaRow', 'meta-row']);
-    if (typeof BaseColumnCollection === 'undefined') Message.error('ES011', ['BaseColumnCollection', 'meta-column']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof IGroupControl === 'undefined') throw new ExtendError(/ES011/, null, ['IGroupControl', 'i-control-group']);
+    if (typeof ISchemaControl === 'undefined') throw new ExtendError(/ES011/, null, ['ISchemaControl', 'i-control-schema']);
+    if (typeof IImportControl === 'undefined') throw new ExtendError(/ES011/, null, ['IImportControl', 'i-control-import']);
+    if (typeof IExportControl === 'undefined') throw new ExtendError(/ES011/, null, ['IExportControl', 'i-control-export']);
+    if (typeof ISerialize === 'undefined') throw new ExtendError(/ES011/, null, ['ISerialize', 'i-serialize']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
+    if (typeof MetaElement === 'undefined') throw new ExtendError(/ES011/, null, ['MetaElement', 'meta-element']);
+    if (typeof MetaRowCollection === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRowCollection', 'meta-row']);
+    if (typeof MetaRow === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRow', 'meta-row']);
+    if (typeof BaseColumnCollection === 'undefined') throw new ExtendError(/ES011/, null, ['BaseColumnCollection', 'meta-column']);
 
     //==============================================================
     // 4. module implementation   
@@ -145,7 +149,7 @@
                 get: function() { return _metaSet; },
                 set: function(nVal) { 
                     if (!(nVal instanceof MetaElement && nVal.instanceOf('MetaSet'))) {
-                        Message.error('ES032', ['_metaSet', 'MetaSet']);
+                        throw new ExtendError(/ES032/, null, ['_metaSet', 'MetaSet']);
                     }
                     _metaSet = nVal;
                 },
@@ -161,7 +165,7 @@
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { 
-                    Message.error('ES0111', ['columns', 'MetaEntity']);
+                    throw new ExtendError(/ES0111/, null, ['columns', 'MetaEntity']);
                 },
                 configurable: true, // 하위에서 재정의 해야함
                 enumerable: true
@@ -215,7 +219,7 @@
             var oGuid = p_oGuid;
 
             if (!_isSchema(p_oGuid)) { 
-                Message.error('ES021', ['transformSchema(obj)', '{columns: ... , rows: ...}']);
+                throw new ExtendError(/ES021/, null, ['transformSchema(obj)', '{columns: ... , rows: ...}']);
             }
 
             if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
@@ -282,19 +286,19 @@
             var opt = p_option || 3;
             var _this = this;
 
-            if (!(p_entity instanceof BaseEntity)) Message.error('ES032', ['entity', 'BaseEntity']);
-            if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
+            if (!(p_entity instanceof BaseEntity)) throw new ExtendError(/ES032/, null, ['entity', 'BaseEntity']);
+            if (typeof opt !== 'number') throw new ExtendError(/ES021/, null, ['opt', 'number']);
             if (opt % 2 === 1) loadColumn(); // opt: 1, 3
             if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
             return;
 
             // inner function
             function loadColumn() {
-                if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
+                if (_this.rows.count > 0 ) throw new ExtendError(/ES045/, null, ['rows', 'column']);
                 for (let i = 0; i < p_entity.columns.count; i++) {
                     var column = p_entity.columns[i].clone();
                     var key = p_entity.columns.keyOf(i);
-                    if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
+                    if (_this.columns.exist(key)) throw new ExtendError(/ES046/, null, ['columns', key]);
                     _this.columns.add(column);
                 }
             }
@@ -332,8 +336,8 @@
             } else {
                 for (var i = 0; i < p_items.length; i++) {
                     columnName = p_items[i];
-                    if (!_isString(columnName)) Message.error('ES045', ['items', 'string']);
-                    if (!this.columns.exist(columnName)) Message.error('ES053', ['items', 'column']);
+                    if (!_isString(columnName)) throw new ExtendError(/ES045/, null, ['items', 'string']);
+                    if (!this.columns.exist(columnName)) throw new ExtendError(/ES053/, null, ['items', 'column']);
                     
                     column = this.columns.alias(columnName)
                     p_entity.columns.add(column);
@@ -379,7 +383,7 @@
 
             if (obj._baseEntity && obj._baseEntity['$ref']) {
                 obj['_baseEntity'] = MetaRegistry.findSetObject(obj._baseEntity['$ref'], origin);
-                if (!obj['_baseEntity']) Message.error('ES015', [key, '_baseEntity']);
+                if (!obj['_baseEntity']) throw new ExtendError(/ES015/, null, [key, '_baseEntity']);
             }
 
             columns = obj['columns'];
@@ -412,23 +416,23 @@
             function addColumn(key, columns) {
                 var column;
                 if (_isObject(columns[key])) {
-                    if (_this.rows.count > 0 ) Message.error('ES045', ['rows', 'column']);
+                    if (_this.rows.count > 0 ) throw new ExtendError(/ES045/, null, ['rows', 'column']);
                     var prop = columns[key];
                     var obj = {};
                     if (_isObject(prop) && prop['$ref']) {
                         column = MetaRegistry.findSetObject(prop['$ref'], origin);
-                        if (!column) Message.error('ES015', [key, 'column']);
+                        if (!column) throw new ExtendError(/ES015/, null, [key, 'column']);
                     } else {
                         if (_isObject(prop['_entity']) && prop['_entity']['$ref']) {
                             prop['_entity'] = MetaRegistry.findSetObject(prop['_entity']['$ref'], origin);
-                            if (!prop['_entity']) Message.error('ES015', [key, '_entity']);
+                            if (!prop['_entity']) throw new ExtendError(/ES015/, null, [key, '_entity']);
                         }
                         for (var p in prop) obj[p] = prop[p];
 
                         column = new Column(key, null, obj);
                     }
                     if(prop['_guid']) MetaRegistry.createSetObject(prop, column); 
-                    if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
+                    if (_this.columns.exist(key)) throw new ExtendError(/ES046/, null, ['columns', key]);
                     _this.columns.add(column);
                 }
             }
@@ -503,7 +507,7 @@
         BaseEntity.prototype.setValue  = function(p_row) {
             var alias = '';
 
-            if (!(p_row instanceof MetaRow)) Message.error('ES032', ['row', 'MetaRow']);
+            if (!(p_row instanceof MetaRow)) throw new ExtendError(/ES032/, null, ['row', 'MetaRow']);
             for(var i = 0; this.columns.count > i; i++) {
                 alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
                 this.columns[i].value = p_row[alias];
@@ -527,8 +531,8 @@
             var target;
 
             // 1. 유효성 검사
-            if (!(p_target instanceof BaseEntity)) Message.error('ES032', ['target', 'BaseEntity']);
-            if (typeof p_option !== 'number') Message.error('ES021', ['option', 'number']);
+            if (!(p_target instanceof BaseEntity)) throw new ExtendError(/ES032/, null, ['target', 'BaseEntity']);
+            if (typeof p_option !== 'number') throw new ExtendError(/ES021/, null, ['option', 'number']);
 
             // 2. 타겟 복제본 만들기
             target = p_target.clone();
@@ -568,8 +572,8 @@
                 // 3-1. 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
                     alias = tarColumns[i].alias;
-                    if (this.columns.exist(alias)) Message.error('ES042', ['column.name', alias]);
-                    if (this.columns.existAlias(alias)) Message.error('ES042', ['column.alias', alias]);
+                    if (this.columns.exist(alias)) throw new ExtendError(/ES042/, null, ['column.name', alias]);
+                    if (this.columns.existAlias(alias)) throw new ExtendError(/ES042/, null, ['column.alias', alias]);
                 }
                 // 3-2. 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
@@ -641,8 +645,8 @@
                 // 3-1. 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
                     alias = tarColumns[i].alias;
-                    if (this.columns.exist(alias)) Message.error('ES042', ['columnName', alias]);
-                    if (this.columns.existAlias(alias)) Message.error('ES042', ['alais', alias]);
+                    if (this.columns.exist(alias)) throw new ExtendError(/ES042/, null, ['columnName', alias]);
+                    if (this.columns.existAlias(alias)) throw new ExtendError(/ES042/, null, ['alais', alias]);
                 }
                 // 3-2. 로우 임시 저장 및 초기화 
                 for (var i = 0; i < this.rows.count; i++) {
@@ -695,7 +699,7 @@
             var callback;
             var view;
             
-            if (!MetaView) Message.error('ES0110', ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
+            if (!MetaView) throw new ExtendError(/ES0110/, null, ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
             
             view = new MetaView('select');
 
@@ -722,14 +726,14 @@
         BaseEntity.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
             
-            if (p_obj instanceof BaseEntity) Message.error('ES022', ['BaseEntity']);
+            if (p_obj instanceof BaseEntity) throw new ExtendError(/ES022/, null, ['BaseEntity']);
 
             if (typeof obj === 'string') {
                 if (typeof p_parse === 'function') obj = p_parse(obj);
                 else obj = JSON.parse(obj, null);
             }
 
-            if (!_isObject(obj)) Message.error('ES021', ['obj', 'object']); // Branch:
+            if (!_isObject(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']); // Branch:
 
             this.setObject(obj);
         };
@@ -767,9 +771,9 @@
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
-            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
-            if (typeof opt !== 'number') Message.error('ES021', ['option', 'number']);
-            if (opt <= 0 || opt > 3) Message.error('ES067', ['option', '1', '3']);
+            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
+            if (typeof opt !== 'number') throw new ExtendError(/ES021/, null, ['option', 'number']);
+            if (opt <= 0 || opt > 3) throw new ExtendError(/ES067/, null, ['option', '1', '3']);
 
             if (p_obj instanceof BaseEntity) {
                 this._readEntity(p_obj, p_option);
@@ -791,13 +795,13 @@
         BaseEntity.prototype.readSchema  = function(p_obj, p_createRow) {
             var obj = p_obj;
             
-            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 obj = BaseEntity.transformSchema(obj); // gObj >> sObj<요약>
             }
-            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
 
             this._readSchema(obj, p_createRow);
         };        
@@ -810,13 +814,13 @@
             var obj = p_obj;
             var rows;
 
-            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
 
             if (MetaRegistry.isGuidObject(p_obj)) {
                 if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
                 obj = BaseEntity.transformSchema(p_obj);
             }
-            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
             
             rows = obj['rows'];
             if (Array.isArray(rows) && this.columns.count > 0) {
@@ -876,7 +880,7 @@
          * @returns {BaseEntity} 복제한 객체
          */
         BaseEntity.prototype.clone = function() {
-            Message.error('ES013', ['clone()']);
+            throw new ExtendError(/ES013/, null, ['clone()']);
         };
 
         /** 
@@ -885,7 +889,7 @@
          * @returns {MetaView} 복사한 뷰 객체
          */
         BaseEntity.prototype.copy = function() {
-            Message.error('ES013', ['copy()']);
+            throw new ExtendError(/ES013/, null, ['copy()']);
         };
 
         

@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var ICollection;
 
@@ -18,18 +19,21 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         ICollection                 = require('./i-collection').ICollection;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         ICollection                 = _global._L.ICollection;
     }
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof ICollection === 'undefined') Message.error('ES011', ['ICollection', 'i-collection']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof ICollection === 'undefined') throw new ExtendError(/ES011/, null, ['ICollection', 'i-collection']);
 
     //==============================================================
     // 4. module implementation   
@@ -53,7 +57,7 @@
          * @abstract
          */
         IArrayCollection.prototype.insertAt  = function() {
-            Message.error('ES013', ['insertAt(pos, val, ...): bool']);
+            throw new ExtendError(/ES013/, null, ['insertAt(pos, val, ...): bool']);
         };
     
         return IArrayCollection;

@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var BaseCollection;
     var IArrayCollection;
@@ -21,6 +22,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         IArrayCollection            = require('./i-collection-array').IArrayCollection;
         BaseCollection              = require('./base-collection').BaseCollection;
@@ -28,6 +30,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         IArrayCollection            = _global._L.IArrayCollection;
         BaseCollection              = _global._L.BaseCollection;
@@ -37,11 +40,12 @@
     
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IArrayCollection === 'undefined') Message.error('ES011', ['IArrayCollection', 'i-collection-array']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
-    if (typeof BaseCollection === 'undefined') Message.error('ES011', ['BaseCollection', 'base-collection']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof IArrayCollection === 'undefined') throw new ExtendError(/ES011/, null, ['IArrayCollection', 'i-collection-array']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
+    if (typeof BaseCollection === 'undefined') throw new ExtendError(/ES011/, null, ['BaseCollection', 'base-collection']);
     
     //==============================================================
     // 4. module implementation
@@ -157,7 +161,7 @@
                     
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
+                    if (!meta) throw new ExtendError(/ES015/, null, ['_elem['+ i +']', '$ref']);
                     this.__GET$_elements(this).push(meta);  
                 
                 } else this.__GET$_elements(this).push(elem);
@@ -202,9 +206,9 @@
             try {
                 var index   = this.count;
 
-                if (typeof p_pos !== 'number') Message.error('ES021', ['pos', 'number']);
-                if (index < p_pos) Message.error('ES061', ['pos']);
-                if (p_pos < 0) Message.error('ES062', ['pos', '0']);
+                if (typeof p_pos !== 'number') throw new ExtendError(/ES021/, null, ['pos', 'number']);
+                if (index < p_pos) throw new ExtendError(/ES061/, null, ['pos']);
+                if (p_pos < 0) throw new ExtendError(/ES062/, null, ['pos', '0']);
                 if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_value);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                     Message.warn('WS011', ['configurable = false', 'element']); 
@@ -233,7 +237,7 @@
                 return true;
 
             } catch (error) {
-                Message.error('ES019', ['insertAt()', error.message]);
+                throw new ExtendError(/ES019/, null, ['insertAt()', error.message]);
             }
         };
 

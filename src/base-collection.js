@@ -43,13 +43,13 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
-    if (typeof ICollection === 'undefined') throw new Error( Message.get('ES011', ['ICollection', 'i-collection']));
-    if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
-    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-    if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof Observer === 'undefined') throw new ExtendError(/ES011/, null, ['Observer', 'observer']);
+    if (typeof ICollection === 'undefined') throw new ExtendError(/ES011/, null, ['ICollection', 'i-collection']);
+    if (typeof IList === 'undefined') throw new ExtendError(/ES011/, null, ['IList', 'i-list']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
 
     //==============================================================
     // 4. module implementation
@@ -490,7 +490,7 @@
             }
             if (p_oGuid['_owner']) {
                 owner = MetaRegistry.findSetObject(p_oGuid['_owner']['$ref'], origin);
-                if (!owner) Message.error('ES015', [p_oGuid['name'], '_owner']);
+                if (!owner) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_owner']);
                 this._owner = owner;
             }
             if (Array.isArray(p_oGuid['_elemTypes']) && p_oGuid['_elemTypes'].length > 0){
@@ -517,7 +517,7 @@
         BaseCollection.prototype.removeAt = function(p_idx) {
             var elem;
             
-            if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
+            if (typeof p_idx !== 'number') throw new ExtendError(/ES021/, null, ['idx', 'number']);
             elem = this._elements[p_idx];
             if (elem) {
                 this._onRemove(p_idx, elem);
@@ -551,7 +551,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            Message.error('ES013', ['add(any): number']);
+            throw new ExtendError(/ES013/, null, ['add(any): number']);
         };
         
         /**
@@ -560,7 +560,7 @@
          * @fires _L.Collection.BaseCollection#onClear 
          */
         BaseCollection.prototype.clear  = function() {
-            Message.error('ES013', ['clear()']);
+            throw new ExtendError(/ES013/, null, ['clear()']);
         };
 
         return BaseCollection;
