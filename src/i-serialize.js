@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     // var Util;
     // var IObject;
     // var ISerialize;
@@ -19,12 +20,15 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
     }
 
     //==============================================================
     // 3. module dependency check
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
 
     //==============================================================
     // 4. module implementation   
@@ -45,7 +49,7 @@
          * @abstract
          */
         ISerialize.prototype.output  = function() {
-            Message.error('ES013', ['output(...)']);
+            throw new ExtendError(/ES013/, null, ['output(...)']);
         };
 
         /**
@@ -53,7 +57,7 @@
          * @abstract
          */
         ISerialize.prototype.load  = function(String) {
-            Message.error('ES013', ['load(...)']);
+            throw new ExtendError(/ES013/, null, ['load(...)']);
         };
 
         return ISerialize;

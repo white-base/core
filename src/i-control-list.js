@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     // var Util;
     // var IObject;
     // var IListControl;
@@ -19,12 +20,15 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
     }
 
     //==============================================================
     // 3. module dependency check
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
 
     //==============================================================
     // 4. module implementation   
@@ -45,7 +49,7 @@
          * @abstract
          */
         IListControl.prototype.add = function() {
-            Message.error('ES013', ['add(key)']);
+            throw new ExtendError(/ES013/, null, ['add(key)']);
         };
 
         /**
@@ -53,7 +57,7 @@
          * @abstract
          */
         IListControl.prototype.del  = function() {
-            Message.error('ES013', ['del(key)']);
+            throw new ExtendError(/ES013/, null, ['del(key)']);
         };
 
         /**
@@ -61,7 +65,7 @@
          * @abstract
          */
         IListControl.prototype.has  = function() {
-            Message.error('ES013', ['has(any)']);
+            throw new ExtendError(/ES013/, null, ['has(any)']);
         };
 
         /**
@@ -69,7 +73,7 @@
          * @abstract
          */
         IListControl.prototype.find  = function() {
-            Message.error('ES013', ['find(any)']);
+            throw new ExtendError(/ES013/, null, ['find(any)']);
         };
 
         return IListControl;

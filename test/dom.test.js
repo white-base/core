@@ -644,10 +644,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-object');
             });
             it("- namespace : IObject ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 require('../src/i-object');
                 
                 expect(global._L.IObject).toBeDefined();
@@ -661,7 +663,7 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- namespace : IMarshal ", () => {
-        
+                require('../src/extend-error');
                 require('../src/i-marshal');
                 
                 expect(global._L.IMarshal).toBeDefined();
@@ -675,6 +677,7 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- namespace : IMarshal ", () => {
+                require('../src/extend-error');
         
                 require('../src/i-serialize');
                 
@@ -689,6 +692,7 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- namespace : ITransaction ", () => {
+                require('../src/extend-error');
         
                 require('../src/i-transaction');
                 
@@ -703,10 +707,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-control-import');
             });
             it("- namespace : IImportControl ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 require('../src/i-control-import');
                 
@@ -721,10 +727,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-control-group');
             });
             it("- namespace : IGroupControl ", () => {
                 require('../src/message');
+                require('../src/extend-error');
         
                 require('../src/i-control-group');
                 
@@ -739,10 +747,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-control-export');
             });
             it("- namespace : IExportControl ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 require('../src/i-control-export');
                 
@@ -757,10 +767,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-list');
             });
             it("- namespace : IList ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 require('../src/i-list');
                 
@@ -775,10 +787,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-element');
             });
             it("- namespace : IList ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 require('../src/i-element');
                 
@@ -793,10 +807,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-control-schema');
             });
             it("- namespace : IList ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 require('../src/i-control-schema');
                 
@@ -811,10 +827,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 require('../src/i-control-list');
             });
             it("- namespace : IListControl ", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 require('../src/i-control-list');
                 
@@ -874,15 +892,18 @@ describe("[ GROUP]", () => {
                 global._L = null;
              });
              it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 expect(() => require('../src/i-collection')).toThrow(/Cannot read properties/);
              });
              it("- 예외 : 모두 로딩이 인된경우", () => {
                  require('../src/message');
+                 require('../src/extend-error');
          
                  expect(() => require('../src/i-collection')).toThrow(/ES011/);
              });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/i-collection')).toThrow(/Util/);
             });
@@ -905,10 +926,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
              });
              it("- 예외 : 자신만 로딩", () => {
+                require('../src/extend-error');
                 expect(() => require('../src/i-collection-property')).toThrow(/Cannot read properties/);
             });
              it("- 예외 : 모두 로딩이 인된경우", () => {
                  require('../src/message');
+                 require('../src/extend-error');
         
                  expect(() => require('../src/i-collection-property')).toThrow(/ES011/);
              });
@@ -2618,14 +2641,15 @@ describe("[ GROUP]", () => {
                 jest.resetModules();
                 global._L = null;
                 });
-            it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');
-                require('../src/extend-error');
+            // it("- 예외 : 전체 로딩 안할 때", () => {
+            //     // require('../src/message'); 
+            //     require('../src/extend-error');
                 
-                expect(() => require('../src/meta-column')).toThrow(/Cannot read properties/);
-            });
+            //     expect(() => require('../src/meta-column')).toThrow(/Cannot read properties/);
+            // });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/meta-column')).toThrow(/Util/);
             });

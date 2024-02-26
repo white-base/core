@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
 
     //==============================================================
     // 1. namespace declaration
@@ -16,11 +17,14 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
     }
     //==============================================================
     // 3. module dependency check
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
 
     //==============================================================
     // 4. module implementation   
@@ -41,7 +45,7 @@
          * @abstract
          */
         IObject.prototype.getTypes  = function() {
-            Message.error('ES013', ['getTypes(): array<function>']);
+            throw new ExtendError(/ES013/, null, ['getTypes(): array<function>']);
         };
         
         /**
@@ -49,7 +53,7 @@
          * @abstract
          */
         IObject.prototype.instanceOf  = function() {
-            Message.error('ES013', ['instanceOf(function | string): boolean']);
+            throw new ExtendError(/ES013/, null, ['instanceOf(function | string): boolean']);
         };
 
         /**
@@ -57,7 +61,7 @@
          * @abstract
          */
         IObject.prototype.equal  = function() {
-            Message.error('ES013', ['equal(meta): boolean']);
+            throw new ExtendError(/ES013/, null, ['equal(meta): boolean']);
         };
         
     

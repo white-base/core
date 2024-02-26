@@ -9,6 +9,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var Observer;
     var CustomError;
@@ -27,6 +28,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         MetaElement                 = require('./meta-element').MetaElement;
@@ -35,6 +37,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         CustomError                 = _global._L.CustomError;
@@ -46,12 +49,13 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
-    if (typeof BaseColumn === 'undefined') Message.error('ES011', ['BaseColumn', 'base-column']);
-    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof Observer === 'undefined') throw new ExtendError(/ES011/, null, ['Observer', 'observer']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaElement === 'undefined') throw new ExtendError(/ES011/, null, ['MetaElement', 'meta-element']);
+    if (typeof BaseColumn === 'undefined') throw new ExtendError(/ES011/, null, ['BaseColumn', 'base-column']);
+    if (typeof PropertyCollection === 'undefined') throw new ExtendError(/ES011/, null, ['PropertyCollection', 'collection-property']);
 
     //==============================================================
     // 4. module implementation
@@ -110,7 +114,7 @@
             {
                 get: function() { return isNotNull },
                 set: function(nVal) { 
-                    if(typeof nVal !== 'boolean') Message.error('ES021', ['isNotNull', 'boolean']);
+                    if(typeof nVal !== 'boolean') throw new ExtendError(/ES021/, null, ['isNotNull', 'boolean']);
                     isNotNull = nVal; 
                 },
                 configurable: false,
@@ -125,7 +129,7 @@
             {
                 get: function() { return isNullPass },
                 set: function(nVal) { 
-                    if(typeof nVal !== 'boolean') Message.error('ES021', ['isNullPass', 'boolean']);
+                    if(typeof nVal !== 'boolean') throw new ExtendError(/ES021/, null, ['isNullPass', 'boolean']);
                     isNullPass = nVal; 
                 },
                 configurable: false,
@@ -152,7 +156,7 @@
                     else list.push(nVal);
                     for(var i = 0; list.length > i; i++) {
                         if (!(typeof list[i] === 'function' || (typeof list[i].regex === 'object' && typeof list[i].msg === 'string'))) {
-                            Message.error('ES021', ['constraints', 'array<function | {regex,msg,code}>']);
+                            throw new ExtendError(/ES021/, null, ['constraints', 'array<function | {regex,msg,code}>']);
                          }
                     }
                     constraints = list;
@@ -212,7 +216,7 @@
             {
                 get: function() { return getter; },
                 set: function(val) { 
-                    if(typeof val !== 'function') Message.error('ES021', ['getter', 'function']);
+                    if(typeof val !== 'function') throw new ExtendError(/ES021/, null, ['getter', 'function']);
                     getter = val;
                 },
                 configurable: false,
@@ -227,7 +231,7 @@
             {
                 get: function() { return setter; },
                 set: function(val) { 
-                    if(typeof val !== 'function') Message.error('ES021', ['setter', 'function']);
+                    if(typeof val !== 'function') throw new ExtendError(/ES021/, null, ['setter', 'function']);
                     setter = val;
                 },
                 configurable: false,
@@ -407,8 +411,8 @@
                 this.constraints.push(p_regex);
                 return;
             }
-            if (!(p_regex instanceof RegExp)) Message.error('ES021', ['regex', 'RegExp']);
-            if (!(typeof p_msg === 'string')) Message.error('ES021', ['msg', 'string']);    
+            if (!(p_regex instanceof RegExp)) throw new ExtendError(/ES021/, null, ['regex', 'RegExp']);
+            if (!(typeof p_msg === 'string')) throw new ExtendError(/ES021/, null, ['msg', 'string']);    
 
             constraint.regex = p_regex;
             constraint.msg = p_msg;
@@ -497,9 +501,9 @@
             {
                 get: function() { return _baseType; },
                 set: function(nVal) { 
-                    if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    // if (!(new nVal('temp') instanceof BaseColumn)) Message.error('ES032', ['_baseType', 'BaseColumn']);
-                    if (!(Util.isProtoChain(nVal, BaseColumn))) Message.error('ES032', ['_baseType', 'BaseColumn']);
+                    if (!(typeof nVal === 'function')) throw new ExtendError(/ES021/, null, ['_baseType', 'function']);
+                    // if (!(new nVal('temp') instanceof BaseColumn)) throw new ExtendError('ES032', ['_baseType', 'BaseColumn']);
+                    if (!(Util.isProtoChain(nVal, BaseColumn))) throw new ExtendError(/ES032/, null, ['_baseType', 'BaseColumn']);
                     _baseType = nVal;
                 },
                 enumerable: false,
@@ -523,9 +527,9 @@
          */
         BaseColumnCollection.prototype.add = function(p_name, p_value) {
             
-            if (this._owner.rows.count > 0) Message.error('ES045', ['_owner.rows', 'column']);
-            if (this.existColumnName(p_name)) Message.error('ES042', ['name', 'columnName']);
-            if (this.existAlias(p_name)) Message.error('ES042', ['name', 'alias']); 
+            if (this._owner.rows.count > 0) throw new ExtendError(/ES045/, null, ['_owner.rows', 'column']);
+            if (this.existColumnName(p_name)) throw new ExtendError(/ES042/, null, ['name', 'columnName']);
+            if (this.existAlias(p_name)) throw new ExtendError(/ES042/, null, ['name', 'alias']); 
             
             return _super.prototype.add.call(this, p_name, p_value);
         };
@@ -536,7 +540,7 @@
          * @returns {boolean}
          */
         BaseColumnCollection.prototype.removeAt = function(p_idx) {
-            if (this._owner.rows.count > 0) Message.error('ES044', ['_owner.rows', 'idx']);
+            if (this._owner.rows.count > 0) throw new ExtendError(/ES044/, null, ['_owner.rows', 'idx']);
             return _super.prototype.removeAt.call(this, p_idx); 
         };
 
@@ -586,7 +590,7 @@
 
         /** @abstract */
         BaseColumnCollection.prototype.addValue = function() {
-            Message.error('ES013', ['addValue(name, value)']);
+            throw new ExtendError(/ES013/, null, ['addValue(name, value)']);
         };
 
         return BaseColumnCollection;
@@ -627,7 +631,7 @@
                 key  = p_any.columnName;
                 column = p_any.clone(this._owner);
             } else {
-                Message.error('ES022', ['object']); 
+                throw new ExtendError(/ES022/, null, ['object']); 
             }
 
             return _super.prototype.add.call(this, key, column);
@@ -644,7 +648,7 @@
             var property = {};
             var _valueTypes = this._baseType._VALUE_TYPE;
 
-            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            if (typeof p_name !== 'string') throw new ExtendError(/ES021/, null, ['name', 'string']);
             if (_valueTypes.length > 0) Util.matchType([_valueTypes], p_value);
             
             property = { value: p_value };
@@ -745,7 +749,7 @@
             var column;
 
             if (p_refCollection && !(p_refCollection instanceof BaseColumnCollection)) {
-                Message.error('ES032', ['refCollection', 'BaseColumnCollection']);
+                throw new ExtendError(/ES032/, null, ['refCollection', 'BaseColumnCollection']);
             }
 
             if (p_any instanceof BaseColumn) {
@@ -754,7 +758,7 @@
             } else if (typeof p_any === 'string') {
                 key = p_any;
                 column = new this._baseType(key, this._owner);
-            } else Message.error('ES022', ['object '+ typeof p_any]);
+            } else throw new ExtendError(/ES022/, null, ['object '+ typeof p_any]);
 
             // baseCollection & refCollection 존재하는 경우
             if (p_refCollection instanceof BaseColumnCollection) {                                  
@@ -789,7 +793,7 @@
             var property = {};
             var _valueTypes = this._baseType._VALUE_TYPE;
 
-            if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
+            if (typeof p_name !== 'string') throw new ExtendError(/ES021/, null, ['name', 'string']);
             if (_valueTypes.length > 0) Util.matchType([_valueTypes], p_value);
             
             property = { value: p_value };
@@ -804,7 +808,7 @@
          */
         MetaViewColumnCollection.prototype.addEntity  = function(p_entity) {
             if (typeof p_entity !== 'undefined' && !(p_entity instanceof MetaElement && p_entity.instanceOf('BaseEntity'))) {
-                Message.error('ES032', ['entity', 'BaseEntity']);
+                throw new ExtendError(/ES032/, null, ['entity', 'BaseEntity']);
             }
 
             for (var i = 0; p_entity.columns.count > i; i++) {

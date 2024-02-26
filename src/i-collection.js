@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var IPartControl;
     var ILookupControl;
     var IBaseCollection;
@@ -21,9 +22,11 @@
     
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util
         IPartControl                = _global._L.IPartControl;
         ILookupControl              = _global._L.ILookupControl;
@@ -32,7 +35,8 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
 
     //==============================================================
     // 4. module implementation
@@ -53,7 +57,7 @@
          * @abstract
          */
         ICollection.prototype.add  = function() {
-            Message.error('ES013', ['add(any): boolean']);
+            throw new ExtendError(/ES013/, null, ['add(any): boolean']);
         };
 
         /**
@@ -61,7 +65,7 @@
          * @abstract
          */
         ICollection.prototype.remove  = function() {
-            Message.error('ES013', ['remove(elem) : boolean']);
+            throw new ExtendError(/ES013/, null, ['remove(elem) : boolean']);
         };
 
         /**
@@ -69,7 +73,7 @@
          * @abstract
          */
         ICollection.prototype.contains  = function() {
-            Message.error('ES013', ['contains()']);
+            throw new ExtendError(/ES013/, null, ['contains()']);
         };
 
         /**
@@ -77,7 +81,7 @@
          * @abstract
          */
         ICollection.prototype.indexOf  = function() {
-            Message.error('ES013', ['indexOf()']);
+            throw new ExtendError(/ES013/, null, ['indexOf()']);
         };
 
         return ICollection;

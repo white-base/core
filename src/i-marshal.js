@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     // var Util;
     // var IObject;
     // var IMarshal;
@@ -19,12 +20,15 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
     }
 
     //==============================================================
     // 3. module dependency check
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
 
     //==============================================================
     // 4. module implementation   
@@ -57,7 +61,7 @@
          * @abstract
          */
         IMarshal.prototype.getObject = function() {
-            Message.error('ES013', ['getObject(p_vOpt, p_origin?): object']);
+            throw new ExtendError(/ES013/, null, ['getObject(p_vOpt, p_origin?): object']);
         };
 
         /**
@@ -65,7 +69,7 @@
          * @abstract
          */
         IMarshal.prototype.setObject  = function() {
-            Message.error('ES013', ['setObject(mObj)']);
+            throw new ExtendError(/ES013/, null, ['setObject(mObj)']);
         };
 
         return IMarshal;

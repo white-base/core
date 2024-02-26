@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
 
     //==============================================================
     // 1. namespace declaration
@@ -16,11 +17,14 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
     }
     //==============================================================
     // 3. module dependency check
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
 
     //==============================================================
     // 4. module implementation   
@@ -41,7 +45,7 @@
          * @abstract
          */
         IGroupControl.prototype.merge  = function() {
-            Message.error('ES013', ['merge(any)']);
+            throw new ExtendError(/ES013/, null, ['merge(any)']);
         };
 
         /**
@@ -49,7 +53,7 @@
          * @abstract
          */
         IGroupControl.prototype.copy  = function() {
-            Message.error('ES013', ['copy()']);
+            throw new ExtendError(/ES013/, null, ['copy()']);
         };
 
         return IGroupControl;

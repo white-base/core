@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var MetaRegistry;
     var NamespaceManager;
@@ -56,6 +57,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         MetaRegistry                = require('./meta-registry').MetaRegistry;
         NamespaceManager            = require('./namespace-manager').NamespaceManager;
@@ -104,6 +106,7 @@
     // 4. module implementation
     var loadNamespace = function() {
         MetaRegistry.registerClass(Message, Message._NS, Message.name);
+        MetaRegistry.registerClass(ExtendError, ExtendError._NS, ExtendError.name);
         MetaRegistry.registerClass(MetaRegistry, MetaRegistry._NS, MetaRegistry.name);
         MetaRegistry.registerClass(MetaObject, MetaObject._NS, MetaObject.name, );
         MetaRegistry.registerClass(MetaElement, MetaElement._NS, MetaElement.name);
