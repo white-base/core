@@ -225,8 +225,8 @@
         var addCnt = 0;
         // var union = [];
 
-        if (typeof p_ctor !== 'function') throw new Error(Message.get('ES024', ['p_ctor', 'function']));
-        if (!_isObject(p_obj)) throw new Error(Message.get('ES024', ['p_obj', 'obj']));
+        if (typeof p_ctor !== 'function') throw new ExtendError(/ES024/, null, ['p_ctor', 'function']);
+        if (!_isObject(p_obj)) throw new ExtendError(/ES024/, null, ['p_obj', 'obj']);
 
         if (typeof p_obj._interface === 'undefined') {
             Object.defineProperty(p_obj, '_interface', {
@@ -246,7 +246,7 @@
                     p_obj._interface.push(arguments[i]);
                     addCnt++;
                 }
-            } else throw new Error(Message.get('ES021', ['arguments', 'function']));
+            } else throw new ExtendError(/ES021/, null, ['arguments', 'function']);
         } 
 
         for (var i = 0; i < p_ctor['_UNION'].length; i++) {
@@ -289,7 +289,7 @@
                 for (var i = 0; i < this._interface.length; i++) {
                     if (this._interface[i].name === target) return true;  
                 }
-            } else throw new Error(Message.get('ES021', ['isImplementOf()', 'function, string']));
+            } else throw new ExtendError(/ES021/, null, ['isImplementOf()', 'function, string']);
             return false;
         }
         function typeName(obj) {

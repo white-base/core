@@ -950,15 +950,15 @@
                     }
                     /**
                      * 네임스페이스 기준으로 분리하면 적합할 듯
-                     * L01 : Common.*       message.js<제외>, extend-error.js<자체>, util.js, util-type.js, observer.js, load-namespace.js <없음>
+                     * L01 : Common.*       message.js<제외>, extend-error.js<자체>, util.js:4, util-type.js:100~, observer.js:6, load-namespace.js <없음>
                      *  - 100 : util-type match
                      *  - 200 : util-type allow
                      *  - 300 : util-type etc
                      *  - 
-                     * L02 : Interface.*    i-*.js 
-                     * L03 : Meta.*         meta-object.js, meta-element.js, namespace-manager.js, meta-register.js
-                     * L04 : Collection.*   trans-queue.js, base-collection.js, collection-*.js
-                     * L05 : Meta.Entity.*  base-column.js, base-entity.js, meta-column.js, object-column.js, meta-row.js, meta-set.js, meta-table.js, meta-view.js
+                     * L02 : Interface.*    i-*.js:26  <14개>
+                     * L03 : Meta.*         meta-object.js:4, meta-element.js:2, namespace-manager.js:10, meta-register.js:28
+                     * L04 : Collection.*   trans-queue.js, base-collection.js:5, collection-array.js:5, collection-property.js:11, collection-transaction.js:1
+                     * L05 : Meta.Entity.*  base-column.js:9, base-entity.js:34, meta-column.js:21, object-column.js:3, meta-row.js:7, meta-set.js:11, meta-table.js:9, meta-view.js:13
                      */
                 },
                 W: {    // warning

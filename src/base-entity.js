@@ -62,19 +62,19 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof IGroupControl === 'undefined') throw new ExtendError(/ES011/, null, ['IGroupControl', 'i-control-group']);
-    if (typeof ISchemaControl === 'undefined') throw new ExtendError(/ES011/, null, ['ISchemaControl', 'i-control-schema']);
-    if (typeof IImportControl === 'undefined') throw new ExtendError(/ES011/, null, ['IImportControl', 'i-control-import']);
-    if (typeof IExportControl === 'undefined') throw new ExtendError(/ES011/, null, ['IExportControl', 'i-control-export']);
-    if (typeof ISerialize === 'undefined') throw new ExtendError(/ES011/, null, ['ISerialize', 'i-serialize']);
-    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
-    if (typeof MetaElement === 'undefined') throw new ExtendError(/ES011/, null, ['MetaElement', 'meta-element']);
-    if (typeof MetaRowCollection === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRowCollection', 'meta-row']);
-    if (typeof MetaRow === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRow', 'meta-row']);
-    if (typeof BaseColumnCollection === 'undefined') throw new ExtendError(/ES011/, null, ['BaseColumnCollection', 'meta-column']);
+    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (typeof IGroupControl === 'undefined') throw new Error(Message.get('ES011', ['IGroupControl', 'i-control-group']));
+    if (typeof ISchemaControl === 'undefined') throw new Error(Message.get('ES011', ['ISchemaControl', 'i-control-schema']));
+    if (typeof IImportControl === 'undefined') throw new Error(Message.get('ES011', ['IImportControl', 'i-control-import']));
+    if (typeof IExportControl === 'undefined') throw new Error(Message.get('ES011', ['IExportControl', 'i-control-export']));
+    if (typeof ISerialize === 'undefined') throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
+    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+    if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+    if (typeof MetaElement === 'undefined') throw new ExtendError(Message.get('ES011', ['MetaElement', 'meta-element']));
+    if (typeof MetaRowCollection === 'undefined') throw new Error(Message.get('ES011', ['MetaRowCollection', 'meta-row']));
+    if (typeof MetaRow === 'undefined') throw new Error(Message.get('ES011', ['MetaRow', 'meta-row']));
+    if (typeof BaseColumnCollection === 'undefined') throw new Error(Message.get('ES011', ['BaseColumnCollection', 'meta-column']));
 
     //==============================================================
     // 4. module implementation   

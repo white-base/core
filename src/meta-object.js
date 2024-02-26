@@ -38,10 +38,10 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
-    if (typeof IObject === 'undefined') throw new ExtendError(/ES011/, null, ['IObject', 'i-object']);
-    if (typeof IMarshal === 'undefined') throw new ExtendError(/ES011/, null, ['IMarshal', 'i-marshal']);
-    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (typeof IObject === 'undefined') throw new Error(Message.get('ES011', ['IObject', 'i-object']));
+    if (typeof IMarshal === 'undefined') throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
+    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
 
     //==============================================================
     // 4. module implementation   

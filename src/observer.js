@@ -29,7 +29,7 @@
     //==============================================================Á
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
 
     //==============================================================
     // 4. module implementation   

@@ -46,12 +46,12 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
-    if (typeof ITransaction === 'undefined') throw new ExtendError(/ES011/, null, ['ITransaction', 'i-transaction']);
-    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
-    if (typeof PropertyCollection === 'undefined') throw new ExtendError(/ES011/, null, ['PropertyCollection', 'collection-property']);
-    if (typeof BaseEntity === 'undefined') throw new ExtendError(/ES011/, null, ['BaseEntity', 'base-entity']);
-    if (typeof MetaTableColumnCollection === 'undefined') throw new ExtendError(/ES011/, null, ['MetaTableColumnCollection', 'meta-column']);
+    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (typeof ITransaction === 'undefined') throw new Error(Message.get('ES011', ['ITransaction', 'i-transaction']));
+    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+    if (typeof PropertyCollection === 'undefined') throw new Error(Message.get('ES011', ['PropertyCollection', 'collection-property']));
+    if (typeof BaseEntity === 'undefined') throw new Error(Message.get('ES011', ['BaseEntity', 'base-entity']));
+    if (typeof MetaTableColumnCollection === 'undefined') throw new Error(Message.get('ES011', ['MetaTableColumnCollection', 'meta-column']));
 
     //==============================================================
     // 4. module implementation   

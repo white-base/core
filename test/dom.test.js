@@ -1513,7 +1513,7 @@ describe("[ GROUP]", () => {
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
                 require('../src/extend-error');
-                require('../src/util-type');
+                require('../src/util-type'); 
                 require('../src/util');
         
                 require('../src/i-object');
@@ -1540,7 +1540,7 @@ describe("[ GROUP]", () => {
                 require('../src/trans-queue');
                 require('../src/collection-transaction');
                 require('../src/collection-property');
-                // require('../src/meta-element');
+                // require('../src/meta-element'); 
         
                 expect(() => require('../src/base-entity')).toThrow(/MetaElement/);
             });

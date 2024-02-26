@@ -41,11 +41,11 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
-    if (typeof IPropertyCollection === 'undefined') throw new ExtendError(/ES011/, null, ['IPropertyCollection', 'i-collection-property']);
-    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
-    if (typeof BaseCollection === 'undefined') throw new ExtendError(/ES011/, null, ['BaseCollection', 'base-collection']);
+    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (typeof IPropertyCollection === 'undefined') throw new Error(Message.get('ES011', ['IPropertyCollection', 'i-collection-property']));
+    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+    if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+    if (typeof BaseCollection === 'undefined') throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
     
     //==============================================================
     // 4. module implementation   
