@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     
     //==============================================================
@@ -17,15 +18,18 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util
     }
 
     //==============================================================Á
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
 
     //==============================================================
     // 4. module implementation   
@@ -36,7 +40,7 @@
          * @param {object} p_caller 함수 호출 본문에서 this 역활 publish.apply(p_caller, ...)
          */
         function Observer(p_caller) {
-            if (typeof p_caller !== 'object') Message.error('ES031', ['caller']);
+            if (typeof p_caller !== 'object') throw new ExtendError(/ES031/, null, ['caller']);
             
             var __subscribers = this._getInitObject();
             var isLog = false;
@@ -97,7 +101,7 @@
             {
                 get: function() { return isLog; },
                 set: function(nVal) {
-                    if (typeof nVal !== 'boolean') Message.error('ES021', ['isLog', 'boolean']);
+                    if (typeof nVal !== 'boolean') throw new ExtendError(/ES021/, null, ['isLog', 'boolean']);
                     isLog = nVal;
                 }
             });
@@ -111,7 +115,7 @@
             {
                 get: function() { return isSingleMode; },
                 set: function(nVal) { 
-                    if (typeof nVal !== 'boolean') Message.error('ES021', ['isSingleMode', 'boolean']);
+                    if (typeof nVal !== 'boolean') throw new ExtendError(/ES021/, null, ['isSingleMode', 'boolean']);
                     isSingleMode = nVal;
                 }
             });
@@ -121,8 +125,8 @@
             // inner variable access
             this.__SET$__subscribers = function(val, call) {
                 if (call instanceof Observer) { // 상속접근 허용
-                    if (typeof val !== 'object') Message.error('ES021', ['__subscribers', 'object']);
-                    if (typeof val.any === 'undefined') Message.error('ES021', ['__subscribers.any', 'array']);
+                    if (typeof val !== 'object') throw new ExtendError(/ES021/, null, ['__subscribers', 'object']);
+                    if (typeof val.any === 'undefined') throw new ExtendError(/ES021/, null, ['__subscribers.any', 'array']);
                     __subscribers = val;    
                 }
             }
@@ -156,7 +160,7 @@
         Observer.prototype.subscribe = function(p_fn, p_code) {
             p_code = p_code || 'any';
 
-            if (typeof p_fn !== 'function') Message.error('ES021', ['fn', 'function']);
+            if (typeof p_fn !== 'function') throw new ExtendError(/ES021/, null, ['fn', 'function']);
             
             if (this.isSingleMode && this.__subscribers[p_code]) this.unsubscribe(p_code);    // 싱글모드시 초기화
             if (typeof this.__subscribers[p_code] === 'undefined') {

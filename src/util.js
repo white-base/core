@@ -266,7 +266,7 @@
                 } else matchType(p_obj._interface[i], p_obj, 1);
             }
         } catch (error) { 
-            throw new ExtendError(Message.get('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]));
+            throw new ExtendError(/ES017/, error, [typeName(p_obj), typeName(p_obj._interface[i])]);
             // Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
         }
 

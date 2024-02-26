@@ -9,6 +9,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var Observer;
     var IList;
@@ -26,6 +27,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         IList                       = require('./i-list').IList;
@@ -34,6 +36,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    // COVER:
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         MetaObject                  = _global._L.MetaObject;
@@ -44,12 +47,13 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
-    if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
-    if (typeof TransactionCollection === 'undefined') Message.error('ES011', ['TransactionCollection', 'collection-transaction']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof Observer === 'undefined') throw new ExtendError(/ES011/, null, ['Observer', 'observer']);
+    if (typeof IList === 'undefined') throw new ExtendError(/ES011/, null, ['IList', 'i-list']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
+    if (typeof TransactionCollection === 'undefined') throw new ExtendError(/ES011/, null, ['TransactionCollection', 'collection-transaction']);
 
     //==============================================================
     // 4. module implementation   
@@ -204,7 +208,7 @@
             
             // BaseEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('BaseEntity'))) {
-                Message.error('ES032', ['entity', 'BaseEntity']);
+                throw new ExtendError(/ES032/, null, ['entity', 'BaseEntity']);
             }
             
             // 설정
@@ -323,7 +327,7 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var entity;
             
-            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) Message.error('ES063', ['_elem', '_key']);
+            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) throw new ExtendError(/ES063/, null, ['_elem', '_key']);
 
             if (p_oGuid['__subscribers']) {
                 this.__event.__SET$__subscribers(p_oGuid['__subscribers'], this.__event);
@@ -336,7 +340,7 @@
                     this.__GET$_elements(this)[i] = obj;
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) Message.error('ES015', ['_elem['+ i +']', '$ref']);
+                    if (!meta) throw new ExtendError(/ES015/, null, ['_elem['+ i +']', '$ref']);
                     this.__GET$_elements(this)[i] = meta;   
                 } else this.__GET$_elements(this)[i] = elem;   
             }
@@ -393,7 +397,7 @@
                 set: function(nVal) {
                     var typeName;
                     if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], nVal);
-                    if (nVal._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
+                    if (nVal._entity !== this._owner) throw new ExtendError(/ES032/, null, ['_entity', 'this._owner']);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
                 },
@@ -424,15 +428,15 @@
             var result;
             var entity = p_row._entity;
 
-            if (!(p_row instanceof MetaRow )) Message.error('ES032', ['row', 'MetaRow']);
-            if (entity._guid !== this._owner._guid) Message.error('ES034', ['_guid', '_owner._guid']);
+            if (!(p_row instanceof MetaRow )) throw new ExtendError(/ES032/, null, ['row', 'MetaRow']);
+            if (entity._guid !== this._owner._guid) throw new ExtendError(/ES034/, null, ['_guid', '_owner._guid']);
             
             // valid 검사
             if (matchType === true) {
                 for (let i = 0; i < p_row.count; i++) {
                     result = entity.columns[i].valid(p_row[i]);
                     if(result) {
-                        Message.error('ES054', ['row', 'column.valid()', result.msg]);
+                        throw new ExtendError(/ES054/, null, ['row', 'column.valid()', result.msg]);
                     }
                 }
             }

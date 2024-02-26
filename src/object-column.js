@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var Observer;
     var CustomError;
@@ -25,6 +26,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         MetaObject                  = require('./meta-object').MetaObject;
@@ -34,6 +36,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         CustomError                 = _global._L.CustomError;
@@ -46,13 +49,14 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof Observer === 'undefined') Message.error('ES011', ['Observer', 'observer']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
-    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
-    if (typeof BaseColumn === 'undefined') Message.error('ES011', ['BaseColumn', 'base-column']);
-    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof Observer === 'undefined') throw new ExtendError(/ES011/, null, ['Observer', 'observer']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
+    if (typeof MetaElement === 'undefined') throw new ExtendError(/ES011/, null, ['MetaElement', 'meta-element']);
+    if (typeof BaseColumn === 'undefined') throw new ExtendError(/ES011/, null, ['BaseColumn', 'base-column']);
+    if (typeof PropertyCollection === 'undefined') throw new ExtendError(/ES011/, null, ['PropertyCollection', 'collection-property']);
 
     //==============================================================
     // 4. module implementation
@@ -95,7 +99,7 @@
                         this[prop] = p_property[prop];
                     }
                 }
-            } else Message.error('ES021', ['p_property', 'object']);
+            } else throw new ExtendError(/ES021/, null, ['p_property', 'object']);
         };
 
         /**
@@ -153,7 +157,7 @@
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) Message.error('ES015', ['ObjectColumn.default', '$ref']);
+                    if (!meta) throw new ExtendError(/ES015/, null, ['ObjectColumn.default', '$ref']);
                     this['default'] = meta;
                 }
             }
@@ -167,7 +171,7 @@
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) Message.error('ES015', ['ObjectColumn.value', '$ref']);
+                    if (!meta) throw new ExtendError(/ES015/, null, ['ObjectColumn.value', '$ref']);
                     this.value = meta;
                 }
             }

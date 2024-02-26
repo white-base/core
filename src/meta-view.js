@@ -7,6 +7,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var MetaObject;
     var BaseEntity;
@@ -24,6 +25,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaObject                  = require('./meta-object').MetaObject;
@@ -32,6 +34,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaObject                  = _global._L.MetaObject;
@@ -42,12 +45,13 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
-    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
-    if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
-    if (typeof MetaViewColumnCollection === 'undefined') Message.error('ES011', ['MetaViewColumnCollection', 'meta-column']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
+    if (typeof PropertyCollection === 'undefined') throw new ExtendError(/ES011/, null, ['PropertyCollection', 'collection-property']);
+    if (typeof BaseEntity === 'undefined') throw new ExtendError(/ES011/, null, ['BaseEntity', 'base-entity']);
+    if (typeof MetaViewColumnCollection === 'undefined') throw new ExtendError(/ES011/, null, ['MetaViewColumnCollection', 'meta-column']);
 
     //==============================================================
     // 4. module implementation   
@@ -73,7 +77,7 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (nVal === this.viewName) return;
-                    if (typeof nVal !== 'string') Message.error('ES021', ['viewName', 'string']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['viewName', 'string']);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -88,8 +92,8 @@
             {
                 get: function() { return columns; },
                 set: function(nVal) { 
-                    if (!(nVal instanceof MetaViewColumnCollection)) Message.error('ES032', ['columns', 'MetaViewColumnCollection']);
-                    if (this.rows.count > 0) Message.error('ES047', ['rows', 'MetaRow', 'MetaViewColumnCollection']);
+                    if (!(nVal instanceof MetaViewColumnCollection)) throw new ExtendError(/ES032/, null, ['columns', 'MetaViewColumnCollection']);
+                    if (this.rows.count > 0) throw new ExtendError(/ES047/, null, ['rows', 'MetaRow', 'MetaViewColumnCollection']);
                     columns = nVal;
                 },
                 configurable: false,
@@ -104,7 +108,7 @@
             {
                 get: function() { return _baseEntity; },
                 set: function(nVal) { 
-                    if (!(nVal instanceof BaseEntity)) Message.error('ES032', ['_baseEntity', 'BaseEntity']);
+                    if (!(nVal instanceof BaseEntity)) throw new ExtendError(/ES032/, null, ['_baseEntity', 'BaseEntity']);
                     _baseEntity = nVal;
                 },
                 configurable: false,
@@ -159,13 +163,13 @@
 
             if(p_oGuid['_metaSet']) {
                 metaSet = MetaRegistry.findSetObject(p_oGuid['_metaSet']['$ref'], origin);
-                if (!metaSet) Message.error('ES015', [p_oGuid['name'], '_metaSet']);
+                if (!metaSet) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_metaSet']);
                 this._metaSet = metaSet;
             }
             // this.metaSet = mObj.metaSet;
             if (p_oGuid['_baseEntity']) {
                 baseEntity = MetaRegistry.findSetObject(p_oGuid['_baseEntity']['$ref'], origin);
-                if (!baseEntity) Message.error('ES015', [p_oGuid['name'], '_baseEntity']);
+                if (!baseEntity) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_baseEntity']);
                 // this.__SET$_baseEntity(baseEntity, this);
                 this._baseEntity = baseEntity;
             } 
@@ -249,9 +253,9 @@
             {
                 get: function() { return _baseType; },
                 set: function(nVal) { 
-                    if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    // if (!(new nVal('temp') instanceof MetaView)) Message.error('ES032', ['_baseType', 'MetaView']);
-                    if (!(Util.isProtoChain(nVal, MetaView))) Message.error('ES032', ['_baseType', 'MetaView']);
+                    if (!(typeof nVal === 'function')) throw new ExtendError(/ES021/, null, ['_baseType', 'function']);
+                    // if (!(new nVal('temp') instanceof MetaView)) throw new ExtendError('ES032', ['_baseType', 'MetaView']);
+                    if (!(Util.isProtoChain(nVal, MetaView))) throw new ExtendError(/ES032/, null, ['_baseType', 'MetaView']);
                     _baseType = nVal;
                 },
                 configurable: false,
@@ -281,10 +285,10 @@
             var key;
 
             if (p_baseEntity && !(p_baseEntity instanceof BaseEntity)) {
-                Message.error('ES032', ['baseEntity', 'BaseEntity']);
+                throw new ExtendError(/ES032/, null, ['baseEntity', 'BaseEntity']);
             }
             if (p_obj instanceof MetaView && p_baseEntity) {
-                Message.error('ES016', ['baseEntity', 'MetaView']);
+                throw new ExtendError(/ES016/, null, ['baseEntity', 'MetaView']);
             }
 
             if (typeof p_obj === 'string') {      
@@ -295,9 +299,9 @@
                 key  = p_obj.viewName;
                 view = p_obj;
                 p_obj._metaSet = this._owner;
-            } else Message.error('ES021', ['object', 'string, MetaView object']);
+            } else throw new ExtendError(/ES021/, null, ['object', 'string, MetaView object']);
 
-            if (this.existViewName(key)) Message.error('ES042', ['viewName', key]);
+            if (this.existViewName(key)) throw new ExtendError(/ES042/, null, ['viewName', key]);
 
             return _super.prototype.add.call(this, key, view);
         };

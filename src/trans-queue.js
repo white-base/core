@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var MetaObject;
     var IArrayCollection;
@@ -19,11 +20,13 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         MetaObject                  = require('./meta-object').MetaObject;
         IArrayCollection            = require('./i-collection-array').IArrayCollection;
     } else {    // COVER:
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         MetaObject                  = _global._L.MetaObject;
         IArrayCollection            = _global._L.IArrayCollection;
@@ -31,9 +34,10 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IArrayCollection === 'undefined') Message.error('ES011', ['IArrayCollection', 'i-collection-array']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof IArrayCollection === 'undefined') throw new ExtendError(/ES011/, null, ['IArrayCollection', 'i-collection-array']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
 
     //==============================================================
     // 4. module implementation   
@@ -69,10 +73,10 @@
                 get: function() { return collection; },
                 set: function(nVal) { 
                     if (!(nVal instanceof MetaObject)) {
-                        Message.error('ES032', ['collection', 'MetaObject']);
+                        throw new ExtendError(/ES032/, null, ['collection', 'MetaObject']);
                     }
                     if (!(nVal.isImplementOf(IArrayCollection))) {
-                        Message.error('ES033', ['collection', 'IArrayCollection']);
+                        throw new ExtendError(/ES033/, null, ['collection', 'IArrayCollection']);
                     }
                     collection = nVal;
                 },
@@ -120,7 +124,7 @@
                     pos = obj.pos;
                     this.collection.removeAt(pos);
                     this.collection.insertAt(pos, obj.clone);
-                } else Message.error('ES022', ['cmd='+ obj.cmd]);
+                } else throw new ExtendError(/ES022/, null, ['cmd='+ obj.cmd]);
             }
             this.init();
         };

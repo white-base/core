@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var MetaObject;
     var IElement;
@@ -20,11 +21,13 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         IElement                    = require('./i-element').IElement;
         MetaObject                  = require('./meta-object').MetaObject;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         IElement                    = _global._L.IElement;
         MetaObject                  = _global._L.MetaObject;
@@ -32,9 +35,10 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IElement === 'undefined') Message.error('ES011', ['IElement', 'i-element']);
-    if (typeof MetaObject === 'undefined') Message.error('ES011', ['MetaObject', 'meta-object']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof IElement === 'undefined') throw new ExtendError(/ES011/, null, ['IElement', 'i-element']);
+    if (typeof MetaObject === 'undefined') throw new ExtendError(/ES011/, null, ['MetaObject', 'meta-object']);
 
     //==============================================================
     // 4. module implementation   
@@ -69,8 +73,8 @@
 
             // inner variable access
             this.__SET$_name = function(val, call) {
-                if (typeof val !== 'string') Message.error('ES021', ['_name', 'string']);   // Branch:
-                if (val.length === 0) Message.error('ES055', ['_name']);
+                if (typeof val !== 'string') throw new ExtendError(/ES021/, null, ['_name', 'string']);   // Branch:
+                if (val.length === 0) throw new ExtendError(/ES055/, null, ['_name']);
                 if (call instanceof MetaElement) _name = val;    // 상속접근 허용
             }
             

@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var IObject;
     var IMarshal;
@@ -20,12 +21,14 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         IObject                     = require('./i-object').IObject;
         IMarshal                    = require('./i-marshal').IMarshal;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util
         IObject                     = _global._L.IObject;
         IMarshal                    = _global._L.IMarshal;
@@ -34,10 +37,11 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IObject === 'undefined') Message.error('ES011', ['IObject', 'i-object']);
-    if (typeof IMarshal === 'undefined') Message.error('ES011', ['IMarshal', 'i-marshal']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof IObject === 'undefined') throw new ExtendError(/ES011/, null, ['IObject', 'i-object']);
+    if (typeof IMarshal === 'undefined') throw new ExtendError(/ES011/, null, ['IMarshal', 'i-marshal']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
 
     //==============================================================
     // 4. module implementation   
@@ -98,7 +102,7 @@
             if (this._type.hasOwnProperty('_KIND')) {
                 var kind = this._type['_KIND'].toLowerCase();
                 if (['abstract', 'interface', 'enum', 'function'].indexOf(kind) > -1) { // Branch:
-                    Message.error('ES018', [this._type.name]);
+                    throw new ExtendError(/ES018/, null, [this._type.name]);
                 }
             }
 
@@ -270,15 +274,15 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
-            if (!_isObject(p_oGuid)) Message.error('ES021', ['oGuid', 'object']);
-            if (p_oGuid['_type'] !== fullName) Message.error('ES046', [p_oGuid['_type'], fullName]);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['oGuid', 'object']);
+            if (p_oGuid['_type'] !== fullName) throw new ExtendError(/ES046/, null, [p_oGuid['_type'], fullName]);
             
             if (MetaRegistry.isGuidObject(origin)) {
                 if (!origin['__TRANSFORM_REFER']) {
                     origin = MetaRegistry.transformRefer(origin);
                     origin['__TRANSFORM_REFER'] = true;
                 }
-            } else Message.error('ES022', [typeof p_oGuid]);
+            } else throw new ExtendError(/ES022/, null, [typeof p_oGuid]);
             
             MetaRegistry.createSetObject(p_oGuid, this); // $set attach
         };

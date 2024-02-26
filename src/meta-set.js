@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var ISchemaControl;
     var IImportControl;
@@ -28,6 +29,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         ISchemaControl              = require('./i-control-schema').ISchemaControl;
         IImportControl              = require('./i-control-import').IImportControl;
@@ -41,6 +43,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Common.Util;
         ISchemaControl              = _global._L.ISchemaControl;
         IImportControl              = _global._L.IImportControl;
@@ -56,17 +59,18 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof ISchemaControl === 'undefined') Message.error('ES011', ['ISchemaControl', 'i-control-schema']);
-    if (typeof IImportControl === 'undefined') Message.error('ES011', ['IImportControl', 'i-control-import']);
-    if (typeof IExportControl === 'undefined') Message.error('ES011', ['IExportControl', 'i-control-export']);
-    if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
-    if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof MetaElement === 'undefined') Message.error('ES011', ['MetaElement', 'meta-element']);
-    if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
-    if (typeof MetaTableCollection === 'undefined') Message.error('ES011', ['MetaTableCollection', 'meta-table']);
-    if (typeof MetaViewCollection === 'undefined') Message.error('ES011', ['MetaViewCollection', 'meta-view']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof ISchemaControl === 'undefined') throw new ExtendError(/ES011/, null, ['ISchemaControl', 'i-control-schema']);
+    if (typeof IImportControl === 'undefined') throw new ExtendError(/ES011/, null, ['IImportControl', 'i-control-import']);
+    if (typeof IExportControl === 'undefined') throw new ExtendError(/ES011/, null, ['IExportControl', 'i-control-export']);
+    if (typeof ISerialize === 'undefined') throw new ExtendError(/ES011/, null, ['ISerialize', 'i-serialize']);
+    if (typeof ITransaction === 'undefined') throw new ExtendError(/ES011/, null, ['ITransaction', 'i-transaction']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof MetaElement === 'undefined') throw new ExtendError(/ES011/, null, ['MetaElement', 'meta-element']);
+    if (typeof BaseEntity === 'undefined') throw new ExtendError(/ES011/, null, ['BaseEntity', 'base-entity']);
+    if (typeof MetaTableCollection === 'undefined') throw new ExtendError(/ES011/, null, ['MetaTableCollection', 'meta-table']);
+    if (typeof MetaViewCollection === 'undefined') throw new ExtendError(/ES011/, null, ['MetaViewCollection', 'meta-view']);
 
     //==============================================================
     // 4. module implementation   
@@ -96,7 +100,7 @@
             {
                 get: function() { return this._name; },
                 set: function(nVal) { 
-                    if (typeof nVal !== 'string') Message.error('ES021', ['setName', 'string']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['setName', 'string']);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -134,7 +138,7 @@
             Object.defineProperty(this, 'autoChanges', {
                 set: function(nVal) { 
                     if (typeof nVal !== 'boolean') {
-                        Message.error('ES021', ['autoChanges', 'boolean']);
+                        throw new ExtendError(/ES021/, null, ['autoChanges', 'boolean']);
                     }
                     for (var i = 0; i < this.tables.count; i++) {
                         this.tables[i].rows.autoChanges = nVal;
@@ -172,7 +176,7 @@
             var obj = {};
 
             if (!_isSchema(p_oGuid)) { 
-                Message.error('ES021', ['transformSchema(obj)', '{tables: ... , views: ...}']);
+                throw new ExtendError(/ES021/, null, ['transformSchema(obj)', '{tables: ... , views: ...}']);
             }
 
             obj['name'] = p_oGuid['name']; 
@@ -287,14 +291,14 @@
             var obj = p_obj;
             var mObj;
 
-            if (p_obj instanceof MetaSet) Message.error('ES022', ['MetaSet']);
+            if (p_obj instanceof MetaSet) throw new ExtendError(/ES022/, null, ['MetaSet']);
 
             if (typeof obj === 'string') {
                 if (typeof p_parse === 'function') obj = p_parse(obj);
                 else obj = JSON.parse(obj, null);
             }
             
-            if (!_isObject(obj)) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
             
             this.setObject(obj);
         };
@@ -332,8 +336,8 @@
             var opt = typeof p_opt === 'undefined' ? 3 : p_opt;
             var entity;
 
-            if (typeof p_obj !== 'object' || p_obj === null) Message.error('ES021', ['obj', 'object']);
-            if (typeof opt !== 'number') Message.error('ES021', ['opt', 'number']);
+            if (typeof p_obj !== 'object' || p_obj === null) throw new ExtendError(/ES021/, null, ['obj', 'object']);
+            if (typeof opt !== 'number') throw new ExtendError(/ES021/, null, ['opt', 'number']);
 
             if (p_obj instanceof MetaSet) {
                 this.setName = p_obj.setName;
@@ -368,7 +372,7 @@
             var obj;
             var entity;
 
-            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
 
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
 
@@ -378,7 +382,7 @@
                 obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
-            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
 
             if (obj['tables']) {
                 entity = obj['tables'];
@@ -415,7 +419,7 @@
             var metaSet = null;
             var obj;
 
-            if (!_isObject(p_obj)) Message.error('ES021', ['obj', 'object']);
+            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
             
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             
@@ -425,7 +429,7 @@
                 obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
-            if (!_isSchema(obj)) Message.error('ES021', ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
             
             if (_isObject(obj['tables'])) createRow(obj['tables'], this.tables);
             if (_isObject(obj['views'])) createRow(obj['views'], this.views);

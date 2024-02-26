@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var NamespaceManager;
 
@@ -18,18 +19,21 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         NamespaceManager            = require('./namespace-manager').NamespaceManager;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         NamespaceManager            = _global._L.NamespaceManager;
     }
 
     //==============================================================Á
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof NamespaceManager === 'undefined') Message.error('ES011', ['NamespaceManager', 'namespace-manager']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof NamespaceManager === 'undefined') throw new ExtendError(/ES011/, null, ['NamespaceManager', 'namespace-manager']);
 
     //==============================================================
     // 4. module implementation       
@@ -137,8 +141,8 @@
             var type;
             var fullName;
 
-            if (!this.isMetaObject(p_meta)) Message.error('ES052', ['meta', '{_type:function, _guid: string}']);
-            if (this.has(p_meta)) Message.error('ES042', ['meta', '_guid']);
+            if (!this.isMetaObject(p_meta)) throw new ExtendError(/ES052/, null, ['meta', '{_type:function, _guid: string}']);
+            if (this.has(p_meta)) throw new ExtendError(/ES042/, null, ['meta', '_guid']);
 
             _ns         = p_meta['_ns'] || '';
             type        = p_meta['_type'];
@@ -158,7 +162,7 @@
             var guid;
 
             if (typeof p_meta !== 'object' && typeof p_meta !== 'string') {
-                Message.error('ES021', ['target', 'object | string']);
+                throw new ExtendError(/ES021/, null, ['target', 'object | string']);
             }
 
             guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
@@ -237,16 +241,16 @@
             var coClass;
             var params;
             
-            if (!_isObject(p_oGuid)) Message.error('ES021', ['p_oGuid', 'object']);
-            if (!_isString(p_oGuid['_type'])) Message.error('ES052', ['p_oGuid', '{_type:string }']);
-            if (!_isObject(origin)) Message.error('ES021', ['origin', 'object']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['p_oGuid', 'object']);
+            if (!_isString(p_oGuid['_type'])) throw new ExtendError(/ES052/, null, ['p_oGuid', '{_type:string }']);
+            if (!_isObject(origin)) throw new ExtendError(/ES021/, null, ['origin', 'object']);
             
             type        = p_oGuid['_type'];
             ns          = p_oGuid['_ns'] || '';
             fullName    =  ns !== '' ? [ns, type].join('.') : type;
             coClass     = this.getClass(fullName);
             
-            if (typeof coClass !== 'function') Message.error('ES053', [fullName, 'function(class)']);
+            if (typeof coClass !== 'function') throw new ExtendError(/ES053/, null, [fullName, 'function(class)']);
             
             params = coClass.hasOwnProperty('_PARAMS') ? coClass['_PARAMS'] : []; // arr
             for (var i = 0; i < params.length; i++) {
@@ -270,8 +274,8 @@
          * console.log(obj.onwer);          // { $ref : '5337877c-49d6-9add-f35a-7bd31d510d4f' }
          */
         MetaRegistry.createReferObject = function(p_meta) {
-            if (!_isObject(p_meta)) Message.error('ES021', ['p_meta', 'object']);
-            if (!_isString(p_meta['_guid'])) Message.error('ES052', ['p_oGuid', '{_guid:string }']);
+            if (!_isObject(p_meta)) throw new ExtendError(/ES021/, null, ['p_meta', 'object']);
+            if (!_isString(p_meta['_guid'])) throw new ExtendError(/ES052/, null, ['p_oGuid', '{_guid:string }']);
             return { $ref: p_meta['_guid'] };
         };
 
@@ -289,7 +293,7 @@
             var fullName;
             var ns, key;
 
-            if (typeof p_fun !== 'function') Message.error('ES021', ['p_fun', 'function']);
+            if (typeof p_fun !== 'function') throw new ExtendError(/ES021/, null, ['p_fun', 'function']);
             
             if (!this.findClass(p_fun)) {
                 ns  = p_fun['_NS'] || '';
@@ -313,9 +317,9 @@
          * console.log(obj);                    // {name: 'm2, $set: '5337877c-49d6-9add-f35a-7bd31d510d4f'}
          */
         MetaRegistry.createSetObject = function(p_oGuid, p_meta) {
-            if (!_isObject(p_oGuid)) Message.error('ES021', ['p_oGuid', 'object']);
-            if (!_isObject(p_meta)) Message.error('ES021', ['p_meta', 'object']);
-            if (!_isString(p_meta['_guid'])) Message.error('ES052', ['p_meta', '{_guid:string }'])
+            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['p_oGuid', 'object']);
+            if (!_isObject(p_meta)) throw new ExtendError(/ES021/, null, ['p_meta', 'object']);
+            if (!_isString(p_meta['_guid'])) throw new ExtendError(/ES052/, null, ['p_meta', '{_guid:string }'])
             
             p_oGuid['$set'] = p_meta['_guid'];
             return p_oGuid;
@@ -334,7 +338,7 @@
             var _this = this;
             var arrObj;
 
-            if (!_isObject(p_oGuid)) Message.error('ES021', ['oGuid', 'object']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['oGuid', 'object']);
             
             arrObj = _getGuidList(p_oGuid);
             if (!validUniqueGuid() || !validReference(p_oGuid) || !validCollection(p_oGuid)) return false;
@@ -408,7 +412,7 @@
             var guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             var arrOrigin = [];
 
-            if (!_isString(guid)) Message.error('ES024', ['p_oGuid', 'string | object<guid>']);
+            if (!_isString(guid)) throw new ExtendError(/ES024/, null, ['p_oGuid', 'string | object<guid>']);
 
             if (Array.isArray(p_origin)) arrOrigin = p_origin;
             else arrOrigin.push(p_origin);
@@ -416,7 +420,7 @@
             for (var i = 0; i < arrOrigin.length; i++) {
                 var origin = arrOrigin[i];
                 var arrObj = _getGuidList(origin);
-                if (!_isObject(origin)) Message.error('ES024', ['p_origin', 'object']);
+                if (!_isObject(origin)) throw new ExtendError(/ES024/, null, ['p_origin', 'object']);
                 for (var ii = 0; ii < arrObj.length; ii++) {
                     if (arrObj[ii]._guid === guid) return true;
                 }
@@ -436,8 +440,8 @@
             var guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             var origin = p_origin;
 
-            if (!_isString(guid)) Message.error('ES024', ['guid', 'string']);
-            if (!_isObject(origin)) Message.error('ES024', ['p_origin', 'object']);
+            if (!_isString(guid)) throw new ExtendError(/ES024/, null, ['guid', 'string']);
+            if (!_isObject(origin)) throw new ExtendError(/ES024/, null, ['p_origin', 'object']);
 
             return findObject(origin);
             
@@ -474,8 +478,8 @@
          * @returns {boolean}
          */
         MetaRegistry.hasRefer = function(p_oGuid) {
-            if (!_isObject(p_oGuid)) Message.error('ES024', ['target', 'object']);
-            if (!this.isGuidObject(p_oGuid)) Message.error('ES024', ['target', 'guid']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'object']);
+            if (!this.isGuidObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'guid']);
 
             return hasRefer(p_oGuid);
 
@@ -507,7 +511,7 @@
             var arrObj;
             var clone;
 
-            if (!_isObject(p_oGuid)) Message.error('ES024', ['p_oGuid', 'object']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['p_oGuid', 'object']);
             
             arrObj = _getGuidList(p_oGuid);
             clone = Util.deepCopy(p_oGuid);
@@ -525,7 +529,7 @@
                         if (_isObject(oGuid[prop])) {
                             if (oGuid[prop]['$ns']) {
                                 var ns = _this.getClass(oGuid[prop]['$ns']);
-                                if (typeof ns !== 'function') Message.error('ES015', ['$ns', oGuid[prop]['$ns']]);
+                                if (typeof ns !== 'function') throw new ExtendError(/ES015/, null, ['$ns', oGuid[prop]['$ns']]);
                                 oGuid[prop] = ns; // function 타입 연결
                             } else linkReference(oGuid[prop], arr);
                         }
@@ -544,7 +548,7 @@
         MetaRegistry.registerClass = function(p_fun, p_ns, p_key) {
             var fullName;
             
-            if (!(_isObject(p_fun) || typeof p_fun === 'function')) Message.error('ES024', ['p_fun', 'object | function']);
+            if (!(_isObject(p_fun) || typeof p_fun === 'function')) throw new ExtendError(/ES024/, null, ['p_fun', 'object | function']);
 
             if (p_key) fullName = p_ns.length > 0 ? p_ns +'.'+ p_key : p_key;
             else fullName = p_ns;
@@ -561,7 +565,7 @@
          * @returns {boolean}
          */
         MetaRegistry.releaseClass = function(p_fullName) {
-            if (!_isString(p_fullName)) Message.error('ES024', ['p_fullName', 'string']);
+            if (!_isString(p_fullName)) throw new ExtendError(/ES024/, null, ['p_fullName', 'string']);
             
             if (typeof _global[p_fullName] === 'function') return true; // 내장함수 & 전역 함수
             return this.ns.del(p_fullName);
@@ -576,7 +580,7 @@
         MetaRegistry.findClass = function(p_fun) {
             var fullName;
 
-            if (typeof p_fun !== 'function') Message.error('ES024', ['p_fun', 'function']);
+            if (typeof p_fun !== 'function') throw new ExtendError(/ES024/, null, ['p_fun', 'function']);
             
             fullName = p_fun.name;
             if (typeof _global[fullName] === 'function') return fullName;   // 내장함수 & 전역 함수
@@ -589,7 +593,7 @@
          * @returns {function}
          */
         MetaRegistry.getClass = function(p_fullName) {
-            if (!_isString(p_fullName)) Message.error('ES024', ['p_fullName', 'string']);
+            if (!_isString(p_fullName)) throw new ExtendError(/ES024/, null, ['p_fullName', 'string']);
             
             if (typeof _global[p_fullName] === 'function') return _global[p_fullName];  // 내장함수 & 전역 함수
             return this.ns.find(p_fullName);
@@ -607,11 +611,11 @@
             var oGuid;
             var meta;
 
-            if (typeof p_str !== 'string') Message.error('ES021', ['str', 'string']);
+            if (typeof p_str !== 'string') throw new ExtendError(/ES021/, null, ['str', 'string']);
 
             obj = (typeof p_parse === 'function') ? p_parse(obj) : JSON.parse(obj, null);
             if (this.has(obj)) return this.find(obj['_guid']);  // 객체가 존재할 경우
-            if (!this.isGuidObject(obj)) Message.error('ES022', ['obj']);
+            if (!this.isGuidObject(obj)) throw new ExtendError(/ES022/, null, ['obj']);
 
             oGuid = this.transformRefer(obj);
             meta = this.createMetaObject(oGuid);

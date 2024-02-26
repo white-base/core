@@ -6,6 +6,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var IList;
     var IListControl;
@@ -20,12 +21,14 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         IList                       = require('./i-list').IList;
         IListControl                = require('./i-control-list').IListControl;
         ISerialize                  = require('./i-serialize').ISerialize;
     } else {
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         IList                       = _global._L.IList;
         IListControl                = _global._L.IListControl;
@@ -35,10 +38,11 @@
     
     //==============================================================Á
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof IList === 'undefined') Message.error('ES011', ['IList', 'i-list']);
-    if (typeof IListControl === 'undefined') Message.error('ES011', ['IListControl', 'i-control-list']);
-    if (typeof ISerialize === 'undefined') Message.error('ES011', ['ISerialize', 'i-serialize']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof IList === 'undefined') throw new ExtendError(/ES011/, null, ['IList', 'i-list']);
+    if (typeof IListControl === 'undefined') throw new ExtendError(/ES011/, null, ['IListControl', 'i-control-list']);
+    if (typeof ISerialize === 'undefined') throw new ExtendError(/ES011/, null, ['ISerialize', 'i-serialize']);
 
     //==============================================================
     // 4. module implementation   
@@ -132,7 +136,7 @@
             {
                 get: function() { return isOverlap; },
                 set: function(val) { 
-                    if (typeof val !== 'boolean') Message.error('ES021', ['isOverlap', 'boolean']);
+                    if (typeof val !== 'boolean') throw new ExtendError(/ES021/, null, ['isOverlap', 'boolean']);
                     isOverlap = val;
                 },
                 configurable: false,
@@ -168,15 +172,15 @@
             var sections = [];
             if (ns === '') return sections;
             if (typeof ns === 'string') {
-                if (!_validNamespace(ns)) Message.error('ES042', [ns, '_validNamespace()']);
+                if (!_validNamespace(ns)) throw new ExtendError(/ES042/, null, [ns, '_validNamespace()']);
                 sections = ns.split('.');
             } else if (Array.isArray(ns)) {
                 sections = ns;
-            } else Message.error('ES021', ['ns', 'string, array']);
+            } else throw new ExtendError(/ES021/, null, ['ns', 'string, array']);
             for (var i = 0; i < sections.length; i++) {
                 var sName =sections[i];
-                if (!_isString(sName)) Message.error('ES021', ['ns<array>', 'string']);
-                if (!_validName(sName)) Message.error('ES054', [sName, '_validName()']);
+                if (!_isString(sName)) throw new ExtendError(/ES021/, null, ['ns<array>', 'string']);
+                if (!_validName(sName)) throw new ExtendError(/ES054/, null, [sName, '_validName()']);
             }
             return sections;
         }
@@ -291,9 +295,9 @@
 
             sections = _getArray(ns);
             if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
-            if (!_validName(key)) Message.error('ES054', [key, '_validName()']);
+            if (!_validName(key)) throw new ExtendError(/ES054/, null, [key, '_validName()']);
             if (!this.isOverlap && this.getPath(p_elem)) {
-                Message.error('ES041', ['elem', '[isOverlap=false]']);
+                throw new ExtendError(/ES041/, null, ['elem', '[isOverlap=false]']);
             }
             
             if (sections.length === 0) {    // 최상위 등록
@@ -369,7 +373,7 @@
             var namespace = this.__storage;
             var stack = [];
 
-            if (!p_elem) Message.error('ES051', ['p_elem']);
+            if (!p_elem) throw new ExtendError(/ES051/, null, ['p_elem']);
 
             if (findElement(namespace)) {
                 return stack.join('.');
@@ -433,13 +437,13 @@
         NamespaceManager.prototype.load = function(p_str, p_parse) {
             var arr = [];
             
-            if (!_isString(p_str)) Message.error('ES021', ['p_str', 'string']);
+            if (!_isString(p_str)) throw new ExtendError(/ES021/, null, ['p_str', 'string']);
             
             try {
                 if (typeof p_parse === 'function') arr = p_parse(p_str);
                 else arr = JSON.parse(p_str, null);
             } catch (error) {
-                Message.error('ES0110', [typeof p_str, 'parse(...)', error]);
+                throw new ExtendError(/ES0110/, null, [typeof p_str, 'parse(...)', error]);
             }
 
             this.init();

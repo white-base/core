@@ -7,6 +7,7 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
+    var ExtendError;
     var Util;
     var ITransaction;
     var BaseEntity;
@@ -24,6 +25,7 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
+        ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         ITransaction                = require('./i-transaction').ITransaction;
         PropertyCollection          = require('./collection-property').PropertyCollection;
@@ -32,6 +34,7 @@
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
         Message                     = _global._L.Message;
+        ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         ITransaction                = _global._L.ITransaction;
         PropertyCollection          = _global._L.PropertyCollection;
@@ -42,12 +45,13 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof Util === 'undefined') Message.error('ES011', ['Util', 'util']);
-    if (typeof ITransaction === 'undefined') Message.error('ES011', ['ITransaction', 'i-transaction']);
-    if (typeof MetaRegistry === 'undefined') Message.error('ES011', ['MetaRegistry', 'meta-registry']);
-    if (typeof PropertyCollection === 'undefined') Message.error('ES011', ['PropertyCollection', 'collection-property']);
-    if (typeof BaseEntity === 'undefined') Message.error('ES011', ['BaseEntity', 'base-entity']);
-    if (typeof MetaTableColumnCollection === 'undefined') Message.error('ES011', ['MetaTableColumnCollection', 'meta-column']);
+    if (typeof ExtendError === 'undefined') throw new ExtendError(/ES011/, null, ['ExtendError', 'extend-error']);
+    if (typeof Util === 'undefined') throw new ExtendError(/ES011/, null, ['Util', 'util']);
+    if (typeof ITransaction === 'undefined') throw new ExtendError(/ES011/, null, ['ITransaction', 'i-transaction']);
+    if (typeof MetaRegistry === 'undefined') throw new ExtendError(/ES011/, null, ['MetaRegistry', 'meta-registry']);
+    if (typeof PropertyCollection === 'undefined') throw new ExtendError(/ES011/, null, ['PropertyCollection', 'collection-property']);
+    if (typeof BaseEntity === 'undefined') throw new ExtendError(/ES011/, null, ['BaseEntity', 'base-entity']);
+    if (typeof MetaTableColumnCollection === 'undefined') throw new ExtendError(/ES011/, null, ['MetaTableColumnCollection', 'meta-column']);
 
     //==============================================================
     // 4. module implementation   
@@ -74,7 +78,7 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (nVal === this.tableName) return;
-                    if (typeof nVal !== 'string') Message.error('ES021', ['tableName', 'string']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['tableName', 'string']);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -89,8 +93,8 @@
             {
                 get: function() { return columns; },
                 set: function(nVal) { 
-                    if (!(nVal instanceof MetaTableColumnCollection)) Message.error('ES032', ['columns', 'MetaTableColumnCollection']);
-                    if (this.rows.count > 0) Message.error('ES047', ['rows', 'MetaRow', 'MetaTableColumnCollection']);
+                    if (!(nVal instanceof MetaTableColumnCollection)) throw new ExtendError(/ES032/, null, ['columns', 'MetaTableColumnCollection']);
+                    if (this.rows.count > 0) throw new ExtendError(/ES047/, null, ['rows', 'MetaRow', 'MetaTableColumnCollection']);
                     columns = nVal;
                 },
                 configurable: false,
@@ -140,7 +144,7 @@
 
             if(p_oGuid['_metaSet']) {
                 metaSet = MetaRegistry.findSetObject(p_oGuid['_metaSet']['$ref'], origin);
-                if (!metaSet) Message.error('ES015', [p_oGuid['name'], 'metaSet']);
+                if (!metaSet) throw new ExtendError(/ES015/, null, [p_oGuid['name'], 'metaSet']);
                 this._metaSet = metaSet;
             }
             this.columns.setObject(p_oGuid['columns'], origin);
@@ -244,9 +248,9 @@
             {
                 get: function() { return _baseType; },
                 set: function(nVal) { 
-                    if (!(typeof nVal === 'function')) Message.error('ES021', ['_baseType', 'function']);
-                    // if (!(new nVal('temp') instanceof MetaTable)) Message.error('ES032', ['_baseType', 'MetaTable']);
-                    if (!(Util.isProtoChain(nVal, MetaTable))) Message.error('ES032', ['_baseType', 'MetaTable']);
+                    if (!(typeof nVal === 'function')) throw new ExtendError(/ES021/, null, ['_baseType', 'function']);
+                    // if (!(new nVal('temp') instanceof MetaTable)) throw new ExtendError('ES032', ['_baseType', 'MetaTable']);
+                    if (!(Util.isProtoChain(nVal, MetaTable))) throw new ExtendError(/ES032/, null, ['_baseType', 'MetaTable']);
                     _baseType = nVal;
                 },
                 configurable: false,
@@ -277,9 +281,9 @@
                 key  = p_any.tableName;
                 table = p_any;
                 p_any._metaSet = this._owner;
-            } else Message.error('ES021', ['object', 'string, MetaTable object']);
+            } else throw new ExtendError(/ES021/, null, ['object', 'string, MetaTable object']);
 
-            if (this.existTableName(key)) Message.error('ES042', ['tableName', key]);
+            if (this.existTableName(key)) throw new ExtendError(/ES042/, null, ['tableName', key]);
 
             return _super.prototype.add.call(this, key, table);
         };

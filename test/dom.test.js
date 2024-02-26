@@ -20,6 +20,7 @@ describe("[ GROUP]", () => {
         // });
         it("- 예외 : Util 로딩이 안 된 경우", () => {
             require('../src/message');
+            require('../src/extend-error');
     
             expect(() => require('../src/observer')).toThrow(/Util/);
         });
@@ -150,7 +151,7 @@ describe("[ GROUP]", () => {
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
-                require('../src/extend-error');
+                require('../src/extend-error'); 
                 expect(() => require('../src/base-collection')).toThrow(/Util/);
             });
             it("- 예외 : Observer 로딩이 인된경우", () => {
@@ -489,10 +490,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/extend-error');
                 expect(() => require('../src/trans-queue')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/trans-queue')).toThrow(/Util/);
             });
@@ -967,10 +970,12 @@ describe("[ GROUP]", () => {
                 global._L = null;
              });
              it("- 예외 : 전체 로딩 안할 때", () => {
+                require('../src/extend-error');
                 expect(() => require('../src/custom-error')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
         
                 expect(() => require('../src/meta-registry')).toThrow(/Util/);
             });
@@ -1014,11 +1019,13 @@ describe("[ GROUP]", () => {
          });
         it("- 예외 : 전체 로딩 안할 때", () => {
             require('../src/message');
+            require('../src/extend-error');
     
             expect(() => require('../src/meta-object')).toThrow(/ES011/);
         });
         it("- 예외 : Util 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
             
             expect(() => require('../src/meta-object')).toThrow(/Util/);
         });
@@ -1101,10 +1108,12 @@ describe("[ GROUP]", () => {
             global._L = null;
          });
         it("- 예외 : 전체 로딩 안할 때", () => {
+            require('../src/extend-error');
             expect(() => require('../src/meta-element')).toThrow(/Cannot read properties/);
         });
         it("- 예외 : Util 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
     
             expect(() => require('../src/meta-element')).toThrow(/Util/);
         });
@@ -1170,11 +1179,13 @@ describe("[ GROUP]", () => {
          });
         it("- 예외 : 전체 로딩 안할 때", () => {
             // require('../src/message');
+            require('../src/extend-error');
     
             expect(() => require('../src/meta-registry')).toThrow(/Cannot read properties/);
         });
         it("- 예외 : Util 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
     
             expect(() => require('../src/meta-registry')).toThrow(/Util/);
         });
@@ -1215,11 +1226,13 @@ describe("[ GROUP]", () => {
          });
         it("- 예외 : 전체 로딩 안할 때", () => {
             // require('../src/message');
+            require('../src/extend-error');
     
             expect(() => require('../src/namespace-manager')).toThrow(/Cannot read properties/);
         });
         it("- 예외 : Util 로딩이 인된경우", () => {
             require('../src/message');
+            require('../src/extend-error');
     
             expect(() => require('../src/namespace-manager')).toThrow(/Util/);
         });
@@ -1696,11 +1709,13 @@ describe("[ GROUP]", () => {
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
                 // require('../src/message');
+                require('../src/extend-error');
         
                 expect(() => require('../src/meta-table')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/meta-table')).toThrow(/Util/);
             });
@@ -1944,11 +1959,13 @@ describe("[ GROUP]", () => {
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
                 // require('../src/message');
+                require('../src/extend-error');
         
                 expect(() => require('../src/meta-view')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
         
                 expect(() => require('../src/meta-view')).toThrow(/Util/);
             });
@@ -2175,10 +2192,12 @@ describe("[ GROUP]", () => {
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
                 // require('../src/message');            
+                require('../src/extend-error');
                 expect(() => require('../src/meta-set')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/meta-set')).toThrow(/Util/);
             });
@@ -2786,11 +2805,13 @@ describe("[ GROUP]", () => {
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
                 // require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/object-column')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/object-column')).toThrow(/Util/);
             });
@@ -2954,11 +2975,13 @@ describe("[ GROUP]", () => {
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
                 // require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/meta-row')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
+                require('../src/extend-error');
                 
                 expect(() => require('../src/meta-row')).toThrow(/Util/);
             });
