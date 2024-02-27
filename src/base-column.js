@@ -9,7 +9,6 @@
     var ExtendError;
     var Util;
     var Observer;
-    var CustomError;
     var MetaElement;
     var MetaRegistry;
 
@@ -33,7 +32,6 @@
         ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
-        CustomError                 = _global._L.CustomError;
         MetaRegistry                = _global._L.MetaRegistry;
         MetaElement                 = _global._L.MetaElement;
     }

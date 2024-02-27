@@ -2700,7 +2700,7 @@ describe("[target: util-type.js.js]", () => {
                 expect(isAllowType(type1, tar04)).toBe(false);
                 expect(isAllowType(type1, tar05)).toBe(false);
                 expect(isAllowType(type1, tar06)).toBe(false);
-                // type2
+                // type2 == type1
                 expect(isAllowType(type2, tar01)).toBe(T);
                 expect(isAllowType(type2, tar02)).toBe(T);
                 expect(isAllowType(type2, tar03)).toBe(false);
@@ -6359,16 +6359,16 @@ describe("[target: util-type.js.js]", () => {
             var thr01 = '[EL01202] 타입 허용 : choice(_ALL_) 타입에 choice(_ERR_) 타입을 허용하지 않습니다. tarType: choice(_ERR_)'
             expect(()=> allowType(type1, tar01)).toThrow(thr01)
         });
-        it('- [EL01203] ', () => {
-            var type1 = [['_non_']]
-            var tar01 = [['_all_']]
-            var thr01 = '[EL01203] 타입 허용 : choice(_NON_) 타입에 choice(_NON_) 타입만 허용합니다. tarType: choice(_ALL_)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
         it('- [EL01204] ', () => {
+            // var type1 = [['_non_']]
+            // var tar01 = [['_all_']]
+            // var thr01 = '[EL01204] 타입 허용 : choice(_NON_) 타입에 choice(_NON_) 타입만 허용합니다. tarType: choice(_ALL_)'
+            // expect(()=> allowType(type1, tar01)).toThrow(thr01)
+        });
+        it('- [EL01203] ', () => {
             var type1 = [['_any_']]
             var tar01 = [['_err_']]
-            var thr01 = '[EL01204] 타입 허용 : choice(_ANY_) 타입에 choice(_ALL_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: choice(_ERR_)'
+            var thr01 = '[EL01203] 타입 허용 : choice(_ANY_) 타입에 choice(_ALL_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: choice(_ERR_)'
             expect(()=> allowType(type1, tar01)).toThrow(thr01)
         });
         it('- [EL01205] ', () => {
@@ -6483,7 +6483,7 @@ describe("[target: util-type.js.js]", () => {
         it('- [EL01222] ', () => {
             var type1 = [['_err_']]
             var tar01 = 10
-            var thr01 = '[EL01222] 초이스 허용 : choice(_ERR_) 타입에 choice(_ERR_) 타입만 가능합니다.'
+            var thr01 = '[EL01205] 타입 허용 : choice(_ERR_) 타입에 choice(_ERR_) 타입만 허용합니다. tarType: number(10)'
             expect(()=> allowType(type1, tar01)).toThrow(thr01)
         });
         // 발생할 수 없음

@@ -8,10 +8,10 @@ const index   = require('..');
 //==============================================================
 // test
 describe("[target: index.js]", () => {
-    describe('Observer, CustomError, Util', () => {
+    describe('Observer, ExtendError, Util', () => {
         it('- _L.*  ', () => {
             expect(typeof index.Observer).toBe('function');
-            expect(typeof index.CustomError).toBe('function');
+            expect(typeof index.ExtendError).toBe('function');
             expect(typeof index.Util.inherits).toBe('function');
             expect(typeof index.Util.getArrayDepth).toBe('function');
             expect(typeof index.Util.createGuid).toBe('function');
@@ -28,7 +28,7 @@ describe("[target: index.js]", () => {
             // namespace
             expect(typeof index.Common).toBe('object');
             expect(typeof index.Common.Observer).toBe('function');
-            expect(typeof index.Common.CustomError).toBe('function');
+            expect(typeof index.Common.ExtendError).toBe('function');
             expect(typeof index.Common.Util.inherits).toBe('function');
             expect(typeof index.Common.Util.getArrayDepth).toBe('function');
             expect(typeof index.Common.Util.createGuid).toBe('function');

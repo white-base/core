@@ -963,34 +963,6 @@ describe("[ GROUP]", () => {
     });
 
     describe("[ GROUP]", () => {
-
-        describe("load: custom-error.js <CustomError>", () => {
-            beforeEach(() => {
-                jest.resetModules();
-                global._L = null;
-             });
-             it("- 예외 : 전체 로딩 안할 때", () => {
-                require('../src/extend-error');
-                expect(() => require('../src/custom-error')).toThrow(/Cannot read properties/);
-            });
-            it("- 예외 : Util 로딩이 인된경우", () => {
-                require('../src/message');
-                require('../src/extend-error');
-        
-                expect(() => require('../src/meta-registry')).toThrow(/Util/);
-            });
-            it("- 로딩 성공 ", () => {
-                require('../src/message');
-                require('../src/extend-error');
-                require('../src/util-type');
-                require('../src/util');
-                
-                require('../src/custom-error');
-                
-                expect(global._L.CustomError).toBeDefined();
-                expect(global._L.Common.CustomError).toBeDefined();
-            });
-        });
     
         describe("load: load-namespace.js <loadNamespace()>", () => {
             beforeEach(() => {

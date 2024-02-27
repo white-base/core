@@ -3,7 +3,7 @@
  */
 var Util                        = require('./src/util');
 var Observer                    = require("./src/observer").Observer;
-var CustomError                 = require('./src/custom-error').CustomError;
+var ExtendError                 = require('./src/extend-error').ExtendError;
 var Message                     = require('./src/message').Message;
 var BaseCollection              = require("./src/base-collection").BaseCollection;
 var ArrayCollection             = require("./src/collection-array").ArrayCollection;
@@ -41,7 +41,7 @@ var IArrayCollection            = require('./src/i-collection-array').IArrayColl
 module.exports = {
     Util: Util,
     Observer: Observer,
-    CustomError: CustomError,
+    ExtendError: ExtendError,
     Message: Message,
     BaseCollection: BaseCollection,
     ArrayCollection: ArrayCollection,
@@ -79,7 +79,7 @@ module.exports = {
     Common: {
         Util: Util,
         Observer: Observer,
-        CustomError: CustomError,
+        ExtendError: ExtendError,
         Message: Message,
     },
     Collection: {

@@ -14,7 +14,7 @@
     var BaseCollection;
     var PropertyCollection;
     var TransactionCollection;
-    var CustomError;
+    // var CustomError;
     var IArrayCollection;
     // var IBaseCollection;
     var IPropertyCollection;
@@ -65,7 +65,7 @@
         BaseCollection              = require('./base-collection').BaseCollection;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         TransactionCollection       = require('./collection-transaction').TransactionCollection;
-        CustomError                 = require('./custom-error').CustomError;
+        // CustomError                 = require('./custom-error').CustomError;
         IArrayCollection            = require('./i-collection-array').IArrayCollection;
         // IBaseCollection             = require('./i-base-collection').IBaseCollection;
         IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
@@ -142,7 +142,7 @@
         MetaRegistry.registerClass(MetaViewCollection, MetaViewCollection._NS, MetaViewCollection.name);
         MetaRegistry.registerClass(TransactionQueue, TransactionQueue._NS, TransactionQueue.name);
         MetaRegistry.registerClass(Observer, Observer._NS, Observer.name);
-        MetaRegistry.registerClass(CustomError, CustomError._NS, CustomError.name);
+        // MetaRegistry.registerClass(CustomError, CustomError._NS, CustomError.name);
         MetaRegistry.registerClass(NamespaceManager, NamespaceManager._NS, NamespaceManager.name);
         MetaRegistry.registerClass(Util, 'Common', 'Util');
     

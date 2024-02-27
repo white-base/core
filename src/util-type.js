@@ -239,7 +239,7 @@
     function _hasKindChoice(name) {
         var arr = [];
         
-        arr = arr.concat(['_ALL_', '_NON_', '_ANY_', '_ERR_']);
+        arr = arr.concat(['_ALL_', '_ANY_', '_NON_', '_ERR_']);
         arr = arr.concat(['_REQ_', '_OPT_', '_DEF_', '_EUM_']);
 
         if (typeof name !== 'string') return false;
@@ -661,38 +661,38 @@
             }
         }
         // all, non, any, req, opt, seq 타입 검사
-        if (eType['kind'] && tType['kind'] && eType['$type'] === tType['$type']) {
+        // if (eType['kind'] && tType['kind'] && eType['$type'] === tType['$type']) {
             // 거부조건
-            if (eType['kind'] === '_ALL_' && (tType['kind'] === '_ERR_')) {
-                throw new ExtendError(/EL01202/, prop, [eType['$type'], sTar]);
-            } 
-            if (eType['kind'] === '_NON_' && tType['kind'] !== '_NON_') { 
-                throw new ExtendError(/EL01203/, prop, [eType['$type'], sTar]);
-            }
-            if (eType['kind'] === '_ANY_' && (tType['kind'] === '_ALL_' || tType['kind'] === '_OPT_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
-                throw new ExtendError(/EL01204/, prop, [eType['$type'], sTar]);
-            }
-            if (eType['kind'] === '_ERR_' && tType['kind'] !== '_ERR_') { 
-                throw new ExtendError(/EL01205/, prop, [eType['$type'], sTar]);
-            }
+            // if (eType['kind'] === '_ALL_' && (tType['kind'] === '_ERR_')) {
+            //     throw new ExtendError(/EL01202/, prop, [eType['$type'], sTar]);
+            // } 
+            // if (eType['kind'] === '_ANY_' && (tType['kind'] === '_ALL_' || tType['kind'] === '_OPT_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
+            //     throw new ExtendError(/EL01203/, prop, [eType['$type'], sTar]);
+            // }
+            // if (eType['kind'] === '_NON_' && tType['kind'] !== '_NON_') { 
+            //     throw new ExtendError(/EL01204/, prop, [eType['$type'], sTar]);
+            // }
+            // if (eType['kind'] === '_ERR_' && tType['kind'] !== '_ERR_') { 
+            //     throw new ExtendError(/EL01205/, prop, [eType['$type'], sTar]);
+            // }
             
             // if (oriType['kind'] === '_ANY_' && (tType['kind'] === '_ALL_' || tType['kind'] === '_NON_')) {
             //     Message.error('ES0727', [oriType['kind'], '_ALL_, _NON_', tType['kind']]);
             // }
-            if (eType['kind'] === '_OPT_' && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
-                throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
-            } 
-            if (eType['kind'] === '_REQ_' && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' ||  tType['kind'] === '_OPT_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
-                throw new ExtendError(/EL01207/, prop, [eType['$type'], sTar]);
-            }
+            // if (eType['kind'] === '_OPT_' && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
+            //     throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
+            // } 
+            // if (eType['kind'] === '_REQ_' && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' ||  tType['kind'] === '_OPT_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
+            //     throw new ExtendError(/EL01207/, prop, [eType['$type'], sTar]);
+            // }
             // if (eType['$type'] === 'array' eType['kind'] === '_SEQ_' && tType['kind'] !== '_SEQ_') { 
             //     throw new ExtendError(/EL01208/, prop, [eType['$type'], sTar]);
             // }
             // 허용 조건
-            if (eType['kind'] === '_ALL_' && (tType['kind'] !== '_ERR_')) return;   // REVIEW: 상단으로 통합 대기
-            if (eType['kind'] === '_NON_' && (tType['kind'] === '_NON_')) return;   // REVIEW: 상단에서 걸러짐, 제거 검토
-            if (eType['kind'] === '_ANY_' && (tType['kind'] === '_ANY_')) return;   
-        }
+            // if (eType['kind'] === '_ALL_' && (tType['kind'] !== '_ERR_')) return;   // REVIEW: 상단으로 통합 대기
+            // if (eType['kind'] === '_NON_' && (tType['kind'] === '_NON_')) return;   // REVIEW: 상단에서 걸러짐, 제거 검토
+            // if (eType['kind'] === '_ANY_' && (tType['kind'] === '_ANY_')) return;   
+        // }
         
         //  원본은 초이스가 아니고, tarType choice 의 인 경우
         if (eType['$type'] !== 'choice' && tType['$type'] === 'choice' ) {
@@ -722,18 +722,22 @@
         // inner function
         function arrayAllow() {
             // if (oriType['list'].length === 0 && !oriType['kind'] && tType['$type'] === 'array') return;      // [], [[]], Array
-            if (eType['list'].length === 0 && tType['$type'] === 'array') return;      // [], [[]], Array
+            // if (eType['list'].length === 0 && tType['$type'] === 'array') return;      // [], [[]], Array
             if (tType['$type'] !== 'array' || !Array.isArray(tType['list'])) throw new ExtendError(/EL01211/, prop, [tType['$type']]);
             
             // _ALL_ (all)
             if (eType['kind'] === '_ALL_') {
-                return;     // Line:
+                return;
 
             // _ANY_ (any)
             } else if (eType['kind'] === '_ANY_') {
-                if (tType['kind'] && tType['list'].length === 0) throw new ExtendError(/EL01212/, prop, []);  // REVIEW: 발생하지 않음
-                if (tType['list'].length > 0) return;
-                throw new ExtendError(/EL01213/, prop, ['array(any)', error]); // Line: // REVIEW: 발생하지 않음
+                if (tType['kind'] === '_ANY_') return;
+                if (tType['kind'] === '_ALL_' || tType['kind'] === '_OPT_') {
+                    throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
+                }
+                return;
+                // if (tType['kind'] && tType['list'].length === 0) throw new ExtendError(/EL01212/, prop, []);  // REVIEW: 발생하지 않음
+                // throw new ExtendError(/EL01213/, prop, ['array(any)', error]); // REVIEW: 발생하지 않음
                 // throw new ExtendError('array any 는 하나 이싱 요소가 존재해야 합니다.');  
 
             // _SEQ_ (sequence)
@@ -758,9 +762,13 @@
                 // if (oriType['list'].length < tType['list'].length) {
                 //     Message.error('ES0716', ['array _OPT_', oriType.toString(), tType.toString()]);
                 // }
-                if (eType['list'].length > 0 && tType['list'].length === 0) {
-                    throw new ExtendError(/EL01217/, prop, ['array']);     // Line: // REVIEW: 발생할 수 없음
+                if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' || tType['kind'] === '_OPT_') {
+                    throw new ExtendError(/EL01207/, prop, [eType['$type'], sTar]);
                 }
+                
+                // if (eType['list'].length > 0 && tType['list'].length === 0) {
+                //     throw new ExtendError(/EL01217/, prop, ['array']);    // REVIEW: 발생할 수 없음
+                // }
                 // element check
                 // for (var i = 0; i < tType['list'].length; i++) {
                 //     var success = false;
@@ -787,7 +795,10 @@
 
             // _OPT_ (option)
             } else if (eType['kind'] === '_OPT_') {
-                if (Array.isArray(tType['list']) && tType['list'].length === 0) return;
+                if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' ) {
+                    throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
+                }
+                // if (Array.isArray(tType['list']) && tType['list'].length === 0) return;
 
                 // element check
                 // for (var i = 0; i < tType['list'].length; i++) {
@@ -855,24 +866,31 @@
 
             // _ALL_ (all)
             if (eType['kind'] === '_ALL_') {
+                if (tType['$type'] === tType['$type'] && tType['kind'] === '_ERR_') {
+                    throw new ExtendError(/EL01202/, prop, [eType['$type'], sTar]);
+                }
                 return;
 
             // _ANY_ (any)
             } else if (eType['kind'] === '_ANY_') {
-                if (typeof tType['ref'] !== 'undefined') return;
-                throw new ExtendError(/EL01221/, prop, ['_ANY_', 'undefined']);
+                // if (typeof tType['ref'] !== 'undefined') return;
+                if (tType['$type'] === 'undefined') throw new ExtendError(/EL01221/, prop, ['_ANY_', 'undefined']);
+                if (eType['$type'] === tType['$type'] && (tType['kind'] === '_ALL_' || tType['kind'] === '_OPT_' || tType['kind'] === '_ERR_' || tType['kind'] === '_NON_')) {
+                    throw new ExtendError(/EL01203/, prop, [eType['$type'], sTar]);
+                }
+                return;
             
             // _NON_ 
             } else if  (eType['kind'] === '_NON_') {
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
-                    throw new ExtendError(/EL01223/, prop, []);
+                    throw new ExtendError(/EL01204/, prop, [eType['$type'], sTar]);
                 }
-                return; // Line:
+                return;
 
             // _ERR_ (error)
             } else if (eType['kind'] === '_ERR_') {
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
-                    throw new ExtendError(/EL01222/, prop, []);
+                    throw new ExtendError(/EL01205/, prop,  [eType['$type'], sTar]);
                     // throw new ExtendError('target 은 _err_ 타입만 가능합니다.');
                 }
                 return;
@@ -893,16 +911,22 @@
 
             // _REQ_ (require)
             } else if (eType['kind'] === '_REQ_') {
-                if (tType['kind'] && tType['ref'].length === 0) {
-                    // throw new ExtendError(/EL01223/, prop, []);    // REVIEW: 발생할 수 없음
+                if (eType['$type'] === tType['$type'] && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' 
+                || tType['kind'] === '_OPT_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
+                    throw new ExtendError(/EL01207/, prop, [eType['$type'], sTar]);
+                    // throw new ExtendError('target 은 _err_ 타입만 가능합니다.');
                 }
+
+                // if (tType['kind'] && tType['ref'].length === 0) {
+                //     // throw new ExtendError(/EL01223/, prop, []);    // REVIEW: 발생할 수 없음
+                // }
                 // var arrTarget = (tType['kind']) ? tType['list'] : [tType['ref']];
 
                 // if (oriType['list'].length > 0 && arrTarget.length === 0) {
                 //     Message.error('ES0717', [oriType.toString(), arrTarget.toString(),]);
                 // }
                 // for (var i = 0; i < arrTarget.length; i++) {
-                    var success = false;
+                    // var success = false;
                 //     for (var ii = 0; ii < oriType['list'].length; ii++) {
                 //         try {
                 //             if (success) continue;
@@ -917,8 +941,15 @@
 
             // _OPT_ (option)
             } else if (eType['kind'] === '_OPT_') {
+                if (tType['$type'] === 'undefined') return;
+                if (eType['$type'] === tType['$type'] && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' 
+                || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
+                    throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
+                    // throw new ExtendError('target 은 _err_ 타입만 가능합니다.');
+                }
+
                 // if (typeof tType['ref'] === 'undefined') return;
-                if (typeof tarType === 'undefined') return;
+                // if (typeof tarType === 'undefined') return;
                 // var arrTarget = (tType['kind']) ? tType['list'] : [tType['ref']];
 
                 // if (oriType['list'].length > 0 && arrTarget.length === 0) {
