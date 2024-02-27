@@ -704,20 +704,20 @@
         // check allow type
         if (_isLeafType(eType['$type'])) {
             if(typeof eType['default'] !== 'undefined' && eType['default'] !== null && !_equalLiternal(eType['default'], tType['default'])) {
-                throw new ExtendError(/EL01209/, prop, [eType['$type'], eType, tType]);
+                throw new ExtendError(/EL01202/, prop, [eType['$type'], eType, tType]);
             }
             // if (tType['$type'] === 'choice') {
             //     var choType = { $type: 'choice', kind: '_OPT_', list: [oriType] };
             //     _execAllow(choType, tType, opt);
             // } else if (oriType['$type'] !== tType['$type']) Message.error('ES0713', [oriType['$type'], tType['$type']]);
-            if (eType['$type'] !== tType['$type']) throw new ExtendError(/EL0120A/, prop, [eType['$type'], tType['$type']]);
+            if (eType['$type'] !== tType['$type']) throw new ExtendError(/EL01203/, prop, [eType['$type'], tType['$type']]);
         
         } else if (eType['$type'] === 'array')  arrayAllow();
         else if (eType['$type'] === 'choice') choiceAllow();
         else if (eType['$type'] === 'class') classAllow();
         else if (eType['$type'] === 'union') unionAllow();
         else if (eType['$type'] === 'function') functionAllow();
-        else throw new ExtendError(/EL0120B/, prop, []);
+        else throw new ExtendError(/EL01204/, prop, []);
 
         // inner function
         function arrayAllow() {
@@ -733,7 +733,7 @@
             } else if (eType['kind'] === '_ANY_') {
                 if (tType['kind'] === '_ANY_') return;
                 if (tType['kind'] === '_ALL_' || tType['kind'] === '_OPT_') {
-                    throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
+                    throw new ExtendError(/EL01212/, prop, [sTar]);
                 }
                 return;
                 // if (tType['kind'] && tType['list'].length === 0) throw new ExtendError(/EL01212/, prop, []);  // REVIEW: 발생하지 않음
@@ -742,9 +742,9 @@
 
             // _SEQ_ (sequence)
             } else if (eType['kind'] === '_SEQ_') {
-                if (eType['kind'] !== tType['kind'])  throw new ExtendError(/EL01214/, prop, [tType]);
+                if (eType['kind'] !== tType['kind'])  throw new ExtendError(/EL01213/, prop, [tType]);
                 if (eType['list'].length > tType['list'].length) {
-                    throw new ExtendError(/EL01215/, prop, [eType.list.length, tType.list.length]);
+                    throw new ExtendError(/EL01214/, prop, [eType.list.length, tType.list.length]);
                 }
 
                 // element check
@@ -752,7 +752,7 @@
                     try {
                         _execAllow(eType['list'][i], tType['list'][i], opt, pathName);
                     } catch (error) {
-                        throw new ExtendError(/EL01216/, error, [i]);
+                        throw new ExtendError(/EL01215/, error, [i]);
                     }
                 }
                 return;
@@ -763,7 +763,7 @@
                 //     Message.error('ES0716', ['array _OPT_', oriType.toString(), tType.toString()]);
                 // }
                 if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' || tType['kind'] === '_OPT_') {
-                    throw new ExtendError(/EL01207/, prop, [eType['$type'], sTar]);
+                    throw new ExtendError(/EL01216/, prop, [eType['$type'], sTar]);
                 }
                 
                 // if (eType['list'].length > 0 && tType['list'].length === 0) {
@@ -796,7 +796,7 @@
             // _OPT_ (option)
             } else if (eType['kind'] === '_OPT_') {
                 if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' ) {
-                    throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
+                    throw new ExtendError(/EL01217/, prop, [eType['$type'], sTar]);
                 }
                 // if (Array.isArray(tType['list']) && tType['list'].length === 0) return;
 
@@ -850,7 +850,7 @@
                         continue;
                     }
                 }
-                if (!success) throw new ExtendError(/EL01219/, prop, [eType, tType]);
+                if (!success) throw new ExtendError(/EL01218/, prop, [eType, tType]);
             }
         }
         
@@ -867,7 +867,7 @@
             // _ALL_ (all)
             if (eType['kind'] === '_ALL_') {
                 if (tType['$type'] === tType['$type'] && tType['kind'] === '_ERR_') {
-                    throw new ExtendError(/EL01202/, prop, [eType['$type'], sTar]);
+                    throw new ExtendError(/EL0122E/, prop, [eType['$type'], sTar]);
                 }
                 return;
 
@@ -876,21 +876,23 @@
                 // if (typeof tType['ref'] !== 'undefined') return;
                 if (tType['$type'] === 'undefined') throw new ExtendError(/EL01221/, prop, ['_ANY_', 'undefined']);
                 if (eType['$type'] === tType['$type'] && (tType['kind'] === '_ALL_' || tType['kind'] === '_OPT_' || tType['kind'] === '_ERR_' || tType['kind'] === '_NON_')) {
-                    throw new ExtendError(/EL01203/, prop, [eType['$type'], sTar]);
+                    throw new ExtendError(/EL01225/, prop, [sTar]);
                 }
                 return;
             
             // _NON_ 
             } else if  (eType['kind'] === '_NON_') {
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
-                    throw new ExtendError(/EL01204/, prop, [eType['$type'], sTar]);
+                    // 4
+                    throw new ExtendError(/EL01226/, prop, [sTar]);
                 }
                 return;
 
             // _ERR_ (error)
             } else if (eType['kind'] === '_ERR_') {
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
-                    throw new ExtendError(/EL01205/, prop,  [eType['$type'], sTar]);
+                    // 5
+                    throw new ExtendError(/EL01222/, prop, [sTar]);
                     // throw new ExtendError('target 은 _err_ 타입만 가능합니다.');
                 }
                 return;
@@ -913,7 +915,8 @@
             } else if (eType['kind'] === '_REQ_') {
                 if (eType['$type'] === tType['$type'] && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' 
                 || tType['kind'] === '_OPT_' || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
-                    throw new ExtendError(/EL01207/, prop, [eType['$type'], sTar]);
+                    // 6
+                    throw new ExtendError(/EL0122A/, prop, [sTar]);
                     // throw new ExtendError('target 은 _err_ 타입만 가능합니다.');
                 }
 
@@ -944,7 +947,8 @@
                 if (tType['$type'] === 'undefined') return;
                 if (eType['$type'] === tType['$type'] && (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' 
                 || tType['kind'] === '_NON_' || tType['kind'] === '_ERR_')) {
-                    throw new ExtendError(/EL01206/, prop, [eType['$type'], sTar]);
+                    // 7
+                    throw new ExtendError(/EL0122B/, prop, [sTar]);
                     // throw new ExtendError('target 은 _err_ 타입만 가능합니다.');
                 }
 
@@ -972,18 +976,21 @@
             // _EUN_ (enumeration)
             } else if (eType['kind'] === '_EUM_') {
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
+                    // 8
                     throw new ExtendError(/EL01224/, prop, []);
                     // throw new ExtendError('target 은 _eum_ 타입만 가능합니다.');
                 }
-                if (eType['list'].length === 0) throw new ExtendError(/EL01225/, prop, ['extType']);    // REVIEW: 발생하지 않음
+                // if (eType['list'].length === 0) throw new ExtendError(/EL01225/, prop, ['extType']);    // REVIEW: 발생하지 않음
                 // if (oriType['list'].length === 0) throw new ExtendError('origin _eum_(enum) 1개이상 항목이 필요합니디.');
-                if (tType['list'].length === 0) throw new ExtendError(/EL01226/, prop, ['tarType']);   // REVIEW: 발생하지 않음
+                // if (tType['list'].length === 0) throw new ExtendError(/EL01226/, prop, ['tarType']);   // REVIEW: 발생하지 않음
                 // if (tType['list'].length === 0) throw new ExtendError('target _eum_(enum) 1개이상 항목이 필요합니디.');
                 for (var ii = 0; ii < eType['list'].length; ii++) {
+                    // 9
                     if (!_isLiteral(eType['list'][ii])) throw new ExtendError(/EL01227/, prop, [ii, extendType(eType['list'][ii])]);
                     // if (!_isLiteral(oriType['list'][ii])) throw new ExtendError('origin _eum_(enum)은 리터럴 타입만 가능합니다.');
                 }
                 for (var ii = 0; ii < tType['list'].length; ii++) {
+                    // 10
                     if (!_isLiteral(tType['list'][ii])) throw new ExtendError(/EL01228/, prop, [ii, extendType(tType['list'][ii])]);
                     // if (!_isLiteral(tType['list'][ii])) throw new ExtendError('target _eum_(enum)은 리터럴 타입만 가능합니다.');
                 }
@@ -991,15 +998,18 @@
             // _DEF_ (default)
             } else if (eType['kind'] === '_DEF_') {
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
+                    // A
                     throw new ExtendError(/EL01229/, prop, []);
                     // throw new ExtendError('target 은 _def_ 타입만 가능합니다.');
                 }
-                if (eType['list'].length === 0) throw new ExtendError(/EL0122A/, prop, ['extType choice(def)']);    // REVIEW: 발생하지 않음
+                // if (eType['list'].length === 0) throw new ExtendError(/EL0122A/, prop, ['extType choice(def)']);    // REVIEW: 발생하지 않음
                 // if (oriType['list'].length === 0) throw new ExtendError('origin _def_(default) 1개이상 항목이 필요합니디.');
-                if (tType['list'].length === 0) throw new ExtendError(/EL0122B/, prop, ['tarType choice(def)']);    // REVIEW: 발생하지 않음
+                // if (tType['list'].length === 0) throw new ExtendError(/EL0122B/, prop, ['tarType choice(def)']);    // REVIEW: 발생하지 않음
                 // if (tType['list'].length === 0) throw new ExtendError('target _def_(default) 1개이상 항목이 필요합니디.');
+                // B
                 if (!_isLiteral(eType['list'][0])) throw new ExtendError(/EL0122C/, prop, [extendType(eType['list'][0])]);
                 // if (!_isLiteral(oriType['list'][0])) throw new ExtendError('origin _def_(default) 1번째는 리터럴 타입만 가능합니다.');
+                // C
                 if (!_isLiteral(tType['list'][0])) throw new ExtendError(/EL0122D/, prop,  [extendType(tType['list'][0])]);
                 // if (!_isLiteral(tType['list'][0])) throw new ExtendError('target _def_(default) 1번째는 리터럴 타입만 가능합니다.');
                 // if (typeof target === 'undefined') {
@@ -1017,9 +1027,9 @@
             // var arrTarget = (tType['kind']) ? tType['list'] : [tType['ref']];
             var arrTarget = (tType['kind']) ? tType['list'] : [tarType];
 
-            if (eType['list'].length > 0 && arrTarget.length === 0) {
-                throw new ExtendError(/EL0122F/, prop, [eType.toString(), arrTarget.toString(),]);  // Line: REVIEW: 발생하지 않음
-            }
+            // if (eType['list'].length > 0 && arrTarget.length === 0) {
+            //     throw new ExtendError(/EL0122F/, prop, [eType.toString(), arrTarget.toString(),]);  // Line: REVIEW: 발생하지 않음
+            // }
             for (var i = 0; i < arrTarget.length; i++) {
                 var success = false;
                 for (var ii = 0; ii < eType['list'].length; ii++) {
@@ -1031,6 +1041,7 @@
                         continue;
                     }
                 }
+                // D
                 if (!success) throw new ExtendError(/EL0122G/, prop, [i, eType, extendType(arrTarget[i])['$type']]);
             }
         }
