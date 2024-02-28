@@ -49,6 +49,14 @@ describe("[target: extend-error.js]", () => {
                     expect(()=> funcC()).toThrow(/ES03[\s\S]*ES04/);                // catch 수신
                 });
             });
+            describe("커버리지", () => {
+                // it("- Object.setPrototypeOf ", () => {
+                //     delete Object.setPrototypeOf;
+                //     const {ExtendError}         = require('../src/extend-error');
+                //     var e  = new ExtendError('msg')
+                //     expect(()=> {throw new ExtendError('msg')}).toThrow(/msg/)
+                // });
+            });
 
         });
         

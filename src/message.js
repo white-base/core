@@ -916,8 +916,11 @@
                         '30A': {  // EL0130A  
                             msg: '타입 허용 : allowType(extType, tarType) 검사가 실패하였습니다.'
                         },
-                        '30B': {  // EL0131B  
+                        '30B': {  // EL0130B  
                             msg: '타입 매치 : matchType(extType, target) 검사가 실패하였습니다.'
+                        },
+                        '30C': {  // EL0130C
+                            msg: 'ctor 이 function 타입이 아닙니다. typeof ctor = $1'
                         },
                     }
                     /**
@@ -1069,7 +1072,7 @@
          * @param {array<string>} p_aValue $1, $2... 매창값
          */
         Message.error = function(p_code, p_aValue) {
-            throw new Error(Message.get(p_code, p_aValue));
+            throw new Error(Message.get(p_code, p_aValue));     // Line:
         };
 
         /**

@@ -84,6 +84,11 @@ describe("[target: message.js]", () => {
                 expect(msg2.msg).toMatch(/2/);
             });
         });
+        describe("MetaObject.error(code, value) ", () => {
+            it("- error() : 코드값으로 예외 발생", () => {
+                expect(()=> Message.error('ES011', [])).toThrow('ES011')
+            });
+        });
         describe("MetaObject.warn(): obj <콘솔 경고 얻기>", () => {
             it("- getInfo() : 메세지 얻기", () => {
                 // const mock = jest.fn(console.warn);

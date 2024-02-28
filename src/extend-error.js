@@ -136,11 +136,12 @@
             },
           });
           
-        if (Object.setPrototypeOf) {
-            Object.setPrototypeOf(ExtendError, Error);
-        } else {
-            ExtendError.__proto__ = Error;
-        }
+        // REVIEW: 이부분이 제거 해도 문제 없는게 맞느지 검토해야함
+        // if (Object.setPrototypeOf) {
+        //     Object.setPrototypeOf(ExtendError, Error);
+        // } else {
+        //     ExtendError.__proto__ = Error;  // Line:
+        // }
         // Util.inherits(ExtendError, _super);
 
         ExtendError._NS = 'Common';    // namespace

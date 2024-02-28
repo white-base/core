@@ -72,22 +72,26 @@ describe('Util.*', () => {
         expect(str1).toEqual(str2);
         expect(reg1).toEqual(reg2);
     });
-    // it('- Util.inherits : Object.create() 제거 ', () => {
-    //     const temp = Object.create; // 임시 저장
-    //     Object.create = undefined;  // 비우기
-    //     const Util      = require('../src/util');
-    //     Object.create = temp;       // 복귀
-    //     const Super = function() { this.foo = 1 };
-    //     const Bar = function() { 
-    //         Super.call(this);
-    //         this.bar = 10 
-    //     };
-    //     Util.inherits(Bar, Super);
-    //     const i = new Bar();
+    it('- Util.inherits : Object.create() 제거 ', () => {
+        // const temp = Object.create; // 임시 저장
+        // delete Object.create;  // 비우기
+        global.OLD_ENV = true;  // 디버깅 
+        const Util      = require('../src/util');
 
-    //     expect(i.foo).toBe(1);
-    //     expect(i.bar).toBe(10);
-    // });
+        // Object.create = temp;       // 복귀
+        const Super = function() { this.foo = 1 };
+        const Bar = function() { 
+            Super.call(this);
+            this.bar = 10 
+        };
+        // delete Object.create;  // 비우기
+
+        Util.inherits(Bar, Super);
+        const i = new Bar();
+
+        expect(i.foo).toBe(1);
+        expect(i.bar).toBe(10);
+    });
     it('- Util.inherits : Object.create() ', () => {
         const Util      = require('../src/util');
         const Super = function() { this.foo = 1 };

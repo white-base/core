@@ -61,7 +61,7 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error'])); // Branch:
     if (typeof getAllProperties === 'undefined') throw new Error(Message.get('ES012', ['getAllProperties', 'util-type']));
     if (typeof extendType === 'undefined') throw new Error(Message.get('ES012', ['extendType', 'util-type']));     // Branch:
     if (typeof allowType === 'undefined')throw new Error(Message.get('ES012', ['allowType', 'util-type']));
@@ -76,6 +76,8 @@
     
     //==============================================================
     // 4. module implementation   
+    var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
+
 
     // local function
     function _isObject(obj) {``
@@ -83,7 +85,7 @@
     }
 
     // polyfill
-    if (!Array.isArray) {
+    if (!Array.isArray || OLD_ENV) {
         Array.isArray = function(p_obj) {
           return Object.prototype.toString.call(p_obj) === '[object Array]';
         };
@@ -181,10 +183,10 @@
      */
     var inherits = (function () {
 
-        if (typeof Object.create === 'function') {
+        if (typeof Object.create === 'function' && !OLD_ENV) {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
-                if (superCtor) {
+                if (superCtor) {    // Branch:
                     ctor.super = superCtor;
                     ctor.prototype = Object.create(superCtor.prototype, {
                         constructor: {
@@ -198,13 +200,13 @@
             };
         } else {
             // old school shim for old browsers
-            return function (ctor, superCtor) {
+            return function (ctor, superCtor) {         // Line:
                 if (superCtor) {
                     ctor.super = superCtor;
                     var TempCtor = function () {};
                     TempCtor.prototype = superCtor.prototype;
                     ctor.prototype = new TempCtor();
-                    ctor.prototype.constructor = ctor;
+                    ctor.prototype.constructor = ctor;  // ~ Line:
                 }
             }
         }

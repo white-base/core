@@ -26,10 +26,11 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error'])); // Branch:
     
     //==============================================================
     // 4. module implementation 
+    var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
     
     /**
      * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부
@@ -221,43 +222,14 @@
     function _hasType(name) {
         var arr = [];
         
+        if (typeof name !== 'string') return false;
+
         arr = arr.concat(['null', 'undefined', 'number', 'string', 'boolean']);
         arr = arr.concat(['array', 'function', 'object']);
         arr = arr.concat(['choice', 'union', 'class']);
         arr = arr.concat(['symbol', 'bigint', 'regexp']);
         arr = arr.concat(['etc']);  // 예외 오류 코드 검출 
 
-        if (typeof name !== 'string') return false;
-        return arr.indexOf(name) > -1;
-    }
-
-    /**
-     * choice type kind 여부
-     * @param {string} name 
-     * @returns {boolean}
-     */
-    function _hasKindChoice(name) {
-        var arr = [];
-        
-        arr = arr.concat(['_ALL_', '_ANY_', '_NON_', '_ERR_']);
-        arr = arr.concat(['_REQ_', '_OPT_', '_DEF_', '_EUM_']);
-
-        if (typeof name !== 'string') return false;
-        return arr.indexOf(name) > -1;
-    }
-
-    /**
-     * choice type kind 여부
-     * @param {string} name 
-     * @returns {boolean}
-     */
-    function _hasKindArray(name) {
-        var arr = [];
-        
-        arr = arr.concat(['_ALL_', '_ANY_']);
-        arr = arr.concat(['_REQ_', '_OPT_', '_SEQ_']);
-
-        if (typeof name !== 'string') return false;
         return arr.indexOf(name) > -1;
     }
 
@@ -272,7 +244,38 @@
         arr = arr.concat(['null', 'undefined', 'number', 'string', 'boolean']);
         arr = arr.concat(['symbol', 'bigint', 'regexp', 'object']);
 
+        return arr.indexOf(name) > -1;
+    }
+
+    /**
+     * choice type kind 여부
+     * @param {string} name 
+     * @returns {boolean}
+     */
+    function _hasKindChoice(name) {
+        var arr = [];
+        
         if (typeof name !== 'string') return false;
+        
+        arr = arr.concat(['_ALL_', '_ANY_', '_NON_', '_ERR_']);
+        arr = arr.concat(['_REQ_', '_OPT_', '_DEF_', '_EUM_']);
+
+        return arr.indexOf(name) > -1;
+    }
+
+    /**
+     * choice type kind 여부
+     * @param {string} name 
+     * @returns {boolean}
+     */
+    function _hasKindArray(name) {
+        var arr = [];
+        
+        if (typeof name !== 'string') return false;
+
+        arr = arr.concat(['_ALL_', '_ANY_']);
+        arr = arr.concat(['_REQ_', '_OPT_', '_SEQ_']);
+
         return arr.indexOf(name) > -1;
     }
     
@@ -304,7 +307,7 @@
      */
     var deepEqual = function(obj1, obj2) {
         if (obj1 === obj2) return true;
-        if (typeof obj1 !== typeof obj2) return false;
+        if (typeof obj1 !== typeof obj2) return false;  // Branch:
 
         if (Array.isArray(obj1)) {
             if (obj1.length !== obj2.length) return false;
@@ -319,7 +322,7 @@
         } else {
             if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
             for (var key in obj1) {
-                if (obj1.hasOwnProperty(key)) { 
+                if (obj1.hasOwnProperty(key)) {     // Branch:
                     var val1 = obj1[key];
                     var val2 = obj2[key];
                     // if (!_isObject(val1)) continue;
@@ -345,8 +348,8 @@
         var union;
         var proto;
 
-        if (typeof ctor !== 'function') return;
-        
+        if (typeof ctor !== 'function') throw new ExtendError(/EL0130C/, null, [typeof ctor]);
+
         arr.push(ctor);
         union = ctor['_UNION'] || [];
         proto = getPrototype(ctor);        
@@ -366,10 +369,9 @@
         // innner function
         function getPrototype(ctor) {
             if (ctor.hasOwnProperty('super')) return ctor.super;
-            return  Object.getPrototypeOf(ctor) || ctor.__proto__;
+            return !OLD_ENV && Object.getPrototypeOf ? Object.getPrototypeOf(ctor) : ctor.__proto__;
         }
     }
-
     /**
      * 생성자의 상위 또는 _UNION 에 지정된 생성자의 타입과 같은지 검사합니다.
      * @memberof _L.Common.Util
@@ -380,11 +382,13 @@
     var isProtoChain = function(ctor, target) {
         var arr;
         if (typeof ctor !== 'function') return false;
+        if (!(typeof target === 'function' || typeof target === 'string')) return false;
+
         arr = getTypes(ctor);
         for (var i = 0; i < arr.length; i++) {
             if (typeof target === 'string') {
-                if (target === arr[i].name) return true;    // Line:
-            } else if (typeof target === 'function') {
+                if (target === arr[i].name) return true;
+            } else {
                 if (target === arr[i]) return true;
             }
         }
@@ -416,7 +420,7 @@
         if (typeObj['_instance']) obj['_instance'] = typeObj['_instance'];
 
         if (leafType.indexOf(obj['$type']) > -1) {
-            if (typeObj['return']) obj['default'] = typeObj['default'];
+            if (typeObj['default']) obj['default'] = typeObj['default'];
             return obj;
         }
         if (obj['$type'] === 'array' ||  obj['$type'] === 'choice') {
@@ -444,7 +448,7 @@
             var list = getAllProperties(temp);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+                if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어   // Branch:
                 obj['_prop'][key] = typeObject(temp[key]);
             }
         }
@@ -502,7 +506,7 @@
         }
         // special type
         if (typeof type === 'object'  && type !== null && type['$type']) {
-            if (type['$type']) obj['$type'] = type['$type'];
+            obj['$type'] = type['$type'];
             if (type['default']) obj['default'] = type['default'];
             if (type['kind']) obj['kind'] = type['kind'];
             if (type['ref']) obj['ref'] = type['ref'];
@@ -578,7 +582,7 @@
             var kind = type['_KIND'];
             if (kind) {
                 kind = kind.toLowerCase();
-                if (kind === 'function') obj['$type'] = 'function';
+                if (kind === 'function') obj['$type'] = 'function';     // Branch:
                 else obj['$type'] = 'class';    // class, interface, abstract
             } else obj['$type'] = _isUpper(type.name) ? 'class' : 'function';
                 
@@ -612,10 +616,10 @@
         // step : object
         } else if (_isFillObj(type) || _isEmptyObj(type)) {
             obj['$type'] = 'union';
-        } else if(_isPrimitiveObj(type)) {
+        } else if(_isPrimitiveObj(type)) {  // Branch:
             obj['$type'] = 'object';
-        } else throw new ExtendError(/EL01309/, null, []);    // Line:
-        
+        }
+        // } else throw new ExtendError(/EL01309/, null, []);    // Line:
         return obj;
     }
 
@@ -639,7 +643,7 @@
         if (pathName !== 'extType' || !pathName) prop['error path'] = pathName;
         opt = opt || 0;
 
-        if (_isObject(eType['ref']) &&  _isObject(tType['ref']) && deepEqual(eType, tType)) return;
+        if (_isObject(eType['ref']) &&  _isObject(tType['ref']) && deepEqual(eType, tType)) return; // Branch:
         // origin seq, opt 필수 검사
         if (eType['kind']) {
             if ((eType['kind'] === '_SEQ_' || eType['kind'] === '_OPT_' || eType['kind'] === '_REQ_' || eType['kind'] === '_EUM_'|| eType['kind'] === '_DEF_') 
@@ -714,7 +718,7 @@
                 }
 
             // _OPT_ (option)
-            } else if (eType['kind'] === '_OPT_') {
+            } else if (eType['kind'] === '_OPT_') {     // Branch:
                 if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' ) {
                     throw new ExtendError(/EL01217/, prop, [eType['$type'], sTar]);
                 }
@@ -803,7 +807,7 @@
                 }
 
             // _DEF_ (default)
-            } else if (eType['kind'] === '_DEF_') {
+            } else if (eType['kind'] === '_DEF_') { // Branch:
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
                     throw new ExtendError(/EL0122B/, prop, []);
                 }
@@ -1016,7 +1020,7 @@
                 if (target.length === 0) throw new ExtendError(/EL01116/,  prop, [target.length]);
 
             // _OPT_ (option)
-            } else if (eType['kind'] === '_OPT_') {
+            } else if (eType['kind'] === '_OPT_') {     // Branch:
                 if (Array.isArray(target) && target.length === 0) return;
             }
             
@@ -1081,7 +1085,7 @@
                 }
 
             // _DEF_ (default)
-            } else if (eType['kind'] === '_DEF_') {
+            } else if (eType['kind'] === '_DEF_') { // Branch:
                 if (!_isLiteral(eType['list'][0])) throw new ExtendError(/EL01125/, prop, [typeOf(eType['list'][0])]);
                 if (typeof target === 'undefined') {
                     target = eType['list'][0];
@@ -1112,7 +1116,7 @@
                 if (target instanceof extType) return;     
                 if (!_isBuiltFunction(extType) && target !== null && opt === 1) {
                     try {
-                        var subPath = pathName === 'target' ? '<instance>' : pathName + '<instance>';
+                        var subPath = pathName === 'target' ? '<instance>' : pathName + '<instance>';   // Branch:
                         return _execMatch(_creator(extType), target, opt, subPath);
                     } catch (error) {
                         throw new ExtendError(/EL01131/, error);

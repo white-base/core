@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const {extendType, typeObject, typeOf}  = require('../src/util-type');
+const {getTypes, isProtoChain, extendType, typeObject, typeOf}  = require('../src/util-type');
 const {isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 const T = true;
@@ -13,6 +13,40 @@ const T = true;
 describe("[target: util-type.js.js]", () => {
     beforeAll(() => {
         jest.resetModules();
+    });
+    describe('isProtoChain() ', () => {
+        it('- isProtoChain() : class ', () => {
+            class ClassA { a = 1 }
+            class ClassB extends ClassA { b = 2 }
+
+            expect(isProtoChain(ClassB, ClassA)).toBe(T);
+            expect(isProtoChain(ClassB, 'ClassA')).toBe(T);
+            expect(isProtoChain(ClassA, ClassB)).toBe(false);
+        });
+        it('- isProtoChain() : etc type ', () => {
+            class ClassA { a = 1 }
+            expect(isProtoChain({}, ClassA)).toBe(false);
+            expect(isProtoChain(ClassA, {})).toBe(false);
+        });
+    });
+    describe('getTypes(ctor) ', () => {
+        it('- getTypes() : 타입 조회', () => {
+            class ClassA { a = 1 }
+            class ClassB extends ClassA { b = 2 }
+            var type1 = getTypes(ClassB);
+            var tar01 = [ClassB, ClassA];
+
+            expect(type1).toEqual(tar01)
+        });
+        it('- getTypes() : old env ', () => {
+            global.OLD_ENV = true;
+            class ClassA { a = 1 }
+            class ClassB extends ClassA { b = 2 }
+            var type1 = getTypes(ClassB);
+            var tar01 = [ClassB, ClassA];
+
+            expect(type1).toEqual(tar01)
+        });
     });
     describe('typeOf(target): str <타입 얻기> ', () => {
         it('- typeOf() : 예외 ', () => {
@@ -203,6 +237,7 @@ describe("[target: util-type.js.js]", () => {
             it('- extendType() : string [리터럴] ', () => {
                 var type1 = String
                 var type2 = 'str'  // 리터럴
+                var type3 = { $type: 'string', default: 'str' }
                 
                 // type1
                 expect(extendType(type1).$type  ).toBe('string');
@@ -210,6 +245,9 @@ describe("[target: util-type.js.js]", () => {
                 // type2
                 expect(extendType(type2).$type  ).toBe('string');
                 expect(extendType(type2).default).toBe(type2);
+                // type3
+                expect(extendType(type3).$type  ).toBe('string');
+                expect(extendType(type3).default).toBe(type2);
             });
             it('- extendType() : number [리터럴] ', () => {
                 var type1 = Number
@@ -396,6 +434,7 @@ describe("[target: util-type.js.js]", () => {
                 var type03 = function(String, Number){Object}
                 var type04 = function(){[Object]}
                 var type05 = function(aa, bb){cc}
+                
                 // 표현식 (화살표)
                 var type06 = ()=>{}
                 var type07 = ([String])=>{return Number}
@@ -408,6 +447,9 @@ describe("[target: util-type.js.js]", () => {
                 var type13 = function func (aa, bb){cc}
                 var type14 = function func(String){Number}
                 var type15 = function func(String){return Number}
+                // 스페설 
+                var type16 = { $type: 'function', ref: function funcA(){}, 
+                    params: [String], return: Number }
 
                 // type1
                 expect(extendType(type01).$type  ).toBe('function');
@@ -469,6 +511,10 @@ describe("[target: util-type.js.js]", () => {
                 expect(extendType(type15).$type  ).toBe('function');
                 expect(extendType(type15).params ).toEqual([String]);
                 expect(extendType(type15).return ).toEqual(Number);
+                // type16
+                expect(extendType(type16).$type  ).toBe('function');
+                expect(extendType(type16).params ).toEqual([String]);
+                expect(extendType(type16).return ).toEqual(Number);
             });
         });
     });
@@ -6621,22 +6667,25 @@ describe("[target: util-type.js.js]", () => {
             });
             it('- [EL01304] ', () => {
                 var type1 = { $type: 'Not_Type' }
+                var type2 = { $type: {} }
                 var thr01 = '[EL01304] 타입 검사 : [Not_Type]는 처리할 수 스페셜타입 입니다.'
+                var thr02 = 'EL01304] 타입 검사 : [[object Object]]는 처리할 수 스페셜타입 입니다.'
                 expect(()=> extendType(type1)).toThrow(thr01)
+                expect(()=> extendType(type2)).toThrow(thr02)
             });
-            it('- [EL01304] ', () => {
+            it('- [EL01304] extendType() ', () => {
                 var type1 = { $type: 'Not_Type' }
                 var thr01 = '[EL01304] 타입 검사 : [Not_Type]는 처리할 수 스페셜타입 입니다.'
                 expect(()=> extendType(type1)).toThrow(thr01)
             });
-            it('- [EL01305] ', () => {
-                var type1 = { $type: 'array', kind: '_eum_' }
-                var thr01 = '[EL01305] 타입 검사 : array(_eum_) 타입은 처리할 수 없는 스페설타입 입니다.'
+            it('- [EL01305] extendType()', () => {
+                var type1 = { $type: 'array', kind: -10 }
+                var thr01 = '[EL01305] 타입 검사 : array(-10) 타입은 처리할 수 없는 스페설타입 입니다.'
                 expect(()=> extendType(type1)).toThrow(thr01)
             });
-            it('- [EL01306] ', () => {
-                var type1 = { $type: 'choice', kind: '_seq_' }
-                var thr01 = '[EL01306] 타입 검사 : choice(_seq_) 타입은 처리할 수 없는 스페셜타입 입니다.'
+            it('- [EL01306] extendType()', () => {
+                var type1 = { $type: 'choice', kind: -10 }
+                var thr01 = '[EL01306] 타입 검사 : choice(-10) 타입은 처리할 수 없는 스페셜타입 입니다.'
                 expect(()=> extendType(type1)).toThrow(thr01)
             });
             it('- [EL01307] ', () => {
@@ -6667,12 +6716,20 @@ describe("[target: util-type.js.js]", () => {
                 var thr01 = '[EL0130B] 타입 매치 : matchType(extType, target) 검사가 실패하였습니다.'
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
-        
+            it('- [EL0130B] getTypes()', () => {
+                expect(()=> getTypes({})).toThrow('EL0130C');
+            });
         });
 
 
 
         
+    });
+    describe('커버리지', () => {
+        it('- _hasType() ', () => {
+            var type1 = { $type: -1 }
+            expect(()=> extendType(type1)).toThrow('EL01304');
+        });
     });
 
 });
