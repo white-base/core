@@ -5705,16 +5705,16 @@ describe("[target: util-type.js.js]", () => {
             // expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
             // expect(()=> matchType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
-            expect(()=> matchType([[ String, Number]], true       )).toThrow('EL01129')
-            expect(()=> matchType([[String, Number]], []          )).toThrow('EL01129')
-            expect(()=> matchType([[String, Number]], {}          )).toThrow('EL01129')            
+            expect(()=> matchType([[ String, Number]], true       )).toThrow('EL01126')
+            expect(()=> matchType([[String, Number]], []          )).toThrow('EL01126')
+            expect(()=> matchType([[String, Number]], {}          )).toThrow('EL01126')            
             // expect(()=> matchType([[String, Number]],  undefined           )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  true                )).toThrow('EL01129')
-            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow('EL01129')
-            expect(()=> matchType([[String, Number]],  {}                  )).toThrow('EL01129')
-            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow('EL01129') // 당연히 실패
-            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow('EL01129')
-            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow('EL01129')
+            expect(()=> matchType([[String, Number]],  true                )).toThrow('EL01126')
+            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow('EL01126')
+            expect(()=> matchType([[String, Number]],  {}                  )).toThrow('EL01126')
+            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow('EL01126') // 당연히 실패
+            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow('EL01126')
+            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow('EL01126')
         });
         it('- 복합 샘플 : 에러 문구 구성 ', () => {
             var type1 = { aa: { bb: [['_req_', ['_req_', [[String, [['str', 10]], {} ]] ], Boolean ]] } }
@@ -5753,17 +5753,17 @@ describe("[target: util-type.js.js]", () => {
 
             var tar41 = { aa: [true] }
 
-            expect(()=> matchType(type1, tar11)).toThrow('EL01129')
-            expect(()=> matchType(type1, tar12)).toThrow('EL01129')
-            expect(()=> matchType(type1, tar13)).toThrow('EL01129')
+            expect(()=> matchType(type1, tar11)).toThrow('EL01126')
+            expect(()=> matchType(type1, tar12)).toThrow('EL01126')
+            expect(()=> matchType(type1, tar13)).toThrow('EL01126')
             expect(()=> matchType(type1, tar14)).toThrow('EL01141')
             expect(()=> matchType(type1, tar15)).toThrow('EL01141')
 
-            expect(()=> matchType(type2, tar21)).toThrow('EL0122G')
+            expect(()=> matchType(type2, tar21)).toThrow('EL0122E')
             expect(()=> matchType(type2, tar22)).toThrow('EL01157')
 
             expect(()=> matchType(type3, tar31)).toThrow('EL01132')
-            expect(()=> matchType(type3, tar31, 1)).toThrow('EL01129')
+            expect(()=> matchType(type3, tar31, 1)).toThrow('EL01126')
 
             expect(()=> matchType(type4, tar41)).toThrow('EL01117') 
         });
@@ -5774,7 +5774,7 @@ describe("[target: util-type.js.js]", () => {
     
             expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow('EL01142')
             expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
-            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01129')
+            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01126')
             expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow('EL01142')
             expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow('EL01142')            
         });
@@ -5788,18 +5788,18 @@ describe("[target: util-type.js.js]", () => {
         });
         
         it('- isMatchType() : choice 원시 타입 ', () => {
-            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow('EL01129')
-            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow('EL01129')
-            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow('EL01129')
-            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow('EL01129')
-            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow('EL01129')
+            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow('EL01126')
+            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow('EL01126')
+            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow('EL01126')
+            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow('EL01126')
+            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow('EL01126')
         });
         it('- isMatchType() : choice 내장 객체 타입 ', () => {
-            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow('EL01129')
-            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow('EL01129')
-            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow('EL01129')       
-            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow('EL01129')       
-            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow('EL01129')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow('EL01126')
+            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow('EL01126')
+            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow('EL01126')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow('EL01126')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow('EL01126')       
         });
         it('- isMatchType() : array 조건 검사  ', () => {    
             expect(()=> matchType([],           10                  )).toThrow('EL01111')
@@ -5831,11 +5831,11 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Array, Symbol                 )).toThrow('EL01111');
         });
         it('- choice : or 타입 (내장 타입) ', () => {
-            expect(()=> matchType([[Array, String]],          1               )).toThrow('EL01129');
-            expect(()=> matchType([[Array]],                  function any(){})).toThrow('EL01129');
-            expect(()=> matchType([[String]],                 function any(){})).toThrow('EL01129');
-            expect(()=> matchType([[String, Number]],         null            )).toThrow('EL01129');
-            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow('EL01129');
+            expect(()=> matchType([[Array, String]],          1               )).toThrow('EL01126');
+            expect(()=> matchType([[Array]],                  function any(){})).toThrow('EL01126');
+            expect(()=> matchType([[String]],                 function any(){})).toThrow('EL01126');
+            expect(()=> matchType([[String, Number]],         null            )).toThrow('EL01126');
+            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow('EL01126');
         });
         it('- function() : class 타입', () => {
             const Func1 = function() { this.aa = Number };
@@ -5967,8 +5967,8 @@ describe("[target: util-type.js.js]", () => {
             // expect(()=> allowType(['_etc_'],                 [null]                     )).toThrow('ES0735')
         }); 
         it('- allowType(a, b) : choice : 예외', () => {     
-            expect(()=> allowType([['_any_']],                  undefined             )).toThrow('EL01221')
-            expect(()=> allowType([['_any_']],                                        )).toThrow('EL01221')
+            expect(()=> allowType([['_any_']],                  undefined             )).toThrow('EL01222')
+            expect(()=> allowType([['_any_']],                                        )).toThrow('EL01222')
             // expect(()=> allowType([['_seq_']],                  [['_seq_']]           )).toThrow('ES0729')
             // expect(()=> allowType([['_seq_']],                  [['_seq_', String]]   )).toThrow('ES0729') 
             // expect(()=> allowType([['_seq_']],                  [['_seq_', Number]]   )).toThrow('ES0729')
@@ -5982,19 +5982,19 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType([['_opt_']],                  [['_any_']]                   )).toThrow('EL01201')
             expect(()=> allowType([['_opt_']],                  undefined                     )).toThrow('EL01201')
             expect(()=> allowType([['_opt_']],                  [[String]]                    )).toThrow('EL01201')
-            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('EL0122G')
-            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('EL0122E')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('EL0122E')
             expect(()=> allowType([['_opt_', String]],          [['_opt_']]                   )).toThrow('EL01201')
-            expect(()=> allowType([['_opt_', String]],          [['_any_']]                   )).toThrow('EL0122B')
-            expect(()=> allowType([['_opt_', String]],          [[Number]]                    )).toThrow('EL0122G')
-            expect(()=> allowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('EL0122G')
-            expect(()=> allowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String]],          [['_any_']]                   )).toThrow('EL01227')
+            expect(()=> allowType([['_opt_', String]],          [[Number]]                    )).toThrow('EL0122E')
+            expect(()=> allowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('EL0122E')
+            expect(()=> allowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('EL0122E')
             expect(()=> allowType([['_opt_', String, Number]],  [['_opt_']]                   )).toThrow('EL01201')
-            expect(()=> allowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('EL0122B')
-            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('EL0122G')
-            expect(()=> allowType([['_req_', String, Number]],           [['_req_', String, Boolean, Number]]   )).toThrow('EL0122G')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('EL01227')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('EL0122E')
+            expect(()=> allowType([['_req_', String, Number]],           [['_req_', String, Boolean, Number]]   )).toThrow('EL0122E')
             expect(()=> allowType([['_req_', String, Number]],           [['_opt_']]                   )).toThrow('EL01201')
-            expect(()=> allowType([['_req_', String, Number]],           [['_any_']]                   )).toThrow('EL0122A')
+            expect(()=> allowType([['_req_', String, Number]],           [['_any_']]                   )).toThrow('EL01226')
         });
         it('- isAllowType(a, b) : function ', () => {
             var type1   = function(String, Number){Boolean}
@@ -6059,693 +6059,620 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(type1, {str: String, bool: false, num: String}          )).toBe(false);
             expect(isAllowType(type1, {str: String}                                    )).toBe(false);
             // 예외 : 오류코드
-            expect(()=> allowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('EL0122G')
-            expect(()=> allowType(type1, {str: String, bool: false, num: String}          )).toThrow('EL0122G')
+            expect(()=> allowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('EL0122E')
+            expect(()=> allowType(type1, {str: String, bool: false, num: String}          )).toThrow('EL0122E')
             expect(()=> allowType(type1, {str: String}                                    )).toThrow('EL01242')
         });
     });
     describe('예외 코드 ', () => {
-        it('- [EL01101] ', () => {
-            var type1 = ['_SEQ_'];
-            var type2 = ['_OPT_'];
-            var type3 = ['_REQ_'];
-            var type4 = [['_EUM_']];
-            var type5 = [['_DEF_']];
-            var tar00 = null;
-            var thr01 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: array(_SEQ_)[]'
-            var thr02 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: array(_OPT_)[]'
-            var thr03 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: array(_REQ_)[]'
-            var thr04 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_EUM_)[]'
-            var thr05 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_DEF_)[]'
-           
-            expect(()=> matchType(type1, tar00)).toThrow(thr01)
-            expect(()=> matchType(type2, tar00)).toThrow(thr02)
-            expect(()=> matchType(type3, tar00)).toThrow(thr03)
-            expect(()=> matchType(type4, tar00)).toThrow(thr04)
-            expect(()=> matchType(type5, tar00)).toThrow(thr05)
+        describe(' match ', () => {
+            it('- [EL01101] 기본', () => {
+                var type1 = ['_SEQ_'];
+                var type2 = ['_OPT_'];
+                var type3 = ['_REQ_'];
+                var type4 = [['_EUM_']];
+                var type5 = [['_DEF_']];
+                var tar00 = null;
+                var thr01 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: array(_SEQ_)[]'
+                var thr02 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: array(_OPT_)[]'
+                var thr03 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: array(_REQ_)[]'
+                var thr04 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_EUM_)[]'
+                var thr05 = '[EL01101] 타입 매치 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_DEF_)[]'
+               
+                expect(()=> matchType(type1, tar00)).toThrow(thr01)
+                expect(()=> matchType(type2, tar00)).toThrow(thr02)
+                expect(()=> matchType(type3, tar00)).toThrow(thr03)
+                expect(()=> matchType(type4, tar00)).toThrow(thr04)
+                expect(()=> matchType(type5, tar00)).toThrow(thr05)
+            });
+            // match primitve
+            it('- [EL01102] 기본', () => {
+                var type1 = null;
+                var type2 = undefined;
+                var type3 = 'str';
+                var type4 = 10;
+                var type5 = true;
+                var type6 = 10n;
+                var type7 = Symbol;
+                var type8 = /reg/;
+                var type9 = new Date();
+                var tar01 = [['_NON_']];
+                var thr01 = '[EL01102] 타입 매치 : target 은 \'null\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr02 = '[EL01102] 타입 매치 : target 은 \'undefined\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr03 = '[EL01102] 타입 매치 : target 은 \'string\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr04 = '[EL01102] 타입 매치 : target 은 \'number\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr05 = '[EL01102] 타입 매치 : target 은 \'boolean\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr06 = '[EL01102] 타입 매치 : target 은 \'bigint\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr07 = '[EL01102] 타입 매치 : target 은 \'symbol\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr08 = '[EL01102] 타입 매치 : target 은 \'regexp\' 타입이 아닙니다. tarType: choice(_NON_)'
+                var thr09 = '[EL01102] 타입 매치 : target 은 \'object\' 타입이 아닙니다. tarType: choice(_NON_)'
+                
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+                expect(()=> matchType(type2, tar01)).toThrow(thr02)
+                expect(()=> matchType(type3, tar01)).toThrow(thr03)
+                expect(()=> matchType(type4, tar01)).toThrow(thr04)
+                expect(()=> matchType(type5, tar01)).toThrow(thr05)
+                expect(()=> matchType(type6, tar01)).toThrow(thr06)
+                expect(()=> matchType(type7, tar01)).toThrow(thr07)
+                expect(()=> matchType(type8, tar01)).toThrow(thr08)
+                expect(()=> matchType(type9, tar01)).toThrow(thr09)
+            });
+            it('- [EL01103] 기본', () => {
+                var type1 = { $type: 'etc'};
+                var tar01 = null;
+                var thr01 = '타입 매치 : 처리할 수 없는 타입니다.'
+                // 사전에 검사해서 처리할 수 없는 타입임
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            // match array
+            it('- [EL01111] array', () => {
+                var type1 = []
+                var tar01 = null
+                var thr01 = 'EL01111] 배열 매치 : target 은 array 타입이 아닙니다. tarType: null'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01112] array(_any_)', () => {
+                var type1 = ['_any_']
+                var tar01 = []
+                var thr01 = '[EL01112] 배열 매치 : array(_ANY_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = 0'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01113] array(_seq_)', () => {
+                var type1 = ['_seq_', String]
+                var tar01 = []
+                var thr01 = '[EL01113] 배열 매치 : array(_SEQ_) 타입의 길이보다 target array 의 길이가 작습니다. extType.length = 1, target.length = 0'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01114] array(_seq_)', () => {
+                var type1 = ['_seq_', 10]
+                var tar01 = [20]
+                var thr01 = '[EL01114] 배열 매치 : array(_SEQ_) [0]번째 리터럴 타입이 target 값과 다릅니다. extType[0] = 10, target[0] = 20'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01115] array(_seq_)', () => {
+                var type1 = ['_seq_', String]
+                var tar01 = [10]
+                var thr01 = '[EL01115] 배열 매치 : array(_SEQ_) [0]번째 타입 검사가 실패하였습니다. extType[0] = string'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01116] array(_req_)', () => {
+                var type1 = ['_req_', String]
+                var tar01 = []
+                var thr01 = '[EL01116] 배열 매치 : array(_REQ_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = 0'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01117] array list', () => {
+                var type1 = [String, Number]
+                var tar01 = [true]
+                var thr01 = '[EL01117] 배열 매치 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            // match choice
+            it('- [EL01121] choice(_any_)', () => {
+                var type1 = [['_any_']]
+                var tar01 = undefined
+                var thr01 = '[EL01121] 초이스 매치 : choice(_ANY_) 타입에 \'undefined\' 은 사용할 수 없습니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01122] choice(_non_)', () => {
+                var type1 = [['_non_']]
+                var tar01 = [true]
+                var thr01 = '[EL01122] 초이스 매치 : choice(_NON_) 타입에 \'undefined\' 만 가능합니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01123] choice(_err_)', () => {
+                var type1 = [['_err_']]
+                var tar01 = [true]
+                var thr01 = '[EL01123] 초이스 매치 : choice(_ERR_) 타입에 Errror 인스턴스 만 가능합니다.'
+                expect(matchType(type1, new Error())).toBe(undefined);
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01124] choice(_eum_)', () => {
+                var type1 = [['_EUM_', 10, 'str', String]]
+                var tar01 = [true]
+                var thr01 = '[EL01124] 초이스 매치 : choice(_EUM_) 타입의 세부 타입은 리터럴만 가능합니다. extType[2]: string'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01125] choice(_def_)', () => {
+                var type1 = [['_DEF_', String, 10, 'str']]
+                var tar01 = [true]
+                var thr01 = '[EL01125] 초이스 매치 : choice(_DEF_) 타입의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: string'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01126] choice sub', () => {
+                var type1 = [[String, Number]]
+                var tar01 = [true]
+                var thr01 = '[EL01126] 초이스 매치 : choice 세부 타입 검사가 실패하였습니다. extType: choice(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            // match class
+            it('- [EL01131] class', () => {
+                class ClassA { aa = String }
+                var type1 = ClassA
+                var tar01 = { aa: 10 }
+                var thr01 = '[EL01131] 클래스 매치 : class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)'
+                expect(()=> matchType(type1, tar01, 1)).toThrow(thr01)
+            });
+            it('- [EL01132] class', () => {
+                class ClassA { aa = String }
+                var type1 = ClassA
+                var tar01 = { aa: 10 }
+                var thr01 = '[EL01132] 클래스 매치 : target은 [ClassA]의 인스턴스가 아닙니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01133] class', () => {
+                class ClassA { aa = String }
+                var type1 = ClassA
+                var tar01 = 10
+                var thr01 = '[EL01133] 클래스 매치 : target 이 class, object, union 타입이 아닙니다. tarType: number(10)'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            // match union
+            it('- [EL01141] union', () => {
+                var type1 = {}
+                var tar01 = 10
+                var thr01 = '[EL01141] 유니언 매치 : target 은 union 타입이 아닙니다. tarType: number(10)'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01142] union', () => {
+                var type1 = {aa: String}
+                var tar01 = {}
+                var thr01 = '[EL01142] 유니언 매치 : target[\'aa\'] 키가 존재하지 않습니다. extType[\'aa\'] = string'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01143] union', () => {
+                var type1 = {aa: String}
+                var tar01 = {aa: 10}
+                var thr01 = '[EL01143] 유니언 매치 : \'aa\' 타입 검사가 실패하였습니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            // match function
+            it('- [EL01151] function', () => {
+                var type1 = Function
+                var tar01 = 10
+                var thr01 = '[EL01151] 함수 매치 : target 은 function 타입이 아닙니다. tarType: number(10)'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01152] function', () => {
+                var type1 = { $type: 'function', name: 'funcA' }
+                var tar01 = { $type: 'function' }
+                var thr01 = '[EL01152] 함수 매치 : 선언한 extType.name = \'funcA\' 과 target name 이 일치하지 않습니다. function.name = \'undefined\''
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01153] function', () => {
+                var type1 = { $type: 'function', func: function funcA(){} }
+                var tar01 = ()=>{}
+                var thr01 = '[EL01153] 함수 매치 : extType.func 을 선언하였는데 target.func 이 functon 타입이 아닙니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01154] function', () => {
+                var type1 = { $type: 'function', func: function funcA(){} }
+                var tar01 = { $type: 'function', func: function funcB(){} }
+                var thr01 = '[EL01154] 함수 매치 : extType.func 과 target.func 서로 다릅니다.(proto check)'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01155] function', () => {
+                var type1 = { $type: 'function', params: [String, Number], return: Boolean }
+                var tar01 = { $type: 'function', }
+                var thr01 = '[EL01155] 함수 매치 : target의 params 또는 return 객체를 설정해야 합니다. extType.param = array(_OPT_)[string, number], extType.return = boolean'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01156] function', () => {
+                var type1 = { $type: 'function', params: [String, Number] }
+                var tar01 = { $type: 'function', params: [String] }
+                var thr01 = '[EL01156] 함수 매치 : params 허용검사가 거부되었습니다. <array(_SEQ_) 변환>'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01157] function', () => {
+                var type1 = { $type: 'function', return: String }
+                var tar01 = { $type: 'function', return: Boolean }
+                var thr01 = '[EL01157] 함수 매치 : return 허용검사가 거부되었습니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
         });
-        // match primitve
-        it('- [EL01102] ', () => {
-            var type1 = null;
-            var type2 = undefined;
-            var type3 = 'str';
-            var type4 = 10;
-            var type5 = true;
-            var type6 = 10n;
-            var type7 = Symbol;
-            var type8 = /reg/;
-            var type9 = new Date();
-            var tar01 = [['_NON_']];
-            var thr01 = '[EL01102] 타입 매치 : target 은 \'null\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr02 = '[EL01102] 타입 매치 : target 은 \'undefined\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr03 = '[EL01102] 타입 매치 : target 은 \'string\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr04 = '[EL01102] 타입 매치 : target 은 \'number\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr05 = '[EL01102] 타입 매치 : target 은 \'boolean\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr06 = '[EL01102] 타입 매치 : target 은 \'bigint\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr07 = '[EL01102] 타입 매치 : target 은 \'symbol\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr08 = '[EL01102] 타입 매치 : target 은 \'regexp\' 타입이 아닙니다. tarType: choice(_NON_)'
-            var thr09 = '[EL01102] 타입 매치 : target 은 \'object\' 타입이 아닙니다. tarType: choice(_NON_)'
+        describe(' allow ', () => {
+            // allow 
+            it('- [EL01201] extType ', () => {
+                var type0 = null;
+                var type1 = ['_SEQ_'];
+                var type2 = ['_OPT_'];
+                var type3 = ['_REQ_'];
+                var type4 = [['_EUM_']];
+                var type5 = [['_DEF_']];
+                var tar00 = null;
+                var tar01 = ['_SEQ_'];
+                var tar02 = ['_OPT_'];
+                var tar03 = ['_REQ_'];
+                var tar04 = [['_EUM_']];
+                var tar05 = [['_DEF_']];
+
+                var thr01 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: array(_SEQ_)[]'
+                var thr02 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: array(_OPT_)[]'
+                var thr03 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: array(_REQ_)[]'
+                var thr04 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_EUM_)[]'
+                var thr05 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_DEF_)[]'
             
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-            expect(()=> matchType(type2, tar01)).toThrow(thr02)
-            expect(()=> matchType(type3, tar01)).toThrow(thr03)
-            expect(()=> matchType(type4, tar01)).toThrow(thr04)
-            expect(()=> matchType(type5, tar01)).toThrow(thr05)
-            expect(()=> matchType(type6, tar01)).toThrow(thr06)
-            expect(()=> matchType(type7, tar01)).toThrow(thr07)
-            expect(()=> matchType(type8, tar01)).toThrow(thr08)
-            expect(()=> matchType(type9, tar01)).toThrow(thr09)
-        });
-        it('- [EL01103] ', () => {
-            var type1 = { $type: 'etc'};
-            var tar01 = null;
-            var thr01 = '타입 매치 : 처리할 수 없는 타입니다.'
-            // 사전에 검사해서 처리할 수 없는 타입임
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // match array
-        it('- [EL01111] ', () => {
-            var type1 = []
-            var tar01 = null
-            var thr01 = 'EL01111] 배열 매치 : target 은 array 타입이 아닙니다. tarType: null'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01112] ', () => {
-            var type1 = ['_any_']
-            var tar01 = []
-            var thr01 = '[EL01112] 배열 매치 : array(_ANY_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = 0'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01113] ', () => {
-            var type1 = ['_seq_', String]
-            var tar01 = []
-            var thr01 = '[EL01113] 배열 매치 : array(_SEQ_) 타입의 길이보다 target array 의 길이가 작습니다. extType.length = 1, target.length = 0'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01114] ', () => {
-            var type1 = ['_seq_', 10]
-            var tar01 = [20]
-            var thr01 = '[EL01114] 배열 매치 : array(_SEQ_) [0]번째 리터럴 타입이 target 값과 다릅니다. extType[0] = 10, target[0] = 20'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01115] ', () => {
-            var type1 = ['_seq_', String]
-            var tar01 = [10]
-            var thr01 = '[EL01115] 배열 매치 : array(_SEQ_) [0]번째 타입 검사가 실패하였습니다. extType[0] = string'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01116] ', () => {
-            var type1 = ['_req_', String]
-            var tar01 = []
-            var thr01 = '[EL01116] 배열 매치 : array(_REQ_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = 0'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01117] ', () => {
-            var type1 = [String, Number]
-            var tar01 = [true]
-            var thr01 = '[EL01117] 배열 매치 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // match choice
-        it('- [EL01121] ', () => {
-            var type1 = [['_any_']]
-            var tar01 = undefined
-            var thr01 = '[EL01121] 초이스 매치 : choice(_ANY_) 타입에 \'undefined\' 은 사용할 수 없습니다.'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01122] ', () => {
-            var type1 = [['_non_']]
-            var tar01 = [true]
-            var thr01 = '[EL01122] 초이스 매치 : choice(_NON_) 타입에 \'undefined\' 만 가능합니다.'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01123] ', () => {
-            var type1 = [['_err_']]
-            var tar01 = [true]
-            var thr01 = '[EL01123] 초이스 매치 : choice(_ERR_) 타입에 Errror 인스턴스 만 가능합니다.'
-            expect(matchType(type1, new Error())).toBe(undefined);
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // it('- [EL01124] ', () => {
-        //     var type1 = [['_req_']]
-        //     var tar01 = [true];
-        //     var thr01 = '[EL01117] 타입매치 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
-        //     expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        // });
-        // it('- [EL01125] ', () => {
-        //     var type1 = [String, Number];
-        //     var tar01 = [true];
-        //     var thr01 = '[EL01117] 타입매치 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
-        //     expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        // });
-        it('- [EL01126] ', () => {
-            var type1 = [['_EUM_', 10, 'str', String]]
-            var tar01 = [true]
-            var thr01 = '[EL01126] 초이스 매치 : choice(_EUM_) 타입의 세부 타입은 리터럴만 가능합니다. extType[2]: string'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // it('- [EL01127] ', () => {
-        //     var type1 = [String, Number];
-        //     var tar01 = [true];
-        //     var thr01 = '[EL01117] 타입매치 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
-        //     expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        // });
-        it('- [EL01128] ', () => {
-            var type1 = [['_DEF_', String, 10, 'str']]
-            var tar01 = [true]
-            var thr01 = '[EL01128] 초이스 매치 : choice(_DEF_) 타입의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: string'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01129] ', () => {
-            var type1 = [[String, Number]]
-            var tar01 = [true]
-            var thr01 = '[EL01129] 초이스 매치 : choice 세부 타입 검사가 실패하였습니다. extType: choice(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // match class
-        it('- [EL01131] ', () => {
-            class ClassA { aa = String }
-            var type1 = ClassA
-            var tar01 = { aa: 10 }
-            var thr01 = '[EL01131] 클래스 매치 : class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)'
-            expect(()=> matchType(type1, tar01, 1)).toThrow(thr01)
-        });
-        it('- [EL01132] ', () => {
-            class ClassA { aa = String }
-            var type1 = ClassA
-            var tar01 = { aa: 10 }
-            var thr01 = '[EL01132] 클래스 매치 : target은 [ClassA]의 인스턴스가 아닙니다.'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01133] ', () => {
-            class ClassA { aa = String }
-            var type1 = ClassA
-            var tar01 = 10
-            var thr01 = '[EL01133] 클래스 매치 : target 이 class, object, union 타입이 아닙니다. tarType: number(10)'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // match union
-        it('- [EL01141] ', () => {
-            var type1 = {}
-            var tar01 = 10
-            var thr01 = '[EL01141] 유니언 매치 : target 은 union 타입이 아닙니다. tarType: number(10)'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01142] ', () => {
-            var type1 = {aa: String}
-            var tar01 = {}
-            var thr01 = '[EL01142] 유니언 매치 : target[\'aa\'] 키가 존재하지 않습니다. extType[\'aa\'] = string'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01143] ', () => {
-            var type1 = {aa: String}
-            var tar01 = {aa: 10}
-            var thr01 = '[EL01143] 유니언 매치 : \'aa\' 타입 검사가 실패하였습니다.'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // match function
-        it('- [EL01151] ', () => {
-            var type1 = Function
-            var tar01 = 10
-            var thr01 = '[EL01151] 함수 매치 : target 은 function 타입이 아닙니다. tarType: number(10)'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01152] ', () => {
-            var type1 = { $type: 'function', name: 'funcA' }
-            var tar01 = { $type: 'function' }
-            var thr01 = '[EL01152] 함수 매치 : 선언한 extType.name = \'funcA\' 과 target name 이 일치하지 않습니다. function.name = \'undefined\''
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01153] ', () => {
-            var type1 = { $type: 'function', func: function funcA(){} }
-            var tar01 = ()=>{}
-            var thr01 = '[EL01153] 함수 매치 : extType.func 을 선언하였는데 target.func 이 functon 타입이 아닙니다.'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01154] ', () => {
-            var type1 = { $type: 'function', func: function funcA(){} }
-            var tar01 = { $type: 'function', func: function funcB(){} }
-            var thr01 = '[EL01154] 함수 매치 : extType.func 과 target.func 서로 다릅니다.(proto check)'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01155] ', () => {
-            var type1 = { $type: 'function', params: [String, Number], return: Boolean }
-            var tar01 = { $type: 'function', }
-            var thr01 = '[EL01155] 함수 매치 : target의 params 또는 return 객체를 설정해야 합니다. extType.param = array(_OPT_)[string, number], extType.return = boolean'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01156] ', () => {
-            var type1 = { $type: 'function', params: [String, Number] }
-            var tar01 = { $type: 'function', params: [String] }
-            var thr01 = '[EL01156] 함수 매치 : params 허용검사가 거부되었습니다. <array(_SEQ_) 변환>'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01157] ', () => {
-            var type1 = { $type: 'function', return: String }
-            var tar01 = { $type: 'function', return: Boolean }
-            var thr01 = '[EL01157] 함수 매치 : return 허용검사가 거부되었습니다.'
-            expect(()=> matchType(type1, tar01)).toThrow(thr01)
-        });
-        // allow primitive
-        it('- [EL01201] extType ', () => {
-            var type0 = null;
-            var type1 = ['_SEQ_'];
-            var type2 = ['_OPT_'];
-            var type3 = ['_REQ_'];
-            var type4 = [['_EUM_']];
-            var type5 = [['_DEF_']];
-            var tar00 = null;
-            var tar01 = ['_SEQ_'];
-            var tar02 = ['_OPT_'];
-            var tar03 = ['_REQ_'];
-            var tar04 = [['_EUM_']];
-            var tar05 = [['_DEF_']];
+                expect(()=> allowType(type1, tar00)).toThrow(thr01)
+                expect(()=> allowType(type2, tar00)).toThrow(thr02)
+                expect(()=> allowType(type3, tar00)).toThrow(thr03)
+                expect(()=> allowType(type4, tar00)).toThrow(thr04)
+                expect(()=> allowType(type5, tar00)).toThrow(thr05)
+            });
+            it('- [EL01201] tarType ', () => {
+                var type0 = null;
+                var tar01 = ['_SEQ_'];
+                var tar02 = ['_OPT_'];
+                var tar03 = ['_REQ_'];
+                var tar04 = [['_EUM_']];
+                var tar05 = [['_DEF_']];
 
-            var thr01 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: array(_SEQ_)[]'
-            var thr02 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: array(_OPT_)[]'
-            var thr03 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: array(_REQ_)[]'
-            var thr04 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_EUM_)[]'
-            var thr05 = '[EL01201] 타입 허용 : extType 의 세부 타입을 지정해야 합니다. extType: choice(_DEF_)[]'
-           
-            expect(()=> allowType(type1, tar00)).toThrow(thr01)
-            expect(()=> allowType(type2, tar00)).toThrow(thr02)
-            expect(()=> allowType(type3, tar00)).toThrow(thr03)
-            expect(()=> allowType(type4, tar00)).toThrow(thr04)
-            expect(()=> allowType(type5, tar00)).toThrow(thr05)
-        });
-        it('- [EL01201] tarType ', () => {
-            var type0 = null;
-            var tar01 = ['_SEQ_'];
-            var tar02 = ['_OPT_'];
-            var tar03 = ['_REQ_'];
-            var tar04 = [['_EUM_']];
-            var tar05 = [['_DEF_']];
+                var thr01 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: array(_SEQ_)[]'
+                var thr02 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: array(_OPT_)[]'
+                var thr03 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: array(_REQ_)[]'
+                var thr04 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: choice(_EUM_)[]'
+                var thr05 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: choice(_DEF_)[]'
+            
+                expect(()=> allowType(type0, tar01)).toThrow(thr01)
+                expect(()=> allowType(type0, tar02)).toThrow(thr02)
+                expect(()=> allowType(type0, tar03)).toThrow(thr03)
+                expect(()=> allowType(type0, tar04)).toThrow(thr04)
+                expect(()=> allowType(type0, tar05)).toThrow(thr05)
+            });
+            it('- [EL01202] 기본', () => {
+                var type1 = 10
+                var tar01 = 20
+                var thr01 = '[EL01202] 타입 허용 : number 타입의 리터럴 값과 다릅니다. extType = number(10), tarType = number(20)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01203] 기본', () => {
+                var type1 = String
+                var tar01 = 10
+                var thr01 = '[EL01203] 타입 허용 : string 타입이 아닙니다. tarType = number'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01204] 기본', () => {      // 타입 강제 발생
+                var type1 = { $type: 'etc'}
+                var tar01 = null
+                var thr01 = '[EL01204] 타입 허용 : 처리할 수 없는 타입입니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            
+            // allow array
+            it('- [EL01211] array', () => {
+                var type1 = []
+                var tar01 = 10
+                var thr01 = '[EL01211] 배열 허용 : array 타입이 아닙니다. tarType: number'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01212] array(_any_)', () => {
+                var type1 = ['_any_']
+                var tar01 = ['_all_']
+                var thr01 = '[EL01212] 타입 허용 : array(_ANY_) 타입에 array(_ALL_, _OPT_) 타입을 허용하지 않습니다. tarType: array(_ALL_)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01213] array(_seq_)', () => {
+                var type1 = ['_seq_', 10]
+                var tar01 = [10]
+                var thr01 = '[EL01213] 배열 허용 : array(_SEQ_) 타입에 array(_SEQ_) 타입만 허용합니다. tarType: array(_OPT_)[number(10)]'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01214] array(_seq_)', () => {
+                var type1 =  ['_seq_', 10, 20]
+                var tar01 =  ['_seq_', 10]
+                var thr01 = '[EL01214] 배열 허용 :extType 의 array(_SEQ_) 타입의 길이보다 tarType 은 같거나 커야합니다. extType.length = 2, target.length = 1'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01215] array(_seq_)', () => {
+                var type1 =  ['_seq_', 10, 20]
+                var tar01 =  ['_seq_', 10, 30]
+                var thr01 = '[EL01215] 배열 허용 : array(_SEQ_) [1]번째 타입 검사가 실패하였습니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01216] array(_req_)', () => {
+                var type1 =  ['_req_', 10, 20]
+                var tar01 =  ['_all_']
+                var thr01 = '[EL01216] 배열 허용 : array(_REQ_) 타입에 array(_ALL_, _ANY_, _OPT_) 타입을 허용하지 않습니다. tarType: array(_ALL_)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01217] array(_opt_)', () => {
+                var type1 =  ['_opt_', 10, 20]
+                var tar01 =  ['_all_']
+                var thr01 = '[EL01217] 배열 허용 : array(_OPT_) 타입에 array(_ALL_, _ANY_) 타입을 허용하지 않습니다. tarType: array(_ALL_)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01218] array list', () => {
+                var type1 =  [String]
+                var tar01 =  [Number]
+                var thr01 = '[EL01218] 배열 허용 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string], tarType: array(_OPT_)[number]'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            
+            // allow choice
+            it('- [EL01221] choice(_all_)', () => {
+                var type1 = [['_all_']]
+                var tar01 = [['_err_']]
+                var thr01 = '[EL01221] 초이스 허용 : choice(_ALL_) 타입에 choice(_ERR_) 타입을 허용하지 않습니다. tarType: choice'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01222] choice(_any_)', () => {
+                var type1 = [['_any_']]
+                var tar01 = undefined
+                var thr01 = '[EL01222] 초이스 허용 : choice(_ANY_) 타입에 \'undefined\' 타입은 사용할 수 없습니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01223] choice(_any_)', () => {
+                var type1 = [['_any_']]
+                var tar01 = [['_err_']]
+                var thr01 = '[EL01223] 초이스 허용 : choice(_ANY_) 타입에 choice(_NON_, _ERR_), \'undefined\' 타입을 허용하지 않습니다. tarType: choice(_ERR_)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01224] choice(_non_)', () => {
+                var type1 = [['_non_']]
+                var tar01 = [['_all_']]
+                var thr01 = '[EL01224] 초이스 허용 : choice(_NON_) 타입에 choice(_NON_) 타입만 허용합니다. tarType: choice(_ALL_)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01225] choice(_err_)', () => {
+                var type1 = [['_err_']]
+                var tar01 = [['_all_']]
+                var thr01 = '[EL01225] 초이스 허용 : choice(_ERR_) 타입에 choice(_ERR_) 타입만 가능합니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01226] choice(_req_)', () => {
+                var type1 = [['_req_', 10]]
+                var tar01 = [['_all_']]
+                var thr01 = '[EL01226] 초이스 허용 : choice(_REQ_) 타입에 choice(_ALL_, _ANY_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: choice(_ALL_)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01227] choice(_opt_)', () => {
+                var type1 = [['_opt_', 10]]
+                var tar01 = [['_all_']]
+                var thr01 = '[EL01227] 초이스 허용 : choice(_OPT_) 타입에 choice(_ALL_, _ANY_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: choice(_ALL_)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01228] choice(_eum_)', () => {
+                var type1 = [['_eum_', 10]]
+                var tar01 = 10
+                var thr01 = '[EL01228] 초이스 허용 : choice(_EUM_) 타입에 choice(_EUM_) 타입만 가능합니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01229] choice(_eum_)', () => {
+                var type1 = [['_eum_', String]]
+                var tar01 = [['_eum_', '']]
+                var thr01 = '[EL01229] 초이스 허용 : choice(_EUM_) 의 세부 타입은 리터럴만 가능합니다. extType[0]: string'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL0122A] choice(_eum_)', () => {
+                var type1 = [['_eum_', '']]
+                var tar01 = [['_eum_', Number]]
+                var thr01 = '[EL0122A] 초이스 허용 : tarType choice(_EUM_) 의 세부 타입은 리터럴만 가능합니다. tarType[0]: number'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL0122B] choice(_def_)', () => {
+                var type1 = [['_def_', '']]
+                var tar01 = [['_eum_', Number]]
+                var thr01 = '[EL0122B] 초이스 허용 : choice(_DEF_) 타입에 choice(_DEF_) 타입만 가능합니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL0122C] choice(_def_)', () => {
+                var type1 = [['_def_', String]]
+                var tar01 = [['_def_', Number]]
+                var thr01 = '[EL0122C] 초이스 허용 : extType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: string'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL0122D] choice(_def_)', () => {
+                var type1 = [['_def_', 'a']]
+                var tar01 = [['_def_', String]]
+                var thr01 = '[EL0122D] 초이스 허용 : tarType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. tarType[0]: string'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL0122E] choice sub', () => {
+                var type1 = [[String, 10]]
+                var tar01 = [['', Number]]
+                var thr01 = '[EL0122E] 초이스 허용 : tarType[1] = number 타입에 허용하는 extType 이 없습니다. extType = choice(_OPT_)[string, number(10)]'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            
+            // allow class
+            it('- [EL01231] class', () => {
+                class ClassA { aa = String }
+                class ClassB { aa = Number }
+                var type1 = ClassA
+                var tar01 = ClassB
+                var thr01 = '[EL01231] 클래스 허용 : extType, tarType class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)'
+                expect(()=> allowType(type1, tar01, 1)).toThrow(thr01)
+            });
+            it('- [EL01232] class', () => {
+                class ClassA { aa = String }
+                class ClassB { aa = Number }
+                var type1 = ClassA
+                var tar01 = ClassB
+                var thr01 = '[EL01232] 클래스 허용 : class to class 허용이 거부 되었습니다. (opt = 0)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01233] ', () => {
+                class ClassA { aa = String }
+                var type1 = ClassA
+                var tar01 = { aa: Number }
+                var thr01 = '[EL01233] 클래스 허용 : tarType class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)'
+                expect(()=> allowType(type1, tar01, 1)).toThrow(thr01)
+            });
+            it('- [EL01234] class', () => {
+                class ClassA { aa = String }
+                var type1 = ClassA
+                var tar01 = { aa: Number }
+                var thr01 = 'EL01234] 클래스 허용 : class to union 허용이 거부 되었습니다. (opt = 0)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01235] class', () => {
+                class ClassA { aa = String }
+                var type1 = ClassA
+                var tar01 = 10
+                var thr01 = '[EL01235] 클래스 허용 : tarType 이 class, union 타입이 아닙니다. tarType: number(10)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
 
-            var thr01 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: array(_SEQ_)[]'
-            var thr02 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: array(_OPT_)[]'
-            var thr03 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: array(_REQ_)[]'
-            var thr04 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: choice(_EUM_)[]'
-            var thr05 = '[EL01201] 타입 허용 : tarType 의 세부 타입을 지정해야 합니다. tarType: choice(_DEF_)[]'
-           
-            expect(()=> allowType(type0, tar01)).toThrow(thr01)
-            expect(()=> allowType(type0, tar02)).toThrow(thr02)
-            expect(()=> allowType(type0, tar03)).toThrow(thr03)
-            expect(()=> allowType(type0, tar04)).toThrow(thr04)
-            expect(()=> allowType(type0, tar05)).toThrow(thr05)
+            // allow union
+            it('- [EL01241] union', () => {
+                var type1 = {}
+                var tar01 = 10
+                var thr01 = '[EL01241] 유니언 허용 : tarType 은 union 타입이 아닙니다. tarType: number(10)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01242] union', () => {
+                var type1 = {aa: String}
+                var tar01 = {}
+                var thr01 = '[EL01242] 유니언 허용 : tarType[\'aa\'] 키가 존재하지 않습니다. extType[\'aa\'] = string'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01243] union', () => {
+                var type1 = {aa: String}
+                var tar01 = {aa: 10}
+                var thr01 = '[EL01243] 유니언 허용 : \'aa\' 타입 검사가 실패하였습니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            
+            // allow function
+            it('- [EL01251] function', () => {
+                var type1 = Function
+                var tar01 = 10
+                var thr01 = '[EL01251] 함수 허용 : tarType 은 function 타입이 아닙니다. tarType: number(10)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01252] function', () => {
+                var type1 = { $type: 'function', name: 'funcA' }
+                var tar01 = { $type: 'function' }
+                var thr01 = '[EL01252] 함수 허용 : 선언한 extType.name = \'funcA\' 과 target name 이 일치하지 않습니다. function.name = \'undefined\''
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01253] function', () => {
+                var type1 = { $type: 'function', func: function funcA(){} }
+                var tar01 = ()=>{}
+                var thr01 = '[EL01253] 함수 허용 : extType.func 을 선언하였는데 target.func 이 functon 타입이 아닙니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01254] function', () => {
+                var type1 = { $type: 'function', func: function funcA(){} }
+                var tar01 = { $type: 'function', func: function funcB(){} }
+                var thr01 = '[EL01254] 함수 허용 : extType.func 과 target.func 서로 다릅니다.(proto check)'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01255] function', () => {
+                var type1 = { $type: 'function', params: [String, Number], return: Boolean }
+                var tar01 = { $type: 'function', }
+                var thr01 = '[EL01255] 함수 허용 : tarType의 params 또는 return 객체를 설정해야 합니다. extType.param = array(_OPT_)[string, number], extType.return = boolean'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01256] function', () => {
+                var type1 = { $type: 'function', params: [String, Number] }
+                var tar01 = { $type: 'function', params: [String] }
+                var thr01 = '[EL01256] 함수 허용 : params 허용검사가 거부되었습니다. <array(_SEQ_) 변환>'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01257] function', () => {
+                var type1 = { $type: 'function', return: String }
+                var tar01 = { $type: 'function', return: Boolean }
+                var thr01 = '[EL01257] 함수 허용 : return 허용검사가 거부되었습니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
         });
-        it('- [EL01202] ', () => {
-            var type1 = [['_all_']]
-            var tar01 = [['_err_']]
-            var thr01 = '[EL0122E] 초이스 허용 : choice(_ALL_) 타입에 choice(_ERR_) 타입을 허용하지 않습니다. tarType: choice'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
+        describe(' etc ', () => {
+            // etc
+            it('- [EL01301] ', () => {
+                // REVIEW: 오류 조건을 찾아야함
+                // var type1 = (String)=>{(String)}
+                // var tar01 =  (String, [])=>{}
+                // var thr01 = '[EL01301]'
+                // expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01302] ', () => {
+                // REVIEW: 오류 조건을 찾아야함
+                // var type1 = (String)=>{(String)}
+                // var tar01 =  (String, [])=>{}
+                // var thr01 = '[EL01301]'
+                // expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01303] ', () => {
+                // REVIEW: 오류 조건을 찾아야함
+                // var type1 = function (aa, bb) { cc; }
+                // var tar01 = ()=>{}
+                // var thr01 = '[EL01301]aaaa'
+                // expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL01304] ', () => {
+                var type1 = { $type: 'Not_Type' }
+                var thr01 = '[EL01304] 타입 검사 : [Not_Type]는 처리할 수 스페셜타입 입니다.'
+                expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL01304] ', () => {
+                var type1 = { $type: 'Not_Type' }
+                var thr01 = '[EL01304] 타입 검사 : [Not_Type]는 처리할 수 스페셜타입 입니다.'
+                expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL01305] ', () => {
+                var type1 = { $type: 'array', kind: '_eum_' }
+                var thr01 = '[EL01305] 타입 검사 : array(_eum_) 타입은 처리할 수 없는 스페설타입 입니다.'
+                expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL01306] ', () => {
+                var type1 = { $type: 'choice', kind: '_seq_' }
+                var thr01 = '[EL01306] 타입 검사 : choice(_seq_) 타입은 처리할 수 없는 스페셜타입 입니다.'
+                expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL01307] ', () => {
+                var type1 = ['_eum_']
+                var thr01 = '[EL01307] 타입 검사 : array(_EUM_) 타입은 처리할 수 없는 타입 입니다.'
+                expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL01308] ', () => {
+                var type1 = [['_seq_']]
+                var thr01 = '[EL01308] 타입 검사 : choice(_SEQ_) 타입은 처리할 수 없는 타입 입니다.'
+                expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL01309] ', () => {
+                // REVIEW: 오류 조건을 찾아야함
+                // var type1 =  { $type: 'etc' }
+                // var thr01 = '[EL01308] 타입 검사 : choice(_SEQ_) 타입은 처리할 수 없는 타입 입니다.'
+                // expect(()=> extendType(type1)).toThrow(thr01)
+            });
+            it('- [EL0130A] allowType()', () => {
+                var type1 = ''
+                var tar01 = 10
+                var thr01 = '[EL0130A] 타입 허용 : allowType(extType, tarType) 검사가 실패하였습니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL0130B] matchType()', () => {
+                var type1 = ''
+                var tar01 = 10
+                var thr01 = '[EL0130B] 타입 매치 : matchType(extType, target) 검사가 실패하였습니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+        
         });
-        it('- [EL01204] ', () => {
-            // var type1 = [['_non_']]
-            // var tar01 = [['_all_']]
-            // var thr01 = '[EL01204] 타입 허용 : choice(_NON_) 타입에 choice(_NON_) 타입만 허용합니다. tarType: choice(_ALL_)'
-            // expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01203] ', () => {
-            var type1 = [['_any_']]
-            var tar01 = [['_err_']]
-            var thr01 = '[EL01225] 초이스 허용 : choice(_ANY_) 타입에 choice(_NON_, _ERR_), \'undefined\' 타입을 허용하지 않습니다. tarType: choice(_ERR_)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01205] ', () => {
-            var type1 = [['_err_']]
-            var tar01 = [['_all_']]
-            var thr01 = '[EL01222] 초이스 허용 : choice(_ERR_) 타입에 choice(_ERR_) 타입만 가능합니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01206] ', () => {
-            var type1 = [['_opt_', 10]]
-            var tar01 = [['_all_']]
-            var thr01 = '[EL0122B] 초이스 허용 : choice(_OPT_) 타입에 choice(_ALL_, _ANY_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: choice(_ALL_)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01207] ', () => {
-            var type1 = [['_req_', 10]]
-            var tar01 = [['_all_']]
-            var thr01 = '[EL0122A] 초이스 허용 : choice(_REQ_) 타입에 choice(_ALL_, _ANY_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: choice(_ALL_)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생 할 수 없음!!
-        it('- [EL01208] ', () => {
-        //     var type1 = [['_seq_', 10]]
-        //     var tar01 = [['_all_']]
-        //     var thr01 = '[EL01208] 타입 허용 : choice(_SEQ_) 타입에 choice(_SEQ_) 타입만 허용합니다. tarType: choice(_ALL_)'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01202] ', () => {
-            var type1 = 10
-            var tar01 = 20
-            var thr01 = '[EL01202] 타입 허용 : number 타입의 리터럴 값과 다릅니다. extType = number(10), tarType = number(20)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01203] ', () => {
-            var type1 = String
-            var tar01 = 10
-            var thr01 = '[EL01203] 타입 허용 : string 타입이 아닙니다. tarType = number'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01204] ', () => {      // 타입 강제 발생
-            var type1 = { $type: 'etc'}
-            var tar01 = null
-            var thr01 = '[EL01204] 타입 허용 : 처리할 수 없는 타입입니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // allow array
-        it('- [EL01211] ', () => {
-            var type1 = []
-            var tar01 = 10
-            var thr01 = '[EL01211] 배열 허용 : array 타입이 아닙니다. tarType: number'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01212] ', () => {
-            var type1 = ['_any_']
-            var tar01 = ['_all_']
-            var thr01 = '[EL01212] 타입 허용 : array(_ANY_) 타입에 array(_ALL_, _OPT_) 타입을 허용하지 않습니다. tarType: array(_ALL_)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생하지 않음!!
-        it('- [EL01213] ', () => {
-        //     var type1 = []
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01213] ', () => {
-            var type1 = ['_seq_', 10]
-            var tar01 = [10]
-            var thr01 = '[EL01213] 배열 허용 : array(_SEQ_) 타입에 array(_SEQ_) 타입만 허용합니다. tarType: array(_OPT_)[number(10)]'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01214] ', () => {
-            var type1 =  ['_seq_', 10, 20]
-            var tar01 =  ['_seq_', 10]
-            var thr01 = '[EL01214] 배열 허용 :extType 의 array(_SEQ_) 타입의 길이보다 tarType 은 같거나 커야합니다. extType.length = 2, target.length = 1'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01215] ', () => {
-            var type1 =  ['_seq_', 10, 20]
-            var tar01 =  ['_seq_', 10, 30]
-            var thr01 = '[EL01215] 배열 허용 : array(_SEQ_) [1]번째 타입 검사가 실패하였습니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음!!
-        it('- [EL01217] ', () => {
-        //     var type1 = []
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL01218] ', () => {
-        //     var type1 = []
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01217] ', () => {
-            var type1 =  [String]
-            var tar01 =  [Number]
-            var thr01 = '[EL01218] 배열 허용 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string], tarType: array(_OPT_)[number]'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // allow choice
-        it('- [EL01221] ', () => {
-            var type1 = [['_any_']]
-            var tar01 = undefined
-            var thr01 = '[EL01221] 초이스 허용 : choice(_ANY_) 타입에 \'undefined\' 타입은 사용할 수 없습니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01222] ', () => {
-            var type1 = [['_err_']]
-            var tar01 = 10
-            var thr01 = '[EL01222] 초이스 허용 : choice(_ERR_) 타입에 choice(_ERR_) 타입만 가능합니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL01223] ', () => {
-            // var type1 = [['_req_']]
-            // var tar01 = [[]]
-            // var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-            // expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01224] ', () => {
-            var type1 = [['_eum_', 10]]
-            var tar01 = 10
-            var thr01 = '[EL01224] 초이스 허용 : choice(_EUM_) 타입에 choice(_EUM_) 타입만 가능합니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL01225] ', () => {
-        //     var type1 = [[]]
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL01226] ', () => {
-        //     var type1 = [[]]
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01227] ', () => {
-            var type1 = [['_eum_', String]]
-            var tar01 = [['_eum_', '']]
-            var thr01 = '[EL01227] 초이스 허용 : choice(_EUM_) 의 세부 타입은 리터럴만 가능합니다. extType[0]: string'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01228] ', () => {
-            var type1 = [['_eum_', '']]
-            var tar01 = [['_eum_', Number]]
-            var thr01 = '[EL01228] 초이스 허용 : tarType choice(_EUM_) 의 세부 타입은 리터럴만 가능합니다. tarType[0]: number'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01229] ', () => {
-            var type1 = [['_def_', '']]
-            var tar01 = [['_eum_', Number]]
-            var thr01 = '[EL01229] 초이스 허용 : choice(_DEF_) 타입에 choice(_DEF_) 타입만 가능합니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL0122A] ', () => {
-        //     var type1 = [[]]
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL0122B] ', () => {
-        //     var type1 = [[]]
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL0122C] ', () => {
-            var type1 = [['_def_', String]]
-            var tar01 = [['_def_', Number]]
-            var thr01 = '[EL0122C] 초이스 허용 : extType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: string'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL0122D] ', () => {
-            var type1 = [['_def_', 'a']]
-            var tar01 = [['_def_', String]]
-            var thr01 = '[EL0122D] 초이스 허용 : tarType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. tarType[0]: string'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL0122E] ', () => {
-        //     var type1 = [[]]
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // 발생할 수 없음
-        it('- [EL0122F] ', () => {
-        //     var type1 = [[]]
-        //     var tar01 = 10
-        //     var thr01 = '[EL0120A] 타입 허용 : string 타입이 아닙니다. tarType = number'
-        //     expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL0122G] ', () => {
-            var type1 = [[String, 10]]
-            var tar01 = [['', Number]]
-            var thr01 = '[EL0122G] 초이스 허용 : tarType[1] = number 타입에 허용하는 extType 이 없습니다. extType = choice(_OPT_)[string, number(10)]'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // allow class
-        it('- [EL01231] ', () => {
-            class ClassA { aa = String }
-            class ClassB { aa = Number }
-            var type1 = ClassA
-            var tar01 = ClassB
-            var thr01 = '[EL01231] 클래스 허용 : extType, tarType class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)'
-            expect(()=> allowType(type1, tar01, 1)).toThrow(thr01)
-        });
-        it('- [EL01232] ', () => {
-            class ClassA { aa = String }
-            class ClassB { aa = Number }
-            var type1 = ClassA
-            var tar01 = ClassB
-            var thr01 = '[EL01232] 클래스 허용 : class to class 허용이 거부 되었습니다. (opt = 0)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01233] ', () => {
-            class ClassA { aa = String }
-            var type1 = ClassA
-            var tar01 = { aa: Number }
-            var thr01 = '[EL01233] 클래스 허용 : tarType class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)'
-            expect(()=> allowType(type1, tar01, 1)).toThrow(thr01)
-        });
-        it('- [EL01234] ', () => {
-            class ClassA { aa = String }
-            var type1 = ClassA
-            var tar01 = { aa: Number }
-            var thr01 = 'EL01234] 클래스 허용 : class to union 허용이 거부 되었습니다. (opt = 0)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01235] ', () => {
-            class ClassA { aa = String }
-            var type1 = ClassA
-            var tar01 = 10
-            var thr01 = '[EL01235] 클래스 허용 : tarType 이 class, union 타입이 아닙니다. tarType: number(10)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // allow union
-        it('- [EL01241] ', () => {
-            var type1 = {}
-            var tar01 = 10
-            var thr01 = '[EL01241] 유니언 허용 : tarType 은 union 타입이 아닙니다. tarType: number(10)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01242] ', () => {
-            var type1 = {aa: String}
-            var tar01 = {}
-            var thr01 = '[EL01242] 유니언 허용 : tarType[\'aa\'] 키가 존재하지 않습니다. extType[\'aa\'] = string'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01243] ', () => {
-            var type1 = {aa: String}
-            var tar01 = {aa: 10}
-            var thr01 = '[EL01243] 유니언 허용 : \'aa\' 타입 검사가 실패하였습니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // allow function
-        it('- [EL01251] ', () => {
-            var type1 = Function
-            var tar01 = 10
-            var thr01 = '[EL01251] 함수 허용 : tarType 은 function 타입이 아닙니다. tarType: number(10)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01252] ', () => {
-            var type1 = { $type: 'function', name: 'funcA' }
-            var tar01 = { $type: 'function' }
-            var thr01 = '[EL01252] 함수 허용 : 선언한 extType.name = \'funcA\' 과 target name 이 일치하지 않습니다. function.name = \'undefined\''
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01253] ', () => {
-            var type1 = { $type: 'function', func: function funcA(){} }
-            var tar01 = ()=>{}
-            var thr01 = '[EL01253] 함수 허용 : extType.func 을 선언하였는데 target.func 이 functon 타입이 아닙니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01254] ', () => {
-            var type1 = { $type: 'function', func: function funcA(){} }
-            var tar01 = { $type: 'function', func: function funcB(){} }
-            var thr01 = '[EL01254] 함수 허용 : extType.func 과 target.func 서로 다릅니다.(proto check)'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01255] ', () => {
-            var type1 = { $type: 'function', params: [String, Number], return: Boolean }
-            var tar01 = { $type: 'function', }
-            var thr01 = '[EL01255] 함수 허용 : tarType의 params 또는 return 객체를 설정해야 합니다. extType.param = array(_OPT_)[string, number], extType.return = boolean'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01256] ', () => {
-            var type1 = { $type: 'function', params: [String, Number] }
-            var tar01 = { $type: 'function', params: [String] }
-            var thr01 = '[EL01256] 함수 허용 : params 허용검사가 거부되었습니다. <array(_SEQ_) 변환>'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01257] ', () => {
-            var type1 = { $type: 'function', return: String }
-            var tar01 = { $type: 'function', return: Boolean }
-            var thr01 = '[EL01257] 함수 허용 : return 허용검사가 거부되었습니다.'
-            expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        // etc
-        it('- [EL01301] ', () => {
-            // REVIEW: 오류 조건을 찾아야함
-            // var type1 = (String)=>{(String)}
-            // var tar01 =  (String, [])=>{}
-            // var thr01 = '[EL01301]'
-            // expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01302] ', () => {
-            // REVIEW: 오류 조건을 찾아야함
-            // var type1 = (String)=>{(String)}
-            // var tar01 =  (String, [])=>{}
-            // var thr01 = '[EL01301]'
-            // expect(()=> allowType(type1, tar01)).toThrow(thr01)
-        });
-        it('- [EL01303] ', () => {
-            // REVIEW: 오류 조건을 찾아야함
-            // var type1 = function (aa, bb) { cc; }
-            // var tar01 = ()=>{}
-            // var thr01 = '[EL01301]aaaa'
-            // expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL01304] ', () => {
-            var type1 = { $type: 'Not_Type' }
-            var thr01 = '[EL01304] 타입 검사 : [Not_Type]는 처리할 수 스페셜타입 입니다.'
-            expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL01304] ', () => {
-            var type1 = { $type: 'Not_Type' }
-            var thr01 = '[EL01304] 타입 검사 : [Not_Type]는 처리할 수 스페셜타입 입니다.'
-            expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL01305] ', () => {
-            var type1 = { $type: 'array', kind: '_eum_' }
-            var thr01 = '[EL01305] 타입 검사 : array(_eum_) 타입은 처리할 수 없는 스페설타입 입니다.'
-            expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL01306] ', () => {
-            var type1 = { $type: 'choice', kind: '_seq_' }
-            var thr01 = '[EL01306] 타입 검사 : choice(_seq_) 타입은 처리할 수 없는 스페셜타입 입니다.'
-            expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL01307] ', () => {
-            var type1 = ['_eum_']
-            var thr01 = '[EL01307] 타입 검사 : array(_EUM_) 타입은 처리할 수 없는 타입 입니다.'
-            expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL01308] ', () => {
-            var type1 = [['_seq_']]
-            var thr01 = '[EL01308] 타입 검사 : choice(_SEQ_) 타입은 처리할 수 없는 타입 입니다.'
-            expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL01309] ', () => {
-            // REVIEW: 오류 조건을 찾아야함
-            // var type1 =  { $type: 'etc' }
-            // var thr01 = '[EL01308] 타입 검사 : choice(_SEQ_) 타입은 처리할 수 없는 타입 입니다.'
-            // expect(()=> extendType(type1)).toThrow(thr01)
-        });
-        it('- [EL0130A] ', () => {
-            var type1 = ''
-            var tar01 = 10
-            var thr01 = '[EL0130A] 타입 허용 : allowType(extType, tarType) 검사가 실패하였습니다.'
-            expect(()=> allowType('', 10)).toThrow(thr01)
-        });
-        it('- [EL0130B] ', () => {
-            var type1 = ''
-            var tar01 = 10
-            var thr01 = '[EL0130B] 타입 매치 : matchType(extType, target) 검사가 실패하였습니다.'
-            expect(()=> matchType('', 10)).toThrow(thr01)
-        });
+
+
+
+        
     });
 
 });

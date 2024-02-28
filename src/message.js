@@ -655,6 +655,8 @@
                         103: {  // EL01103  
                             msg: '타입 매치 : 처리할 수 없는 타입니다. ',
                         },
+                        
+                        // match array
                         111: {  // EL01111  
                             msg: '배열 매치 : target 은 array 타입이 아닙니다. tarType: $1',
                         },
@@ -676,6 +678,8 @@
                         117: {  // EL01117   
                             msg: '배열 매치 : array 요소 검사가 실패하였습니다. extType: $1, tarType: $2',
                         },
+                        
+                        // match choice
                         121: {  // EL01121  
                             msg: '초이스 매치 : choice(_ANY_) 타입에 \'undefined\' 은 사용할 수 없습니다.',
                         },
@@ -685,24 +689,17 @@
                         123: {  // EL01123  
                             msg: '초이스 매치 : choice(_ERR_) 타입에 Errror 인스턴스 만 가능합니다.',
                         },
-                        // 124: {  // EL01124  
-                        //     msg: '타입매치 : [$1]는 어떤 값도 설정할 수 없습니다. ',
-                        // },
-                        // 125: {  // EL01125  
-                        //     msg: '타입매치 : $1 대상 $2 의 대한 원본에서 허용하는 타입이 없습니다.  ',
-                        // },
-                        126: {  // EL01126  
+                        124: {  // EL01124  
                             msg: '초이스 매치 : choice(_EUM_) 타입의 세부 타입은 리터럴만 가능합니다. extType[$1]: $2',
                         },
-                        // 127: {  // EL01127  
-                        //     msg: '타입매치 : $1 대상 $2 의 대한 원본에서 허용하는 타입이 없습니다.  ',
-                        // },
-                        128: {  // EL01128  
+                        125: {  // EL01125  
                             msg: '초이스 매치 : choice(_DEF_) 타입의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: $1',
                         },
-                        129: {  // EL01129  
+                        126: {  // EL01126  
                             msg: '초이스 매치 : choice 세부 타입 검사가 실패하였습니다. extType: $1, tarType: $2',
                         },
+                        
+                        // match class
                         131: {  // EL01131
                             msg: '클래스 매치 : class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)',
                         },
@@ -712,6 +709,8 @@
                         133: {  // EL01133
                             msg: '클래스 매치 : target 이 class, object, union 타입이 아닙니다. tarType: $1',
                         },
+                        
+                        // match union
                         141: {  // EL01141 
                             msg: '유니언 매치 : target 은 union 타입이 아닙니다. tarType: $1',
                         },
@@ -721,6 +720,8 @@
                         143: {  // EL01143 
                             msg: '유니언 매치 : \'$1\' 타입 검사가 실패하였습니다.',
                         },
+                        
+                        // match function
                         151: {  // EL01151 
                             msg: '함수 매치 : target 은 function 타입이 아닙니다. tarType: $1',
                         },
@@ -743,142 +744,94 @@
                             msg: '함수 매치 : return 허용검사가 거부되었습니다.',
                         },
                         
-                        200: {  // util-type : allow
+                        // allow
+                        200: {
                             msg: ''
                         },
                         201: {  // EL01201   
                             msg: '타입 허용 : $1 의 세부 타입을 지정해야 합니다. $1: $2',
                         },
-                        
-                        //  아래로 이동
                         202: {  // EL01202  
                             msg: '타입 허용 : $1 타입의 리터럴 값과 다릅니다. extType = $2, tarType = $3',
-                            // msg: '타입 허용 : $1(_ALL_) 타입에 $1(_ERR_) 타입을 허용하지 않습니다. tarType: $2',
                         },
                         203: {  // EL01203  
                             msg: '타입 허용 : $1 타입이 아닙니다. tarType = $2',
-                            //     msg: '타입 허용 : $1(_ANY_) 타입에 $1(_ALL_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: $2',
                         },
                         204: {  // EL01204  
                             msg: '타입 허용 : 처리할 수 없는 타입입니다.',
-                            //     msg: '타입 허용 : $1(_NON_) 타입에 $1(_NON_) 타입만 허용합니다. tarType: $2',
                         },
-                        // 205: {  // EL01205  
-                        //     msg: '타입 허용 : $1(_ERR_) 타입에 $1(_ERR_) 타입만 허용합니다. tarType: $2',
-                        // },
-                        // 206: {  // EL01206  
-                        //     msg: '타입 허용 : $1(_OPT_) 타입에 $1(_ALL_, _ANY_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: $2',
-                        // },
-                        // 207: {  // EL01207  
-                        //     msg: '타입 허용 : $1(_REQ_) 타입에 $1(_ALL_, _ANY_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: $2',
-                        // },
-                        // 아래로 이동
-
-                        // 208: {  // EL01208  
-                        //     msg: '타입 허용 : $1(_SEQ_) 타입에 $1(_SEQ_) 타입만 허용합니다. tarType: $2',
-                        // },
-                        // 209: {  // EL01209  
-                        //     msg: '타입 허용 : $1 타입의 리터럴 값과 다릅니다. extType = $2, tarType = $3',
-                        // },
-                        // '20A': {    // EL0120A  
-                        //     msg: '타입 허용 : $1 타입이 아닙니다. tarType = $2',
-                        // },
-                        // '20B': {    // EL0120B  
-                        //     msg: '타입 허용 : 처리할 수 없는 타입입니다.',
-                        // },
+                        
+                        // allow array
                         211: {  // EL01211  
                             msg: '배열 허용 : array 타입이 아닙니다. tarType: $1',
                         },
                         212: {  // EL01212  
                             msg: '타입 허용 : array(_ANY_) 타입에 array(_ALL_, _OPT_) 타입을 허용하지 않습니다. tarType: $1',
-                            // msg: '배열 허용 : 대상은 $1 타입이 아닙니다. ',
                         },
                         213: {  // EL01213  
                             msg: '배열 허용 : array(_SEQ_) 타입에 array(_SEQ_) 타입만 허용합니다. tarType: $1',
-                            // msg: '배열 허용 : array(_ANY_) 타입은 tarType 의 array 의 요소가 하나 이상 가지고 있어야 합니다. tarType.length = $1',
-                            // msg: '배열 허용 : 배열(_SEQ_) 타입은 대상이 원본보다 같거나 커야합니다. origin choice type: [$1], target choice type: [$2] ',
                         },
                         214: {  // EL01214  
                             msg: '배열 허용 :extType 의 array(_SEQ_) 타입의 길이보다 tarType 은 같거나 커야합니다. extType.length = $1, target.length = $2',
-                            // msg: '배열 허용 : array(_SEQ_) 타입에 array(_SEQ_) 타입만 허용합니다. tarType: $1',
-                            // msg: '배열 허용 : 대상은 $1 타입이 아닙니다. ',
                         },
                         215: {  // EL01215  
                             msg: '배열 허용 : array(_SEQ_) [$1]번째 타입 검사가 실패하였습니다.',
-                            // msg: '배열 허용 : 배열(_SEQ_) 타입은 대상이 원본보다 같거나 커야합니다. origin choice type: [$1], target choice type: [$2] ',
                         },
                         216: {  // EL01216  
-                            msg: '타입 허용 : array(_REQ_) 타입에 array(_ALL_, _ANY_, _OPT_) 타입을 허용하지 않습니다. tarType: $2',
-                            // msg: '배열 허용 : $1 $2 타입검사에 실패하였습니다. $3 ',
+                            msg: '배열 허용 : array(_REQ_) 타입에 array(_ALL_, _ANY_, _OPT_) 타입을 허용하지 않습니다. tarType: $2',
                         },
-                        217: {  // EL01217  ES0717
-                            msg: '타입 허용 : array(_OPT_) 타입에 array(_ALL_, _ANY_) 타입을 허용하지 않습니다. tarType: $2',
-                            // msg: '배열 허용 : 대상에 선택타입이 없습니다. origin choice type: [$1], target choice type: [$2] ',
+                        217: {  // EL01217  
+                            msg: '배열 허용 : array(_OPT_) 타입에 array(_ALL_, _ANY_) 타입을 허용하지 않습니다. tarType: $2',
                         },
-                        218: {  // EL01218  ES0735
+                        218: {  // EL01218  
                             msg: '배열 허용 : array 요소 검사가 실패하였습니다. extType: $1, tarType: $2',
-                            // msg: '배열 허용 : 처리할 수 없는 kind 타입니다. ',
                         },
-                        219: {  // EL01219  
-                            // msg: '배열 허용 : array 요소 검사가 실패하였습니다. extType: $1, tarType: $2',
+
+                        // allow choice 
+                        221: {  // EL01221 
+                            msg: '초이스 허용 : choice(_ALL_) 타입에 choice(_ERR_) 타입을 허용하지 않습니다. tarType: $1',
                         },
-                        221: {  // EL01221  
-                            // msg: '초이스 허용 : choice $1 타입에는 [$2]을 사용할 수 없습니다. ',
+                        222: {  // EL01222 
                             msg: '초이스 허용 : choice(_ANY_) 타입에 \'undefined\' 타입은 사용할 수 없습니다.',
                         },
-                        222: {  // EL01222  
-                            msg: '초이스 허용 : choice(_ERR_) 타입에 choice(_ERR_) 타입만 가능합니다. tarType: $1',
-                        //     msg: '타입 허용 : $1(_ERR_) 타입에 $1(_ERR_) 타입만 허용합니다. tarType: $2',
-                            // msg: '초이스 허용 : [$1]는 [$2] 타입만 가능합니다.',
-                        },
                         223: {  // EL01223 
-                            msg: '초이스 허용 :  choice(_NON_) 타입에 choice(_NON_) 타입만 가능합니다.',
+                            msg: '초이스 허용 : choice(_ANY_) 타입에 choice(_NON_, _ERR_), \'undefined\' 타입을 허용하지 않습니다. tarType: $1',
                         },
                         224: {  // EL01224 
-                            msg: '초이스 허용 : choice(_EUM_) 타입에 choice(_EUM_) 타입만 가능합니다.',
+                            msg: '초이스 허용 : choice(_NON_) 타입에 choice(_NON_) 타입만 허용합니다. tarType: $1',
                         },
                         225: {  // EL01225 
-                            msg: '초이스 허용 : choice(_ANY_) 타입에 choice(_NON_, _ERR_), \'undefined\' 타입을 허용하지 않습니다. tarType: $1',
-                            // msg: '초이스 허용 : $1 대상 $2 의 대한 원본에서 허용하는 타입이 없습니다.  ',
+                            msg: '초이스 허용 : choice(_ERR_) 타입에 choice(_ERR_) 타입만 가능합니다. tarType: $1',
                         },
                         226: {  // EL01226 
-                            msg: '초이스 허용 : choice(_NON_) 타입에 choice(_NON_) 타입만 허용합니다. tarType: $1',
-                            // msg: '초이스 허용 : $1 대상 $2 의 대한 원본에서 허용하는 타입이 없습니다.  ',
+                            msg: '초이스 허용 : choice(_REQ_) 타입에 choice(_ALL_, _ANY_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: $1',
                         },
-                        227: {  // EL01227  
+                        227: {  // EL01227 
+                            msg: '초이스 허용 : choice(_OPT_) 타입에 choice(_ALL_, _ANY_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: $1',
+                        },
+                        228: {  // EL01228 
+                            msg: '초이스 허용 : choice(_EUM_) 타입에 choice(_EUM_) 타입만 가능합니다.',
+                        },
+                        229: {  // EL01229 
                             msg: '초이스 허용 : choice(_EUM_) 의 세부 타입은 리터럴만 가능합니다. extType[$1]: $2',
                         },
-                        228: {  // EL01228  
+                        '22A': {  // EL0122A 
                             msg: '초이스 허용 : tarType choice(_EUM_) 의 세부 타입은 리터럴만 가능합니다. tarType[$1]: $2',
                         },
-                        229: {  // EL01229  
+                        '22B': {  // EL0122B 
                             msg: '초이스 허용 : choice(_DEF_) 타입에 choice(_DEF_) 타입만 가능합니다.',
                         },
-                        '22A': {    // EL0122A 
-                            msg: '초이스 허용 : choice(_REQ_) 타입에 choice(_ALL_, _ANY_, _OPT_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: $1',
-                            // msg: '초이스 허용 : $1 대상 $2 의 대한 원본에서 허용하는 타입이 없습니다.  ',
-                        },
-                        '22B': {    // EL0122B 
-                            msg: '초이스 허용 : choice(_OPT_) 타입에 choice(_ALL_, _ANY_, _NON_, _ERR_) 타입을 허용하지 않습니다. tarType: $1',
-                        //     msg: '초이스 허용 : $1 대상 $2 의 대한 원본에서 허용하는 타입이 없습니다.  ',
-                        },
-                        '22C': {    // EL0122C  
+                        '22C': {  // EL0122C 
                             msg: '초이스 허용 : extType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: $1',
                         },
-                        '22D': {    // EL0122D  
+                        '22D': {  // EL0122D 
                             msg: '초이스 허용 : tarType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. tarType[0]: $1',
                         },
-                        '22E': {    // EL0122E  
-                            msg: '초이스 허용 : choice(_ALL_) 타입에 choice(_ERR_) 타입을 허용하지 않습니다. tarType: $1',
-                            // msg: '초이스 허용 : 처리할 수 없는 kind 타입니다. kind = $1 ',
-                        },
-                        // '22F': {    // EL0122F  
-                        //     msg: '초이스 허용 : 대상에 선택타입이 없습니다. origin choice type: [$1], target choice type: [$2] ',
-                        // },
-                        '22G': {    // EL0122G  
-                            // msg: '초이스 허용 : $1 대상 $2 의 대한 원본에서 허용하는 타입이 없습니다.  ',
+                        '22E': {  // EL0122E 
                             msg: '초이스 허용 : tarType[$1] = $3 타입에 허용하는 extType 이 없습니다. extType = $2',
                         },
+                        
+                        // allow class
                         231: {  // EL01231  
                             msg: '클래스 허용 : extType, tarType class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)',
                         },
@@ -894,18 +847,19 @@
                         235: {  // EL01235  
                             msg: '클래스 허용 : tarType 이 class, union 타입이 아닙니다. tarType: $1',
                         },
+                        
+                        // allow union
                         241: {  // EL01241  
                             msg: '유니언 허용 : tarType 은 union 타입이 아닙니다. tarType: $1',
-                            // msg: '유니언 허용 : [$1]는 [$2]타입이 아닙니다. ',
                         },
                         242: {  // EL01242  
                             msg: '유니언 허용 : tarType[\'$1\'] 키가 존재하지 않습니다. extType[\'$1\'] = $2',
-                            // msg: '유니언 허용 : $1 타입이 거부되었습니다. $2 ',
                         },
                         243: {  // EL01243  
                             msg: '유니언 허용 : \'$1\' 타입 검사가 실패하였습니다.',
-                            // msg: '유니언 허용 : $1 타입이 거부되었습니다. $2 ',
                         },
+                        
+                        // allow function
                         251: {  // EL01251 
                             msg: '함수 허용 : tarType 은 function 타입이 아닙니다. tarType: $1',
                         },
@@ -928,7 +882,8 @@
                             msg: '함수 허용 : return 허용검사가 거부되었습니다.',
                         },
 
-                        300: {  // util-type : etc
+                        // util-type etc
+                        300: {
                             msg: ''
                         },
                         301: {  // EL01301  
