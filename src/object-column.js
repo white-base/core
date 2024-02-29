@@ -92,8 +92,9 @@
         ObjectColumn.prototype._load = function(p_property) {
             if (typeof p_property === 'object' ) {
                 for(var prop in p_property) {
-                    if (p_property.hasOwnProperty(prop) &&
-                    ['default', 'caption', 'value', 'alias'].indexOf(prop) > -1) {
+                    // if (p_property.hasOwnProperty(prop) &&
+                    if (Object.prototype.hasOwnProperty.call(p_property, prop) &&
+                        ['default', 'caption', 'value', 'alias'].indexOf(prop) > -1) {
                         this[prop] = p_property[prop];
                     }
                 }

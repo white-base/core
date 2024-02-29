@@ -292,10 +292,11 @@
         MetaColumn.prototype._load = function(p_property) {
             if (typeof p_property === 'object' ) {
                 for(var prop in p_property) {
-                    if (p_property.hasOwnProperty(prop) &&
-                    ['default', 'caption', 'isNotNull', 'isNullPass', 'constraints', 
+                    // if (p_property.hasOwnProperty(prop) &&
+                    if (Object.prototype.hasOwnProperty.call(p_property, prop) &&
+                        ['default', 'caption', 'isNotNull', 'isNullPass', 'constraints', 
                         'value', 'getter', 'setter', 'alias', 'onChanged'
-                    ].indexOf(prop) > -1) {
+                        ].indexOf(prop) > -1) {
                         this[prop] = p_property[prop];
                     }
                 }

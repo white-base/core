@@ -1034,6 +1034,11 @@ describe("[target: meta-table.js]", () => {
     
                 expect(() => table2.load(table1)).toThrow('ES022');
             });
+            it("- load(entity) : 커버리지 ", () => {
+                var table1 = new MetaTable('T1');
+                
+                expect(() => table1.load(null)).toThrow('ES021');
+            });
         });
         describe("BaseEntity.output(stringify?, space?, vOpt?): str <엔티티 출력>", () => {
             it("- output() : getObject() 결과 비교  ", () => {

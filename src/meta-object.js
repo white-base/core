@@ -99,9 +99,10 @@
             }
 
             // 추상클래스 검사
-            if (this._type.hasOwnProperty('_KIND')) {
+            if (Object.prototype.hasOwnProperty.call(this._type, '_KIND')) {
+            // if (this._type.hasOwnProperty('_KIND')) {
                 var kind = this._type['_KIND'].toLowerCase();
-                if (['abstract', 'interface', 'enum', 'function'].indexOf(kind) > -1) { // Branch:
+                if (['abstract', 'interface', 'enum', 'function'].indexOf(kind) > -1) {
                     throw new ExtendError(/ES018/, null, [this._type.name]);
                 }
             }
@@ -210,9 +211,10 @@
          */
         MetaObject.prototype.instanceOf = function(p_fun) {
             var _this = this;
+            var unionTypes = this._interface;
             // var unionTypes = this._type['_UNION'] || [];
-            var unionTypes = this._interface || []; // Branch:
-            var thisTypes = this.getTypes();
+            // var unionTypes = this._interface || [];
+            // var thisTypes = this.getTypes();
 
             if (typeof p_fun === 'string') return findFunctionName(p_fun);
             if (typeof p_fun === 'function') return findFunction(p_fun);

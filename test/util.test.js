@@ -10,6 +10,7 @@
 describe('Util.*', () => {
     beforeEach(() => {
         jest.resetModules();
+        global.OLD_ENV = false;
     });
     afterEach(() => {
         jest.clearAllMocks();
@@ -72,6 +73,17 @@ describe('Util.*', () => {
         expect(str1).toEqual(str2);
         expect(reg1).toEqual(reg2);
     });
+    it('- Util.deepCopy() : prototype 복제 안함 ', () => {
+        const Util      = require('../src/util');
+        var sup01 = Object.create({aa: 1})
+        sup01.bb = 2
+        var obj01 = Object.create(sup01)
+        obj01.cc = 3
+        
+        const obj02 = Util.deepCopy(obj01);
+
+        expect(obj01).toEqual(obj02);
+    });
     it('- Util.inherits : Object.create() 제거 ', () => {
         // const temp = Object.create; // 임시 저장
         // delete Object.create;  // 비우기
@@ -120,7 +132,24 @@ describe('Util.*', () => {
         expect(i.foo).toBe(1);
         expect(i.bar).toBe(10);
     });
+    it('- Util.inherits : 부모 삽입 안함, old env ', () => {
+        global.OLD_ENV = true;  // 디버깅 
+        const Util      = require('../src/util');
+        const Super = function() { this.foo = 1 };
+        const Bar = function() { 
+            Super.call(this);
+            this.bar = 10 
+        };
+        Util.inherits(Bar);
+        const i = new Bar();
+
+        expect(Bar.super).not.toEqual(Super);   // Super 가 아님
+        expect(i.foo).toBe(1);
+        expect(i.bar).toBe(10);
+    });
+
     // it('- Util.inherits : Object.create() 제거 및 부모 삽입 안함', () => {
+
     //     const temp = Object.create; // 임시 저장
     //     Object.create = undefined;  // 비우기
     //     const Util      = require('../src/util');

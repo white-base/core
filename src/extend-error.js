@@ -29,6 +29,8 @@
 
     //==============================================================
     // 4. module implementation   
+    var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
+
     var ExtendError = (function () {
         
         /**
@@ -48,7 +50,7 @@
 
         /**
          * 확장 에러   
-         * ES5 이상 호환성 지원을 위해서 특수한 방식으로 상속진행함
+         * ES5 이상 호환성 지원을 위해서 자체 상속방식으로 처리함 
          * @constructs _L.Common.ExtendError
          * @param {string | Regexp} p_message 사용자 메세지 내용
          * @param {ExtendError | object} p_object  상위 Error 객체 또는 속성 객체
@@ -70,11 +72,12 @@
                 _prop = p_object;
             }
             
-            if (typeof p_message === 'string') _message = p_message;
-            else if (p_message instanceof RegExp) {
+            if (typeof p_message === 'string') {
+                _message = p_message;
+            } else if (p_message instanceof RegExp) {
                 _message = Message.get(p_message.source, p_arrVal);
-            } 
-            // _message = typeof p_message === 'string' ? p_message : '';
+            } else _message = '';
+            
             _build = _message + '\n';
             
             if (_prop) _build += buildMessageProp(_prop);
@@ -99,7 +102,7 @@
 
             _instance.queue.push(_message);
 
-            if (Error.captureStackTrace) {
+            if (Error.captureStackTrace && !OLD_ENV) {
                 Error.captureStackTrace(_instance, ExtendError);
             }
 
@@ -108,11 +111,11 @@
             return _instance;
 
             // inner function 
-            function buildMessageProp(p) {
+            function buildMessageProp(obj) {
                 var msg = '';
-                if (typeof p !== 'object' || p === null) return;
-                for (var prop in p) {
-                    if (typeof p[prop] === 'string')msg += prop + ' : '+ p[prop] + '\n';
+                for (var prop in obj) {
+                    if (typeof obj[prop] === 'string') msg += prop + ' : '+ obj[prop] + '\n';
+                    else continue;
                 }
                 return msg;
             }
@@ -140,7 +143,7 @@
         // if (Object.setPrototypeOf) {
         //     Object.setPrototypeOf(ExtendError, Error);
         // } else {
-        //     ExtendError.__proto__ = Error;  // Line:
+        //     ExtendError.__proto__ = Error;
         // }
         // Util.inherits(ExtendError, _super);
 

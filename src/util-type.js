@@ -26,7 +26,7 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error'])); // Branch:
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     
     //==============================================================
     // 4. module implementation 
@@ -259,6 +259,7 @@
         
         arr = arr.concat(['_ALL_', '_ANY_', '_NON_', '_ERR_']);
         arr = arr.concat(['_REQ_', '_OPT_', '_DEF_', '_EUM_']);
+        arr = arr.concat(['_ETC_']);  // 예외 오류 코드 검출 
 
         return arr.indexOf(name) > -1;
     }
@@ -275,6 +276,7 @@
 
         arr = arr.concat(['_ALL_', '_ANY_']);
         arr = arr.concat(['_REQ_', '_OPT_', '_SEQ_']);
+        arr = arr.concat(['_ETC_']);  // 예외 오류 코드 검출 
 
         return arr.indexOf(name) > -1;
     }
@@ -300,14 +302,15 @@
     };
 
     /**
-     * 객체를 비교합니다.
+     * 객체를 비교합니다.  
+     * prototype chain 은 무시된다.  
      * @param {object} obj1 
      * @param {object} obj2 
      * @returns {boolean}
      */
     var deepEqual = function(obj1, obj2) {
         if (obj1 === obj2) return true;
-        if (typeof obj1 !== typeof obj2) return false;  // Branch:
+        if (typeof obj1 !== typeof obj2) return false;
 
         if (Array.isArray(obj1)) {
             if (obj1.length !== obj2.length) return false;
@@ -322,7 +325,7 @@
         } else {
             if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
             for (var key in obj1) {
-                if (obj1.hasOwnProperty(key)) {     // Branch:
+                if (Object.prototype.hasOwnProperty.call(obj1, key)) {
                     var val1 = obj1[key];
                     var val2 = obj2[key];
                     // if (!_isObject(val1)) continue;
@@ -368,8 +371,9 @@
 
         // innner function
         function getPrototype(ctor) {
-            if (ctor.hasOwnProperty('super')) return ctor.super;
-            return !OLD_ENV && Object.getPrototypeOf ? Object.getPrototypeOf(ctor) : ctor.__proto__;
+            // if (ctor.hasOwnProperty('super')) return ctor.super;
+            if (Object.prototype.hasOwnProperty.call(ctor, 'super')) return ctor.super;
+            return !OLD_ENV && typeof Object.getPrototypeOf === 'function' ? Object.getPrototypeOf(ctor) : ctor.__proto__;
         }
     }
     /**
@@ -408,7 +412,7 @@
     var typeObject = function(type) {
         var obj = {};
         var typeObj = _isObject(type) && type['$type'] ? type : extendType(type);
-        var leafType = ['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigint', 'object', 'regexp'];
+        var leafType = ['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigi¡nt', 'object', 'regexp'];
 
         obj['$type'] = typeObj['$type'];
         
@@ -448,7 +452,7 @@
             var list = getAllProperties(temp);
             for (var i = 0; i < list.length; i++) {
                 var key = list[i];
-                if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어   // Branch:
+                if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
                 obj['_prop'][key] = typeObject(temp[key]);
             }
         }
@@ -582,7 +586,7 @@
             var kind = type['_KIND'];
             if (kind) {
                 kind = kind.toLowerCase();
-                if (kind === 'function') obj['$type'] = 'function';     // Branch:
+                if (kind === 'function') obj['$type'] = 'function';
                 else obj['$type'] = 'class';    // class, interface, abstract
             } else obj['$type'] = _isUpper(type.name) ? 'class' : 'function';
                 
@@ -616,10 +620,13 @@
         // step : object
         } else if (_isFillObj(type) || _isEmptyObj(type)) {
             obj['$type'] = 'union';
-        } else if(_isPrimitiveObj(type)) {  // Branch:
+        
+        // REVIEW:  기타 모든 함수는 object 로 처리한다. 더 좋은 방법이 있으면 대체 한다.
+        } else {
+        // } else if(_isPrimitiveObj(type)) {
             obj['$type'] = 'object';
         }
-        // } else throw new ExtendError(/EL01309/, null, []);    // Line:
+        // } else throw new ExtendError(/EL01309/, null, []);    // REVIEW: 커버리지 확인시 주석 처리
         return obj;
     }
 
@@ -643,7 +650,7 @@
         if (pathName !== 'extType' || !pathName) prop['error path'] = pathName;
         opt = opt || 0;
 
-        if (_isObject(eType['ref']) &&  _isObject(tType['ref']) && deepEqual(eType, tType)) return; // Branch:
+        // if (_isObject(eType['ref']) && _isObject(tType['ref']) && deepEqual(eType, tType)) return; // REVIEW: 필요없어  보이지만 잠시 남겨둠
         // origin seq, opt 필수 검사
         if (eType['kind']) {
             if ((eType['kind'] === '_SEQ_' || eType['kind'] === '_OPT_' || eType['kind'] === '_REQ_' || eType['kind'] === '_EUM_'|| eType['kind'] === '_DEF_') 
@@ -718,10 +725,14 @@
                 }
 
             // _OPT_ (option)
-            } else if (eType['kind'] === '_OPT_') {     // Branch:
+            } else if (eType['kind'] === '_OPT_') {
                 if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' ) {
                     throw new ExtendError(/EL01217/, prop, [eType['$type'], sTar]);
                 }
+            
+            // _ETC_
+            } else {
+                throw new ExtendError(/EL01218/, prop, [eType['kind']]);
             }
 
             // element check
@@ -741,7 +752,7 @@
                         continue;
                     }
                 }
-                if (!success) throw new ExtendError(/EL01218/, prop, [eType, tType]);
+                if (!success) throw new ExtendError(/EL01219/, prop, [eType, tType]);
             }
         }
 
@@ -807,12 +818,16 @@
                 }
 
             // _DEF_ (default)
-            } else if (eType['kind'] === '_DEF_') { // Branch:
+            } else if (eType['kind'] === '_DEF_') {
                 if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
                     throw new ExtendError(/EL0122B/, prop, []);
                 }
                 if (!_isLiteral(eType['list'][0])) throw new ExtendError(/EL0122C/, prop, [extendType(eType['list'][0])]);
                 if (!_isLiteral(tType['list'][0])) throw new ExtendError(/EL0122D/, prop,  [extendType(tType['list'][0])]);
+
+            // _ETC_
+            } else {
+                throw new ExtendError(/EL0122E/, prop, [eType['kind']]);
             }
 
             // element check
@@ -828,7 +843,7 @@
                         continue;
                     }
                 }
-                if (!success) throw new ExtendError(/EL0122E/, prop, [i, eType, extendType(arrTarget[i])['$type']]);
+                if (!success) throw new ExtendError(/EL0122F/, prop, [i, eType, extendType(arrTarget[i])['$type']]);
             }
         }
         
@@ -930,7 +945,6 @@
         var tType = extendType(target);
         var prop = {};
         var sExt = eType.toString(), sTar = tType.toString();
-        var typeMsg = 'extType:['+ sExt +'], tType:['+ sTar +']';
         
         pathName = pathName ? pathName : 'extType';
         if (pathName !== 'extType') prop['error path'] = pathName;    // TODO: 'target' 명칭의 중복 수정필요
@@ -1020,10 +1034,15 @@
                 if (target.length === 0) throw new ExtendError(/EL01116/,  prop, [target.length]);
 
             // _OPT_ (option)
-            } else if (eType['kind'] === '_OPT_') {     // Branch:
+            } else if (eType['kind'] === '_OPT_') {
                 if (Array.isArray(target) && target.length === 0) return;
+    
+            // _ETC_
+            } else {
+                throw new ExtendError(/EL01117/,  prop, [eType['kind']]);
             }
             
+
             // element check
             for (var i = 0; i < target.length; i++) {
                 var tar = target[i];
@@ -1046,7 +1065,7 @@
                     }
                 }
                 if (!success) {
-                    throw new ExtendError(/EL01117/, prop, [eType.toString(), tType.toString()]);
+                    throw new ExtendError(/EL01118/, prop, [eType.toString(), tType.toString()]);
                 }
             }
         }
@@ -1066,7 +1085,7 @@
                 if (typeof target === 'undefined') return;
                 throw new ExtendError(/EL01122/, []);
                 
-                // _ERR_ (error)
+            // _ERR_ (error)
             } else if (eType['kind'] === '_ERR_') {
                 if (target instanceof Error) return;
                 throw new ExtendError(/EL01123/, []);
@@ -1085,13 +1104,18 @@
                 }
 
             // _DEF_ (default)
-            } else if (eType['kind'] === '_DEF_') { // Branch:
+            } else if (eType['kind'] === '_DEF_') {
                 if (!_isLiteral(eType['list'][0])) throw new ExtendError(/EL01125/, prop, [typeOf(eType['list'][0])]);
                 if (typeof target === 'undefined') {
                     target = eType['list'][0];
                     return;
                 }
+
+            // _ETC_
+            } else {
+                throw new ExtendError(/EL01126/,  prop, [eType['kind']]);
             }
+
             // element check
             for (var ii = 0; ii < eType['list'].length; ii++) {
                 try {
@@ -1105,7 +1129,7 @@
                     continue;
                 }
             }
-            throw new ExtendError(/EL01126/, prop,[eType, tType]);
+            throw new ExtendError(/EL01127/, prop,[eType, tType]);
         }
 
         function classMatch() {
@@ -1116,7 +1140,7 @@
                 if (target instanceof extType) return;     
                 if (!_isBuiltFunction(extType) && target !== null && opt === 1) {
                     try {
-                        var subPath = pathName === 'target' ? '<instance>' : pathName + '<instance>';   // Branch:
+                        var subPath = pathName === 'extType' ? '<instance>' : pathName + '<instance>';
                         return _execMatch(_creator(extType), target, opt, subPath);
                     } catch (error) {
                         throw new ExtendError(/EL01131/, error);

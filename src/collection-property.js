@@ -323,7 +323,7 @@
          */
         PropertyCollection.prototype.exist = function(p_key) {
             if (!_isString(p_key)) throw new ExtendError(/ES021/, null, ['key', 'string']);
-            return this.hasOwnProperty(p_key);
+            return Object.prototype.hasOwnProperty.call(this, p_key);
         };
 
         return PropertyCollection;

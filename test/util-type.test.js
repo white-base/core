@@ -3,16 +3,40 @@
  */
 //==============================================================
 // gobal defined
-const {getTypes, isProtoChain, extendType, typeObject, typeOf}  = require('../src/util-type');
-const {isAllowType, allowType }  = require('../src/util-type');
+const { getAllProperties, deepEqual, isProtoChain, getTypes } = require('../src/util-type');
+const { extendType, typeObject, typeOf } = require('../src/util-type');
+const { isAllowType, allowType }  = require('../src/util-type');
 const { isMatchType, matchType }  = require('../src/util-type');
 const T = true;
 
 //==============================================================
 // test
 describe("[target: util-type.js.js]", () => {
-    beforeAll(() => {
+    beforeEach(() => {
         jest.resetModules();
+        global.OLD_ENV = false;
+    });
+    describe('deepEqual(obj1, obj2) ', () => {
+        it('- deepEqual() : 객체 비교 ', () => {
+            var obj01 = {}
+            var obj02 = {}
+
+            var tar01 = {}
+            var tar02 = 10
+
+            expect(deepEqual(obj01, tar01)).toBe(T);
+            expect(deepEqual(obj02, tar02)).toBe(false);
+        });
+        it('- deepEqual() : prototype 객체 비교 ', () => {
+            var sup01 = Object.create({aa: 1})
+            sup01.bb = 2
+            var obj01 = Object.create(sup01)
+            obj01.cc = 3
+
+            var tar01 = { cc: 3 }
+
+            expect(deepEqual(obj01, tar01)).toBe(T);
+        });
     });
     describe('isProtoChain() ', () => {
         it('- isProtoChain() : class ', () => {
@@ -40,9 +64,10 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- getTypes() : old env ', () => {
             global.OLD_ENV = true;
+            var Util = require('../src/util-type');
             class ClassA { a = 1 }
             class ClassB extends ClassA { b = 2 }
-            var type1 = getTypes(ClassB);
+            var type1 = Util.getTypes(ClassB);
             var tar01 = [ClassB, ClassA];
 
             expect(type1).toEqual(tar01)
@@ -403,6 +428,9 @@ describe("[target: util-type.js.js]", () => {
             it('- extendType() : class ', () => {
                 var type1 = function Class1(){ this.age = 1; this.fun = (a,b)=>{} }
                 var type2 = Date
+                function IClassA(){}
+                IClassA._KIND = 'interface'
+                var type3 = IClassA;
 
                 // type1
                 expect(extendType(type1).$type      ).toBe('class');
@@ -410,6 +438,9 @@ describe("[target: util-type.js.js]", () => {
                 // type2
                 expect(extendType(type2).$type      ).toBe('class');
                 expect(extendType(type2).ref        ).toBe(type2);
+                // type3
+                expect(extendType(type3).$type      ).toBe('class');
+                expect(extendType(type3).ref        ).toBe(type3);
             });
             it('- extendType() : union ', () => {
                 var type1 = { str: 'blue', num: Number }
@@ -449,7 +480,14 @@ describe("[target: util-type.js.js]", () => {
                 var type15 = function func(String){return Number}
                 // 스페설 
                 var type16 = { $type: 'function', ref: function funcA(){}, 
-                    params: [String], return: Number }
+                    params: [String], return: Number 
+                }
+                // 정적설정
+                function funcA(){}
+                funcA._KIND = 'function'
+                funcA._TYPE = { params: [String], return: Number }
+                var type17 = funcA
+
 
                 // type1
                 expect(extendType(type01).$type  ).toBe('function');
@@ -515,6 +553,10 @@ describe("[target: util-type.js.js]", () => {
                 expect(extendType(type16).$type  ).toBe('function');
                 expect(extendType(type16).params ).toEqual([String]);
                 expect(extendType(type16).return ).toEqual(Number);
+                // type17
+                expect(extendType(type17).$type  ).toBe('function');
+                expect(extendType(type17).params ).toEqual([String]);
+                expect(extendType(type17).return ).toEqual(Number);
             });
         });
     });
@@ -990,6 +1032,21 @@ describe("[target: util-type.js.js]", () => {
                     expect(typeObject(tar03)).toEqual(tar03);
                     expect(typeObject(tar04)).toEqual(tar04);
                 });
+            });
+        });
+        describe('커버리지 ', () => {
+            it('- typeObject() : undefined ', () => {
+                const Util      = require('../src/util');
+                function IClassA() { this.aa = String }
+                function ClassB() { 
+                    this.aa = '';
+                    Util.implements(ClassB, this, IClassA );  
+                }
+                // Util.inherits(ClassB, ClassA)
+                var type1 = new ClassB()
+                var tar01 = { $type: 'union', _prop: { aa: { $type: 'string', default: '' } } }
+
+                expect(typeObject(type1)).toEqual(tar01);
             });
         });
     });
@@ -5751,16 +5808,16 @@ describe("[target: util-type.js.js]", () => {
             // expect(()=> matchType([['_seq_']],                 10          )).toThrow(/ES0729/)
             // expect(()=> matchType([['_seq_', String, Number]], [[1,2,3]]   )).toThrow(/ES077/)
             // expect(()=> matchType([['_seq_', String, Number]], 10          )).toThrow(/ES077/)
-            expect(()=> matchType([[ String, Number]], true       )).toThrow('EL01126')
-            expect(()=> matchType([[String, Number]], []          )).toThrow('EL01126')
-            expect(()=> matchType([[String, Number]], {}          )).toThrow('EL01126')            
+            expect(()=> matchType([[ String, Number]], true       )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]], []          )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]], {}          )).toThrow('EL01127')            
             // expect(()=> matchType([[String, Number]],  undefined           )).toThrow(/ES076/)
-            expect(()=> matchType([[String, Number]],  true                )).toThrow('EL01126')
-            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow('EL01126')
-            expect(()=> matchType([[String, Number]],  {}                  )).toThrow('EL01126')
-            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow('EL01126') // 당연히 실패
-            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow('EL01126')
-            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow('EL01126')
+            expect(()=> matchType([[String, Number]],  true                )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  [[]]                )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  {}                  )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  [[String, Boolean]] )).toThrow('EL01127') // 당연히 실패
+            expect(()=> matchType([[String, Number]],  [[Number, String]]  )).toThrow('EL01127')
+            expect(()=> matchType([[String, Number]],  [[Number, String, Boolean]] )).toThrow('EL01127')
         });
         it('- 복합 샘플 : 에러 문구 구성 ', () => {
             var type1 = { aa: { bb: [['_req_', ['_req_', [[String, [['str', 10]], {} ]] ], Boolean ]] } }
@@ -5799,19 +5856,19 @@ describe("[target: util-type.js.js]", () => {
 
             var tar41 = { aa: [true] }
 
-            expect(()=> matchType(type1, tar11)).toThrow('EL01126')
-            expect(()=> matchType(type1, tar12)).toThrow('EL01126')
-            expect(()=> matchType(type1, tar13)).toThrow('EL01126')
+            expect(()=> matchType(type1, tar11)).toThrow('EL01127')
+            expect(()=> matchType(type1, tar12)).toThrow('EL01127')
+            expect(()=> matchType(type1, tar13)).toThrow('EL01127')
             expect(()=> matchType(type1, tar14)).toThrow('EL01141')
             expect(()=> matchType(type1, tar15)).toThrow('EL01141')
 
-            expect(()=> matchType(type2, tar21)).toThrow('EL0122E')
+            expect(()=> matchType(type2, tar21)).toThrow('EL0122F')
             expect(()=> matchType(type2, tar22)).toThrow('EL01157')
 
             expect(()=> matchType(type3, tar31)).toThrow('EL01132')
-            expect(()=> matchType(type3, tar31, 1)).toThrow('EL01126')
+            expect(()=> matchType(type3, tar31, 1)).toThrow('EL01127')
 
-            expect(()=> matchType(type4, tar41)).toThrow('EL01117') 
+            expect(()=> matchType(type4, tar41)).toThrow('EL01118') 
         });
 
         it('- isMatchType() : class ', () => {
@@ -5820,7 +5877,7 @@ describe("[target: util-type.js.js]", () => {
     
             expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow('EL01142')
             expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
-            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01126')
+            expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01127')
             expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow('EL01142')
             expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow('EL01142')            
         });
@@ -5834,18 +5891,18 @@ describe("[target: util-type.js.js]", () => {
         });
         
         it('- isMatchType() : choice 원시 타입 ', () => {
-            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow('EL01126')
-            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow('EL01126')
-            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow('EL01126')
-            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow('EL01126')
-            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow('EL01126')
+            expect(()=> matchType([[Number, String, Boolean]], new Date()  )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], /reg/       )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], Symbol()    )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], []          )).toThrow('EL01127')
+            expect(()=> matchType([[Number, String, Boolean]], {}          )).toThrow('EL01127')
         });
         it('- isMatchType() : choice 내장 객체 타입 ', () => {
-            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow('EL01126')
-            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow('EL01126')
-            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow('EL01126')       
-            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow('EL01126')       
-            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow('EL01126')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], 1          )).toThrow('EL01127')
+            expect(()=> matchType([[RegExp, Date, Symbol]], true       )).toThrow('EL01127')
+            expect(()=> matchType([[RegExp, Date, Symbol]], 'str'      )).toThrow('EL01127')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], []         )).toThrow('EL01127')       
+            expect(()=> matchType([[RegExp, Date, Symbol]], {}         )).toThrow('EL01127')       
         });
         it('- isMatchType() : array 조건 검사  ', () => {    
             expect(()=> matchType([],           10                  )).toThrow('EL01111')
@@ -5857,12 +5914,12 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(['_seq_', String, Number], ['str']    )).toThrow('EL01113')
             expect(()=> matchType(['_seq_', String, Number], 10         )).toThrow('EL01111')
             expect(()=> matchType(['_opt_'],    10                  )).toThrow('EL01101')
-            expect(()=> matchType(['_opt_', String, Number], [true] )).toThrow('EL01117')
-            expect(()=> matchType(['_opt_', String, Number], [{}]   )).toThrow('EL01117')
+            expect(()=> matchType(['_opt_', String, Number], [true] )).toThrow('EL01118')
+            expect(()=> matchType(['_opt_', String, Number], [{}]   )).toThrow('EL01118')
             expect(()=> matchType(['_opt_', String, Number], 10     )).toThrow('EL01111')
             // expect(()=> matchType(['_req_', String, Number], []              )).toThrow(/ES022/)
-            expect(()=> matchType(['_req_', String, Number], [true]          )).toThrow('EL01117')
-            expect(()=> matchType(['_req_', String, Number], [{}]            )).toThrow('EL01117')
+            expect(()=> matchType(['_req_', String, Number], [true]          )).toThrow('EL01118')
+            expect(()=> matchType(['_req_', String, Number], [{}]            )).toThrow('EL01118')
             expect(()=> matchType(['_req_', String, Number], 10              )).toThrow('EL01111')
             expect(()=> matchType(Array, function any(){}       )).toThrow('EL01111');
             expect(()=> matchType(Array, function any(){}, []   )).toThrow('EL01111');
@@ -5877,11 +5934,11 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(Array, Symbol                 )).toThrow('EL01111');
         });
         it('- choice : or 타입 (내장 타입) ', () => {
-            expect(()=> matchType([[Array, String]],          1               )).toThrow('EL01126');
-            expect(()=> matchType([[Array]],                  function any(){})).toThrow('EL01126');
-            expect(()=> matchType([[String]],                 function any(){})).toThrow('EL01126');
-            expect(()=> matchType([[String, Number]],         null            )).toThrow('EL01126');
-            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow('EL01126');
+            expect(()=> matchType([[Array, String]],          1               )).toThrow('EL01127');
+            expect(()=> matchType([[Array]],                  function any(){})).toThrow('EL01127');
+            expect(()=> matchType([[String]],                 function any(){})).toThrow('EL01127');
+            expect(()=> matchType([[String, Number]],         null            )).toThrow('EL01127');
+            expect(()=> matchType([[Array, Number, Boolean]], 'str'           )).toThrow('EL01127');
         });
         it('- function() : class 타입', () => {
             const Func1 = function() { this.aa = Number };
@@ -5989,22 +6046,22 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType(['_opt_'],                 ['_any_']                  )).toThrow('EL01201')
             expect(()=> allowType(['_opt_'],                 []                         )).toThrow('EL01201') 
             expect(()=> allowType(['_opt_'],                 [String]                   )).toThrow('EL01201')
-            expect(()=> allowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('EL01218')
-            expect(()=> allowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('EL01218')
+            expect(()=> allowType(['_opt_', String],         ['_opt_', Number, String]  )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String],         ['_opt_', Number]          )).toThrow('EL01219')
             expect(()=> allowType(['_opt_', String],         ['_opt_']                  )).toThrow('EL01201')
             expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('EL01217')
-            expect(()=> allowType(['_opt_', String],         [Number]                   )).toThrow('EL01218')
-            expect(()=> allowType(['_opt_', String],         [undefined]                )).toThrow('EL01218')   // length > 0 이면 true
+            expect(()=> allowType(['_opt_', String],         [Number]                   )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String],         [undefined]                )).toThrow('EL01219')   // length > 0 이면 true
             expect(()=> allowType(['_opt_', String],         ['_any_']                  )).toThrow('EL01217')
             expect(()=> allowType(['_opt_', String],         []                         )).toThrow('EL01217')
-            expect(()=> allowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('EL01218')
-            expect(()=> allowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('EL01218')
+            expect(()=> allowType(['_opt_', String, Number], [Number, Boolean]          )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String, Number], [Number, String, Boolean]  )).toThrow('EL01219')
             expect(()=> allowType(['_opt_', String, Number], ['_opt_']                  )).toThrow('EL01201')
             expect(()=> allowType(['_opt_', String, Number], ['_any_']                  )).toThrow('EL01217')
-            expect(()=> allowType(['_opt_', String, Number], [undefined]                )).toThrow('EL01218')
-            expect(()=> allowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('EL01218')
+            expect(()=> allowType(['_opt_', String, Number], [undefined]                )).toThrow('EL01219')
+            expect(()=> allowType(['_opt_', String, Number], ['_opt_', Number, String, Boolean])).toThrow('EL01219')
             // val
-            expect(()=> allowType(['_req_', String, Number],          ['_req_', String, Boolean, Number]  )).toThrow('EL01218')
+            expect(()=> allowType(['_req_', String, Number],          ['_req_', String, Boolean, Number]  )).toThrow('EL01219')
             expect(()=> allowType(['_req_', String, Number],          ['_opt_']                  )).toThrow('EL01201')
             expect(()=> allowType(['_req_', String, Number],          ['_any_']                  )).toThrow('EL01216')
             // non 
@@ -6028,17 +6085,17 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> allowType([['_opt_']],                  [['_any_']]                   )).toThrow('EL01201')
             expect(()=> allowType([['_opt_']],                  undefined                     )).toThrow('EL01201')
             expect(()=> allowType([['_opt_']],                  [[String]]                    )).toThrow('EL01201')
-            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('EL0122E')
-            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('EL0122E')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number, String]]   )).toThrow('EL0122F')
+            expect(()=> allowType([['_opt_', String]],          [['_opt_', Number]]           )).toThrow('EL0122F')
             expect(()=> allowType([['_opt_', String]],          [['_opt_']]                   )).toThrow('EL01201')
             expect(()=> allowType([['_opt_', String]],          [['_any_']]                   )).toThrow('EL01227')
-            expect(()=> allowType([['_opt_', String]],          [[Number]]                    )).toThrow('EL0122E')
-            expect(()=> allowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('EL0122E')
-            expect(()=> allowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('EL0122E')
+            expect(()=> allowType([['_opt_', String]],          [[Number]]                    )).toThrow('EL0122F')
+            expect(()=> allowType([['_opt_', String, Number]],  [[String, Boolean]]           )).toThrow('EL0122F')
+            expect(()=> allowType([['_opt_', String, Number]],  [[Number, String, Boolean]]   )).toThrow('EL0122F')
             expect(()=> allowType([['_opt_', String, Number]],  [['_opt_']]                   )).toThrow('EL01201')
             expect(()=> allowType([['_opt_', String, Number]],  [['_any_']]                   )).toThrow('EL01227')
-            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('EL0122E')
-            expect(()=> allowType([['_req_', String, Number]],           [['_req_', String, Boolean, Number]]   )).toThrow('EL0122E')
+            expect(()=> allowType([['_opt_', String, Number]],  [['_opt_', String, Boolean, Number]])).toThrow('EL0122F')
+            expect(()=> allowType([['_req_', String, Number]],           [['_req_', String, Boolean, Number]]   )).toThrow('EL0122F')
             expect(()=> allowType([['_req_', String, Number]],           [['_opt_']]                   )).toThrow('EL01201')
             expect(()=> allowType([['_req_', String, Number]],           [['_any_']]                   )).toThrow('EL01226')
         });
@@ -6105,8 +6162,8 @@ describe("[target: util-type.js.js]", () => {
             expect(isAllowType(type1, {str: String, bool: false, num: String}          )).toBe(false);
             expect(isAllowType(type1, {str: String}                                    )).toBe(false);
             // 예외 : 오류코드
-            expect(()=> allowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('EL0122E')
-            expect(()=> allowType(type1, {str: String, bool: false, num: String}          )).toThrow('EL0122E')
+            expect(()=> allowType(type1, {str: '', bool: null, num: [['_opt_', String]]}  )).toThrow('EL0122F')
+            expect(()=> allowType(type1, {str: String, bool: false, num: String}          )).toThrow('EL0122F')
             expect(()=> allowType(type1, {str: String}                                    )).toThrow('EL01242')
         });
     });
@@ -6207,10 +6264,17 @@ describe("[target: util-type.js.js]", () => {
                 var thr01 = '[EL01116] 배열 매치 : array(_REQ_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = 0'
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
-            it('- [EL01117] array list', () => {
+            it('- [EL01117] array(_etc_)', () => {
+                var type1 = ['_etc_']
+                var tar01 = []
+                var thr01 = '[EL01117] 배열 매치 : array(_ETC_) 는 처리할 수 없는 array 타입 종류입니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+
+            it('- [EL01118] array list', () => {
                 var type1 = [String, Number]
                 var tar01 = [true]
-                var thr01 = '[EL01117] 배열 매치 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+                var thr01 = '[EL01118] 배열 매치 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
             // match choice
@@ -6234,21 +6298,27 @@ describe("[target: util-type.js.js]", () => {
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
             it('- [EL01124] choice(_eum_)', () => {
-                var type1 = [['_EUM_', 10, 'str', String]]
+                var type1 = [['_eum_', 10, 'str', String]]
                 var tar01 = [true]
                 var thr01 = '[EL01124] 초이스 매치 : choice(_EUM_) 타입의 세부 타입은 리터럴만 가능합니다. extType[2]: string'
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
             it('- [EL01125] choice(_def_)', () => {
-                var type1 = [['_DEF_', String, 10, 'str']]
+                var type1 = [['_def_', String, 10, 'str']]
                 var tar01 = [true]
                 var thr01 = '[EL01125] 초이스 매치 : choice(_DEF_) 타입의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: string'
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
-            it('- [EL01126] choice sub', () => {
+            it('- [EL01126] choice(_etc_)', () => {
+                var type1 = [['_etc_']]
+                var tar01 = [true]
+                var thr01 = '[EL01126] 초이스 매치 : choice(_ETC_) 는 처리할 수 없는 choice 타입 종류입니다.'
+                expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01127] choice sub', () => {
                 var type1 = [[String, Number]]
                 var tar01 = [true]
-                var thr01 = '[EL01126] 초이스 매치 : choice 세부 타입 검사가 실패하였습니다. extType: choice(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
+                var thr01 = '[EL01127] 초이스 매치 : choice 세부 타입 검사가 실패하였습니다. extType: choice(_OPT_)[string, number], tarType: array(_OPT_)[boolean(true)]'
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
             // match class
@@ -6446,10 +6516,16 @@ describe("[target: util-type.js.js]", () => {
                 var thr01 = '[EL01217] 배열 허용 : array(_OPT_) 타입에 array(_ALL_, _ANY_) 타입을 허용하지 않습니다. tarType: array(_ALL_)'
                 expect(()=> allowType(type1, tar01)).toThrow(thr01)
             });
-            it('- [EL01218] array list', () => {
+            it('- [EL01218] array(_etc_)', () => {
+                var type1 =  ['_etc_']
+                var tar01 =  ['_all_']
+                var thr01 = '[EL01218] 배열 허용 : array(_ETC_) 는 처리할 수 없는 array 타입 종류입니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL01219] array list', () => {
                 var type1 =  [String]
                 var tar01 =  [Number]
-                var thr01 = '[EL01218] 배열 허용 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string], tarType: array(_OPT_)[number]'
+                var thr01 = '[EL01219] 배열 허용 : array 요소 검사가 실패하였습니다. extType: array(_OPT_)[string], tarType: array(_OPT_)[number]'
                 expect(()=> allowType(type1, tar01)).toThrow(thr01)
             });
             
@@ -6532,10 +6608,16 @@ describe("[target: util-type.js.js]", () => {
                 var thr01 = '[EL0122D] 초이스 허용 : tarType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. tarType[0]: string'
                 expect(()=> allowType(type1, tar01)).toThrow(thr01)
             });
-            it('- [EL0122E] choice sub', () => {
+            it('- [EL0122E] choice(_etc_)', () => {
+                var type1 = [['_etc_']]
+                var tar01 = [['_any_']]
+                var thr01 = '[EL0122E] 초이스 허용 : choice(_ETC_) 는 처리할 수 없는 choice 타입 종류입니다.'
+                expect(()=> allowType(type1, tar01)).toThrow(thr01)
+            });
+            it('- [EL0122F] choice sub', () => {
                 var type1 = [[String, 10]]
                 var tar01 = [['', Number]]
-                var thr01 = '[EL0122E] 초이스 허용 : tarType[1] = number 타입에 허용하는 extType 이 없습니다. extType = choice(_OPT_)[string, number(10)]'
+                var thr01 = '[EL0122F] 초이스 허용 : tarType[1] = number 타입에 허용하는 extType 이 없습니다. extType = choice(_OPT_)[string, number(10)]'
                 expect(()=> allowType(type1, tar01)).toThrow(thr01)
             });
             

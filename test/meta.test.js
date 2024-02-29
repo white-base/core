@@ -51,6 +51,21 @@ describe("[target: meta-object.js, meta-element.js]", () => {
 
                 expect(()=> c._type).toThrow(/constructor/)
             });
+            it("- _KIND : 커버리지 ", () => {
+                class MetaObjectA extends MetaObject {
+                    constructor() { super() }
+                }
+                MetaObjectA._KIND = 'abstract'
+                class MetaObjectB extends MetaObject {
+                    constructor() { super() }
+                }
+                MetaObjectB._KIND = 'etc'
+
+                var obj01 = new MetaObjectB()
+
+                expect(()=> new MetaObjectA).toThrow(/ES018/)
+                // expect(()=> new MetaObjectB).toThrow(/ES018/)
+            });
         });
         describe("MetaObject.guid: str <GUID 얻기>", () => {
             it("- this.guid ", () => {
@@ -421,8 +436,11 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 
                 i.__SET$_name('E2', i)
                 expect(i._name).toBe('E2');
+               
                 i.__SET$_name('E3')  // 접근금지
                 expect(i._name).toBe('E2');
+
+                expect(()=> i.__SET$_name(10, i)).toThrow(/ES021/);
             });
         });
     });

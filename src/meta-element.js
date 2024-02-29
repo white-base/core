@@ -73,7 +73,7 @@
 
             // inner variable access
             this.__SET$_name = function(val, call) {
-                if (typeof val !== 'string') throw new ExtendError(/ES021/, null, ['_name', 'string']);   // Branch:
+                if (typeof val !== 'string') throw new ExtendError(/ES021/, null, ['_name', 'string']);
                 if (val.length === 0) throw new ExtendError(/ES055/, null, ['_name']);
                 if (call instanceof MetaElement) _name = val;    // 상속접근 허용
             }

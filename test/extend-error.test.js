@@ -14,6 +14,7 @@ describe("[target: extend-error.js]", () => {
     describe("ExtendError :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();
+            global.OLD_ENV = false;
         });
         describe("base", () => {
             beforeEach(() => {
@@ -48,14 +49,19 @@ describe("[target: extend-error.js]", () => {
                     expect(()=> funcB()).toThrow(/ES02[\s\S]*ES03[\s\S]*ES04/);     // 함수 catch 수신
                     expect(()=> funcC()).toThrow(/ES03[\s\S]*ES04/);                // catch 수신
                 });
+                it("- _type : prop ", () => {
+                    expect(()=> { throw new ExtendError('msg', {aa: '10'}) }).toThrow(/aa/);
+                    expect(()=> { throw new ExtendError('msg', {aa: 10}) }).toThrow(/msg/);
+                    expect(()=> { throw new ExtendError() }).toThrow();
+                });
             });
             describe("커버리지", () => {
-                // it("- Object.setPrototypeOf ", () => {
-                //     delete Object.setPrototypeOf;
-                //     const {ExtendError}         = require('../src/extend-error');
-                //     var e  = new ExtendError('msg')
-                //     expect(()=> {throw new ExtendError('msg')}).toThrow(/msg/)
-                // });
+                it("- Error.captureStackTrace 저거후 ", () => {
+                    global.OLD_ENV = true;  // 디버깅 
+                    const {ExtendError}         = require('../src/extend-error');
+                    // var e  = new ExtendError('msg')
+                    expect(()=> {throw new ExtendError('msg')}).toThrow(/msg/)
+                });
             });
 
         });

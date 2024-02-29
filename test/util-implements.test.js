@@ -9,7 +9,9 @@ const Util      = require('../src/util');
 // test
 describe("[target: util.js]", () => {
     describe('Util.implements(this, interface)', () => {
-        beforeAll(() => {
+        beforeEach(() => {
+            jest.resetModules();
+            global.OLD_ENV = false;
         });
         it('- this 인터페이스 선언 : 예외 (인터페이스 미구현)', () => {
             function ISuper() {
@@ -563,6 +565,56 @@ describe("[target: util.js]", () => {
             }
     
             expect(()=> new CoClass1()).toThrow('ES024');
+        });
+        it('- implements() : 커버리지, 인터페이스 중복 ', () => {
+            class ISuper1 {
+                arr = Array;
+            }
+            function CoClass1() {
+                this.arr = [];
+                Util.implements(CoClass1, this, ISuper1);
+            }
+            CoClass1._UNION = [ISuper1]
+            var obj01 = new CoClass1()
+
+            expect(obj01).toEqual({arr: []})
+        });
+        it('- implements() : 커버리지, 오류명 ', () => {
+            function ISuper1() {
+                this.arr = Array;
+            } 
+            function CoClass1() {
+                this.arr = '';
+                Util.implements(CoClass1, this, ISuper1);
+            }
+
+            expect(()=> new CoClass1()).toThrow('ES017')
+        });
+        it('- implements() : 커버리지, 오류명, old env ', () => {
+            global.OLD_ENV = true;  // 디버깅 
+            const Util      = require('../src/util');
+
+            function ISuper1() {
+                this.arr = Array;
+            } 
+            function CoClass1() {
+                this.arr = '';
+                Util.implements(CoClass1, this, ISuper1);
+            }
+
+            expect(()=> new CoClass1()).toThrow('ES017')
+        });
+        it('- implements() : 커버리지, 인터페이스 없는 이름 ', () => {
+            // class ISuper1 {
+            //     arr = Array;
+            // }
+            function CoClass1() {
+                this.arr = [];
+                Util.implements(CoClass1, this);
+            }
+            CoClass1._UNION = [String('aa')]
+            
+            expect(()=> new CoClass1()).toThrow('ES017')
         });
     });
 });

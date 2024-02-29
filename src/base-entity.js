@@ -402,7 +402,7 @@
                 rows = obj['rows'];
                 if (Array.isArray(rows) && rows.length > 0)
                 for (var key in rows[0]) {    // rows[0] 기준
-                    if (Object.hasOwnProperty.call(rows[0], key) && !this.columns.existAlias(key)) {
+                    if (Object.prototype.hasOwnProperty.call(rows[0], key) && !this.columns.existAlias(key)) {
                         var prop = rows[0][key];
                         if (!this.columns.exist(key)) {
                             var column = new Column(key, this);
@@ -733,12 +733,12 @@
                 else obj = JSON.parse(obj, null);
             }
 
-            if (!_isObject(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']); // Branch:
+            if (!_isObject(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
 
             this.setObject(obj);
         };
 
-        BaseEntity.prototype.load._TYPE = { params: String };
+        // BaseEntity.prototype.load._TYPE = { params: String };
 
         /**
          * 객체 출력(직렬화)
@@ -827,7 +827,7 @@
                 for (var i = 0; i < rows.length; i++) {
                     var row = this.newRow(this);
                     for (var key in rows[i]) {
-                        if (Object.hasOwnProperty.call(row, key)) row[key] = rows[i][key];
+                        if (Object.prototype.hasOwnProperty.call(row, key)) row[key] = rows[i][key];
                     }
                     this.rows.add(row);
                 }

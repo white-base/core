@@ -44,8 +44,8 @@
         typeObject                  = require('./util-type').typeObject;
         typeOf                      = require('./util-type').typeOf;
     } else {    
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
+        Message                     = _global._L.Common.Message;
+        ExtendError                 = _global._L.Common.ExtendError;
         getAllProperties            = _global._L.Util.getAllProperties
         extendType                  = _global._L.Util.extendType
         allowType                   = _global._L.Util.allowType
@@ -61,18 +61,18 @@
 
     //==============================================================
     // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error'])); // Branch:
+    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (typeof getAllProperties === 'undefined') throw new Error(Message.get('ES012', ['getAllProperties', 'util-type']));
-    if (typeof extendType === 'undefined') throw new Error(Message.get('ES012', ['extendType', 'util-type']));     // Branch:
+    if (typeof extendType === 'undefined') throw new Error(Message.get('ES012', ['extendType', 'util-type']));
     if (typeof allowType === 'undefined')throw new Error(Message.get('ES012', ['allowType', 'util-type']));
     if (typeof isMatchType === 'undefined') throw new Error(Message.get('ES012', ['isMatchType', 'util-type']));
-    if (typeof isAllowType === 'undefined') throw new Error(Message.get('ES012', ['isAllowType', 'util-type']));   // Branch:
+    if (typeof isAllowType === 'undefined') throw new Error(Message.get('ES012', ['isAllowType', 'util-type']));
     if (typeof matchType === 'undefined') throw new Error(Message.get('ES012', ['matchType', 'util-type']));
-    if (typeof deepEqual === 'undefined') throw new Error(Message.get('ES012', ['deepEqual', 'util-type']));       // Branch:
-    if (typeof isProtoChain === 'undefined') throw new Error(Message.get('ES012', ['isProtoChain', 'util-type'])); // Branch:
+    if (typeof deepEqual === 'undefined') throw new Error(Message.get('ES012', ['deepEqual', 'util-type']));
+    if (typeof isProtoChain === 'undefined') throw new Error(Message.get('ES012', ['isProtoChain', 'util-type']));
     if (typeof getTypes === 'undefined') throw new Error(Message.get('ES012', ['getTypes', 'util-type']));
-    if (typeof typeObject === 'undefined') throw new Error(Message.get('ES012', ['typeObject', 'util-type']));     // Branch:
-    if (typeof typeOf === 'undefined') throw new Error(Message.get('ES012', ['typeOf', 'util-type']));             // Branch:
+    if (typeof typeObject === 'undefined') throw new Error(Message.get('ES012', ['typeObject', 'util-type']));
+    if (typeof typeOf === 'undefined') throw new Error(Message.get('ES012', ['typeOf', 'util-type']));
     
     //==============================================================
     // 4. module implementation   
@@ -80,7 +80,7 @@
 
 
     // local function
-    function _isObject(obj) {``
+    function _isObject(obj) {
         return obj != null && typeof obj === 'object';
     }
 
@@ -166,7 +166,7 @@
             }
         } else {
             for (var key in object) {
-                if (object.hasOwnProperty(key)) {   // Branch:
+                if (Object.prototype.hasOwnProperty.call(object, key)) {
                     copy[key] = deepCopy(object[key]);
                 }
             }
@@ -186,7 +186,7 @@
         if (typeof Object.create === 'function' && !OLD_ENV) {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
-                if (superCtor) {    // Branch:
+                if (superCtor) {
                     ctor.super = superCtor;
                     ctor.prototype = Object.create(superCtor.prototype, {
                         constructor: {
@@ -200,13 +200,13 @@
             };
         } else {
             // old school shim for old browsers
-            return function (ctor, superCtor) {         // Line:
+            return function (ctor, superCtor) {
                 if (superCtor) {
                     ctor.super = superCtor;
                     var TempCtor = function () {};
                     TempCtor.prototype = superCtor.prototype;
                     ctor.prototype = new TempCtor();
-                    ctor.prototype.constructor = ctor;  // ~ Line:
+                    ctor.prototype.constructor = ctor;
                 }
             }
         }
@@ -252,7 +252,7 @@
         } 
 
         for (var i = 0; i < p_ctor['_UNION'].length; i++) {
-            if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {        // Branch:
+            if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {    // 인터페이스 중복 검사 후 등록
                 p_obj._interface.push(p_ctor['_UNION'][i]);
                 addCnt++;
             }
@@ -268,7 +268,7 @@
                 } else matchType(p_obj._interface[i], p_obj, 1);
             }
         } catch (error) { 
-            throw new ExtendError(/ES017/, error, [typeName(p_obj), typeName(p_obj._interface[i])]);
+            throw new ExtendError(/ES017/, error, [typeName(p_obj), typeName(p_obj._interface[i]), '']);
             // Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
         }
 
@@ -295,16 +295,16 @@
             return false;
         }
         function typeName(obj) {
-            if (typeof obj === 'function') return obj.name;
-            if (_isObject(obj)) {                       // Branch: ~
-                var constructor = extendType(obj);
+            var proto;
+            var constructor;
+
+            if (typeof obj === 'function') {
+                return obj.name;
+            } else if (typeof obj === 'object') {
+                proto = !OLD_ENV && Object.getPrototypeOf ? Object.getPrototypeOf(obj) : obj.__proto__ ;
+                constructor = proto.constructor;
                 return  constructor.name;
-            }
-            // return 'unknown';
-        }
-        function extendType(obj) {
-            var proto = obj.__proto__ || Object.getPrototypeOf(obj);        // ~ Branch:
-            return proto.constructor;
+            } else return 'unknown name';
         }
     };
 

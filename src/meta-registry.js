@@ -252,7 +252,8 @@
             
             if (typeof coClass !== 'function') throw new ExtendError(/ES053/, null, [fullName, 'function(class)']);
             
-            params = coClass.hasOwnProperty('_PARAMS') ? coClass['_PARAMS'] : []; // arr
+            // params = coClass.hasOwnProperty('_PARAMS') ? coClass['_PARAMS'] : []; // arr
+            params = Object.prototype.hasOwnProperty.call(coClass, '_PARAMS') ? coClass['_PARAMS'] : []; // arr
             for (var i = 0; i < params.length; i++) {
                 var argName = params[i];
                 var prop = p_oGuid[argName];

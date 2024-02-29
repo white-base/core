@@ -436,7 +436,7 @@
 
             function createRow(p_entity, p_collec) {
                 for (var key in p_entity) {
-                    if (Object.hasOwnProperty.call(p_entity, key) && p_collec.exist(key)) {
+                    if (Object.prototype.hasOwnProperty.call(p_entity, key) && p_collec.exist(key)) {
                         p_collec[key].readData(p_entity[key]);
                     }
                 }

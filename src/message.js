@@ -676,6 +676,9 @@
                             msg: '배열 매치 : array(_REQ_) 타입은 target array 의 요소가 하나 이상 가지고 있어야 합니다. target.length = $1',
                         },
                         117: {  // EL01117   
+                            msg: '배열 매치 : array($1) 는 처리할 수 없는 array 타입 종류입니다.',
+                        },
+                        118: {  // EL01118   
                             msg: '배열 매치 : array 요소 검사가 실패하였습니다. extType: $1, tarType: $2',
                         },
                         
@@ -696,6 +699,9 @@
                             msg: '초이스 매치 : choice(_DEF_) 타입의 첫번째 세부 타입은 리터럴만 가능합니다. extType[0]: $1',
                         },
                         126: {  // EL01126  
+                            msg: '초이스 매치 : choice($1) 는 처리할 수 없는 choice 타입 종류입니다.',
+                        },
+                        127: {  // EL01127  
                             msg: '초이스 매치 : choice 세부 타입 검사가 실패하였습니다. extType: $1, tarType: $2',
                         },
                         
@@ -784,6 +790,9 @@
                             msg: '배열 허용 : array(_OPT_) 타입에 array(_ALL_, _ANY_) 타입을 허용하지 않습니다. tarType: $2',
                         },
                         218: {  // EL01218  
+                            msg: '배열 허용 : array($1) 는 처리할 수 없는 array 타입 종류입니다.',
+                        },
+                        219: {  // EL01219
                             msg: '배열 허용 : array 요소 검사가 실패하였습니다. extType: $1, tarType: $2',
                         },
 
@@ -828,9 +837,13 @@
                             msg: '초이스 허용 : tarType choice(_DEF_) 의 첫번째 세부 타입은 리터럴만 가능합니다. tarType[0]: $1',
                         },
                         '22E': {  // EL0122E 
+                            msg: '초이스 허용 : choice($1) 는 처리할 수 없는 choice 타입 종류입니다.',
+                        },
+                        '22F': {  // EL0122F 
                             msg: '초이스 허용 : tarType[$1] = $3 타입에 허용하는 extType 이 없습니다. extType = $2',
                         },
-                        
+
+
                         // allow class
                         231: {  // EL01231  
                             msg: '클래스 허용 : extType, tarType class 타입을 union 타입으로 생성 후 검사에 실패하였습니다. (opt = 1)',

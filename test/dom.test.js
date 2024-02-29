@@ -7,147 +7,213 @@
 
 //==============================================================
 // test
-describe("[ GROUP]", () => {
-    describe("load: observer.js <Observer>", () => {
-        beforeEach(() => {
-            jest.resetModules();
-            global._L = null;
-         });
-        //  it("- 예외 : 전체 로딩 안할 때", () => {
-        //     require('../src/message');
-    
-        //     expect(() => require('../src/base-entity')).toThrow(/ES011/);
-        // });
-        it("- 예외 : Util 로딩이 안 된 경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-    
-            expect(() => require('../src/observer')).toThrow(/Util/);
-        });
-        it("- namespace : observer.js ", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/observer');
-            
-            expect(global._L.Observer).toBeDefined();
-            expect(global._L.Common.Observer).toBeDefined();
-        });
-    });
-
-    describe("load: util-type.js <Util.type >", () => {
-        beforeEach(() => {
-            jest.resetModules();
-            global._L = null;
-         });
-        it("- namespace : util-type.js ", () => {
-            require('../src/extend-error');
-            require('../src/util-type');
-            
-            expect(global._L.Common.Util.getAllProperties).toBeDefined();
-            expect(global._L.Common.Util.deepEqual).toBeDefined();
-            expect(global._L.Common.Util.isMatchType).toBeDefined();
-            expect(global._L.Common.Util.isAllowType).toBeDefined();
-            expect(global._L.Common.Util.matchType).toBeDefined();
-            expect(global._L.Common.Util.allowType).toBeDefined();
-            expect(global._L.Common.Util.getTypes).toBeDefined();
-            expect(global._L.Common.Util.extendType).toBeDefined();
-            expect(global._L.Common.Util.typeObject).toBeDefined();
-            expect(global._L.Common.Util.typeOf).toBeDefined();
-            expect(global._L.Common.Util.isProtoChain).toBeDefined();
-        });
-    });
-    
-    describe("load: util.js <Util>", () => {
-        beforeEach(() => {
-            jest.resetModules();
-            global._L = null;
-         });
-        it("- namespace : util.js ", () => {
-            require('../src/message'); 
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-            
-            expect(global._L.Common.Util.getAllProperties).toBeDefined();
-            expect(global._L.Common.Util.deepEqual).toBeDefined();
-            expect(global._L.Common.Util.isMatchType).toBeDefined();
-            expect(global._L.Common.Util.isAllowType).toBeDefined();
-            expect(global._L.Common.Util.matchType).toBeDefined();
-            expect(global._L.Common.Util.allowType).toBeDefined();
-            expect(global._L.Common.Util.getTypes).toBeDefined();
-            expect(global._L.Common.Util.extendType).toBeDefined();
-            expect(global._L.Common.Util.typeObject).toBeDefined();
-            expect(global._L.Common.Util.typeOf).toBeDefined();
-            expect(global._L.Common.Util.isProtoChain).toBeDefined();
-            /// util.js
-            expect(global._L.Common.Util.inherits).toBeDefined();
-            expect(global._L.Common.Util.getArrayDepth).toBeDefined();
-            expect(global._L.Common.Util.createGuid).toBeDefined();
-            expect(global._L.Common.Util.implements).toBeDefined(); 
-        });
-        it("- 예외 : util-type.js 로딩이 인된경우", () => {
-            require('../src/message');
-            expect(() => require('../src/util')).toThrow(/Cannot read properties/);
-        });
-        it("- 예외 : util-type.js : getAllProperties 제거", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            delete global._L.Common.Util.getAllProperties;
-            expect(() => require('../src/util')).toThrow(/getAllProperties/);
-        });
-        it("- 예외 : util-type.js : allowType 제거", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            delete global._L.Common.Util.allowType;
-            expect(() => require('../src/util')).toThrow(/allowType/);
-        });
-        it("- 예외 : util-type.js : getType 제거", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            delete global._L.Common.Util.getTypes;
-            expect(() => require('../src/util')).toThrow(/getTypes/);
-        });
-
-        it("- 예외 : util-type.js : isMatchType 제거", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            delete global._L.Common.Util.isMatchType;
-            expect(() => require('../src/util')).toThrow(/isMatchType/);
-        });
-        // it("- 예외 : util-type.js : checkUnionType 제거", () => {
-        //     require('../src/message');
-        //     require('../src/util-type');
-        //     delete global._L.Common.Util.checkUnionType;
-        //     expect(() => require('../src/util')).toThrow(/checkUnionType/);
-        // });
-        it("- 예외 : util-type.js : matchType 제거", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            delete global._L.Common.Util.matchType;
-            expect(() => require('../src/util')).toThrow(/matchType/);
-        });
-        // it("- 예외 : util-type.js : validUnionType 제거", () => {
-        //     require('../src/message');
-        //     require('../src/util-type');
-        //     delete global._L.Common.Util.validUnionType;
-        //     expect(() => require('../src/util')).toThrow(/validUnionType/);
-        // });
-        
-    });
-
-    describe("[target: collection-property.js, collection-array.js, base-collection.js]", () => {
-        describe("BaseCollection :: 클래스", () => {
+describe("[L.*]", () => {
+    describe("[Common.*]", () => {
+        describe("load: observer.js <Observer>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+             });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/observer')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 안 된 경우", () => {
+                require('../src/message');
+                expect(() => require('../src/observer')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : Util 로딩이 안 된 경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
+        
+                expect(() => require('../src/observer')).toThrow(/Util/);
+            });
+            it("- namespace : observer.js ", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/observer');
+                
+                expect(global._L.Observer).toBeDefined();
+                expect(global._L.Common.Observer).toBeDefined();
+            });
+        });
+        describe("load: util-type.js <Util.type >", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+            
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/util-type')).toThrow(/Cannot read properties/);
+            });
+             it("- 예외 : ExtendError 로딩이 안 된 경우", () => {
+                require('../src/message');
+                expect(() => require('../src/util-type')).toThrow(/ExtendError/);
+            });
+            it("- namespace : util-type.js ", () => {
+                require('../src/extend-error');
+                require('../src/util-type');
+                
+                expect(global._L.Common.Util.getAllProperties).toBeDefined();
+                expect(global._L.Common.Util.deepEqual).toBeDefined();
+                expect(global._L.Common.Util.isMatchType).toBeDefined();
+                expect(global._L.Common.Util.isAllowType).toBeDefined();
+                expect(global._L.Common.Util.matchType).toBeDefined();
+                expect(global._L.Common.Util.allowType).toBeDefined();
+                expect(global._L.Common.Util.getTypes).toBeDefined();
+                expect(global._L.Common.Util.extendType).toBeDefined();
+                expect(global._L.Common.Util.typeObject).toBeDefined();
+                expect(global._L.Common.Util.typeOf).toBeDefined();
+                expect(global._L.Common.Util.isProtoChain).toBeDefined();
+            });
+        });    
+        describe("load: util.js <Util>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+             });
+            it("- namespace : util.js ", () => {
+                require('../src/message'); 
+                require('../src/extend-error');
+                require('../src/util-type');
+                require('../src/util');
+                
+                expect(global._L.Common.Util.getAllProperties).toBeDefined();
+                expect(global._L.Common.Util.deepEqual).toBeDefined();
+                expect(global._L.Common.Util.isMatchType).toBeDefined();
+                expect(global._L.Common.Util.isAllowType).toBeDefined();
+                expect(global._L.Common.Util.matchType).toBeDefined();
+                expect(global._L.Common.Util.allowType).toBeDefined();
+                expect(global._L.Common.Util.getTypes).toBeDefined();
+                expect(global._L.Common.Util.extendType).toBeDefined();
+                expect(global._L.Common.Util.typeObject).toBeDefined();
+                expect(global._L.Common.Util.typeOf).toBeDefined();
+                expect(global._L.Common.Util.isProtoChain).toBeDefined();
+                /// util.js
+                expect(global._L.Common.Util.inherits).toBeDefined();
+                expect(global._L.Common.Util.getArrayDepth).toBeDefined();
+                expect(global._L.Common.Util.createGuid).toBeDefined();
+                expect(global._L.Common.Util.implements).toBeDefined(); 
+            });
+            it("- 예외 : util-type.js 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/util')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : util-type.js : ExtendError 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.ExtendError; 
+                expect(() => require('../src/util')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : util-type.js : getAllProperties 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.getAllProperties;
+                expect(() => require('../src/util')).toThrow(/getAllProperties/);
+            });
+            it("- 예외 : util-type.js : extendType 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Util.extendType; 
+                expect(() => require('../src/util')).toThrow(/extendType/);
+            });
+            it("- 예외 : util-type.js : allowType 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.allowType;
+                expect(() => require('../src/util')).toThrow(/allowType/);
+            });
+            it("- 예외 : util-type.js : getType 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.getTypes;
+                expect(() => require('../src/util')).toThrow(/getTypes/);
+            });
+    
+            it("- 예외 : util-type.js : isMatchType 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.isMatchType;
+                expect(() => require('../src/util')).toThrow(/isMatchType/);
+            });
+            it("- 예외 : util-type.js : isAllowType 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.isAllowType;
+                expect(() => require('../src/util')).toThrow(/isAllowType/);
+            });
+            // it("- 예외 : util-type.js : checkUnionType 제거", () => {
+            //     require('../src/message');
+            //     require('../src/util-type');
+            //     delete global._L.Common.Util.checkUnionType;
+            //     expect(() => require('../src/util')).toThrow(/checkUnionType/);
+            // });
+            it("- 예외 : util-type.js : matchType 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.matchType;
+                expect(() => require('../src/util')).toThrow(/matchType/);
+            });
+            it("- 예외 : util-type.js : deepEqual 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.deepEqual;
+                expect(() => require('../src/util')).toThrow(/deepEqual/);
+            });
+            it("- 예외 : util-type.js : isProtoChain 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.isProtoChain;
+                expect(() => require('../src/util')).toThrow(/isProtoChain/);
+            });
+            it("- 예외 : util-type.js : typeObject 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.typeObject;
+                expect(() => require('../src/util')).toThrow(/typeObject/);
+            });
+            it("- 예외 : util-type.js : typeOf 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.typeOf;
+                expect(() => require('../src/util')).toThrow(/typeOf/);
+            });
+    
+            // it("- 예외 : util-type.js : validUnionType 제거", () => {
+            //     require('../src/message');
+            //     require('../src/util-type');
+            //     delete global._L.Common.Util.validUnionType;
+            //     expect(() => require('../src/util')).toThrow(/validUnionType/);
+            // });
+            
+        });
+    });
+    describe("[Collection.*]", () => {
+        describe("base-collection.js <BaseCollection>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/base-collection')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/base-collection')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
@@ -268,10 +334,17 @@ describe("[ GROUP]", () => {
             });
             
         });
-        describe("ArrayCollection :: 클래스", () => {
+        describe("collection-array.js <ArrayCollection>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/collection-array')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/collection-array')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
@@ -376,10 +449,17 @@ describe("[ GROUP]", () => {
             });
             
         });
-        describe("PropertyCollection :: 클래스", () => {
+        describe("collection-property.js <PropertyCollection>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/collection-property')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/collection-property')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
@@ -484,14 +564,17 @@ describe("[ GROUP]", () => {
             });
             
         });
-        describe("TransactionQueue :: 클래스", () => {
+        describe("trans-queue.js <TransactionQueue>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
             });
-            it("- 예외 : Util 로딩이 인된경우", () => {
-                require('../src/extend-error');
+            it("- 예외 : 전체 로딩이 인된경우", () => {
                 expect(() => require('../src/trans-queue')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/trans-queue')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
@@ -567,10 +650,17 @@ describe("[ GROUP]", () => {
             });
             
         });
-        describe("TransactionCollection :: 클래스", () => {
+        describe("collection-transaction.js <TransactionCollection>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/collection-transaction')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/collection-transaction')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
@@ -638,13 +728,18 @@ describe("[ GROUP]", () => {
             
         });
     });
-
-
-    describe("[ GROUP]", () => {
+    describe("[Inteface.*]", () => {
         describe("load: i-object.js <IObject >", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-object')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-object')).toThrow(/ExtendError/);
             });
             it("- 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -659,11 +754,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IObject).toBeDefined();
             });
         });
-        
         describe("load: i-marshal.js <IMarshal>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-marshal')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-marshal')).toThrow(/ExtendError/);
             });
             it("- namespace : IMarshal ", () => {
                 require('../src/extend-error');
@@ -673,11 +774,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IMarshal).toBeDefined();
             });
         });
-        
         describe("load: i-serialize.js <ISerialize>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-serialize')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-serialize')).toThrow(/ExtendError/);
             });
             it("- namespace : IMarshal ", () => {
                 require('../src/extend-error');
@@ -688,11 +795,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.ISerialize).toBeDefined();
             });
         });
-        
         describe("load: i-transaction.js <ITransaction>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-transaction')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-transaction')).toThrow(/ExtendError/);
             });
             it("- namespace : ITransaction ", () => {
                 require('../src/extend-error');
@@ -703,11 +816,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.ITransaction).toBeDefined();
             });
         });
-        
         describe("load: i-control-import.js <IImportControl>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-control-import')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-control-import')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -723,11 +842,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IImportControl).toBeDefined();
             });
         });
-        
         describe("load: i-control-group.js <IGroupControl>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-control-group')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-control-group')).toThrow(/ExtendError/);
             });
             it("- 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -743,11 +868,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IGroupControl).toBeDefined();
             });
         });
-        
         describe("load: i-control-export.js <IExportControl>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-control-export')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-control-export')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -763,11 +894,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IExportControl).toBeDefined();
             });
         });
-        
         describe("load: i-list.js <IList>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-list')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-list')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -783,11 +920,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IList).toBeDefined();
             });
         });
-        
         describe("load: i-element.js <IElement>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-element')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-element')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -803,11 +946,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IElement).toBeDefined();
             });
         });
-        
         describe("load: i-control-schema.js <ISchemaControl>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-control-schema')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-control-schema')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -822,12 +971,18 @@ describe("[ GROUP]", () => {
                 expect(global._L.ISchemaControl).toBeDefined();
                 expect(global._L.Interface.ISchemaControl).toBeDefined();
             });
-        });
-        
+        });        
         describe("load: i-control-list.js <IListControl>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-control-list')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-control-list')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
                 require('../src/extend-error');
@@ -843,11 +998,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IListControl).toBeDefined();
             });
         });
-        
         describe("load: i-collection-array.js <IArrayCollection>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-collection-array')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-collection-array')).toThrow(/ExtendError/);
             });
             it("- 예외 : 전체 로딩 안할 때", () => {
                 require('../src/extend-error');
@@ -888,22 +1049,28 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.IArrayCollection).toBeDefined();
             });
         });
-        
         describe("load: i-collection.js <ICollection>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
-             });
-             it("- 예외 : 자신만 로딩", () => {
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/i-collection')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-collection')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : 자신만 로딩", () => {
                 require('../src/extend-error');
                 expect(() => require('../src/i-collection')).toThrow(/Cannot read properties/);
-             });
-             it("- 예외 : 모두 로딩이 인된경우", () => {
-                 require('../src/message');
-                 require('../src/extend-error');
+            });
+            it("- 예외 : 모두 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
          
-                 expect(() => require('../src/i-collection')).toThrow(/ES011/);
-             });
+                expect(() => require('../src/i-collection')).toThrow(/ES011/);
+            });
             it("- 예외 : Util 로딩이 인된경우", () => {
                 require('../src/message');
                 require('../src/extend-error');
@@ -922,30 +1089,36 @@ describe("[ GROUP]", () => {
                 expect(global._L.Interface.ICollection).toBeDefined();
             });
         });
-        
         describe("load: i-collection-property.js <IPropertyCollection>", () => {
+
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
-             });
-             it("- 예외 : 자신만 로딩", () => {
-                require('../src/extend-error');
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
                 expect(() => require('../src/i-collection-property')).toThrow(/Cannot read properties/);
             });
-             it("- 예외 : 모두 로딩이 인된경우", () => {
-                 require('../src/message');
-                 require('../src/extend-error');
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/i-collection-property')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : 자신만 로딩", () => {
+                expect(() => require('../src/i-collection-property')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : 모두 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
         
-                 expect(() => require('../src/i-collection-property')).toThrow(/ES011/);
-             });
-             it("- 예외 : ICollection 로딩이 인된경우", () => {
-                 require('../src/message');
+                expect(() => require('../src/i-collection-property')).toThrow(/ES011/);
+            });
+            it("- 예외 : ICollection 로딩이 인된경우", () => {
+                require('../src/message');
                 require('../src/extend-error');
                 require('../src/util-type');
                  require('../src/util');
          
                  expect(() => require('../src/i-collection-property')).toThrow(/ICollection/);
-             });
+            });
             it("- namespace : IPropertyCollection ", () => {
                 require('../src/message');
                 require('../src/extend-error');
@@ -961,9 +1134,7 @@ describe("[ GROUP]", () => {
         
         });
     });
-
-    describe("[ GROUP]", () => {
-    
+    describe("[Meta.*]", () => {
         describe("load: load-namespace.js <loadNamespace()>", () => {
             beforeEach(() => {
                 jest.resetModules();
@@ -980,299 +1151,306 @@ describe("[ GROUP]", () => {
                 expect(global._L.Common.loadNamespace).toBeDefined();
             });
         });
-    
-    });
-
-    
-    describe("load: meta-object.js <MetaObject>", () => {
-        beforeEach(() => {
-            jest.resetModules();
-            global._L = null;
-         });
-        it("- 예외 : 전체 로딩 안할 때", () => {
-            require('../src/message');
-            require('../src/extend-error');
-    
-            expect(() => require('../src/meta-object')).toThrow(/ES011/);
-        });
-        it("- 예외 : Util 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
+        describe("load: meta-object.js <MetaObject>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+             });
+            it("- 예외 : 전체 로딩 안할 때", () => {
+                expect(() => require('../src/meta-object')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-object')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                
+                expect(() => require('../src/meta-object')).toThrow(/Util/);
+            });
+            it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
+                require('../src/message');
+                    require('../src/extend-error');
+                    require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/i-object');
+                require('../src/i-marshal');
+                // require('../src/i-list');
+                // require('../src/i-control-list');
+                // require('../src/i-serialize');
+        
+                // require('../src/namespace-manager');
+                // require('../src/meta-registry');
+        
+                expect(() => require('../src/meta-object')).toThrow(/MetaRegistry/);
+            });
+            it("- 예외 : IObject 로딩이 인된경우", () => {
+                require('../src/message');
+                    require('../src/extend-error');
+                    require('../src/util-type');
+                require('../src/util');
+        
+                // require('../src/i-object');
+                // require('../src/i-marshal');
+                require('../src/i-list');
+                require('../src/i-control-list');
+                require('../src/i-serialize');
+        
+                require('../src/namespace-manager');
+                require('../src/meta-registry');
+        
+                expect(() => require('../src/meta-object')).toThrow(/IObject/);
+            });
+            it("- 예외 : IMarshal 로딩이 인된경우", () => {
+                require('../src/message');
+                    require('../src/extend-error');
+                    require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/i-object');
+                // require('../src/i-marshal');
+                require('../src/i-list');
+                require('../src/i-control-list');
+                require('../src/i-serialize');
+        
+                require('../src/namespace-manager');
+                require('../src/meta-registry');
+        
+                expect(() => require('../src/meta-object')).toThrow(/IMarshal/);
+            });
             
-            expect(() => require('../src/meta-object')).toThrow(/Util/);
+            it("- 로딩 성공 ", () => {
+                require('../src/message');
+                    require('../src/extend-error');
+                    require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/i-object');
+                require('../src/i-marshal');
+                require('../src/i-list');
+                require('../src/i-control-list');
+                require('../src/i-serialize');
+        
+                require('../src/namespace-manager');
+                require('../src/meta-registry');
+                require('../src/meta-object');
+        
+                expect(global._L.MetaObject).toBeDefined();
+                expect(global._L.Meta.MetaObject).toBeDefined();
+            });
+            
         });
-        it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
-            require('../src/message');
+        describe("load: meta-element.js <MetaElement>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+             });
+            it("- 예외 : 전체 로딩 안할 때", () => {
+                expect(() => require('../src/meta-element')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-element')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
+        
+                expect(() => require('../src/meta-element')).toThrow(/Util/);
+            });
+            it("- 예외 : IElement 로딩이 인된경우", () => {
+                require('../src/message');
                 require('../src/extend-error');
                 require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-object');
-            require('../src/i-marshal');
-            // require('../src/i-list');
-            // require('../src/i-control-list');
-            // require('../src/i-serialize');
-    
-            // require('../src/namespace-manager');
-            // require('../src/meta-registry');
-    
-            expect(() => require('../src/meta-object')).toThrow(/MetaRegistry/);
-        });
-        it("- 예외 : IObject 로딩이 인된경우", () => {
-            require('../src/message');
+                require('../src/util');
+        
+                require('../src/i-object');
+                require('../src/i-marshal');
+        
+                expect(() => require('../src/meta-element')).toThrow(/IElement/);
+            });
+            it("- 예외 : MetaObject 로딩이 인된경우", () => {
+                require('../src/message');
                 require('../src/extend-error');
                 require('../src/util-type');
-            require('../src/util');
+                require('../src/util');
+        
+                require('../src/i-object');
+                require('../src/i-marshal');
+                require('../src/i-element');
+        
+                require('../src/i-list');
+                require('../src/i-control-list');
+                require('../src/i-serialize');
     
-            // require('../src/i-object');
-            // require('../src/i-marshal');
-            require('../src/i-list');
-            require('../src/i-control-list');
-            require('../src/i-serialize');
-    
-            require('../src/namespace-manager');
-            require('../src/meta-registry');
-    
-            expect(() => require('../src/meta-object')).toThrow(/IObject/);
-        });
-        it("- 예외 : IMarshal 로딩이 인된경우", () => {
-            require('../src/message');
+                require('../src/namespace-manager');
+                require('../src/meta-registry');
+        
+                expect(() => require('../src/meta-element')).toThrow(/MetaObject/);
+            });
+            it("- 로딩 성공 ", () => {
+                require('../src/message');
                 require('../src/extend-error');
                 require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-object');
-            // require('../src/i-marshal');
-            require('../src/i-list');
-            require('../src/i-control-list');
-            require('../src/i-serialize');
-    
-            require('../src/namespace-manager');
-            require('../src/meta-registry');
-    
-            expect(() => require('../src/meta-object')).toThrow(/IMarshal/);
-        });
+                require('../src/util');
         
-        it("- 로딩 성공 ", () => {
-            require('../src/message');
+                require('../src/i-object');
+                require('../src/i-marshal');
+                require('../src/i-element');
+        
+                require('../src/i-list');
+                require('../src/i-control-list');
+                require('../src/i-serialize');
+    
+                require('../src/namespace-manager');
+                require('../src/meta-registry');
+                
+                require('../src/meta-object');
+                require('../src/meta-element');
+        
+                expect(global._L.MetaElement).toBeDefined();
+                expect(global._L.Meta.MetaElement).toBeDefined();
+            });
+            
+        });
+        describe("load: meta-registry.js <MetaRegistry>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+             });
+            it("- 예외 : 전체 로딩 안할 때", () => {
+                expect(() => require('../src/meta-registry')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-registry')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
+        
+                expect(() => require('../src/meta-registry')).toThrow(/Util/);
+            });
+            it("- 예외 : NamespaceManager 로딩이 인된경우", () => {
+                require('../src/message');
                 require('../src/extend-error');
                 require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-object');
-            require('../src/i-marshal');
-            require('../src/i-list');
-            require('../src/i-control-list');
-            require('../src/i-serialize');
-    
-            require('../src/namespace-manager');
-            require('../src/meta-registry');
-            require('../src/meta-object');
-    
-            expect(global._L.MetaObject).toBeDefined();
-            expect(global._L.Meta.MetaObject).toBeDefined();
-        });
+                require('../src/util');
         
-    });
-    describe("load: meta-element.js <MetaElement>", () => {
-        beforeEach(() => {
-            jest.resetModules();
-            global._L = null;
-         });
-        it("- 예외 : 전체 로딩 안할 때", () => {
-            require('../src/extend-error');
-            expect(() => require('../src/meta-element')).toThrow(/Cannot read properties/);
-        });
-        it("- 예외 : Util 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-    
-            expect(() => require('../src/meta-element')).toThrow(/Util/);
-        });
-        it("- 예외 : IElement 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-object');
-            require('../src/i-marshal');
-    
-            expect(() => require('../src/meta-element')).toThrow(/IElement/);
-        });
-        it("- 예외 : MetaObject 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-object');
-            require('../src/i-marshal');
-            require('../src/i-element');
-    
-            require('../src/i-list');
-            require('../src/i-control-list');
-            require('../src/i-serialize');
-
-            require('../src/namespace-manager');
-            require('../src/meta-registry');
-    
-            expect(() => require('../src/meta-element')).toThrow(/MetaObject/);
-        });
-        it("- 로딩 성공 ", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-object');
-            require('../src/i-marshal');
-            require('../src/i-element');
-    
-            require('../src/i-list');
-            require('../src/i-control-list');
-            require('../src/i-serialize');
-
-            require('../src/namespace-manager');
-            require('../src/meta-registry');
+                require('../src/i-list');
+                require('../src/i-control-list');
+                // require('../src/namespace-manager');
+        
+                expect(() => require('../src/meta-registry')).toThrow(/NamespaceManager/);
+            });
+            it("- 로딩 성공 ", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/i-list');
+                require('../src/i-control-list');
+                require('../src/i-serialize');
+                
+                require('../src/namespace-manager');
+                require('../src/meta-registry');
+        
+                expect(global._L.MetaRegistry).toBeDefined();
+                expect(global._L.Meta.MetaRegistry).toBeDefined();
+            });
             
-            require('../src/meta-object');
-            require('../src/meta-element');
-    
-            expect(global._L.MetaElement).toBeDefined();
-            expect(global._L.Meta.MetaElement).toBeDefined();
         });
+        describe("load: namespace-manager.js <NamespaceManager>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+             });
+            it("- 예외 : 전체 로딩 안할 때", () => {
+                expect(() => require('../src/namespace-manager')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/namespace-manager')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
         
-    });
-    describe("load: meta-registry.js <MetaRegistry>", () => {
-        beforeEach(() => {
-            jest.resetModules();
-            global._L = null;
-         });
-        it("- 예외 : 전체 로딩 안할 때", () => {
-            // require('../src/message');
-            require('../src/extend-error');
-    
-            expect(() => require('../src/meta-registry')).toThrow(/Cannot read properties/);
-        });
-        it("- 예외 : Util 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-    
-            expect(() => require('../src/meta-registry')).toThrow(/Util/);
-        });
-        it("- 예외 : NamespaceManager 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-list');
-            require('../src/i-control-list');
-            // require('../src/namespace-manager');
-    
-            expect(() => require('../src/meta-registry')).toThrow(/NamespaceManager/);
-        });
-        it("- 로딩 성공 ", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-list');
-            require('../src/i-control-list');
-            require('../src/i-serialize');
+                expect(() => require('../src/namespace-manager')).toThrow(/Util/);
+            });
+            it("- 예외 : IList 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                require('../src/util');
+        
+                // require('../src/i-list');
+                // require('../src/i-control-list');
+                // require('../src/namespace-manager');
+        
+                expect(() => require('../src/namespace-manager')).toThrow(/IList/);
+            });
+            it("- 예외 : IListControl 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/i-list');
+                // require('../src/i-control-list');
+                // require('../src/namespace-manager');
+        
+                expect(() => require('../src/namespace-manager')).toThrow(/IListControl/);
+            });
+            it("- 예외 : ISerialize 로딩이 인된경우", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/i-list');
+                require('../src/i-control-list');
+                // require('../src/namespace-manager');
+        
+                expect(() => require('../src/namespace-manager')).toThrow(/ISerialize/);
+            });
+            it("- 로딩 성공 ", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                require('../src/util');
+        
+                require('../src/i-list');
+                require('../src/i-control-list');
+                require('../src/i-serialize');
+                
+                require('../src/namespace-manager');
+        
+                expect(global._L.NamespaceManager).toBeDefined();
+                expect(global._L.Meta.NamespaceManager).toBeDefined();
+            });
             
-            require('../src/namespace-manager');
-            require('../src/meta-registry');
-    
-            expect(global._L.MetaRegistry).toBeDefined();
-            expect(global._L.Meta.MetaRegistry).toBeDefined();
         });
-        
     });
-    describe("load: namespace-manager.js <NamespaceManager>", () => {
-        beforeEach(() => {
-            jest.resetModules();
-            global._L = null;
-         });
-        it("- 예외 : 전체 로딩 안할 때", () => {
-            // require('../src/message');
-            require('../src/extend-error');
-    
-            expect(() => require('../src/namespace-manager')).toThrow(/Cannot read properties/);
-        });
-        it("- 예외 : Util 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-    
-            expect(() => require('../src/namespace-manager')).toThrow(/Util/);
-        });
-        it("- 예외 : IList 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            // require('../src/i-list');
-            // require('../src/i-control-list');
-            // require('../src/namespace-manager');
-    
-            expect(() => require('../src/namespace-manager')).toThrow(/IList/);
-        });
-        it("- 예외 : IListControl 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-list');
-            // require('../src/i-control-list');
-            // require('../src/namespace-manager');
-    
-            expect(() => require('../src/namespace-manager')).toThrow(/IListControl/);
-        });
-        it("- 예외 : ISerialize 로딩이 인된경우", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-list');
-            require('../src/i-control-list');
-            // require('../src/namespace-manager');
-    
-            expect(() => require('../src/namespace-manager')).toThrow(/ISerialize/);
-        });
-        it("- 로딩 성공 ", () => {
-            require('../src/message');
-            require('../src/extend-error');
-            require('../src/util-type');
-            require('../src/util');
-    
-            require('../src/i-list');
-            require('../src/i-control-list');
-            require('../src/i-serialize');
-            
-            require('../src/namespace-manager');
-    
-            expect(global._L.NamespaceManager).toBeDefined();
-            expect(global._L.Meta.NamespaceManager).toBeDefined();
-        });
-        
-    });
-
-    describe("[ GROUP]", () => {
+    describe("[Meta.Entity.*]", () => {
         describe("load: base-entity.js <BaseEntity>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');
-                require('../src/extend-error');
-        
                 expect(() => require('../src/base-entity')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/base-entity')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : Util 로딩이 안 된 경우", () => {
+                require('../src/message');
+                expect(() => require('../src/base-entity')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -1680,10 +1858,11 @@ describe("[ GROUP]", () => {
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');
-                require('../src/extend-error');
-        
                 expect(() => require('../src/meta-table')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-table')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -1930,10 +2109,11 @@ describe("[ GROUP]", () => {
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');
-                require('../src/extend-error');
-        
                 expect(() => require('../src/meta-view')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-view')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -2163,9 +2343,11 @@ describe("[ GROUP]", () => {
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');            
-                require('../src/extend-error');
                 expect(() => require('../src/meta-set')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-set')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -2542,18 +2724,23 @@ describe("[ GROUP]", () => {
                 expect(global._L.Meta.Entity.MetaSet).toBeDefined();
             });
         });
-    
-        describe("load: meta-column.js <BaseColumn>", () => {
+        describe("load: base-column.js <BaseColumn>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');
-                require('../src/extend-error');
-                
                 expect(() => require('../src/base-column')).toThrow(/Cannot read properties/);
             });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/base-column')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : ExtendError 로딩이 안 된 경우", () => {
+                require('../src/message');
+                expect(() => require('../src/base-column')).toThrow(/ExtendError/);
+            });
+
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
                 require('../src/extend-error');
@@ -2626,18 +2813,18 @@ describe("[ GROUP]", () => {
                 expect(global._L.Meta.Entity.BaseColumn).toBeDefined();
             });
         });
-    
         describe("load: meta-column.js <MetaColumn>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
                 });
-            // it("- 예외 : 전체 로딩 안할 때", () => {
-            //     // require('../src/message'); 
-            //     require('../src/extend-error');
-                
-            //     expect(() => require('../src/meta-column')).toThrow(/Cannot read properties/);
-            // });
+            it("- 예외 : 전체 로딩 안할 때", () => {
+                expect(() => require('../src/meta-column')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-column')).toThrow(/ExtendError/);
+            });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
                 require('../src/extend-error');
@@ -2776,10 +2963,11 @@ describe("[ GROUP]", () => {
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');
-                require('../src/extend-error');
-                
                 expect(() => require('../src/object-column')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/object-column')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -2939,17 +3127,17 @@ describe("[ GROUP]", () => {
                 expect(global._L.Meta.Entity.ObjectColumn).toBeDefined();
             });
         });
-    
         describe("load: meta-row.js <MetaRow>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                // require('../src/message');
-                require('../src/extend-error');
-                
                 expect(() => require('../src/meta-row')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message');
+                expect(() => require('../src/meta-row')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
