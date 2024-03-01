@@ -54,7 +54,7 @@
          * @abstract
          */
         IElement.prototype.clone  = function() {
-            throw new ExtendError(/ES013/, null, ['clone()']);
+            throw new ExtendError(/EL02131/, null, ['IElement']);
         };
 
         return IElement;

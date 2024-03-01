@@ -61,7 +61,7 @@
          * @abstract
          */
         IMarshal.prototype.getObject = function() {
-            throw new ExtendError(/ES013/, null, ['getObject(p_vOpt, p_origin?): object']);
+            throw new ExtendError(/EL02121/, null, ['IMarshal']);
         };
 
         /**
@@ -69,7 +69,7 @@
          * @abstract
          */
         IMarshal.prototype.setObject  = function() {
-            throw new ExtendError(/ES013/, null, ['setObject(mObj)']);
+            throw new ExtendError(/EL02122/, null, ['IMarshal']);
         };
 
         return IMarshal;

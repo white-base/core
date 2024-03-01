@@ -642,9 +642,11 @@
                         },
 
                     },
-                    L01: {  // 위치 기준 발생 에서
+                    
+                    // 위치 기준 발생 에서
+                    L01: {  // Common.*
                         100: {  // util-type : match
-                            msg: '',
+                            msg: 'util-type.js match',
                         },
                         101: {  // EL01101  
                             msg: '타입 매치 : $1 의 세부 타입을 지정해야 합니다. $1: $2',
@@ -752,7 +754,7 @@
                         
                         // allow
                         200: {
-                            msg: ''
+                            msg: 'util-type.js allow',
                         },
                         201: {  // EL01201   
                             msg: '타입 허용 : $1 의 세부 타입을 지정해야 합니다. $1: $2',
@@ -895,9 +897,9 @@
                             msg: '함수 허용 : return 허용검사가 거부되었습니다.',
                         },
 
-                        // util-type etc
+                        // util-type.js etc
                         300: {
-                            msg: ''
+                            msg: 'util-type.js etc'
                         },
                         301: {  // EL01301  
                             msg: '파싱 검사 : function 규칙이 아닙니다. "$1"',
@@ -935,18 +937,134 @@
                         '30C': {  // EL0130C
                             msg: 'ctor 이 function 타입이 아닙니다. typeof ctor = $1'
                         },
-                    }
+                        
+                        // util.js
+                        401: {  // EL01401
+                            msg: 'implements(ctor, obj, args..) ctor 이 <function> 타입이 아닙니다. typeof ctor == \'$1\''
+                        },
+                        402: {  // EL01402
+                            msg: 'implements(ctor, obj, args..) obj 이 <object> 타입이 아닙니다. typeof obj == \'$1\''
+                        },
+                        403: {  // EL01403
+                            msg: 'implements(ctor, obj, args..) args[$1] 이 <function> 타입이 아닙니다. typeof args[$1] == \'$2\''
+                        },
+                        404: {  // EL01404
+                            msg: '[$1] 는 [$2] 타입을 구현해야 합니다. $1._KIND = \'$3\''
+                        },
+                        405: {  // EL01405
+                            msg: 'isImplementOf(target) target 은 <function, string> 타입만 가능합니다. typeof target = \'$1\''
+                        },
+                    },
+                    L02: {  // Interface.*
+                        
+                        // Meta.*
+                        100: {
+                            msg: 'Meta.*'
+                        },
+                        110: {  // i-object.js
+                            msg: ''
+                        },
+                        111: {  // EL02111
+                            msg: 'getTypes(): array<function> 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        112: {  // EL02112
+                            msg: 'instanceOf(any): boolean 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        113: {  // EL02113
+                            msg: 'equal(any): boolena 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        120: {  // i-marshal.js
+                            msg: ''
+                        },
+                        121: {  // EL02121
+                            msg: 'getObject(opt?, origin?): object 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        122: {  // EL02122
+                            msg: 'setObject(mObj) 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        130: {  // i-element.js
+                            msg: ''
+                        },
+                        131: {  // EL02131
+                            msg: 'clone(): object 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        140: {  // i-list.js
+                            msg: ''
+                        },
+                        150: {  // i-control-list.js
+                            msg: ''
+                        },
+                        151: {  // EL02151
+                            msg: 'add(key) 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        152: {  // EL02152
+                            msg: 'del(key) 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        153: {  // EL02153
+                            msg: 'has(key): boolean 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+                        154: {  // EL02154
+                            msg: 'find(any): any 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                        },
+
+                        // Collection.*
+                        200: {
+                            msg: 'Collectoin.*'
+                        },
+                        210: {  // i-collection.js
+                            msg: ''
+                        },
+                        220: {  // i-collection-array.js
+                            msg: ''
+                        },
+                        230: {  // i-collection-property.js
+                            msg: ''
+                        },
+
+                        // Meta.Entity.*
+                        300: {
+                            msg: 'Meta.Entity.*'
+                        },
+                        310: {  // i-control-export.js
+                            msg: ''
+                        },
+                        320: {  // i-control-import.js
+                            msg: ''
+                        },
+                        330: {  // i-control-group.js
+                            msg: ''
+                        },
+                        340: {  // i-control-schema.js
+                            msg: ''
+                        },
+                        350: {  // i-serialize.js
+                            msg: ''
+                        },
+                        360: {  // i-transaction.js
+                            msg: ''
+                        },
+                    },
+
                     /**
                      * 네임스페이스 기준으로 분리하면 적합할 듯
                      * L01 : Common.*       message.js<제외>, extend-error.js<자체>, util.js:4, util-type.js:100~, observer.js:6, load-namespace.js <없음>
-                     *  - 100 : util-type match
-                     *  - 200 : util-type allow
-                     *  - 300 : util-type etc
-                     *  - 
+                     *  - 100~ : util-type match
+                     *  - 200~ : util-type allow
+                     *  - 300~ : util-type etc
+                     *  - 400~ : util
+                     * 
                      * L02 : Interface.*    i-*.js:26  <14개>
+                     *  - 100~ : Meta.*,            i-object.js, i-marshal.js, i-element.js, i-list.js, i-control-list.js
+                     *  - 200~ : Collectoin.*       i-collectin.js, i-collectin-array.js, i-collection-property.js
+                     *  - 300~ : Meta.Entity.*      i-control-export.js, i-control-group.js, i-control-import.js, i-control-schema.js, i-serialize.js, i-transaction.js
+                     * Meta
+                     * Collection
+                     * Meta.Entity
+                     * 
                      * L03 : Meta.*         meta-object.js:4, meta-element.js:2, namespace-manager.js:10, meta-register.js:28
                      * L04 : Collection.*   trans-queue.js, base-collection.js:5, collection-array.js:5, collection-property.js:11, collection-transaction.js:1
                      * L05 : Meta.Entity.*  base-column.js:9, base-entity.js:34, meta-column.js:21, object-column.js:3, meta-row.js:7, meta-set.js:11, meta-table.js:9, meta-view.js:13
+                     * G01 : 전역 코드? L01 에 적용가능?
                      */
                 },
                 W: {    // warning

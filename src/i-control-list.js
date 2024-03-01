@@ -49,7 +49,7 @@
          * @abstract
          */
         IListControl.prototype.add = function() {
-            throw new ExtendError(/ES013/, null, ['add(key)']);
+            throw new ExtendError(/EL02151/, null, ['IListControl']);
         };
 
         /**
@@ -57,7 +57,7 @@
          * @abstract
          */
         IListControl.prototype.del  = function() {
-            throw new ExtendError(/ES013/, null, ['del(key)']);
+            throw new ExtendError(/EL02152/, null, ['IListControl']);
         };
 
         /**
@@ -65,7 +65,7 @@
          * @abstract
          */
         IListControl.prototype.has  = function() {
-            throw new ExtendError(/ES013/, null, ['has(any)']);
+            throw new ExtendError(/EL02153/, null, ['IListControl']);
         };
 
         /**
@@ -73,7 +73,7 @@
          * @abstract
          */
         IListControl.prototype.find  = function() {
-            throw new ExtendError(/ES013/, null, ['find(any)']);
+            throw new ExtendError(/EL02154/, null, ['IListControl']);
         };
 
         return IListControl;

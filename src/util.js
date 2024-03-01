@@ -225,10 +225,9 @@
         var _interface = [];
         var msg = '';
         var addCnt = 0;
-        // var union = [];
 
-        if (typeof p_ctor !== 'function') throw new ExtendError(/ES024/, null, ['p_ctor', 'function']);
-        if (!_isObject(p_obj)) throw new ExtendError(/ES024/, null, ['p_obj', 'obj']);
+        if (typeof p_ctor !== 'function') throw new ExtendError(/EL01401/, null, [typeof p_ctor]);
+        if (!_isObject(p_obj)) throw new ExtendError(/EL01402/, null, [typeof p_obj]);
 
         if (typeof p_obj._interface === 'undefined') {
             Object.defineProperty(p_obj, '_interface', {
@@ -248,7 +247,7 @@
                     p_obj._interface.push(arguments[i]);
                     addCnt++;
                 }
-            } else throw new ExtendError(/ES021/, null, ['arguments', 'function']);
+            } else throw new ExtendError(/EL01403/, null, [i - 2, typeof arguments[i]]);
         } 
 
         for (var i = 0; i < p_ctor['_UNION'].length; i++) {
@@ -261,15 +260,12 @@
         try {
             var beginIdx = p_obj._interface.length - addCnt;
             for (var i = beginIdx; i < p_obj._interface.length; i++) {
-                // POINT: 타입과 인터페이스 분리
-                // if (typeof p_obj._interface[i]['_KIND'] === 'string' && p_obj._interface[i]['_KIND'] === 'interface') {
-                if (p_ctor['_KIND'] === 'interface') {
+                if (p_ctor['_KIND'] === 'interface') {  // 인터페이스 타입과 분리
                     allowType(p_obj._interface[i], p_obj, 1);
                 } else matchType(p_obj._interface[i], p_obj, 1);
             }
         } catch (error) { 
-            throw new ExtendError(/ES017/, error, [typeName(p_obj), typeName(p_obj._interface[i]), '']);
-            // Message.error('ES017', [typeName(p_obj), typeName(p_obj._interface[i]), error.message]);
+            throw new ExtendError(/EL01404/, error, [typeName(p_obj), typeName(p_obj._interface[i]), p_ctor['_KIND'] || 'class']);
         }
 
         if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
@@ -291,13 +287,12 @@
                 for (var i = 0; i < this._interface.length; i++) {
                     if (this._interface[i].name === target) return true;  
                 }
-            } else throw new ExtendError(/ES021/, null, ['isImplementOf()', 'function, string']);
+            } else throw new ExtendError(/EL01405/, null, [typeof target]);
             return false;
         }
         function typeName(obj) {
             var proto;
             var constructor;
-
             if (typeof obj === 'function') {
                 return obj.name;
             } else if (typeof obj === 'object') {

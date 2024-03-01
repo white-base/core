@@ -45,7 +45,7 @@
          * @abstract
          */
         IObject.prototype.getTypes  = function() {
-            throw new ExtendError(/ES013/, null, ['getTypes(): array<function>']);
+            throw new ExtendError(/EL02111/, null, ['IObject']);
         };
         
         /**
@@ -53,7 +53,7 @@
          * @abstract
          */
         IObject.prototype.instanceOf  = function() {
-            throw new ExtendError(/ES013/, null, ['instanceOf(function | string): boolean']);
+            throw new ExtendError(/EL02112/, null, ['IObject']);
         };
 
         /**
@@ -61,7 +61,7 @@
          * @abstract
          */
         IObject.prototype.equal  = function() {
-            throw new ExtendError(/ES013/, null, ['equal(meta): boolean']);
+            throw new ExtendError(/EL02113/, null, ['IObject']);
         };
         
     

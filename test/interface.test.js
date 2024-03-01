@@ -38,13 +38,13 @@ describe("[target: i-* ]", () => {
             const i = new IObject();
 
             // extends
-            expect(()=> s.getTypes()).toThrow(/ES013/);
-            expect(()=> s.instanceOf()).toThrow(/ES013/);
-            expect(()=> s.equal()).toThrow(/ES013/);
+            expect(()=> s.getTypes()).toThrow(/EL02111/);
+            expect(()=> s.instanceOf()).toThrow(/EL02112/);
+            expect(()=> s.equal()).toThrow(/EL02113/);
             // create
-            expect(()=> i.getTypes()).toThrow(/ES013/);
-            expect(()=> i.instanceOf()).toThrow(/ES013/);
-            expect(()=> i.equal()).toThrow(/ES013/);
+            expect(()=> i.getTypes()).toThrow(/EL02111/);
+            expect(()=> i.instanceOf()).toThrow(/EL02112/);
+            expect(()=> i.equal()).toThrow(/EL02113/);
         });
 
     });
@@ -60,15 +60,15 @@ describe("[target: i-* ]", () => {
             expect(s._guid).toBeDefined();
             expect(s._type).toBeDefined();
 
-            expect(()=> s.getObject()).toThrow(/ES013/);
-            expect(()=> s.setObject()).toThrow(/ES013/);
+            expect(()=> s.getObject()).toThrow(/EL02121/);
+            expect(()=> s.setObject()).toThrow(/EL02122/);
             // create
             // expect(i._guid).toBe(String);
             // expect(i._type).toBe(Function);
             expect(s._guid).toBeDefined();
             expect(s._type).toBeDefined();
-            expect(()=> i.getObject()).toThrow(/ES013/);
-            expect(()=> i.setObject()).toThrow(/ES013/);
+            expect(()=> i.getObject()).toThrow(/EL02121/);
+            expect(()=> i.setObject()).toThrow(/EL02122/);
         });
     });
     describe("IExportControl :: 인터페이스", () => {
@@ -130,15 +130,15 @@ describe("[target: i-* ]", () => {
             const i = new IListControl();
 
             // extends
-            expect(()=> s.add()).toThrow(/ES013/);
-            expect(()=> s.del()).toThrow(/ES013/);
-            expect(()=> s.has()).toThrow(/ES013/);
-            expect(()=> s.find()).toThrow(/ES013/);
+            expect(()=> s.add()).toThrow(/EL02151/);
+            expect(()=> s.del()).toThrow(/EL02152/);
+            expect(()=> s.has()).toThrow(/EL02153/);
+            expect(()=> s.find()).toThrow(/EL02154/);
             // create
-            expect(()=> i.add()).toThrow(/ES013/);
-            expect(()=> i.del()).toThrow(/ES013/);
-            expect(()=> i.has()).toThrow(/ES013/);
-            expect(()=> i.find()).toThrow(/ES013/);
+            expect(()=> i.add()).toThrow(/EL02151/);
+            expect(()=> i.del()).toThrow(/EL02152/);
+            expect(()=> i.has()).toThrow(/EL02153/);
+            expect(()=> i.find()).toThrow(/EL02154/);
         });
     });
     describe("IElement :: 인터페이스", () => {
@@ -149,10 +149,10 @@ describe("[target: i-* ]", () => {
 
             // extends
             expect(s._name).toBe(String);
-            expect(()=> s.clone()).toThrow(/ES013/);
+            expect(()=> s.clone()).toThrow(/EL02131/);
             // create
             expect(i._name).toBe(String);
-            expect(()=> i.clone()).toThrow(/ES013/);
+            expect(()=> i.clone()).toThrow(/EL02131/);
         });
     });
 

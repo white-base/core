@@ -37,7 +37,7 @@
      * @param {*} obj 
      * @returns {boolean}
      */
-    function _isPrimitiveObj(obj) {
+    function _isPrimitiveObj(obj) { // REVIEW: 정리 필요, 의미적으로 명료하게..
         if(typeof obj === 'object' && obj !== null 
             && (obj instanceof RegExp || obj instanceof Date )) {
             return true;
@@ -50,7 +50,7 @@
      * @param {*} obj 
      * @returns {boolean}
      */
-    function _isObject(obj)  {
+    function _isObject(obj)  {  // REVIEW: 정리 필요, 의미적으로 명료하게
         if(typeof obj === 'object' && obj !== null && !_isPrimitiveObj(obj)) {
             return true;
         }

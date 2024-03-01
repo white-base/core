@@ -384,14 +384,6 @@
         };
 
         /**
-         * 제약조건을 추가
-         * @param {function} p_func 
-         * @returns {object?} 리턴값이 없으면 검사 성공
-         */
-        MetaColumn.prototype.addConstraint = function(p_func) {
-        };
-
-        /**
          * 제약조건을 추가  
          * REVIEW: 정규식으로 반대 조건을 모두 나열 할수 있으므로, 항상 실패조건을 하는게 맞을지? 검토
          * @param {Regexp} p_regex 정규표현식
