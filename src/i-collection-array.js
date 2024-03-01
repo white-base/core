@@ -57,7 +57,7 @@
          * @abstract
          */
         IArrayCollection.prototype.insertAt  = function() {
-            throw new ExtendError(/ES013/, null, ['insertAt(pos, val, ...): bool']);
+            throw new ExtendError(/EL02221/, null, ['IArrayCollection']);
         };
     
         return IArrayCollection;

@@ -46,7 +46,7 @@
          * @abstract
          */
         ISchemaControl.prototype.readSchema  = function() {
-            throw new ExtendError(/ES013/, null, ['readSchema(JSON)']);
+            throw new ExtendError(/EL02341/, null, ['ISchemaControl']);
         };
 
         /**
@@ -54,7 +54,7 @@
          * @abstract
          */
         ISchemaControl.prototype.writeSchema  = function() {
-            throw new ExtendError(/ES013/, null, ['writeSchema(): JSON']);
+            throw new ExtendError(/EL02342/, null, ['ISchemaControl']);
         };
     
         return ISchemaControl;

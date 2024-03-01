@@ -957,7 +957,7 @@
                     },
                     L02: {  // Interface.*
                         
-                        // Meta.*
+                        // use Meta.* 
                         100: {
                             msg: 'Meta.*'
                         },
@@ -965,28 +965,28 @@
                             msg: ''
                         },
                         111: {  // EL02111
-                            msg: 'getTypes(): array<function> 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'getTypes(): array<function> 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         112: {  // EL02112
-                            msg: 'instanceOf(any): boolean 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'instanceOf(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         113: {  // EL02113
-                            msg: 'equal(any): boolena 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'equal(any): boolena 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         120: {  // i-marshal.js
                             msg: ''
                         },
                         121: {  // EL02121
-                            msg: 'getObject(opt?, origin?): object 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'getObject(opt?, origin?): object 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         122: {  // EL02122
-                            msg: 'setObject(mObj) 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'setObject(mObj) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         130: {  // i-element.js
                             msg: ''
                         },
                         131: {  // EL02131
-                            msg: 'clone(): object 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'clone(): object 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         140: {  // i-list.js
                             msg: ''
@@ -995,54 +995,178 @@
                             msg: ''
                         },
                         151: {  // EL02151
-                            msg: 'add(key) 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'add(key) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         152: {  // EL02152
-                            msg: 'del(key) 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'del(key) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         153: {  // EL02153
-                            msg: 'has(key): boolean 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'has(key): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         154: {  // EL02154
-                            msg: 'find(any): any 은 추상메소드 입니다. [$1] 을 상속해서 구현해야 합니다.'
+                            msg: 'find(any): any 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
 
-                        // Collection.*
+                        // use Collection.*
                         200: {
                             msg: 'Collectoin.*'
                         },
                         210: {  // i-collection.js
                             msg: ''
                         },
+                        211: {  // EL02211
+                            msg: 'add(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                        212: {  // EL02212
+                            msg: 'remove(elem): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                        213: {  // EL02213
+                            msg: 'cantains(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                        214: {  // EL02214
+                            msg: 'indexOf(any): number 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
                         220: {  // i-collection-array.js
                             msg: ''
+                        },
+                        221: {  // EL02221
+                            msg: 'insertAt(pos, val, ..): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         230: {  // i-collection-property.js
                             msg: ''
                         },
+                        231: {  // EL02231
+                            msg: 'keyOf(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
 
-                        // Meta.Entity.*
+                        // use Meta.Entity.*
                         300: {
                             msg: 'Meta.Entity.*'
                         },
                         310: {  // i-control-export.js
                             msg: ''
                         },
+                        311: {  // EL02311
+                            msg: 'write(opt): object 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
                         320: {  // i-control-import.js
                             msg: ''
+                        },
+                        321: {  // EL02321
+                            msg: 'read(object) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         330: {  // i-control-group.js
                             msg: ''
                         },
+                        331: {  // EL02331
+                            msg: 'merge(any, opt) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                        332: {  // EL02332
+                            msg: 'copy(filter) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
                         340: {  // i-control-schema.js
                             msg: ''
+                        },
+                        341: {  // EL02341
+                            msg: 'readSchema(json) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                        342: {  // EL02342
+                            msg: 'writeSchema(opt): object 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         350: {  // i-serialize.js
                             msg: ''
                         },
+                        351: {  // EL02351
+                            msg: 'output(opt, ...): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                        352: {  // EL02352
+                            msg: 'load(any, ...) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
                         360: {  // i-transaction.js
                             msg: ''
                         },
+                        361: {  // EL02361
+                            msg: 'acceptChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                        362: {  // EL02362
+                            msg: 'rejectChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                        },
+                    },
+                    L03: {  // Meta.*
+                        100: {
+                            msg: ''
+                        },
+                        110: {  // meta-object.js
+                            msg: ''
+                        },
+                        111: {  // EL03111
+                            msg: ''
+                        },
+                        112: {  // EL03112
+                            msg: ''
+                        },
+                        113: {  // EL03113
+                            msg: ''
+                        },
+                        114: {  // EL03114
+                            msg: ''
+                        },
+                        120: {  // meta-element.js
+                            msg: ''
+                        },
+                        121: {  // EL03121
+                            msg: ''
+                        },
+                        122: {  // EL03122
+                            msg: ''
+                        },
+                        200: {  // namespace-manager.js
+                            msg: ''
+                        },
+                        211: {  // EL03211
+                            msg: ''
+                        },
+                        300: {
+                            msg: ''
+                        },
+                        310: {  // namespace-manager.js
+                            msg: ''
+                        },
+                        311: {  // EL03311
+                            msg: ''
+                        },
+                        312: {  // EL03312
+                            msg: ''
+                        },
+                        313: {  // EL03313
+                            msg: ''
+                        },
+                        314: {  // EL03314
+                            msg: ''
+                        },
+                        315: {  // EL03315
+                            msg: ''
+                        },
+                        316: {  // EL03316
+                            msg: ''
+                        },
+                        317: {  // EL03317
+                            msg: ''
+                        },
+                        318: {  // EL03318
+                            msg: ''
+                        },
+                        319: {  // EL03319
+                            msg: ''
+                        },
+                        '31A': {  // EL0331A
+                            msg: ''
+                        },
+                        
+                    },
+                    L04: {  // Collection.*
+                    },
+                    L05: {  // Meta.Entity.*
                     },
 
                     /**
@@ -1057,13 +1181,26 @@
                      *  - 100~ : Meta.*,            i-object.js, i-marshal.js, i-element.js, i-list.js, i-control-list.js
                      *  - 200~ : Collectoin.*       i-collectin.js, i-collectin-array.js, i-collection-property.js
                      *  - 300~ : Meta.Entity.*      i-control-export.js, i-control-group.js, i-control-import.js, i-control-schema.js, i-serialize.js, i-transaction.js
-                     * Meta
-                     * Collection
-                     * Meta.Entity
                      * 
-                     * L03 : Meta.*         meta-object.js:4, meta-element.js:2, namespace-manager.js:10, meta-register.js:28
-                     * L04 : Collection.*   trans-queue.js, base-collection.js:5, collection-array.js:5, collection-property.js:11, collection-transaction.js:1
-                     * L05 : Meta.Entity.*  base-column.js:9, base-entity.js:34, meta-column.js:21, object-column.js:3, meta-row.js:7, meta-set.js:11, meta-table.js:9, meta-view.js:13
+                     * POINT:
+                     * L03 : Meta
+                     *  - 100~ : meta-object.js:4, meta-element.js:2
+                     *  - 200~ : meta-register.js:28
+                     *      + 10 : 객체 등록 관련-5
+                     *      + 20 : 네임스페이스 동록 관련-4 
+                     *      + 30 : create 관련-11
+                     *      + 30 : 기타-11
+                     *  - 300~ : namespace-manager.js:10
+                     * L04 : Collection
+                     *  - 100~ : base-collection.js:5
+                     *  - 200~ : collection-array.js:5, collection-property.js:11
+                     *  - 300~ : collection-transaction.js:1, trans-queue.js, 
+                     * 
+                     * L05 : Meta.Entity
+                     *  - 100~ : base-entity.js:34, base-column.js:9
+                     *  - 200~ : meta-column.js:21, object-column.js:3, meta-row.js:7
+                     *  - 300~ : meta-set.js:11, meta-table.js:9, meta-view.js:13
+                     * 
                      * G01 : 전역 코드? L01 에 적용가능?
                      */
                 },

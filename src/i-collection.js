@@ -57,7 +57,7 @@
          * @abstract
          */
         ICollection.prototype.add  = function() {
-            throw new ExtendError(/ES013/, null, ['add(any): boolean']);
+            throw new ExtendError(/EL02211/, null, ['ICollection']);
         };
 
         /**
@@ -65,7 +65,7 @@
          * @abstract
          */
         ICollection.prototype.remove  = function() {
-            throw new ExtendError(/ES013/, null, ['remove(elem) : boolean']);
+            throw new ExtendError(/EL02212/, null, ['ICollection']);
         };
 
         /**
@@ -73,7 +73,7 @@
          * @abstract
          */
         ICollection.prototype.contains  = function() {
-            throw new ExtendError(/ES013/, null, ['contains()']);
+            throw new ExtendError(/EL02213/, null, ['ICollection']);
         };
 
         /**
@@ -81,7 +81,7 @@
          * @abstract
          */
         ICollection.prototype.indexOf  = function() {
-            throw new ExtendError(/ES013/, null, ['indexOf()']);
+            throw new ExtendError(/EL02214/, null, ['ICollection']);
         };
 
         return ICollection;

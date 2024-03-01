@@ -45,7 +45,7 @@
          * @abstract
          */
         IExportControl.prototype.write  = function() {
-            throw new ExtendError(/ES013/, null, ['write(any)']);
+            throw new ExtendError(/EL02311/, null, ['IExportControl']);
         };
     
         return IExportControl;

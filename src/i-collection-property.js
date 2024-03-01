@@ -57,7 +57,7 @@
          * @abstract
          */
         IPropertyCollection.prototype.keyOf  = function() {
-            throw new ExtendError(/ES013/, null, ['keyOf(idx): str']);
+            throw new ExtendError(/EL02231/, null, ['IPropertyCollection']);
         };
 
         return IPropertyCollection;

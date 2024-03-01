@@ -45,7 +45,7 @@
          * @abstract
          */
         IImportControl.prototype.read  = function() {
-            throw new ExtendError(/ES013/, null, ['read(any)']);
+            throw new ExtendError(/EL02321/, null, ['IImportControl']);
         };
     
         return IImportControl;
