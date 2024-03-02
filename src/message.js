@@ -1347,37 +1347,37 @@
                             msg: ''
                         },
                         221: {  // EL04221
-                            msg: ''
+                            msg: 'setObject(oGuid, origin); oGuid[\'_elem\'].length = $1 길이와 oGuid[\'_key\'].length = $2 길이가 서로 다릅니다.'
                         },
                         222: {  // EL04222
-                            msg: ''
+                            msg: 'setObject(oGuid, origin); oGuid[\'_elem\'].length = $1 길이와 oGuid[\'_desc\'].length = $2 길이가 서로 다릅니다.'
                         },
                         223: {  // EL04223
-                            msg: ''
+                            msg: 'setObject(oGuid, origin); oGuid._elem[$1] guid 를 찾을 수 없습니다. guid = $2' 
                         },
                         224: {  // EL04224
-                            msg: ''
+                            msg: 'indexOf(obj, isKey); key로 인덱스값을 찾을 경우 obj 는 \'string\' 타입이어야 합니다. typeof obj = $1'
                         },
                         225: {  // EL04225
-                            msg: ''
+                            msg: 'add(name, value, desc); name 이 \'string\' 타입이 아닙니다. typeof name = $1'
                         },
                         226: {  // EL04226
-                            msg: ''
+                            msg: 'add(name, value, desc); name = \'$1\' 이 이름규칙에 맞지 않습니다. 규칙 = \'$2\''
                         },
                         227: {  // EL04227
-                            msg: ''
+                            msg: 'add(name, value, desc); name = \'$1\' 이 예약어 입니다.'
                         },
                         228: {  // EL04228
-                            msg: ''
+                            msg: 'add(name, value, desc); name = \'$1\' 이 기존 이름과 중복이 발생했습니다.'
                         },
                         229: {  // EL04229
-                            msg: ''
+                            msg: 'add(name, value, desc); 추가가 실패하였습니다. name = \'$1\', value = \'$2\''
                         },
                         '22A': {  // EL0422A
-                            msg: ''
+                            msg: 'keyOf(idx); idx 이 \'number\' 타입이 아닙니다. typeof idx = $1'
                         },
                         '22B': {  // EL0422B
-                            msg: ''
+                            msg: 'exist(key); key 이 \'string\' 타입이 아닙니다.(length > 0) typeof key = $1'
                         },
                         
                         300: {
@@ -1387,13 +1387,19 @@
                             msg: ''
                         },
                         311: {  // EL04311
-                            msg: ''
+                            msg: 'TransactionCollection.autoChanges 는 \'boolean\' 타입입니다. typeof aucoChanges = \'$1\''
                         },
                         320: {  // trans-queue.js
                             msg: ''
                         },
                         321: {  // EL04321
-                            msg: ''
+                            msg: 'collection 값이 [MetaObject] 을 상속한 인스턴스가 아닙니다.'
+                        },
+                        322: {  // EL04322
+                            msg: 'collection 이 [IArrayCollection] 을 구현한 인스턴스가 아닙니다.'
+                        },
+                        323: {  // EL04323
+                            msg: 'rollback(); \'$1\' 는 처리할 수 없는 cmd 입니다.'
                         },
                     },
                     L05: {  // Meta.Entity.*
@@ -1427,10 +1433,10 @@
                      *      + 40 : 기타
                      * L04 : Collection
                      *  - 100~ : base-collection.js:5
-                     * POINT:
                      *  - 200~ : collection-array.js:5, collection-property.js:11
                      *  - 300~ : collection-transaction.js:1, trans-queue.js, 
                      * 
+                     * POINT:
                      * L05 : Meta.Entity
                      *  - 100~ : base-entity.js:34, base-column.js:9
                      *  - 200~ : meta-column.js:21, object-column.js:3, meta-row.js:7

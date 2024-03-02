@@ -57,7 +57,7 @@
             /**
              * 트렌젝션 큐
              * @readonly
-             * @member {TransactionCollection} _L.Collection.TransactionQueue#_transQueue
+             * @member {TransactionCollection} _L.Collection.TransactionCollection#_transQueue
              */
             Object.defineProperty(this, '_transQueue',
             {
@@ -68,14 +68,14 @@
 
             /**
              * 자동 변경 유무 (기본값: 사용 false)
-             * @member {boolean} _L.Collection.TransactionQueue#autoChanges
+             * @member {boolean} _L.Collection.TransactionCollection#autoChanges
              */
             Object.defineProperty(this, 'autoChanges', 
             {
                 get: function() { return autoChanges; },
                 set: function(nVal) { 
                     if (typeof nVal !== 'boolean') {
-                        throw new ExtendError(/ES021/, null, ['autoChanges', 'boolean']);
+                        throw new ExtendError(/EL04311/, null, [typeof nVal]);
                     }
                     autoChanges = nVal;
                 },
@@ -86,7 +86,7 @@
             /**
              * 변경 유무
              * @readonly
-             * @member {TransactionCollection} _L.Collection.TransactionQueue#hasChanges
+             * @member {TransactionCollection} _L.Collection.TransactionCollection#hasChanges
              */
             Object.defineProperty(this, 'hasChanges',
             {

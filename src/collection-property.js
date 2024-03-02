@@ -188,10 +188,10 @@
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
 
-            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) throw new ExtendError(/ES063/, null, ['_elem', '_key']);
+            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) throw new ExtendError(/EL04221/, null, [p_oGuid['_elem'].length, p_oGuid['_key'].length]);
             
             if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
-                if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) throw new ExtendError(/ES063/, null, ['_elem', '_desc']);
+                if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) throw new ExtendError(/EL04222/, null, [p_oGuid['_elem'].length, p_oGuid['_desc'].length]);
                 for (var i = 0; i < p_oGuid['_desc'].length; i++) {
                     this.__GET$_descriptors(this).push(p_oGuid['_desc'][i]);
                 }
@@ -214,7 +214,7 @@
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) throw new ExtendError(/ES015/, null, ['_elem['+ i +']', '$ref']);
+                    if (!meta) throw new ExtendError(/EL04223/, null, [i, elem['$ref']]);
                     this.__GET$_elements(this).push(meta);
                     
                 } else this.__GET$_elements(this).push(elem);
@@ -232,7 +232,7 @@
             
             if (!isKey) return this._elements.indexOf(p_obj);
             else {
-                if (!_isString(p_obj))  throw new ExtendError(/ES021/, null, ['p_isKey = true', 'string']);
+                if (!_isString(p_obj))  throw new ExtendError(/EL04224/, null, [typeof p_obj]);
                 return this._keys.indexOf(p_obj);
             }
         };
@@ -252,10 +252,10 @@
 
                 // types = [types.concat(this._elemTypes)];
                 
-                if (!_isString(p_name)) throw new ExtendError(/ES021/, null, ['name', 'string']);
-                if(!regex.test(p_name)) throw new ExtendError(/ES068/, null, [p_name, 'Propery.name']);
-                if (this.__KEYWORD.indexOf(p_name) > -1) throw new ExtendError(/ES048/, null, [p_name, 'Symbol word']);
-                if (this.exist(p_name)) throw new ExtendError(/ES042/, null, [p_name, 'property._keys']);
+                if (!_isString(p_name)) throw new ExtendError(/EL04225/, null, [p_name]);
+                if(!regex.test(p_name)) throw new ExtendError(/EL04226/, null, [p_name, regex.source]);
+                if (this.__KEYWORD.indexOf(p_name) > -1) throw new ExtendError(/EL04227/, null, [p_name]);
+                if (this.exist(p_name)) throw new ExtendError(/EL04228/, null, [p_name]);
                 if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_value);
                 // if (this._elemTypes.length > 0) Util.matchType(types, p_value);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
@@ -283,7 +283,7 @@
                 return index;
 
             } catch (error) {
-                throw new ExtendError(/ES019/, null, ['insertAt()', error.message]);
+                throw new ExtendError(/EL04229/, error, [p_name, p_value]);
             }
         };
 
@@ -312,7 +312,7 @@
          * @returns {string}
          */
         PropertyCollection.prototype.keyOf = function(p_idx) {
-            if (typeof p_idx !== 'number') throw new ExtendError(/ES021/, null, ['idx', 'number']);
+            if (typeof p_idx !== 'number') throw new ExtendError(/EL0422A/, null, [typeof p_idx]);
             return this._keys[p_idx];
         };
 
@@ -322,7 +322,7 @@
          * @returns {boolean}
          */
         PropertyCollection.prototype.exist = function(p_key) {
-            if (!_isString(p_key)) throw new ExtendError(/ES021/, null, ['key', 'string']);
+            if (!_isString(p_key)) throw new ExtendError(/EL0422B/, null, [typeof p_key]);
             return Object.prototype.hasOwnProperty.call(this, p_key);
         };
 

@@ -527,19 +527,19 @@ describe("[target: collection-trans.js]", () => {
         describe("예외, 커버리지", () => {
             it("- this.autoChanges 예외 ", () => {
                 let s = new Student();
-                expect(()=> s.rows.autoChanges = 1).toThrow(/ES021/)
+                expect(()=> s.rows.autoChanges = 1).toThrow(/EL04311/)
             });
             it("- this._transQueue.collection : 예외 ", () => {
                 let s = new Student();
-                expect(()=> s.rows._transQueue.collection = 1).toThrow(/ES032/)
-                expect(()=> s.rows._transQueue.collection = new MetaObject).toThrow(/ES033/)
+                expect(()=> s.rows._transQueue.collection = 1).toThrow(/EL04321/)
+                expect(()=> s.rows._transQueue.collection = new MetaObject).toThrow(/EL04322/)
             });
             it("- 커버리지 : this._transQueue.update ", () => {
                 let s = new Student();
                 s.rows._transQueue.queue.push({cmd: 'E', pos:null, ref: null, colne:null})
                 
 
-                expect(()=> s.rows.rollback()).toThrow(/ES022/)
+                expect(()=> s.rows.rollback()).toThrow(/EL04323/)
             });
         });
     });

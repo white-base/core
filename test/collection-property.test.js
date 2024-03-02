@@ -356,7 +356,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(i.columns.exist('0')).toBe(true);
                 expect(i.columns.exist('1')).toBe(true);
                 expect(i.columns.exist('2')).toBe(false);
-                expect(()=> i.columns.exist(true)).toThrow(/ES021/);
+                expect(()=> i.columns.exist(true)).toThrow(/EL0422B/);
             });
         });
 
@@ -467,8 +467,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 obj1._desc.pop()
                 obj2._key.pop()
                 
-                expect(()=> a2.setObject(obj1)).toThrow(/ES063/)
-                expect(()=> a2.setObject(obj2)).toThrow(/ES063/)
+                expect(()=> a2.setObject(obj1)).toThrow(/EL04222/)
+                expect(()=> a2.setObject(obj2)).toThrow(/EL04221/)
         
             });
         });
@@ -506,7 +506,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 s.columns.add('a1', 'A1');
         
                 expect(s.columns.indexOf('a5', 2)).toBe(-1); // 없는 경우
-                expect(()=> s.columns.indexOf(100, 1)).toThrow(/ES021/);  
+                expect(()=> s.columns.indexOf(100, 1)).toThrow(/EL04224/);  
             });
             // it("- keyOf(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
             //     let s = new Student();
@@ -644,39 +644,39 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 const result1 = s.columns.add('a1');
                 // const result2 = s.columns.add('a1');
                 
-                expect(()=> s.columns.add('a1')).toThrow(/ES042/);
+                expect(()=> s.columns.add('a1')).toThrow(/EL04228/);
                 expect(result1 > -1).toBeTruthy();
                 // jest.mockRestore();
             });
             it("- add(name) : 예약어 사용시 (예외)", () => {
                 let s = new Student();
-                expect(() => s.columns.add('_owner')).toThrow(/ES048/);
-                expect(() => s.columns.add('_elements')).toThrow(/ES048/);
-                expect(() => s.columns.add('__KEYWORD')).toThrow(/ES048/);
-                expect(() => s.columns.add('_elemTypes')).toThrow(/ES048/);
-                expect(() => s.columns.add('list')).toThrow(/ES048/);
-                expect(() => s.columns.add('count')).toThrow(/ES048/);
-                expect(() => s.columns.add('onAdd')).toThrow(/ES048/);
-                expect(() => s.columns.add('onRemove')).toThrow(/ES048/);
-                expect(() => s.columns.add('onClear')).toThrow(/ES048/);
-                expect(() => s.columns.add('onChanging')).toThrow(/ES048/);
-                expect(() => s.columns.add('onChanged')).toThrow(/ES048/);
-                expect(() => s.columns.add('_remove')).toThrow(/ES048/);
-                expect(() => s.columns.add('add')).toThrow(/ES048/);
-                expect(() => s.columns.add('clear')).toThrow(/ES048/);
-                expect(() => s.columns.add('remove')).toThrow(/ES048/);
-                expect(() => s.columns.add('removeAt')).toThrow(/ES048/);
-                expect(() => s.columns.add('indexOf')).toThrow(/ES048/);
-                expect(() => s.columns.add('exist')).toThrow(/ES048/);
+                expect(() => s.columns.add('_owner')).toThrow(/EL04227/);
+                expect(() => s.columns.add('_elements')).toThrow(/EL04227/);
+                expect(() => s.columns.add('__KEYWORD')).toThrow(/EL04227/);
+                expect(() => s.columns.add('_elemTypes')).toThrow(/EL04227/);
+                expect(() => s.columns.add('list')).toThrow(/EL04227/);
+                expect(() => s.columns.add('count')).toThrow(/EL04227/);
+                expect(() => s.columns.add('onAdd')).toThrow(/EL04227/);
+                expect(() => s.columns.add('onRemove')).toThrow(/EL04227/);
+                expect(() => s.columns.add('onClear')).toThrow(/EL04227/);
+                expect(() => s.columns.add('onChanging')).toThrow(/EL04227/);
+                expect(() => s.columns.add('onChanged')).toThrow(/EL04227/);
+                expect(() => s.columns.add('_remove')).toThrow(/EL04227/);
+                expect(() => s.columns.add('add')).toThrow(/EL04227/);
+                expect(() => s.columns.add('clear')).toThrow(/EL04227/);
+                expect(() => s.columns.add('remove')).toThrow(/EL04227/);
+                expect(() => s.columns.add('removeAt')).toThrow(/EL04227/);
+                expect(() => s.columns.add('indexOf')).toThrow(/EL04227/);
+                expect(() => s.columns.add('exist')).toThrow(/EL04227/);
                 // expect(() => s.columns.add('keys')).toThrow(/ES048/);
-                expect(() => s.columns.add('_keys')).toThrow(/ES048/);
+                expect(() => s.columns.add('_keys')).toThrow(/EL04227/);
                 // expect(() => s.columns.add('indexOfProp')).toThrow(/ES048/);
-                expect(() => s.columns.add('keyOf')).toThrow(/ES048/);
+                expect(() => s.columns.add('keyOf')).toThrow(/EL04227/);
                 // expect(() => s.columns.add('removeByProp')).toThrow(/ES048/);
             });
             it("- add(name) : 이름을 숫자로 사용할 경우 (예외)", () => {
                 let s = new Student();
-                expect(() => s.columns.add(10)).toThrow(/ES021/);
+                expect(() => s.columns.add(10)).toThrow(/EL04225/);
             });
             it("- add(value, desc) : 기술자 정의 경고 ", () => {
                 let s = new Student();
@@ -701,8 +701,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             });
             it("- add(name) : 이름규칙 (예외)", () => {
                 let s = new Student();
-                expect(() => s.columns.add('10')).toThrow(/ES068/);
-                expect(() => s.columns.add('0')).toThrow(/ES068/);
+                expect(() => s.columns.add('10')).toThrow(/EL04226/);
+                expect(() => s.columns.add('0')).toThrow(/EL04226/);
             });
         });
         describe("PropertyCollection.clear() <초기화> ", () => {
@@ -738,7 +738,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 let s = new Student();
                 s.columns.add('a1', 'A1');
         
-                expect(()=> s.columns.keyOf('a1')).toThrow('ES021');
+                expect(()=> s.columns.keyOf('a1')).toThrow('EL0422A');
             });
         });
         describe("예외, 커버리지 ", () => {
@@ -852,8 +852,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             const result1 = elem.columns.add('a1', c1);
             const result2 = elem.columns.add('a2', m1);
             
-            expect(() => elem.columns.add('a3')).toThrow(/ES019/);
-            expect(() => elem.columns.add('a3', 'str')).toThrow(/ES019/);
+            expect(() => elem.columns.add('a3')).toThrow(/EL04229/);
+            expect(() => elem.columns.add('a3', 'str')).toThrow(/EL04229/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -896,8 +896,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             i.columns['a1'] = 'AA1';
             i.columns['a2'] = 'AA2';
     
-            expect(() => i.columns.add('a3')).toThrow(/ES019/);
-            expect(() => i.columns.add('a3', 10)).toThrow(/ES019/);
+            expect(() => i.columns.add('a3')).toThrow(/EL04229/);
+            expect(() => i.columns.add('a3', 10)).toThrow(/EL04229/);
             expect(() => i.columns['a1'] = 10).toThrow(/EL0130B/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
@@ -907,9 +907,9 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             const result1 = i.columns.add('a1', 'A1');
             const result2 = i.columns.add('a2', true);
             
-            expect(() => i.columns.add('a3')).toThrow(/ES019/);
-            expect(() => i.columns.add('a3', 10)).toThrow(/ES019/);
-            expect(() => i.columns.add('a3', {})).toThrow(/ES019/);
+            expect(() => i.columns.add('a3')).toThrow(/EL04229/);
+            expect(() => i.columns.add('a3', 10)).toThrow(/EL04229/);
+            expect(() => i.columns.add('a3', {})).toThrow(/EL04229/);
             expect(() => i.columns['a1'] = 10).toThrow(/EL0130B/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();

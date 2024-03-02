@@ -73,10 +73,10 @@
                 get: function() { return collection; },
                 set: function(nVal) { 
                     if (!(nVal instanceof MetaObject)) {
-                        throw new ExtendError(/ES032/, null, ['collection', 'MetaObject']);
+                        throw new ExtendError(/EL04321/, null, []);
                     }
                     if (!(nVal.isImplementOf(IArrayCollection))) {
-                        throw new ExtendError(/ES033/, null, ['collection', 'IArrayCollection']);
+                        throw new ExtendError(/EL04322/, null, []);
                     }
                     collection = nVal;
                 },
@@ -124,7 +124,7 @@
                     pos = obj.pos;
                     this.collection.removeAt(pos);
                     this.collection.insertAt(pos, obj.clone);
-                } else throw new ExtendError(/ES022/, null, ['cmd='+ obj.cmd]);
+                } else throw new ExtendError(/EL04323/, null, [obj.cmd]);
             }
             this.init();
         };

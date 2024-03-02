@@ -689,7 +689,7 @@ describe("[target: meta-view.js]", () => {
                 expect(v1.columns['c3']._entity === v1).toBe(true);
                 // 참조가 있어서 로드 실패
                 expect(()=> v2.load(str2, parse)).toThrow('ES015')
-                expect(()=> v3.load(str3, parse)).toThrow('ES015')
+                expect(()=> v3.load(str3, parse)).toThrow('EL04223')
                 /**
                  * MEMO: 외부에 참조(컬럼)가 있는 경우 예외 확인
                  */
@@ -1766,7 +1766,7 @@ describe("[target: meta-view.js]", () => {
                 expect(v1.viewName).toBe('V1');
                 expect(v1.columns.count).toBe(3);
                 expect(()=> v2.setObject(view2.getObject())).toThrow('ES015');
-                expect(()=> v3.setObject(view3.getObject())).toThrow('ES015');
+                expect(()=> v3.setObject(view3.getObject())).toThrow('EL04223');
                 /**
                  * MEMO: 
                  * - 참조가 없는 뷰 설정 확인
@@ -2220,7 +2220,7 @@ describe("[target: meta-view.js]", () => {
                 // set2.setObject(obj2);
                 // set3.setObject(obj3);
                 expect(()=> set2.setObject(obj2)).toThrow('ES015')
-                expect(()=> set3.setObject(obj3)).toThrow('ES015')
+                expect(()=> set3.setObject(obj3)).toThrow('EL04223')
 
                 // MetaRegistry.init();
                 // var set1 = new MetaView('V4');
