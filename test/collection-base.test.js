@@ -52,8 +52,8 @@ describe("[target: base-collection.js]", () => {
                 }
                 const s1 = new SubCollection();
                 
-                expect(()=> s1.add()).toThrow(/ES013/)
-                expect(()=> s1.clear()).toThrow(/ES013/)
+                expect(()=> s1.add()).toThrow(/EL04114/)
+                expect(()=> s1.clear()).toThrow(/EL04115/)
             });
 
             it("- getObject()  ", () => {

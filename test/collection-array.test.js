@@ -245,7 +245,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             it("- removeAt(str) : 예외 ", () => {
                 let s = new Student();
     
-                expect(()=> s.rows.removeAt('1')).toThrow(/ES021/);
+                expect(()=> s.rows.removeAt('1')).toThrow(/EL04113/);
             });
         });
 
@@ -423,7 +423,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 const obj = a1.getObject();
                 const a2 = new ArrayCollection();
         
-                expect(()=> a2.setObject(obj)).toThrow(/ES015/)
+                expect(()=> a2.setObject(obj)).toThrow(/EL04211/)
             });
         });
         
@@ -608,21 +608,21 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 s.rows.add('A0');
                 s.rows.add('A1');
 
-                expect(()=> s.rows.insertAt(3, 'A2')).toThrow(/ES061/);
+                expect(()=> s.rows.insertAt(3, 'A2')).toThrow(/EL04213/);
             });
             it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
                 let s = new Student();
                 s.rows.add('A0');
                 s.rows.add('A1');
 
-                expect(()=> s.rows.insertAt(-1, 'A2')).toThrow(/ES062/);
+                expect(()=> s.rows.insertAt(-1, 'A2')).toThrow(/EL04214/);
             });
             it("- insertAt(pos) : 예외 :자료형", () => {
                 let s = new Student();
                 s.rows.add('A0');
                 s.rows.add('A1');
 
-                expect(()=> s.rows.insertAt('ERR', 'A2')).toThrow(/ES021/);
+                expect(()=> s.rows.insertAt('ERR', 'A2')).toThrow(/EL04212/);
             });
         });
         describe("예외 및 커버리지 ", () => {
@@ -650,7 +650,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }
                 const s1 = new SubClass();
 
-                expect(()=> s1._remove()).toThrow(/ES013/)
+                expect(()=> s1._remove()).toThrow(/EL04111/)
             });
 
 
@@ -691,8 +691,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const c1 = new Student(1);
             const result = elem.rows.add(c1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES019/);
-            expect(() => elem.rows.add('str')).toThrow(/ES019/);
+            expect(() => elem.rows.add(null)).toThrow(/EL04215/);
+            expect(() => elem.rows.add('str')).toThrow(/EL04215/);
             expect(result > -1).toBeTruthy();
         });
         it("- 단일 타입 : rows.요소명 = obj ", () => {
@@ -713,7 +713,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result1 = elem.rows.add( c1);
             const result2 = elem.rows.add('str');
             
-            expect(() => elem.rows.add()).toThrow('ES019');
+            expect(() => elem.rows.add()).toThrow('EL04215');
             expect(elem.rows[0].level).toBe(1);
             elem.rows[0] = 'OVER';
             expect(elem.rows[0]).toBe('OVER');
@@ -743,8 +743,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result1 = elem.rows.add(c1);
             const result2 = elem.rows.add(m1);
             
-            expect(() => elem.rows.add(null)).toThrow(/ES019/);
-            expect(() => elem.rows.add('str')).toThrow(/ES019/);
+            expect(() => elem.rows.add(null)).toThrow(/EL04215/);
+            expect(() => elem.rows.add('str')).toThrow(/EL04215/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
@@ -787,8 +787,8 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             i.rows[0] = 'AA1';
             i.rows[1] = 'AA2';
     
-            expect(() => i.rows.add(null)).toThrow(/ES019/);
-            expect(() => i.rows.add(10)).toThrow(/ES019/);
+            expect(() => i.rows.add(null)).toThrow(/EL04215/);
+            expect(() => i.rows.add(10)).toThrow(/EL04215/);
             expect(() => i.rows[0] = 10).toThrow(/EL0130B/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
@@ -798,10 +798,10 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
-            expect(() => i.rows.add(undefined)).toThrow(/ES019/);
-            expect(() => i.rows.add(null)).toThrow(/ES019/);
-            expect(() => i.rows.add(10)).toThrow(/ES019/);
-            expect(() => i.rows.add({})).toThrow(/ES019/);
+            expect(() => i.rows.add(undefined)).toThrow(/EL04215/);
+            expect(() => i.rows.add(null)).toThrow(/EL04215/);
+            expect(() => i.rows.add(10)).toThrow(/EL04215/);
+            expect(() => i.rows.add({})).toThrow(/EL04215/);
             expect(() => i.rows[0] = 10).toThrow(/EL0130B/);
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();

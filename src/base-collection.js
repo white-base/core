@@ -435,7 +435,7 @@
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
-            throw new ExtendError(/ES013/, null, ['_remove(idx): boolean ']);
+            throw new ExtendError(/EL04111/, null, []);
         };
 
         /**
@@ -490,7 +490,7 @@
             }
             if (p_oGuid['_owner']) {
                 owner = MetaRegistry.findSetObject(p_oGuid['_owner']['$ref'], origin);
-                if (!owner) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_owner']);
+                if (!owner) throw new ExtendError(/EL04112/, null, [p_oGuid['_owner']['$ref']]);
                 this._owner = owner;
             }
             if (Array.isArray(p_oGuid['_elemTypes']) && p_oGuid['_elemTypes'].length > 0){
@@ -517,7 +517,7 @@
         BaseCollection.prototype.removeAt = function(p_idx) {
             var elem;
             
-            if (typeof p_idx !== 'number') throw new ExtendError(/ES021/, null, ['idx', 'number']);
+            if (typeof p_idx !== 'number') throw new ExtendError(/EL04113/, null, [typeof p_idx]);
             elem = this._elements[p_idx];
             if (elem) {
                 this._onRemove(p_idx, elem);
@@ -551,7 +551,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            throw new ExtendError(/ES013/, null, ['add(any): number']);
+            throw new ExtendError(/EL04114/, null, ['add(any): number']);
         };
         
         /**
@@ -560,7 +560,7 @@
          * @fires _L.Collection.BaseCollection#onClear 
          */
         BaseCollection.prototype.clear  = function() {
-            throw new ExtendError(/ES013/, null, ['clear()']);
+            throw new ExtendError(/EL04115/, null, ['clear()']);
         };
 
         return BaseCollection;

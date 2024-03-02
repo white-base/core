@@ -161,7 +161,7 @@
                     
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) throw new ExtendError(/ES015/, null, ['_elem['+ i +']', '$ref']);
+                    if (!meta) throw new ExtendError(/EL04211/, null, [i, elem['$ref']]);
                     this.__GET$_elements(this).push(meta);  
                 
                 } else this.__GET$_elements(this).push(elem);
@@ -206,9 +206,9 @@
             try {
                 var index   = this.count;
 
-                if (typeof p_pos !== 'number') throw new ExtendError(/ES021/, null, ['pos', 'number']);
-                if (index < p_pos) throw new ExtendError(/ES061/, null, ['pos']);
-                if (p_pos < 0) throw new ExtendError(/ES062/, null, ['pos', '0']);
+                if (typeof p_pos !== 'number') throw new ExtendError(/EL04212/, null, [typeof p_pos]);
+                if (index < p_pos) throw new ExtendError(/EL04213/, null, [p_pos, index]);
+                if (p_pos < 0) throw new ExtendError(/EL04214/, null, [p_pos]);
                 if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_value);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                     Message.warn('WS011', ['configurable = false', 'element']); 
@@ -237,7 +237,7 @@
                 return true;
 
             } catch (error) {
-                throw new ExtendError(/ES019/, null, ['insertAt()', error.message]);
+                throw new ExtendError(/EL04215/, error, [p_pos, p_value]);
             }
         };
 

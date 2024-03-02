@@ -1299,6 +1299,102 @@
                         },
                     },
                     L04: {  // Collection.*
+                        100: {
+                            msg: ''
+                        },
+                        110: {  // base-collection.js
+                            msg: ''
+                        },
+                        111: {  // EL04111
+                            msg: '_remove(idx): boolean 는 추상메소드 입니다. 구현해야 합니다.'
+                        },
+                        112: {  // EL04112
+                            msg: 'setObject(oGuid, origin); oGuid 의 _owner 연결이 실패하였습니다. guid = $1'
+                        },
+                        113: {  // EL04113
+                            msg: 'removeAt(idx); idx 는 \'number\' 타입이 아닙니다. typeof idx = $1'
+                        },
+                        114: {  // EL04114
+                            msg: 'add(any): number 는 추상메소드 입니다. 구현해야 합니다.'
+                        },
+                        115: {  // EL04115
+                            msg: 'clear() 는 추상메소드 입니다. 구현해야 합니다.'
+                        },
+                        200: {
+                            msg: ''
+                        },
+                        
+                        210: {  // collection-array.js
+                            msg: ''
+                        },
+                        211: {  // EL04211
+                            msg: 'setObject(oGuid, origin); oGuid[\'_elem\'][$1] 의 _elements 연결이 실패하였습니다. guid = $2'
+                        },
+                        212: {  // EL04212
+                            msg: 'insertAt(pos, value, desc); pos 는 \'number\' 타입이 아닙니다. typeof pos = $1'
+                        },
+                        213: {  // EL04213
+                            msg: 'insertAt(pos, value, desc); pos 는 this.count 보다 클 수 없습니다. pos = $1, count = $2'
+                        },
+                        214: {  // EL04214
+                            msg: 'insertAt(pos, value, desc);  pos 는 0 보다 작을 수 없습니다. pos = $1'
+                        },
+                        215: {  // EL04215
+                            msg: 'insertAt(pos, value, desc); 등록이 실패하였습니다. pos = $1, value = $2'
+                        },
+
+                        220: {  // collection-property.js
+                            msg: ''
+                        },
+                        221: {  // EL04221
+                            msg: ''
+                        },
+                        222: {  // EL04222
+                            msg: ''
+                        },
+                        223: {  // EL04223
+                            msg: ''
+                        },
+                        224: {  // EL04224
+                            msg: ''
+                        },
+                        225: {  // EL04225
+                            msg: ''
+                        },
+                        226: {  // EL04226
+                            msg: ''
+                        },
+                        227: {  // EL04227
+                            msg: ''
+                        },
+                        228: {  // EL04228
+                            msg: ''
+                        },
+                        229: {  // EL04229
+                            msg: ''
+                        },
+                        '22A': {  // EL0422A
+                            msg: ''
+                        },
+                        '22B': {  // EL0422B
+                            msg: ''
+                        },
+                        
+                        300: {
+                            msg: ''
+                        },
+                        310: {  // collection-transaction.js
+                            msg: ''
+                        },
+                        311: {  // EL04311
+                            msg: ''
+                        },
+                        320: {  // trans-queue.js
+                            msg: ''
+                        },
+                        321: {  // EL04321
+                            msg: ''
+                        },
                     },
                     L05: {  // Meta.Entity.*
                     },
@@ -1329,9 +1425,9 @@
                      *      + 20 : ns 제어
                      *      + 30 : ns 요소 제어
                      *      + 40 : 기타
-                     * POINT:
                      * L04 : Collection
                      *  - 100~ : base-collection.js:5
+                     * POINT:
                      *  - 200~ : collection-array.js:5, collection-property.js:11
                      *  - 300~ : collection-transaction.js:1, trans-queue.js, 
                      * 

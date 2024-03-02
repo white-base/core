@@ -289,7 +289,7 @@ describe("[target: meta-row.js]", () => {
 
                 expect(a2.equal(a1)).toBe(true);
                 expect(a2.rows[0].__event.list.length).toBe(1)
-                expect(()=>a2.rows.setObject(obj1)).toThrow(/ES015/);
+                expect(()=>a2.rows.setObject(obj1)).toThrow(/EL04112/);
                 /**
                  * MEMO:
                  * - 소유하는 entity에서 setObject() 확인
@@ -835,7 +835,7 @@ describe("[target: meta-row.js]", () => {
                 table1.rows.add(row0);
                 table1.rows.add(row1);
     
-                expect(()=> table1.rows.insertAt(3, row2)).toThrow(/ES061/);
+                expect(()=> table1.rows.insertAt(3, row2)).toThrow(/EL04213/);
             });
             it("- insertAt(pos) : 예외 : 0 보다 작을 경우", () => {
                 var table1 = new MetaTable('T1');
@@ -850,7 +850,7 @@ describe("[target: meta-row.js]", () => {
                 table1.rows.add(row0);
                 table1.rows.add(row1);
     
-                expect(()=> table1.rows.insertAt(-1, row2)).toThrow(/ES062/);
+                expect(()=> table1.rows.insertAt(-1, row2)).toThrow(/EL04214/);
             });
         });
         describe("예외 및 커버리지", () => {
