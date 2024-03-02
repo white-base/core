@@ -76,8 +76,8 @@ describe("[target: base-column.js]", () => {
             it("- 객체 생성 속성 확인 ", () => {
                 const obj1 = {aa: 1}
 
-                expect(()=> new BaseColumn('o1', null, String)).toThrow(/ES018/)
-                expect(()=> new BaseColumn('o1', null, [String, Number])).toThrow(/ES018/)
+                expect(()=> new BaseColumn('o1', null, String)).toThrow(/EL03111/)
+                expect(()=> new BaseColumn('o1', null, [String, Number])).toThrow(/EL03111/)
             });
             /**
              * valueTypes

@@ -103,7 +103,7 @@
             // if (this._type.hasOwnProperty('_KIND')) {
                 var kind = this._type['_KIND'].toLowerCase();
                 if (['abstract', 'interface', 'enum', 'function'].indexOf(kind) > -1) {
-                    throw new ExtendError(/ES018/, null, [this._type.name]);
+                    throw new ExtendError(/EL03111/, null, [this._type.name, kind]);
                 }
             }
 
@@ -276,17 +276,17 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var fullName = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
 
-            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['oGuid', 'object']);
-            if (p_oGuid['_type'] !== fullName) throw new ExtendError(/ES046/, null, [p_oGuid['_type'], fullName]);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03112/, null, [typeof p_oGuid]);
+            if (p_oGuid['_type'] !== fullName) throw new ExtendError(/EL03113/, null, [p_oGuid['_type'], fullName]);
             
             if (MetaRegistry.isGuidObject(origin)) {
                 if (!origin['__TRANSFORM_REFER']) {
                     origin = MetaRegistry.transformRefer(origin);
                     origin['__TRANSFORM_REFER'] = true;
                 }
-            } else throw new ExtendError(/ES022/, null, [typeof p_oGuid]);
+            } else throw new ExtendError(/EL03114/, null, [p_origin._type, p_origin._guid]);
             
-            MetaRegistry.createSetObject(p_oGuid, this); // $set attach
+            MetaRegistry.setMetaObject(p_oGuid, this); // $set attach
         };
 
         return MetaObject;

@@ -141,8 +141,8 @@
             var type;
             var fullName;
 
-            if (!this.isMetaObject(p_meta)) throw new ExtendError(/ES052/, null, ['meta', '{_type:function, _guid: string}']);
-            if (this.has(p_meta)) throw new ExtendError(/ES042/, null, ['meta', '_guid']);
+            if (!this.isMetaObject(p_meta)) throw new ExtendError(/EL03211/, null, [p_meta._type, p_meta._guid]);
+            if (this.has(p_meta)) throw new ExtendError(/EL03212/, null, [p_meta._guid]);
 
             _ns         = p_meta['_ns'] || '';
             type        = p_meta['_type'];
@@ -162,7 +162,7 @@
             var guid;
 
             if (typeof p_meta !== 'object' && typeof p_meta !== 'string') {
-                throw new ExtendError(/ES021/, null, ['target', 'object | string']);
+                throw new ExtendError(/EL03213/, null, [typeof p_meta]);
             }
 
             guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
@@ -241,16 +241,16 @@
             var coClass;
             var params;
             
-            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['p_oGuid', 'object']);
-            if (!_isString(p_oGuid['_type'])) throw new ExtendError(/ES052/, null, ['p_oGuid', '{_type:string }']);
-            if (!_isObject(origin)) throw new ExtendError(/ES021/, null, ['origin', 'object']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03221/, null, [typeof p_oGuid]);
+            if (!_isString(p_oGuid['_type'])) throw new ExtendError(/EL03222/, null, [typeof p_oGuid['_type']]);
+            if (!_isObject(origin)) throw new ExtendError(/EL03223/, null, [typeof origin]);
             
             type        = p_oGuid['_type'];
             ns          = p_oGuid['_ns'] || '';
             fullName    =  ns !== '' ? [ns, type].join('.') : type;
             coClass     = this.getClass(fullName);
             
-            if (typeof coClass !== 'function') throw new ExtendError(/ES053/, null, [fullName, 'function(class)']);
+            if (typeof coClass !== 'function') throw new ExtendError(/EL03224/, null, [fullName, typeof coClass]);
             
             // params = coClass.hasOwnProperty('_PARAMS') ? coClass['_PARAMS'] : []; // arr
             params = Object.prototype.hasOwnProperty.call(coClass, '_PARAMS') ? coClass['_PARAMS'] : []; // arr
@@ -275,8 +275,8 @@
          * console.log(obj.onwer);          // { $ref : '5337877c-49d6-9add-f35a-7bd31d510d4f' }
          */
         MetaRegistry.createReferObject = function(p_meta) {
-            if (!_isObject(p_meta)) throw new ExtendError(/ES021/, null, ['p_meta', 'object']);
-            if (!_isString(p_meta['_guid'])) throw new ExtendError(/ES052/, null, ['p_oGuid', '{_guid:string }']);
+            if (!_isObject(p_meta)) throw new ExtendError(/EL03225/, null, [typeof p_meta]);
+            if (!_isString(p_meta['_guid'])) throw new ExtendError(/EL03226/, null, [typeof p_meta['_guid']]);
             return { $ref: p_meta['_guid'] };
         };
 
@@ -294,7 +294,7 @@
             var fullName;
             var ns, key;
 
-            if (typeof p_fun !== 'function') throw new ExtendError(/ES021/, null, ['p_fun', 'function']);
+            if (typeof p_fun !== 'function') throw new ExtendError(/EL03227/, null, [typeof fun]);
             
             if (!this.findClass(p_fun)) {
                 ns  = p_fun['_NS'] || '';
@@ -314,13 +314,13 @@
          * @example
          * var meta = new MetaElement('m1');    // meta.guid = '5337877c-49d6-9add-f35a-7bd31d510d4f'
          * var obj = { name: 'm2' };
-         * MetaRegistry.createSetObject(obj, meta);
+         * MetaRegistry.setMetaObject(obj, meta);
          * console.log(obj);                    // {name: 'm2, $set: '5337877c-49d6-9add-f35a-7bd31d510d4f'}
          */
-        MetaRegistry.createSetObject = function(p_oGuid, p_meta) {
-            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['p_oGuid', 'object']);
-            if (!_isObject(p_meta)) throw new ExtendError(/ES021/, null, ['p_meta', 'object']);
-            if (!_isString(p_meta['_guid'])) throw new ExtendError(/ES052/, null, ['p_meta', '{_guid:string }'])
+        MetaRegistry.setMetaObject = function(p_oGuid, p_meta) {
+            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03241/, null, [typeof p_oGuid]);
+            if (!_isObject(p_meta)) throw new ExtendError(/EL03242/, null, [typeof p_meta]);
+            if (!_isString(p_meta['_guid'])) throw new ExtendError(/EL03243/, null,[typeof p_meta['_guid']]);
             
             p_oGuid['$set'] = p_meta['_guid'];
             return p_oGuid;
@@ -339,7 +339,7 @@
             var _this = this;
             var arrObj;
 
-            if (!_isObject(p_oGuid)) throw new ExtendError(/ES021/, null, ['oGuid', 'object']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03244/, null, [typeof p_oGuid]);
             
             arrObj = _getGuidList(p_oGuid);
             if (!validUniqueGuid() || !validReference(p_oGuid) || !validCollection(p_oGuid)) return false;
@@ -413,7 +413,7 @@
             var guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             var arrOrigin = [];
 
-            if (!_isString(guid)) throw new ExtendError(/ES024/, null, ['p_oGuid', 'string | object<guid>']);
+            if (!_isString(guid)) throw new ExtendError(/EL03245/, null, [typeof guid]);
 
             if (Array.isArray(p_origin)) arrOrigin = p_origin;
             else arrOrigin.push(p_origin);
@@ -421,13 +421,42 @@
             for (var i = 0; i < arrOrigin.length; i++) {
                 var origin = arrOrigin[i];
                 var arrObj = _getGuidList(origin);
-                if (!_isObject(origin)) throw new ExtendError(/ES024/, null, ['p_origin', 'object']);
+                if (!_isObject(origin)) throw new ExtendError(/EL03246/, null, [i, typeof guid]);
                 for (var ii = 0; ii < arrObj.length; ii++) {
                     if (arrObj[ii]._guid === guid) return true;
                 }
             }
             return false;
         };
+        
+        /**
+         * 지정한 객체에 참조타입 요소를 가지고 있는지 확인힙니다.  
+         * 참조타입 : $ref: '...', $ns:'....'
+         * @param {object} p_oGuid 
+         * @returns {boolean}
+         */
+        MetaRegistry.hasRefer = function(p_oGuid) {
+            if (!_isObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'object']);
+            if (!this.isGuidObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'guid']);
+
+            return hasRefer(p_oGuid);
+
+            // inner function
+            function hasRefer(oGuid) {  // 참조 포함 여부
+                if (Array.isArray(oGuid)){
+                    for(var i = 0; i < oGuid.length; i++) {
+                        if (typeof oGuid[i] === 'object' && hasRefer(oGuid[i])) return true;
+                    }
+                } else {
+                    if (oGuid['$ref'] && _isString(oGuid['$ref'])) return true;
+                    if (oGuid['$ns'] && _isString(oGuid['$ns'])) return true;
+                    for(var prop in oGuid) {
+                        if (_isObject(oGuid[prop]) && hasRefer(oGuid[prop])) return true
+                    }
+                }
+                return false;
+            }
+        };     
 
         /**
          * guid 객체로 설정한 메타 객체를 조회합니다.  
@@ -472,34 +501,7 @@
             }
         };
 
-        /**
-         * 지정한 객체에 참조타입 요소를 가지고 있는지 확인힙니다.  
-         * 참조타입 : $ref: '...', $ns:'....'
-         * @param {object} p_oGuid 
-         * @returns {boolean}
-         */
-        MetaRegistry.hasRefer = function(p_oGuid) {
-            if (!_isObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'object']);
-            if (!this.isGuidObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'guid']);
-
-            return hasRefer(p_oGuid);
-
-            // inner function
-            function hasRefer(oGuid) {  // 참조 포함 여부
-                if (Array.isArray(oGuid)){
-                    for(var i = 0; i < oGuid.length; i++) {
-                        if (typeof oGuid[i] === 'object' && hasRefer(oGuid[i])) return true;
-                    }
-                } else {
-                    if (oGuid['$ref'] && _isString(oGuid['$ref'])) return true;
-                    if (oGuid['$ns'] && _isString(oGuid['$ns'])) return true;
-                    for(var prop in oGuid) {
-                        if (_isObject(oGuid[prop]) && hasRefer(oGuid[prop])) return true
-                    }
-                }
-                return false;
-            }
-        };       
+          
 
         /**
          * 지정한 객체의 참조타입 요소를 변환합니다.  
@@ -543,13 +545,15 @@
          * 네임스페이스(ns)에 클래스(함수)를 중복검사 후 등록합니다.  
          * - 기본제공 함수는 내부 저장하지 않습니다.
          * @param {function | object} p_fun 
-         * @param {array<string> | string} p_ns fullname 또는 네임스페이스 
-         * @param {string?} p_key 
+         * @param {string} p_ns fullname 또는 네임스페이스 
+         * @param {string} p_key 
          */
         MetaRegistry.registerClass = function(p_fun, p_ns, p_key) {
             var fullName;
             
-            if (!(_isObject(p_fun) || typeof p_fun === 'function')) throw new ExtendError(/ES024/, null, ['p_fun', 'object | function']);
+            if (!(_isObject(p_fun) || typeof p_fun === 'function')) throw new ExtendError(/EL03231/, null, [typeof p_fun]);
+            if (p_ns && typeof p_ns !== 'string') throw new ExtendError(/EL03232/, null, [typeof p_ns]);
+            if (p_key && !_isString(p_key)) throw new ExtendError(/EL03233/, null, [typeof p_key]);
 
             if (p_key) fullName = p_ns.length > 0 ? p_ns +'.'+ p_key : p_key;
             else fullName = p_ns;
@@ -566,7 +570,7 @@
          * @returns {boolean}
          */
         MetaRegistry.releaseClass = function(p_fullName) {
-            if (!_isString(p_fullName)) throw new ExtendError(/ES024/, null, ['p_fullName', 'string']);
+            if (!_isString(p_fullName)) throw new ExtendError(/EL03234/, null, [typeof p_fullName]);
             
             if (typeof _global[p_fullName] === 'function') return true; // 내장함수 & 전역 함수
             return this.ns.del(p_fullName);
@@ -581,7 +585,7 @@
         MetaRegistry.findClass = function(p_fun) {
             var fullName;
 
-            if (typeof p_fun !== 'function') throw new ExtendError(/ES024/, null, ['p_fun', 'function']);
+            if (typeof p_fun !== 'function') throw new ExtendError(/EL03235/, null, [typeof p_fun]);
             
             fullName = p_fun.name;
             if (typeof _global[fullName] === 'function') return fullName;   // 내장함수 & 전역 함수
@@ -594,7 +598,7 @@
          * @returns {function}
          */
         MetaRegistry.getClass = function(p_fullName) {
-            if (!_isString(p_fullName)) throw new ExtendError(/ES024/, null, ['p_fullName', 'string']);
+            if (!_isString(p_fullName)) throw new ExtendError(/EL03236/, null, [typeof p_fullName]);
             
             if (typeof _global[p_fullName] === 'function') return _global[p_fullName];  // 내장함수 & 전역 함수
             return this.ns.find(p_fullName);

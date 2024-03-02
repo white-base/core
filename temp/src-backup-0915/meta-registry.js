@@ -273,7 +273,7 @@
             else Message.error('ES053', ['ns', fun.name]);
         };
 
-        MetaRegistry.createSetObject = function(target, meta) {
+        MetaRegistry.setMetaObject = function(target, meta) {
             if (meta && meta._guid && meta._guid.length > 0 ) {
                 target['$set'] = meta._guid;
                 return target;

@@ -285,7 +285,7 @@
             if (p_mObj._type !== fullName) Message.error('ES046', [p_mObj._type, fullName]);
             // this.__SET$_guid(p_mObj._guid, this);
             // p_mObj['$set'] = this._guid;
-            MetaRegistry.createSetObject(p_mObj, this);
+            MetaRegistry.setMetaObject(p_mObj, this);
         };
         // MetaObject.prototype.setObject  = function(p_mObj) {
         //     var meta;

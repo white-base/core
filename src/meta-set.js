@@ -406,7 +406,7 @@
             function addEntity(key, p_collec, p_baseCollec) {
                 var prop = p_collec[key];
                 if (!p_baseCollec.exist(key)) p_baseCollec.add(key);
-                MetaRegistry.createSetObject(prop, p_baseCollec[key]);                 
+                MetaRegistry.setMetaObject(prop, p_baseCollec[key]);                 
                 p_baseCollec[key]._readSchema(p_collec[key], p_createRow, obj);                    
             }
         };

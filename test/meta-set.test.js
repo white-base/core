@@ -47,7 +47,7 @@ describe("[target: meta-set.js]", () => {
             it("- 예외 : 다른자료형 ", () => {
                 var set1 = new MetaSet('S1');
                 expect(()=> set1.setName = 10).toThrow(/ES021/)
-                expect(()=> set1.setName = '').toThrow(/ES055/)
+                expect(()=> set1.setName = '').toThrow(/EL03122/)
             });
         });
         describe("MetaSet.autoChanges <자동 변경 설정>", () => {

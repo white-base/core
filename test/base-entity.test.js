@@ -85,7 +85,7 @@ describe("[target: base-entity.js]", () => {
         describe("BaseEntity.BaseEntity() <생성 : 추상클래스>", () => {
             it("- new BaseEntity() : 예외 ", () => {
         
-                expect(()=> new BaseEntity('T1')).toThrow(/ES018/);
+                expect(()=> new BaseEntity('T1')).toThrow(/EL03111/);
             });
         });
         describe("BaseEntity.clone() <복제>", () => {

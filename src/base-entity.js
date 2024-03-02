@@ -379,7 +379,7 @@
             var Column = this.columns._baseType;
             var origin = p_origin ? p_origin : p_obj;
             
-            if (obj['_guid']) MetaRegistry.createSetObject(obj, this); 
+            if (obj['_guid']) MetaRegistry.setMetaObject(obj, this); 
 
             if (obj._baseEntity && obj._baseEntity['$ref']) {
                 obj['_baseEntity'] = MetaRegistry.findSetObject(obj._baseEntity['$ref'], origin);
@@ -431,7 +431,7 @@
 
                         column = new Column(key, null, obj);
                     }
-                    if(prop['_guid']) MetaRegistry.createSetObject(prop, column); 
+                    if(prop['_guid']) MetaRegistry.setMetaObject(prop, column); 
                     if (_this.columns.exist(key)) throw new ExtendError(/ES046/, null, ['columns', key]);
                     _this.columns.add(column);
                 }

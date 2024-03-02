@@ -219,7 +219,7 @@ describe("[target: meta-column.js]", () => {
                 table1.columns['c2'].alias = 'cc2'
 
                 expect(() => table1.columns.add('cc2')).toThrow(/ES042/);
-                expect(() => table1.columns.add('')).toThrow(/ES055/);
+                expect(() => table1.columns.add('')).toThrow(/EL03122/);
             });
 
         });

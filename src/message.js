@@ -1100,32 +1100,122 @@
                             msg: ''
                         },
                         111: {  // EL03111
-                            msg: ''
+                            msg: 'abstract, interface, enum 타입은 생성할 수 없습니다. $1[\'_KIND\'] = \'$2\''
                         },
                         112: {  // EL03112
-                            msg: ''
+                            msg: 'setObject(oGuid, origin) 의 oGuid 는 \'object\' 타입입니다. typeof oGuid = \'$1\''
                         },
                         113: {  // EL03113
-                            msg: ''
+                            msg: 'setObject(oGuid, origin) 네임스페이스가 서로 다릅니다. this._type = $1, oGuid._type = $2'
                         },
                         114: {  // EL03114
-                            msg: ''
+                            msg: 'setObject(oGuid, origin) origin 은 Guid 객체가 아닙니다. origin._type = \'$1\', origin._guid = \'$2\''
                         },
                         120: {  // meta-element.js
                             msg: ''
                         },
                         121: {  // EL03121
-                            msg: ''
+                            msg: '__SET$_name(val, call) val 은 \'string\' 타입입니다. typeof val = \'$1\''
                         },
                         122: {  // EL03122
+                            msg: '__SET$_name(val, call) val.length 은 0 보다 커야 합니다.'
+                        },
+                        
+                        200: {  // meta-registry.js
                             msg: ''
                         },
-                        200: {  // namespace-manager.js
+                        210: {  // 객체
                             msg: ''
                         },
                         211: {  // EL03211
+                            msg: 'register(meta) 등록할 meta 가 Guid 객체가 아닙니다. meta._type = \'$1\', meta._guid = \'$2\''
+                        },
+                        212: {  // EL03212
+                            msg: 'register(meta) 등록할 meta._guid 가 이미 등록되어 있습니다. meta._guid = \'$1\''
+                        },
+                        213: {  // EL03213
+                            msg: 'release(meta) 해제할 meta 는 string(guid) | object(Guid) 타입만 가능합니다. typeof meta = \'$1\''
+                        },
+                        
+                        220: {  // create
                             msg: ''
                         },
+                        221: {  // EL03221
+                            msg: 'createMetaObject(oGuid, origin) oGuid 는 \'object\' 타입만 가능합니다. typeof oGuid = \'$1\''
+                        },
+                        222: {  // EL03222
+                            msg: 'createMetaObject(oGuid, origin) oGuid._type 은 \'string\' 타입만 가능합니다.(length > 0) typeof oGuid._type = \'$1\''
+                        },
+                        223: {  // EL03223
+                            msg: 'createMetaObject(oGuid, origin) origin 는 \'object\' 타입만 가능합니다. typeof origin = \'$1\''
+                        },
+                        224: {  // EL03224
+                            msg: 'createMetaObject(oGuid, origin) [$1] 네임스페이스가 \'function\' 타입이 아닙니다. typeof coClass = \'$2\''
+                        },
+                        225: {  // EL03225
+                            msg: 'createReferObject(meta) meta 는 \'object\' 타입만 가능합니다. typeof meta = \'$1\''
+                        },
+                        226: {  // EL03226
+                            msg: 'createReferObject(meta) meta._guid 은 \'string\' 타입만 가능합니다.(length > 0) typeof meta._guid = \'$1\''
+                        },
+                        227: {  // EL03227
+                            msg: 'createNsReferObject(fun) fun 는 \'function\' 타입이 아닙니다. typeof fun = \'$1\''
+                        },
+
+                        230: {  // 네임스페이스
+                            msg: ''
+                        },
+                        231: {  // EL03231
+                            msg: 'registerClass(fun, ns, key) fun 이 \'function\' 타입이 아닙니다. typeof fun = \'$1\''
+                        },
+                        232: {  // EL03232
+                            msg: 'registerClass(fun, ns, key) ns 가 \'string\' 타입이 아닙니다. typeof ns = \'$1\''
+                        },
+                        233: {  // EL03233
+                            msg: 'registerClass(fun, ns, key) key 가 \'string\' 타입이 아닙니다. typeof key = \'$1\''
+                        },
+                        234: {  // EL03234
+                            msg: 'releaseClass(fullName) fullName 은 \'string\' 타입만 가능합니다.(length > 0) typeof fullName = \'$1\''
+                        },
+                        235: {  // EL03235
+                            msg: 'findClass(fun) fun 는 \'function\' 타입이 아닙니다. typeof fun = \'$1\''
+                        },
+                        236: {  // EL03236
+                            msg: 'getClass(fullName) fullName 은 \'string\' 타입만 가능합니다.(length > 0) typeof fullName = \'$1\''
+                        },
+
+                        240: {  // etc
+                            msg: ''
+                        },
+                        241: {  // EL03241
+                            msg: 'setMetaObject(oGuid, meta) oGuid 는 \'object\' 타입만 가능합니다. typeof oGuid = \'$1\''
+                        },
+                        242: {  // EL03242
+                            msg: 'setMetaObject(oGuid, meta) meta 는 \'object\' 타입만 가능합니다. typeof meta = \'$1\''
+                        },
+                        243: {  // EL03243
+                            msg: 'setMetaObject(meta) meta._guid 은 \'string\' 타입만 가능합니다.(length > 0) typeof meta._guid = \'$1\''
+                        },
+                        244: {  // EL03244
+                            msg: 'validObject(oGuid) oGuid 는 \'object\' 타입만 가능합니다. typeof oGuid = \'$1\''
+                        },
+                        245: {  // EL03245
+                            msg: 'hasGuidObject(oGuid, origin) guid 는 \'string\' 타입만 가능합니다.(length > 0) typeof guid = \'$1\''
+                        },
+                        246: {  // EL03246
+                            msg: 'hasGuidObject(oGuid, origin) origin[$1]는 \'object\' 타입이 아닙니다. typeof origin[$1] = \'$2\''
+                        },
+                        247: {  // EL03247
+                            msg: ''
+                        },
+                        
+                        250: {  // etc
+                            msg: ''
+                        },
+                        251: {  // EL03241
+                            msg: ''
+                        },
+
                         300: {
                             msg: ''
                         },
@@ -1182,14 +1272,14 @@
                      *  - 200~ : Collectoin.*       i-collectin.js, i-collectin-array.js, i-collection-property.js
                      *  - 300~ : Meta.Entity.*      i-control-export.js, i-control-group.js, i-control-import.js, i-control-schema.js, i-serialize.js, i-transaction.js
                      * 
-                     * POINT:
                      * L03 : Meta
                      *  - 100~ : meta-object.js:4, meta-element.js:2
                      *  - 200~ : meta-register.js:28
                      *      + 10 : 객체 등록 관련-5
-                     *      + 20 : 네임스페이스 동록 관련-4 
-                     *      + 30 : create 관련-11
-                     *      + 30 : 기타-11
+                     * POINT:
+                     *      + 20 : create 관련-11
+                     *      + 30 : 네임스페이스 동록 관련-4 
+                     *      + 40 : 기타-11
                      *  - 300~ : namespace-manager.js:10
                      * L04 : Collection
                      *  - 100~ : base-collection.js:5

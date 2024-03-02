@@ -63,7 +63,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
 
                 var obj01 = new MetaObjectB()
 
-                expect(()=> new MetaObjectA).toThrow(/ES018/)
+                expect(()=> new MetaObjectA).toThrow(/EL03111/)
                 // expect(()=> new MetaObjectB).toThrow(/ES018/)
             });
         });
@@ -194,8 +194,8 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 const obj5 = m5.getObject();
                 m6.setObject(obj5)
 
-                expect(()=> m2.setObject(-1)).toThrow(/ES021/)
-                expect(()=> m4.setObject(obj3, {})).toThrow(/ES022/)
+                expect(()=> m2.setObject(-1)).toThrow(/EL03112/)
+                expect(()=> m4.setObject(obj3, {})).toThrow(/EL03114/)
             });
             it("- setObject() : 커버리지 ", () => {
                 const m1 = new MetaObject();
@@ -440,7 +440,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 i.__SET$_name('E3')  // 접근금지
                 expect(i._name).toBe('E2');
 
-                expect(()=> i.__SET$_name(10, i)).toThrow(/ES021/);
+                expect(()=> i.__SET$_name(10, i)).toThrow(/EL03121/);
             });
         });
     });
