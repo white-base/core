@@ -55,11 +55,12 @@ describe("[target: namespace-manager.js]", () => {
                 const fun1 = function() {return 'Fun1'};
                 ns.add('fun1', fun1);
 
-                expect(()=> ns.add('a1.fun1', fun1)).toThrow(/ES041/);
+                expect(()=> ns.add('a1.fun1', fun1)).toThrow(/EL03333/);
+                expect(()=> ns.add('a1.fun1', fun1)).toThrow(/EL03332/);
             });
             it("- this.isOverlap : 예외 ", () => {
                 const ns = new NamespaceManager();
-                expect(()=> ns.isOverlap = 1).toThrow(/ES021/);
+                expect(()=> ns.isOverlap = 1).toThrow(/EL03311/);
             });
         });
         describe("NamespaceManager.list <요소 목록>", () => {
@@ -134,18 +135,22 @@ describe("[target: namespace-manager.js]", () => {
             it("- addNamespace() : [예외] 자른 다료형 ", () => {
                 const ns = new NamespaceManager();
     
-                expect(() => ns.addNamespace(['aa', 10])).toThrow('ES021');
-                expect(() => ns.addNamespace(10)).toThrow('ES021');
-                expect(() => ns.addNamespace({})).toThrow('ES021');
-                expect(() => ns.addNamespace(true)).toThrow('ES021');
+                expect(() => ns.addNamespace(['aa', 10])).toThrow('EL03314');
+                expect(() => ns.addNamespace(10)).toThrow('EL03313');
+                expect(() => ns.addNamespace({})).toThrow('EL03313');
+
+                expect(() => ns.addNamespace(true)).toThrow('EL03313');
+                expect(() => ns.addNamespace(true)).toThrow('EL03313');
             });
             it("- addNamespace() : [예외] ns/section 이름 규칙 ", () => {
                 const ns = new NamespaceManager();
     
-                expect(() => ns.addNamespace('.aa')).toThrow('ES042');
-                expect(() => ns.addNamespace('aa-bb')).toThrow('ES042');
-                expect(() => ns.addNamespace('aa.bb@')).toThrow('ES042');
-                expect(() => ns.addNamespace('aa.3bb')).toThrow('ES054');
+                expect(() => ns.addNamespace('.aa')).toThrow('EL03312');
+                expect(() => ns.addNamespace('aa-bb')).toThrow('EL03312');
+                expect(() => ns.addNamespace('aa.bb@')).toThrow('EL03312');
+
+                expect(() => ns.addNamespace('aa.3bb')).toThrow('EL03315');
+                expect(() => ns.addNamespace('aa.3bb')).toThrow('EL03321');
             });
         });
         describe("NamespaceManager.delNamespace(ns) <네임스페이스 해제>", () => {
@@ -184,7 +189,7 @@ describe("[target: namespace-manager.js]", () => {
                 ns.delNamespace('a1.b2');
                 expect(s.a1.b1).toBeDefined();
                 expect(s.a1.b2).not.toBeDefined();
-                expect(()=> ns.delNamespace(['a1', -1])).toThrow(/ES021/)
+                expect(()=> ns.delNamespace(['a1', -1])).toThrow(/EL03314/)
             });
             it("- delNamespace() : 없는 경우 ", () => {
                 const ns = new NamespaceManager();
@@ -226,7 +231,7 @@ describe("[target: namespace-manager.js]", () => {
             it("- 예외 : 타입 ", () => {
                 const ns = new NamespaceManager();
                 const s = ns.__storage;
-                expect(()=> ns.path([-1])).toThrow(/ES021/)
+                expect(()=> ns.path([-1])).toThrow(/EL03314/)
             });
         });
         describe("NamespaceManager.add(fullName, elem) <네임스페이스에 요소 설정>", () => {
@@ -264,7 +269,8 @@ describe("[target: namespace-manager.js]", () => {
                 const ns = new NamespaceManager();
     
                 // expect(() => ns.set('a1.b1', '.Fun', Function)).toThrow(/p_key/);
-                expect(() => ns.add('a1.b1.Fun%', Function)).toThrow('ES054');
+                expect(() => ns.add('a1.b1.Fun%', Function)).toThrow('EL03331');
+                expect(() => ns.add('a1.b1.Fun%', Function)).toThrow('EL03333');
             });
         });
         describe("NamespaceManager.find(fullname) <네임스페이스에 요소 얻기>", () => {
@@ -274,6 +280,7 @@ describe("[target: namespace-manager.js]", () => {
                 const fun = ns.find('a1.b1.Fun');
 
                 expect(fun).toBe(Function);
+                expect(ns.find('3Fun')).not.toBeDefined();
             });
         });
 
@@ -292,6 +299,8 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns.has(Array)).toBe(false);
                 expect(r1).toBe(true);
                 expect(r2).toBe(false);
+                expect(()=>ns.del('a1.b1.3Arrd')).toThrow('EL03334')
+                ;
             });
         });
         describe("NamespaceManager.getPath(elem) <네임스페이스 얻기>", () => {
@@ -324,7 +333,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- 예외 : 타입 ", () => {
                 const ns = new NamespaceManager();
-                expect(()=> ns.getPath()).toThrow(/ES051/)
+                expect(()=> ns.getPath()).toThrow(/EL03341/)
             });
         });
         describe("NamespaceManager.has(elem): bool <네임스페이스에 요소 유무>", () => {
@@ -420,6 +429,8 @@ describe("[target: namespace-manager.js]", () => {
 
                 expect(obj.list[0]).toEqual({ns:'', key:'str1', full: 'str1', elem: 'STR'})
                 expect(obj.list[1]).toEqual({ns:'a1', key:'num1', full: 'a1.num1', elem: 10})
+
+                expect(()=> ns.output(Function)).toThrow('EL03342')
             });
         });
         describe("NamespaceManager.load(str, parse?) <네임스페이스 불러오기>", () => {
@@ -466,8 +477,8 @@ describe("[target: namespace-manager.js]", () => {
                 const obj = JSON.parse(str, null);
                 const ns2 = new NamespaceManager();
             
-                expect(()=> ns2.load('STR')).toThrow(/ES0110/)
-                expect(()=> ns2.load({list: null})).toThrow(/ES021/)
+                expect(()=> ns2.load('STR')).toThrow(/EL03344/)
+                expect(()=> ns2.load({list: null})).toThrow(/EL03343/)
             });
         });
         describe("예외, 커버리지", () => {

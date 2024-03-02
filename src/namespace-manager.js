@@ -136,7 +136,7 @@
             {
                 get: function() { return isOverlap; },
                 set: function(val) { 
-                    if (typeof val !== 'boolean') throw new ExtendError(/ES021/, null, ['isOverlap', 'boolean']);
+                    if (typeof val !== 'boolean') throw new ExtendError(/EL03311/, null, [typeof val]);
                     isOverlap = val;
                 },
                 configurable: false,
@@ -160,27 +160,31 @@
             if (typeof obj === 'string' && obj.length > 0) return true;
             return false;
         }
+
         function _validNamespace(nsName) {  // 네임스페이스 이름 검사
             var regex = /^[_a-zA-Z]([.]?[_0-9a-zA-Z])*$/;
             return regex.test(nsName)
         }
+
         function _validName(sName) {   // 이름 검사
             var regex = /^[_a-zA-Z]([_0-9a-zA-Z])*$/;
             return regex.test(sName)
         }
+
         function _getArray(ns) {  // 네임스페이스 문자열 배열로 얻기
             var sections = [];
             if (ns === '') return sections;
             if (typeof ns === 'string') {
-                if (!_validNamespace(ns)) throw new ExtendError(/ES042/, null, [ns, '_validNamespace()']);
+                if (!_validNamespace(ns)) throw new ExtendError(/EL03312/, null, [ns]);
                 sections = ns.split('.');
             } else if (Array.isArray(ns)) {
                 sections = ns;
-            } else throw new ExtendError(/ES021/, null, ['ns', 'string, array']);
+            } else throw new ExtendError(/EL03313/, null, [typeof ns]);
+
             for (var i = 0; i < sections.length; i++) {
                 var sName =sections[i];
-                if (!_isString(sName)) throw new ExtendError(/ES021/, null, ['ns<array>', 'string']);
-                if (!_validName(sName)) throw new ExtendError(/ES054/, null, [sName, '_validName()']);
+                if (!_isString(sName)) throw new ExtendError(/EL03314/, null, [i, typeof sName]);
+                if (!_validName(sName)) throw new ExtendError(/EL03315/, null, [i, sName]);
             }
             return sections;
         }
@@ -230,16 +234,23 @@
          */
         NamespaceManager.prototype.addNamespace = function(p_ns) {
             var parent = this.__storage;
-            var sections = _getArray(p_ns);
+            var sections;
         
-            if (this.___KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
-        
-            for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
-                if (typeof parent[sections[i]] === 'undefined') {
-                    parent[sections[i]] = this.__createNsRefer();
+            try {
+                sections = _getArray(p_ns);
+
+                if (this.___KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
+            
+                for (var i = 0; i < sections.length; i+=1) {
+                    var sName = sections[i];
+                    if (typeof parent[sections[i]] === 'undefined') {
+                        parent[sections[i]] = this.__createNsRefer();
+                    }
+                    parent = parent[sections[i]];
                 }
-                parent = parent[sections[i]];
+
+            } catch (error) {
+                throw new ExtendError(/EL03321/, error, []);
             }
         };
 
@@ -249,14 +260,20 @@
          */
         NamespaceManager.prototype.delNamespace = function(p_ns) {
             var parent = this.__storage;
-            var sections = _getArray(p_ns);
+            var sections;
         
-            for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
-                if (parent[sName] && parent[sName]['_type'] === 'ns') {
-                    if (i === sections.length - 1) delete parent[sName];
-                    else parent = parent[sName];
-                } else return;
+            try {
+                sections = _getArray(p_ns);
+
+                for (var i = 0; i < sections.length; i+=1) {
+                    var sName = sections[i];
+                    if (parent[sName] && parent[sName]['_type'] === 'ns') {
+                        if (i === sections.length - 1) delete parent[sName];
+                        else parent = parent[sName];
+                    } else return;
+                }
+            } catch (error) {
+                throw new ExtendError(/EL03322/, error, []);
             }
         };
 
@@ -271,13 +288,19 @@
 
             if (!p_ns) return parent;
             
-            sections = _getArray(p_ns);
-            for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
-                if (parent[sName] && parent[sName]['_type'] === 'ns') {
-                    if (i === sections.length - 1) return parent[sName];    
-                    parent = parent[sName];
-                } else return;
+            try {
+                sections = _getArray(p_ns);
+
+                for (var i = 0; i < sections.length; i+=1) {
+                    var sName = sections[i];
+                    if (parent[sName] && parent[sName]['_type'] === 'ns') {
+                        if (i === sections.length - 1) return parent[sName];    
+                        parent = parent[sName];
+                    } else return;
+                }
+                
+            } catch (error) {
+                throw new ExtendError(/EL03323/, error, []);
             }
         };
 
@@ -289,27 +312,36 @@
         NamespaceManager.prototype.add = function(p_fullName, p_elem) {
             var parent = this.__storage;
             var sections;
-            var oPath = this._getPathObject(p_fullName);
-            var key = oPath['key'];
-            var ns = oPath['ns'];
+            var oPath;
+            var key;
+            var ns;
 
-            sections = _getArray(ns);
-            if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
-            if (!_validName(key)) throw new ExtendError(/ES054/, null, [key, '_validName()']);
-            if (!this.isOverlap && this.getPath(p_elem)) {
-                throw new ExtendError(/ES041/, null, ['elem', '[isOverlap=false]']);
-            }
-            
-            if (sections.length === 0) {    // 최상위 등록
-                parent[key] = p_elem;
-                return;
-            } else this.addNamespace(ns);
-
-            for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
-                if (i === sections.length - 1) { 
-                    parent[sName][key] = p_elem;
-                } else parent = parent[sName];
+            try {
+                oPath = this._getPathObject(p_fullName);
+                key = oPath['key'];
+                ns = oPath['ns'];
+                sections = _getArray(ns);
+    
+                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
+                if (!_validName(key)) throw new ExtendError(/EL03331/, null, [key]);
+                if (!this.isOverlap && this.getPath(p_elem)) {
+                    throw new ExtendError(/EL03332/, null, []);
+                }
+                
+                if (sections.length === 0) {    // 최상위 등록
+                    parent[key] = p_elem;
+                    return;
+                } else this.addNamespace(ns);
+    
+                for (var i = 0; i < sections.length; i+=1) {
+                    var sName = sections[i];
+                    if (i === sections.length - 1) { 
+                        parent[sName][key] = p_elem;
+                    } else parent = parent[sName];
+                }
+                
+            } catch (error) {
+                throw new ExtendError(/EL03333/, error, []);
             }
         };
 
@@ -322,16 +354,23 @@
             var parent = this.__storage;
             var sections;
 
-            sections = _getArray(p_fullName);
-            for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
-                if (parent[sName]) {
-                    if (i === sections.length - 1) {
-                        delete parent[sName];
-                        return true;
-                    } else parent = parent[sName];
-                } else return false;
+            try {
+                sections = _getArray(p_fullName);
+    
+                for (var i = 0; i < sections.length; i+=1) {
+                    var sName = sections[i];
+                    if (parent[sName]) {
+                        if (i === sections.length - 1) {
+                            delete parent[sName];
+                            return true;
+                        } else parent = parent[sName];
+                    } else return false;
+                }
+                
+            } catch (error) {
+                throw new ExtendError(/EL03334/, error, []);
             }
+
         };
 
         /**
@@ -354,13 +393,18 @@
             var parent = this.__storage;
             var sections;
 
-            sections = _getArray(p_fullName);
-            for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
-                if (parent[sName]) {
-                    if (i === sections.length - 1) return parent[sName];
-                    else parent = parent[sName];
-                } else return;
+            try {
+                sections = _getArray(p_fullName);   // try undefined
+                for (var i = 0; i < sections.length; i+=1) {
+                    var sName = sections[i];
+                    if (parent[sName]) {
+                        if (i === sections.length - 1) return parent[sName];
+                        else parent = parent[sName];
+                    } else return;
+                }
+                
+            } catch (error) {
+                return;                
             }
         };
         
@@ -373,7 +417,7 @@
             var namespace = this.__storage;
             var stack = [];
 
-            if (!p_elem) throw new ExtendError(/ES051/, null, ['p_elem']);
+            if (!p_elem) throw new ExtendError(/EL03341/, null, [typeof p_elem]);
 
             if (findElement(namespace)) {
                 return stack.join('.');
@@ -411,22 +455,28 @@
             var str;
             var temp = {list: arr};
 
-            for (var i = 0; i < this.list.length; i++) {
-                var fullName    = this.list[i];
-                var fun         = this.find(fullName);
-                var nObj        = this._getPathObject(fullName);
-                obj = { 
-                    ns: nObj.ns, 
-                    key: nObj.key, 
-                    full: fullName, 
-                    elem: fun
-                };
-                arr.push(obj);
+            try {
+                for (var i = 0; i < this.list.length; i++) {
+                    var fullName    = this.list[i];
+                    var fun         = this.find(fullName);
+                    var nObj        = this._getPathObject(fullName);
+                    obj = { 
+                        ns: nObj.ns, 
+                        key: nObj.key, 
+                        full: fullName, 
+                        elem: fun
+                    };
+                    arr.push(obj);
+                }
+    
+                if (typeof p_stringify === 'function') str = p_stringify(temp, {space: p_space} );
+                else str = JSON.stringify(temp, null, p_space);
+                return str;
+                
+            } catch (error) {
+                throw new ExtendError(/EL03342/, error, [error]);
             }
-
-            if (typeof p_stringify === 'function') str = p_stringify(temp, {space: p_space} );
-            else str = JSON.stringify(temp, null, p_space);
-            return str;
+            
         };
 
         /**
@@ -437,20 +487,21 @@
         NamespaceManager.prototype.load = function(p_str, p_parse) {
             var arr = [];
             
-            if (!_isString(p_str)) throw new ExtendError(/ES021/, null, ['p_str', 'string']);
+            if (!_isString(p_str)) throw new ExtendError(/EL03343/, null, [typeof p_str]);
             
             try {
                 if (typeof p_parse === 'function') arr = p_parse(p_str);
                 else arr = JSON.parse(p_str, null);
-            } catch (error) {
-                throw new ExtendError(/ES0110/, null, [typeof p_str, 'parse(...)', error]);
-            }
+                
+                this.init();
+                for (var i = 0; i < arr['list'].length; i++) {
+                    var o = arr['list'][i];
+                    var fun = o['elem'];
+                    this.add(o['full'], fun);
+                }
 
-            this.init();
-            for (var i = 0; i < arr['list'].length; i++) {
-                var o = arr['list'][i];
-                var fun = o['elem'];
-                this.add(o['full'], fun);
+            } catch (error) {
+                throw new ExtendError(/EL03344/, error, [error.message]);
             }
         };
 

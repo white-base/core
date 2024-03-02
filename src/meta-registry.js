@@ -339,7 +339,7 @@
             var _this = this;
             var arrObj;
 
-            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03244/, null, [typeof p_oGuid]);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03251/, null, [typeof p_oGuid]);
             
             arrObj = _getGuidList(p_oGuid);
             if (!validUniqueGuid() || !validReference(p_oGuid) || !validCollection(p_oGuid)) return false;
@@ -413,7 +413,7 @@
             var guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             var arrOrigin = [];
 
-            if (!_isString(guid)) throw new ExtendError(/EL03245/, null, [typeof guid]);
+            if (!_isString(guid)) throw new ExtendError(/EL03252/, null, [typeof guid]);
 
             if (Array.isArray(p_origin)) arrOrigin = p_origin;
             else arrOrigin.push(p_origin);
@@ -421,14 +421,14 @@
             for (var i = 0; i < arrOrigin.length; i++) {
                 var origin = arrOrigin[i];
                 var arrObj = _getGuidList(origin);
-                if (!_isObject(origin)) throw new ExtendError(/EL03246/, null, [i, typeof guid]);
+                if (!_isObject(origin)) throw new ExtendError(/EL03253/, null, [i, typeof guid]);
                 for (var ii = 0; ii < arrObj.length; ii++) {
                     if (arrObj[ii]._guid === guid) return true;
                 }
             }
             return false;
         };
-        
+
         /**
          * 지정한 객체에 참조타입 요소를 가지고 있는지 확인힙니다.  
          * 참조타입 : $ref: '...', $ns:'....'
@@ -436,8 +436,8 @@
          * @returns {boolean}
          */
         MetaRegistry.hasRefer = function(p_oGuid) {
-            if (!_isObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'object']);
-            if (!this.isGuidObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['target', 'guid']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03254/, null, [typeof p_oGuid]);
+            if (!this.isGuidObject(p_oGuid)) throw new ExtendError(/EL03255/, null, [p_oGuid['_type'], p_oGuid['_guid']]);
 
             return hasRefer(p_oGuid);
 
@@ -470,8 +470,8 @@
             var guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             var origin = p_origin;
 
-            if (!_isString(guid)) throw new ExtendError(/ES024/, null, ['guid', 'string']);
-            if (!_isObject(origin)) throw new ExtendError(/ES024/, null, ['p_origin', 'object']);
+            if (!_isString(guid)) throw new ExtendError(/EL03256/, null, [guid]);
+            if (!_isObject(origin)) throw new ExtendError(/EL03257/, null, [typeof origin]);
 
             return findObject(origin);
             
@@ -514,7 +514,7 @@
             var arrObj;
             var clone;
 
-            if (!_isObject(p_oGuid)) throw new ExtendError(/ES024/, null, ['p_oGuid', 'object']);
+            if (!_isObject(p_oGuid)) throw new ExtendError(/EL03244/, null, [typeof p_oGuid]);
             
             arrObj = _getGuidList(p_oGuid);
             clone = Util.deepCopy(p_oGuid);
@@ -522,7 +522,8 @@
             return clone;
 
             // inner function
-            function linkReference(oGuid, arr) {    // 참조 연결
+            function linkReference(oGuid, arr, parentName) {    // 참조 연결
+                parentName = parentName || '';
                 if (Array.isArray(oGuid)){
                     for(var i = 0; i < oGuid.length; i++) {
                         if (typeof oGuid[i] === 'object') linkReference(oGuid[i], arr);
@@ -532,9 +533,9 @@
                         if (_isObject(oGuid[prop])) {
                             if (oGuid[prop]['$ns']) {
                                 var ns = _this.getClass(oGuid[prop]['$ns']);
-                                if (typeof ns !== 'function') throw new ExtendError(/ES015/, null, ['$ns', oGuid[prop]['$ns']]);
+                                if (typeof ns !== 'function') throw new ExtendError(/EL03245/, null, [parentName, prop]);
                                 oGuid[prop] = ns; // function 타입 연결
-                            } else linkReference(oGuid[prop], arr);
+                            } else linkReference(oGuid[prop], arr, parentName ? parentName +'.'+ prop : prop);
                         }
                     }
                 }
@@ -616,11 +617,11 @@
             var oGuid;
             var meta;
 
-            if (typeof p_str !== 'string') throw new ExtendError(/ES021/, null, ['str', 'string']);
+            if (typeof p_str !== 'string') throw new ExtendError(/EL03246/, null, [typeof str]);
 
             obj = (typeof p_parse === 'function') ? p_parse(obj) : JSON.parse(obj, null);
             if (this.has(obj)) return this.find(obj['_guid']);  // 객체가 존재할 경우
-            if (!this.isGuidObject(obj)) throw new ExtendError(/ES022/, null, ['obj']);
+            if (!this.isGuidObject(obj)) throw new ExtendError(/EL03247/, null, [obj['_type'], obj['_guid']]);
 
             oGuid = this.transformRefer(obj);
             meta = this.createMetaObject(oGuid);
