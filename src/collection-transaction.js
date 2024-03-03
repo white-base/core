@@ -75,7 +75,7 @@
                 get: function() { return autoChanges; },
                 set: function(nVal) { 
                     if (typeof nVal !== 'boolean') {
-                        throw new ExtendError(/EL04311/, null, [typeof nVal]);
+                        throw new ExtendError(/EL04311/, null, [this.constructor.name ,typeof nVal]);
                     }
                     autoChanges = nVal;
                 },

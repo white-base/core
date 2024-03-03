@@ -115,13 +115,13 @@ describe("[target: meta-column.js]", () => {
                 }
                 var temp1  = new TempCollection();
 
-                expect(()=> temp1.addValue('i1', 'V1')).toThrow(/ES013/)
+                expect(()=> temp1.addValue('i1', 'V1')).toThrow(/EL05147/)
             });
             it("- _baseType 설정 : 예외  ", () => {
                 const t1 = new MetaTable('T1');
 
-                expect(()=> t1.columns._baseType = 10).toThrow(/ES021/)
-                expect(()=> t1.columns._baseType = MetaElement).toThrow(/ES032/)
+                expect(()=> t1.columns._baseType = 10).toThrow(/EL05141/)
+                expect(()=> t1.columns._baseType = MetaElement).toThrow(/EL05142/)
             });
         });
 
@@ -144,7 +144,7 @@ describe("[target: meta-column.js]", () => {
 
                 expect(table1.columns.count).toBe(2);
                 expect(table1.rows.count).toBe(1);
-                expect(()=>table1.columns.removeAt(1)).toThrow(/ES044/)
+                expect(()=>table1.columns.removeAt(1)).toThrow(/EL05146/)
             });
         });
         describe("BaseColumnCollection.addValue(name, value) <이름과 값으로 컬럼 추가>", () => {
@@ -162,8 +162,8 @@ describe("[target: meta-column.js]", () => {
 
                 expect(() => table1.columns.addValue('c1', {})).toThrow(/EL0130B/);
                 expect(() => table1.columns.addValue('c1', /reg/)).toThrow(/EL0130B/);
-                expect(()=> table1.columns.addValue(10)).toThrow(/ES021/)
-                expect(()=> table1.columns.addValue({})).toThrow(/ES021/)
+                expect(()=> table1.columns.addValue(10)).toThrow(/EL05152/)
+                expect(()=> table1.columns.addValue({})).toThrow(/EL05152/)
             });
         });
         describe("MetaTableColumnCollection.add(name | column) <컬럼 추가>", () => {
@@ -201,16 +201,16 @@ describe("[target: meta-column.js]", () => {
                 row1['i2'] = 'R2';
                 table1.rows.add(row1);
 
-                expect(() => table1.columns.add('i3')).toThrow(/ES045/);
-                expect(() => table1.columns.removeAt(0) ).toThrow(/ES044/);
-                expect(() => table1.columns.remove(table1.columns['i2'])).toThrow(/ES044/);
+                expect(() => table1.columns.add('i3')).toThrow(/EL05143/);
+                expect(() => table1.columns.removeAt(0) ).toThrow(/EL05146/);
+                expect(() => table1.columns.remove(table1.columns['i2'])).toThrow(/EL05146/);
             });
             it("- add(?) : 예외 ", () => {
                 var table1 = new MetaTable('T1');
 
-                expect(() => table1.columns.add(1)).toThrow(/ES022/);
-                expect(() => table1.columns.add({})).toThrow(/ES022/);
-                expect(() => table1.columns.add(/err/)).toThrow(/ES022/);
+                expect(() => table1.columns.add(1)).toThrow(/EL05151/);
+                expect(() => table1.columns.add({})).toThrow(/EL05151/);
+                expect(() => table1.columns.add(/err/)).toThrow(/EL05151/);
             });
             it("- add(?) : 예외 <별칭과 중복> ", () => {
                 var table1 = new MetaTable('T1');
@@ -218,7 +218,7 @@ describe("[target: meta-column.js]", () => {
                 table1.columns.add('c2');
                 table1.columns['c2'].alias = 'cc2'
 
-                expect(() => table1.columns.add('cc2')).toThrow(/ES042/);
+                expect(() => table1.columns.add('cc2')).toThrow(/EL05145/);
                 expect(() => table1.columns.add('')).toThrow(/EL03122/);
             });
 
@@ -296,7 +296,7 @@ describe("[target: meta-column.js]", () => {
 
                 expect(()=> view1.columns.addValue('c2', {})).toThrow(/EL0130B/)
                 expect(()=> view1.columns.addValue('c2', /reg/)).toThrow(/EL0130B/)
-                expect(()=> view1.columns.addValue(10, 10)).toThrow(/ES021/)
+                expect(()=> view1.columns.addValue(10, 10)).toThrow(/EL05163/)
             });
         });
         describe("MetaViewColumnCollection.add(name, baseCollection) <컬럼 추가>", () => {
@@ -329,10 +329,10 @@ describe("[target: meta-column.js]", () => {
             it("- add(?, ?) : 예외 ", () => {
                 var view1 = new MetaView('T1');
 
-                expect(()=> view1.columns.add('c2', {})).toThrow(/ES032/)
-                expect(()=> view1.columns.add('c2', 10)).toThrow(/ES032/)
-                expect(()=> view1.columns.add(10)).toThrow(/ES022/)
-                expect(()=> view1.columns.add({})).toThrow(/ES022/)
+                expect(()=> view1.columns.add('c2', {})).toThrow(/EL05161/)
+                expect(()=> view1.columns.add('c2', 10)).toThrow(/EL05161/)
+                expect(()=> view1.columns.add(10)).toThrow(/EL05162/)
+                expect(()=> view1.columns.add({})).toThrow(/EL05162/)
             });
         });
 
@@ -365,23 +365,23 @@ describe("[target: meta-column.js]", () => {
                 view1.columns.add('c2');
                 view1.columns['c1'].alias = 'cc1'
                 
-                expect(()=> view1.columns['c2'].columnName = 'cc1').toThrow(/ES042/)
-                expect(()=> view1.columns['c1'].columnName = 10).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].columnName = {}).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].alias = 10).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].alias = {}).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].caption = 10).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].caption = {}).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].isNotNull = 10).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].isNotNull = {}).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].isNullPass = 10).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].isNullPass = {}).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].getter = 10).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].getter = {}).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].setter = 10).toThrow(/ES021/)
-                expect(()=> view1.columns['c1'].setter = {}).toThrow(/ES021/)
-                expect(()=> view1.columns.addEntity(10)).toThrow(/ES032/)
-                expect(()=> view1.columns.addEntity({})).toThrow(/ES032/)
+                expect(()=> view1.columns['c2'].columnName = 'cc1').toThrow(/EL05114/)
+                expect(()=> view1.columns['c1'].columnName = 10).toThrow(/EL05112/)
+                expect(()=> view1.columns['c1'].columnName = {}).toThrow(/EL05112/)
+                expect(()=> view1.columns['c1'].alias = 10).toThrow(/EL05115/)
+                expect(()=> view1.columns['c1'].alias = {}).toThrow(/EL05115/)
+                expect(()=> view1.columns['c1'].caption = 10).toThrow(/EL05117/)
+                expect(()=> view1.columns['c1'].caption = {}).toThrow(/EL05117/)
+                expect(()=> view1.columns['c1'].isNotNull = 10).toThrow(/EL05131/)
+                expect(()=> view1.columns['c1'].isNotNull = {}).toThrow(/EL05131/)
+                expect(()=> view1.columns['c1'].isNullPass = 10).toThrow(/EL05132/)
+                expect(()=> view1.columns['c1'].isNullPass = {}).toThrow(/EL05132/)
+                expect(()=> view1.columns['c1'].getter = 10).toThrow(/EL05134/)
+                expect(()=> view1.columns['c1'].getter = {}).toThrow(/EL05134/)
+                expect(()=> view1.columns['c1'].setter = 10).toThrow(/EL05135/)
+                expect(()=> view1.columns['c1'].setter = {}).toThrow(/EL05135/)
+                expect(()=> view1.columns.addEntity(10)).toThrow(/EL05164/)
+                expect(()=> view1.columns.addEntity({})).toThrow(/EL05164/)
             });
         });
     });

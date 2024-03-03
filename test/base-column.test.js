@@ -69,7 +69,7 @@ describe("[target: base-column.js]", () => {
                 }
                 const s1 = new SubClass();
 
-                expect(()=> s1.clone()).toThrow(/ES013/)
+                expect(()=> s1.clone()).toThrow(/EL05119/) 
             });
         });
         describe("BaseColumn() <생성자>", () => {

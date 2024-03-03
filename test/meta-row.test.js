@@ -104,7 +104,7 @@ describe("[target: meta-row.js]", () => {
                 expect(table1.columns['c2']._entity === table1).toBe(true)
             });
             it("- new MetaRow() : 예외(빈 엔티티) ", () => {
-                expect(() => new MetaRow()).toThrow('ES032');
+                expect(() => new MetaRow()).toThrow('EL05211');
             });
         });
         describe("MetaObject.equal() <객체 비교>", () => {
@@ -367,7 +367,7 @@ describe("[target: meta-row.js]", () => {
                 const row1 = new MetaRow(a1)
                 obj1._key.pop() // 강제 키 제거
                 
-                expect(()=> row1.setObject(obj1)).toThrow(/ES063/)
+                expect(()=> row1.setObject(obj1)).toThrow(/EL05212/)
             });
             it("- 예외 : $ref 가 없는 경우 ", () => {
                 var e1 = new MetaElement('E1')
@@ -506,13 +506,13 @@ describe("[target: meta-row.js]", () => {
         
                 expect(table1.rows[0]['i1']).toBe('R1');
                 expect(table1.rows[0]['i2']).toBe(10);
-                expect(() => table1.rows.add(row2, true)).toThrow(/ES054/);
-                expect(() => table1.rows.add(row3, true)).toThrow('ES054');
+                expect(() => table1.rows.add(row2, true)).toThrow(/EL05224/);
+                expect(() => table1.rows.add(row3, true)).toThrow('EL05224');
             });
             it("- add(row) : 예외(다른 엔티티) ", () => {
                 var table1 = new MetaTable('T1');
             
-                expect(() => table1.rows.add('ERR')).toThrow('ES032');
+                expect(() => table1.rows.add('ERR')).toThrow('EL05222');
             });
             it("- add(row) : 예외(다른 객체) ", () => {
                 var table1 = new MetaTable('T1');
@@ -522,7 +522,7 @@ describe("[target: meta-row.js]", () => {
                 row['i1'] = 'R1';
                 table1.rows.add(row);
             
-                expect(() => table2.rows.add(row)).toThrow('ES034');        
+                expect(() => table2.rows.add(row)).toThrow('EL05223');        
             });
         });
 
@@ -743,7 +743,7 @@ describe("[target: meta-row.js]", () => {
                 expect(table1.rows[0][0]).toBe('R1');
                 table1.rows[0] = row2;
                 expect(table1.rows[0][0]).toBe('R2');
-                expect(() => table1.rows[0] = row3).toThrow(/ES032/);
+                expect(() => table1.rows[0] = row3).toThrow(/EL05221/);
             });
         });
     

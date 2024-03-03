@@ -1387,7 +1387,7 @@
                             msg: ''
                         },
                         311: {  // EL04311
-                            msg: 'TransactionCollection.autoChanges 는 \'boolean\' 타입입니다. typeof aucoChanges = \'$1\''
+                            msg: '$1.autoChanges 는 \'boolean\' 타입입니다. typeof aucoChanges = \'$2\''
                         },
                         320: {  // trans-queue.js
                             msg: ''
@@ -1403,24 +1403,215 @@
                         },
                     },
                     L05: {  // Meta.Entity.*
+                        100: {
+                            msg: ''
+                        },
+                        110: {  // BaseColumn
+                            msg: ''
+                        },
+                        111: {  // EL05111
+                            msg: '$1._entity 값이 [MetaElement] 인스턴스가 아닙니다.'
+                        },
+                        112: {  // EL05112
+                            msg: '$1.columnName 는 \'string\' 타입입니다. typeof columnName = \'$2\''
+                        },
+                        113: {  // EL05113
+                            msg: '기존에 $1.columnName \'$2\'이 존재합니다.'
+                        },
+                        114: {  // EL05114
+                            msg: '기존에 $1.alias \'$2\'이 존재하여 columnName 을 설정할 수 없습니다.'
+                        },
+                        115: {  // EL05115
+                            msg: '$1.alias 는 \'string\' 타입입니다. typeof alias = \'$2\''
+                        },
+                        116: {  // EL05116
+                            msg: '기존에 $1.alias \'$2\'이 존재합니다.'
+                        },
+                        117: {  // EL05117
+                            msg: '$1.caption 는 \'string\' 타입입니다. typeof caption = \'$2\''
+                        },
+                        118: {  // EL05118
+                            msg: 'setObject(oGuid, origin); oGuid.[\'_entity\'] guid 를 찾을 수 없습니다. name = $1, guid = $2' 
+                        },
+                        119: {  // EL05119
+                            msg: 'clone() 은 추상메소드 입니다. 상속해서 구현해야 합니다.'
+                        },
+
+                        120: {  // ObjectColumn
+                            msg: ''
+                        },
+                        121: {  // EL05121
+                            msg: '_load(prop); prop 는 \'object\' 타입입니다. typeof prop = \'$2\''
+                        },
+                        122: {  // EL05122
+                            msg: 'setObject(oGuid, origin); oGuid.[\'default\'] guid 를 찾을 수 없습니다. guid = $1' 
+                        },
+                        123: {  // EL05123
+                            msg: 'setObject(oGuid, origin); oGuid.[\'value\'] guid 를 찾을 수 없습니다. guid = $1' 
+                        },
+
+                        130: {  // MetaColumn
+                            msg: ''
+                        },
+                        131: {  // EL05131
+                            msg: '$1.isNotNull 는 \'boolean\' 타입입니다. typeof isNotNull = \'$2\''
+                        },
+                        132: {  // EL05132
+                            msg: '$1.isNullPass 는 \'boolean\' 타입입니다. typeof isNullPass = \'$2\''
+                        },
+                        133: {  // EL05133
+                            msg: '$1.constraints 의 배열 요소는 \'function\' | {regex: RegExp, msg: string} 타입입니다. typeof [$2].regex = \'$3\', [$2].msg = \'$4\''
+                        },
+                        134: {  // EL05134
+                            msg: '$1.getter 는 \'function\' 타입입니다. typeof getter = \'$2\''
+                        },
+                        135: {  // EL05135
+                            msg: '$1.setter 는 \'function\' 타입입니다. typeof setter = \'$2\''
+                        },
+                        136: {  // EL05136
+                            msg: 'addConstraint(regex, msg, code, condition); regex 는 RegExp 인스턴스가 아닙니다.'
+                        },
+                        137: {  // EL05137
+                            msg: 'addConstraint(regex, msg, code, condition); msg 는 \'string\' 타입입니다. typeof msg = \'$1\''
+                        },
+
+                        140: {  // BaseColumnCollection
+                            msg: ''
+                        },
+                        141: {  // EL05141
+                            msg: '$1._baseType 는 \'function\' 타입입니다. typeof getter = \'$2\''
+                        },
+                        142: {  // EL05142
+                            msg: '$1._baseType [BaseColumn]의 prototype 이 연결되어 있어야 합니다.(상속)'
+                        },
+                        143: {  // EL05143
+                            msg: 'add(name, vlaue); _onwer 의 rows 가 존재하여 columnColleciton 을 추가할 수 없습니다. _onwer.rows.count = $1'
+                        },
+                        144: {  // EL05144
+                            msg: 'add(name, vlaue); $1 에 \'$2\' 존재하여 추가할 수 없습니다.'
+                        },
+                        145: {  // EL05145
+                            msg: 'add(name, vlaue); $1 에 alias \'$2\'이 존재하여 추가할 수 없습니다.'
+                        },
+                        146: {  // EL05146
+                            msg: 'removeAt(idx); _onwer 의 rows 가 존재하여 columnColleciton 을 제거할 수 없습니다. _onwer.rows.count  = $1'
+                        },
+                        147: {  // EL05147
+                            msg: 'addValue(name, value) 은 추상메소드 입니다. 상속해서 구현해야 합니다.'
+                        },
+
+                        150: {  // MetaTableColumnCollection
+                            msg: ''
+                        },
+                        151: {  // EL05151
+                            msg: 'add(any); any 는 \'string\' | [BaseColumn] 타입입니다. typeof any = $1'
+                        },
+                        152: {  // EL05152
+                            msg: 'addValue(name, value); name 은 \'string\' 타입입니다. typeof name = $1'
+                        },
+                        160: {  // MetaViewColumnCollection
+                            msg: ''
+                        },
+                        161: {  // EL05161
+                            msg: 'add(any, refCol); refCol 값이 [BaseColumnCollection] 타입이 아닙니다.'
+                        },
+                        162: {  // EL05162
+                            msg: 'add(any, refCol); any 는 \'string\' | [BaseColumn] 타입입니다. typeof any = $1'
+                        },
+                        163: {  // EL05163
+                            msg: 'addValue(name, value, refCol); name 은 \'string\' 타입입니다. typeof name = $1'
+                        },
+                        164: {  // EL05164
+                            msg: 'addEntity(entity); entity 값이 [BaseEntity] 타입이 아닙니다.'
+                        },
+
+                        200: {  //
+                            msg: ''
+                        },
+                        210: {  // MetaRow
+                            msg: ''
+                        },
+                        211: {  // EL05211
+                            msg: '$1.constructor(entity) 값이 [BaseEntity] 타입이 아닙니다.'
+                        },
+                        212: {  // EL05212
+                            msg: 'setObject(oGuid, origin); oGuid[\'_elem\'].length = $1 길이와 oGuid[\'_key\'].length = $2 길이가 서로 다릅니다.'
+                        },
+
+                        220: {  // MetaRowCollection
+                            msg: ''
+                        },
+                        221: {  // EL05221
+                            msg: 'target의 _entity 객체와 $1._onwer 객체가 같이야 합니다.'
+                        },
+                        222: {  // EL05222
+                            msg: 'insertAt(pos, row, isCheck); row 는 [MetaRow] 타입이 아닙니다.'
+                        },
+                        223: {  // EL05223
+                            msg: 'insertAt(pos, row, isCheck); row 의 _entity 객체와 $1._onwer 객체가 같이야 합니다.'
+                        },
+                        224: {  // EL05224
+                            msg: 'insertAt(pos, row, isCheck); row[$1] 의 유효성 검사(valid)가 실패하였습니다. fail msg = \'$2\''
+                        },
+
+                        300: {  // base-entity.js
+                            msg: ''
+                        },
+                        310: {  // private method
+                            msg: ''
+                        },
+                        311: {  // EL05311
+                            msg: ''
+                        },
+                        320: {  // property
+                            msg: ''
+                        },
+                        321: {  // EL05321
+                            msg: ''
+                        },
+                        330: {  // method
+                            msg: ''
+                        },
+                        331: {  // EL05331
+                            msg: ''
+                        },
+                        340: {  // merge, copy
+                            msg: ''
+                        },
+                        341: {  // EL05341
+                            msg: ''
+                        },
+                        350: {  // load, output
+                            msg: ''
+                        },
+                        351: {  // EL05351
+                            msg: ''
+                        },
+                        360: {  // read, readSchema, readDate
+                            msg: ''
+                        },
+                        361: {  // EL05361
+                            msg: ''
+                        },
+
                     },
 
                     /**
                      * 네임스페이스 기준으로 분리하면 적합할 듯
                      * L01 : Common.*       message.js<제외>, extend-error.js<자체>, util.js:4, util-type.js:100~, observer.js:6, load-namespace.js <없음>
-                     *  - 100~ : util-type match
-                     *  - 200~ : util-type allow
-                     *  - 300~ : util-type etc
-                     *  - 400~ : util
+                     *  - 100 : util-type match
+                     *  - 200 : util-type allow
+                     *  - 300 : util-type etc
+                     *  - 400 : util
                      * 
                      * L02 : Interface.*    i-*.js:26  <14개>
-                     *  - 100~ : Meta.*,            i-object.js, i-marshal.js, i-element.js, i-list.js, i-control-list.js
-                     *  - 200~ : Collectoin.*       i-collectin.js, i-collectin-array.js, i-collection-property.js
-                     *  - 300~ : Meta.Entity.*      i-control-export.js, i-control-group.js, i-control-import.js, i-control-schema.js, i-serialize.js, i-transaction.js
+                     *  - 100 : Meta.*,            i-object.js, i-marshal.js, i-element.js, i-list.js, i-control-list.js
+                     *  - 200 : Collectoin.*       i-collectin.js, i-collectin-array.js, i-collection-property.js
+                     *  - 300 : Meta.Entity.*      i-control-export.js, i-control-group.js, i-control-import.js, i-control-schema.js, i-serialize.js, i-transaction.js
                      * 
                      * L03 : Meta
-                     *  - 100~ : meta-object.js:4, meta-element.js:2
-                     *  - 200~ : meta-register.js:28
+                     *  - 100 : meta-object.js:4, meta-element.js:2
+                     *  - 200 : meta-register.js:28
                      *      + 10 : 객체 등록 관련-5
                      *      + 20 : create 관련-11
                      *      + 30 : 네임스페이스 동록 관련-4 
@@ -1432,15 +1623,37 @@
                      *      + 30 : ns 요소 제어
                      *      + 40 : 기타
                      * L04 : Collection
-                     *  - 100~ : base-collection.js:5
-                     *  - 200~ : collection-array.js:5, collection-property.js:11
-                     *  - 300~ : collection-transaction.js:1, trans-queue.js, 
+                     *  - 100 : base-collection.js:5
+                     *  - 200 : collection-array.js:5, collection-property.js:11
+                     *  - 300 : collection-transaction.js:1, trans-queue.js, 
                      * 
-                     * POINT:
                      * L05 : Meta.Entity
-                     *  - 100~ : base-entity.js:34, base-column.js:9
-                     *  - 200~ : meta-column.js:21, object-column.js:3, meta-row.js:7
-                     *  - 300~ : meta-set.js:11, meta-table.js:9, meta-view.js:13
+                     *  - 100 : 
+                     *      + 10 : base-column-9
+                     *      + 20 : object-column-3
+                     *      + 30 : meta-column-7
+                     *      + 40 : base-column-collection-7
+                     *      + 50 : table-column-collection-2
+                     *      + 60 : view -column-collection-4
+                     *  - 200 : row
+                     *      + 10 : meta-row.js:7 
+                     * POINT:
+                     *  - 300 : base-entity.js:34
+                     *      + 10 : 속성-2
+                     *      + 20 : private method-11
+                     *      + 30 : 자체 메소드 :: seValue-1,  select-1,, clone-1
+                     *      + 40 : merge-6, copy-1
+                     *      + 50 : load-2, output
+                     *      + 60 : read-3, readSchema-2, readDate-2
+                     * 
+                     *  - 400 : meta-table.js:9
+                     *      + 10 : 4
+                     *      + 20 : colleciton-4
+                     *  - 500 : meta-view.js:13
+                     *      + 10 : 5
+                     *      + 20 : collection-6
+                     *  - 600 : meta-set.js:11
+                     *      + 10 : 11
                      * 
                      * G01 : 전역 코드? L01 에 적용가능?
                      */

@@ -208,7 +208,7 @@
             
             // BaseEntity 등록 & order(순서) 값 계산
             if (!(p_entity instanceof MetaObject && p_entity.instanceOf('BaseEntity'))) {
-                throw new ExtendError(/ES032/, null, ['entity', 'BaseEntity']);
+                throw new ExtendError(/EL05211/, null, []);
             }
             
             // 설정
@@ -327,7 +327,7 @@
             var origin = p_origin ? p_origin : p_oGuid;
             var entity;
             
-            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) throw new ExtendError(/ES063/, null, ['_elem', '_key']);
+            if (p_oGuid['_elem'].length !== p_oGuid['_key'].length) throw new ExtendError(/EL05212/, null, [p_oGuid['_elem'].length, p_oGuid['_key'].length]);
 
             if (p_oGuid['__subscribers']) {
                 this.__event.__SET$__subscribers(p_oGuid['__subscribers'], this.__event);
@@ -395,9 +395,8 @@
             return {
                 get: function() { return this._elements[p_idx]; },
                 set: function(nVal) {
-                    var typeName;
                     if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], nVal);
-                    if (nVal._entity !== this._owner) throw new ExtendError(/ES032/, null, ['_entity', 'this._owner']);
+                    if (nVal._entity !== this._owner) throw new ExtendError(/EL05221/, null, [this.constructor.name]);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
                 },
@@ -409,34 +408,34 @@
         /**
          * MetaRow 추가 idx 를 기준으로 검사한다.
          * @param {MetaRow} p_row 
-         * @param {boolean?} p_matchType true: 검사 진행, false: 검사 안함
+         * @param {boolean?} p_isCheck true: 검사 진행, false: 검사 안함
          * @returns {number}
          */
-        MetaRowCollection.prototype.add  = function(p_row, p_matchType) {
-            return this.insertAt(this._elements.length, p_row, p_matchType);
+        MetaRowCollection.prototype.add  = function(p_row, p_isCheck) {
+            return this.insertAt(this._elements.length, p_row, p_isCheck);
         };
 
         /**
          * pos 위치에 추가
          * @param {number} p_pos 
          * @param {MetaRow} p_row 
-         * @param {boolean?} p_matchType 유효성 검사 여부 
+         * @param {boolean?} p_isCheck 유효성 검사 여부 
          * @returns {boolean}
          */
-        MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_matchType) {
-            var matchType = p_matchType || false;
+        MetaRowCollection.prototype.insertAt  = function(p_pos, p_row, p_isCheck) {
+            var isCheck = p_isCheck || false;
             var result;
             var entity = p_row._entity;
 
-            if (!(p_row instanceof MetaRow )) throw new ExtendError(/ES032/, null, ['row', 'MetaRow']);
-            if (entity._guid !== this._owner._guid) throw new ExtendError(/ES034/, null, ['_guid', '_owner._guid']);
+            if (!(p_row instanceof MetaRow )) throw new ExtendError(/EL05222/, null, []);
+            if (entity._guid !== this._owner._guid) throw new ExtendError(/EL05223/, null, [this.constructor.name]);
             
             // valid 검사
-            if (matchType === true) {
+            if (isCheck === true) {
                 for (let i = 0; i < p_row.count; i++) {
-                    result = entity.columns[i].valid(p_row[i]);
+                    result = entity.columns[i].valid(p_row[i]);     // TODO: try 조건으로 변경 하면 하위 메세지 호출함
                     if(result) {
-                        throw new ExtendError(/ES054/, null, ['row', 'column.valid()', result.msg]);
+                        throw new ExtendError(/EL05224/, null, [i, result.msg]);
                     }
                 }
             }

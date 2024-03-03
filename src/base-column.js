@@ -70,7 +70,7 @@
             /**
              * 컬럼 컬렉션의 키
              * @readonly
-             * @member {BaseEntity} _L.Meta.Entity.ObjectColumn#__key
+             * @member {BaseEntity} _L.Meta.Entity.BaseColumn#__key
              */
             Object.defineProperty(this, '__key', 
             {
@@ -88,7 +88,7 @@
                 get: function() { return _entity; },
                 set: function(nVal) { 
                     if (typeof nVal !== 'undefined' && !(nVal instanceof MetaElement && nVal.instanceOf('BaseEntity'))) {
-                        throw new ExtendError(/ES032/, null, ['_entity', 'BaseEntity']);
+                        throw new ExtendError(/EL05111/, null, [this.constructor.name]);
                     }
                     _entity = nVal;
                 },
@@ -122,9 +122,9 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (nVal === this.columnName) return;
-                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['columnName', 'string']); 
-                    if (_entity && _entity.columns.existColumnName(nVal)) throw new ExtendError(/ES042/, null, [nVal, 'columnName']);
-                    if (_entity && _entity.columns.existAlias(nVal)) throw new ExtendError(/ES042/, null, [nVal, 'alias']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/EL05112/, null, [this.constructor.name, typeof nVal]); 
+                    if (_entity && _entity.columns.existColumnName(nVal)) throw new ExtendError(/EL05113/, null, [this.constructor.name, nVal]);
+                    if (_entity && _entity.columns.existAlias(nVal)) throw new ExtendError(/EL05114/, null, [this.constructor.name, nVal]);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -144,8 +144,8 @@
                 get: function() { return typeof alias === 'string' ? alias : this.columnName; },
                 set: function(nVal) { 
                    var entity = this._entity;
-                   if(typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['alias', 'string']);
-                   if (entity && entity.columns.existAlias(nVal)) throw new ExtendError(/ES042/, null, [nVal, 'alias']);
+                   if(typeof nVal !== 'string') throw new ExtendError(/EL05115/, null, [this.constructor.name, typeof nVal]); 
+                   if (entity && entity.columns.existAlias(nVal)) throw new ExtendError(/EL05116/, null, [this.constructor.name, nVal]);
                    alias = nVal;
                 },
                 configurable: false,
@@ -175,7 +175,7 @@
             {
                 get: function() { return caption; },
                 set: function(nVal) { 
-                    if(typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['caption', 'string']); 
+                    if(typeof nVal !== 'string') throw new ExtendError(/EL05117/, null, [this.constructor.name, typeof nVal]); 
                     caption = nVal; 
                 },
                 configurable: false,
@@ -264,7 +264,7 @@
 
             if (p_oGuid['_entity']) {
                 entity = MetaRegistry.findSetObject(p_oGuid['_entity']['$ref'], origin);
-                if (!entity) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_entity']);
+                if (!entity) throw new ExtendError(/EL05118/, null, [p_oGuid['name'], p_oGuid['_entity']['$ref']]);
                 this._entity = entity;
             } 
             this.columnName = p_oGuid['columnName'];
@@ -279,7 +279,7 @@
          * @abstract 
          */
         BaseColumn.prototype.clone = function() {
-            throw new ExtendError(/ES013/, null, ['clone()']);
+            throw new ExtendError(/EL05119/, null, []);
         };
 
         return BaseColumn;

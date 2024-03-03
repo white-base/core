@@ -87,18 +87,18 @@
 
         /**
          *  프로퍼티 객체로 속성 로드
-         * @param {object} p_property 
+         * @param {object} p_prop 
          */
-        ObjectColumn.prototype._load = function(p_property) {
-            if (typeof p_property === 'object' ) {
-                for(var prop in p_property) {
+        ObjectColumn.prototype._load = function(p_prop) {
+            if (typeof p_prop === 'object' ) {
+                for(var prop in p_prop) {
                     // if (p_property.hasOwnProperty(prop) &&
-                    if (Object.prototype.hasOwnProperty.call(p_property, prop) &&
+                    if (Object.prototype.hasOwnProperty.call(p_prop, prop) &&
                         ['default', 'caption', 'value', 'alias'].indexOf(prop) > -1) {
-                        this[prop] = p_property[prop];
+                        this[prop] = p_prop[prop];
                     }
                 }
-            } else throw new ExtendError(/ES021/, null, ['p_property', 'object']);
+            } else throw new ExtendError(/EL05121/, null, ['p_prop', 'object']);
         };
 
         /**
@@ -156,7 +156,7 @@
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) throw new ExtendError(/ES015/, null, ['ObjectColumn.default', '$ref']);
+                    if (!meta) throw new ExtendError(/EL05122/, null, [elem['$ref']]);
                     this['default'] = meta;
                 }
             }
@@ -170,7 +170,7 @@
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) throw new ExtendError(/ES015/, null, ['ObjectColumn.value', '$ref']);
+                    if (!meta) throw new ExtendError(/EL05123/, null, [elem['$ref']]);
                     this.value = meta;
                 }
             }

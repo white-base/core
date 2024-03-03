@@ -477,9 +477,9 @@ describe("[target: meta-column.js ]", () => {
                 const obj2 = c2.getObject();    // 엔티티 존재함
                 const cc1 = new MetaColumn('CC2');
                 const cc2 = new MetaColumn('CC2');
-                cc1.setObject(obj1);
+                cc1.setObject(obj1);``
 
-                expect(()=>cc2.setObject(obj2)).toThrow(/ES015/);
+                expect(()=>cc2.setObject(obj2)).toThrow(/EL05118/);
                 expect(cc1.equal(c1)).toBe(true);
                 expect(cc1._type).toBe(c1._type);
                 expect(cc1.caption).toBe(c1.caption);
@@ -558,9 +558,9 @@ describe("[target: meta-column.js ]", () => {
                 expect(c1.constraints.length).toBe(3);
                 c1.constraints = {regex:/10/, msg: 'sss'};
                 expect(c1.constraints.length).toBe(1);
-                expect(()=> c1.constraints = {reg:/10/, msg: 'sss'}).toThrow(/ES021/);
-                expect(()=> c1.addConstraint('str', 'sss')).toThrow(/ES021/);
-                expect(()=> c1.addConstraint(/reg/,  10)).toThrow(/ES021/);
+                expect(()=> c1.constraints = {reg:/10/, msg: 'sss'}).toThrow(/EL05133/);
+                expect(()=> c1.addConstraint('str', 'sss')).toThrow(/EL05136/);
+                expect(()=> c1.addConstraint(/reg/,  10)).toThrow(/EL05137/);
 
                 /**
                  * MEMO:
@@ -663,7 +663,7 @@ describe("[target: meta-column.js ]", () => {
             it("- 예외", () => {   
                 const c1 = new MetaColumn('c1');
 
-                expect(()=>c1._entity = 0).toThrow(/ES032/)
+                expect(()=>c1._entity = 0).toThrow(/EL05111/)
                 expect(()=>c1.default = {}).toThrow(/EL01127/)
                 expect(()=>c1.value = {}).toThrow(/EL01127/)
 

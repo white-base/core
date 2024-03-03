@@ -46,7 +46,7 @@ describe("[target: object-column.js]", () => {
             it("- 객체 생성 속성 확인 ", () => {
                 const t1 = new MetaTable('T1');
                 const obj1 = {aa: 1}
-                const prop = {
+                const prop = { 
                     default: {},
                     value: obj1,
                     alias: 'oo1',
@@ -63,8 +63,8 @@ describe("[target: object-column.js]", () => {
                 expect(o1.value).toBe(prop.value);
             });
             it("- 객체 생성 예외 : property ", () => {
-                // const o1 = new ObjectColumn('o1', null, prop);
-                expect(()=> new ObjectColumn('o1', null, 'ERR')).toThrow(/ES021/)
+                // const o1 = new ObjectColumn('o1', null, prop); 
+                expect(()=> new ObjectColumn('o1', null, 'ERR')).toThrow(/EL05121/)
             });
             it("- 커버리지 ", () => {
                 const prop = {
@@ -205,9 +205,9 @@ describe("[target: object-column.js]", () => {
                 const g1 = o1.getObject();
                 const o2 = new ObjectColumn('o2');
                 
-                expect(()=> o2.setObject(g1)).toThrow(/ES015/)
+                expect(()=> o2.setObject(g1)).toThrow(/EL05118/)
             });
-            it("- 예외 : $ref 연결 실패", () => {
+            it("- 예외 : $ref 연결 실패", () => { 
                 const t1 = new MetaTable('T1');
                 const t2 = new MetaTable('T2');
                 const e1 = new MetaElement('E1')
@@ -231,10 +231,10 @@ describe("[target: object-column.js]", () => {
                 gt2.columns._elem[0].value = {}
                 gt2.columns._elem[0].default = {}
                 const tt1 = new MetaTable('TT1');
-                const tt2 = new MetaTable('TT2');
+                const tt2 = new MetaTable('TT2'); 
 
-                expect(()=> tt1.setObject(gt1)).toThrow(/ES015/)
-                expect(()=> tt2.setObject(gt2)).toThrow(/ES015/)
+                expect(()=> tt1.setObject(gt1)).toThrow(/EL05123/)
+                expect(()=> tt2.setObject(gt2)).toThrow(/EL05122/)
                 /**
                  * MEMO: 상위컬럼을 강제로 삭제해서 예외 확인
                  */

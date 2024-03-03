@@ -494,7 +494,7 @@ describe("[target: meta-view.js]", () => {
                 view3.rows.add(view3.getValue());
                 view1.merge(view2, 0, true);
                 
-                expect(()=> view1.merge(view3, 0, true)).toThrow('ES054');
+                expect(()=> view1.merge(view3, 0, true)).toThrow('EL05224');
                 expect(view1.columns.count).toBe(3);
                 expect(view1.rows.count).toBe(2);
                 expect(view1.rows[0]['c1']).toBe('R1');
@@ -2255,8 +2255,8 @@ describe("[target: meta-view.js]", () => {
                 const c1 = view1.columns['c1'];
                 const c2 = view1.columns['c2'];
 
-                expect(()=> view1.columns.add('c1')).toThrow('ES042')
-                expect(()=> c2.columnName = 'c1').toThrow('ES042')
+                expect(()=> view1.columns.add('c1')).toThrow('EL05144')
+                expect(()=> c2.columnName = 'c1').toThrow('EL05113')
                 // 컬럼명 변경
                 c1.columnName = 'cc1';
                 c2.columnName = 'c1';
@@ -2282,18 +2282,18 @@ describe("[target: meta-view.js]", () => {
                 expect(c1._entity === view1).toBe(true)
                 expect(c2._entity === view1).toBe(true)
                 expect(c3._entity === view1).toBe(true)
-                expect(()=> view1.columns.add('c1')).toThrow('ES042')
-                expect(()=> view1.columns.add('c2')).toThrow('ES042')
-                expect(()=> view1.columns.add('c3')).toThrow('ES042')
-                expect(()=> c1.columnName = 'c2').toThrow('ES042')
-                expect(()=> c1.columnName = 'c3').toThrow('ES042')
-                expect(()=> view2.columns.add('c2')).toThrow('ES042')
-                expect(()=> view2.columns.add('c3')).toThrow('ES042')
-                expect(()=> c2.columnName = 'c1').toThrow('ES042')
-                expect(()=> c2.columnName = 'c3').toThrow('ES042')
-                expect(()=> view3.columns.add('c3')).toThrow('ES042')
-                expect(()=> c3.columnName = 'c1').toThrow('ES042')
-                expect(()=> c3.columnName = 'c2').toThrow('ES042')
+                expect(()=> view1.columns.add('c1')).toThrow('EL05144')
+                expect(()=> view1.columns.add('c2')).toThrow('EL05144')
+                expect(()=> view1.columns.add('c3')).toThrow('EL05144')
+                expect(()=> c1.columnName = 'c2').toThrow('EL05113')
+                expect(()=> c1.columnName = 'c3').toThrow('EL05113')
+                expect(()=> view2.columns.add('c2')).toThrow('EL05144')
+                expect(()=> view2.columns.add('c3')).toThrow('EL05144')
+                expect(()=> c2.columnName = 'c1').toThrow('EL05113')
+                expect(()=> c2.columnName = 'c3').toThrow('EL05113')
+                expect(()=> view3.columns.add('c3')).toThrow('EL05144')
+                expect(()=> c3.columnName = 'c1').toThrow('EL05113')
+                expect(()=> c3.columnName = 'c2').toThrow('EL05113')
             });
         });
         describe("alias 중복 검사", () => {
@@ -2304,7 +2304,7 @@ describe("[target: meta-view.js]", () => {
                 const c1 = view1.columns['c1'];
                 const c2 = view1.columns['c2'];
 
-                expect(()=> c2.alias = 'c1').toThrow('ES042')
+                expect(()=> c2.alias = 'c1').toThrow('EL05116')
                 // alias 변경
                 c1.alias = 'cc1';
                 c2.alias = 'c1';
@@ -2326,12 +2326,12 @@ describe("[target: meta-view.js]", () => {
                 const c2 = view2.columns['c2'];
                 const c3 = view3.columns['c3'];
                 
-                expect(()=> c1.alias = 'c2').toThrow('ES042')
-                expect(()=> c1.alias = 'c3').toThrow('ES042')
-                expect(()=> c2.alias = 'c1').toThrow('ES042')
-                expect(()=> c2.alias = 'c3').toThrow('ES042')
-                expect(()=> c3.alias = 'c1').toThrow('ES042')
-                expect(()=> c3.alias = 'c2').toThrow('ES042')
+                expect(()=> c1.alias = 'c2').toThrow('EL05116')
+                expect(()=> c1.alias = 'c3').toThrow('EL05116')
+                expect(()=> c2.alias = 'c1').toThrow('EL05116')
+                expect(()=> c2.alias = 'c3').toThrow('EL05116')
+                expect(()=> c3.alias = 'c1').toThrow('EL05116')
+                expect(()=> c3.alias = 'c2').toThrow('EL05116')
             });
         });
     });
@@ -2343,7 +2343,7 @@ describe("[target: meta-view.js]", () => {
             const view2 = new MetaView('V2', view1); // 전체 참조
             view2.columns.add('c2');
             
-            expect(()=> view1.columns.add('c3', view2.columns)).toThrow('ES042')
+            expect(()=> view1.columns.add('c3', view2.columns)).toThrow('EL05144')
             /**
              * MEMO: 순환 참조 발생시 baseEntity 가 없는 곳에서 컬럼 중복이 발생한다.
              */
