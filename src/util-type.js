@@ -170,7 +170,7 @@
      * @param {*} funBody 
      * @returns {object}
      */
-    function _getFunInfo(funBody) {
+    function _getFunInfo(funBody) {  // TODO: 이름 파서로 변경
         var syntax1 = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;    // 제한 규칙
         var syntax2 = /(\(.*\)|\w+)\s*(?:=>).*/;
         var regFunc1 = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
