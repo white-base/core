@@ -54,7 +54,7 @@ describe("[target: meta-view.js]", () => {
             });
             it("- 예외 : 자른자료형 ", () => {
                 var view1 = new MetaView('T1');
-                expect(()=> view1.viewName = {}).toThrow('ES021')
+                expect(()=> view1.viewName = {}).toThrow('EL05431')
             });
         });
         describe("MetaView.columns <컬럼 속성>", () => {
@@ -65,7 +65,7 @@ describe("[target: meta-view.js]", () => {
             });
             it("- 예외 : 다른타입 ", () => {
                 var view1 = new MetaView('T1');
-                expect(()=> view1.columns = {}).toThrow('ES032')
+                expect(()=> view1.columns = {}).toThrow('EL05432')
             });
             it("- 예외 : row 존재시 ", () => {
                 var view1 = new MetaView('T1');
@@ -73,7 +73,7 @@ describe("[target: meta-view.js]", () => {
                 view1.rows.add(view1.newRow())
                 var col = new MetaViewColumnCollection(view1);
 
-                expect(()=> view1.columns = col).toThrow('ES047')
+                expect(()=> view1.columns = col).toThrow('EL05433')
             });
             it("- 커버리지 : columns ", () => {
                 var view1 = new MetaView('T1');
@@ -85,7 +85,7 @@ describe("[target: meta-view.js]", () => {
         describe("MetaView._baseEntity <기본 엔티티>", () => {
             it("- 예외 : 타입이 다를 경우 ", () => {
                 var view1 = new MetaView('T1');
-                expect(()=> view1._baseEntity = {}).toThrow('ES032')
+                expect(()=> view1._baseEntity = {}).toThrow('EL05434')
             });
         });
         describe("MetaObject.equal() <객체 비교>", () => {
@@ -519,8 +519,8 @@ describe("[target: meta-view.js]", () => {
                 view2.rows.add(view2.getValue());
                 view3.rows.add(view3.getValue());
                 
-                expect(()=>view1.merge(view2, 1)).toThrow('ES042');
-                expect(()=>view1.merge(view3, 1)).toThrow('ES042');
+                expect(()=>view1.merge(view2, 1)).toThrow('EL05343');
+                expect(()=>view1.merge(view3, 1)).toThrow('EL05343');
                 expect(view1.columns.count).toBe(3);
                 expect(view1.rows.count).toBe(1);
                 expect(view1.rows[0]['c1']).toBe('R1');
@@ -574,8 +574,9 @@ describe("[target: meta-view.js]", () => {
                 view2.rows.add(view2.getValue());
                 view3.rows.add(view3.getValue());
 
-                expect(()=>view1.merge(view2, 3)).toThrow('ES042');
-                expect(()=>view1.merge(view3, 3)).toThrow('ES042');
+                expect(()=>view1.merge(view2, 3)).toThrow('EL05345');
+                expect(()=>view1.merge(view3, 3)).toThrow('EL05345');
+                expect(()=>view1.merge(view3, 3)).toThrow('EL05347');   // catch 
                 expect(view1.columns.count).toBe(3);
                 expect(view1.rows.count).toBe(1);
                 expect(view1.rows[0]['c1']).toBe('R1'); // rows[0]
@@ -688,7 +689,7 @@ describe("[target: meta-view.js]", () => {
                 expect(v1.columns['c2']._entity === v1).toBe(true);
                 expect(v1.columns['c3']._entity === v1).toBe(true);
                 // 참조가 있어서 로드 실패
-                expect(()=> v2.load(str2, parse)).toThrow('ES015')
+                expect(()=> v2.load(str2, parse)).toThrow('EL05436')
                 expect(()=> v3.load(str3, parse)).toThrow('EL04223')
                 /**
                  * MEMO: 외부에 참조(컬럼)가 있는 경우 예외 확인
@@ -698,7 +699,7 @@ describe("[target: meta-view.js]", () => {
                 const view1 = new MetaView('V1');
                 const v1 = new MetaView('VV1');
                 
-                expect(()=> v1.load(view1)).toThrow('ES022');
+                expect(()=> v1.load(view1)).toThrow('EL05351');
                 /**
                  * MEMO: MetaViw 로딩 예외 확인
                  */
@@ -795,8 +796,8 @@ describe("[target: meta-view.js]", () => {
                 expect(v1.columns['c2']._entity === v1).toBe(true);
                 expect(v1.columns['c3']._entity === v1).toBe(true);
                 expect(v1.getObject(2)).toEqual(vv1.getObject(2));
-                expect(()=> v2.read(view2.getObject())).toThrow('ES015')
-                expect(()=> v3.read(view3.getObject())).toThrow('ES015')
+                expect(()=> v2.read(view2.getObject())).toThrow('EL0532A')
+                expect(()=> v3.read(view3.getObject())).toThrow('EL0532C')
                 /**
                  * MEMO:
                  * - oGuid 를 read 할 경우, _entity 는 자신을 참조 확인
@@ -826,8 +827,8 @@ describe("[target: meta-view.js]", () => {
                 expect(v1.columns['cc1']._entity === v1).toBe(true);
                 expect(v1.columns['cc2']._entity === v1).toBe(true);
                 expect(v1.columns['cc3']._entity === v1).toBe(true);
-                expect(()=> v2.read(view2.getObject())).toThrow('ES015')
-                expect(()=> v3.read(view3.getObject())).toThrow('ES015')
+                expect(()=> v2.read(view2.getObject())).toThrow('EL0532A')
+                expect(()=> v3.read(view3.getObject())).toThrow('EL0532C')
                 /**
                  * MEMO:
                  * - oGuid 를 read 할 경우, _entity 는 자신을 참조 확인
@@ -916,11 +917,11 @@ describe("[target: meta-view.js]", () => {
             it("- read() : 예외", () => {
                 const v1 = new MetaView('V1')
 
-                expect(()=>v1.read({}, 0)).toThrow('ES067')
-                expect(()=>v1.read({}, 4)).toThrow('ES067')
-                expect(()=>v1.read({})).toThrow('ES021')
-                expect(()=>v1.read([])).toThrow('ES021')
-                expect(()=>v1.read()).toThrow('ES021')
+                expect(()=>v1.read({}, 0)).toThrow('EL05356')
+                expect(()=>v1.read({}, 4)).toThrow('EL05356')
+                expect(()=>v1.read({})).toThrow('EL05359')
+                expect(()=>v1.read([])).toThrow('EL05359')
+                expect(()=>v1.read()).toThrow('EL05354')
                 /**
                  * MEMO: 
                  * - opt 예외 확인
@@ -935,9 +936,10 @@ describe("[target: meta-view.js]", () => {
             it("- readSchema() : 예외 ", () => {
                 const v1 = new MetaView('V1')
 
-                expect(()=>v1.readSchema({})).toThrow('ES021')
-                expect(()=>v1.readSchema([])).toThrow('ES021')
-                expect(()=>v1.readSchema()).toThrow('ES021')
+                expect(()=>v1.readSchema({})).toThrow('EL05359')
+                expect(()=>v1.readSchema([])).toThrow('EL05359')
+                expect(()=>v1.readSchema()).toThrow('EL05358')
+                expect(()=>v1.readSchema()).toThrow('EL0535A')  // catch
                 /**
                  * MEMO: read() 테스트와 중복
                  */
@@ -947,9 +949,10 @@ describe("[target: meta-view.js]", () => {
             it("- readData() :  예외", () => {
                 const v1 = new MetaView('V1')
 
-                expect(()=>v1.readData({})).toThrow('ES021')
-                expect(()=>v1.readData([])).toThrow('ES021')
-                expect(()=>v1.readData()).toThrow('ES021')
+                expect(()=>v1.readData({})).toThrow('EL0535C')
+                expect(()=>v1.readData({})).toThrow('EL0535D') // catch
+                expect(()=>v1.readData([])).toThrow('EL0535C')
+                expect(()=>v1.readData()).toThrow('EL0535B')
                 /**
                  * MEMO: read() 테스트와 중복
                  */
@@ -1765,7 +1768,7 @@ describe("[target: meta-view.js]", () => {
 
                 expect(v1.viewName).toBe('V1');
                 expect(v1.columns.count).toBe(3);
-                expect(()=> v2.setObject(view2.getObject())).toThrow('ES015');
+                expect(()=> v2.setObject(view2.getObject())).toThrow('EL05436');
                 expect(()=> v3.setObject(view3.getObject())).toThrow('EL04223');
                 /**
                  * MEMO: 
@@ -1960,8 +1963,8 @@ describe("[target: meta-view.js]", () => {
             it("- 예외 ", () => {
                 const set1 = new MetaSet('S1');
                 
-                expect(()=> set1.views._baseType = {}).toThrow('ES021')
-                expect(()=> set1.views._baseType = MetaTable).toThrow('ES032')
+                expect(()=> set1.views._baseType = {}).toThrow('EL05441')
+                expect(()=> set1.views._baseType = MetaTable).toThrow('EL05442')
             });
         });
         describe("MetaViewCollection.add() <테이블 추가>", () => {
@@ -1983,17 +1986,17 @@ describe("[target: meta-view.js]", () => {
                 const set1 = new MetaSet('S1');
                 set1.views.add('V1');
                 
-                expect(()=> set1.views.add({})).toThrow('ES021')
+                expect(()=> set1.views.add({})).toThrow('EL05445')
                 // expect(()=> set1.tables.add()).toThrow(/ES051/)
-                expect(()=> set1.views.add('V1')).toThrow('ES042')
+                expect(()=> set1.views.add('V1')).toThrow('EL05446')
             });
             it("- 예외 : baseEntity", () => {
                 const set1 = new MetaSet('S1');
                 const table1 = new MetaTable('T1')
                 const view1 = new MetaView('V1')
                 
-                expect(()=> set1.views.add('V1', {})).toThrow('ES032')
-                expect(()=> set1.views.add(view1, table1)).toThrow('ES016') // 동시삽입
+                expect(()=> set1.views.add('V1', {})).toThrow('EL05444')
+                expect(()=> set1.views.add(view1, table1)).toThrow('EL05443') // 동시삽입
             });
         });
     });
@@ -2219,7 +2222,7 @@ describe("[target: meta-view.js]", () => {
                 set1.setObject(obj1);
                 // set2.setObject(obj2);
                 // set3.setObject(obj3);
-                expect(()=> set2.setObject(obj2)).toThrow('ES015')
+                expect(()=> set2.setObject(obj2)).toThrow('EL05436')
                 expect(()=> set3.setObject(obj3)).toThrow('EL04223')
 
                 // MetaRegistry.init();

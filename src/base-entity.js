@@ -71,7 +71,7 @@
     if (typeof ISerialize === 'undefined') throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
     if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-    if (typeof MetaElement === 'undefined') throw new ExtendError(Message.get('ES011', ['MetaElement', 'meta-element']));
+    if (typeof MetaElement === 'undefined') throw new Error(Message.get('ES011', ['MetaElement', 'meta-element']));
     if (typeof MetaRowCollection === 'undefined') throw new Error(Message.get('ES011', ['MetaRowCollection', 'meta-row']));
     if (typeof MetaRow === 'undefined') throw new Error(Message.get('ES011', ['MetaRow', 'meta-row']));
     if (typeof BaseColumnCollection === 'undefined') throw new Error(Message.get('ES011', ['BaseColumnCollection', 'meta-column']));
@@ -149,7 +149,7 @@
                 get: function() { return _metaSet; },
                 set: function(nVal) { 
                     if (!(nVal instanceof MetaElement && nVal.instanceOf('MetaSet'))) {
-                        throw new ExtendError(/ES032/, null, ['_metaSet', 'MetaSet']);
+                        throw new ExtendError(/EL05311/, null, [this.constructor.name]);
                     }
                     _metaSet = nVal;
                 },
@@ -165,7 +165,7 @@
             Object.defineProperty(this, 'columns', 
             {
                 get: function() { 
-                    throw new ExtendError(/ES0111/, null, ['columns', 'MetaEntity']);
+                    throw new ExtendError(/EL05312/, null, [this.constructor.name]);
                 },
                 configurable: true, // 하위에서 재정의 해야함
                 enumerable: true
@@ -210,22 +210,28 @@
 
         
         /**
-         * 엔티티 스카마 객체로 변환
+         * 엔티티 스카마 객체로 변환  (static method)
          * @param {object} p_oGuid getObject()로 얻은 객체
+         * @static
          * @returns {object}
          */
         BaseEntity.transformSchema  = function(p_oGuid) {
             var obj = {};
             var oGuid = p_oGuid;
 
-            if (!_isSchema(p_oGuid)) { 
-                throw new ExtendError(/ES021/, null, ['transformSchema(obj)', '{columns: ... , rows: ...}']);
-            }
+            try {
+                if (!_isSchema(p_oGuid)) { 
+                    throw new ExtendError(/EL05331/, null, [p_oGuid.columns, p_oGuid.rows]);
+                }
 
-            if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
-            if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
-            obj['columns'] = transformColumn(oGuid['columns'], oGuid);
-            obj['rows'] = transformRow(oGuid['rows'], oGuid);
+                if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
+                if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
+                obj['columns'] = transformColumn(oGuid['columns'], oGuid);
+                obj['rows'] = transformRow(oGuid['rows'], oGuid);
+                
+            } catch (error) {
+                throw new ExtendError(/EL05332/, error, []);
+            }
             
             return obj;
 
@@ -277,6 +283,62 @@
         };
         
         /**
+         * 엔티티 대상에 로우 만들기
+         * @protected
+         * @param {BaseEntity} p_entity 빌드 대상 엔티티
+         * @param {function} p_callback 로우 대상 조회 콜백
+         * @param {array<string>} p_items 선택할 로우명 , [] 또는 undefined 시 전체 선택
+         * @returns {BaseEntity}
+         */
+        BaseEntity.prototype._buildEntity = function(p_entity, p_callback, p_items) {
+            var orignal = this.clone();
+            var columnName;
+            var column;
+
+            try {
+                // columns 구성
+                if (p_items.length === 0) {
+                    for (var i = 0; i < this.columns.count; i++) {
+                        p_entity.columns.add(this.columns[i]);  // 참조로 등록
+                    }
+    
+                } else {
+                    for (var i = 0; i < p_items.length; i++) {
+                        columnName = p_items[i];
+                        if (!_isString(columnName)) throw new ExtendError(/EL05321/, null, [i, typeof columnName]);
+                        if (!this.columns.exist(columnName)) throw new ExtendError(/EL05322/, null, [columnName]);
+                        
+                        column = this.columns.alias(columnName)
+                        p_entity.columns.add(column);
+                    }
+                }
+    
+                // rows 등록
+                for (var i = 0; i < orignal.rows.count; i++) {  
+                    if (!p_callback || (typeof p_callback === 'function' 
+                        && p_callback.call(this, orignal.rows[i], i, p_entity))) {
+                        p_entity.rows.add(createRow(orignal.rows[i]));
+                    } 
+                }
+                return p_entity;
+                
+            } catch (error) {
+                throw new ExtendError(/EL05323/, error, []);
+            }
+
+            // inner function
+            function createRow(row) {
+                var alias, newRow;
+                newRow = p_entity.newRow();
+                for (var ii = 0; ii < p_entity.columns.count; ii++) {
+                    alias = p_entity.columns[ii].alias;
+                    newRow[alias] = row[alias];
+                }
+                return newRow;
+            }
+        };
+
+        /**
          * BaseEntity 읽기(로드)
          * @protected
          * @param {BaseEntity} p_object 대상 엔티티
@@ -286,19 +348,25 @@
             var opt = p_option || 3;
             var _this = this;
 
-            if (!(p_entity instanceof BaseEntity)) throw new ExtendError(/ES032/, null, ['entity', 'BaseEntity']);
-            if (typeof opt !== 'number') throw new ExtendError(/ES021/, null, ['opt', 'number']);
-            if (opt % 2 === 1) loadColumn(); // opt: 1, 3
-            if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
-            return;
+            try {
+                if (!(p_entity instanceof BaseEntity)) throw new ExtendError(/EL05324/, null, []);
+                if (typeof opt !== 'number') throw new ExtendError(/EL05325/, null, [typeof opt]);
+            
+                if (opt % 2 === 1) loadColumn(); // opt: 1, 3
+                if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
+                return;
+                
+            } catch (error) {
+                throw new ExtendError(/EL05326/, error, [opt]);
+            }
 
             // inner function
             function loadColumn() {
-                if (_this.rows.count > 0 ) throw new ExtendError(/ES045/, null, ['rows', 'column']);
+                if (_this.rows.count > 0 ) throw new ExtendError(/EL05327/, null, [opt]);
                 for (let i = 0; i < p_entity.columns.count; i++) {
                     var column = p_entity.columns[i].clone();
                     var key = p_entity.columns.keyOf(i);
-                    if (_this.columns.exist(key)) throw new ExtendError(/ES046/, null, ['columns', key]);
+                    if (_this.columns.exist(key)) throw new ExtendError(/EL05328/, null, [key]);
                     _this.columns.add(column);
                 }
             }
@@ -314,56 +382,6 @@
             }
         };
 
-        /**
-         * 엔티티 대상에 로우 만들기
-         * @protected
-         * @param {BaseEntity} p_entity 빌드 대상 엔티티
-         * @param {function} p_callback 로우 대상 조회 콜백
-         * @param {array<string>} p_items 선택할 로우명 , [] 또는 undefined 시 전체 선택
-         * @returns {BaseEntity}
-         */
-        BaseEntity.prototype._buildEntity = function(p_entity, p_callback, p_items) {
-            var orignal = this.clone();
-            var columnName;
-            var column;
-
-            // columns 구성
-            if (p_items.length === 0) {
-                for (var i = 0; i < this.columns.count; i++) {
-                    p_entity.columns.add(this.columns[i]);  // 참조로 등록
-                }
-
-            } else {
-                for (var i = 0; i < p_items.length; i++) {
-                    columnName = p_items[i];
-                    if (!_isString(columnName)) throw new ExtendError(/ES045/, null, ['items', 'string']);
-                    if (!this.columns.exist(columnName)) throw new ExtendError(/ES053/, null, ['items', 'column']);
-                    
-                    column = this.columns.alias(columnName)
-                    p_entity.columns.add(column);
-                }
-            }
-
-            // rows 등록
-            for (var i = 0; i < orignal.rows.count; i++) {  
-                if (!p_callback || (typeof p_callback === 'function' 
-                    && p_callback.call(this, orignal.rows[i], i, p_entity))) {
-                    p_entity.rows.add(createRow(orignal.rows[i]));
-                } 
-            }
-            return p_entity;
-
-            // inner function
-            function createRow(row) {
-                var alias, newRow;
-                newRow = p_entity.newRow();
-                for (var ii = 0; ii < p_entity.columns.count; ii++) {
-                    alias = p_entity.columns[ii].alias;
-                    newRow[alias] = row[alias];
-                }
-                return newRow;
-            }
-        };
 
         /**
          * 스키마 읽기
@@ -371,7 +389,7 @@
          * @param {boolean} p_createRow 기본값 = false, 컬럼이 없을경우 로우이름의 컬럼 생성 여부
          * @param {object} p_origin 원본 객체
          */
-        BaseEntity.prototype._readSchema  = function(p_obj, p_createRow, p_origin) {
+        BaseEntity.prototype._readSchema  = function(p_obj, p_isCreateRow, p_origin) {
             var _this = this;
             var obj = p_obj;
             var columns;
@@ -379,60 +397,67 @@
             var Column = this.columns._baseType;
             var origin = p_origin ? p_origin : p_obj;
             
-            if (obj['_guid']) MetaRegistry.setMetaObject(obj, this); 
+            try {
 
-            if (obj._baseEntity && obj._baseEntity['$ref']) {
-                obj['_baseEntity'] = MetaRegistry.findSetObject(obj._baseEntity['$ref'], origin);
-                if (!obj['_baseEntity']) throw new ExtendError(/ES015/, null, [key, '_baseEntity']);
-            }
+                if (obj['_guid']) MetaRegistry.setMetaObject(obj, this); 
 
-            columns = obj['columns'];
-            if (columns) {
-                // 1. $key 인덱스 기준으로 컬럼명 추출
-                if (columns['$key'] && Array.isArray(columns['$key'])) {
-                    for (var i = 0; i < columns['$key'].length; i++) {
-                        addColumn(columns['$key'][i], columns);
-                    }
-                // 2. 무작위로 컬럼명 추출
-                } else for (var key in columns) addColumn(key, columns);
-            }
+                if (obj._baseEntity && obj._baseEntity['$ref']) {
+                    obj['_baseEntity'] = MetaRegistry.findSetObject(obj._baseEntity['$ref'], origin);
+                    if (!obj['_baseEntity']) throw new ExtendError(/EL05329/, null, [obj._baseEntity['$ref']]);
+                }
+                columns = obj['columns'];
+                if (columns) {
+                        // 1. $key 인덱스 기준으로 컬럼명 추출
+                        if (columns['$key'] && Array.isArray(columns['$key'])) {
+                            for (var i = 0; i < columns['$key'].length; i++) {
+                                
+                                    addColumn(columns['$key'][i], columns);
+                                }
+                        // 2. 무작위로 컬럼명 추출
+                        } else for (var key in columns) addColumn(key, columns);
+                        
 
-            // opt
-            if (p_createRow === true) {
-                rows = obj['rows'];
-                if (Array.isArray(rows) && rows.length > 0)
-                for (var key in rows[0]) {    // rows[0] 기준
-                    if (Object.prototype.hasOwnProperty.call(rows[0], key) && !this.columns.existAlias(key)) {
-                        var prop = rows[0][key];
-                        if (!this.columns.exist(key)) {
-                            var column = new Column(key, this);
-                            this.columns.add(column);
+                }
+                // opt
+                if (p_isCreateRow === true) {
+                    rows = obj['rows'];
+                    if (Array.isArray(rows) && rows.length > 0)
+                    for (var key in rows[0]) {    // rows[0] 기준
+                        if (Object.prototype.hasOwnProperty.call(rows[0], key) && !this.columns.existAlias(key)) {
+                            var prop = rows[0][key];
+                            if (!this.columns.exist(key)) {
+                                var column = new Column(key, this);
+                                this.columns.add(column);
+                            }
                         }
                     }
                 }
+
+            } catch (error) {
+                throw new ExtendError(/EL0532A/, error, []);
             }
 
             // innner function
             function addColumn(key, columns) {
                 var column;
                 if (_isObject(columns[key])) {
-                    if (_this.rows.count > 0 ) throw new ExtendError(/ES045/, null, ['rows', 'column']);
+                    if (_this.rows.count > 0 ) throw new ExtendError(/EL0532B/, null, []);
                     var prop = columns[key];
                     var obj = {};
                     if (_isObject(prop) && prop['$ref']) {
                         column = MetaRegistry.findSetObject(prop['$ref'], origin);
-                        if (!column) throw new ExtendError(/ES015/, null, [key, 'column']);
+                        if (!column) throw new ExtendError(/EL0532C/, null, [key, prop['$ref']]);
                     } else {
                         if (_isObject(prop['_entity']) && prop['_entity']['$ref']) {
                             prop['_entity'] = MetaRegistry.findSetObject(prop['_entity']['$ref'], origin);
-                            if (!prop['_entity']) throw new ExtendError(/ES015/, null, [key, '_entity']);
+                            if (!prop['_entity']) throw new ExtendError(/EL0532D/, null, [key, '_entity']);
                         }
                         for (var p in prop) obj[p] = prop[p];
 
                         column = new Column(key, null, obj);
                     }
                     if(prop['_guid']) MetaRegistry.setMetaObject(prop, column); 
-                    if (_this.columns.exist(key)) throw new ExtendError(/ES046/, null, ['columns', key]);
+                    if (_this.columns.exist(key)) throw new ExtendError(/EL0532E/, null, [key]);
                     _this.columns.add(column);
                 }
             }
@@ -452,9 +477,12 @@
          * @returns {object}  
          */
         BaseEntity.prototype.getObject = function(p_vOpt, p_owned) {
-            var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
+            var obj;
             var vOpt = p_vOpt || 0;
-            var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+            var owned;
+
+            obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
+            owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
             if (vOpt < 2 && vOpt > -1 && this._metaSet) {
                 obj['_metaSet'] = MetaRegistry.createReferObject(this._metaSet);
@@ -475,6 +503,7 @@
          * columns, rows(데이터)를 초기화 한다
          */
         BaseEntity.prototype.reset = function() {
+            
             this.rows.clear();
             this.columns.clear();
         };
@@ -507,10 +536,15 @@
         BaseEntity.prototype.setValue  = function(p_row) {
             var alias = '';
 
-            if (!(p_row instanceof MetaRow)) throw new ExtendError(/ES032/, null, ['row', 'MetaRow']);
-            for(var i = 0; this.columns.count > i; i++) {
-                alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
-                this.columns[i].value = p_row[alias];
+            try {
+                if (!(p_row instanceof MetaRow)) throw new ExtendError(/EL05333/, null, []);
+                for(var i = 0; this.columns.count > i; i++) {
+                    alias = this.columns[i].alias;        // 별칭이 없을시 name 설정됨
+                    this.columns[i].value = p_row[alias];
+                }
+                
+            } catch (error) {
+                throw new ExtendError(/EL05334/, error, []);
             }
         };
 
@@ -530,150 +564,108 @@
             var tempRows = [], clone;
             var target;
 
-            // 1. 유효성 검사
-            if (!(p_target instanceof BaseEntity)) throw new ExtendError(/ES032/, null, ['target', 'BaseEntity']);
-            if (typeof p_option !== 'number') throw new ExtendError(/ES021/, null, ['option', 'number']);
+            
+            try {
+                // 1. 유효성 검사
+                if (!(p_target instanceof BaseEntity)) throw new ExtendError(/EL05341/, null, []);
+                if (typeof p_option !== 'number') throw new ExtendError(/EL05342/, null, [typeof p_option]);
 
-            // 2. 타겟 복제본 만들기
-            target = p_target.clone();
+                // 2. 타겟 복제본 만들기
+                target = p_target.clone();
 
-            // opt = 0
-            if (opt === 0) {
-                // 3-1. 로우 임시 저장 및 초기화 
-                for (var i = 0; i < this.rows.count; i++) {
-                    tempRows.push(this.rows[i].clone());
-                }
-                this.rows.clear();
-                // 3-2. 원본 row 추가
-                for (var i = 0; i < tempRows.length; i++) {
-                    newRow = this.newRow();
-                    for (var ii = 0; ii < this.columns.count; ii++) {
-                        alias = this.columns[ii].alias;
-                        if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
+                // opt = 0
+                if (opt === 0) {
+                    // 3-1. 로우 임시 저장 및 초기화 
+                    for (var i = 0; i < this.rows.count; i++) {
+                        tempRows.push(this.rows[i].clone());
                     }
-                    this.rows.add(newRow, p_matchType);
-                }
-                // 3-3. 타겟 row 추가
-                tarRows = target.rows;
-                for (var i = 0; i < tarRows.count; i++) {
-                    newRow = this.newRow();
-                    tarRow = tarRows[i];
-                    for (var ii = 0; ii < this.columns.count; ii++) {
-                        alias = this.columns[ii].alias;
-                        if (tarRow[alias]) newRow[alias] = tarRow[alias];
+                    this.rows.clear();
+                    // 3-2. 원본 row 추가
+                    for (var i = 0; i < tempRows.length; i++) {
+                        newRow = this.newRow();
+                        for (var ii = 0; ii < this.columns.count; ii++) {
+                            alias = this.columns[ii].alias;
+                            if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
+                        }
+                        this.rows.add(newRow, p_matchType);
                     }
-                    this.rows.add(newRow, p_matchType);
-                }
-            }
-            // opt = 1
-            if (opt === 1) {
-                tarColumns = target.columns;
-                tarRows = target.rows;
-                // 3-1. 컬럼 중복 검사
-                for (var i = 0; i < tarColumns.count; i++) {
-                    alias = tarColumns[i].alias;
-                    if (this.columns.exist(alias)) throw new ExtendError(/ES042/, null, ['column.name', alias]);
-                    if (this.columns.existAlias(alias)) throw new ExtendError(/ES042/, null, ['column.alias', alias]);
-                }
-                // 3-2. 로우 임시 저장 및 초기화 
-                for (var i = 0; i < this.rows.count; i++) {
-                    tempRows.push(this.rows[i].clone());
-                }
-                this.rows.clear();
-                // 3-3. 컬럼 추가
-                for (var i = 0; i < tarColumns.count; i++) {
-                    clone = tarColumns[i].clone(this);
-                    var key = tarColumns[i].alias;
-                    clone.columnName = key;
-                    clone.__SET$__key(key, clone);
-                    this.columns.add(clone);
-                }
-                // 3-4. 로우 추가 (기준:idx)
-                for (var i = 0; i < tempRows.length; i++) {
-                    newRow = this.newRow();
-                    for (var ii = 0; ii < this.columns.count; ii++) {
-                        alias = this.columns[ii].alias;
-                        if (tempRows[i][alias]) {                         // 원본 로우
-                            newRow[alias] = tempRows[i][alias];
-                            continue;
-                        } else if (tarRows[i] && tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                    // 3-3. 타겟 row 추가
+                    tarRows = target.rows;
+                    for (var i = 0; i < tarRows.count; i++) {
+                        newRow = this.newRow();
+                        tarRow = tarRows[i];
+                        for (var ii = 0; ii < this.columns.count; ii++) {
+                            alias = this.columns[ii].alias;
+                            if (tarRow[alias]) newRow[alias] = tarRow[alias];
+                        }
+                        this.rows.add(newRow, p_matchType);
                     }
-                    this.rows.add(newRow, p_matchType);
-                }                                
-            }
-            // opt = 2
-            if (opt === 2) {
-                tarColumns = target.columns;
-                tarRows = target.rows;
-                // 3-1. 로우 임시 저장 및 초기화 
-                for (var i = 0; i < this.rows.count; i++) {
-                    tempRows.push(this.rows[i].clone());
                 }
-                this.rows.clear();
-                // 3-2. 컬럼 추가
-                for (var i = 0; i < tarColumns.count; i++) {
-                    alias = tarColumns[i].alias;
-                    if (!this.columns.exist(alias)) {
+                // opt = 1
+                if (opt === 1) {
+                    tarColumns = target.columns;
+                    tarRows = target.rows;
+                    // 3-1. 컬럼 중복 검사
+                    for (var i = 0; i < tarColumns.count; i++) {
+                        alias = tarColumns[i].alias;
+                        if (this.columns.exist(alias)) throw new ExtendError(/EL05343/, null, [i, alias]);
+                        if (this.columns.existAlias(alias)) throw new ExtendError(/EL05344/, null, [i, alias]);
+                    }
+                    // 3-2. 로우 임시 저장 및 초기화 
+                    for (var i = 0; i < this.rows.count; i++) {
+                        tempRows.push(this.rows[i].clone());
+                    }
+                    this.rows.clear();
+                    // 3-3. 컬럼 추가
+                    for (var i = 0; i < tarColumns.count; i++) {
                         clone = tarColumns[i].clone(this);
-                        clone.name = alias;
+                        var key = tarColumns[i].alias;
+                        clone.columnName = key;
+                        clone.__SET$__key(key, clone);
                         this.columns.add(clone);
                     }
+                    // 3-4. 로우 추가 (기준:idx)
+                    for (var i = 0; i < tempRows.length; i++) {
+                        newRow = this.newRow();
+                        for (var ii = 0; ii < this.columns.count; ii++) {
+                            alias = this.columns[ii].alias;
+                            if (tempRows[i][alias]) {                         // 원본 로우
+                                newRow[alias] = tempRows[i][alias];
+                                continue;
+                            } else if (tarRows[i] && tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                        }
+                        this.rows.add(newRow, p_matchType);
+                    }                                
                 }
-                // 3-3. 로우 추가 : 원본
-                for (var i = 0; i < tempRows.length; i++) {
-                    newRow = this.newRow();
-                    for (var ii = 0; ii < this.columns.count; ii++) {
-                        alias = this.columns[ii].alias;
-                        if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
+                // opt = 2
+                if (opt === 2) {
+                    tarColumns = target.columns;
+                    tarRows = target.rows;
+                    // 3-1. 로우 임시 저장 및 초기화 
+                    for (var i = 0; i < this.rows.count; i++) {
+                        tempRows.push(this.rows[i].clone());
                     }
-                    this.rows.add(newRow, p_matchType);
-                }
-                // 3-4. 로우 추가 : 타겟
-                for (var i = 0; i < tarRows.count; i++) {
-                    newRow = this.newRow();
-                    for (var ii = 0; ii < this.columns.count; ii++) {
-                        alias = this.columns[ii].alias;
-                        if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
+                    this.rows.clear();
+                    // 3-2. 컬럼 추가
+                    for (var i = 0; i < tarColumns.count; i++) {
+                        alias = tarColumns[i].alias;
+                        if (!this.columns.exist(alias)) {
+                            clone = tarColumns[i].clone(this);
+                            clone.name = alias;
+                            this.columns.add(clone);
+                        }
                     }
-                    this.rows.add(newRow, p_matchType);
-                }
-            }
-            // opt = 3
-            if (opt === 3) {
-                tarColumns = target.columns;
-                tarRows = target.rows;
-                // 3-1. 컬럼 중복 검사
-                for (var i = 0; i < tarColumns.count; i++) {
-                    alias = tarColumns[i].alias;
-                    if (this.columns.exist(alias)) throw new ExtendError(/ES042/, null, ['columnName', alias]);
-                    if (this.columns.existAlias(alias)) throw new ExtendError(/ES042/, null, ['alais', alias]);
-                }
-                // 3-2. 로우 임시 저장 및 초기화 
-                for (var i = 0; i < this.rows.count; i++) {
-                    tempRows.push(this.rows[i].clone());
-                }
-                this.rows.clear();
-                // 3-3. 컬럼 추가
-                for (var i = 0; i < tarColumns.count; i++) {
-                    clone = tarColumns[i].clone(this);
-                    clone.name = tarColumns[i].alias;
-                    this.columns.add(clone);
-                }
-                // 3-4. 로우 추가 (idx)
-                for (var i = 0; i < tempRows.length; i++) {
-                    newRow = this.newRow();
-                    for (var ii = 0; ii < this.columns.count; ii++) {
-                        alias = this.columns[ii].alias;
-                        if (tempRows[i][alias]) {                         // 원본 로우
-                            newRow[alias] = tempRows[i][alias];
-                            continue;
-                        }else newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                    // 3-3. 로우 추가 : 원본
+                    for (var i = 0; i < tempRows.length; i++) {
+                        newRow = this.newRow();
+                        for (var ii = 0; ii < this.columns.count; ii++) {
+                            alias = this.columns[ii].alias;
+                            if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
+                        }
+                        this.rows.add(newRow, p_matchType);
                     }
-                    this.rows.add(newRow, p_matchType);
-                }     
-                // 3-5. 타겟 로우가 클 경우 로우 추가
-                if (tempRows.length < tarRows.count) {
-                    for (var i = tempRows.length; i < tarRows.count; i++) {
+                    // 3-4. 로우 추가 : 타겟
+                    for (var i = 0; i < tarRows.count; i++) {
                         newRow = this.newRow();
                         for (var ii = 0; ii < this.columns.count; ii++) {
                             alias = this.columns[ii].alias;
@@ -682,6 +674,53 @@
                         this.rows.add(newRow, p_matchType);
                     }
                 }
+                // opt = 3
+                if (opt === 3) {
+                    tarColumns = target.columns;
+                    tarRows = target.rows;
+                    // 3-1. 컬럼 중복 검사
+                    for (var i = 0; i < tarColumns.count; i++) {
+                        alias = tarColumns[i].alias;
+                        if (this.columns.exist(alias)) throw new ExtendError(/EL05345/, null, [i, alias]);
+                        if (this.columns.existAlias(alias)) throw new ExtendError(/EL05346/, null, [i, alias]);
+                    }
+                    // 3-2. 로우 임시 저장 및 초기화 
+                    for (var i = 0; i < this.rows.count; i++) {
+                        tempRows.push(this.rows[i].clone());
+                    }
+                    this.rows.clear();
+                    // 3-3. 컬럼 추가
+                    for (var i = 0; i < tarColumns.count; i++) {
+                        clone = tarColumns[i].clone(this);
+                        clone.name = tarColumns[i].alias;
+                        this.columns.add(clone);
+                    }
+                    // 3-4. 로우 추가 (idx)
+                    for (var i = 0; i < tempRows.length; i++) {
+                        newRow = this.newRow();
+                        for (var ii = 0; ii < this.columns.count; ii++) {
+                            alias = this.columns[ii].alias;
+                            if (tempRows[i][alias]) {                         // 원본 로우
+                                newRow[alias] = tempRows[i][alias];
+                                continue;
+                            }else newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                        }
+                        this.rows.add(newRow, p_matchType);
+                    }     
+                    // 3-5. 타겟 로우가 클 경우 로우 추가
+                    if (tempRows.length < tarRows.count) {
+                        for (var i = tempRows.length; i < tarRows.count; i++) {
+                            newRow = this.newRow();
+                            for (var ii = 0; ii < this.columns.count; ii++) {
+                                alias = this.columns[ii].alias;
+                                if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
+                            }
+                            this.rows.add(newRow, p_matchType);
+                        }
+                    }
+                }
+            } catch (error) {
+                throw new ExtendError(/EL05347/, error, [opt]);
             }
         };
 
@@ -694,27 +733,36 @@
         BaseEntity.prototype.select  = function(p_filter, p_args) {
             var args = Array.prototype.slice.call(arguments);
             var _this = this;
-            var MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
+            var MetaView;
             var columnNames = [];
             var callback;
             var view;
-            
-            if (!MetaView) throw new ExtendError(/ES0110/, null, ['Meta.Entity.MetaView', 'MetaRegistry.ns']);
-            
-            view = new MetaView('select');
 
-            // 매개변수 구성
-            if (typeof p_filter === 'function') {
-                callback = p_filter;
-                if (Array.isArray(p_args)) columnNames = p_args;
-                else if (args.length > 1) columnNames = args.splice(1);
-            } else if (Array.isArray(p_filter)) {
-                columnNames = p_filter;
-            } else {
-                columnNames = args.splice(0);
+            try {
+                args = Array.prototype.slice.call(arguments);
+                MetaView = MetaRegistry.ns.find('Meta.Entity.MetaView');
+                
+                if (!MetaView) throw new ExtendError(/EL05335/, null, ['Meta.Entity.MetaView']);
+                
+                view = new MetaView('select');
+    
+                // 매개변수 구성
+                if (typeof p_filter === 'function') {
+                    callback = p_filter;
+                    if (Array.isArray(p_args)) columnNames = p_args;
+                    else if (args.length > 1) columnNames = args.splice(1);
+                } else if (Array.isArray(p_filter)) {
+                    columnNames = p_filter;
+                } else {
+                    columnNames = args.splice(0);
+                }
+                // 엔티티 빌드
+                return this._buildEntity(view, callback, columnNames);
+
+            } catch (error) {
+                throw new ExtendError(/EL05336/, error, []);
             }
-            // 엔티티 빌드
-            return this._buildEntity(view, callback, columnNames);
+
         };
         
         /**
@@ -726,16 +774,19 @@
         BaseEntity.prototype.load = function(p_obj, p_parse) {
             var obj = p_obj;
             
-            if (p_obj instanceof BaseEntity) throw new ExtendError(/ES022/, null, ['BaseEntity']);
-
-            if (typeof obj === 'string') {
-                if (typeof p_parse === 'function') obj = p_parse(obj);
-                else obj = JSON.parse(obj, null);
+            
+            try {
+                if (p_obj instanceof BaseEntity) throw new ExtendError(/EL05351/, null, []);
+                if (typeof obj === 'string') {
+                    if (typeof p_parse === 'function') obj = p_parse(obj);
+                    else obj = JSON.parse(obj, null);
+                }    
+                if (!_isObject(obj)) throw new ExtendError(/EL05352/, null, [typeof obj]);
+                this.setObject(obj);
+                
+            } catch (error) {
+                throw new ExtendError(/EL05353/, error, []);
             }
-
-            if (!_isObject(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
-
-            this.setObject(obj);
         };
 
         // BaseEntity.prototype.load._TYPE = { params: String };
@@ -748,9 +799,10 @@
          * @returns {string}
          */
         BaseEntity.prototype.output = function(p_vOpt, p_stringify, p_space) {
-            var rObj = this.getObject(p_vOpt);
+            var rObj;
             var str;
-            
+
+            rObj = this.getObject(p_vOpt);
             if (typeof p_stringify === 'function') str = p_stringify(rObj, {space: p_space} );
             else str = JSON.stringify(rObj, null, p_space);
             return str;
@@ -771,18 +823,24 @@
             var entity = null;
             var opt = typeof p_option === 'undefined' ? 3 : p_option;
 
-            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
-            if (typeof opt !== 'number') throw new ExtendError(/ES021/, null, ['option', 'number']);
-            if (opt <= 0 || opt > 3) throw new ExtendError(/ES067/, null, ['option', '1', '3']);
+            
+            try {
+                if (!_isObject(p_obj)) throw new ExtendError(/EL05354/, null, [typeof p_obj]);
+                if (typeof opt !== 'number') throw new ExtendError(/EL05355/, null, [typeof opt]);
+                if (opt <= 0 || opt > 3) throw new ExtendError(/EL05356/, null, [opt]);
 
-            if (p_obj instanceof BaseEntity) {
-                this._readEntity(p_obj, p_option);
-            } else{
-                if (p_obj.viewName) this.viewName = p_obj.viewName;
-                if (p_obj.tableName) this.tableName = p_obj.tableName;
-                // 스키마 및 데이터 읽기
-                if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
-                if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
+                if (p_obj instanceof BaseEntity) {
+                    this._readEntity(p_obj, p_option);
+                } else{
+                    if (p_obj.viewName) this.viewName = p_obj.viewName;
+                    if (p_obj.tableName) this.tableName = p_obj.tableName;
+                    // 스키마 및 데이터 읽기
+                    if (opt % 2 === 1) this.readSchema(p_obj, opt === 3 ? true : false); // opt: 1, 3
+                    if (Math.floor(opt / 2) >= 1) this.readData(p_obj); // opt: 2, 3
+                }
+                
+            } catch (error) {
+                throw new ExtendError(/EL05357/, error, []);
             }
         };
         
@@ -795,15 +853,20 @@
         BaseEntity.prototype.readSchema  = function(p_obj, p_createRow) {
             var obj = p_obj;
             
-            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
-
-            if (MetaRegistry.isGuidObject(p_obj)) {
-                if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = BaseEntity.transformSchema(obj); // gObj >> sObj<요약>
+            
+            try {
+                if (!_isObject(p_obj)) throw new ExtendError(/EL05358/, null, [typeof p_obj]);
+                if (MetaRegistry.isGuidObject(p_obj)) {
+                    if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
+                    obj = BaseEntity.transformSchema(obj); // gObj >> sObj<요약>
+                }
+                if (!_isSchema(obj)) throw new ExtendError(/EL05359/, null, [obj.columns, obj.rows]);
+    
+                this._readSchema(obj, p_createRow);
+                
+            } catch (error) {
+                throw new ExtendError(/EL0535A/, error, []);
             }
-            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
-
-            this._readSchema(obj, p_createRow);
         };        
 
         /**
@@ -814,23 +877,29 @@
             var obj = p_obj;
             var rows;
 
-            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
-
-            if (MetaRegistry.isGuidObject(p_obj)) {
-                if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
-                obj = BaseEntity.transformSchema(p_obj);
-            }
-            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
             
-            rows = obj['rows'];
-            if (Array.isArray(rows) && this.columns.count > 0) {
-                for (var i = 0; i < rows.length; i++) {
-                    var row = this.newRow(this);
-                    for (var key in rows[i]) {
-                        if (Object.prototype.hasOwnProperty.call(row, key)) row[key] = rows[i][key];
-                    }
-                    this.rows.add(row);
+            try {
+                if (!_isObject(p_obj)) throw new ExtendError(/EL0535B/, null, [typeof p_obj]);
+    
+                if (MetaRegistry.isGuidObject(p_obj)) {
+                    if (MetaRegistry.hasRefer(p_obj)) obj = MetaRegistry.transformRefer(p_obj);
+                    obj = BaseEntity.transformSchema(p_obj);
                 }
+                if (!_isSchema(obj)) throw new ExtendError(/EL0535C/, null, [obj.columns, obj.rows]);
+                
+                rows = obj['rows'];
+                if (Array.isArray(rows) && this.columns.count > 0) {
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = this.newRow(this);
+                        for (var key in rows[i]) {
+                            if (Object.prototype.hasOwnProperty.call(row, key)) row[key] = rows[i][key];
+                        }
+                        this.rows.add(row);
+                    }
+                }
+                
+            } catch (error) {
+                throw new ExtendError(/EL0535D/, error, []);
             }
         };
 
@@ -841,9 +910,9 @@
          */
         BaseEntity.prototype.write  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var oSch;
-            var oGuid = this.getObject(p_vOpt);
-
+            var oGuid;
+            
+            oGuid = this.getObject(vOpt);
             return BaseEntity.transformSchema(oGuid);
         };
 
@@ -854,11 +923,11 @@
          */
         BaseEntity.prototype.writeSchema  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            
-            var schema = this.write(vOpt);
+            var schema;
+
+            schema = this.write(vOpt);
             schema.rows = [];
-            return schema;
-            
+            return schema;                
         };
 
         /**
@@ -868,8 +937,9 @@
          */
         BaseEntity.prototype.writeData  = function(p_vOpt) {
             var vOpt = p_vOpt || 0;
-            var schema = this.write(vOpt);
+            var schema;
             
+            schema = this.write(vOpt);
             schema.columns = {};
             return schema;
         };
@@ -880,7 +950,7 @@
          * @returns {BaseEntity} 복제한 객체
          */
         BaseEntity.prototype.clone = function() {
-            throw new ExtendError(/ES013/, null, ['clone()']);
+            throw new ExtendError(/EL05337/, null, []);
         };
 
         /** 
@@ -889,7 +959,7 @@
          * @returns {MetaView} 복사한 뷰 객체
          */
         BaseEntity.prototype.copy = function() {
-            throw new ExtendError(/ES013/, null, ['copy()']);
+            throw new ExtendError(/EL05348/, null, []);
         };
 
         

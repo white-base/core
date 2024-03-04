@@ -382,7 +382,7 @@ describe("[target: meta-row.js]", () => {
                 const row1 = new MetaRow(a1)
                 obj1._elem[0] = 'ERR' // 강제 guid 제거
                 
-                expect(()=> row1.setObject(obj1)).toThrow(/ES015/)
+                expect(()=> row1.setObject(obj1)).toThrow(/EL05213/)
             });
             /**
              * 예외

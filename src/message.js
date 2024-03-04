@@ -954,6 +954,33 @@
                         405: {  // EL01405
                             msg: 'isImplementOf(target); target 은 <function, string> 타입만 가능합니다. typeof target = \'$1\''
                         },
+
+                        // etc
+                        500: {
+                            msg: ''
+                        },
+                        510: {  // observer.js
+                            msg: ''
+                        },
+                        511: {  // EL01511
+                            msg: 'new Observer(caller); caller 는 \'object\' 타입이 아닙니다. typeof caller = $1'
+                        },
+                        512: {  // EL01512
+                            msg: 'Observer.isLog 는 \'boolean\' 타입이 아닙니다. typeof isLog = $1'
+                        },
+                        513: {  // EL01513
+                            msg: 'Observer.isSingleMode 는 \'boolean\' 타입이 아닙니다. typeof isSingleMode = $1'
+                        },
+                        514: {  // EL01514
+                            msg: 'Observer.____subscribers 값은  \'object\' 타입이 아닙니다. typeof ____subscribers = $1'
+                        },
+                        515: {  // EL01515
+                            msg: 'Observer.____subscribers[\'any\'] 객체가 없습니다. { any: undefined }'
+                        },
+                        516: {  // EL01516
+                            msg: 'subscribe(fn, code); fn 는 \'function\' 타입이 아닙니다. typeof fn = $1'
+                        },
+
                     },
                     L02: {  // Interface.*
                         
@@ -1497,7 +1524,7 @@
                             msg: 'removeAt(idx); _onwer 의 rows 가 존재하여 columnColleciton 을 제거할 수 없습니다. _onwer.rows.count  = $1'
                         },
                         147: {  // EL05147
-                            msg: 'addValue(name, value) 은 추상메소드 입니다. 상속해서 구현해야 합니다.'
+                            msg: 'addValue(name, value) 은 추상메소드 입니다. 구현해야 합니다.'
                         },
 
                         150: {  // MetaTableColumnCollection
@@ -1537,6 +1564,9 @@
                         212: {  // EL05212
                             msg: 'setObject(oGuid, origin); oGuid[\'_elem\'].length = $1 길이와 oGuid[\'_key\'].length = $2 길이가 서로 다릅니다.'
                         },
+                        213: {  // EL05213
+                            msg: 'setObject(oGuid, origin); oGuid[\'_elem\'][$1] guid 를 찾을 수 없습니다. guid = $2'
+                        },
 
                         220: {  // MetaRowCollection
                             msg: ''
@@ -1557,41 +1587,279 @@
                         300: {  // base-entity.js
                             msg: ''
                         },
-                        310: {  // private method
+                        310: {  // property
                             msg: ''
                         },
                         311: {  // EL05311
-                            msg: ''
+                            msg: '$1._mestaset 값은 [MetaSet] 타입이 아닙니다.'
                         },
-                        320: {  // property
+                        312: {  // EL05312
+                            msg: '$1.columns 속성을 재정의해야 합니다.'
+                        },
+
+                        320: {  // private method :: _buildEntity, _readEntity, _readSchema - 14
                             msg: ''
                         },
                         321: {  // EL05321
-                            msg: ''
+                            msg: '_buildEntity(entity, cb, items); items[$1] 가 \'string\' 타입이 아닙니다. typeof items[$1] = $2'
                         },
-                        330: {  // method
+                        322: {  // EL05322
+                            msg: '_buildEntity(entity, cb, items); this.columns 에 \'$1\' 컬럼명이 존재하여 추가할 수 없습니다.'
+                        },
+                        323: {  // EL05323
+                            msg: '_buildEntity(entity, cb, items); entity 에 대한 row 생성이 실패하였습니다.'
+                        },
+                        324: {  // EL05324
+                            msg: '_readEntity(entity, opt); entity 가 [BaseEntity] 타입이 아닙니다.'
+                        },
+                        325: {  // EL05325
+                            msg: '_readEntity(entity, opt); opt 가 \'number\' 타입이 아닙니다. typeof opt = $1'
+                        },
+                        326: {  // EL05326
+                            msg: '_readEntity(entity, opt); entity 읽기가 실패하였습니다. opt = $1'
+                        },
+                        327: {  // EL05327
+                            msg: '_readEntity(entity, opt); this.rows 가 존재하여 컬럼을 load 할 수 없습니다. opt = $1'
+                        },
+                        328: {  // EL05328
+                            msg: '_readEntity(entity, opt); this.columns 에 \'$1\' 컬럼명이 존재하여 추가할 수 없습니다.'
+                        },
+                        329: {  // EL05329
+                            msg: '_readSchema(obj, isRow, origin); obj._baseEntity guid를 찾을 수 없습니다. guid = $1'
+                        },
+                        '32A': {  // EL0532A
+                            msg: '_readSchema(obj, isRow, origin); 스키마 읽기가 실패하였습니다.'
+                        },
+                        '32B': {  // EL0532B
+                            msg: '_readSchema(obj, isRow, origin); this.rows 가 존재하여 컬럼을 추가 할 수 없습니다.'
+                        },
+                        '32C': {  // EL0532C
+                            msg: '_readSchema(obj, isRow, origin); this.columns[$1] guid를 찾을 수 없습니다. guid = $2'
+                        },
+                        '32D': {  // EL0532D
+                            msg: '_readSchema(obj, isRow, origin); this.columns[$1]._entity guid를 찾을 수 없습니다. guid = $2'
+                        },
+                        '32E': {  // EL0532E
+                            msg: '_readSchema(obj, isRow, origin); this.columns 에 \'$1\' 컬럼명이 존재하여 추가할 수 없습니다.'
+                        },
+
+                        330: {  // method :: transformSchema(static), setValue, clone, select - 7, 예외 없음 : getValue, clear, reset, newRow, getObject, setObject
                             msg: ''
                         },
                         331: {  // EL05331
-                            msg: ''
+                            msg: 'BaseEntity.transformSchema(oGuid); oGuid 는 스키마 객체가 아닙니다. oGuid = {columns: $1, rows: $2}'
                         },
-                        340: {  // merge, copy
+                        332: {  // EL05332
+                            msg: 'BaseEntity.transformSchema(oGuid); 스키마 변환이 실패하였습니다.'
+                        },
+                        333: {  // EL05333
+                            msg: 'setValue(row); row 가 [MetaRow] 타입이 아닙니다.'
+                        },
+                        334: {  // EL05334
+                            msg: 'setValue(row); columns 에 row 설정이 실패하였습니다.'
+                        },
+                        335: {  // EL05335
+                            msg: 'select(filter, ...); MetaRegistry.ns 에서 \'$1\' 가져오는데 싪패하였습니다.'
+                        },
+                        336: {  // EL05336
+                            msg: 'select(filter, ...); 조회가 실패하였습니다.'
+                        },
+                        337: {  // EL05337
+                            msg: 'clone() 은 추상메소드 입니다. 구현해야 합니다.'
+                        },
+
+                        340: {  // merge, copy - 8
                             msg: ''
                         },
                         341: {  // EL05341
-                            msg: ''
+                            msg: 'merge(target, opt, isMath); target 이 [BaseEntity] 타입이 아닙니다.'
                         },
-                        350: {  // load, output
+                        342: {  // EL05342
+                            msg: 'merge(target, opt, isMath); opt 이 \'number\' 타입이 아닙니다. typeof opt = $1'
+                        },
+                        343: {  // EL05343
+                            msg: 'merge(target, opt, isMath); opt = 1, target.columns[$1].name = \'$2\' 이 column name 에 존재합니다.'
+                        },
+                        344: {  // EL05344
+                            msg: 'merge(target, opt, isMath); opt = 1, target.columns[$1].name = \'$2\' 이 column alias 에 존재합니다.'
+                        },
+                        345: {  // EL05345
+                            msg: 'merge(target, opt, isMath); opt = 3, target.columns[$1].name = \'$2\' 이 columns name 에 존재합니다.'
+                        },
+                        346: {  // EL05346
+                            msg: 'merge(target, opt, isMath); opt = 3, target.columns[$1].name = \'$2\' 이 columns alias 에 존재합니다.'
+                        },
+                        347: {  // EL05347
+                            msg: 'merge(target, opt, isMath); 병합이 실패하였습니다. opt = $1'
+                        },
+                        348: {  // EL05348
+                            msg: 'copy() 은 추상메소드 입니다. 구현해야 합니다.'
+                        },
+
+                        350: {  // load, read, readSchema, readDate - 12
                             msg: ''
                         },
                         351: {  // EL05351
-                            msg: ''
+                            msg: 'load(obj, parse); [BaseEntity] 타입의 obj 는 로드할 수 없습니다.'
                         },
-                        360: {  // read, readSchema, readDate
+                        352: {  // EL05352
+                            msg: 'load(obj, parse); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        353: {  // EL05353
+                            msg: 'load(obj, parse); 로드가 실패하였습니다.'
+                        },
+                        354: {  // EL05354
+                            msg: 'read(obj, opt); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        355: {  // EL05355
+                            msg: 'read(obj, opt); opt 이 \'number\' 타입이 아닙니다. typeof opt = $1'
+                        },
+                        356: {  // EL05356
+                            msg: 'read(obj, opt); opt 값은 범위(1 ~ 3)가 아닙니다. obj = $1'
+                        },
+                        357: {  // EL05357
+                            msg: 'read(obj, opt); 읽기가 실패하였습니다.'
+                        },
+                        358: {  // EL05358
+                            msg: 'readSchema(obj, isCreate, origin); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        359: {  // EL05359
+                            msg: 'readSchema(obj, isCreate, origin); obj 는 스키마 객체가 아닙니다. obj = {columns: $1, rows: $2}'
+                        },
+                        '35A': {  // EL0535A
+                            msg: 'readSchema(obj, isCreate, origin); 스카미 읽기가 실패하였습니다.'
+                        },
+                        '35B': {  // EL0535B
+                            msg: 'readData(obj); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        '35C': {  // EL0535C
+                            msg: 'readData(obj); obj 는 스키마 객체가 아닙니다. obj = {columns: $1, rows: $2}'
+                        },
+                        '35D': {  // EL0535D
+                            msg: 'readData(obj); 데이터 읽기가 실패하였습니다.'
+                        },
+
+                        360: {  // output, write, writeSchema, writeData
                             msg: ''
                         },
                         361: {  // EL05361
                             msg: ''
+                        },
+
+                        400: {
+                            msg: ''
+                        },
+                        410: {  // MetaTable
+                            msg: ''
+                        },
+                        411: {  // EL05411
+                            msg: '$1.tableName 값은 \'string\' 타입이 아닙니다. typeof tableName = $2'
+                        },
+                        412: {  // EL05412
+                            msg: '$1.columns 값은 [MetaTableColumnCollection] 타입이 아닙니다.'
+                        },
+                        413: {  // EL05413
+                            msg: '$1.rows 존재하여 columns 을 설정할 수 없습니다. rows.count = $2'
+                        },
+                        414: {  // EL05414
+                            msg: 'setObject(oGuid, origin); oGuid.[\'_metaSet\'] guid 를 찾을 수 없습니다. guid = $1' 
+                        },
+
+                        420: {  // MetaTableColleciton
+                            msg: ''
+                        },
+                        421: {  // EL05421
+                            msg: '$1._baseType 값은 function 타입이 아닙니다. typeof _baseType = $2'
+                        },
+                        422: {  // EL05422
+                            msg: '$1._baseType [MetaTable]의 prototype 이 연결되어 있어야 합니다.(상속)'
+                        },
+                        423: {  // EL05423
+                            msg: 'add(any); any 는 \'string\' | [MetaTable] 타입만 가능합니다. typeof any = $1'
+                        },
+                        424: {  // EL05424
+                            msg: 'add(any); tableName = \'$1\'이 기존에 존재합니다.'
+                        },
+
+                        430: {  // MetaView
+                            msg: ''
+                        },
+                        431: {  // EL05431
+                            msg: '$1.viewName 값은 \'string\' 타입이 아닙니다. typeof viewName = $2'
+                        },
+                        432: {  // EL05432
+                            msg: '$1.columns 값은 [MetaViewColumnCollection] 타입이 아닙니다.'
+                        },
+                        433: {  // EL05433
+                            msg: '$1.rows 존재하여 columns 을 설정할 수 없습니다. rows.count = $2'
+                        },
+                        434: {  // EL05434
+                            msg: '$1._baseEntity 값은 [BaseEntity] 타입이 아닙니다.'
+                        },
+                        435: {  // EL05435
+                            msg: 'setObject(oGuid, origin); oGuid.[\'_metaSet\'] guid 를 찾을 수 없습니다. guid = $1' 
+                        },
+                        436: {  // EL05436
+                            msg: 'setObject(oGuid, origin); oGuid.[\'_baseEntity\'] guid 를 찾을 수 없습니다. guid = $1' 
+                        },
+
+                        440: {  // MetaViewColleciton
+                            msg: ''
+                        },
+                        441: {  // EL05441
+                            msg: '$1._baseType 값은 \'function\' 타입이 아닙니다. typeof _baseType = $2'
+                        },
+                        442: {  // EL05442
+                            msg: '$1._baseType [MetaView]의 prototype 이 연결되어 있어야 합니다.(상속)'
+                        },
+                        443: {  // EL05443
+                            msg: 'add(obj, baseEntity); [MetaView] 타입의 obj와  baseEntity 를 동시에 입력할 수 없습니다.'
+                        },
+                        444: {  // EL05444
+                            msg: 'add(obj, baseEntity); baseEntity 는 [BaseEntity] 타입이 아닙니다.'
+                        },
+                        445: {  // EL05445
+                            msg: 'add(obj, baseEntity); obj 는 \'string\' | [MetaView] 타입만 가능합니다. typeof obj = $1'
+                        },
+                        446: {  // EL05446
+                            msg: 'add(obj, baseEntity); viewName = \'$1\'이 기존에 존재합니다.'
+                        },
+
+                        450: {  // MetaSet
+                            msg: ''
+                        },
+                        451: {  // EL05451
+                            msg: '$1.setName 값은 \'string\' 타입이 아닙니다. typeof setName = $2'
+                        },
+                        452: {  // EL05452
+                            msg: '$1.autoChanges 값은 \'boolean\' 타입이 아닙니다. typeof setName = $2'
+                        },
+                        453: {  // EL05453
+                            msg: 'MetaSet.transformSchema(oGuid); oGuid 는 스키마 객체가 아닙니다. oGuid = {tables: .., views: ..}'
+                        },
+                        454: {  // EL05454
+                            msg: 'load(obj, parse); [MetaSet] 타입의 obj 는 로드할 수 없습니다.'
+                        },
+                        455: {  // EL05455
+                            msg: 'load(obj, parse); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        456: {  // EL05456
+                            msg: 'read(obj, opt); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        457: {  // EL05457
+                            msg: 'read(obj, opt); opt 이 \'number\' 타입이 아닙니다. typeof opt = $1'
+                        },
+                        458: {  // EL05458
+                            msg: 'readSchema(obj, isCreate); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        459: {  // EL05459
+                            msg: 'readSchema(obj, isCreate); obj 는 스키마 객체가 아닙니다. obj = {tables: $1, views: $2}'
+                        },
+                        '45A': {  // EL0545A
+                            msg: 'readData(obj); obj 가 \'object\' 타입이 아닙니다.(null제외) typeof obj = $1'
+                        },
+                        '45B': {  // EL0545B
+                            msg: 'readData(obj); obj 는 스키마 객체가 아닙니다. obj = {tables: $1, views: $2}'
                         },
 
                     },
@@ -1637,7 +1905,6 @@
                      *      + 60 : view -column-collection-4
                      *  - 200 : row
                      *      + 10 : meta-row.js:7 
-                     * POINT:
                      *  - 300 : base-entity.js:34
                      *      + 10 : 속성-2
                      *      + 20 : private method-11
@@ -1646,15 +1913,14 @@
                      *      + 50 : load-2, output
                      *      + 60 : read-3, readSchema-2, readDate-2
                      * 
-                     *  - 400 : meta-table.js:9
-                     *      + 10 : 4
+                     *  - 400 : 
+                     *      + 10 : meta-table.js:9
                      *      + 20 : colleciton-4
-                     *  - 500 : meta-view.js:13
-                     *      + 10 : 5
-                     *      + 20 : collection-6
-                     *  - 600 : meta-set.js:11
-                     *      + 10 : 11
+                     *      + 30 : meta-view.js:13
+                     *      + 40 : collection-6
+                     *      + 50 :  meta-set.js:11
                      * 
+                     * POINT:
                      * G01 : 전역 코드? L01 에 적용가능?
                      */
                 },

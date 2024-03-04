@@ -36,7 +36,7 @@ describe("[target: base-entity.js]", () => {
                 }
                 const s1 = new SubClass('S1');
 
-                expect(()=> s1.columns).toThrow(/ES0111/)
+                expect(()=> s1.columns).toThrow(/EL05312/)
             });
         });
         describe("MetaObject.getTypes(): arr<func> <타입 얻기> ", () => {
@@ -95,7 +95,7 @@ describe("[target: base-entity.js]", () => {
                 }
                 const s1 = new SubClass('S1');
 
-                expect(()=> s1.clone()).toThrow(/ES013/)
+                expect(()=> s1.clone()).toThrow(/EL05337/)
             });
         });
         describe("BaseEntity.copy() <복사>", () => {
@@ -105,7 +105,7 @@ describe("[target: base-entity.js]", () => {
                 }
                 const s1 = new SubClass('S1');
 
-                expect(()=> s1.copy()).toThrow(/ES013/)
+                expect(()=> s1.copy()).toThrow(/EL05348/)
             });
         });
         describe("커버리지 및 예외", () => {
@@ -115,8 +115,8 @@ describe("[target: base-entity.js]", () => {
                 // }
                 // const s1 = new SubClass('S1');
 
-                expect(()=> BaseEntity.transformSchema('ERR')).toThrow(/ES021/)
-                expect(()=> BaseEntity.transformSchema(null)).toThrow(/ES021/)
+                expect(()=> BaseEntity.transformSchema('ERR')).toThrow(/EL05331/)
+                expect(()=> BaseEntity.transformSchema(null)).toThrow(/EL05332/)
             });
         });
     });

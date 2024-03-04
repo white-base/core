@@ -69,7 +69,7 @@ describe("[target: meta-table.js]", () => {
             });
             it("- 예외 : 자른자료형 ", () => {
                 var table1 = new MetaTable('T1');
-                expect(()=> table1.tableName = {}).toThrow(/ES021/)
+                expect(()=> table1.tableName = {}).toThrow(/EL05411/)
             });
         });
         describe("MetaTable.columns <컬럼 속성>", () => {
@@ -80,7 +80,7 @@ describe("[target: meta-table.js]", () => {
             });
             it("- 예외 : 다른타입 ", () => {
                 var table1 = new MetaTable('T1');
-                expect(()=> table1.columns = {}).toThrow(/ES032/)
+                expect(()=> table1.columns = {}).toThrow(/EL05412/)
             });
             it("- 예외 : row 존재시 ", () => {
                 var table1 = new MetaTable('T1');
@@ -88,7 +88,7 @@ describe("[target: meta-table.js]", () => {
                 table1.rows.add(table1.newRow())
                 var col = new MetaTableColumnCollection(table1);
 
-                expect(()=> table1.columns = col).toThrow(/ES047/)
+                expect(()=> table1.columns = col).toThrow(/EL05413/)
             });
         });
         describe("MetaObject.equal() <객체 비교>", () => {
@@ -304,7 +304,7 @@ describe("[target: meta-table.js]", () => {
             });
             it("- 예외 : 타입 실패 ", () => {
                 var table1 = new MetaTable('T1');
-                expect(()=> table1.setValue({})).toThrow(/ES032/)
+                expect(()=> table1.setValue({})).toThrow(/EL05333/)
             });
         });
         
@@ -537,7 +537,7 @@ describe("[target: meta-table.js]", () => {
                 table1.read(json1, 3);
                 table2.read(json2, 3);
     
-                expect(() => table1.merge(table2, 1)).toThrow('ES042');
+                expect(() => table1.merge(table2, 1)).toThrow('EL05343');
             });
             it("- merge() : opt = 1 (예외 : 컬럼 중복 2) ", () => {
                 var table1 = new MetaTable('T1');
@@ -566,7 +566,7 @@ describe("[target: meta-table.js]", () => {
                 table2.read(json2, 3);
                 table2.columns['i3'].alias = 'i1'; // 별칭 처리
     
-                expect(() => table1.merge(table2, 1)).toThrow('ES042');
+                expect(() => table1.merge(table2, 1)).toThrow('EL05343');
             });
             it("- merge() : opt = 1 (예외 : 별칭 중복 1) ", () => {
                 var table1 = new MetaTable('T1');
@@ -595,7 +595,7 @@ describe("[target: meta-table.js]", () => {
                 table2.read(json2, 3);
                 table1.columns['i1'].alias = 'ii1';
     
-                expect(() => table1.merge(table2, 1)).toThrow('ES042');
+                expect(() => table1.merge(table2, 1)).toThrow('EL05344');
             });
             it("- merge() : opt = 1 (예외 : 컬럼 중복 2) ", () => {
                 var table1 = new MetaTable('T1');
@@ -625,7 +625,7 @@ describe("[target: meta-table.js]", () => {
                 table1.columns['i1'].alias = 'ii1';
                 table2.columns['i3'].alias = 'ii1';
     
-                expect(() => table1.merge(table2, 1)).toThrow('ES042');
+                expect(() => table1.merge(table2, 1)).toThrow('EL05344');
             });
             it("- merge() : opt = 2 (다른 구조) ", () => {
                 var table1 = new MetaTable('T1');
@@ -775,14 +775,14 @@ describe("[target: meta-table.js]", () => {
                 table1.read(json1, 3);
                 table2.read(json2, 3);
                 
-                expect(()=> table1.merge(table2, 3)).toThrow(/ES042/)
+                expect(()=> table1.merge(table2, 3)).toThrow(/EL05346/)
             });
             it("- 예외 : target, opt 타입 실패 ", () => {
                 var table1 = new MetaTable('T1');
                 var table2 = new MetaTable('T2');
                 
-                expect(()=> table1.merge({})).toThrow(/ES032/)
-                expect(()=> table1.merge(table2, 'ERR')).toThrow(/ES021/)
+                expect(()=> table1.merge({})).toThrow(/EL05341/)
+                expect(()=> table1.merge(table2, 'ERR')).toThrow(/EL05342/)
             });
         });
     
@@ -923,7 +923,8 @@ describe("[target: meta-table.js]", () => {
                 var table1 = new MetaTable('T1');
                 MetaRegistry.init();
 
-                expect(()=> table1.select('i1')).toThrow(/ES0110/)
+                expect(()=> table1.select('i1')).toThrow(/EL05335/)
+                expect(()=> table1.select('i1')).toThrow(/EL05336/)
             });
             // it("- select(itmms) : 예외 <callback>", () => {
             //     var table1 = new MetaTable('T1');
@@ -1032,12 +1033,13 @@ describe("[target: meta-table.js]", () => {
                 row['i2'] = 'R2';
                 table1.rows.add(row);
     
-                expect(() => table2.load(table1)).toThrow('ES022');
+                expect(() => table2.load(table1)).toThrow('EL05351');
+                expect(() => table2.load(table1)).toThrow('EL05353'); // catch
             });
             it("- load(entity) : 커버리지 ", () => {
                 var table1 = new MetaTable('T1');
                 
-                expect(() => table1.load(null)).toThrow('ES021');
+                expect(() => table1.load(null)).toThrow('EL05352');
             });
         });
         describe("BaseEntity.output(stringify?, space?, vOpt?): str <엔티티 출력>", () => {
@@ -1072,8 +1074,10 @@ describe("[target: meta-table.js]", () => {
                 // table3.read(table1, 2)
 
 
-                expect(()=> table1._readEntity({})).toThrow(/ES032/)
-                expect(()=> table1._readEntity(table2, '!!')).toThrow(/ES021/)
+                expect(()=> table1._readEntity({})).toThrow(/EL05324/)
+
+                expect(()=> table1._readEntity(table2, '!!')).toThrow(/EL05325/)
+                expect(()=> table1._readEntity(table2, '!!')).toThrow(/EL05326/)
             });
         });
 
@@ -1131,8 +1135,8 @@ describe("[target: meta-table.js]", () => {
                 table1.rows.add(table1.newRow());
                 table2.rows.add(table2.newRow());
 
-                expect(()=> table2.read(table1) ).toThrow(/ES045/)
-                expect(()=> table3.read(table1) ).toThrow(/ES046/)
+                expect(()=> table2.read(table1) ).toThrow(/EL05327/)
+                expect(()=> table3.read(table1) ).toThrow(/EL05328/)
             });
             it("- read(oSch, opt) : obj 읽기", () => {
                 var table1 = new MetaTable('T1');
@@ -1156,8 +1160,9 @@ describe("[target: meta-table.js]", () => {
                         i1: { caption: 'C1'},
                     },
                 };
-                expect(()=> table1.read(json1, 0)).toThrow('ES067')
-                expect(()=> table1.read(json1, 'ERR')).toThrow('ES021')
+                expect(()=> table1.read(json1, 0)).toThrow('EL05356')
+                expect(()=> table1.read(json1, 0)).toThrow('EL05357')     // catch 
+                expect(()=> table1.read(json1, 'ERR')).toThrow('EL05355')
                 table2.read(json1, 1);  // 스키마 가져오기
                 table3.read(json1, 2);  // 데이터 가져오기
                 table4.read(json1, 3);  // 스키마 + 데이터 가져오기
@@ -1222,7 +1227,7 @@ describe("[target: meta-table.js]", () => {
                 };
                 table0.read(json1);  // 아무 동작 안함
                 const rObj = table0.getObject();
-                expect(()=> table1.read(rObj, 0)).toThrow('ES067')
+                expect(()=> table1.read(rObj, 0)).toThrow('EL05356')
                 table2.read(rObj, 1);  // 스키마 가져오기
                 table3.read(rObj, 2);  // 데이터 가져오기
                 table4.read(rObj, 3);  // 스키마 + 데이터 가져오기
@@ -1321,7 +1326,7 @@ describe("[target: meta-table.js]", () => {
                         { ii1: 'R10', i2: 'R20' },
                     ]
                 }
-                expect(()=> table1.read(json1, 3)).toThrow(/ES015/)
+                expect(()=> table1.read(json1, 3)).toThrow(/EL0532D/)
             });
 
         });
@@ -1376,7 +1381,7 @@ describe("[target: meta-table.js]", () => {
                 };
                 table1.columns.addValue('i1', '');
     
-                expect(() => table1.readSchema(json1)).toThrow('ES046');
+                expect(() => table1.readSchema(json1)).toThrow('EL0532E');
             });
             it("- readSchema(JSON) : 예외(row 존재) ", () => {
                 var table1 = new MetaTable('T1');
@@ -1395,7 +1400,7 @@ describe("[target: meta-table.js]", () => {
                 };
                 table1.read(json1, 3);  // 스키마 + 데이터 가져오기
     
-                expect(() => table1.readSchema(json2)).toThrow('ES045');
+                expect(() => table1.readSchema(json2)).toThrow('EL0532B');
             });
             it("- readSchema(JSON, isReadRow) : column 읽기(스키마) ", () => {
                 var table1 = new MetaTable('T1');
@@ -1438,7 +1443,8 @@ describe("[target: meta-table.js]", () => {
                 var table1 = new MetaTable('T1');
                 const g1 = e1.getObject();
                 
-                expect(()=> table1.readSchema(g1)).toThrow(/ES021/)
+                expect(()=> table1.readSchema(g1)).toThrow(/EL05331/)
+                expect(()=> table1.readSchema(g1)).toThrow(/EL05332/)
             });
 
         });
@@ -1477,7 +1483,7 @@ describe("[target: meta-table.js]", () => {
                 var table1 = new MetaTable('T1');
                 const g1 = e1.getObject();
                 
-                expect(()=> table1.readData(g1)).toThrow(/ES021/)
+                expect(()=> table1.readData(g1)).toThrow(/EL05331/)
             });
         });
         describe("BaseEntity.write(): obj <쓰기>", () => {
@@ -1681,7 +1687,7 @@ describe("[target: meta-table.js]", () => {
                 t1._metaSet = s1
                 const g1 = t1.getObject();
                 
-                expect(()=> t2.setObject(g1)).toThrow(/ES015/)
+                expect(()=> t2.setObject(g1)).toThrow(/EL05414/)
             });
         });
 
@@ -1845,8 +1851,10 @@ describe("[target: meta-table.js]", () => {
                 row['i1'] = 1;
                 table1.rows.add(row);
 
-                expect(()=> table1.copy([{}])).toThrow(/ES045/)
-                expect(()=> table1.copy('i2')).toThrow(/ES053/)
+                expect(()=> table1.copy([{}])).toThrow(/EL05321/)
+                expect(()=> table1.copy('i2')).toThrow(/EL05322/)
+
+                expect(()=> table1.copy('i2')).toThrow(/EL05323/)
             });
 
             /// SKIP
@@ -2007,8 +2015,8 @@ describe("[target: meta-table.js]", () => {
             it("- 예외 ", () => {
                 const set1 = new MetaSet('S1');
                 
-                expect(()=> set1.tables._baseType = {}).toThrow(/ES021/)
-                expect(()=> set1.tables._baseType = MetaView).toThrow(/ES032/)
+                expect(()=> set1.tables._baseType = {}).toThrow(/EL05421/)
+                expect(()=> set1.tables._baseType = MetaView).toThrow(/EL05422/)
             });
         });
         describe("MetaTableCollection.add() <테이블 추가>", () => {
@@ -2030,9 +2038,9 @@ describe("[target: meta-table.js]", () => {
                 const set1 = new MetaSet('S1');
                 set1.tables.add('T1');
                 
-                expect(()=> set1.tables.add({})).toThrow(/ES021/)
+                expect(()=> set1.tables.add({})).toThrow(/EL05423/)
                 // expect(()=> set1.tables.add()).toThrow(/ES051/)
-                expect(()=> set1.tables.add('T1')).toThrow(/ES042/)
+                expect(()=> set1.tables.add('T1')).toThrow(/EL05424/)
             });
         });
         describe("output(), load()", () => {
@@ -2055,9 +2063,9 @@ describe("[target: meta-table.js]", () => {
                 const vv2 = set1.views['V2'];
                 const vv3 = set1.views['V3'];              
 
-                expect(()=> view.load(v1.output(0, stringify, '\t'))).toThrow('ES015')
-                expect(()=> view.load(v2.output(0, stringify, '\t'))).toThrow('ES015')
-                expect(()=> view.load(v3.output(0, stringify, '\t'))).toThrow('ES015')
+                expect(()=> view.load(v1.output(0, stringify, '\t'))).toThrow('EL05435')
+                expect(()=> view.load(v2.output(0, stringify, '\t'))).toThrow('EL05435')
+                expect(()=> view.load(v3.output(0, stringify, '\t'))).toThrow('EL05435')
                 expect(v1.columns.count).toBe(3)
                 expect(v2.columns.count).toBe(2)
                 expect(v3.columns.count).toBe(1)

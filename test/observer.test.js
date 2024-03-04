@@ -15,7 +15,7 @@ describe("[target: observer.js]", () => {
         });
     
         it("- 생성자에 전달 없을 경우", () => {
-            expect(()=> new Observer()).toThrow(/ES031/);
+            expect(()=> new Observer()).toThrow(/EL01511/);
         });
     });
     describe("< 이벤트 직접 호출 >", () => {
@@ -55,16 +55,16 @@ describe("[target: observer.js]", () => {
             const e = new EventClass();
             
             // subscribe()
-            expect(()=> e._event.subscribe()).toThrow('ES021');
-            expect(()=> e._event.subscribe('str')).toThrow('ES021');
+            expect(()=> e._event.subscribe()).toThrow('EL01516');
+            expect(()=> e._event.subscribe('str')).toThrow('EL01516');
             // __subscribers
             // expect(()=> e._event.__subscribers = 1).toThrow('ES064');
             // expect(()=> e._event.__subscribers = 'str').toThrow('ES064');
             // expect(()=> e._event.__subscribers = {}).toThrow('ES064');
             // innner
-            expect(()=> e._event.__SET$__subscribers(1, e._event)).toThrow('ES021');
-            expect(()=> e._event.__SET$__subscribers('str', e._event)).toThrow('ES021');
-            expect(()=> e._event.__SET$__subscribers({}, e._event)).toThrow('ES021');
+            expect(()=> e._event.__SET$__subscribers(1, e._event)).toThrow('EL01514');
+            expect(()=> e._event.__SET$__subscribers('str', e._event)).toThrow('EL01514');
+            expect(()=> e._event.__SET$__subscribers({}, e._event)).toThrow('EL01515');
         });
         it("- __subscribers 강제삽입 : 강제 예외 (any 함수 아닌 값을 삽입) ", () => {
             const result = [];
@@ -152,7 +152,7 @@ describe("[target: observer.js]", () => {
             e._onAdd('P1', 'P2');    // 이벤트 강제 호출
     
             expect(result).toEqual(['ADD2']);
-            expect(()=> e._event.isSingleMode = 1).toThrow(/ES021/);
+            expect(()=> e._event.isSingleMode = 1).toThrow(/EL01513/);
         });
         it("- 이벤트 onAdd 모두 해지 ", () => {
             const e = new EventClass();
@@ -233,7 +233,7 @@ describe("[target: observer.js]", () => {
             e.onAdd = func2
             e._onAdd();
             
-            expect(()=> e._event.isLog = 1).toThrow('ES021')
+            expect(()=> e._event.isLog = 1).toThrow('EL01512')
         });
         it("- this._caller ", () => {
             global.console.log = jest.fn((val) => {

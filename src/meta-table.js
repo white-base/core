@@ -78,7 +78,7 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (nVal === this.tableName) return;
-                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['tableName', 'string']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/EL05411/, null, [typeof nVal]);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -93,8 +93,8 @@
             {
                 get: function() { return columns; },
                 set: function(nVal) { 
-                    if (!(nVal instanceof MetaTableColumnCollection)) throw new ExtendError(/ES032/, null, ['columns', 'MetaTableColumnCollection']);
-                    if (this.rows.count > 0) throw new ExtendError(/ES047/, null, ['rows', 'MetaRow', 'MetaTableColumnCollection']);
+                    if (!(nVal instanceof MetaTableColumnCollection)) throw new ExtendError(/EL05412/, null, []);
+                    if (this.rows.count > 0) throw new ExtendError(/EL05413/, null, [this.constructor.name, this.rows.count]);
                     columns = nVal;
                 },
                 configurable: false,
@@ -144,7 +144,7 @@
 
             if(p_oGuid['_metaSet']) {
                 metaSet = MetaRegistry.findSetObject(p_oGuid['_metaSet']['$ref'], origin);
-                if (!metaSet) throw new ExtendError(/ES015/, null, [p_oGuid['name'], 'metaSet']);
+                if (!metaSet) throw new ExtendError(/EL05414/, null, [p_oGuid['_metaSet']['$ref']]);
                 this._metaSet = metaSet;
             }
             this.columns.setObject(p_oGuid['columns'], origin);
@@ -248,9 +248,9 @@
             {
                 get: function() { return _baseType; },
                 set: function(nVal) { 
-                    if (!(typeof nVal === 'function')) throw new ExtendError(/ES021/, null, ['_baseType', 'function']);
+                    if (!(typeof nVal === 'function')) throw new ExtendError(/EL05421/, null, [this.constructor.name, typeof nVal]);
                     // if (!(new nVal('temp') instanceof MetaTable)) throw new ExtendError('ES032', ['_baseType', 'MetaTable']);
-                    if (!(Util.isProtoChain(nVal, MetaTable))) throw new ExtendError(/ES032/, null, ['_baseType', 'MetaTable']);
+                    if (!(Util.isProtoChain(nVal, MetaTable))) throw new ExtendError(/EL05422/, null, [this.constructor.name]);
                     _baseType = nVal;
                 },
                 configurable: false,
@@ -281,9 +281,9 @@
                 key  = p_any.tableName;
                 table = p_any;
                 p_any._metaSet = this._owner;
-            } else throw new ExtendError(/ES021/, null, ['object', 'string, MetaTable object']);
+            } else throw new ExtendError(/EL05423/, null, [typeof any]);
 
-            if (this.existTableName(key)) throw new ExtendError(/ES042/, null, ['tableName', key]);
+            if (this.existTableName(key)) throw new ExtendError(/EL05424/, null, [key]);
 
             return _super.prototype.add.call(this, key, table);
         };

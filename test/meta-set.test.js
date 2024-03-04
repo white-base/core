@@ -46,14 +46,14 @@ describe("[target: meta-set.js]", () => {
             });
             it("- 예외 : 다른자료형 ", () => {
                 var set1 = new MetaSet('S1');
-                expect(()=> set1.setName = 10).toThrow(/ES021/)
+                expect(()=> set1.setName = 10).toThrow(/EL05451/)
                 expect(()=> set1.setName = '').toThrow(/EL03122/)
             });
         });
         describe("MetaSet.autoChanges <자동 변경 설정>", () => {
             it("- 예외 : 다른자료형 ", () => {
                 var set1 = new MetaSet('S1');
-                expect(()=> set1.autoChanges = 10).toThrow(/ES021/)
+                expect(()=> set1.autoChanges = 10).toThrow(/EL05452/)
                 // expect(()=> set1.setName = '').toThrow(/ES055/)
             });
         });
@@ -109,7 +109,7 @@ describe("[target: meta-set.js]", () => {
                 // set1.tables['T1'].columns.add('i2');
             });
             it("- 커버리지 : transformSchema() ", () => {
-                expect(()=> MetaSet.transformSchema(null)).toThrow(/ES021/)
+                expect(()=> MetaSet.transformSchema(null)).toThrow(/EL05453/)
             });
         });                
         describe("MetaSet.getObject(): obj<ref> <객체 얻기>", () => {
@@ -410,7 +410,7 @@ describe("[target: meta-set.js]", () => {
                 const set2 = new MetaSet('S2');
 
                 expect(()=> set2.load(set2)).toThrow(/ES022/)
-                expect(()=> set2.load(null)).toThrow(/ES021/)
+                expect(()=> set2.load(null)).toThrow(/EL05455/)
                 // expect(()=> set2.load({})).toThrow(/ES022/)
             });
             
@@ -896,8 +896,8 @@ describe("[target: meta-set.js]", () => {
             });
             it("- 예외 :  타입 다름 ", () => {
                 const set1 = new MetaSet('S1')
-                expect(()=> set1.read(null)).toThrow(/ES021/)
-                expect(()=> set1.read({}, 'ERR')).toThrow(/ES021/)
+                expect(()=> set1.read(null)).toThrow(/EL05456/)
+                expect(()=> set1.read({}, 'ERR')).toThrow(/EL05457/)
             });
             // it("- 커버리지 :  객체 타입 ", () => {
             //     const set1 = new MetaSet('S1')
@@ -1005,8 +1005,8 @@ describe("[target: meta-set.js]", () => {
             });
             it("- 예외 : 스키마가 아닌 객체 ", () => {
                 const set1 = new MetaSet('S1')
-                expect(()=> set1.readSchema({})).toThrow(/ES021/)
-                expect(()=> set1.readSchema(null)).toThrow(/ES021/)
+                expect(()=> set1.readSchema({})).toThrow(/EL05459/)
+                expect(()=> set1.readSchema(null)).toThrow(/EL05458/)
             });
             it("- 예외 : 기존에 중복 테이블/뷰가 존재할 경우 ", () => {
                 // TODO:
@@ -1061,8 +1061,8 @@ describe("[target: meta-set.js]", () => {
             it("- 예외 : 스키마가 아닌 객체 ", () => {
                 const set1 = new MetaSet('S1')
                 // expect(()=> set1.readData({})).toThrow(/ES021/)
-                expect(()=> set1.readData(null)).toThrow(/ES021/)
-                expect(()=> set1.readData({})).toThrow(/ES021/)
+                expect(()=> set1.readData(null)).toThrow(/EL0545A/)
+                expect(()=> set1.readData({})).toThrow(/EL0545B/)
             });
             it("- 예외 : 객체가 아닌 스키마 ", () => {
                 const set1 = new MetaSet('S1')
@@ -1070,7 +1070,7 @@ describe("[target: meta-set.js]", () => {
                     tables: 1,
                     views: null
                 }
-                expect(()=> set1.readData(obj1)).toThrow(/ES021/)
+                expect(()=> set1.readData(obj1)).toThrow(/EL0545B/)
             });
             it("- 커버리지 : views, tables 한쪽만 존재 ", () => {
                 const set1 = new MetaSet('S1')
@@ -1478,7 +1478,7 @@ describe("[target: meta-set.js]", () => {
                 table1._metaSet = set1;
 
                 expect(table1._metaSet === set1).toBe(true)
-                expect(()=> table1._metaSet = 'ERR').toThrow(/ES032/)
+                expect(()=> table1._metaSet = 'ERR').toThrow(/EL05311/)
             });
             it.skip("- MetaSet._isSchema() ", () => {
                 // class SubClass extends BaseEntity {

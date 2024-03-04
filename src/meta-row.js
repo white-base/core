@@ -340,7 +340,7 @@
                     this.__GET$_elements(this)[i] = obj;
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                    if (!meta) throw new ExtendError(/ES015/, null, ['_elem['+ i +']', '$ref']);
+                    if (!meta) throw new ExtendError(/EL05213/, null, [i, elem['$ref']]);
                     this.__GET$_elements(this)[i] = meta;   
                 } else this.__GET$_elements(this)[i] = elem;   
             }

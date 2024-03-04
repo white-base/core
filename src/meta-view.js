@@ -77,7 +77,7 @@
                 get: function() { return this._name; },
                 set: function(nVal) { 
                     if (nVal === this.viewName) return;
-                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['viewName', 'string']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/EL05431/, null, [typeof nVal]);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -92,8 +92,8 @@
             {
                 get: function() { return columns; },
                 set: function(nVal) { 
-                    if (!(nVal instanceof MetaViewColumnCollection)) throw new ExtendError(/ES032/, null, ['columns', 'MetaViewColumnCollection']);
-                    if (this.rows.count > 0) throw new ExtendError(/ES047/, null, ['rows', 'MetaRow', 'MetaViewColumnCollection']);
+                    if (!(nVal instanceof MetaViewColumnCollection)) throw new ExtendError(/EL05432/, null, [this.constructor.name]);
+                    if (this.rows.count > 0) throw new ExtendError(/EL05433/, null, [this.constructor.name, this.rows.count ]);
                     columns = nVal;
                 },
                 configurable: false,
@@ -108,7 +108,7 @@
             {
                 get: function() { return _baseEntity; },
                 set: function(nVal) { 
-                    if (!(nVal instanceof BaseEntity)) throw new ExtendError(/ES032/, null, ['_baseEntity', 'BaseEntity']);
+                    if (!(nVal instanceof BaseEntity)) throw new ExtendError(/EL05434/, null, [this.constructor.name]);
                     _baseEntity = nVal;
                 },
                 configurable: false,
@@ -163,13 +163,13 @@
 
             if(p_oGuid['_metaSet']) {
                 metaSet = MetaRegistry.findSetObject(p_oGuid['_metaSet']['$ref'], origin);
-                if (!metaSet) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_metaSet']);
+                if (!metaSet) throw new ExtendError(/EL05435/, null, [p_oGuid['_metaSet']['$ref']]);
                 this._metaSet = metaSet;
             }
             // this.metaSet = mObj.metaSet;
             if (p_oGuid['_baseEntity']) {
                 baseEntity = MetaRegistry.findSetObject(p_oGuid['_baseEntity']['$ref'], origin);
-                if (!baseEntity) throw new ExtendError(/ES015/, null, [p_oGuid['name'], '_baseEntity']);
+                if (!baseEntity) throw new ExtendError(/EL05436/, null, [p_oGuid['_baseEntity']['$ref']]);
                 // this.__SET$_baseEntity(baseEntity, this);
                 this._baseEntity = baseEntity;
             } 
@@ -253,9 +253,9 @@
             {
                 get: function() { return _baseType; },
                 set: function(nVal) { 
-                    if (!(typeof nVal === 'function')) throw new ExtendError(/ES021/, null, ['_baseType', 'function']);
+                    if (!(typeof nVal === 'function')) throw new ExtendError(/EL05441/, null, [typeof nVal]);
                     // if (!(new nVal('temp') instanceof MetaView)) throw new ExtendError('ES032', ['_baseType', 'MetaView']);
-                    if (!(Util.isProtoChain(nVal, MetaView))) throw new ExtendError(/ES032/, null, ['_baseType', 'MetaView']);
+                    if (!(Util.isProtoChain(nVal, MetaView))) throw new ExtendError(/EL05442/, null, [this.constructor.name]);
                     _baseType = nVal;
                 },
                 configurable: false,
@@ -284,11 +284,11 @@
             var view;
             var key;
 
-            if (p_baseEntity && !(p_baseEntity instanceof BaseEntity)) {
-                throw new ExtendError(/ES032/, null, ['baseEntity', 'BaseEntity']);
-            }
             if (p_obj instanceof MetaView && p_baseEntity) {
-                throw new ExtendError(/ES016/, null, ['baseEntity', 'MetaView']);
+                throw new ExtendError(/EL05443/, null, []);
+            }
+            if (p_baseEntity && !(p_baseEntity instanceof BaseEntity)) {
+                throw new ExtendError(/EL05444/, null, []);
             }
 
             if (typeof p_obj === 'string') {      
@@ -299,9 +299,9 @@
                 key  = p_obj.viewName;
                 view = p_obj;
                 p_obj._metaSet = this._owner;
-            } else throw new ExtendError(/ES021/, null, ['object', 'string, MetaView object']);
+            } else throw new ExtendError(/EL05445/, null, [typeof p_obj]);
 
-            if (this.existViewName(key)) throw new ExtendError(/ES042/, null, ['viewName', key]);
+            if (this.existViewName(key)) throw new ExtendError(/EL05446/, null, [key]);
 
             return _super.prototype.add.call(this, key, view);
         };

@@ -40,7 +40,7 @@
          * @param {object} p_caller 함수 호출 본문에서 this 역활 publish.apply(p_caller, ...)
          */
         function Observer(p_caller) {
-            if (typeof p_caller !== 'object') throw new ExtendError(/ES031/, null, ['caller']);
+            if (typeof p_caller !== 'object') throw new ExtendError(/EL01511/, null, [typeof p_caller]);
             
             var __subscribers = this._getInitObject();
             var isLog = false;
@@ -101,7 +101,7 @@
             {
                 get: function() { return isLog; },
                 set: function(nVal) {
-                    if (typeof nVal !== 'boolean') throw new ExtendError(/ES021/, null, ['isLog', 'boolean']);
+                    if (typeof nVal !== 'boolean') throw new ExtendError(/EL01512/, null, [typeof nVal]);
                     isLog = nVal;
                 }
             });
@@ -115,7 +115,7 @@
             {
                 get: function() { return isSingleMode; },
                 set: function(nVal) { 
-                    if (typeof nVal !== 'boolean') throw new ExtendError(/ES021/, null, ['isSingleMode', 'boolean']);
+                    if (typeof nVal !== 'boolean') throw new ExtendError(/EL01513/, null, [typeof nVal]);
                     isSingleMode = nVal;
                 }
             });
@@ -125,8 +125,8 @@
             // inner variable access
             this.__SET$__subscribers = function(val, call) {
                 if (call instanceof Observer) { // 상속접근 허용
-                    if (typeof val !== 'object') throw new ExtendError(/ES021/, null, ['__subscribers', 'object']);
-                    if (typeof val.any === 'undefined') throw new ExtendError(/ES021/, null, ['__subscribers.any', 'array']);
+                    if (typeof val !== 'object') throw new ExtendError(/EL01514/, null, [typeof val]);
+                    if (typeof val.any === 'undefined') throw new ExtendError(/EL01515/, null, []);
                     __subscribers = val;    
                 }
             }
@@ -160,7 +160,7 @@
         Observer.prototype.subscribe = function(p_fn, p_code) {
             p_code = p_code || 'any';
 
-            if (typeof p_fn !== 'function') throw new ExtendError(/ES021/, null, ['fn', 'function']);
+            if (typeof p_fn !== 'function') throw new ExtendError(/EL01516/, null, [typeof p_fn]);
             
             if (this.isSingleMode && this.__subscribers[p_code]) this.unsubscribe(p_code);    // 싱글모드시 초기화
             if (typeof this.__subscribers[p_code] === 'undefined') {

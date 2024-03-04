@@ -100,7 +100,7 @@
             {
                 get: function() { return this._name; },
                 set: function(nVal) { 
-                    if (typeof nVal !== 'string') throw new ExtendError(/ES021/, null, ['setName', 'string']);
+                    if (typeof nVal !== 'string') throw new ExtendError(/EL05451/, null, [this.constructor.name, typeof nVal]);
                     this.__SET$_name(nVal, this);
                 },
                 configurable: false,
@@ -138,7 +138,7 @@
             Object.defineProperty(this, 'autoChanges', {
                 set: function(nVal) { 
                     if (typeof nVal !== 'boolean') {
-                        throw new ExtendError(/ES021/, null, ['autoChanges', 'boolean']);
+                        throw new ExtendError(/EL05452/, null, [this.constructor.name, typeof nVal]);
                     }
                     for (var i = 0; i < this.tables.count; i++) {
                         this.tables[i].rows.autoChanges = nVal;
@@ -176,7 +176,7 @@
             var obj = {};
 
             if (!_isSchema(p_oGuid)) { 
-                throw new ExtendError(/ES021/, null, ['transformSchema(obj)', '{tables: ... , views: ...}']);
+                throw new ExtendError(/EL05453/, null, []);
             }
 
             obj['name'] = p_oGuid['name']; 
@@ -291,14 +291,14 @@
             var obj = p_obj;
             var mObj;
 
-            if (p_obj instanceof MetaSet) throw new ExtendError(/ES022/, null, ['MetaSet']);
+            if (p_obj instanceof MetaSet) throw new ExtendError(/ES022/, null, []);
 
             if (typeof obj === 'string') {
                 if (typeof p_parse === 'function') obj = p_parse(obj);
                 else obj = JSON.parse(obj, null);
             }
             
-            if (!_isObject(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
+            if (!_isObject(obj)) throw new ExtendError(/EL05455/, null, [typeof obj]);
             
             this.setObject(obj);
         };
@@ -336,8 +336,8 @@
             var opt = typeof p_opt === 'undefined' ? 3 : p_opt;
             var entity;
 
-            if (typeof p_obj !== 'object' || p_obj === null) throw new ExtendError(/ES021/, null, ['obj', 'object']);
-            if (typeof opt !== 'number') throw new ExtendError(/ES021/, null, ['opt', 'number']);
+            if (typeof p_obj !== 'object' || p_obj === null) throw new ExtendError(/EL05456/, null, [typeof p_obj]);
+            if (typeof opt !== 'number') throw new ExtendError(/EL05457/, null, [typeof opt]);
 
             if (p_obj instanceof MetaSet) {
                 this.setName = p_obj.setName;
@@ -372,7 +372,7 @@
             var obj;
             var entity;
 
-            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
+            if (!_isObject(p_obj)) throw new ExtendError(/EL05458/, null, [typeof p_obj]);
 
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
 
@@ -382,7 +382,7 @@
                 obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
-            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) throw new ExtendError(/EL05459/, null, [obj.tables, obj.views]);
 
             if (obj['tables']) {
                 entity = obj['tables'];
@@ -419,7 +419,7 @@
             var metaSet = null;
             var obj;
 
-            if (!_isObject(p_obj)) throw new ExtendError(/ES021/, null, ['obj', 'object']);
+            if (!_isObject(p_obj)) throw new ExtendError(/EL0545A/, null, [typeof p_obj]);
             
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             
@@ -429,7 +429,7 @@
                 obj = MetaSet.transformSchema(metaSet);
             } else obj = metaSet;
 
-            if (!_isSchema(obj)) throw new ExtendError(/ES021/, null, ['obj', 'object<Schema> | object<Guid>']);
+            if (!_isSchema(obj)) throw new ExtendError(/EL0545B/, null, [obj.tables, obj.views]);
             
             if (_isObject(obj['tables'])) createRow(obj['tables'], this.tables);
             if (_isObject(obj['views'])) createRow(obj['views'], this.views);
