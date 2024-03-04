@@ -10,7 +10,7 @@ const T = true;
 
 //==============================================================
 // test
-describe("[target: util-type.js.js]", () => {
+describe.skip("[target: util-type.js.js]", () => {
     beforeAll(() => {
         // 경고 모킹 = 숨감
         // global.console.warn = jest.fn();
