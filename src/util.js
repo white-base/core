@@ -16,6 +16,7 @@
     var matchType;
     var deepEqual;
     var isProtoChain;
+    var hasType;
     var getTypes;
     var typeObject;
     var typeOf;
@@ -40,6 +41,7 @@
         matchType                   = require('./util-type').matchType;
         deepEqual                   = require('./util-type').deepEqual;
         isProtoChain                = require('./util-type').isProtoChain;
+        hasType                     = require('./util-type').hasType;
         getTypes                    = require('./util-type').getTypes;
         typeObject                  = require('./util-type').typeObject;
         typeOf                      = require('./util-type').typeOf;
@@ -54,6 +56,7 @@
         matchType                   = _global._L.Util.matchType
         deepEqual                   = _global._L.Util.deepEqual
         isProtoChain                = _global._L.Util.isProtoChain
+        hasType                     = _global._L.Util.hasType
         getTypes                    = _global._L.Util.getTypes
         typeObject                  = _global._L.Util.typeObject
         typeOf                      = _global._L.Util.typeOf
@@ -70,6 +73,7 @@
     if (typeof matchType === 'undefined') throw new Error(Message.get('ES012', ['matchType', 'util-type']));
     if (typeof deepEqual === 'undefined') throw new Error(Message.get('ES012', ['deepEqual', 'util-type']));
     if (typeof isProtoChain === 'undefined') throw new Error(Message.get('ES012', ['isProtoChain', 'util-type']));
+    if (typeof hasType === 'undefined') throw new Error(Message.get('ES012', ['hasType', 'util-type']));
     if (typeof getTypes === 'undefined') throw new Error(Message.get('ES012', ['getTypes', 'util-type']));
     if (typeof typeObject === 'undefined') throw new Error(Message.get('ES012', ['typeObject', 'util-type']));
     if (typeof typeOf === 'undefined') throw new Error(Message.get('ES012', ['typeOf', 'util-type']));
@@ -181,11 +185,10 @@
      * 지정한 부모(생성자)를 상속합니다.
      * @function
      * @memberof _L.Common.Util
-     * @param {object} ctor 대상
-     * @param {object} superCtor 상속 받는 부모 생성자
+     * @param {object | function} ctor 대상
+     * @param {object | function} superCtor 상속 받는 부모 생성자
      */
     var inherits = (function () {
-
         if (typeof Object.create === 'function' && !OLD_ENV) {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
@@ -267,20 +270,20 @@
                 } else matchType(p_obj._interface[i], p_obj, 1);
             }
         } catch (error) { 
-            throw new ExtendError(/EL01404/, error, [typeName(p_obj), typeName(p_obj._interface[i]), p_ctor['_KIND'] || 'class']);
+            throw new ExtendError(/EL01404/, error, [$typeName(p_obj), $typeName(p_obj._interface[i]), p_ctor['_KIND'] || 'class']);
         }
 
         if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
             Object.defineProperty(p_obj, 'isImplementOf',
             {
-                value: isImplementOf,
+                value: $isImplementOf,
                 configurable: false,
                 enumerable: false
             });
         }
 
         // inner function
-        function isImplementOf(target) {
+        function $isImplementOf(target) {
             if (typeof target === 'function') {
                 for (var i = 0; i < this._interface.length; i++) {
                     if (this._interface[i] === target) return true;  
@@ -292,7 +295,7 @@
             } else throw new ExtendError(/EL01405/, null, [typeof target]);
             return false;
         }
-        function typeName(obj) {
+        function $typeName(obj) {
             var proto;
             var constructor;
             if (typeof obj === 'function') {
@@ -325,6 +328,7 @@
         exports.deepCopy = deepCopy;
         exports.deepEqual = deepEqual;
         exports.isProtoChain = isProtoChain;
+        exports.hasType = hasType;
         exports.typeObject = typeObject;
         exports.typeOf = typeOf;
 
@@ -345,6 +349,7 @@
             deepCopy: deepCopy,
             deepEqual: deepEqual,
             isProtoChain: isProtoChain,
+            hasType: hasType,
             typeObject: typeObject,
             typeOf: typeOf,
         };

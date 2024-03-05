@@ -180,13 +180,13 @@
             }
 
             obj['name'] = p_oGuid['name']; 
-            obj['tables'] = transformTable(p_oGuid['tables']);
-            obj['views'] = transformView(p_oGuid['views']);   
+            obj['tables'] = $transformTable(p_oGuid['tables']);
+            obj['views'] = $transformView(p_oGuid['views']);   
             
             return obj;
 
             // inner function
-            function transformTable(p_oGuid) {
+            function $transformTable(p_oGuid) {
                 var obj = {};
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var table = p_oGuid['_elem'][i];
@@ -196,7 +196,7 @@
                 obj['$key'] = p_oGuid['_key'];
                 return obj;
             }
-            function transformView(p_oGuid) {
+            function $transformView(p_oGuid) {
                 var obj = {};
                 for (var i = 0; i < p_oGuid['_elem'].length; i++) {
                     var view = p_oGuid['_elem'][i];
@@ -388,22 +388,22 @@
                 entity = obj['tables'];
                 if (entity['$key'] && Array.isArray(entity['$key'])) {
                     for (var i = 0; i < entity['$key'].length; i++) {
-                        addEntity(entity['$key'][i], entity, this.tables);
+                        $addEntity(entity['$key'][i], entity, this.tables);
                     }
-                } else for (var key in entity) addEntity(key, entity, this.tables);
+                } else for (var key in entity) $addEntity(key, entity, this.tables);
             }
             if (obj['views']) {
                 entity = obj['views'];
                 if (entity['$key'] && Array.isArray(entity['$key'])) {
                     for (var i = 0; i < entity['$key'].length; i++) {
-                        addEntity(entity['$key'][i], entity, this.views);
+                        $addEntity(entity['$key'][i], entity, this.views);
                     }
-                } else for (var key in entity) addEntity(key, entity, this.views);
+                } else for (var key in entity) $addEntity(key, entity, this.views);
             }
             return;
 
             // inner funciton
-            function addEntity(key, p_collec, p_baseCollec) {
+            function $addEntity(key, p_collec, p_baseCollec) {
                 var prop = p_collec[key];
                 if (!p_baseCollec.exist(key)) p_baseCollec.add(key);
                 MetaRegistry.setMetaObject(prop, p_baseCollec[key]);                 
@@ -431,10 +431,10 @@
 
             if (!_isSchema(obj)) throw new ExtendError(/EL0545B/, null, [obj.tables, obj.views]);
             
-            if (_isObject(obj['tables'])) createRow(obj['tables'], this.tables);
-            if (_isObject(obj['views'])) createRow(obj['views'], this.views);
+            if (_isObject(obj['tables'])) $createRow(obj['tables'], this.tables);
+            if (_isObject(obj['views'])) $createRow(obj['views'], this.views);
 
-            function createRow(p_entity, p_collec) {
+            function $createRow(p_entity, p_collec) {
                 for (var key in p_entity) {
                     if (Object.prototype.hasOwnProperty.call(p_entity, key) && p_collec.exist(key)) {
                         p_collec[key].readData(p_entity[key]);

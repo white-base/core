@@ -219,7 +219,7 @@ describe('Util.*', () => {
         expect(arr.length).toBe(5);
     });
 
-    it('- Util.isProtoChain() : 상속 또는 인터페이스 여부 검사 ', () => {
+    it('- Util.isProtoChain() : 상속 여부 검사 ', () => {    // TODO: util-type 이동 요망
         const Util      = require('../src/util');
         const IClassA = function IClassA() {this.ia = true}
         const IClassA1 = function IClassA1() {this.ia1 = true}
@@ -232,7 +232,29 @@ describe('Util.*', () => {
         ClassB._UNION = [IClassB]
 
         expect(Util.isProtoChain(ClassB, ClassA)).toBe(true);
-        expect(Util.isProtoChain(ClassB, IClassA1)).toBe(true);
+        expect(Util.isProtoChain(ClassB, IClassA1)).toBe(false);
+    });
+
+    it('- Util.hasType() : 상속 또는 인터페이스 타입 검사 ', () => {    // TODO: util-type 이동 요망
+        const Util      = require('../src/util');
+        const IClassA = function IClassA() {this.ia = true}
+        const IClassA1 = function IClassA1() {this.ia1 = true}
+        const IClassB = function IClassB() {this.ib = true}
+        Util.inherits(IClassB, IClassA1);
+        const ClassA = function ClassA() {this.a = true}
+        const ClassB = function ClassB() {this.b = true}
+        Util.inherits(ClassB, ClassA);
+        ClassA._UNION = [IClassA, IClassB]
+        ClassB._UNION = [IClassB]
+
+        expect(Util.hasType(null, ClassA)).toBe(false);
+        expect(Util.hasType(ClassB, null)).toBe(false);
+        
+        expect(Util.hasType(ClassB, ClassA)).toBe(true);
+        expect(Util.hasType(ClassB, IClassA1)).toBe(true);
+        expect(Util.hasType(ClassB, 'ClassA')).toBe(true);
+        expect(Util.hasType(ClassB, 'ClassZ')).toBe(false);
+        expect(Util.hasType(ClassB, 'IClassA1')).toBe(true);
     });
 
     // describe("예외, 커버리지 ", () => {

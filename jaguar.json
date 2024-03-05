@@ -32,7 +32,7 @@
         "recurse": true,
         "private": true,
         "lenient": true,
-        "destination": "./docs5",
+        "destination": "./docs",
         "template": "./node_modules/jaguarjs-jsdoc"
     }
     

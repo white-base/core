@@ -181,7 +181,7 @@
         var arrParam = [];
         var arrRetrun;
         
-        funBody = skipComment(funBody);
+        funBody = $skipComment(funBody);
 
         try {
             if (syntax1.test(funBody)) arrFunc = regFunc1.exec(funBody);
@@ -203,7 +203,7 @@
         return result;
 
         // inner function
-        function skipComment(body) {    // 주석 제거 comment
+        function $skipComment(body) {    // 주석 제거 comment
             var rBody = body;
             var bloackComment = /\/\*[^](.*?)\*\//g
             var lineComment = /\/\/[^](.*?)(\n|$)/g
@@ -304,6 +304,7 @@
     /**
      * 객체를 비교합니다.  
      * prototype chain 은 무시된다.  
+     * @memberof _L.Common.Util
      * @param {object} obj1 
      * @param {object} obj2 
      * @returns {boolean}
@@ -340,29 +341,37 @@
     }
 
     /**
-     * 대상의 상위를 포함하여 '_UNION'과 자신의 타입 목록을 가져옵니다.
+     * 대상의 상위를 포함하여 '_UNION'과 자신의 타입 목록을 가져옵니다.  
+     * 대상을 0 부터 할당한다.  
+     * 대상._UNION 의 목록을 포함
      * @memberof _L.Common.Util
      * @param {function} ctor 생성자
-     * @returns {array<function>}
+     * @param {boolean} [hasUnion= true] _UNION 포함 여부
+     * @returns {array<function>} 
      */
-    var getTypes = function (ctor) {
+    var getTypes = function (ctor, hasUnion) {
         var arr = [];
         var tempArr = [];
         var union;
         var proto;
 
+        hasUnion = hasUnion === false ? false : true;
+        
         if (typeof ctor !== 'function') throw new ExtendError(/EL0130C/, null, [typeof ctor]);
 
         arr.push(ctor);
-        union = ctor['_UNION'] || [];
-        proto = getPrototype(ctor);        
+        proto = $getPrototype(ctor);        
         
         if (proto !== Function.prototype) {
-            arr = arr.concat(getTypes(proto));
+            arr = arr.concat(getTypes(proto, hasUnion));
         }
-        for (var i = 0; i < union.length; i++) {
-            arr = arr.concat(getTypes(union[i]));
+        if (hasUnion) {
+            union = ctor['_UNION'] || [];
+            for (var i = 0; i < union.length; i++) {
+                arr = arr.concat(getTypes(union[i], hasUnion));
+            }
         }
+
         for (var i = 0; i < arr.length; i++) {
             var idx = tempArr.indexOf(arr[i]);
             if (idx < 0) tempArr.push(arr[i]);
@@ -370,7 +379,7 @@
         return tempArr;
 
         // innner function
-        function getPrototype(ctor) {
+        function $getPrototype(ctor) {
             // if (ctor.hasOwnProperty('super')) return ctor.super;
             if (Object.prototype.hasOwnProperty.call(ctor, 'super')) return ctor.super;
             return !OLD_ENV && typeof Object.getPrototypeOf === 'function' ? Object.getPrototypeOf(ctor) : ctor.__proto__;
@@ -384,6 +393,29 @@
      * @returns {boolean}
      */
     var isProtoChain = function(ctor, target) {
+        var arr;
+        if (typeof ctor !== 'function') return false;
+        if (!(typeof target === 'function' || typeof target === 'string')) return false;
+
+        arr = getTypes(ctor, false);
+        for (var i = 0; i < arr.length; i++) {
+            if (typeof target === 'string') {
+                if (target === arr[i].name) return true;
+            } else {
+                if (target === arr[i]) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 생성자의 상위 또는 _UNION 에 지정된 생성자의 타입을 가지고 있는지 여부를 검사합니다.
+     * @memberof _L.Common.Util
+     * @param {function} ctor 생성자
+     * @param {function | string} target 검사 대상
+     * @returns {boolean}
+     */
+    var hasType = function(ctor, target) {
         var arr;
         if (typeof ctor !== 'function') return false;
         if (!(typeof target === 'function' || typeof target === 'string')) return false;
@@ -678,15 +710,15 @@
             }
             if (eType['$type'] !== tType['$type']) throw new ExtendError(/EL01203/, prop, [eType['$type'], tType['$type']]);
         
-        } else if (eType['$type'] === 'array')  arrayAllow();
-        else if (eType['$type'] === 'choice') choiceAllow();
-        else if (eType['$type'] === 'class') classAllow();
-        else if (eType['$type'] === 'union') unionAllow();
-        else if (eType['$type'] === 'function') functionAllow();
+        } else if (eType['$type'] === 'array')  $arrayAllow();
+        else if (eType['$type'] === 'choice') $choiceAllow();
+        else if (eType['$type'] === 'class') $classAllow();
+        else if (eType['$type'] === 'union') $unionAllow();
+        else if (eType['$type'] === 'function') $functionAllow();
         else throw new ExtendError(/EL01204/, prop, []);
 
         // inner function
-        function arrayAllow() {
+        function $arrayAllow() {
             if (tType['$type'] !== 'array' || !Array.isArray(tType['list'])) throw new ExtendError(/EL01211/, prop, [tType['$type']]);
             
             // _ALL_ (all)
@@ -756,7 +788,7 @@
             }
         }
 
-        function choiceAllow() {
+        function $choiceAllow() {
             // _ALL_ (all)
             if (eType['kind'] === '_ALL_') {
                 if (tType['$type'] === tType['$type'] && tType['kind'] === '_ERR_') {
@@ -847,7 +879,7 @@
             }
         }
         
-        function classAllow() {
+        function $classAllow() {
             if (tType['$type'] === 'class') {         // # class to class
                 if (isProtoChain(tType['ref'], eType['ref'])) return;   // 1.proto check
                 if (opt === 1) {
@@ -878,7 +910,7 @@
             throw new ExtendError(/EL01235/, prop, [tType]);
         }
 
-        function unionAllow() {
+        function $unionAllow() {
             var list;
 
             if (tType['$type'] !== 'union') throw new ExtendError(/EL01241/, prop, [tType]);
@@ -895,7 +927,7 @@
             }
         }
 
-        function functionAllow() {
+        function $functionAllow() {
             if (tType['$type'] !== 'function')  throw new ExtendError(/EL01251/, prop, [tType]);
             if (eType['ref'] === Function) return;
             // special type check
@@ -991,15 +1023,15 @@
         } else if (eType['$type'] === 'object') {
             if (tType['$type'] !== 'object') throw new ExtendError(/EL01102/, prop, ['object', sTar]);
 
-        } else if (eType['$type'] === 'array') arrayMatch();
-        else if (eType['$type'] === 'choice') choiceMatch();
-        else if (eType['$type'] === 'class') classMatch();
-        else if (eType['$type'] === 'union') unionMatch();
-        else if (eType['$type'] === 'function') functionMatch();        
+        } else if (eType['$type'] === 'array') $arrayMatch();
+        else if (eType['$type'] === 'choice') $choiceMatch();
+        else if (eType['$type'] === 'class') $classMatch();
+        else if (eType['$type'] === 'union') $unionMatch();
+        else if (eType['$type'] === 'function') $functionMatch();        
         else throw new ExtendError(/EL01103/, prop, []);
 
         // inner function
-        function arrayMatch() {
+        function $arrayMatch() {
             if (!Array.isArray(target)) throw new ExtendError(/EL01111/, prop, [sTar]);
             
             // _ALL_ (all)
@@ -1070,7 +1102,7 @@
             }
         }
 
-        function choiceMatch() {
+        function $choiceMatch() {
             // _ALL_ (all)
             if (eType['kind'] === '_ALL_') {
                 return;
@@ -1132,7 +1164,7 @@
             throw new ExtendError(/EL01127/, prop,[eType, tType]);
         }
 
-        function classMatch() {
+        function $classMatch() {
             if (tType['$type'] === 'class') {         // # class to class
                 if (typeof eType['ref'] === 'undefined') return;  // 전역 클래스 타입
                 if (isProtoChain(tType['ref'], eType['ref'])) return;
@@ -1151,7 +1183,7 @@
             throw new ExtendError(/EL01133/, prop, [tType]);                
         }
 
-        function unionMatch() {
+        function $unionMatch() {
             var list;
             
             if (tType['$type'] !== 'union') throw new ExtendError(/EL01141/, prop, [tType]);
@@ -1175,7 +1207,7 @@
             }
         }
 
-        function functionMatch() {
+        function $functionMatch() {
             if (tType['$type'] !== 'function') throw new ExtendError(/EL01151/, prop, [tType]);
             if (eType['ref'] === Function) return;
             // special type check
@@ -1285,6 +1317,7 @@
         exports.getAllProperties = getAllProperties;
         exports.deepEqual = deepEqual;
         exports.isProtoChain = isProtoChain;
+        exports.hasType = hasType;
         exports.getTypes = getTypes;
         exports.extendType = extendType;
         exports.typeObject = typeObject;
@@ -1298,6 +1331,7 @@
             getAllProperties: getAllProperties,
             deepEqual: deepEqual,
             isProtoChain: isProtoChain,
+            hasType: hasType,
             getTypes: getTypes,
             extendType: extendType,
             typeObject: typeObject,

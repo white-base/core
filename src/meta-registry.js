@@ -342,47 +342,47 @@
             if (!_isObject(p_oGuid)) throw new ExtendError(/EL03251/, null, [typeof p_oGuid]);
             
             arrObj = _getGuidList(p_oGuid);
-            if (!validUniqueGuid() || !validReference(p_oGuid) || !validCollection(p_oGuid)) return false;
+            if (!$validUniqueGuid() || !$validReference(p_oGuid) || !$validCollection(p_oGuid)) return false;
             return true;
 
             // inner function
-            function findGuid(guid, arr) { // guid 조회
+            function $findGuid(guid, arr) { // guid 조회
                 for(var i = 0; i < arr.length; i++) {
                     if (arr[i]['_guid'] === guid) return arr[i];
                 }
             }
-            function validReference(oGuid) { // 참조 검사
-                if (oGuid['$ref'] && !findGuid(oGuid['$ref'], arrObj)) return false;
-                if (oGuid['$set'] && !findGuid(oGuid['$set'], arrObj)) return false;
+            function $validReference(oGuid) { // 참조 검사
+                if (oGuid['$ref'] && !$findGuid(oGuid['$ref'], arrObj)) return false;
+                if (oGuid['$set'] && !$findGuid(oGuid['$set'], arrObj)) return false;
                 if (oGuid['$ns'] && !_this.getClass(oGuid['$ns'])) return false;
         
                 if (Array.isArray(oGuid)){
                     for(var i = 0; i < oGuid.length; i++) {
-                        if (_isObject(oGuid[i]) && !validReference(oGuid[i])) return false
+                        if (_isObject(oGuid[i]) && !$validReference(oGuid[i])) return false
                     }
                 } else {
                     for(var prop in oGuid) {
-                        if (_isObject(oGuid[prop]) && !validReference(oGuid[prop])) return false;
+                        if (_isObject(oGuid[prop]) && !$validReference(oGuid[prop])) return false;
                     }
                 }
                 return true;
             }
-            function validCollection(oGuid) { // 컬렉션 검사
+            function $validCollection(oGuid) { // 컬렉션 검사
                 if (Array.isArray(oGuid['_elem']) && Array.isArray(oGuid['_key'])) {
                     if (oGuid['_elem'].length !== oGuid['_key'].length) return false;
                 }
                 if (Array.isArray(oGuid)){
                     for(var i = 0; i < oGuid.length; i++) {
-                        if (_isObject(oGuid[i]) && !validCollection(oGuid[i])) return false;
+                        if (_isObject(oGuid[i]) && !$validCollection(oGuid[i])) return false;
                     }
                 } else {
                     for(var prop in p_oGuid) {
-                        if (_isObject(oGuid[prop]) && !validCollection(oGuid[prop])) return false;
+                        if (_isObject(oGuid[prop]) && !$validCollection(oGuid[prop])) return false;
                     }
                 }
                 return true;
             }
-            function validUniqueGuid() {    // guid 유일한 값인지 검사
+            function $validUniqueGuid() {    // guid 유일한 값인지 검사
                 for (var i = 0; i < arrObj.length; i++) {
                     for (var ii = 0; ii < arrObj.length; ii++) {
                         if (arrObj[i]['_guid'] === arrObj[ii]['_guid'] && i !== ii) return false; // 중복
@@ -439,19 +439,19 @@
             if (!_isObject(p_oGuid)) throw new ExtendError(/EL03254/, null, [typeof p_oGuid]);
             if (!this.isGuidObject(p_oGuid)) throw new ExtendError(/EL03255/, null, [p_oGuid['_type'], p_oGuid['_guid']]);
 
-            return hasRefer(p_oGuid);
+            return $hasRefer(p_oGuid);
 
             // inner function
-            function hasRefer(oGuid) {  // 참조 포함 여부
+            function $hasRefer(oGuid) {  // 참조 포함 여부
                 if (Array.isArray(oGuid)){
                     for(var i = 0; i < oGuid.length; i++) {
-                        if (typeof oGuid[i] === 'object' && hasRefer(oGuid[i])) return true;
+                        if (typeof oGuid[i] === 'object' && $hasRefer(oGuid[i])) return true;
                     }
                 } else {
                     if (oGuid['$ref'] && _isString(oGuid['$ref'])) return true;
                     if (oGuid['$ns'] && _isString(oGuid['$ns'])) return true;
                     for(var prop in oGuid) {
-                        if (_isObject(oGuid[prop]) && hasRefer(oGuid[prop])) return true
+                        if (_isObject(oGuid[prop]) && $hasRefer(oGuid[prop])) return true
                     }
                 }
                 return false;
@@ -473,15 +473,15 @@
             if (!_isString(guid)) throw new ExtendError(/EL03256/, null, [guid]);
             if (!_isObject(origin)) throw new ExtendError(/EL03257/, null, [typeof origin]);
 
-            return findObject(origin);
+            return $findObject(origin);
             
             // inner finction
-            function findObject(oGuid) { // 객체 조회
+            function $findObject(oGuid) { // 객체 조회
                 var result;
                 if (Array.isArray(oGuid)){
                     for(var i = 0; i < oGuid.length; i++) {
                         if (typeof oGuid[i] === 'object') {
-                            result = findObject(oGuid[i]);
+                            result = $findObject(oGuid[i]);
                             if(result) return result;
                         }
                     }
@@ -492,7 +492,7 @@
                     }
                     for(var prop in oGuid) {
                         if (typeof oGuid[prop] === 'object') {
-                            result = findObject(oGuid[prop]);
+                            result = $findObject(oGuid[prop]);
                             if(result) return result;
                         } 
                     }
@@ -518,15 +518,15 @@
             
             arrObj = _getGuidList(p_oGuid);
             clone = Util.deepCopy(p_oGuid);
-            linkReference(clone, arrObj);
+            $linkReference(clone, arrObj);
             return clone;
 
             // inner function
-            function linkReference(oGuid, arr, parentName) {    // 참조 연결
+            function $linkReference(oGuid, arr, parentName) {    // 참조 연결
                 parentName = parentName || '';
                 if (Array.isArray(oGuid)){
                     for(var i = 0; i < oGuid.length; i++) {
-                        if (typeof oGuid[i] === 'object') linkReference(oGuid[i], arr);
+                        if (typeof oGuid[i] === 'object') $linkReference(oGuid[i], arr);
                     }
                 } else {
                     for(var prop in oGuid) {
@@ -535,7 +535,7 @@
                                 var ns = _this.getClass(oGuid[prop]['$ns']);
                                 if (typeof ns !== 'function') throw new ExtendError(/EL03245/, null, [parentName, prop]);
                                 oGuid[prop] = ns; // function 타입 연결
-                            } else linkReference(oGuid[prop], arr, parentName ? parentName +'.'+ prop : prop);
+                            } else $linkReference(oGuid[prop], arr, parentName ? parentName +'.'+ prop : prop);
                         }
                     }
                 }

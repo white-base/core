@@ -1752,17 +1752,17 @@
             var obj = _getCodeObject(code);
             var msg, long;
 
-            if (typeof obj !== 'object') return _intro(code) + 'There are no messages about the code.' 
+            if (typeof obj !== 'object') return $intro(code) + 'There are no messages about the code.' 
             
-            msg = _build(obj.msg);
+            msg = $build(obj.msg);
             if (isLong) {
-                long = _build(obj.long);
+                long = $build(obj.long);
                 if (long.length > 0) msg += '\n' + long;
             }
-            return _intro(code) + msg;
+            return $intro(code) + msg;
 
             // inner function
-            function _build(p_msg) {
+            function $build(p_msg) {
                 var msg = p_msg || '';
                 var result;
                 var max = 0;
@@ -1782,7 +1782,7 @@
                 }
                 return msg;
             }
-            function _intro(code) {
+            function $intro(code) {
                 var div;
                 var intro = '';
 

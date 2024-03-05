@@ -80,8 +80,8 @@
             
             _build = _message + '\n';
             
-            if (_prop) _build += buildMessageProp(_prop);
-            if (_queue) _build += buildMsgQueue(_queue); 
+            if (_prop) _build += $buildMessageProp(_prop);
+            if (_queue) _build += $buildMsgQueue(_queue); 
 
             // var _instance = _super.call(this, _build);
             var _instance = new Error(_build);
@@ -111,7 +111,7 @@
             return _instance;
 
             // inner function 
-            function buildMessageProp(obj) {
+            function $buildMessageProp(obj) {
                 var msg = '';
                 for (var prop in obj) {
                     if (typeof obj[prop] === 'string') msg += prop + ' : '+ obj[prop] + '\n';
@@ -119,7 +119,7 @@
                 }
                 return msg;
             }
-            function buildMsgQueue(queue) {
+            function $buildMsgQueue(queue) {
                 var msg = '';
                 var queue_cnt = queue.length;
                 for (var i = queue_cnt; i > 0; i--) {

@@ -216,12 +216,12 @@
             // var unionTypes = this._interface || [];
             // var thisTypes = this.getTypes();
 
-            if (typeof p_fun === 'string') return findFunctionName(p_fun);
-            if (typeof p_fun === 'function') return findFunction(p_fun);
+            if (typeof p_fun === 'string') return $$findFunctionName(p_fun);
+            if (typeof p_fun === 'function') return $findFunction(p_fun);
             return false;
 
             // inner function
-            function findFunction(fun) {
+            function $findFunction(fun) {
                 var types = _this.getTypes();
                 for (var i = 0; i < types.length; i++) {
                     if (fun === types[i]) return true;
@@ -232,7 +232,7 @@
                 }
                 return false;
             }
-            function findFunctionName(funName) {
+            function $$findFunctionName(funName) {
                 var types = _this.getTypes();
                 for (var i = 0; i < types.length; i++) {
                     if (funName === types[i].name) return true;

@@ -12,10 +12,7 @@
     var ExtendError;
     var Util;
     var Observer;
-    // var MetaRegistry;
-    // var MetaElement;
     var BaseColumn;
-    // var PropertyCollection;
 
     //==============================================================
     // 1. namespace declaration
@@ -30,19 +27,13 @@
         ExtendError                 = require('./extend-error').ExtendError;
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
-        // MetaElement                 = require('./meta-element').MetaElement;
         BaseColumn                  = require('./base-column').BaseColumn;
-        // PropertyCollection          = require('./collection-property').PropertyCollection;
-        // MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
-        // MetaElement                 = _global._L.MetaElement;
         BaseColumn                  = _global._L.BaseColumn;
-        // PropertyCollection          = _global._L.PropertyCollection;
-        // MetaRegistry                = _global._L.MetaRegistry;
     }
 
     //==============================================================
@@ -50,10 +41,7 @@
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
-    // if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-    // if (typeof MetaElement === 'undefined') throw new Error(Message.get('ES011', ['MetaElement', 'meta-element']));
     if (typeof BaseColumn === 'undefined') throw new Error(Message.get('ES011', ['BaseColumn', 'base-column']));
-    // if (typeof PropertyCollection === 'undefined') throw new Error(Message.get('ES011', ['PropertyCollection', 'collection-property']));
 
     //==============================================================
     // 4. module implementation
@@ -472,21 +460,11 @@
     //==============================================================
     // 5. module export
     if (isNode) {     
-        exports.MetaColumn                                  = MetaColumn;
-        // exports.BaseColumnCollection                        = BaseColumnCollection;
-        // exports.MetaViewColumnCollection                    = MetaViewColumnCollection;
-        // exports.MetaTableColumnCollection                   = MetaTableColumnCollection;
-
+        exports.MetaColumn                                 = MetaColumn;
     } else {
         _global._L.MetaColumn                              = MetaColumn;
-        // _global._L.BaseColumnCollection                    = BaseColumnCollection;
-        // _global._L.MetaViewColumnCollection                = MetaViewColumnCollection;
-        // _global._L.MetaTableColumnCollection               = MetaTableColumnCollection;
         // namespace
         _global._L.Meta.Entity.MetaColumn                  = MetaColumn;
-        // _global._L.Meta.Entity.BaseColumnCollection        = BaseColumnCollection;
-        // _global._L.Meta.Entity.MetaViewColumnCollection    = MetaViewColumnCollection;
-        // _global._L.Meta.Entity.MetaTableColumnCollection   = MetaTableColumnCollection;
     }
 
 }(typeof window !== 'undefined' ? window : global));

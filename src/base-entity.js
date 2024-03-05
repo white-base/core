@@ -226,8 +226,8 @@
 
                 if (oGuid['_guid']) obj['_guid'] = oGuid['_guid'];
                 if (oGuid['_baseEntity']) obj['_baseEntity'] = oGuid['_baseEntity'];
-                obj['columns'] = transformColumn(oGuid['columns'], oGuid);
-                obj['rows'] = transformRow(oGuid['rows'], oGuid);
+                obj['columns'] = $transformColumn(oGuid['columns'], oGuid);
+                obj['rows'] = $transformRow(oGuid['rows'], oGuid);
                 
             } catch (error) {
                 throw new ExtendError(/EL05332/, error, []);
@@ -236,7 +236,7 @@
             return obj;
 
             // inner funciton
-            function transformColumn(oGuid, origin) {
+            function $transformColumn(oGuid, origin) {
                 var obj = {};
                 for (var i = 0; i < oGuid['_elem'].length; i++) {
                     var column = oGuid['_elem'][i];
@@ -266,7 +266,7 @@
                 obj['$key'] = oGuid['_key'];
                 return obj;
             }
-            function transformRow(oGuid) {
+            function $transformRow(oGuid) {
                 var arr = [];
                 for (var i = 0; i < oGuid['_elem'].length; i++) {
                     var rows = oGuid['_elem'][i];
@@ -317,7 +317,7 @@
                 for (var i = 0; i < orignal.rows.count; i++) {  
                     if (!p_callback || (typeof p_callback === 'function' 
                         && p_callback.call(this, orignal.rows[i], i, p_entity))) {
-                        p_entity.rows.add(createRow(orignal.rows[i]));
+                        p_entity.rows.add($createRow(orignal.rows[i]));
                     } 
                 }
                 return p_entity;
@@ -327,7 +327,7 @@
             }
 
             // inner function
-            function createRow(row) {
+            function $createRow(row) {
                 var alias, newRow;
                 newRow = p_entity.newRow();
                 for (var ii = 0; ii < p_entity.columns.count; ii++) {
@@ -352,8 +352,8 @@
                 if (!(p_entity instanceof BaseEntity)) throw new ExtendError(/EL05324/, null, []);
                 if (typeof opt !== 'number') throw new ExtendError(/EL05325/, null, [typeof opt]);
             
-                if (opt % 2 === 1) loadColumn(); // opt: 1, 3
-                if (Math.floor(opt / 2) >= 1) loadRow(); // opt: 2, 3
+                if (opt % 2 === 1) $loadColumn(); // opt: 1, 3
+                if (Math.floor(opt / 2) >= 1) $loadRow(); // opt: 2, 3
                 return;
                 
             } catch (error) {
@@ -361,7 +361,7 @@
             }
 
             // inner function
-            function loadColumn() {
+            function $loadColumn() {
                 if (_this.rows.count > 0 ) throw new ExtendError(/EL05327/, null, [opt]);
                 for (let i = 0; i < p_entity.columns.count; i++) {
                     var column = p_entity.columns[i].clone();
@@ -370,7 +370,7 @@
                     _this.columns.add(column);
                 }
             }
-            function loadRow() {    // 컬럼 기준으로 로우를 가져온다.
+            function $loadRow() {    // 컬럼 기준으로 로우를 가져온다.
                 for (let i = 0; i < p_entity.rows.count; i++) {
                     var row = _this.newRow(this);
                     for (let ii = 0; ii < _this.columns.count; ii++) {
@@ -411,10 +411,10 @@
                         if (columns['$key'] && Array.isArray(columns['$key'])) {
                             for (var i = 0; i < columns['$key'].length; i++) {
                                 
-                                    addColumn(columns['$key'][i], columns);
+                                    $addColumn(columns['$key'][i], columns);
                                 }
                         // 2. 무작위로 컬럼명 추출
-                        } else for (var key in columns) addColumn(key, columns);
+                        } else for (var key in columns) $addColumn(key, columns);
                         
 
                 }
@@ -438,7 +438,7 @@
             }
 
             // innner function
-            function addColumn(key, columns) {
+            function $addColumn(key, columns) {
                 var column;
                 if (_isObject(columns[key])) {
                     if (_this.rows.count > 0 ) throw new ExtendError(/EL0532B/, null, []);
@@ -552,13 +552,14 @@
          * 엔티티(테이블/뷰)와 병합
          * @param {BaseEntity} p_target 
          * @param {object} p_option 옵션
-         * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨 <**>
+         * @param {object} p_option.0 로우(idx) 기준 병합, 초과 컬럼은 무시됨 <**>   
          * @param {object} p_option.1 컬럼(key) 기준 병합, 초과 로우는 무시됨
          * @param {object} p_option.2 로우(idx) 기준 병합, 초과 컬럼은 채워짐
          * @param {object} p_option.3 컬럼(key) 기준 병합, 초과 로우는 채워짐 
          * @param {boolean} p_matchType 로우 유효성 검사 유무 (기본:false)
          */
         BaseEntity.prototype.merge  = function(p_target, p_option, p_matchType) {
+            var _this = this;
             var opt = p_option || 0;
             var key, alias, newRow, tarRow, oriRows, tarRows, tarColumns;
             var tempRows = [], clone;
@@ -574,153 +575,160 @@
                 target = p_target.clone();
 
                 // opt = 0
-                if (opt === 0) {
-                    // 3-1. 로우 임시 저장 및 초기화 
-                    for (var i = 0; i < this.rows.count; i++) {
-                        tempRows.push(this.rows[i].clone());
-                    }
-                    this.rows.clear();
-                    // 3-2. 원본 row 추가
-                    for (var i = 0; i < tempRows.length; i++) {
-                        newRow = this.newRow();
-                        for (var ii = 0; ii < this.columns.count; ii++) {
-                            alias = this.columns[ii].alias;
-                            if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
-                        }
-                        this.rows.add(newRow, p_matchType);
-                    }
-                    // 3-3. 타겟 row 추가
-                    tarRows = target.rows;
-                    for (var i = 0; i < tarRows.count; i++) {
-                        newRow = this.newRow();
-                        tarRow = tarRows[i];
-                        for (var ii = 0; ii < this.columns.count; ii++) {
-                            alias = this.columns[ii].alias;
-                            if (tarRow[alias]) newRow[alias] = tarRow[alias];
-                        }
-                        this.rows.add(newRow, p_matchType);
-                    }
-                }
+                if (opt === 0) $mergeByRow();
                 // opt = 1
-                if (opt === 1) {
-                    tarColumns = target.columns;
-                    tarRows = target.rows;
-                    // 3-1. 컬럼 중복 검사
-                    for (var i = 0; i < tarColumns.count; i++) {
-                        alias = tarColumns[i].alias;
-                        if (this.columns.exist(alias)) throw new ExtendError(/EL05343/, null, [i, alias]);
-                        if (this.columns.existAlias(alias)) throw new ExtendError(/EL05344/, null, [i, alias]);
-                    }
-                    // 3-2. 로우 임시 저장 및 초기화 
-                    for (var i = 0; i < this.rows.count; i++) {
-                        tempRows.push(this.rows[i].clone());
-                    }
-                    this.rows.clear();
-                    // 3-3. 컬럼 추가
-                    for (var i = 0; i < tarColumns.count; i++) {
-                        clone = tarColumns[i].clone(this);
-                        var key = tarColumns[i].alias;
-                        clone.columnName = key;
-                        clone.__SET$__key(key, clone);
-                        this.columns.add(clone);
-                    }
-                    // 3-4. 로우 추가 (기준:idx)
-                    for (var i = 0; i < tempRows.length; i++) {
-                        newRow = this.newRow();
-                        for (var ii = 0; ii < this.columns.count; ii++) {
-                            alias = this.columns[ii].alias;
-                            if (tempRows[i][alias]) {                         // 원본 로우
-                                newRow[alias] = tempRows[i][alias];
-                                continue;
-                            } else if (tarRows[i] && tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
-                        }
-                        this.rows.add(newRow, p_matchType);
-                    }                                
-                }
+                if (opt === 1) $mergeByColumn();
                 // opt = 2
-                if (opt === 2) {
-                    tarColumns = target.columns;
-                    tarRows = target.rows;
-                    // 3-1. 로우 임시 저장 및 초기화 
-                    for (var i = 0; i < this.rows.count; i++) {
-                        tempRows.push(this.rows[i].clone());
-                    }
-                    this.rows.clear();
-                    // 3-2. 컬럼 추가
-                    for (var i = 0; i < tarColumns.count; i++) {
-                        alias = tarColumns[i].alias;
-                        if (!this.columns.exist(alias)) {
-                            clone = tarColumns[i].clone(this);
-                            clone.name = alias;
-                            this.columns.add(clone);
-                        }
-                    }
-                    // 3-3. 로우 추가 : 원본
-                    for (var i = 0; i < tempRows.length; i++) {
-                        newRow = this.newRow();
-                        for (var ii = 0; ii < this.columns.count; ii++) {
-                            alias = this.columns[ii].alias;
-                            if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
-                        }
-                        this.rows.add(newRow, p_matchType);
-                    }
-                    // 3-4. 로우 추가 : 타겟
-                    for (var i = 0; i < tarRows.count; i++) {
-                        newRow = this.newRow();
-                        for (var ii = 0; ii < this.columns.count; ii++) {
-                            alias = this.columns[ii].alias;
-                            if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
-                        }
-                        this.rows.add(newRow, p_matchType);
-                    }
-                }
+                if (opt === 2) $mergeByRowFill();
                 // opt = 3
-                if (opt === 3) {
-                    tarColumns = target.columns;
-                    tarRows = target.rows;
-                    // 3-1. 컬럼 중복 검사
-                    for (var i = 0; i < tarColumns.count; i++) {
-                        alias = tarColumns[i].alias;
-                        if (this.columns.exist(alias)) throw new ExtendError(/EL05345/, null, [i, alias]);
-                        if (this.columns.existAlias(alias)) throw new ExtendError(/EL05346/, null, [i, alias]);
-                    }
-                    // 3-2. 로우 임시 저장 및 초기화 
-                    for (var i = 0; i < this.rows.count; i++) {
-                        tempRows.push(this.rows[i].clone());
-                    }
-                    this.rows.clear();
-                    // 3-3. 컬럼 추가
-                    for (var i = 0; i < tarColumns.count; i++) {
-                        clone = tarColumns[i].clone(this);
-                        clone.name = tarColumns[i].alias;
-                        this.columns.add(clone);
-                    }
-                    // 3-4. 로우 추가 (idx)
-                    for (var i = 0; i < tempRows.length; i++) {
-                        newRow = this.newRow();
-                        for (var ii = 0; ii < this.columns.count; ii++) {
-                            alias = this.columns[ii].alias;
-                            if (tempRows[i][alias]) {                         // 원본 로우
-                                newRow[alias] = tempRows[i][alias];
-                                continue;
-                            }else newRow[alias] = tarRows[i][alias]; // 타겟 로우
-                        }
-                        this.rows.add(newRow, p_matchType);
-                    }     
-                    // 3-5. 타겟 로우가 클 경우 로우 추가
-                    if (tempRows.length < tarRows.count) {
-                        for (var i = tempRows.length; i < tarRows.count; i++) {
-                            newRow = this.newRow();
-                            for (var ii = 0; ii < this.columns.count; ii++) {
-                                alias = this.columns[ii].alias;
-                                if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
-                            }
-                            this.rows.add(newRow, p_matchType);
-                        }
-                    }
-                }
+                if (opt === 3) $mergeByColumnFill();
+
             } catch (error) {
                 throw new ExtendError(/EL05347/, error, [opt]);
+            }
+
+            // innner function
+            function $mergeByRow() {    // opt = 0
+                // 3-1. 로우 임시 저장 및 초기화 
+                for (var i = 0; i < _this.rows.count; i++) {
+                    tempRows.push(_this.rows[i].clone());
+                }
+                _this.rows.clear();
+                // 3-2. 원본 row 추가
+                for (var i = 0; i < tempRows.length; i++) {
+                    newRow = _this.newRow();
+                    for (var ii = 0; ii < _this.columns.count; ii++) {
+                        alias = _this.columns[ii].alias;
+                        if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
+                    }
+                    _this.rows.add(newRow, p_matchType);
+                }
+                // 3-3. 타겟 row 추가
+                tarRows = target.rows;
+                for (var i = 0; i < tarRows.count; i++) {
+                    newRow = _this.newRow();
+                    tarRow = tarRows[i];
+                    for (var ii = 0; ii < _this.columns.count; ii++) {
+                        alias = _this.columns[ii].alias;
+                        if (tarRow[alias]) newRow[alias] = tarRow[alias];
+                    }
+                    _this.rows.add(newRow, p_matchType);
+                }
+            }
+            function $mergeByColumn() {     // opt = 1
+                tarColumns = target.columns;
+                tarRows = target.rows;
+                // 3-1. 컬럼 중복 검사
+                for (var i = 0; i < tarColumns.count; i++) {
+                    alias = tarColumns[i].alias;
+                    if (_this.columns.exist(alias)) throw new ExtendError(/EL05343/, null, [i, alias]);
+                    if (_this.columns.existAlias(alias)) throw new ExtendError(/EL05344/, null, [i, alias]);
+                }
+                // 3-2. 로우 임시 저장 및 초기화 
+                for (var i = 0; i < _this.rows.count; i++) {
+                    tempRows.push(_this.rows[i].clone());
+                }
+                _this.rows.clear();
+                // 3-3. 컬럼 추가
+                for (var i = 0; i < tarColumns.count; i++) {
+                    clone = tarColumns[i].clone(_this);
+                    var key = tarColumns[i].alias;
+                    clone.columnName = key;
+                    clone.__SET$__key(key, clone);
+                    _this.columns.add(clone);
+                }
+                // 3-4. 로우 추가 (기준:idx)
+                for (var i = 0; i < tempRows.length; i++) {
+                    newRow = _this.newRow();
+                    for (var ii = 0; ii < _this.columns.count; ii++) {
+                        alias = _this.columns[ii].alias;
+                        if (tempRows[i][alias]) {                         // 원본 로우
+                            newRow[alias] = tempRows[i][alias];
+                            continue;
+                        } else if (tarRows[i] && tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                    }
+                    _this.rows.add(newRow, p_matchType);
+                }    
+            }
+            function $mergeByRowFill() {    // opt = 2
+                tarColumns = target.columns;
+                tarRows = target.rows;
+                // 3-1. 로우 임시 저장 및 초기화 
+                for (var i = 0; i < _this.rows.count; i++) {
+                    tempRows.push(_this.rows[i].clone());
+                }
+                _this.rows.clear();
+                // 3-2. 컬럼 추가
+                for (var i = 0; i < tarColumns.count; i++) {
+                    alias = tarColumns[i].alias;
+                    if (!_this.columns.exist(alias)) {
+                        clone = tarColumns[i].clone(_this);
+                        clone.name = alias;
+                        _this.columns.add(clone);
+                    }
+                }
+                // 3-3. 로우 추가 : 원본
+                for (var i = 0; i < tempRows.length; i++) {
+                    newRow = _this.newRow();
+                    for (var ii = 0; ii < _this.columns.count; ii++) {
+                        alias = _this.columns[ii].alias;
+                        if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
+                    }
+                    _this.rows.add(newRow, p_matchType);
+                }
+                // 3-4. 로우 추가 : 타겟
+                for (var i = 0; i < tarRows.count; i++) {
+                    newRow = _this.newRow();
+                    for (var ii = 0; ii < _this.columns.count; ii++) {
+                        alias = _this.columns[ii].alias;
+                        if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
+                    }
+                    _this.rows.add(newRow, p_matchType);
+                }
+            }
+            function $mergeByColumnFill() { // opt = 3
+                tarColumns = target.columns;
+                tarRows = target.rows;
+                // 3-1. 컬럼 중복 검사
+                for (var i = 0; i < tarColumns.count; i++) {
+                    alias = tarColumns[i].alias;
+                    if (_this.columns.exist(alias)) throw new ExtendError(/EL05345/, null, [i, alias]);
+                    if (_this.columns.existAlias(alias)) throw new ExtendError(/EL05346/, null, [i, alias]);
+                }
+                // 3-2. 로우 임시 저장 및 초기화 
+                for (var i = 0; i < _this.rows.count; i++) {
+                    tempRows.push(_this.rows[i].clone());
+                }
+                _this.rows.clear();
+                // 3-3. 컬럼 추가
+                for (var i = 0; i < tarColumns.count; i++) {
+                    clone = tarColumns[i].clone(_this);
+                    clone.name = tarColumns[i].alias;
+                    _this.columns.add(clone);
+                }
+                // 3-4. 로우 추가 (idx)
+                for (var i = 0; i < tempRows.length; i++) {
+                    newRow = _this.newRow();
+                    for (var ii = 0; ii < _this.columns.count; ii++) {
+                        alias = _this.columns[ii].alias;
+                        if (tempRows[i][alias]) {                         // 원본 로우
+                            newRow[alias] = tempRows[i][alias];
+                            continue;
+                        }else newRow[alias] = tarRows[i][alias]; // 타겟 로우
+                    }
+                    _this.rows.add(newRow, p_matchType);
+                }     
+                // 3-5. 타겟 로우가 클 경우 로우 추가
+                if (tempRows.length < tarRows.count) {
+                    for (var i = tempRows.length; i < tarRows.count; i++) {
+                        newRow = _this.newRow();
+                        for (var ii = 0; ii < _this.columns.count; ii++) {
+                            alias = _this.columns[ii].alias;
+                            if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
+                        }
+                        _this.rows.add(newRow, p_matchType);
+                    }
+                }
             }
         };
 

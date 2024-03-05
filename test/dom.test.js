@@ -178,6 +178,13 @@ describe("[L.*]", () => {
                 delete global._L.Common.Util.isProtoChain;
                 expect(() => require('../src/util')).toThrow(/isProtoChain/);
             });
+            it("- 예외 : util-type.js : hasType 제거", () => {
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/util-type');
+                delete global._L.Common.Util.hasType;
+                expect(() => require('../src/util')).toThrow(/hasType/);
+            });
             it("- 예외 : util-type.js : typeObject 제거", () => {
                 require('../src/message');
                 require('../src/extend-error');

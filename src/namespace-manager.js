@@ -419,18 +419,18 @@
 
             if (!p_elem) throw new ExtendError(/EL03341/, null, [typeof p_elem]);
 
-            if (findElement(namespace)) {
+            if ($findElement(namespace)) {
                 return stack.join('.');
             } else return;
 
             // inner function
-            function findElement(target) { 
+            function $findElement(target) { 
                 for(var prop in target) {
                     var obj = target[prop];
                     if (obj === 'ns') continue;
                     if (obj && obj['_type'] === 'ns') {
                         stack.push(prop);
-                        if(findElement(obj)) return true;
+                        if($findElement(obj)) return true;
                     } else {
                         if (obj === p_elem) {
                             stack.push(prop);

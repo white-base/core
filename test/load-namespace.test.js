@@ -4,9 +4,10 @@
 //==============================================================
 // gobal defined
 'use strict';
+require('../src/namespace');
 const {loadNamespace}                  = require('../src/load-namespace');
 const {MetaRegistry}        = require('../src/meta-registry');
-
+ 
 
 //==============================================================
 // test
