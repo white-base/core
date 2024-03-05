@@ -146,7 +146,8 @@
     };
 
     /**
-     * 지정한 객체를 깊은 복사를 하여 회신합니다.
+     * 지정한 객체를 깊은 복사를 하여 회신합니다.  
+     * (prototype 은 제외)
      * @param {object} object 
      * @memberof _L.Common.Util
      * @returns {object}
