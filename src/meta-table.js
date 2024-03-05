@@ -30,7 +30,7 @@
         ITransaction                = require('./i-transaction').ITransaction;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         BaseEntity                  = require('./base-entity').BaseEntity;
-        MetaTableColumnCollection   = require('./meta-column').MetaTableColumnCollection;
+        MetaTableColumnCollection   = require('./collection-entity').MetaTableColumnCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {    
         Message                     = _global._L.Message;

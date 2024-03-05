@@ -15,7 +15,8 @@ const { BaseColumn }       = require('../src/base-column');
 const { MetaTable }       = require('../src/meta-table');
 const { MetaView, MetaViewCollection }        = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
-const { MetaColumn, BaseColumnCollection }              = require('../src/meta-column');
+const { BaseColumnCollection }              = require('../src/collection-entity');
+const { MetaColumn }              = require('../src/meta-column');
 
 //==============================================================
 // test
@@ -110,7 +111,7 @@ describe("[target: meta-column.js]", () => {
             it("- 강제로  addValue() 제거  ", () => {
                 class TempCollection extends BaseColumnCollection {
                     constructor(p_owner){
-                        super(p_owner) 
+                        super(p_owner, MetaColumn) 
                     }
                 }
                 var temp1  = new TempCollection();
