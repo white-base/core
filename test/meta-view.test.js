@@ -15,7 +15,7 @@ const { MetaView }              = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
 const  {MetaSet}              = require('../src/meta-set');
 const { MetaColumn } = require('../src/meta-column');  
-const { MetaViewColumnCollection } = require('../src/collection-entity');  
+const { MetaViewColumnCollection } = require('../src/collection-column');  
 
 const { replacer, reviver, stringify, parse }              = require('telejson');
 const {MetaRegistry}        = require('../src/meta-registry');

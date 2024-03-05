@@ -15,7 +15,7 @@ const { BaseColumn }       = require('../src/base-column');
 const { MetaTable }       = require('../src/meta-table');
 const { MetaView, MetaViewCollection }        = require('../src/meta-view');
 const { MetaRow }               = require('../src/meta-row');
-const { BaseColumnCollection }              = require('../src/collection-entity');
+const { BaseColumnCollection }              = require('../src/collection-column');
 const { MetaColumn }              = require('../src/meta-column');
 
 //==============================================================

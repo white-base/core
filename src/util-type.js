@@ -108,7 +108,7 @@
      * 리터럴 여부  
      * number, string, boolean, bigint, RexExp instance
      * @param {*} obj 
-     * @returns 
+     * @returns {boolean}
      */
     function _isLiteral(obj) {
         if (typeof obj  === 'number') return true;

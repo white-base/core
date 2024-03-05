@@ -41,7 +41,7 @@
         MetaElement                 = require('./meta-element').MetaElement;
         MetaRowCollection           = require('./meta-row').MetaRowCollection;
         MetaRow                     = require('./meta-row').MetaRow;
-        BaseColumnCollection        = require('./collection-entity').BaseColumnCollection;
+        BaseColumnCollection        = require('./collection-column').BaseColumnCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;

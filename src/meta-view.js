@@ -30,7 +30,7 @@
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaObject                  = require('./meta-object').MetaObject;
         BaseEntity                  = require('./base-entity').BaseEntity;
-        MetaViewColumnCollection    = require('./collection-entity').MetaViewColumnCollection;
+        MetaViewColumnCollection    = require('./collection-column').MetaViewColumnCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
     } else {
         Message                     = _global._L.Message;

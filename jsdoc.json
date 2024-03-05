@@ -14,7 +14,7 @@
     "opts": {
       "template": "node_modules/docdash",
       "encoding": "utf8",
-      "destination": "docs3/",
+      "destination": "docs2/",
       "recurse": true,
       "verbose": true
     },

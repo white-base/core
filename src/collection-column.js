@@ -35,7 +35,7 @@
         BaseColumn                  = require('./base-column').BaseColumn;
         PropertyCollection          = require('./collection-property').PropertyCollection;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
-        MetaColumn                = require('./meta-column').MetaColumn;
+        MetaColumn                  = require('./meta-column').MetaColumn;
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
@@ -45,7 +45,7 @@
         BaseColumn                  = _global._L.BaseColumn;
         PropertyCollection          = _global._L.PropertyCollection;
         MetaRegistry                = _global._L.MetaRegistry;
-        MetaColumn                = _global._L.MetaColumn;
+        MetaColumn                  = _global._L.MetaColumn;
     }
 
     //==============================================================

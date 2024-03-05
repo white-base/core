@@ -7,7 +7,10 @@
     "test": "jest",
     "test:c": "jest --coverage",
     "test:u": "jest --updateSnapshot",
-    "test:v": "jest --verbose"
+    "test:v": "jest --verbose",
+    "doc:j": "jsdoc -c jaguar.json",
+    "doc:2": "jsdoc -c jsdoc.json",
+    "http": "npx http-server"
   },
   "repository": {
     "type": "git",

@@ -81,9 +81,9 @@
         IObject                     = require('./i-object').IObject;
         ITransaction                = require('./i-transaction').ITransaction;
         MetaColumn                  = require('./meta-column').MetaColumn;
-        BaseColumnCollection        = require('./collection-entity').BaseColumnCollection;
-        MetaViewColumnCollection    = require('./collection-entity').MetaViewColumnCollection;
-        MetaTableColumnCollection   = require('./collection-entity').MetaTableColumnCollection;
+        BaseColumnCollection        = require('./collection-column').BaseColumnCollection;
+        MetaViewColumnCollection    = require('./collection-column').MetaViewColumnCollection;
+        MetaTableColumnCollection   = require('./collection-column').MetaTableColumnCollection;
         MetaElement                 = require('./meta-element').MetaElement;
         BaseEntity                  = require('./base-entity').BaseEntity;
         MetaObject                  = require('./meta-object').MetaObject;

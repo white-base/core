@@ -1436,23 +1436,23 @@ describe("[L.*]", () => {
         });
     });
     describe("[Meta.Entity.*]", () => {
-        describe("load: collection-entity.js <BaseColumnCollection, MetaTableColumnCollection, MetaViewColumnCollection>", () => {
+        describe("load: collection-column.js <BaseColumnCollection, MetaTableColumnCollection, MetaViewColumnCollection>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
                 });
             it("- 예외 : 전체 로딩 안할 때", () => {
-                expect(() => require('../src/collection-entity')).toThrow(/Cannot read properties/);
+                expect(() => require('../src/collection-column')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
                 require('../src/message');
-                expect(() => require('../src/collection-entity')).toThrow(/ExtendError/);
+                expect(() => require('../src/collection-column')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message');
                 require('../src/extend-error');
                 
-                expect(() => require('../src/collection-entity')).toThrow(/Util/);
+                expect(() => require('../src/collection-column')).toThrow(/Util/);
             });
             it("- 예외 : MetaRegistry 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -1461,7 +1461,7 @@ describe("[L.*]", () => {
                 require('../src/util');
                 require('../src/observer');
         
-                expect(() => require('../src/collection-entity')).toThrow(/MetaRegistry/); 
+                expect(() => require('../src/collection-column')).toThrow(/MetaRegistry/); 
             });
             it("- 예외 : MetaElement 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -1487,7 +1487,7 @@ describe("[L.*]", () => {
                 // require('../src/meta-element');
                 // require('../src/base-column');
         
-                expect(() => require('../src/collection-entity')).toThrow(/MetaElement/);
+                expect(() => require('../src/collection-column')).toThrow(/MetaElement/);
             });
             it("- 예외 : BaseColumn 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -1513,7 +1513,7 @@ describe("[L.*]", () => {
                 require('../src/meta-element');
                 // require('../src/base-column');
         
-                expect(() => require('../src/collection-entity')).toThrow(/BaseColumn/);
+                expect(() => require('../src/collection-column')).toThrow(/BaseColumn/);
             });
             it("- 예외 : PropertyCollection 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -1539,7 +1539,7 @@ describe("[L.*]", () => {
                 require('../src/meta-element');
                 require('../src/base-column');
         
-                expect(() => require('../src/collection-entity')).toThrow(/PropertyCollection/);
+                expect(() => require('../src/collection-column')).toThrow(/PropertyCollection/);
             });
             it("- 예외 : MetaColumn 로딩이 안 된 경우", () => {
                 require('../src/message');
@@ -1566,7 +1566,7 @@ describe("[L.*]", () => {
                 require('../src/base-column');
                 require('../src/collection-property');
         
-                expect(() => require('../src/collection-entity')).toThrow(/MetaColumn/);
+                expect(() => require('../src/collection-column')).toThrow(/MetaColumn/);
             });
 
             it("- 로딩 성공 ", () => {
@@ -1595,7 +1595,7 @@ describe("[L.*]", () => {
                 require('../src/collection-property');
                 require('../src/meta-column');
                 
-                require('../src/collection-entity');
+                require('../src/collection-column');
         
                 expect(global._L.MetaColumn).toBeDefined();  
                 expect(global._L.Meta.Entity.MetaColumn).toBeDefined();
@@ -2009,7 +2009,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
         
                 require('../src/base-entity');
         
@@ -2220,7 +2220,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
                 require('../src/base-entity');
 
                 // require('../src/meta-table');
@@ -2264,7 +2264,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
                 require('../src/base-entity');
                 require('../src/meta-table');
         
@@ -2458,7 +2458,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
                 require('../src/base-entity');
                 // require('../src/meta-view');
         
@@ -2500,7 +2500,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
                 require('../src/base-entity');
                 require('../src/meta-view');
         
@@ -2806,7 +2806,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
                 require('../src/base-entity');
                 // require('../src/meta-table');
                 // require('../src/meta-view');
@@ -2847,7 +2847,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
                 require('../src/base-entity');
                 require('../src/meta-table');
                 // require('../src/meta-view');
@@ -2888,7 +2888,7 @@ describe("[L.*]", () => {
                 require('../src/meta-row');
                 require('../src/base-column');
                 require('../src/meta-column');
-                require('../src/collection-entity');
+                require('../src/collection-column');
                 require('../src/base-entity');
                 require('../src/meta-table');
                 require('../src/meta-view');

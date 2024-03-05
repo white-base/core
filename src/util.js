@@ -114,9 +114,10 @@
     /**
      * 배열 깊이를 가져옵니다.
      * REVIEW: 필요성 검토 필요!
+     * @memberof _L.Common.Util
      * @param {array} p_elem 
      * @param {number} p_depts 
-     * @memberof _L.Common.Util
+     * @returns {number}
      */
     var getArrayDepth  = function(p_elem, p_depts) {
         var MAX     = 10;
@@ -137,7 +138,6 @@
      * @returns {string}
      */
     var createGuid = function() {
-
         function _p8(s) {  
             var p = (Math.random().toString(16)+'000000000').substring(2,10);  
             return s ? '-' + p.substring(0, 4) + '-' + p.substring(4, 8) : p ;  
@@ -148,31 +148,33 @@
     /**
      * 지정한 객체를 깊은 복사를 하여 회신합니다.  
      * (prototype 은 제외)
-     * @param {object} object 
      * @memberof _L.Common.Util
+     * @param {object} p_obj 
      * @returns {object}
      */
-    var deepCopy = function(object) {
-        if (!_isObject(object)) {
-          return object;
+    var deepCopy = function(p_obj) {
+        var nobj;
+
+        if (!_isObject(p_obj)) {
+          return p_obj;
         }
-        if (object instanceof RegExp) return object;
+        if (p_obj instanceof RegExp) return p_obj;
 
         // 객체인지 배열인지 판단
-        var copy = Array.isArray(object) ? [] : {};
+        nobj = Array.isArray(p_obj) ? [] : {};
        
-        if (Array.isArray(object)) {
-            for (var i = 0; i < object.length; i++) {
-                copy[i] = deepCopy(object[i]);
+        if (Array.isArray(p_obj)) {
+            for (var i = 0; i < p_obj.length; i++) {
+                nobj[i] = deepCopy(p_obj[i]);
             }
         } else {
-            for (var key in object) {
-                if (Object.prototype.hasOwnProperty.call(object, key)) {
-                    copy[key] = deepCopy(object[key]);
+            for (var key in p_obj) {
+                if (Object.prototype.hasOwnProperty.call(p_obj, key)) {
+                    nobj[key] = deepCopy(p_obj[key]);
                 }
             }
         }
-        return copy;
+        return nobj;
     }    
 
     /**
@@ -224,7 +226,6 @@
      */
     var implement = function(p_ctor, p_obj, args) {
         var _interface = [];
-        var msg = '';
         var addCnt = 0;
 
         if (typeof p_ctor !== 'function') throw new ExtendError(/EL01401/, null, [typeof p_ctor]);
