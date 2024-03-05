@@ -170,7 +170,7 @@
      * @param {*} funBody 
      * @returns {object}
      */
-    function _getFunInfo(funBody) {  // TODO: 이름 파서로 변경
+    function _parseFunc(funBody) {
         var syntax1 = /\([,_\[\]{:}\w\s]*\)\s*(?:=>)?\s*{\s*.*\s*.*\s*}/;    // 제한 규칙
         var syntax2 = /(\(.*\)|\w+)\s*(?:=>).*/;
         var regFunc1 = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
@@ -592,7 +592,7 @@
                 
             if (obj['$type'] === 'function') {
                 try {
-                    var funcType  = type['_TYPE'] ? type['_TYPE'] : _getFunInfo(type.toString());
+                    var funcType  = type['_TYPE'] ? type['_TYPE'] : _parseFunc(type.toString());
                     obj['params'] = funcType['params'];
                     obj['return'] = funcType['return'];
                 } catch (err) {
