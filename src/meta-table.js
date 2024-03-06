@@ -1,7 +1,5 @@
-/**
- * namespace _L.Meta.Entity.MetaTable
- * namespace _L.Meta.Entity.MetaTableCollection
- */
+/**** meta-table.js | _L.Meta.Entity.MetaTable, _L.Meta.Entity.MetaTableCollection ****/
+
 (function(_global) {
     'use strict';
 

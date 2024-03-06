@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.ISerialize
- */
+/**** i-serialize.js | _L.Interface.ISerialize ****/
+
 (function(_global) {
     'use strict';
 

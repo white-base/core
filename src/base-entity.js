@@ -1,6 +1,5 @@
-/**
- * namespace _L.Meta.Entity.Entity
- */
+/**** base-entity.js | _L.Meta.Entity.BaseEntity ****/
+
 (function(_global) {
     'use strict';
 

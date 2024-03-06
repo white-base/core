@@ -1,6 +1,5 @@
-/**
- * namespace _L.Common.Util
- */
+/**** util.js | _L.Common.Util.- ****/
+
 (function(_global) {
     'use strict';
 
@@ -116,7 +115,7 @@
     // };
     
     /**
-     * 배열 깊이를 가져옵니다.
+     * 배열의 깊이를 가져온다.
      * REVIEW: 필요성 검토 필요!
      * @memberof _L.Common.Util
      * @param {array} p_elem 
@@ -137,7 +136,7 @@
     };
     
     /**
-     * 고유한 식별자(guid)을 생성합니다.
+     * guid 값을 생성한다.
      * @memberof _L.Common.Util
      * @returns {string}
      */
@@ -150,8 +149,7 @@
     };
 
     /**
-     * 지정한 객체를 깊은 복사를 하여 회신합니다.  
-     * (prototype 은 제외)
+     * 객체를 깊은 복사를한다. (proto제외)
      * @memberof _L.Common.Util
      * @param {object} p_obj 
      * @returns {object}
@@ -182,7 +180,7 @@
     }    
 
     /**
-     * 지정한 부모(생성자)를 상속합니다.
+     * 상속한다.
      * @function
      * @memberof _L.Common.Util
      * @param {object | function} ctor 대상
@@ -219,7 +217,8 @@
     }());
 
     /**
-     * 대상 객체에 인터페이스를 정의하고, 인스턴스를 검사합니다.  
+     * 구현검사한다.  
+     * ctor 종류(_KIND)가 'inteface'이면 allowType(), 아니면 matchType()로 검사한다.
      * @name implements
      * @function
      * @memberof _L.Common.Util

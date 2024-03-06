@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IArrayCollection
- */
+/**** i-colleciton-array.js | _L.Interface.IArrayCollection ****/
+
 (function(_global) {
     'use strict';
 

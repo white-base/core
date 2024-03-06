@@ -1,8 +1,4 @@
-/**
- * namespace _L.Meta.Entity.MetaRow
- * namespace _L.Meta.Entity.MetaRowCollection
- */
-// var $local = {};
+/**** meta-row.js | _L.Meta.Entity.MetaRow, _L.Meta.Entity.MetaRowCollection ****/
 
 (function(_global) {
     'use strict';

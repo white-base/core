@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IObject
- */
+/**** i-object.js | _L.Interface.IObject ****/
+
 (function(_global) {
     'use strict';
 

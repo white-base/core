@@ -1,6 +1,5 @@
-/**
- * namespace _L.Common
- */
+/**** message.js | _L.Common.Message ****/
+
 (function(_global) {
     'use strict';
 

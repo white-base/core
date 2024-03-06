@@ -1,9 +1,5 @@
-/**
- * namespace _L.Meta.Entity.MetaColumn
- * namespace _L.Meta.Entity.BaseColumnCollection
- * namespace _L.Meta.Entity.MetaViewColumnCollection
- * namespace _L.Meta.Entity.MetaTableColumnCollection
- */
+/**** meta-column.js | _L.Meta.Entity.MetaColumn ****/
+
 (function(_global) {
     'use strict';
 

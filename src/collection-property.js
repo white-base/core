@@ -1,6 +1,5 @@
-/**
- * namespace _L.Collection.PropertyCollection
- */
+/**** collection-property.js | _L.Collection.PropertyCollection ****/
+
 (function(_global) {
     'use strict';
 

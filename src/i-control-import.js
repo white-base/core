@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IImportControl
- */
+/**** i-control-import.js | _L.Interface.IImportControl ****/
+
 (function(_global) {
     'use strict';
 

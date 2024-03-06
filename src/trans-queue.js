@@ -1,6 +1,5 @@
-/**
- * namespace _L.Collection.TransactionQueue
- */
+/**** trans-queue.js | _L.Collection.TransactionQueue ****/
+
 (function(_global) {
     'use strict';
 

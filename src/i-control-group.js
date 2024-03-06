@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IGroupControl
- */
+/**** i-control-group.js | _L.Interface.IGroupControl ****/
+
 (function(_global) {
     'use strict';
 

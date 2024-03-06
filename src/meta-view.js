@@ -1,7 +1,5 @@
-/**
- * namespace _L.Meta.Entity.MetaView
- * namespace _L.Meta.Entity.MetaViewCollection
- */
+/**** meta-view.js | _L.Meta.Entity.MetaView, _L.Meta.Entity.MetaViewCollection ****/
+
 (function(_global) {
     'use strict';
 

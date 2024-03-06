@@ -1,3 +1,5 @@
+/**** namespace.js | _L ****/
+
 var README = '커버리즈, jsdoc'
 /**
  * White 네임스페이스

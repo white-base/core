@@ -1,6 +1,5 @@
-/**
- * namespace _L.Collection
- */
+/**** base-collection.js | _L.Collection.BaseCollection ****/
+
 (function(_global) {
     'use strict';
 

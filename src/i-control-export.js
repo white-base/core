@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IExportControl
- */
+/**** i-control-export.js | _L.Interface.IExportControl ****/
+
 (function(_global) {
     'use strict';
 

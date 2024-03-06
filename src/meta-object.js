@@ -1,6 +1,5 @@
-/**
- * namespace _L.Meta.MetaObject
- */
+/**** meta-object.js | _L.Meta.MetaObject ****/
+
 (function(_global) {
     'use strict';
 

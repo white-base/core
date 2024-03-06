@@ -1,6 +1,5 @@
-/**
- * namespace _L.Meta.Entity.ObjectColumn
- */
+/**** object-column.js | _L.Meta.Entity.ObjectColumn ****/
+
 (function(_global) {
     'use strict';
 

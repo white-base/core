@@ -1,6 +1,5 @@
-/**
- * namespace _L.Common.ExtendError
- */
+/**** extend-error.js | _L.Common.ExtendError ****/
+
 (function(_global) {
     'use strict';
 

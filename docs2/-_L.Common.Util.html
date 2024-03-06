@@ -1117,12 +1117,7 @@ prototype chain 은 무시된다.</p></li></ul></dd>
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>타입의 세부 정보<br>
-$type : 공통 타입<br>
-default : 리터럴 타입<br>
-params, retrun, name, func : 함수타입<br>
-create, _instance : 클래스 타입<br>
-_prop : 유니언 타입</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>타입의 객체 정보 얻기</p></li></ul></dd>
     
 
     
@@ -1274,7 +1269,7 @@ _prop : 유니언 타입</p></li></ul></dd>
 
     
 
-    <h4 class="name" id=".typeOf"><span class="type-signature type-signature-static">(static) </span>typeOf<span class="signature">(type)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".typeOf"><span class="type-signature type-signature-static">(static) </span>typeOf<span class="signature">(target)</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
@@ -1284,10 +1279,7 @@ _prop : 유니언 타입</p></li></ul></dd>
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>타입명 얻습니다.</p>
-<p>extType: array(<em>ANY</em>)
-tarType: choice(<em>ALL</em>)
-tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>타입명 얻습니다.</p></li></ul></dd>
     
 
     
@@ -1360,7 +1352,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>target</code></td>
             
 
             <td class="type">
@@ -1426,7 +1418,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
     
 
-    <h4 class="name" id=".extendType"><span class="type-signature type-signature-static">(static) </span>extendType<span class="signature">(type)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id=".extendType"><span class="type-signature type-signature-static">(static) </span>extendType<span class="signature">(target)</span><span class="type-signature"> &rarr; {object}</span></h4>
 
     
 
@@ -1436,7 +1428,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>js2 타입 객체를 리턴한다.<br>
+    <dd class="tag-description"><ul class="dummy"><li><p>확장타입을 얻는다.
 종류 : null, number, string, boolean, array, function, object, undefined, symbol, class, choice, union</p></li></ul></dd>
     
 
@@ -1483,6 +1475,12 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
 
 
+    <h5 class="h5-examples">Example</h5>
+    
+    <pre class="prettyprint"><code>var singleType = ['undefined', 'null', 'number', 'string', 'boolean', 'regexp', 'object', 'symbol'];
+var unionType = ['array', 'choice', 'function', 'class', 'union'];</code></pre>
+
+
 
 
     <h5 class="h5-parameters">Parameters:</h5>
@@ -1510,7 +1508,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>target</code></td>
             
 
             <td class="type">
@@ -1834,7 +1832,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
     
 
-    <h4 class="name" id=".allowType"><span class="type-signature type-signature-static">(static) </span>allowType<span class="signature">(extType, target)</span><span class="type-signature"> &rarr; (nullable) {throw}</span></h4>
+    <h4 class="name" id=".allowType"><span class="type-signature type-signature-static">(static) </span>allowType<span class="signature">(extType, tarType)</span><span class="type-signature"> &rarr; (nullable) {throw}</span></h4>
 
     
 
@@ -1844,7 +1842,184 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>원본타입에 대상타입을 적용(설정)가능 여부를 검사한다.</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>확장타입이 대상타입을 허용하는지 검사한다.</p></li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5 class="h5-parameters">Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>extType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tarType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5 class="h5-returns">Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>실패시 예외를 던진다.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">throw</span>
+
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".matchType"><span class="type-signature type-signature-static">(static) </span>matchType<span class="signature">(extType, target)</span><span class="type-signature"> &rarr; (nullable) {throw}</span></h4>
+
+    
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><p>확장타입이 대상과 매치되는지 검사한다.</p></li></ul></dd>
     
 
     
@@ -2011,183 +2186,6 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
     
 
-    <h4 class="name" id=".matchType"><span class="type-signature type-signature-static">(static) </span>matchType<span class="signature">(chkType, target)</span><span class="type-signature"> &rarr; (nullable) {throw}</span></h4>
-
-    
-
-
-
-
-<dl class="details">
-    
-    <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>대상의 타입 여부를 검사합니다.</p></li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <h5 class="h5-parameters">Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>chkType</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>target</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5 class="h5-returns">Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>실패시 예외를 던진다.</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">throw</span>
-
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
     <h4 class="name" id=".isAllowType"><span class="type-signature type-signature-static">(static) </span>isAllowType<span class="signature">(extType, target, opt)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
@@ -2198,7 +2196,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>원본타입에 대상타입을 적용(설정)가능 여부를 검사한다.</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>확장타입이 대상타입을 허용하는지 검사한다.</p></li></ul></dd>
     
 
     
@@ -2385,7 +2383,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
     
 
-    <h4 class="name" id=".isMatchType"><span class="type-signature type-signature-static">(static) </span>isMatchType<span class="signature">(chkType, target)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id=".isMatchType"><span class="type-signature type-signature-static">(static) </span>isMatchType<span class="signature">(extType, target)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
     
 
@@ -2395,7 +2393,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 <dl class="details">
     
     <dt class="tag-description">Description:</dt>
-    <dd class="tag-description"><ul class="dummy"><li><p>대상의 타입 여부를 검사합니다.</p></li></ul></dd>
+    <dd class="tag-description"><ul class="dummy"><li><p>확장타입이 대상과 매치되는지 검사한다.</p></li></ul></dd>
     
 
     
@@ -2468,7 +2466,7 @@ tarType: choice(<em>NON</em>)[string, number]</p></li></ul></dd>
 
         <tr>
             
-                <td class="name"><code>chkType</code></td>
+                <td class="name"><code>extType</code></td>
             
 
             <td class="type">
@@ -3362,7 +3360,7 @@ REVIEW: 필요성 검토 필요!</p></li></ul></dd>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 08:49:39 GMT+0900 (대한민국 표준시) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Wed Mar 06 2024 12:27:06 GMT+0900 (대한민국 표준시) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

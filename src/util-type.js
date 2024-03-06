@@ -1,6 +1,5 @@
-/**
- * namespace _L.Common.Util
- */
+/**** util-type.js _L.Common.Util.- ****/
+
 (function(_global) {
     'use strict';
 
@@ -282,7 +281,7 @@
     }
     
     /**
-     * 전체 프로퍼티 조회
+     * 전체 프로퍼티를 조회한다.
      * @memberof _L.Common.Util
      * @param {object} obj Object를 제외한 프로터피 리턴
      * @param {boolean?} hasObj Object를 포함 여부
@@ -302,8 +301,7 @@
     };
 
     /**
-     * 객체를 비교합니다.  
-     * prototype chain 은 무시된다.  
+     * 객체를 비교한다. (proto 제외)
      * @memberof _L.Common.Util
      * @param {object} obj1 
      * @param {object} obj2 
@@ -341,9 +339,8 @@
     }
 
     /**
-     * 대상의 상위를 포함하여 '_UNION'과 자신의 타입 목록을 가져옵니다.  
-     * 대상을 0 부터 할당한다.  
-     * 대상._UNION 의 목록을 포함
+     * 함수 타입을 가져온다. (_UNION 포함)
+     * array[0]은 ctor 자신부터 할당
      * @memberof _L.Common.Util
      * @param {function} ctor 생성자
      * @param {boolean} [hasUnion= true] _UNION 포함 여부
@@ -386,7 +383,7 @@
         }
     }
     /**
-     * 생성자의 상위 또는 _UNION 에 지정된 생성자의 타입과 같은지 검사합니다.
+     * 함수 타입을 검사합니다. (proto 기준)
      * @memberof _L.Common.Util
      * @param {function} ctor 생성자
      * @param {function | string} target 검사 대상
@@ -432,7 +429,7 @@
     }
 
     /**
-     * 타입의 객체 정보 얻기
+     * 확장타입 객체를 얻는다. (하위 포함)
      * @memberof _L.Common.Util
      * @param {*} target 
      * @returns {object}
@@ -498,7 +495,7 @@
     };
 
     /**
-     * 타입명 얻습니다.
+     * 확장타입명을 얻는다.
      * @memberof _L.Common.Util
      * @param {*} target 
      * @returns {string}
@@ -509,7 +506,6 @@
 
     /**
      * 확장타입을 얻는다.
-     * 종류 : null, number, string, boolean, array, function, object, undefined, symbol, class, choice, union  
      * @memberof _L.Common.Util
      * @param {any} target 대상타입
      * @returns {object} 
@@ -1307,7 +1303,6 @@
      * @returns {boolean} 
      */
     var isMatchType = function(extType, target, opt) {
-        // if (typeof chkType === 'undefined') return false;
         try {
             _execMatch(extType, target, opt);
             return true;
@@ -1315,7 +1310,6 @@
             return false;
         }
     };
-
 
     //==============================================================
     // 5. module export

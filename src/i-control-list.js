@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IListControl
- */
+/**** i-control-list.js | _L.Interface.IListControl ****/
+
 (function(_global) {
     'use strict';
 

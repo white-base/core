@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IElement
- */
+/**** i-element.js | _L.Interface.IElement ****/
+
 (function(_global) {
     'use strict';
 

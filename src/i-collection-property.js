@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.IPropertyCollection
- */
+/**** i-colleciton-property.js | _L.Interface.IPropertyCollection ****/
+
 (function(_global) {
     'use strict';
 

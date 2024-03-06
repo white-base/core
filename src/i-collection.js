@@ -1,6 +1,5 @@
-/**
- * namespace _L.Interface.ICollection
- */
+/**** i-colleciton.js | _L.Interface.ICollection ****/
+
 (function(_global) {
     'use strict';
 
