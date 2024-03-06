@@ -432,18 +432,24 @@
     }
 
     /**
-     * 타입의 세부 정보  
-     * $type : 공통 타입  
-     * default : 리터럴 타입  
-     * params, retrun, name, func : 함수타입  
-     * create, _instance : 클래스 타입  
-     * _prop : 유니언 타입  
-     * @param {*} type 
+     * 타입의 객체 정보 얻기
+     * @memberof _L.Common.Util
+     * @param {*} target 
      * @returns {object}
+     * @example
+     * var obj = {
+     *      $ype: '',
+     *      default: null,                  // string, number, boolean, regexp
+     *      kind: '',                       // array, choice
+     *      creator: null, _instance: {},   // class
+     *      _prop: {},                      // union
+     *      params: [], return: null,       // function
+     *      name: name, func: null,
+     * }
      */
-    var typeObject = function(type) {
+    var typeObject = function(target) {
         var obj = {};
-        var typeObj = _isObject(type) && type['$type'] ? type : extendType(type);
+        var typeObj = _isObject(target) && target['$type'] ? target : extendType(target);
         var leafType = ['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigi¡nt', 'object', 'regexp'];
 
         obj['$type'] = typeObj['$type'];
@@ -493,26 +499,26 @@
 
     /**
      * 타입명 얻습니다.
-     * 
-     * extType: array(_ANY_)
-     * tarType: choice(_ALL_)
-     * tarType: choice(_NON_)[string, number]
-     * @param {*} type 
+     * @memberof _L.Common.Util
+     * @param {*} target 
      * @returns {string}
      */
-    var typeOf = function (type) {
-        return extendType(type)['$type'];
+    var typeOf = function (target) {
+        return extendType(target)['$type'];
     };
 
     /**
-     * js2 타입 객체를 리턴한다.   
+     * 확장타입을 얻는다.
      * 종류 : null, number, string, boolean, array, function, object, undefined, symbol, class, choice, union  
      * @memberof _L.Common.Util
-     * @param {any} type 대상타입
+     * @param {any} target 대상타입
      * @returns {object} 
+     * @example
+     * var singleType = ['undefined', 'null', 'number', 'string', 'boolean', 'regexp', 'object', 'symbol'];
+     * var unionType = ['array', 'choice', 'function', 'class', 'union'];
      */
-    var extendType = function(type) {
-        var obj =  {$type: '', ref: undefined};
+    var extendType = function(target) {
+        var obj =  { $type: '', ref: undefined };
 
         obj.toString = function(){
             var temp = '';
@@ -541,16 +547,16 @@
             return temp;
         }
         // special type
-        if (typeof type === 'object'  && type !== null && type['$type']) {
-            obj['$type'] = type['$type'];
-            if (type['default']) obj['default'] = type['default'];
-            if (type['kind']) obj['kind'] = type['kind'];
-            if (type['ref']) obj['ref'] = type['ref'];
-            if (type['list']) obj['list'] = type['list'];
-            if (type['name']) obj['name'] = type['name'];
-            if (type['func']) obj['func'] = type['func'];
-            if (type['params']) obj['params'] = type['params'];
-            if (type['return']) obj['return'] = type['return'];
+        if (typeof target === 'object'  && target !== null && target['$type']) {
+            obj['$type'] = target['$type'];
+            if (target['default']) obj['default'] = target['default'];
+            if (target['kind']) obj['kind'] = target['kind'];
+            if (target['ref']) obj['ref'] = target['ref'];
+            if (target['list']) obj['list'] = target['list'];
+            if (target['name']) obj['name'] = target['name'];
+            if (target['func']) obj['func'] = target['func'];
+            if (target['params']) obj['params'] = target['params'];
+            if (target['return']) obj['return'] = target['return'];
             if (!_hasType(obj['$type'])) throw new ExtendError(/EL01304/, null, [obj['$type']]);
             if (obj['$type'] === 'array') {
                 obj['kind'] = obj['kind'] || '_ALL_';
@@ -561,70 +567,70 @@
             }
             return obj;
         } else {
-            obj['ref'] = type;
+            obj['ref'] = target;
         }
 
-        // step : (operation) 
-        if (type === null) {
+        // step : operation
+        if (target === null) {
             obj['$type'] = 'null';
-        } else if (type === Number) {
+        } else if (target === Number) {
             obj['$type'] = 'number';
             obj['default'] = null;            
-        } else if (type === String) {
+        } else if (target === String) {
             obj['$type'] = 'string';
             obj['default'] = null;
-        } else if (type === Boolean) {
+        } else if (target === Boolean) {
             obj['$type'] = 'boolean';
             obj['default'] = null;
-        } else if (type === Array) {
+        } else if (target === Array) {
             obj['$type'] = 'array';
             obj['kind'] = '_ALL_';
             obj['list'] = [];
-        } else if (type === Function) {
+        } else if (target === Function) {
             obj['$type'] = 'function';
             obj['params'] = [];
-        } else if (type === Object) {
+        } else if (target === Object) {
             obj['$type'] = 'object';
-        } else if (type === RegExp) {
+        } else if (target === RegExp) {
             obj['$type'] = 'regexp';
             obj['default'] = null;
-        } else if (type === Symbol) {      // ES6+
+        } else if (target === Symbol) {      // ES6+
             obj['$type'] = 'symbol';
-        } else if (type === BigInt) {      // ES6+
+        } else if (target === BigInt) {      // ES6+
             obj['$type'] = 'bigint';
             obj['default'] = null;
-        } else if (type instanceof RegExp) {
+        } else if (target instanceof RegExp) {
             obj['$type'] = 'regexp';
-            obj['default'] = type;
+            obj['default'] = target;
         // step : typeof
-        } else if (typeof type === 'undefined') {
+        } else if (typeof target === 'undefined') {
             obj['$type'] = 'undefined';
-        } else if (typeof type === 'number') {
+        } else if (typeof target === 'number') {
             obj['$type'] = 'number';
-            obj['default'] = type;
-        } else if (typeof type === 'string') {
+            obj['default'] = target;
+        } else if (typeof target === 'string') {
             obj['$type'] = 'string';
-            obj['default'] = type;
-        } else if (typeof type === 'boolean') {
+            obj['default'] = target;
+        } else if (typeof target === 'boolean') {
             obj['$type'] = 'boolean';
-            obj['default'] = type;
-        } else if (typeof type === 'bigint') { // ES6+
+            obj['default'] = target;
+        } else if (typeof target === 'bigint') { // ES6+
             obj['$type'] = 'bigint';
-            obj['default'] = type;
-        } else if (typeof type === 'symbol') { // ES6+
+            obj['default'] = target;
+        } else if (typeof target === 'symbol') { // ES6+
             obj['$type'] = 'symbol';
         // step : function
-        } else if (typeof type === 'function') {
-            var kind = type['_KIND'];
+        } else if (typeof target === 'function') {
+            var kind = target['_KIND'];
             if (kind) {
                 kind = kind.toLowerCase();
                 if (kind === 'function') obj['$type'] = 'function';
                 else obj['$type'] = 'class';    // class, interface, abstract
-            } else obj['$type'] = _isUpper(type.name) ? 'class' : 'function';
+            } else obj['$type'] = _isUpper(target.name) ? 'class' : 'function';
                 
             if (obj['$type'] === 'function') {
                 try {
-                    var funcType  = type['_TYPE'] ? type['_TYPE'] : _parseFunc(type.toString());
+                    var funcType  = target['_TYPE'] ? target['_TYPE'] : _parseFunc(target.toString());
                     obj['params'] = funcType['params'];
                     obj['return'] = funcType['return'];
                 } catch (err) {
@@ -632,17 +638,17 @@
                 }
             }
         // step : array
-        } else if (Array.isArray(type)) {
-            if (type.length ===  1 && Array.isArray(type[0])) {
+        } else if (Array.isArray(target)) {
+            if (target.length ===  1 && Array.isArray(target[0])) {
                 obj['$type'] = 'choice';
-                if (type[0].length === 0) obj['kind'] = '_ANY_';
-                else obj['kind'] = _getKeyCode(type[0][0]);
-                obj['list'] = obj['kind'] ? type[0].slice(1) : type[0];
+                if (target[0].length === 0) obj['kind'] = '_ANY_';
+                else obj['kind'] = _getKeyCode(target[0][0]);
+                obj['list'] = obj['kind'] ? target[0].slice(1) : target[0];
             } else {
                 obj['$type'] = 'array';
-                if (type.length === 0) obj['kind'] = '_ANY_';
-                else obj['kind'] = _getKeyCode(type[0]);
-                obj['list'] = obj['kind'] ? type.slice(1) : type;
+                if (target.length === 0) obj['kind'] = '_ANY_';
+                else obj['kind'] = _getKeyCode(target[0]);
+                obj['list'] = obj['kind'] ? target.slice(1) : target;
             }
             if (!obj['kind']) obj['kind'] = '_OPT_';
             // kind 검사
@@ -650,7 +656,7 @@
             if (obj['$type'] === 'choice' && !_hasKindChoice(obj['kind'])) throw new ExtendError(/EL01308/, null, [obj['kind']]);
 
         // step : object
-        } else if (_isFillObj(type) || _isEmptyObj(type)) {
+        } else if (_isFillObj(target) || _isEmptyObj(target)) {
             obj['$type'] = 'union';
         
         // REVIEW:  기타 모든 함수는 object 로 처리한다. 더 좋은 방법이 있으면 대체 한다.
@@ -1247,46 +1253,46 @@
     };
 
     /**
-     * 원본타입에 대상타입을 적용(설정)가능 여부를 검사한다.
+     * 확장타입이 대상타입을 허용하는지 검사한다.
      * @memberof _L.Common.Util
      * @param {any} extType 
-     * @param {any} target 
+     * @param {any} tarType
      * @returns {throw?} 실패시 예외를 던진다.
      */
-    var allowType = function(extType, target, opt) {
+    var allowType = function(extType, tarType, opt) {
         try {
-            _execAllow(extType, target, opt);
+            _execAllow(extType, tarType, opt);
         } catch (error) {
             throw new ExtendError(/EL0130A/, error);
         }
     };    
 
     /**
-     * 대상의 타입 여부를 검사합니다.
+     * 확장타입이 대상과 매치되는지 검사한다.
      * @memberof _L.Common.Util
-     * @param {any} chkType 
+     * @param {any} extType 
      * @param {any} target 
      * @returns {throw?} 실패시 예외를 던진다.
      */
-    var matchType = function(chkType, target, opt) {
+    var matchType = function(extType, target, opt) {
         try {
-            _execMatch(chkType, target, opt);
+            _execMatch(extType, target, opt);
         } catch (error) {
             throw new ExtendError(/EL0130B/, error);
         }
     };
 
     /**
-     * 원본타입에 대상타입을 적용(설정)가능 여부를 검사한다.
+     * 확장타입이 대상타입을 허용하는지 검사한다.
      * @memberof _L.Common.Util
      * @param {any} extType 
      * @param {any} target 
      * @param {number} opt 
      * @returns {boolean} 
      */
-    var isAllowType = function(extType, target, opt) {
+    var isAllowType = function(extType, tarType, opt) {
         try {
-            _execAllow(extType, target, opt);
+            _execAllow(extType, tarType, opt);
         } catch (error) {
             return false;
         }
@@ -1294,16 +1300,16 @@
     };  
 
     /**
-     * 대상의 타입 여부를 검사합니다.
+     * 확장타입이 대상과 매치되는지 검사한다.
      * @memberof _L.Common.Util
-     * @param {any} chkType 
+     * @param {any} extType 
      * @param {any} target 
      * @returns {boolean} 
      */
-    var isMatchType = function(chkType, target, opt) {
+    var isMatchType = function(extType, target, opt) {
         // if (typeof chkType === 'undefined') return false;
         try {
-            _execMatch(chkType, target, opt);
+            _execMatch(extType, target, opt);
             return true;
         } catch (error) {
             return false;
