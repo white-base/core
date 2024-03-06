@@ -99,14 +99,17 @@
             )) return true;
             return false;
         }
+
         function _isObject(obj) {    // 객체 여부
             if (typeof obj === 'object' && obj !== null) return true;
             return false;
         }
+
         function _isString(obj) {    // 공백아닌 문자 여부
             if (typeof obj === 'string' && obj.length > 0) return true;
             return false;
         }
+        
         function _getGuidList(oGuid, arr) {  //객체 배열 리턴
             arr = arr || [];
             if (MetaRegistry.isGuidObject(oGuid)) arr.push(oGuid);
@@ -282,25 +285,25 @@
         /**
          * 지정한 함수를 네임스페이스 없으면 등록하고, 함수의 네임스페이스를 guid 객체로 반환합니다.  
          * { $ns: string }
-         * @param {function} p_fun 
+         * @param {function} p_target 
          * @returns {object} guid 객체
          * @example
          * var meta = new MetaElement('m1');
          * obj.onwer = MetaRegistry.createReferObject(meta);
          * console.log(obj);                // {onwer: {$ns: 'Meta.MetaElement'}}
          */
-        MetaRegistry.createNsReferObject = function(p_fun) {
+        MetaRegistry.createNsReferObject = function(p_target) {
             var fullName;
             var ns, key;
 
-            if (typeof p_fun !== 'function') throw new ExtendError(/EL03227/, null, [typeof fun]);
+            if (typeof p_target !== 'function') throw new ExtendError(/EL03227/, null, [typeof p_target]);
             
-            if (!this.findClass(p_fun)) {
-                ns  = p_fun['_NS'] || '';
-                key = p_fun.name;
-                this.registerClass(p_fun, ns, key);
+            if (!this.findClass(p_target)) {
+                ns  = p_target['_NS'] || '';
+                key = p_target.name;
+                this.registerClass(p_target, ns, key);
             }
-            fullName = this.findClass(p_fun);
+            fullName = this.findClass(p_target);
             return { $ns: fullName };
         };
 
@@ -544,14 +547,14 @@
         /**
          * 네임스페이스(ns)에 클래스(함수)를 중복검사 후 등록합니다.  
          * - 기본제공 함수는 내부 저장하지 않습니다.
-         * @param {function | object} p_fun 
+         * @param {function | object} p_target
          * @param {string} p_ns fullname 또는 네임스페이스 
          * @param {string} p_key 
          */
-        MetaRegistry.registerClass = function(p_fun, p_ns, p_key) {
+        MetaRegistry.registerClass = function(p_target, p_ns, p_key) {
             var fullName;
             
-            if (!(_isObject(p_fun) || typeof p_fun === 'function')) throw new ExtendError(/EL03231/, null, [typeof p_fun]);
+            if (!(_isObject(p_target) || typeof p_target === 'function')) throw new ExtendError(/EL03231/, null, [typeof p_target]);
             if (p_ns && typeof p_ns !== 'string') throw new ExtendError(/EL03232/, null, [typeof p_ns]);
             if (p_key && !_isString(p_key)) throw new ExtendError(/EL03233/, null, [typeof p_key]);
 
@@ -561,7 +564,7 @@
             if (_isBuiltFunction(p_fun)) return;    // 내장함수 제외
             if (typeof _global[fullName] === 'function') return;
             
-            if (!this.ns.find(fullName)) this.ns.add(fullName, p_fun);  // 중복 검사 후 등록
+            if (!this.ns.find(fullName)) this.ns.add(fullName, p_target);  // 중복 검사 후 등록
         };
         
         /**
@@ -579,17 +582,17 @@
         /**
          * 네임스페이스(ns)에서 클래스(함수)의 전체경로를 조회합니다.  
          * 클래스가 없으면 아무값도 전달받지 않습니다.  
-         * @param {function} p_fun 
+         * @param {function} p_target 
          * @returns {string?}
          */
-        MetaRegistry.findClass = function(p_fun) {
+        MetaRegistry.findClass = function(p_target) {
             var fullName;
 
-            if (typeof p_fun !== 'function') throw new ExtendError(/EL03235/, null, [typeof p_fun]);
+            if (typeof p_target !== 'function') throw new ExtendError(/EL03235/, null, [typeof p_target]);
             
-            fullName = p_fun.name;
+            fullName = p_target.name;
             if (typeof _global[fullName] === 'function') return fullName;   // 내장함수 & 전역 함수
-            return this.ns.getPath(p_fun);
+            return this.ns.getPath(p_target);
         };
         
         /**

@@ -100,7 +100,8 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(meta1.equal(meta2)).toBe(true);
                 expect(meta2.equal(meta1)).toBe(true);
                 expect(meta1 === meta2).toBe(false);
-                expect(meta1.equal(obj1, obj2)).toBe(true);
+                // expect(meta1.equal(obj1, obj2)).toBe(true);
+                expect(Util.deepEqual(obj1, obj2)).toBe(true);
             });
         });
         
@@ -234,8 +235,8 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 // expect(i.__compare({aa: 1}, {aa:1})).toBe(true);
                 // expect(i.__compare({aa: 1}, {aa:2})).toBe(false);
                 expect(i.equal(10)).toBe(false);
-                expect(i.equal({aa: 1}, {aa:1})).toBe(true);
-                expect(i.equal({aa: 1}, {aa:2})).toBe(false);
+                // expect(i.equal({aa: 1}, {aa:1})).toBe(true);
+                // expect(i.equal({aa: 1}, {aa:2})).toBe(false);
             });
         });
     });

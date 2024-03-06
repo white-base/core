@@ -119,8 +119,6 @@
                 }
             });
 
-
-
             // inner variable access
             this.__SET$__subscribers = function(val, call) {
                 if (call instanceof Observer) { // 상속접근 허용
@@ -154,7 +152,7 @@
          * 구독 신청
          * 이벤트 'p_code'를 입력하지 않으면 전역(any)에 등록 된다.
          * @param {function?} p_fn  구독 콜백 함수
-         * @param {string?} p_code 구독 코드명 : 기본값 'any'
+         * @param {string?} [p_code = 'any'] 구독 코드명
          */
         Observer.prototype.subscribe = function(p_fn, p_code) {
             p_code = p_code || 'any';
@@ -193,7 +191,7 @@
 
         /**
          * 구독 함수 전체 또는 지정 구독을 호출한다. publishAny(p1, p2);
-         * @param {string?} p_code 이벤트 코드명 : 기본값 'any'
+         * @param {string?} [p_code = 'any'] 이벤트 코드명
          */
         Observer.prototype.publish = function(p_code) {
             p_code = p_code || 'any';

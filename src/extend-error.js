@@ -5,7 +5,6 @@
 
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
-    // var Util;
 
     //==============================================================
     // 1. namespace declaration
@@ -16,15 +15,12 @@
     // 2. import module
     if (isNode) {     
         Message                     = require('./message').Message;
-        // Util                        = require('./util');
     } else {    // COVER:
         Message                     = _global._L.Message;
-        // Util                        = _global._L.Util;
     }
 
     //==============================================================Á
     // 3. module dependency check
-    // if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
 
     //==============================================================
     // 4. module implementation   
@@ -34,50 +30,50 @@
         
         /**
          * @overload
-         * @param {string} p_message 사용자 메세지 내용
-         * @param {ExtendError | object} p_object  상위 Error 객체
+         * @param {string} p_msg 사용자 메세지 내용
+         * @param {ExtendError | object} p_prop  상위 Error 객체
          * @returns {Error}
          */
 
         /**
          * @overload
-         * @param {Regexp} p_message 메세지 코드
-         * @param {ExtendError | object} p_object  메세지 코드 전달 파라메터
-         * @param {array<string>} p_arrVal  메세지 코드 전달 파라메터
+         * @param {Regexp} p_msg 메세지 코드
+         * @param {ExtendError | object} p_prop  메세지 코드 전달 파라메터
+         * @param {array<string>} p_codeVal  메세지 코드 전달 파라메터
          * @returns {Error}
          */
 
         /**
-         * 확장 에러   
-         * ES5 이상 호환성 지원을 위해서 자체 상속방식으로 처리함 
+         * 확장 에러를 생성한다.  
+         * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
          * @constructs _L.Common.ExtendError
-         * @param {string | Regexp} p_message 사용자 메세지 내용
-         * @param {ExtendError | object} p_object  상위 Error 객체 또는 속성 객체
-         * @param {array<string>} p_arrVal  메세지 코드값
+         * @param {string | Regexp} p_msg  메세지코드 또는 메세지
+         * @param {ExtendError | object} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
+         * @param {array<string>} p_codeVal  메세지 코드값
          * @example
          * new ExtendError({code:'', ctx: []})
          * new ExtendError(/E0011/, [''])
          */
-        function ExtendError(p_message, p_object, p_arrVal) {
+        function ExtendError(p_msg, p_prop, p_codeVal) {
             var _build = '';
             var _prop;
             var _queue;    
-            var _message;
+            var _msg;
 
-            if (p_object instanceof ExtendError) {
-                _queue = p_object.queue;
-                _prop = p_object.prop;
-            } else if (typeof p_object  === 'object' && p_object !== null) {
-                _prop = p_object;
+            if (p_prop instanceof ExtendError) {
+                _queue = p_prop.queue;
+                _prop = p_prop.prop;
+            } else if (typeof p_prop  === 'object' && p_prop !== null) {
+                _prop = p_prop;
             }
             
-            if (typeof p_message === 'string') {
-                _message = p_message;
-            } else if (p_message instanceof RegExp) {
-                _message = Message.get(p_message.source, p_arrVal);
-            } else _message = '';
+            if (typeof p_msg === 'string') {
+                _msg = p_msg;
+            } else if (p_msg instanceof RegExp) {
+                _msg = Message.get(p_msg.source, p_codeVal);
+            } else _msg = '';
             
-            _build = _message + '\n';
+            _build = _msg + '\n';
             
             if (_prop) _build += $buildMessageProp(_prop);
             if (_queue) _build += $buildMsgQueue(_queue); 
@@ -86,20 +82,20 @@
             var _instance = new Error(_build);
             
             /**
-             * 상위 에러 스택 메세지 (catch문)
-             * @member {array} _L.Common.ExtendError#_queue
+             * 이전에 발생한 message 큐
+             * @member {array<string>} _L.Common.ExtendError#queue
              */
             if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
             else _instance.queue = [];
             
             /**
-             * 에러 속성 메세지
+             * 이름과 값형태의 오류 메세지
              * @member {object} _L.Common.ExtendError#prop
              */
             if (_prop) _instance.prop = _prop;
             else _instance.prop = {};
 
-            _instance.queue.push(_message);
+            _instance.queue.push(_msg);
 
             if (Error.captureStackTrace && !OLD_ENV) {
                 Error.captureStackTrace(_instance, ExtendError);
@@ -129,6 +125,7 @@
                 return msg;
             }
         }
+        
         ExtendError.prototype = Object.create(Error.prototype, {
             constructor: {
               value: Error,
