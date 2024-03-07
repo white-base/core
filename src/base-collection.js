@@ -55,7 +55,9 @@
     var BaseCollection  = (function (_super) {
 
         /**
-        * 컬렉션 최상위 클래스 (추상클래스)
+        * 컬렉션 최상위 클래스 (추상클래스)  
+        * 2  
+        * 1
         * @abstract
         * @extends _L.Meta.MetaObject
         * @constructs _L.Collection.BaseCollection

@@ -46,7 +46,7 @@
     // 4. module implementation   
     var MetaObject  = (function () {
         /**
-         * 메타 최상위 객체를 생성한다.
+         * 메타 최상위 객체를 생성합니다.
          * @constructs _L.Meta.MetaObject
          * @implements {_L.Interface.IObject}
          * @implements {_L.Interface.IMarshal}
@@ -121,6 +121,7 @@
             if (typeof obj === 'object' && obj !== null) return true;
             return false;
         }
+
         function _compare(p_obj1, p_obj2) { // 객체 비교
             if (p_obj1 === p_obj2) return true;
             else if (p_obj1 instanceof MetaObject && p_obj2 instanceof MetaObject) {
@@ -133,9 +134,9 @@
         }
 
         /**
-         * 현재 객체와 target 객체를 비교한다.  
+         * 현재 객체와 target 객체를 비교합니다.  
          * (참조 주소의 비교(===)가 아니고, 속성과 값을 비교,  _guid 값은 비교 제외)  
-         * @param {any} p_target 대상 객체
+         * @param {object} p_target 대상 객체
          * @returns {boolean}
          * @example
          * var meta1 = new MetaObject();
@@ -153,7 +154,7 @@
         };
 
         /**
-         * 현재 객체의 생성자와 상위(proto) 생성자를 목록으로 가져온다.  
+         * 현재 객체의 생성자와 상위(proto) 생성자를 목록으로 가져옵니다.  
          * @returns {array<function>}
          * @example
          * var obj = new MetaObject();
@@ -185,8 +186,8 @@
         };
 
         /**
-         * 현재 객체의 target 생성자의 인스턴스 여부를 검사한다.(_UNION 포함)  
-         * @param {string | function} p_target 함수명 또는 생성자
+         * 현재 객체의 target 인스턴스 여부를 검사합니다 .(_UNION 포함)
+         * @param {function | string} p_target 함수명 또는 생성자
          * @returns {boolean}
          * @example
          * var obj = new MetaObject();
@@ -241,16 +242,16 @@
         };
 
         /**
-         * 현재 객체를 직렬화(guid 타입) 객체로 얻는다.  
+         * 현재 객체를 직렬화(guid 타입) 객체로 얻습니다.  
          * (순환참조는 $ref 값으로 대체된다.)  
          * @param {number} [p_vOpt=0] 가져오기 옵션
-         * - opt = 0 : 참조 구조의 guid 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 1 : 중복 구조의 guid 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 2 : 비침조 구조의 객체 (_guid: No,  $ref: No)   
-         * 객체 비교 : equal(a, b)  
-         * a.getObject(2) == b.getObject(2)   
+         * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+         * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+         * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
          * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
          * @returns {object}  guid 타입 객체
+         * @example
+         * a.getObject(2) == b.getObject(2)   
          */
         MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
             var vOpt = p_vOpt || 0;
@@ -263,8 +264,8 @@
         };
 
         /**
-         * 직렬화(guid 타입) 객체를 현재 객체에 설정한다.  
-         * (설정전에 현재 객체는 초기화 된다.)
+         * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
+         * (객체는 초기화 된다.)
          * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
          * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
          */

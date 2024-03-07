@@ -115,12 +115,12 @@
     // };
     
     /**
-     * 배열의 깊이를 가져온다.
+     * 배열의 깊이를 가져옵니다.  
      * REVIEW: 필요성 검토 필요!
      * @memberof _L.Common.Util
      * @param {array} p_elem 
      * @param {number} p_depts 
-     * @returns {number}
+     * @returns {number} 
      */
     var getArrayDepth  = function(p_elem, p_depts) {
         var MAX     = 10;
@@ -136,9 +136,9 @@
     };
     
     /**
-     * guid 값을 생성한다.
+     * guid 값을 생성합니다. (36자)
      * @memberof _L.Common.Util
-     * @returns {string}
+     * @returns {string} 예> 'b806a5b5-75f7-a1ba-3736-17f56fb5d65a'
      */
     var createGuid = function() {
         function _p8(s) {  
@@ -149,30 +149,30 @@
     };
 
     /**
-     * 객체를 깊은 복사를한다. (proto제외)
+     * 객체를 깊은 복사를합니다. (proto제외)
      * @memberof _L.Common.Util
-     * @param {object} p_obj 
+     * @param {object} p_target 대상 객체
      * @returns {object}
      */
-    var deepCopy = function(p_obj) {
+    var deepCopy = function(p_target) {
         var nobj;
 
-        if (!_isObject(p_obj)) {
-          return p_obj;
+        if (!_isObject(p_target)) {
+          return p_target;
         }
-        if (p_obj instanceof RegExp) return p_obj;
+        if (p_target instanceof RegExp) return p_target;
 
         // 객체인지 배열인지 판단
-        nobj = Array.isArray(p_obj) ? [] : {};
+        nobj = Array.isArray(p_target) ? [] : {};
        
-        if (Array.isArray(p_obj)) {
-            for (var i = 0; i < p_obj.length; i++) {
-                nobj[i] = deepCopy(p_obj[i]);
+        if (Array.isArray(p_target)) {
+            for (var i = 0; i < p_target.length; i++) {
+                nobj[i] = deepCopy(p_target[i]);
             }
         } else {
-            for (var key in p_obj) {
-                if (Object.prototype.hasOwnProperty.call(p_obj, key)) {
-                    nobj[key] = deepCopy(p_obj[key]);
+            for (var key in p_target) {
+                if (Object.prototype.hasOwnProperty.call(p_target, key)) {
+                    nobj[key] = deepCopy(p_target[key]);
                 }
             }
         }
@@ -180,11 +180,11 @@
     }    
 
     /**
-     * 상속한다.
+     * superCtor 을 상속합니다.
      * @function
      * @memberof _L.Common.Util
-     * @param {object | function} ctor 대상
-     * @param {object | function} superCtor 상속 받는 부모 생성자
+     * @param {function | object} ctor 대상 생성자 또는 객체
+     * @param {function | object} superCtor 상속 받을 부모 생성자 또는 객체
      */
     var inherits = (function () {
         if (typeof Object.create === 'function' && !OLD_ENV) {
@@ -217,14 +217,14 @@
     }());
 
     /**
-     * 구현검사한다.  
-     * ctor 종류(_KIND)가 'inteface'이면 allowType(), 아니면 matchType()로 검사한다.
+     * ctor 로 생성한 obj 객체의 args<funtion>의 구현 여부를 검사합니다.
+     * 종류(ctor._KIND)가 'inteface'이면 allowType(), 아니면 matchType()로 검사한다.
      * @name implements
      * @function
      * @memberof _L.Common.Util
-     * @param {function} p_ctor 적용할 생성자
+     * @param {function} p_ctor 검사 대상 생성자
      * @param {object} p_obj 검사 대상 인스턴스 객체
-     * @param {function?} args 인터페이스들,  ctor._UNION 으로 설정 가능
+     * @param {function?} args 인터페이스들, ctor._UNION 정적 속성으로 설정 가능
      */
     var implement = function(p_ctor, p_obj, args) {
         var _interface = [];

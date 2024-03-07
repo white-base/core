@@ -281,7 +281,7 @@
     }
     
     /**
-     * 전체 프로퍼티를 조회한다.
+     * 전체 프로퍼티를 조회합니다.
      * @memberof _L.Common.Util
      * @param {object} obj Object를 제외한 프로터피 리턴
      * @param {boolean?} hasObj Object를 포함 여부
@@ -301,7 +301,7 @@
     };
 
     /**
-     * 객체를 비교한다. (proto 제외)
+     * 객체를 비교합니다. (proto 제외)
      * @memberof _L.Common.Util
      * @param {object} obj1 
      * @param {object} obj2 
@@ -339,8 +339,8 @@
     }
 
     /**
-     * 함수 타입을 가져온다. (_UNION 포함)
-     * array[0]은 ctor 자신부터 할당
+     * 함수 타입을 가져옵니다. (_UNION 포함)  
+     * ctor 자신부터 리턴 배열에 push
      * @memberof _L.Common.Util
      * @param {function} ctor 생성자
      * @param {boolean} [hasUnion= true] _UNION 포함 여부
@@ -383,7 +383,7 @@
         }
     }
     /**
-     * 함수 타입을 검사합니다. (proto 기준)
+     * 함수 타입의 prototype(상속) 타입 여부를 검사합니다.
      * @memberof _L.Common.Util
      * @param {function} ctor 생성자
      * @param {function | string} target 검사 대상
@@ -406,7 +406,7 @@
     }
 
     /**
-     * 생성자의 상위 또는 _UNION 에 지정된 생성자의 타입을 가지고 있는지 여부를 검사합니다.
+     * 함수 타입의 prototype(상속) 또는 _UNION 타입 여부를 검사합니다.
      * @memberof _L.Common.Util
      * @param {function} ctor 생성자
      * @param {function | string} target 검사 대상
@@ -429,7 +429,7 @@
     }
 
     /**
-     * 확장타입 객체를 얻는다. (하위 포함)
+     * 확장타입 객체를 얻습니다. (하위 타입 포함)  
      * @memberof _L.Common.Util
      * @param {*} target 
      * @returns {object}
@@ -495,7 +495,7 @@
     };
 
     /**
-     * 확장타입명을 얻는다.
+     * 확장타입명을 얻습니다.
      * @memberof _L.Common.Util
      * @param {*} target 
      * @returns {string}
@@ -667,7 +667,6 @@
     /**
      * 원본타입에 대상타입이 덮어쓰기가 허용 가능한지 검사합니다.  
      * 원본타입에 대상타입으로 캐스팅이 가능하지 확인합니다.
-     * @memberof _L.Common.Util
      * @param {any} extType 원본 타입
      * @param {any} tarType 대상 타입
      * @param {number} opt 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
@@ -1249,11 +1248,12 @@
     };
 
     /**
-     * 확장타입이 대상타입을 허용하는지 검사한다.
+     * 확장타입이 대상타입을 허용하는지 검사합니다.
      * @memberof _L.Common.Util
-     * @param {any} extType 
-     * @param {any} tarType
-     * @returns {throw?} 실패시 예외를 던진다.
+     * @param {any} extType 확장 타입
+     * @param {any} tarType 검사 대상 타입
+     * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+     * @returns {throw?} 실패시 예외
      */
     var allowType = function(extType, tarType, opt) {
         try {
@@ -1264,11 +1264,12 @@
     };    
 
     /**
-     * 확장타입이 대상과 매치되는지 검사한다.
+     * 확장타입이 대상과 매치되는지 검사합니다.
      * @memberof _L.Common.Util
-     * @param {any} extType 
-     * @param {any} target 
-     * @returns {throw?} 실패시 예외를 던진다.
+     * @param {any} extType 확장 타입
+     * @param {any} target 검사 대상
+     * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+     * @returns {throw?} 실패시 예외
      */
     var matchType = function(extType, target, opt) {
         try {
@@ -1279,12 +1280,12 @@
     };
 
     /**
-     * 확장타입이 대상타입을 허용하는지 검사한다.
+     * 확장타입이 대상타입을 허용하는지 검사합니다.
      * @memberof _L.Common.Util
-     * @param {any} extType 
-     * @param {any} target 
-     * @param {number} opt 
-     * @returns {boolean} 
+     * @param {any} extType 확장 타입
+     * @param {any} target 검사 대상 타입
+     * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+     * @returns {boolean} 검사 통과 여부
      */
     var isAllowType = function(extType, tarType, opt) {
         try {
@@ -1296,11 +1297,12 @@
     };  
 
     /**
-     * 확장타입이 대상과 매치되는지 검사한다.
+     * 확장타입이 대상과 매치되는지 검사합니다.
      * @memberof _L.Common.Util
-     * @param {any} extType 
-     * @param {any} target 
-     * @returns {boolean} 
+     * @param {any} extType 확장 타입
+     * @param {any} target 검사 대상
+     * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+     * @returns {boolean} 검사 통과 여부
      */
     var isMatchType = function(extType, target, opt) {
         try {

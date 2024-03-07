@@ -38,7 +38,7 @@
     // 4. module implementation       
     var MetaRegistry = (function () {
         /**
-         * 메타 객체 등록소 클래스
+         * 메타 객체 등록소입니다. (static)
          * @constructs _L.Meta.MetaRegistry
          * @static
          */
@@ -52,8 +52,9 @@
         var namespace = new NamespaceManager();
     
         /**
-         * 메타 객체 목록을 가져옵니다. (참조값)
+         * 메타 객체 목록 (참조값)
          * @member {string} _L.Meta.MetaRegistry#list
+         * @readonly
          */
         Object.defineProperty(MetaRegistry, "list", 
         {
@@ -67,8 +68,9 @@
         });
 
         /**
-         * 메타 객체의 총수를 가져옵니다.
+         * 메타 객체 전체 갯수
          * @member {string} _L.Meta.MetaRegistry#count
+         * @readonly
          */
         Object.defineProperty(MetaRegistry, "count", 
         {
@@ -78,8 +80,9 @@
         });        
 
         /**
-         * 정적 클래스(함수) 네임스페이스의 네임스페이스를 가져옵니다. (참조값)
+         * 메타 객체의 네임스페이스
          * @member {string} _L.Meta.MetaRegistry#ns
+         * @readonly
          */
         Object.defineProperty(MetaRegistry, "ns", 
         {
@@ -126,7 +129,7 @@
         };
 
         /**
-         * 메타 객체 및 네임스페이스를 초기화 합니다.
+         * 등록된 메타 객체 및 네임스페이스를 초기화 합니다.
          */
         MetaRegistry.init = function() {
             list.length = 0;
@@ -134,8 +137,10 @@
         };
 
         /**
-         * 메타 객체 등록소에 객체를 등록하고, 대상 클래스가 네임스페이스에 없을 경우 추가합니다.
-         * @param {object} p_meta 
+         * 메타 객체를 등록하고, 생성자를 네임스페이스에 등록합니다.  
+         * - 기존에 객체가 등록되어 있으면 예외가 발생합니다.  
+         * - 네임스페이스에 생성자가 없을 경우 등록합니다.
+         * @param {MetaObject} p_meta 메타 객체
          */
         MetaRegistry.register = function(p_meta) {
             var _ns;
@@ -156,9 +161,9 @@
         };
 
         /**
-         * 등록소에서 지정된 객체를 해제 합니다. 
-         * @param {object | string} p_meta 
-         * @returns {boolean}
+         * 등록소에서 메타 객체를 해제합니다. 
+         * @param {MetaObject | string} p_meta 메타 객체 또는 guid
+         * @returns {boolean} 성공 여부
          */
         MetaRegistry.release = function(p_meta) {
             var guid;
@@ -180,17 +185,16 @@
         };
 
         /**
-         * 등록소에 객체를 포함하고 있는지 확인합니다.
-         * 메타 객체 포함 여부
-         * @param {object | string} p_meta  
-         * @returns {boolean}
+         * 등록소에 메타 객체 여부를 확인합니다.
+         * @param {object | string} p_oGuid  guid 타입의 객체 또는 guid
+         * @returns {boolean} 존재 여부
          */
-        MetaRegistry.has = function(p_meta) {
+        MetaRegistry.has = function(p_oGuid) {
             var guid;
 
-            if (typeof p_meta !== 'object' && typeof p_meta !== 'string') return false;
+            if (typeof p_oGuid !== 'object' && typeof p_oGuid !== 'string') return false;
             
-            guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
+            guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             if (!_isString(guid)) return false;
 
             for(var i = 0; i < list.length; i++) {
@@ -200,16 +204,16 @@
         };
         
         /**
-         * 메타 객체를 등록소에서 조회합니다.
-         * @param {object | string} p_meta 
+         * 등록소에서 메타 객체를 찾습니다.
+         * @param {object | string} p_oGuid guid 타입의 객체 또는 guid
          * @returns {MetaObject?}
          */
-        MetaRegistry.find = function(p_meta) {
+        MetaRegistry.find = function(p_oGuid) {
             var guid;
 
-            if (typeof p_meta !== 'object' && typeof p_meta !== 'string') return;
+            if (typeof p_oGuid !== 'object' && typeof p_oGuid !== 'string') return;
             
-            guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
+            guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             if (!_isString(guid)) return;
             
             for(var i = 0; i < list.length; i++) {
@@ -218,20 +222,20 @@
         };
 
         /**
-         * 지정한 객체의 매타 객체 여부를 확인합니다.  
-         * @param {object} p_obj 대상 객체
+         * 매타 객체 여부를 확인합니다.  
+         * @param {object} p_target 대상 객체
          * @returns {boolean}
          */
-        MetaRegistry.isMetaObject = function(p_obj) {
-            if (!_isObject(p_obj)) return false;
-            if (_isString(p_obj['_guid']) && typeof p_obj['_type'] === 'function') return true;
+        MetaRegistry.isMetaObject = function(p_target) {
+            if (!_isObject(p_target)) return false;
+            if (_isString(p_target['_guid']) && typeof p_target['_type'] === 'function') return true;
             return false;
         };
         
         /**
-         * 지정한 guid 객체를 사용하여 메타 객체를 생성합니다.
+         * guid 객체에 대한 메타 객체를 생성합니다.
          * @param {object} p_oGuid guid 타입의 객체
-         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
+         * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체
          * @returns {MetaObject}
          */
         MetaRegistry.createMetaObject = function(p_oGuid, p_origin) {
@@ -267,10 +271,9 @@
         };
         
         /**
-         * 지정한 메타 객체에 대한 guid 객체를 반환합니다.  
-         * { $ref: string }
-         * @param {object} p_meta 매타 객체
-         * @returns {object} guid 객체
+         * guid 객체에 대한 guid 참조를 생성합니다.  
+         * @param {MetaObject} p_meta 메타 객체
+         * @returns {object} { $ref: 'guid값' }
          * @example
          * var meta = new MetaElement('m1');
          * obj.onwer = MetaRegistry.createReferObject(meta);
@@ -283,10 +286,10 @@
         };
 
         /**
-         * 지정한 함수를 네임스페이스 없으면 등록하고, 함수의 네임스페이스를 guid 객체로 반환합니다.  
-         * { $ns: string }
-         * @param {function} p_target 
-         * @returns {object} guid 객체
+         * target을 네임스페이스에 등록하고, 참조를 생성합니다.
+         * 
+         * @param {function} p_target 함수 또는 생성자
+         * @returns {object} { $ns: string }
          * @example
          * var meta = new MetaElement('m1');
          * obj.onwer = MetaRegistry.createReferObject(meta);
@@ -308,11 +311,11 @@
         };
 
         /**
-         * 지정한 guid 객체에 메타객체의 guid 값을 설정합니다.  
-         * - setObject() 시점에 guid 객체가 생성한 메타객체의 guid 를 설정합니다.
-         * @param {object} p_oGuid 
-         * @param {object} p_meta 
-         * @returns {object} oGuid 객체에 $set 설정한 객체
+         * guid 객체에 메타 객체의 guid 를 설정합니다.  
+         * - oGuid.$set = meta._guid
+         * @param {object} p_oGuid guid 타입의 객체
+         * @param {MetaObject} p_meta 
+         * @returns {object} oGuid.$set에 설정한 guid값
          * @example
          * var meta = new MetaElement('m1');    // meta.guid = '5337877c-49d6-9add-f35a-7bd31d510d4f'
          * var obj = { name: 'm2' };
@@ -329,13 +332,13 @@
         };
          
         /**
-         * 지정한 guid 객체의 유효성 검사를 합니다.  
-         * 1. 지정한 객체의 guid 값의 중복 여부 확인합니다.
-         * 2. 지정한 객체의 '$ref'을 값으로 가지는 guid 객체의 존재 여부를 확인합니다.
-         * 3. 지정한 객체의 '$ns'을 값으로 하는 네임스페이스의 존재 여부를 확인합니다.
-         * 4. 지정한 객체의 '_key'와 '_elem' 의 갯수가 같은지 검사합니다.  
-         * @param {object} p_oGuid 
-         * @returns {boolean}
+         * guid 객체의 유효성 검사를 합니다.  
+         * 1. 객체의 guid 값의 중복 여부 확인합니다.  
+         * 2. 객체의 '$ref'을 값으로 가지는 guid 객체의 존재 여부를 확인합니다.  
+         * 3. 객체의 '$ns'을 값으로 하는 네임스페이스의 존재 여부를 확인합니다.  
+         * 4. 객체의 '_key'와 '_elem' 의 갯수가 같은지 검사합니다.  
+         * @param {object} p_oGuid 검사할 guid 객체
+         * @returns {boolean} 성공 여부
          */
         MetaRegistry.validObject = function(p_oGuid) {
             var _this = this;
@@ -395,20 +398,20 @@
         };
 
         /**
-         * 지정한 객체의 guid 객체 여부를 확인합니다.
-         * @param {any} p_obj 
-         * @returns {boolean}
+         * guid 객체 여부를 확인합니다.
+         * @param {object} p_target 확인 대상
+         * @returns {boolean} 
          */
-        MetaRegistry.isGuidObject = function(p_obj) {
-            if (!_isObject(p_obj)) return false;
-            if (_isString(p_obj['_guid']) && _isString(p_obj['_type'])) return true;
+        MetaRegistry.isGuidObject = function(p_target) {
+            if (!_isObject(p_target)) return false;
+            if (_isString(p_target['_guid']) && _isString(p_target['_type'])) return true;
             return false;
         };
 
         /**
-         * 원본 (guid)객체에 _guid 값을 포함한 객체가 존재하는지 확인합니다.
-         * @param {string| object} p_oGuid 대상 객체
-         * @param {object | array<object>} p_origin  원본 guid 객체
+         * origin 객체에 guid 객체의 포함 여부를 확인합니다.
+         * @param {string| object} p_oGuid 확인 대상
+         * @param {object | array<object>} p_origin  원본 객체
          * @returns {boolean}
          */
         MetaRegistry.hasGuidObject = function(p_oGuid, p_origin) {
@@ -432,9 +435,9 @@
         };
 
         /**
-         * 지정한 객체에 참조타입 요소를 가지고 있는지 확인힙니다.  
-         * 참조타입 : $ref: '...', $ns:'....'
-         * @param {object} p_oGuid 
+         * guid 객체에 참조타입 요소가 포함되어 있는지 확인힙니다.  
+         * - 참조타입 : $ref: '', $ns:''
+         * @param {object} p_oGuid 확인 대상
          * @returns {boolean}
          */
         MetaRegistry.hasRefer = function(p_oGuid) {
@@ -461,10 +464,10 @@
         };     
 
         /**
-         * guid 객체로 설정한 메타 객체를 조회합니다.  
-         * 1. guid 객체 내부에서 guid 값의 요소 조회  
-         * 2. 조회한 요소의 $set 값을 사용하여  메타객체 저장소헤 대상 객체 조회  
-         * @param {string | object} p_oGuid 조회 대상
+         * origin 객체에 설정된 guid 객체를 찾습니다.  
+         * 1. guid 객체 내부에서 guid 값의 요소 조회 ?  
+         * 2. 조회한 요소의 $set 값을 사용하여  메타객체 저장소헤 대상 객체 조회 ?   
+         * @param {string | object} p_oGuid 조회 대상 guid 값 또는  guid 객체
          * @param {object} p_origin 원본 객체
          * @returns {MetaObject}
          */
@@ -506,7 +509,7 @@
           
 
         /**
-         * 지정한 객체의 참조타입 요소를 변환합니다.  
+         * guid 객체의 참조요소값을 객체 참조로 변환합니다.  
          * 변환대상 : $ns => [object object]
          * @param {object} p_oGuid 
          * @returns {object} 참조 변환한 oGuid 객체
@@ -545,8 +548,9 @@
         };
         
         /**
-         * 네임스페이스(ns)에 클래스(함수)를 중복검사 후 등록합니다.  
-         * - 기본제공 함수는 내부 저장하지 않습니다.
+         * 네임스페이스(ns)에 생성자 또는 객체를 등록합니다.  
+         * - 중복 검사 후 등록  
+         * - 기본제공 함수는 내부 저장하지 않음  
          * @param {function | object} p_target
          * @param {string} p_ns fullname 또는 네임스페이스 
          * @param {string} p_key 
@@ -561,16 +565,16 @@
             if (p_key) fullName = p_ns.length > 0 ? p_ns +'.'+ p_key : p_key;
             else fullName = p_ns;
             
-            if (_isBuiltFunction(p_fun)) return;    // 내장함수 제외
+            if (_isBuiltFunction(p_target)) return;    // 내장함수 제외
             if (typeof _global[fullName] === 'function') return;
             
             if (!this.ns.find(fullName)) this.ns.add(fullName, p_target);  // 중복 검사 후 등록
         };
         
         /**
-         * 네임스페이스(ns)에서 클래스(함수)를 해제 합니다.
-         * @param {string} p_fullName 
-         * @returns {boolean}
+         * 네임스페이스(ns)에 생성자 또는 객체를 해제합니다.
+         * @param {string} p_fullName 네임스페이스 전체 이름
+         * @returns {boolean} 삭제 성공 여부
          */
         MetaRegistry.releaseClass = function(p_fullName) {
             if (!_isString(p_fullName)) throw new ExtendError(/EL03234/, null, [typeof p_fullName]);
@@ -580,10 +584,9 @@
         };
         
         /**
-         * 네임스페이스(ns)에서 클래스(함수)의 전체경로를 조회합니다.  
-         * 클래스가 없으면 아무값도 전달받지 않습니다.  
-         * @param {function} p_target 
-         * @returns {string?}
+         * 네임스페이스(ns)에서 생성자 또는 객체를 찾아서 전체 경로를 돌려줍니다.
+         * @param {function} p_target 생성자 또는 객체 
+         * @returns {string?} 네임스페이스 전체 이름
          */
         MetaRegistry.findClass = function(p_target) {
             var fullName;
@@ -596,9 +599,9 @@
         };
         
         /**
-         * 네임스페이스에서 클래스(함수)를 조회합니다.
+         * 네임스페이스(ns)에서 전체이름에 대한 생성자 또는 객체를 얻습니다.
          * @param {string} p_fullName 전체경로
-         * @returns {function}
+         * @returns {(object | function)?} 객체 또는 생성자
          */
         MetaRegistry.getClass = function(p_fullName) {
             if (!_isString(p_fullName)) throw new ExtendError(/EL03236/, null, [typeof p_fullName]);
@@ -608,11 +611,11 @@
         };
 
         /**
-         * 직렬화문자열을 메타객체로 불러오기
+         * 직렬화한 guid 문자열을 파싱하여 MetaObject 로 불러옵니다.  
          * REVIEW: 필요성 재검토 필요  
-         * @param {string} p_str 
-         * @param {function?} p_parse 
-         * @returns {MetaObject}
+         * @param {string} p_str guid 객체를 직렬화한 문자열
+         * @param {function?} p_parse JSON 파서
+         * @returns {MetaObject} 불러온 MetaObject
          */
         MetaRegistry.loadMetaObject = function(p_str, p_parse) {
             var obj = p_str;

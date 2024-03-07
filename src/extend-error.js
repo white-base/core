@@ -44,7 +44,7 @@
          */
 
         /**
-         * 확장 에러를 생성한다.  
+         * 확장오류를 생성합니다.  
          * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
          * @constructs _L.Common.ExtendError
          * @param {string | Regexp} p_msg  메세지코드 또는 메세지
@@ -89,7 +89,7 @@
             else _instance.queue = [];
             
             /**
-             * 이름과 값형태의 오류 메세지
+             * 속성타입 오류 메세지
              * @member {object} _L.Common.ExtendError#prop
              */
             if (_prop) _instance.prop = _prop;

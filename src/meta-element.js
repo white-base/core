@@ -47,7 +47,7 @@
     var MetaElement  = (function (_super) {
 
         /**
-         * 메타 요소 객체를 생성한다.  
+         * 메타 요소 객체를 생성합니다.  
          * (독립체 사용 단위)
          * @constructs _L.Meta.MetaElement
          * @extends _L.Meta.MetaObject
@@ -89,16 +89,16 @@
         MetaElement._PARAMS = ['name'];     // creator parameter
         
         /**
-         * 현재 객체를 직렬화(guid 타입) 객체로 얻는다.  
+         * 현재 객체를 직렬화(guid 타입) 객체로 얻습니다.  
          * (순환참조는 $ref 값으로 대체된다.)  
          * @param {number} [p_vOpt=0] 가져오기 옵션
-         * - opt = 0 : 참조 구조의 guid 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 1 : 중복 구조의 guid 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 2 : 비침조 구조의 객체 (_guid: No,  $ref: No)   
-         * 객체 비교 : equal(a, b)  
-         * a.getObject(2) == b.getObject(2)   
+         * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+         * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+         * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
          * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
          * @returns {object}  guid 타입 객체
+         * @example
+         * a.getObject(2) == b.getObject(2)   
          */
         MetaElement.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
@@ -110,8 +110,8 @@
         };
 
         /**
-         * 직렬화(guid 타입) 객체를 현재 객체에 설정한다.  
-         * (설정전에 현재 객체는 초기화 된다.)
+         * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
+         * (객체는 초기화 된다.)
          * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
          * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
          */
@@ -122,7 +122,7 @@
         };
         
         /**
-         * 현재 객체를 복제한다.
+         * 현제 객체를 복제합니다.
          * @returns {MetaElement}
          */
         MetaElement.prototype.clone  = function() {

@@ -47,7 +47,7 @@
     // 4. module implementation   
     var NamespaceManager = (function () {
         /**
-         * 네임스페이스 관리자
+         * 네임스페이스 관리자를 생성합니다.
          * @constructs _L.Meta.NamespaceManager
          */
         function NamespaceManager() {
@@ -58,7 +58,9 @@
             
             /**
              * 네임스페이스 저장소
-             * @member {Array} _L.Meta.NamespaceManager#namespace 
+             * @member {array} _L.Meta.NamespaceManager#__storage 
+             * @private
+             * @readonly
              */
             Object.defineProperty(this, '__storage',
             {
@@ -68,8 +70,9 @@
             });
 
             /** 
-             * 요소타입 
-             * @member {Observer}  _L.Collection.NamespaceManager#_elemTypes  
+             * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용
+             * @member {any | array<any>}  _L.Meta.NamespaceManager#_elemTypes  
+             * @protected
              */
             Object.defineProperty(this, '_elemTypes', 
             {
@@ -85,8 +88,9 @@
             });
 
             /**
-             * 목록 
-             * @member {Array}  _L.Meta.NamespaceManager#list  
+             * 네임스페이스 요소 목록
+             * @member {array<string>}  _L.Meta.NamespaceManager#list
+             * @readonly
              */
             Object.defineProperty(this, 'list', 
             {
@@ -115,8 +119,8 @@
             });
 
             /**
-             * 네임스페이스 갯수 
-             * @member {Number} _L.Meta.NamespaceManager#count 
+             * 네임스페이스 요소 갯수
+             * @member {number} _L.Meta.NamespaceManager#count 
              */
             Object.defineProperty(this, 'count', 
             {
@@ -128,7 +132,7 @@
             });
 
             /**
-             * 중복 요소 등록 여부
+             * 중복 요소 등록 허용 여부, 기본값 = false (중복금지)
              * @member {boolean} _L.Meta.NamespaceManager#isOverlap
              */
             Object.defineProperty(this, 'isOverlap',
@@ -189,16 +193,19 @@
         }
         
         /**
-         * 네임스페이스 기본객체
-         * @returns {object}
+         * 네임스페이스 저장소 초기화 객체를 생성합니다.
+         * @returns {object} {_type: 'ns'}
+         * @private
          */
         NamespaceManager.prototype.__createNsRefer = function() {
             return { _type: 'ns' };
         };
 
         /**
-         * 객체 또는 문자열을 객체타입으로 얻기
+         * 네임스페이스 경로객체를 얻습니다.
          * @param {string | object} p_elem 
+         * @returns {object} {ns: '..', key: '..'}
+         * @protected
          */
         NamespaceManager.prototype._getPathObject = function(p_elem) {
             var fullName;
@@ -221,14 +228,14 @@
         };
         
         /**
-         * 초기화
+         * 네임스페이스를 초기화 합니다.
          */
         NamespaceManager.prototype.init = function() {
             this.__SET$__storage(this.__createNsRefer(), this);
         };
 
         /**
-         * 네임스페이스 등록
+         * 네임스페이스에 경로를 추가합니다.
          * @param {string | array<string>} p_ns 
          */
         NamespaceManager.prototype.addNamespace = function(p_ns) {
@@ -254,7 +261,7 @@
         };
 
         /**
-         * 네임스페이스 해제
+         * 네임스페이스에 경로를 삭제합니다.
          * @param {string | array<string>} p_ns 
          */
         NamespaceManager.prototype.delNamespace = function(p_ns) {
@@ -277,7 +284,7 @@
         };
 
         /**
-         * 네임스페이스 경로 얻기
+         * 네임스페이스에 경로 객체를 얻습니다.
          * @param {string | array<sting>} p_ns 
          * @returns {object} 경로에 대한 객체
          */
@@ -304,7 +311,7 @@
         };
 
         /**
-         * 네임스페이스에 요소(함수/클래스) 추가
+         * 네임스페이스의 경로에 요소를 추가합니다.
          * @param {string} p_fullName 
          * @param {any} p_elem 
          */
@@ -321,7 +328,7 @@
                 ns = oPath['ns'];
                 sections = _getArray(ns);
     
-                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
+                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);  // []로 감싸서 choice 타입으로 변환됨
                 if (!_validName(key)) throw new ExtendError(/EL03331/, null, [key]);
                 if (!this.isOverlap && this.getPath(p_elem)) {
                     throw new ExtendError(/EL03332/, null, []);
@@ -345,7 +352,7 @@
         };
 
         /**
-         * 네임스페이스에 등록된 요소(함수/클래스) 삭제
+         * 네임스페이스의 경로에 요소를 삭제합니다.
          * @param {string} p_fullname 
          * @returns {boolean}
          */
@@ -373,7 +380,7 @@
         };
 
         /**
-         * 요소로 네임스페이스 여부
+         * 네임스페이스에 요소가 있는지 확인합니다.
          * @param {string | any} p_elem 경로 | 객체
          * @returns {boolean}
          */
@@ -384,9 +391,9 @@
         };
 
         /**
-         * 네임스페이스 요소 얻기
+         * 네임스페이스의 경로에 요소를 찾아서 돌려줍니다.
          * @param {string | array<string>} p_fullName 
-         * @returns {any?}
+         * @returns {(object | function)?}
          */
         NamespaceManager.prototype.find = function(p_fullName) {
             var parent = this.__storage;
@@ -408,7 +415,8 @@
         };
         
         /**
-         * 요소로 네임스페이스 경로 조회 (중복시 첫요소 리턴)
+         * 네임스페이스에 요소로 경로를 얻습니다.  
+         * (중복시 첫번째 요소 return)
          * @param {any} p_elem 
          * @returns {string?}
          */
@@ -443,10 +451,11 @@
         };
 
         /**
-         * 네임스페이스 문자열로 내보내기
-         * @param {function?} p_stringify 
-         * @param {string?} p_space 
-         * @returns {string}
+         * 네임스페이스 저장소를 문자열로 내보냅니다.  
+         * 함수를 JSON 으로 출력하기 위해서 별도의 stringify 지정해야합니다.!
+         * @param {function?} p_stringify JSON stringify
+         * @param {string?} p_space 공백
+         * @returns {string} 직렬화한 문자열
          */
         NamespaceManager.prototype.output = function(p_stringify, p_space) {
             var arr = [];
@@ -479,9 +488,9 @@
         };
 
         /**
-         * 문자열 파싱해서 불러오기
-         * @param {string} p_str output문자열
-         * @param {function?} p_parse 
+         * 문자열을 파싱해서 네임스페이스 저장소로 가져옵니다.  
+         * @param {string} p_str 직렬화한 문자열
+         * @param {function?} p_parse JSON 파서
          */
         NamespaceManager.prototype.load = function(p_str, p_parse) {
             var arr = [];
