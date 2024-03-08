@@ -33,13 +33,13 @@
     // 4. module implementation   
     var IList  = (function () {
         /**
-         * 목록 인터페이스
+         * 목록 인터페이스 입니다.
          * @constructs _L.Interface.IList
          * @interface
          */
         function IList() {
             /**
-             * 목록 (참조타입)
+             * 목록
              * @member {array} _L.Interface.IList#list
              */
             this.list = Array;

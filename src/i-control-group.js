@@ -29,7 +29,7 @@
     // 4. module implementation   
     var IGroupControl  = (function () {
         /**
-         * 그룹 컨트롤 인터페이스
+         * 그룹 제어 인터페이스 입니다.
          * @constructs _L.Interface.IGroupControl
          * @interface
          */
@@ -40,7 +40,7 @@
         IGroupControl._KIND = 'interface';
 
         /**
-         * 병합 : 그룹
+         * 병합합니다.
          * @abstract
          */
         IGroupControl.prototype.merge  = function() {
@@ -48,7 +48,8 @@
         };
 
         /**
-         * 복사 : 그룹
+         * 복사합니다.
+         * @returns {any}
          * @abstract
          */
         IGroupControl.prototype.copy  = function() {

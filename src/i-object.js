@@ -29,7 +29,7 @@
     // 4. module implementation   
     var IObject  = (function () {
         /**
-         * 최상위 객체 인터페이스
+         * 객체 인터페이스 입니다. (최상위)
          * @constructs _L.Interface.IObject 
          * @interface
          */
@@ -40,7 +40,8 @@
         IObject._KIND = 'interface';
 
         /**
-         * 객체타입 얻기
+         * 객체 타입들을 얻습니다.
+         * @returns {array<any>}
          * @abstract
          */
         IObject.prototype.getTypes  = function() {
@@ -48,7 +49,8 @@
         };
         
         /**
-         * 인스턴스 여부 검사
+         * 객체의 인스턴스 여부를 확인합니다.
+         * @returns {boolean}
          * @abstract
          */
         IObject.prototype.instanceOf  = function() {
@@ -56,7 +58,8 @@
         };
 
         /**
-         * 객체 비교
+         * 객체와 비교합니다.
+         * @returns {boolean}
          * @abstract
          */
         IObject.prototype.equal  = function() {

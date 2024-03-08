@@ -74,10 +74,10 @@ describe("[target: message.js]", () => {
                 expect(msg).toMatch(/code/);
             });
         });
-        describe("MetaObject.getInfo(): obj <메세지 객체>", () => {
+        describe("MetaObject.getObject(): obj <메세지 객체>", () => {
             it("- getInfo() : 메세지 얻기", () => {
-                const msg1 = Message.getInfo('ES011');
-                const msg2 = Message.getInfo('IS011', ['A', 'B']);
+                const msg1 = Message.getObject('ES011');
+                const msg2 = Message.getObject('IS011', ['A', 'B']);
 
                 // console.warn(msg);
                 expect(msg1.memo).toMatch(/1:/);

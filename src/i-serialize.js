@@ -33,7 +33,7 @@
     // 4. module implementation   
     var ISerialize  = (function () {
         /**
-         * 직렬화 인터페이스
+         * 직렬화 인터페이스 입니다.
          * @constructs _L.Interface.ISerialize
          * @interface
          */
@@ -44,7 +44,8 @@
         ISerialize._KIND = 'interface';
 
         /**
-         * 출력 (내보내기)
+         * 내보내기(출력)를 합니다.
+         * @returns {any}
          * @abstract
          */
         ISerialize.prototype.output  = function() {
@@ -52,7 +53,7 @@
         };
 
         /**
-         * 로드 (가져오기)
+         * 가져오기(로드) 합니다.
          * @abstract
          */
         ISerialize.prototype.load  = function(String) {

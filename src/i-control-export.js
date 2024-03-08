@@ -29,7 +29,7 @@
     // 4. module implementation   
     var IExportControl  = (function () {
         /**
-         * 내보내기 컨트롤 인터페이스
+         * 내보내기 제어 인터페이스 입니다.
          * @constructs _L.Interface.IExportControl
          * @interface
          */
@@ -40,7 +40,8 @@
         IExportControl._KIND = 'interface';
 
         /**
-         * 출력 : 전체
+         * 대상을 내보냅니다. (쓰기)
+         * @returns {any}
          * @abstract
          */
         IExportControl.prototype.write  = function() {

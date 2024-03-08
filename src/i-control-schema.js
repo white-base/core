@@ -30,7 +30,7 @@
     // 4. module implementation   
     var ISchemaControl  = (function () {
         /**
-         *  스카마 컨트롤 인터페이스
+         * 스키마 제어 인터페이스 입니다.
          * @constructs _L.Interface.ISchemaControl
          * @interface
          */
@@ -41,7 +41,7 @@
         ISchemaControl._KIND = 'interface';
 
         /**
-         * 스키마 읽기
+         * 스키마를 가져옵니다.
          * @abstract
          */
         ISchemaControl.prototype.readSchema  = function() {
@@ -49,7 +49,8 @@
         };
 
         /**
-         * 스키마 읽기
+         * 스키마를 내보냅니다. 
+         * @returns {any}
          * @abstract
          */
         ISchemaControl.prototype.writeSchema  = function() {

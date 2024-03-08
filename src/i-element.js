@@ -33,7 +33,7 @@
     // 4. module implementation   
     var IElement  = (function () {
         /**
-         * 독립 요소 클래스
+         * 요소(독립) 인터페이스 입니다.
          * @constructs _L.Interface.IElement
          * @interface
          */
@@ -49,7 +49,8 @@
         IElement._KIND = 'interface';
 
         /**
-         * 복제
+         * 요소를 복제합니다.
+         * @returns {any}
          * @abstract
          */
         IElement.prototype.clone  = function() {

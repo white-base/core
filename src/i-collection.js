@@ -41,7 +41,7 @@
     // 4. module implementation
     var ICollection  = (function () {
         /**
-         * 컬렉션 최상위 인터페이스
+         * 컬렉션 인터페이스 입니다.
          * @constructs _L.Interface.ICollection
          * @interface
          */
@@ -52,7 +52,7 @@
         ICollection._NS = 'Interface';    // namespace
 
         /**
-         * 등록 : insert
+         * 컬렉션에 요소를 추가합니다.
          * @abstract
          */
         ICollection.prototype.add  = function() {
@@ -60,7 +60,7 @@
         };
 
         /**
-         * 삭제 (객체, 이름) : delete
+         * 컬렉션에서 요소를 제거합니다.
          * @abstract
          */
         ICollection.prototype.remove  = function() {
@@ -68,7 +68,8 @@
         };
 
         /**
-         * 유무 검사 (소유) : read (select)
+         * 요소가 컬렉션에 존재하는지 확인합니다.
+         * @returns {boolean}
          * @abstract
          */
         ICollection.prototype.contains  = function() {
@@ -76,7 +77,8 @@
         };
 
         /**
-         * 찾기 (번호) : read(select)
+         * 컬렉션에서 요소을 조회합니다.
+         * @returns {number}
          * @abstract
          */
         ICollection.prototype.indexOf  = function() {

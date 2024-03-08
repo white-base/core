@@ -33,20 +33,20 @@
     // 4. module implementation   
     var IMarshal  = (function () {
         /**
-         * 내부 제어 인터페이스
+         * 객체 통제 인터페이스 입니다.
          * @constructs _L.Interface.IMarshal
          * @interface
          */
         function IMarshal() {
 
             /**
-             * GUID
+             * 객체의 고유 식별자
              * @member {string} _L.Interface.IMarshal#_guid
              */
-
             this._guid = String;
+
             /**
-             * 타입
+             * 객체의 타입
              * @member {string} _L.Interface.IMarshal#_type
              */
             this._type = [['_req_', Function, {$type: 'class'} ]];
@@ -56,7 +56,7 @@
         IMarshal._KIND = 'interface';
         
         /**
-         * 객체 얻기
+         * 대상의 직렬화 객체를 얻습니다.
          * @abstract
          */
         IMarshal.prototype.getObject = function() {
@@ -64,7 +64,7 @@
         };
 
         /**
-         * 객체 설정
+         * 직렬화 객체를 설정합니다.
          * @abstract
          */
         IMarshal.prototype.setObject  = function() {

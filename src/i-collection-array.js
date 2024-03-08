@@ -38,7 +38,7 @@
     // 4. module implementation   
     var IArrayCollection  = (function (_super) {
         /**
-         * 배열 컬렉션 인터페이스
+         * 배열 컬렉션 인터페이스 입니다.
          * @constructs _L.Interface.IArrayCollection
          * @interface
          * @extends  _L.Interface.ICollection
@@ -52,7 +52,7 @@
         IArrayCollection._NS = 'Interface';    // namespace
 
         /**
-         * 조회 : 인덱스로 이름 조회
+         * 요소를 지정위치에 추가합니다.
          * @abstract
          */
         IArrayCollection.prototype.insertAt  = function() {

@@ -33,7 +33,7 @@
     // 4. module implementation   
     var IListControl  = (function () {
         /**
-         * 리스트 컨트롤 인터페이스
+         * 목록 제어 인터페이스 입니다.
          * @constructs _L.Interface.IListControl
          * @interface
          */
@@ -44,7 +44,7 @@
         IListControl._KIND = 'interface';
         
         /**
-         * 등록
+         * 목록에 대상을 추가합니다.
          * @abstract
          */
         IListControl.prototype.add = function() {
@@ -52,7 +52,7 @@
         };
 
         /**
-         * 해제
+         * 목록에서 대상을 삭제합니다.
          * @abstract
          */
         IListControl.prototype.del  = function() {
@@ -60,7 +60,8 @@
         };
 
         /**
-         * 존재 여부
+         * 목록에 대상의 존재 여부를 확인합니다.
+         * @returns {boolean}
          * @abstract
          */
         IListControl.prototype.has  = function() {
@@ -68,7 +69,8 @@
         };
 
         /**
-         * 조회
+         * 목록에서 대상을 찾습니다.
+         * @returns {any}
          * @abstract
          */
         IListControl.prototype.find  = function() {

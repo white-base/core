@@ -29,7 +29,7 @@
     // 4. module implementation   
     var IImportControl  = (function () {
         /**
-         * 입력 컨트롤 인터페이스
+         * 가져오기 제어 인터페이스 입니다.
          * @constructs _L.Interface.IImportControl
          * @interface
          */
@@ -40,7 +40,7 @@
         IImportControl._KIND = 'interface';
 
         /**
-         * 입력 : 전체
+         * 대상을 가져옵니다. (읽기)
          * @abstract
          */
         IImportControl.prototype.read  = function() {

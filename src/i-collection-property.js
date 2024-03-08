@@ -38,7 +38,7 @@
     // 4. module implementation   
     var IPropertyCollection  = (function (_super) {
         /**
-         * 프로퍼티 컬렉션 인터페이스 
+         * 프로퍼티 컬렉션 인터페이스 입니다.
          * @constructs _L.Interface.IPropertyCollection
          * @interface
          * @extends  _L.Interface.ICollection
@@ -52,7 +52,8 @@
         IPropertyCollection._NS = 'Interface';    // namespace
 
         /**
-         * 조회 : 인덱스로 이름 조회
+         * 프로퍼티 키가 존재하는지 확인합니다.
+         * @returns {boolean}
          * @abstract
          */
         IPropertyCollection.prototype.keyOf  = function() {

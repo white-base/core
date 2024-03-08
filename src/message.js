@@ -20,7 +20,7 @@
     // 4. module implementation       
     var Message = (function () {
        /**
-        * 메세지 
+        * 메세지와 코드를 관리합니다. (static)
         * @constructs _L.Common.Message
         * @static
         */
@@ -31,7 +31,7 @@
         
         // var define
         var lang = 'kor';
-        var isLong = true;
+        var isLong = false;
 
         /**
          * 객체 레벨
@@ -1797,9 +1797,17 @@
         }
 
         /**
-         * 코드에 값을 매칭하여 리턴
-         * @param {string} p_code 코드
-         * @param {array<string>} p_aValue $1, $2... 매창값
+         * 메세지를 초기화 합니다.
+         */
+        Message.init = function() {
+            this.lang = 'eng';
+            this.isLong = false;
+        };
+
+        /**
+         * 메세지 코드에 대한 문자열를 얻습니다.
+         * @param {string} p_code 메세지 코드
+         * @param {array<string>} p_aValue msg $1, $2... 매창값
          * @returns {string}
          */
         Message.get = function(p_code, p_aValue) {
@@ -1807,39 +1815,33 @@
         };
 
         /**
-         * 코드에 대한 정보
-         * @param {string} p_code 
-         * @returns {object}
+         * 메세지 코드에 대한 객체를 얻습니다.
+         * @param {string} p_code 메시지 코드
+         * @returns {object} {msg: '메세지', long: '긴메세지'}
          */
-        Message.getInfo = function(p_code) {
+        Message.getObject = function(p_code) {
             return _getCodeObject(p_code);
         };
 
         /**
-         * 예외 리턴, throw new Error(...) 
-         * @param {string} p_code 코드
-         * @param {array<string>} p_aValue $1, $2... 매창값
+         * 메세지 코드에 대한 Error 객체를 생성해서 예외룰 발생합니다.
+         * @param {string} p_code 메세지 코드
+         * @param {array<string>} p_aValue msg $1, $2... 매창값
          */
         Message.error = function(p_code, p_aValue) {
-            throw new Error(Message.get(p_code, p_aValue));     // Line:
+            throw new Error(Message.get(p_code, p_aValue));
         };
 
         /**
-         * 경로 리턴, console.warn(...)
-         * @param {string} p_code 코드
-         * @param {array<string>} p_aValue $1, $2... 매창값
+         * 메세지 코드에 대한 console.warn 을 발생합니다.
+         * @param {string} p_code 메세지 코드
+         * @param {array<string>} p_aValue msg $1, $2... 매창값
          */
         Message.warn = function(p_code, p_aValue) {
             console.warn(Message.get(p_code, p_aValue));
         };
 
-        /**
-         * 초기화
-         */
-        Message.init = function() {
-            this.lang = 'eng';
-            this.isLong = true;
-        };
+
 
         return Message;
     }());
