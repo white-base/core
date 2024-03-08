@@ -71,7 +71,7 @@
 
             /** 
              * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용
-             * @member {any | array<any>}  _L.Meta.NamespaceManager#_elemTypes  
+             * @member {array<any>}  _L.Meta.NamespaceManager#_elemTypes  
              * @protected
              */
             Object.defineProperty(this, '_elemTypes', 

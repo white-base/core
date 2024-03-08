@@ -55,9 +55,7 @@
     var BaseCollection  = (function (_super) {
 
         /**
-        * 컬렉션 최상위 클래스 (추상클래스)  
-        * 2  
-        * 1
+        * 기본 컬렉션을 생성합니다.(최상위)
         * @abstract
         * @extends _L.Meta.MetaObject
         * @constructs _L.Collection.BaseCollection
@@ -88,8 +86,8 @@
                 enumerable: false,
             });
 
-             /** 
-             * 컬렉션 소유 객체를 가져오거나, 설정합니다.
+            /** 
+             * 컬렉션 소유자
              * @protected 
              * @member {object} _L.Collection.BaseCollection#_owner  
              */
@@ -102,9 +100,9 @@
             });
 
             /** 
-             * 컬렉션에 있는 요소를 목록으로 가져옵니다. (참조값)
+             * 컬렉션 요소들
              * @readonly
-             * @member {array} _L.Collection.BaseCollection#_elements  
+             * @member {array<any>} _L.Collection.BaseCollection#_elements  
              */
             Object.defineProperty(this, '_elements', 
             {
@@ -118,9 +116,9 @@
             });
 
             /** 
-             * 컬렉션의 요소별 descriptor 기술자를 목록으로 가져옵니다. (참조값)
+             * 컬렉션 요소의 기술들 (getter, setter)
              * @readonly
-             * @member {array} _L.Collection.BaseCollection#_descriptors  
+             * @member {array<any>} _L.Collection.BaseCollection#_descriptors  
              */
             Object.defineProperty(this, '_descriptors', 
             {
@@ -134,7 +132,7 @@
             });
 
             /** 
-             * 컬렉션 요소에 타입을 가져오거나, 지정합니다. (제약조건)
+             * 컬렉션 요소의 타입 (제약조건)
              * @protected 
              * @member {array<any>}  _L.Collection.BaseCollection#_elemTypes  
              */
@@ -158,7 +156,7 @@
             });
 
             /**
-             * 컬렉션의 항목을 목록으로 가져옵니다. (참조값)
+             * 컬렉션 요소의 목록
              * @readonly
              * @member {array}  _L.Collection.BaseCollection#list  
              */
@@ -174,7 +172,7 @@
             });
 
             /**
-             * 컬렉션에 있는 요소의 총수를 가져옵니다. (참조값)
+             * 컬렉션 요소의 갯수
              * @readonly
              * @member {number} _L.Collection.BaseCollection#count 
              */
@@ -186,7 +184,7 @@
             });
             
             /** 
-             * 예약어, 이름 금지 키워드
+             * 컬렉션 예약어
              * @private
              * @member {array<string>}  _L.Collection.BaseCollection#__KEYWORD  
              */
@@ -198,8 +196,8 @@
                 enumerable: false,
             });
 
-            /** 
-             * 현재 컬렉션의 요소를 등록할 때 발생합니다.
+            /**
+             * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다. 
              * @event _L.Collection.BaseCollection#onAdd
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -214,7 +212,7 @@
             });
 
             /** 
-             * 현재 컬렉션의 요소를 등록할 후 발생합니다.
+             * 컬렉션 요소를 추가 후에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onAdded
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -229,7 +227,7 @@
             });
 
             /** 
-             * 현재 컬렉션의 요소를 삭제할 때 발생합니다.
+             * 컬렉션 요소를 삭제 전에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onRemove
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -244,7 +242,7 @@
             });
 
             /** 
-             * 현재 컬렉션의 요소를 삭제 후 발생합니다.
+             * 컬렉션 요소를 삭제 후에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onRemoved
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -259,7 +257,7 @@
             });
 
             /** 
-             * 현재 컬렉션이 초기화될 때 발생합니다.
+             * 컬렉션을 초기화 전에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onClear
              * @param {function}    p_callback
              * @param {this}        p_callback.p_this 현재 컬렉션
@@ -272,7 +270,7 @@
             });
 
             /** 
-             * 현재 컬렉션이 초기화된 후 발생합니다.
+             * 컬렉션을 초기화 후에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onCleared
              * @param {function}    p_callback
              * @param {this}        p_callback.p_this 현재 컬렉션
@@ -285,7 +283,7 @@
             });
 
             /** 
-             * 현재 컬렉션의 값이 변경될 때 발생합니다.
+             * 컬렉션 요소를 변경 전에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onChanging 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -300,7 +298,7 @@
             });
 
             /** 
-             * 현재 컬렉션의 값이 변경된 후 발생합니다.
+             * 컬렉션 요소를 변경 후에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onChanged 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -345,7 +343,9 @@
         BaseCollection._KIND = 'abstract';
         
         /**
-         * onRemove 이벤트 수신자 입니다.
+         * onAdd 이벤트를 발생합니다.
+         * @param {number} p_idx 인덱스 번호
+         * @param {any} p_value 요소
          * @listens _L.Collection.BaseCollection#onAdd
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_value) {
@@ -353,7 +353,9 @@
         };
 
         /**
-         * onRemove 이벤트 수신자 입니다.
+         * onAdded 이벤트를 발생합니다.
+         * @param {number} p_idx 인덱스 번호
+         * @param {any} p_value 요소
          * @listens _L.Collection.BaseCollection#onAdded
          */
         BaseCollection.prototype._onAdded = function(p_idx, p_value) {
@@ -361,7 +363,9 @@
         };
 
         /**
-         * onRemove 이벤트 수신자 입니다.
+         * onRemove 이벤트를 발생합니다.
+         * @param {number} p_idx 인덱스 번호
+         * @param {any} p_value 요소
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_value) {
@@ -369,7 +373,9 @@
         };
 
         /**
-         * onRemoved 이벤트 수신자 입니다.
+         * onRemoved 이벤트를 발생합니다.
+         * @param {number} p_idx 인덱스 번호
+         * @param {any} p_value 요소
          * @listens _L.Collection.BaseCollection#onRemoved
          */
         BaseCollection.prototype._onRemoved = function(p_idx, p_value) {
@@ -377,7 +383,7 @@
         };
 
         /** 
-         * onClear 이벤트 수신자 입니다.
+         * onClear 이벤트를 발생합니다.
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
@@ -385,7 +391,7 @@
         };
 
         /** 
-         * onCleared 이벤트 수신자 입니다.
+         * onCheared 이벤트를 발생합니다.
          * @listens _L.Collection.BaseCollection#onCleared
          */
         BaseCollection.prototype._onCleared = function() {
@@ -394,7 +400,9 @@
 
 
         /** 
-         * onChanging 이벤트 수신자 입니다.
+         * onChanging 이벤트를 발생합니다.
+         * @param {number} p_idx 인덱스 번호
+         * @param {any} p_value 요소
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function(p_idx, p_value) {
@@ -402,7 +410,9 @@
         };
 
         /** 
-         *  현재 컬렉션의 값이 변경된 후 발생합니다.
+         * onChanged 이벤트를 발생합니다.
+         * @param {number} p_idx 인덱스 번호
+         * @param {any} p_value 요소
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function(p_idx, p_value) {
@@ -410,9 +420,9 @@
         };
 
         /**
-         * 컬렉션 추가시 기본 기술자를 가져옵니다.
+         * 컬렉션에 요소를 추가 할 때 설정되는 기본 기술자입니다.
          * @protected
-         * @param {number} p_idx 인덱스
+         * @param {number} p_idx 인덱스 번호
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
@@ -440,16 +450,16 @@
         };
 
         /**
-         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
-         * - 순환참조는 $ref 값으로 대체된다.
-         * @param {number} p_vOpt 가져오기 옵션
-         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
-         * 객체 비교 : equal(a, b)  
+         * 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
+         * (순환참조는 $ref 값으로 대체된다.)  
+         * @param {number} [p_vOpt=0] 가져오기 옵션
+         * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+         * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+         * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
+         * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
+         * @returns {object}  guid 타입 객체
+         * @example
          * a.getObject(2) == b.getObject(2)   
-         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
-         * @returns {object}  
          */
         BaseCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
@@ -474,10 +484,10 @@
         };
 
         /**
-         * 현재 객체를 초기화 후, 지정한 guid 타입의 객체를 사용하여 설정합니다.   
-         * @param {object} p_oGuid guid 타입의 객체
-         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
-         * 기본값은 p_oGuid 객체와 동일
+         * 직렬화(guid 타입) 객체를 컬렉션 객체에 설정합니다.  
+         * (객체는 초기화 된다.)
+         * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
+         * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
          */
         BaseCollection.prototype.setObject = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -500,9 +510,9 @@
         };
 
         /**
-         * 컬렉션에서 지정된 객체를 제거합니다.
-         * @param {any} p_elem 속성명
-         * @returns {number} 삭제한 인덱스
+         * 컬렉션에 요소를 삭제합니다.
+         * @param {any} p_elem 요소
+         * @returns {number} 삭제한 인덱스 번호
          */
         BaseCollection.prototype.remove = function(p_elem) {
             var idx = this._elements.indexOf(p_elem);
@@ -511,8 +521,8 @@
         };
         
         /**
-         * 컬렉션에서 지정된 인덱스의 열을 제거합니다.
-         * @param {number} p_idx 인덱스
+         * 컬렉션의 지정위치에 요소를 삭제합니다. 
+         * @param {number} p_idx 인덱스 번호
          * @returns {boolean} 처리 결과  
          */
         BaseCollection.prototype.removeAt = function(p_idx) {
@@ -530,8 +540,8 @@
         };
 
         /**
-         * 컬렉션에 이름이 지정된 열이 있는지 여부를 확인합니다.  
-         * @param {object} p_elem 속성 객체
+         * 요소가 컬렉션에 존재하는지 확인합니다.
+         * @param {any} p_elem 요소
          * @returns {boolean}
          */
         BaseCollection.prototype.contains = function(p_elem) {
@@ -539,16 +549,16 @@
         };
 
         /**
-         * 지정된 요소의 인덱스를 가져옵니다.
-         * @param {any} p_elem 속성 객체
-         * @returns {number} 없을시 -1
+         * 컬렉션에 요소를 조회합니다.
+         * @param {any} p_elem 요소
+         * @returns {number} 0 보다 작으면 존재하지 않음
          */
         BaseCollection.prototype.indexOf = function(p_elem) {
             return this._elements.indexOf(p_elem);
         };
 
         /** 
-         * 컬렉션에 지정된 요소를 추가합니다.
+         * 컬렉션에 요소를 추가합니다.
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
@@ -556,7 +566,7 @@
         };
         
         /**
-         * 컬렉션을 초기화 합니다.  
+         * 컬렉션을 초기화 합니다.
          * @abstract 
          * @fires _L.Collection.BaseCollection#onClear 
          */
