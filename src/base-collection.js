@@ -201,7 +201,7 @@
              * @event _L.Collection.BaseCollection#onAdd
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
-             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {any}         p_callback.p_elem 삭제하는 value
              * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onAdd', 
@@ -216,7 +216,7 @@
              * @event _L.Collection.BaseCollection#onAdded
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
-             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {any}         p_callback.p_elem 삭제하는 value
              * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onAdded', 
@@ -231,7 +231,7 @@
              * @event _L.Collection.BaseCollection#onRemove
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
-             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {any}         p_callback.p_elem 삭제하는 value
              * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onRemove', 
@@ -246,7 +246,7 @@
              * @event _L.Collection.BaseCollection#onRemoved
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
-             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {any}         p_callback.p_elem 삭제하는 value
              * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onRemoved', 
@@ -287,7 +287,7 @@
              * @event _L.Collection.BaseCollection#onChanging 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
-             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {any}         p_callback.p_elem 삭제하는 value
              * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onChanging', 
@@ -302,7 +302,7 @@
              * @event _L.Collection.BaseCollection#onChanged 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
-             * @param {any}         p_callback.p_value 삭제하는 value
+             * @param {any}         p_callback.p_elem 삭제하는 value
              * @param {this}        p_callback.p_this 현재 컬렉션
              */
             Object.defineProperty(this, 'onChanged', 
@@ -345,41 +345,41 @@
         /**
          * onAdd 이벤트를 발생합니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_value 요소
+         * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onAdd
          */
-        BaseCollection.prototype._onAdd = function(p_idx, p_value) {
-            this.__event.publish('add', p_idx, p_value, this); 
+        BaseCollection.prototype._onAdd = function(p_idx, p_elem) {
+            this.__event.publish('add', p_idx, p_elem, this); 
         };
 
         /**
          * onAdded 이벤트를 발생합니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_value 요소
+         * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onAdded
          */
-        BaseCollection.prototype._onAdded = function(p_idx, p_value) {
-            this.__event.publish('added', p_idx, p_value, this); 
+        BaseCollection.prototype._onAdded = function(p_idx, p_elem) {
+            this.__event.publish('added', p_idx, p_elem, this); 
         };
 
         /**
          * onRemove 이벤트를 발생합니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_value 요소
+         * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onRemove
          */
-        BaseCollection.prototype._onRemove = function(p_idx, p_value) {
-            this.__event.publish('remove', p_idx, p_value, this);
+        BaseCollection.prototype._onRemove = function(p_idx, p_elem) {
+            this.__event.publish('remove', p_idx, p_elem, this);
         };
 
         /**
          * onRemoved 이벤트를 발생합니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_value 요소
+         * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onRemoved
          */
-        BaseCollection.prototype._onRemoved = function(p_idx, p_value) {
-            this.__event.publish('removed', p_idx, p_value, this);
+        BaseCollection.prototype._onRemoved = function(p_idx, p_elem) {
+            this.__event.publish('removed', p_idx, p_elem, this);
         };
 
         /** 
@@ -402,21 +402,21 @@
         /** 
          * onChanging 이벤트를 발생합니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_value 요소
+         * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onChanging
          */
-        BaseCollection.prototype._onChanging = function(p_idx, p_value) {
-            this.__event.publish('changing', p_idx, p_value, this); 
+        BaseCollection.prototype._onChanging = function(p_idx, p_elem) {
+            this.__event.publish('changing', p_idx, p_elem, this); 
         };
 
         /** 
          * onChanged 이벤트를 발생합니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_value 요소
+         * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onChanged
          */        
-        BaseCollection.prototype._onChanged = function(p_idx, p_value) {
-            this.__event.publish('changed', p_idx, p_value, this); 
+        BaseCollection.prototype._onChanged = function(p_idx, p_elem) {
+            this.__event.publish('changed', p_idx, p_elem, this); 
         };
 
         /**
@@ -442,7 +442,7 @@
         };
 
         /** 
-         * 컬렉션에서 지정된 요소를 제거합니다. (내부)
+         * 컬렉션의 요소를 삭제합니다. (내부)
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
@@ -522,18 +522,18 @@
         
         /**
          * 컬렉션의 지정위치에 요소를 삭제합니다. 
-         * @param {number} p_idx 인덱스 번호
+         * @param {number} p_pos 인덱스 번호
          * @returns {boolean} 처리 결과  
          */
-        BaseCollection.prototype.removeAt = function(p_idx) {
+        BaseCollection.prototype.removeAt = function(p_pos) {
             var elem;
             
-            if (typeof p_idx !== 'number') throw new ExtendError(/EL04113/, null, [typeof p_idx]);
-            elem = this._elements[p_idx];
+            if (typeof p_pos !== 'number') throw new ExtendError(/EL04113/, null, [typeof p_pos]);
+            elem = this._elements[p_pos];
             if (elem) {
-                this._onRemove(p_idx, elem);
-                if (!this._remove(p_idx)) return false;
-                this._onRemoved(p_idx, elem);
+                this._onRemove(p_pos, elem);
+                if (!this._remove(p_pos)) return false;
+                this._onRemoved(p_pos, elem);
                 return true;
             }
             return false;

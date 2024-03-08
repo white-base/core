@@ -50,7 +50,7 @@
     // 4. module implementation
     var ArrayCollection  = (function (_super) {
         /**
-         * 배열타입 컬렉션 클래스
+         * 배열 컬렉션을 생성합니다.
          * @constructs _L.Collection.ArrayCollection
          * @implements {_L.Interface.IArrayCollection}
          * @extends _L.Collection.BaseCollection
@@ -74,40 +74,40 @@
         }
         
         /**
-         * 배열속성 컬렉션을 삭제한다.(내부처리) [구현]
+         * 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)
          * @protected
-         * @param {number} p_idx 인덱스 번호
+         * @param {number} p_pos 인덱스 위치
          * @returns {boolean}
          */
-        ArrayCollection.prototype._remove = function(p_idx) {
+        ArrayCollection.prototype._remove = function(p_pos) {
             var count = this.count - 1;   // [idx] 포인트 이동
             
-            this.__GET$_elements(this).splice(p_idx, 1);
-            this.__GET$_descriptors(this).splice(p_idx, 1);
+            this.__GET$_elements(this).splice(p_pos, 1);
+            this.__GET$_descriptors(this).splice(p_pos, 1);
             
-            if (p_idx < count) {
-                for (var i = p_idx; i < count; i++) {   // 참조 변경(이동)
+            if (p_pos < count) {
+                for (var i = p_pos; i < count; i++) {   // 참조 변경(이동)
                     var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }
                 delete this[count];     // 마지막 idx 삭제
             } else {
-                delete this[p_idx];     // idx 삭제 (끝일 경우)
+                delete this[p_pos];     // idx 삭제 (끝일 경우)
             }
             return true;
         };
 
         /**
-         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
-         * - 순환참조는 $ref 값으로 대체된다.
-         * @param {number} p_vOpt 가져오기 옵션
-         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
-         * 객체 비교 : equal(a, b)  
+         * 배열 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
+         * (순환참조는 $ref 값으로 대체된다.)  
+         * @param {number} [p_vOpt=0] 가져오기 옵션
+         * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+         * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+         * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
+         * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
+         * @returns {object}  guid 타입 객체
+         * @example
          * a.getObject(2) == b.getObject(2)   
-         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
-         * @returns {object}  
          */
         ArrayCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
@@ -133,10 +133,10 @@
         };
 
         /**
-         * 현재 객체를 초기화 후, 지정한 guid 타입의 객체를 사용하여 설정합니다.   
-         * @param {object} p_oGuid guid 타입의 객체
-         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
-         * 기본값은 p_oGuid 객체와 동일
+         * 직렬화(guid 타입) 객체를 배열 컬렉션 객체에 설정합니다.  
+         * (객체는 초기화 된다.)
+         * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
+         * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
          */
         ArrayCollection.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -170,19 +170,19 @@
 
         /**
          * 컬렉션에 요소를 추가합니다.
-         * @param {any} p_value [필수] 요소값
-         * @param {object} p_desc 프로퍼티 기술 객체
+         * @param {any} p_elem 요소
+         * @param {object?} p_desc 프로퍼티 기술자 객체
          * @returns {number} 추가한 인덱스
          */
-        ArrayCollection.prototype.add = function(p_value, p_desc) {
+        ArrayCollection.prototype.add = function(p_elem, p_desc) {
             var pos = this.count;
-            this.insertAt(pos, p_value, p_desc);
+            this.insertAt(pos, p_elem, p_desc);
             return pos;
         };
 
         /**
-         * 컬렉션을 초기화 합니다.  (_element, _descriptors, _keys)  
-         * 이벤트는 초기화 되지 않습니다.
+         * 컬렉션을 초기화 합니다.
+         * 대상 : _element =[], _descriptors = []  
          */
         ArrayCollection.prototype.clear = function() {
             this._onClear();    // event
@@ -195,20 +195,20 @@
         };
 
         /**
-         * 컬렉션에서 지정된 인덱스의 열을 추가합니다.
+         * 컬렉션의 지정위치에 요소를 추가합니다.
          * @param {number} p_pos 인덱스 위치
-         * @param {any} p_value 요소
-         * @param {object} p_desc 기술자
+         * @param {any} p_elem 요소
+         * @param {object?} p_desc 프로퍼티 기술자 객체
          * @returns {boolean} 
          */
-        ArrayCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
+        ArrayCollection.prototype.insertAt = function(p_pos, p_elem, p_desc) {
             try {
                 var index   = this.count;
 
                 if (typeof p_pos !== 'number') throw new ExtendError(/EL04212/, null, [typeof p_pos]);
                 if (index < p_pos) throw new ExtendError(/EL04213/, null, [p_pos, index]);
                 if (p_pos < 0) throw new ExtendError(/EL04214/, null, [p_pos]);
-                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_value);
+                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                     Message.warn('WS011', ['configurable = false', 'element']); 
                 }
@@ -216,9 +216,9 @@
                     Message.warn('WS011', ['writable = false', 'element']);
                 }
 
-                this._onAdd(p_pos, p_value);
+                this._onAdd(p_pos, p_elem);
                 // data process
-                this.__GET$_elements(this).splice(p_pos, 0, p_value);            
+                this.__GET$_elements(this).splice(p_pos, 0, p_elem);            
                 this.__GET$_descriptors(this).splice(p_pos, 0, p_desc);
                 // property define
                 if (_isObject(p_desc)) {
@@ -231,12 +231,12 @@
                     var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }
-                this._onAdded(p_pos, p_value);
+                this._onAdded(p_pos, p_elem);
                 
                 return true;
 
             } catch (error) {
-                throw new ExtendError(/EL04215/, error, [p_pos, p_value]);
+                throw new ExtendError(/EL04215/, error, [p_pos, p_elem]);
             }
         };
 
