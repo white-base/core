@@ -50,7 +50,7 @@
     // 4. module implementation   
     var PropertyCollection  = (function (_super) {
         /**
-         * 속성타입 컬렉션 클래스
+         * 프로퍼티 컬렉션을 생성합니다.
          * @constructs _L.Collection.PropertyCollection
          * @implements {_L.Interface.IPropertyCollection}
          * @extends _L.Collection.BaseCollection
@@ -62,9 +62,9 @@
             var _keys = [];
 
             /** 
-             * 컬렉션에 있는 요소의 키값을 목록으로 가져옵니다. (참조값)
+             * 컬렉션 요소의 키값들
              * @readonly
-             * @member {Array} _L.Collection.PropertyCollection#_keys 
+             * @member {array<string>} _L.Collection.PropertyCollection#_keys 
              */
             Object.defineProperty(this, '_keys',
             {
@@ -102,29 +102,30 @@
             if (typeof obj === 'object' && obj !== null) return true;
             return false;
         }
+
         function _isString(obj) {    // 공백아닌 문자 여부
             if (typeof obj === 'string' && obj.length > 0) return true;
             return false;
         }
 
         /**
-         * 컬렉션에서 지정된 요소를 제거합니다. (내부)
+         * 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)
          * @protected
-         * @param {number} p_idx 속성명
+         * @param {number} p_pos 인덱스 위치
          * @returns {boolean} 
          */
-        PropertyCollection.prototype._remove = function(p_idx) {
+        PropertyCollection.prototype._remove = function(p_pos) {
             var count = this.count - 1;
-            var propName = this.keyOf(p_idx);   // number 검사함
+            var propName = this.keyOf(p_pos);   // number 검사함
             
             delete this[propName];      // 프로퍼티 삭제
 
-            this.__GET$_elements(this).splice(p_idx, 1);
-            this.__GET$_keys(this).splice(p_idx, 1);
-            this.__GET$_descriptors(this).splice(p_idx, 1);
+            this.__GET$_elements(this).splice(p_pos, 1);
+            this.__GET$_keys(this).splice(p_pos, 1);
+            this.__GET$_descriptors(this).splice(p_pos, 1);
             
-            if (p_idx < count) {        // 참조 자료 변경
-                for (var i = p_idx; i < count; i++) {
+            if (p_pos < count) {        // 참조 자료 변경
+                for (var i = p_pos; i < count; i++) {
                     var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
                     propName = this.keyOf(i);
                     Object.defineProperty(this, [i], desc);
@@ -132,22 +133,22 @@
                 }
                 delete this[count];     // 마지막 idx 삭제
             } else {
-                delete this[p_idx];     // idx 삭제 (끝일 경우)
+                delete this[p_pos];     // idx 삭제 (끝일 경우)
             }
             return true;
         };
 
         /**
-         * 현재 객체의 guid 타입의 객체를 가져옵니다.  
-         * - 순환참조는 $ref 값으로 대체된다.
-         * @param {number} p_vOpt 가져오기 옵션
-         * - opt = 0 : 참조 구조의 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 1 : 소유 구조의 객체 (_guid: Yes, $ref: Yes)  
-         * - opt = 2 : 소유 구조의 객체 (_guid: No,  $ref: No)   
-         * 객체 비교 : equal(a, b)  
+         * 프로퍼티 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
+         * (순환참조는 $ref 값으로 대체된다.)  
+         * @param {number} [p_vOpt=0] 가져오기 옵션
+         * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+         * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+         * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
+         * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
+         * @returns {object}  guid 타입 객체
+         * @example
          * a.getObject(2) == b.getObject(2)   
-         * @param {(object | array<object>)?} p_owned 현재 객체를 소유하는 상위 객체들
-         * @returns {object}  
          */
         PropertyCollection.prototype.getObject = function(p_vOpt, p_owned) {
             var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
@@ -178,10 +179,10 @@
         };
 
         /**
-         * 현재 객체를 초기화 후, 지정한 guid 타입의 객체를 사용하여 설정합니다.   
-         * @param {object} p_oGuid guid 타입의 객체
-         * @param {object?} p_origin 현재 객체를 설정하는 원본 guid 객체  
-         * 기본값은 p_oGuid 객체와 동일
+         * 직렬화(guid 타입) 객체를 프로퍼티 컬렉션 객체에 설정합니다.  
+         * (객체는 초기화 된다.)
+         * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
+         * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
          */
         PropertyCollection.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -221,29 +222,29 @@
         };
 
         /**
-         * 지정(키, 요소)된 요소의 인덱스를 가져옵니다.  
-         * @param {string | any} p_obj 키 또는 지정할 객체
-         * @param {boolean?} p_isKey 키로 조회 여부
+         * 프로퍼티 컬렉션의 인덱스 값을 조회합니다.
+         * @param {string | any} p_target 키 또는 조회할 객체
+         * @param {boolean?} [p_isKey=false] 키로 조회 여부
          * @returns {number} 없을시 -1
          */
-        PropertyCollection.prototype.indexOf = function(p_obj, p_isKey) {
+        PropertyCollection.prototype.indexOf = function(p_target, p_isKey) {
             var isKey = p_isKey || false;
             
-            if (!isKey) return this._elements.indexOf(p_obj);
+            if (!isKey) return this._elements.indexOf(p_target);
             else {
-                if (!_isString(p_obj))  throw new ExtendError(/EL04224/, null, [typeof p_obj]);
-                return this._keys.indexOf(p_obj);
+                if (!_isString(p_target))  throw new ExtendError(/EL04224/, null, [typeof p_target]);
+                return this._keys.indexOf(p_target);
             }
         };
 
         /**
-         * 컬렉션에 지정된 이름으로 요소를 추가합니다.
-         * @param {string} p_name [필수] 요소명
-         * @param {any?} p_value 요소
+         * 프로퍼티 컬렉션에 요소를 추가합니다.
+         * @param {string} p_key 키
+         * @param {any?} p_elem 요소
          * @param {object?} p_desc 기술자
          * @returns {boolean} 결과
          */
-        PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
+        PropertyCollection.prototype.add = function(p_key, p_elem, p_desc) {
             try {
                 var index   = this.count;
                 var regex = /^[a-zA-Z_][a-zA-Z0-9_]*/;
@@ -251,12 +252,12 @@
 
                 // types = [types.concat(this._elemTypes)];
                 
-                if (!_isString(p_name)) throw new ExtendError(/EL04225/, null, [p_name]);
-                if(!regex.test(p_name)) throw new ExtendError(/EL04226/, null, [p_name, regex.source]);
-                if (this.__KEYWORD.indexOf(p_name) > -1) throw new ExtendError(/EL04227/, null, [p_name]);
-                if (this.exist(p_name)) throw new ExtendError(/EL04228/, null, [p_name]);
-                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_value);
-                // if (this._elemTypes.length > 0) Util.matchType(types, p_value);
+                if (!_isString(p_key)) throw new ExtendError(/EL04225/, null, [p_key]);
+                if(!regex.test(p_key)) throw new ExtendError(/EL04226/, null, [p_key, regex.source]);
+                if (this.__KEYWORD.indexOf(p_key) > -1) throw new ExtendError(/EL04227/, null, [p_key]);
+                if (this.exist(p_key)) throw new ExtendError(/EL04228/, null, [p_key]);
+                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
+                // if (this._elemTypes.length > 0) Util.matchType(types, p_elem);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                         Message.warn('WS011', ['configurable = true', 'element']);
                 }
@@ -264,31 +265,32 @@
                     Message.warn('WS011', ['writable = true', 'element']);
                 }
 
-                this._onAdd(index, p_value);
+                this._onAdd(index, p_elem);
                 // data process
-                this.__GET$_elements(this).push(p_value);
-                this.__GET$_keys(this).push(p_name);
+                this.__GET$_elements(this).push(p_elem);
+                this.__GET$_keys(this).push(p_key);
                 this.__GET$_descriptors(this).push(p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [index], p_desc);
-                    Object.defineProperty(this, p_name, p_desc);
+                    Object.defineProperty(this, p_key, p_desc);
                 } else {
                     Object.defineProperty(this, [index], this._getPropDescriptor(index));
-                    Object.defineProperty(this, p_name, this._getPropDescriptor(index));
+                    Object.defineProperty(this, p_key, this._getPropDescriptor(index));
                 }
-                this._onAdded(index, p_value);
+                this._onAdded(index, p_elem);
 
                 return index;
 
             } catch (error) {
-                throw new ExtendError(/EL04229/, error, [p_name, p_value]);
+                throw new ExtendError(/EL04229/, error, [p_key, p_elem]);
             }
         };
 
         /**
-         * 컬렉션을 초기화 합니다.  (_element, _descriptors, _keys)  
-         * 이벤트는 초기화 되지 않습니다.
+         * 프로러티 컬렉션을 초기화 합니다.
+         * - 대상 : _element = [], _descriptors = [], _keys = []  
+         * - 이벤트는 초기화 되지 않습니다.
          */
         PropertyCollection.prototype.clear = function() {
             this._onClear();
@@ -306,8 +308,8 @@
         };
     
         /**
-         * 지정된 키로 요소의 인덱스를 가져옵니다.
-         * @param {number} p_idx
+         * 프로퍼티 컬렉션의 인덱스에 대한 키값을 조회합니다.
+         * @param {number} p_idx 인덱스 값
          * @returns {string}
          */
         PropertyCollection.prototype.keyOf = function(p_idx) {
@@ -316,8 +318,8 @@
         };
 
         /**
-         * 컬렉션에 이름이 지정된 열이 있는지 여부를 확인합니다.
-         * @param {string} p_key 요소키, 컬렉션키
+         * 프로퍼티 컬렉션의 키 존재하는지 확인합니다.
+         * @param {string} p_key 프로퍼티 키값
          * @returns {boolean}
          */
         PropertyCollection.prototype.exist = function(p_key) {

@@ -32,9 +32,18 @@ describe("[target: message.js]", () => {
         describe("MetaObject.get(): str <메세지 얻기>", () => {
             it("- get() : 메세지 얻기", () => {
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
-
                 // console.warn(msg);
                 expect(msg).toMatch(/ES011/);
+            });
+            it("- get() : 메세지 얻기, isLong", () => {
+                Message.isLong = true;
+                const msg1 = Message.get('ES010', []);
+                Message.isLong = false;
+                const msg2 = Message.get('ES010', []);
+
+                // console.warn(msg);
+                expect(msg1).toMatch(/ES010/);
+                expect(msg2).toMatch(/ES010/);
             });
             it("- get() : 메세지 얻기 : 한글", () => {
                 Message.lang = 'kor';

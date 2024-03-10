@@ -74,7 +74,7 @@
         }
         
         /**
-         * 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)
+         * 배열 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)
          * @protected
          * @param {number} p_pos 인덱스 위치
          * @returns {boolean}
@@ -169,7 +169,7 @@
         };        
 
         /**
-         * 컬렉션에 요소를 추가합니다.
+         * 배열 컬렉션에 요소를 추가합니다.
          * @param {any} p_elem 요소
          * @param {object?} p_desc 프로퍼티 기술자 객체
          * @returns {number} 추가한 인덱스
@@ -181,7 +181,7 @@
         };
 
         /**
-         * 컬렉션을 초기화 합니다.
+         * 배열 컬렉션을 초기화 합니다.
          * 대상 : _element =[], _descriptors = []  
          */
         ArrayCollection.prototype.clear = function() {
@@ -195,7 +195,7 @@
         };
 
         /**
-         * 컬렉션의 지정위치에 요소를 추가합니다.
+         * 배열 컬렉션의 지정위치에 요소를 추가합니다.
          * @param {number} p_pos 인덱스 위치
          * @param {any} p_elem 요소
          * @param {object?} p_desc 프로퍼티 기술자 객체

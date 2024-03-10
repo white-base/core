@@ -56,7 +56,7 @@
             /**
              * 트렌젝션 큐
              * @readonly
-             * @member {TransactionCollection} _L.Collection.TransactionCollection#_transQueue
+             * @member {TransactionQueue} _L.Collection.TransactionCollection#_transQueue
              */
             Object.defineProperty(this, '_transQueue',
             {
@@ -154,7 +154,7 @@
 
         /**
          * 지정 위치에 요소 삭제
-         * @param {number} p_pos 
+         * @param {number} p_pos 인덱스 위치
          * @returns {boolean}
          */
         TransactionCollection.prototype.removeAt = function(p_pos) {
@@ -172,14 +172,14 @@
 
         /**
          * 지정 위치에 요소 추가
-         * @param {number} p_pos 
-         * @param {any} p_value 
-         * @param {object} p_desc 
+         * @param {number} p_pos 인덱스 위치
+         * @param {any} p_elem 요소
+         * @param {object?} p_desc 프로퍼티 기술자 객체
          * @returns {boolean}
          */
-        TransactionCollection.prototype.insertAt = function(p_pos, p_value, p_desc) {
-            if (!this.autoChanges) this._transQueue.insert(p_pos, p_value);
-            return _super.prototype.insertAt.call(this, p_pos, p_value, p_desc);
+        TransactionCollection.prototype.insertAt = function(p_pos, p_elem, p_desc) {
+            if (!this.autoChanges) this._transQueue.insert(p_pos, p_elem);
+            return _super.prototype.insertAt.call(this, p_pos, p_elem, p_desc);
         };
 
         /**
