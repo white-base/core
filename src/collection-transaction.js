@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var ArrayCollection;
     var TransactionQueue;
@@ -20,12 +21,14 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         ArrayCollection             = require('./collection-array').ArrayCollection;
         TransactionQueue            = require('./trans-queue').TransactionQueue;
     } else {    
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         ArrayCollection             = _global._L.ArrayCollection;
         TransactionQueue            = _global._L.TransactionQueue;
@@ -34,6 +37,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof ArrayCollection === 'undefined') throw new Error(Message.get('ES011', ['ArrayCollection', 'i-collection-array']));
     if (typeof TransactionQueue === 'undefined') throw new Error(Message.get('ES011', ['TransactionQueue', 'trans-queue']));
@@ -109,7 +113,7 @@
             return {
                 get: function() { return this._elements[p_idx]; },
                 set: function(nVal) {
-                    if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], nVal);
+                    if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
                 },

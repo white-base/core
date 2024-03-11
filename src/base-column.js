@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var Observer;
     var MetaElement;
@@ -22,6 +23,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
@@ -29,6 +31,7 @@
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         MetaRegistry                = _global._L.MetaRegistry;
@@ -38,6 +41,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011',['Util', 'util']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
     if (typeof MetaElement === 'undefined') throw new Error(Message.get('ES011', ['MetaElement', 'meta-element']));
@@ -159,7 +163,7 @@
             {
                 get: function() { return defaultValue; },
                 set: function(nVal) { 
-                    if (this._valueTypes.length > 0) Util.matchType([this._valueTypes], nVal);
+                    if (this._valueTypes.length > 0) Type.matchType([this._valueTypes], nVal);
                     defaultValue = nVal; 
                 },
                 configurable: false,
@@ -189,7 +193,7 @@
             {
                 get: function() { return __value; },
                 set: function(nVal) { 
-                    if (this._valueTypes.length > 0) Util.matchType([this._valueTypes], nVal);
+                    if (this._valueTypes.length > 0) Type.matchType([this._valueTypes], nVal);
                     __value = nVal; 
                 },
                 configurable: true,

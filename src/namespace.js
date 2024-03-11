@@ -12,9 +12,15 @@ var README = '커버리즈, jsdoc'
  */
 
 /** 
- * 공통 유틸리티 네임스페이스
+ * 유틸리티 네임스페이스
  * @namespace _L.Common.Util 
  */
+
+/** 
+ * 타입 네임스페이스
+ * @namespace _L.Common.Type 
+ */
+
 
 /** 
  * 공통 확장 네임스페이스

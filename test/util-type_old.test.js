@@ -3,9 +3,9 @@
  */
 //==============================================================
 // gobal defined
-const {extendType, typeOf}  = require('../src/util-type');
-const {isAllowType, allowType }  = require('../src/util-type');
-const { isMatchType, matchType }  = require('../src/util-type');
+const {extendType, typeOf}  = require('../src/type');
+const {isAllowType, allowType }  = require('../src/type');
+const { isMatchType, matchType }  = require('../src/type');
 const T = true;
 
 //==============================================================

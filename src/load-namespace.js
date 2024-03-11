@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var MetaRegistry;
     var NamespaceManager;
@@ -57,6 +58,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         MetaRegistry                = require('./meta-registry').MetaRegistry;
         NamespaceManager            = require('./namespace-manager').NamespaceManager;
@@ -106,6 +108,7 @@
     var loadNamespace = function() {
         MetaRegistry.registerClass(Message, Message._NS, Message.name);
         MetaRegistry.registerClass(ExtendError, ExtendError._NS, ExtendError.name);
+        MetaRegistry.registerClass(Type, 'Common', 'Type');
         MetaRegistry.registerClass(MetaRegistry, MetaRegistry._NS, MetaRegistry.name);
         MetaRegistry.registerClass(MetaObject, MetaObject._NS, MetaObject.name, );
         MetaRegistry.registerClass(MetaElement, MetaElement._NS, MetaElement.name);

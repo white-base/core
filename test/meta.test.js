@@ -5,6 +5,7 @@
 // gobal defined
 'use strict';
 const Util                  = require('../src/util');
+const Type                  = require('../src/type');
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
 // const ComplexElement        = require('../src/meta-element-complex');
@@ -101,7 +102,7 @@ describe("[target: meta-object.js, meta-element.js]", () => {
                 expect(meta2.equal(meta1)).toBe(true);
                 expect(meta1 === meta2).toBe(false);
                 // expect(meta1.equal(obj1, obj2)).toBe(true);
-                expect(Util.deepEqual(obj1, obj2)).toBe(true);
+                expect(Type.deepEqual(obj1, obj2)).toBe(true);
             });
         });
         

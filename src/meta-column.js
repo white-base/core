@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var Observer;
     var BaseColumn;
@@ -21,12 +22,14 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         BaseColumn                  = require('./base-column').BaseColumn;
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         BaseColumn                  = _global._L.BaseColumn;
@@ -35,6 +38,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
     if (typeof BaseColumn === 'undefined') throw new Error(Message.get('ES011', ['BaseColumn', 'base-column']));
@@ -182,7 +186,7 @@
                     // settter 의 리턴이 여부
                     __val = typeof _val !== 'undefined' ? _val : val;
                     __val = __val === null ? '' : __val;  // null 등록 오류 처리
-                    if (this._valueTypes.length > 0) Util.matchType([this._valueTypes], __val);
+                    if (this._valueTypes.length > 0) Type.matchType([this._valueTypes], __val);
                     __value = __val;
                     if (_oldVal !== __val && __val) this._onChanged(__val, _oldVal);    // 검사 및 이벤트 발생
                 },
@@ -307,7 +311,7 @@
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
-            if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
+            if (!Type.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
                 obj['__subscribers'] = this.__event.__subscribers;
             }
             if (this.isNotNull !== false) obj['isNotNull'] = this.isNotNull;

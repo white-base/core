@@ -1,4 +1,4 @@
-/**** util-type.js _L.Common.Util.- ****/
+/**** util-type.js _L.Common.Type.- ****/
 
 (function(_global) {
     'use strict';
@@ -11,7 +11,7 @@
     // 1. 의존 모듈 선언
     _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
-    _global._L.Common.Util          = _global._L.Common.Util || {};
+    _global._L.Common.Type          = _global._L.Common.Type || {};
 
     //==============================================================
     // 2. import module
@@ -282,7 +282,7 @@
     
     /**
      * 전체 프로퍼티를 조회합니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {object} obj Object를 제외한 프로터피 리턴
      * @param {boolean?} hasObj Object를 포함 여부
      * @returns {array<string>}  
@@ -302,7 +302,7 @@
 
     /**
      * 객체를 비교합니다. (proto 제외)
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {object} obj1 
      * @param {object} obj2 
      * @returns {boolean}
@@ -341,7 +341,7 @@
     /**
      * 함수 타입을 가져옵니다. (_UNION 포함)  
      * ctor 자신부터 리턴 배열에 push
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {function} ctor 생성자
      * @param {boolean} [hasUnion= true] _UNION 포함 여부
      * @returns {array<function>} 
@@ -384,7 +384,7 @@
     }
     /**
      * 함수 타입의 prototype(상속) 타입 여부를 검사합니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {function} ctor 생성자
      * @param {function | string} target 검사 대상
      * @returns {boolean}
@@ -407,7 +407,7 @@
 
     /**
      * 함수 타입의 prototype(상속) 또는 _UNION 타입 여부를 검사합니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {function} ctor 생성자
      * @param {function | string} target 검사 대상
      * @returns {boolean}
@@ -430,7 +430,7 @@
 
     /**
      * 확장타입 객체를 얻습니다. (하위 타입 포함)  
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {*} target 
      * @returns {object}
      * @example
@@ -496,7 +496,7 @@
 
     /**
      * 확장타입명을 얻습니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {*} target 
      * @returns {string}
      */
@@ -506,7 +506,7 @@
 
     /**
      * 확장타입을 얻는다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {any} target 대상타입
      * @returns {object} 
      * @example
@@ -1249,7 +1249,7 @@
 
     /**
      * 확장타입이 대상타입을 허용하는지 검사합니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {any} extType 확장 타입
      * @param {any} tarType 검사 대상 타입
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -1265,7 +1265,7 @@
 
     /**
      * 확장타입이 대상과 매치되는지 검사합니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {any} extType 확장 타입
      * @param {any} target 검사 대상
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -1281,7 +1281,7 @@
 
     /**
      * 확장타입이 대상타입을 허용하는지 검사합니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {any} extType 확장 타입
      * @param {any} target 검사 대상 타입
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -1298,7 +1298,7 @@
 
     /**
      * 확장타입이 대상과 매치되는지 검사합니다.
-     * @memberof _L.Common.Util
+     * @memberof _L.Common.Type
      * @param {any} extType 확장 타입
      * @param {any} target 검사 대상
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -1343,8 +1343,8 @@
             isMatchType: isMatchType,
             isAllowType: isAllowType
         };
-        _global._L.Util = ns;
-        _global._L.Common.Util = ns;
+        _global._L.Type = ns;
+        _global._L.Common.Type = ns;
     }
 
 }(typeof window !== 'undefined' ? window : global));

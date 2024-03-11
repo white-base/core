@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     // var Observer;
     var MetaRegistry;
@@ -25,6 +26,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         // Observer                    = require('./observer').Observer;
         MetaElement                 = require('./meta-element').MetaElement;
@@ -35,6 +37,7 @@
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         // Observer                    = _global._L.Observer;
         MetaElement                 = _global._L.MetaElement;
@@ -47,6 +50,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     // if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
@@ -83,7 +87,7 @@
                 set: function(nVal) { 
                     if (!(typeof nVal === 'function')) throw new ExtendError(/EL05141/, null, [this.constructor.name, typeof nVal]);
                     // if (!(new nVal('temp') instanceof BaseColumn)) throw new ExtendError('ES032', ['_baseType', 'BaseColumn']);
-                    if (!(Util.isProtoChain(nVal, BaseColumn))) throw new ExtendError(/EL05142/, null, [this.constructor.name]);
+                    if (!(Type.isProtoChain(nVal, BaseColumn))) throw new ExtendError(/EL05142/, null, [this.constructor.name]);
                     _baseType = nVal;
                 },
                 enumerable: false,
@@ -230,7 +234,7 @@
             var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') throw new ExtendError(/EL05152/, null, [typeof p_name]);
-            if (_valueTypes.length > 0) Util.matchType([_valueTypes], p_value);
+            if (_valueTypes.length > 0) Type.matchType([_valueTypes], p_value);
             
             property = { value: p_value };
             item = new this._baseType(p_name, this._owner, property);
@@ -375,7 +379,7 @@
             var _valueTypes = this._baseType._VALUE_TYPE;
 
             if (typeof p_name !== 'string') throw new ExtendError(/EL05163/, null, [typeof p_name]);
-            if (_valueTypes.length > 0) Util.matchType([_valueTypes], p_value);
+            if (_valueTypes.length > 0) Type.matchType([_valueTypes], p_value);
             
             property = { value: p_value };
             item = new this._baseType(p_name, null, property);

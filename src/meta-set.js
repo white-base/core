@@ -419,7 +419,7 @@
             var obj;
 
             if (!_isObject(p_obj)) throw new ExtendError(/EL0545A/, null, [typeof p_obj]);
-            
+
             metaSet = p_obj['metaSet'] || p_obj['dataSet'] || p_obj;
             
             if (MetaRegistry.isGuidObject(metaSet)) {

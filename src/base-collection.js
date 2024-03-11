@@ -1,4 +1,5 @@
 /**** base-collection.js | _L.Collection.BaseCollection ****/
+import {Observer} from './observer'
 
 (function(_global) {
     'use strict';
@@ -6,7 +7,9 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
-    var Observer;    
+    // var Observer;    
+
+    var Type;
     var Util;
     var ICollection;
     var IList;
@@ -18,13 +21,22 @@
     _global._L                      = _global._L || {};
     _global._L.Collection           = _global._L.Collection || {};
 
+
+
     //==============================================================
     // 2. import module
     if (isNode) {
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
-        Observer                    = require('./observer').Observer;
+        
+        // var Observer                = require('./observer').Observer;
+        // var Observer                    = _global._L.Observer;
+        // var Observer                    = _global.Observer;
+        // var Observer                = require('./observer');
+        // var {Observer}                    = require('./observer');  
+
         ICollection                 = require('./i-collection').ICollection;
         IList                       = require('./i-list').IList;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
@@ -32,8 +44,11 @@
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
-        Observer                    = _global._L.Observer;
+        // var Observer                    = _global._L.Observer;
+        // Observer                    = _global._L.Observer;
+
         ICollection                 = _global._L.ICollection;
         IList                       = _global._L.IList;
         MetaRegistry                = _global._L.MetaRegistry;
@@ -43,8 +58,10 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
+    
     if (typeof ICollection === 'undefined') throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
     if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
@@ -431,7 +448,7 @@
                     // var types = ['_req_'];
                     // types = [types.concat(this._elemTypes)];
                     // if (this._elemTypes.length > 0) Util.matchType(types, nVal);
-                    if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], nVal);
+                    if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
                     this._onChanging(p_idx, nVal);  // before event
                     this.__GET$_elements(this)[p_idx] = nVal;
                     this._onChanged(p_idx, nVal);   // after event
@@ -467,7 +484,7 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             var _elems = [];
             
-            if (!Util.deepEqual(this.__event['__subscribers'], this.__event._getInitObject())) {
+            if (!Type.deepEqual(this.__event['__subscribers'], this.__event._getInitObject())) {
                 obj['__subscribers'] = this.__event.__subscribers;
             }
             if (vOpt < 2 && vOpt > -1 && this._owner) {

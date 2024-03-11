@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var BaseCollection;
     var IArrayCollection;
@@ -22,6 +23,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         IArrayCollection            = require('./i-collection-array').IArrayCollection;
         BaseCollection              = require('./base-collection').BaseCollection;
@@ -30,6 +32,7 @@
     } else {    
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         IArrayCollection            = _global._L.IArrayCollection;
         BaseCollection              = _global._L.BaseCollection;
@@ -40,6 +43,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof IArrayCollection === 'undefined') throw new Error(Message.get('ES011', ['IArrayCollection', 'i-collection-array']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
@@ -208,7 +212,7 @@
                 if (typeof p_pos !== 'number') throw new ExtendError(/EL04212/, null, [typeof p_pos]);
                 if (index < p_pos) throw new ExtendError(/EL04213/, null, [p_pos, index]);
                 if (p_pos < 0) throw new ExtendError(/EL04214/, null, [p_pos]);
-                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
+                if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                     Message.warn('WS011', ['configurable = false', 'element']); 
                 }

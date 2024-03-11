@@ -49,7 +49,7 @@
             // priavte property
             
             /**
-             * 전역 구독자
+             * 전역 구독자  
              * @private
              * @member {object}  _L.Common.Observer#__subscribers  
              */
@@ -220,6 +220,9 @@
     // 5. module export
     if (isNode) {     
         exports.Observer = Observer;
+        _global._L.Observer = Observer;
+        _global.Observer = Observer;
+
     } else {
         _global._L.Observer = Observer;
         _global._L.Common.Observer = Observer;  // namespace

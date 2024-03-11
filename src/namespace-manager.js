@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var IList;
     var IListControl;
@@ -21,6 +22,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         IList                       = require('./i-list').IList;
         IListControl                = require('./i-control-list').IListControl;
@@ -28,6 +30,7 @@
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         IList                       = _global._L.IList;
         IListControl                = _global._L.IListControl;
@@ -38,6 +41,7 @@
     //==============================================================Á
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
     if (typeof IListControl === 'undefined') throw new Error(Message.get('ES011', ['IListControl', 'i-control-list']));
@@ -328,7 +332,7 @@
                 ns = oPath['ns'];
                 sections = _getArray(ns);
     
-                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);  // []로 감싸서 choice 타입으로 변환됨
+                if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);  // []로 감싸서 choice 타입으로 변환됨
                 if (!_validName(key)) throw new ExtendError(/EL03331/, null, [key]);
                 if (!this.isOverlap && this.getPath(p_elem)) {
                     throw new ExtendError(/EL03332/, null, []);

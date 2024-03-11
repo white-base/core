@@ -3,10 +3,10 @@
  */
 //==============================================================
 // gobal defined
-const { getAllProperties, deepEqual, isProtoChain, getTypes } = require('../src/util-type');
-const { extendType, typeObject, typeOf } = require('../src/util-type');
-const { isAllowType, allowType }  = require('../src/util-type');
-const { isMatchType, matchType }  = require('../src/util-type');
+const { getAllProperties, deepEqual, isProtoChain, getTypes } = require('../src/type');
+const { extendType, typeObject, typeOf } = require('../src/type');
+const { isAllowType, allowType }  = require('../src/type');
+const { isMatchType, matchType }  = require('../src/type');
 const T = true;
 
 //==============================================================
@@ -64,10 +64,10 @@ describe("[target: util-type.js.js]", () => {
         });
         it('- getTypes() : old env ', () => {
             global.OLD_ENV = true;
-            var Util = require('../src/util-type');
+            var Type = require('../src/type');
             class ClassA { a = 1 }
             class ClassB extends ClassA { b = 2 }
-            var type1 = Util.getTypes(ClassB);
+            var type1 = Type.getTypes(ClassB);
             var tar01 = [ClassB, ClassA];
 
             expect(type1).toEqual(tar01)

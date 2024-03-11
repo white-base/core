@@ -15,14 +15,14 @@ describe("[target: index.js]", () => {
             expect(typeof index.Util.inherits).toBe('function');
             expect(typeof index.Util.getArrayDepth).toBe('function');
             expect(typeof index.Util.createGuid).toBe('function');
-            expect(typeof index.Util.isMatchType).toBe('function');
+            expect(typeof index.Type.isMatchType).toBe('function');
             // expect(typeof index.Util.checkUnionType).toBe('function');
-            expect(typeof index.Util.matchType).toBe('function');
+            expect(typeof index.Type.matchType).toBe('function');
             // expect(typeof index.Util.validUnionType).toBe('function');
-            expect(typeof index.Util.getAllProperties).toBe('function');
+            expect(typeof index.Type.getAllProperties).toBe('function');
             expect(typeof index.Util.implements).toBe('function');
             expect(typeof index.Util.deepCopy).toBe('function');
-            expect(typeof index.Util.deepEqual).toBe('function');
+            expect(typeof index.Type.deepEqual).toBe('function');
         });
         it('- _L.Common.* ', () => { 
             // namespace
@@ -32,14 +32,14 @@ describe("[target: index.js]", () => {
             expect(typeof index.Common.Util.inherits).toBe('function');
             expect(typeof index.Common.Util.getArrayDepth).toBe('function');
             expect(typeof index.Common.Util.createGuid).toBe('function');
-            expect(typeof index.Common.Util.isMatchType).toBe('function');
+            expect(typeof index.Common.Type.isMatchType).toBe('function');
             // expect(typeof index.Common.Util.checkUnionType).toBe('function');
-            expect(typeof index.Common.Util.matchType).toBe('function');
+            expect(typeof index.Common.Type.matchType).toBe('function');
             // expect(typeof index.Common.Util.validUnionType).toBe('function');
-            expect(typeof index.Common.Util.getAllProperties).toBe('function');
+            expect(typeof index.Common.Type.getAllProperties).toBe('function');
             expect(typeof index.Common.Util.implements).toBe('function');
             expect(typeof index.Common.Util.deepCopy).toBe('function');
-            expect(typeof index.Common.Util.deepEqual).toBe('function');
+            expect(typeof index.Common.Type.deepEqual).toBe('function');
         });
     });
     describe(`IObject, IMarshal, 

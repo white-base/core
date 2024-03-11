@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var IPropertyCollection;
     var BaseCollection;
@@ -22,6 +23,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
         BaseCollection              = require('./base-collection').BaseCollection;
@@ -30,6 +32,7 @@
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         IPropertyCollection         = _global._L.IPropertyCollection;
         BaseCollection              = _global._L.BaseCollection;
@@ -40,6 +43,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof IPropertyCollection === 'undefined') throw new Error(Message.get('ES011', ['IPropertyCollection', 'i-collection-property']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
@@ -256,7 +260,7 @@
                 if(!regex.test(p_key)) throw new ExtendError(/EL04226/, null, [p_key, regex.source]);
                 if (this.__KEYWORD.indexOf(p_key) > -1) throw new ExtendError(/EL04227/, null, [p_key]);
                 if (this.exist(p_key)) throw new ExtendError(/EL04228/, null, [p_key]);
-                if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], p_elem);
+                if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);
                 // if (this._elemTypes.length > 0) Util.matchType(types, p_elem);
                 if (_isObject(p_desc) && p_desc.configurable === false) {
                         Message.warn('WS011', ['configurable = true', 'element']);

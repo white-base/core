@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var Observer;
     var IList;
@@ -24,6 +25,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         Observer                    = require('./observer').Observer;
         IList                       = require('./i-list').IList;
@@ -33,6 +35,7 @@
     } else {    // COVER:
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util;
         Observer                    = _global._L.Observer;
         MetaObject                  = _global._L.MetaObject;
@@ -44,6 +47,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
     if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
@@ -227,7 +231,7 @@
                         var column;
                         // 엔티티 항상 존재함
                         column = _entity.columns[p_idx];
-                        if (column && column._valueTypes.length > 0) Util.matchType([column._valueTypes], nVal);
+                        if (column && column._valueTypes.length > 0) Type.matchType([column._valueTypes], nVal);
                         // 트렌젹션 처리 => 함수로 추출 검토
                         if (_entity && !_entity.rows.autoChanges) {
                             var etc = 'idx:'+ p_idx +', new:' + nVal + ', old:'+ oldValue;
@@ -288,7 +292,7 @@
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
-            if (!Util.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
+            if (!Type.deepEqual(this.__event.__subscribers, this.__event._getInitObject())) {
                 obj['__subscribers'] = this.__event.__subscribers;
             }
             if (vOpt < 2 && vOpt > -1 && this._entity) {
@@ -391,7 +395,7 @@
             return {
                 get: function() { return this._elements[p_idx]; },
                 set: function(nVal) {
-                    if (this._elemTypes.length > 0) Util.matchType([this._elemTypes], nVal);
+                    if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
                     if (nVal._entity !== this._owner) throw new ExtendError(/EL05221/, null, [this.constructor.name]);
                     this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;

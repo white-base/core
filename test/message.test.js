@@ -54,7 +54,7 @@ describe("[target: message.js]", () => {
             });
             it("- get() : 짧은 메세지 얻기 : 한글", () => {
                 Message.lang = 'kor';
-                Message.isLong = false;
+                Message.isLong = true;
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
 
                 // console.warn(msg);

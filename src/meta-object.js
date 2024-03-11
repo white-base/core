@@ -6,6 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     var Message;
     var ExtendError;
+    var Type;
     var Util;
     var IObject;
     var IMarshal;
@@ -21,6 +22,7 @@
     if (isNode) {     
         Message                     = require('./message').Message;
         ExtendError                 = require('./extend-error').ExtendError;
+        Type                        = require('./type');
         Util                        = require('./util');
         IObject                     = require('./i-object').IObject;
         IMarshal                    = require('./i-marshal').IMarshal;
@@ -28,6 +30,7 @@
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
+        Type                        = _global._L.Type;
         Util                        = _global._L.Util
         IObject                     = _global._L.IObject;
         IMarshal                    = _global._L.IMarshal;
@@ -37,6 +40,7 @@
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof IObject === 'undefined') throw new Error(Message.get('ES011', ['IObject', 'i-object']));
     if (typeof IMarshal === 'undefined') throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
@@ -127,9 +131,9 @@
             else if (p_obj1 instanceof MetaObject && p_obj2 instanceof MetaObject) {
                 var obj1 = p_obj1.getObject(2);    // _guid, $ref 제외 객체
                 var obj2 = p_obj2.getObject(2);
-                return Util.deepEqual(obj1, obj2);
+                return Type.deepEqual(obj1, obj2);
             } else if (_isObject(p_obj1) && _isObject(p_obj2)) {
-                return Util.deepEqual(p_obj1, p_obj2);
+                return Type.deepEqual(p_obj1, p_obj2);
             } else return false;
         }
 

@@ -2,6 +2,7 @@
  * ES5
  */
 var Util                        = require('./src/util');
+var Type                        = require('./src/type');
 var Observer                    = require("./src/observer").Observer;
 var ExtendError                 = require('./src/extend-error').ExtendError;
 var Message                     = require('./src/message').Message;
@@ -40,6 +41,7 @@ var IArrayCollection            = require('./src/i-collection-array').IArrayColl
 
 module.exports = {
     Util: Util,
+    Type: Type,
     Observer: Observer,
     ExtendError: ExtendError,
     Message: Message,
@@ -78,6 +80,7 @@ module.exports = {
     // namespace
     Common: {
         Util: Util,
+        Type: Type,
         Observer: Observer,
         ExtendError: ExtendError,
         Message: Message,

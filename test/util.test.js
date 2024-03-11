@@ -166,8 +166,10 @@ describe('Util.*', () => {
     //     expect(i.foo).toBe(1);
     //     expect(i.bar).toBe(10);
     // });
-    it('- Util.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
+    it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
         const Util      = require('../src/util');
+        const Type      = require('../src/type');
+
         // const IClassA = function IClassA() {this.a = true}
         // const IClassB = function IClassB() {this.b = true}
         // const IClassC = function IClassC() {this.c = true}
@@ -178,11 +180,13 @@ describe('Util.*', () => {
         // ClassA._UNION = [IClassA, IClassB]
         // ClassB._UNION = [IClassB]
 
-        var arr = Util.getTypes(ClassB);
+        var arr = Type.getTypes(ClassB);
         expect(arr.length).toBe(2);
     });
-    it('- Util.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
+    it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
         const Util      = require('../src/util');
+        const Type      = require('../src/type');
+
         const IClassA = function IClassA() {this.a = true}
         const IClassB = function IClassB() {this.b = true}
         const IClassC = function IClassC() {this.c = true}
@@ -193,20 +197,24 @@ describe('Util.*', () => {
         ClassA._UNION = [IClassA, IClassB]
         ClassB._UNION = [IClassB]
 
-        var arr = Util.getTypes(ClassB);
+        var arr = Type.getTypes(ClassB);
         expect(arr.length).toBe(5);
     });
-    it('- Util.getTypes() :  생성자의 타입 목록 얻기, ES6 + ES5 class ', () => {
+    it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES6 + ES5 class ', () => {
         const Util      = require('../src/util');
+        const Type      = require('../src/type');
+        
         const Class0 = function Class0() {this.a = true}
         class ClassA extends Class0{ aa = true; }
         class ClassB extends ClassA { bb = true; }
 
-        var arr = Util.getTypes(ClassB);
+        var arr = Type.getTypes(ClassB);
         expect(arr.length).toBe(3);
     });
-    it('- Util.getTypes() :  생성자의 타입 목록 얻기, ES6 class ', () => {
+    it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES6 class ', () => {
         const Util      = require('../src/util');
+        const Type      = require('../src/type');
+        
         class IClassA { a = true; }
         class IClassC { b = true; }
         class IClassB extends IClassC { b = true; }
@@ -215,12 +223,14 @@ describe('Util.*', () => {
         ClassA._UNION = [IClassA, IClassB]
         ClassB._UNION = [IClassB]
 
-        var arr = Util.getTypes(ClassB);
+        var arr = Type.getTypes(ClassB);
         expect(arr.length).toBe(5);
     });
 
-    it('- Util.isProtoChain() : 상속 여부 검사 ', () => {    // TODO: util-type 이동 요망
+    it('- Type.isProtoChain() : 상속 여부 검사 ', () => {    // TODO: util-type 이동 요망
         const Util      = require('../src/util');
+        const Type      = require('../src/type');
+        
         const IClassA = function IClassA() {this.ia = true}
         const IClassA1 = function IClassA1() {this.ia1 = true}
         const IClassB = function IClassB() {this.ib = true}
@@ -231,12 +241,14 @@ describe('Util.*', () => {
         ClassA._UNION = [IClassA, IClassB]
         ClassB._UNION = [IClassB]
 
-        expect(Util.isProtoChain(ClassB, ClassA)).toBe(true);
-        expect(Util.isProtoChain(ClassB, IClassA1)).toBe(false);
+        expect(Type.isProtoChain(ClassB, ClassA)).toBe(true);
+        expect(Type.isProtoChain(ClassB, IClassA1)).toBe(false);
     });
 
-    it('- Util.hasType() : 상속 또는 인터페이스 타입 검사 ', () => {    // TODO: util-type 이동 요망
+    it('- Type.hasType() : 상속 또는 인터페이스 타입 검사 ', () => {    // TODO: util-type 이동 요망
         const Util      = require('../src/util');
+        const Type      = require('../src/type');
+        
         const IClassA = function IClassA() {this.ia = true}
         const IClassA1 = function IClassA1() {this.ia1 = true}
         const IClassB = function IClassB() {this.ib = true}
@@ -247,14 +259,14 @@ describe('Util.*', () => {
         ClassA._UNION = [IClassA, IClassB]
         ClassB._UNION = [IClassB]
 
-        expect(Util.hasType(null, ClassA)).toBe(false);
-        expect(Util.hasType(ClassB, null)).toBe(false);
+        expect(Type.hasType(null, ClassA)).toBe(false);
+        expect(Type.hasType(ClassB, null)).toBe(false);
         
-        expect(Util.hasType(ClassB, ClassA)).toBe(true);
-        expect(Util.hasType(ClassB, IClassA1)).toBe(true);
-        expect(Util.hasType(ClassB, 'ClassA')).toBe(true);
-        expect(Util.hasType(ClassB, 'ClassZ')).toBe(false);
-        expect(Util.hasType(ClassB, 'IClassA1')).toBe(true);
+        expect(Type.hasType(ClassB, ClassA)).toBe(true);
+        expect(Type.hasType(ClassB, IClassA1)).toBe(true);
+        expect(Type.hasType(ClassB, 'ClassA')).toBe(true);
+        expect(Type.hasType(ClassB, 'ClassZ')).toBe(false);
+        expect(Type.hasType(ClassB, 'IClassA1')).toBe(true);
     });
 
     // describe("예외, 커버리지 ", () => {
