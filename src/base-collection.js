@@ -1,5 +1,8 @@
 /**** base-collection.js | _L.Collection.BaseCollection ****/
-import {Observer} from './observer'
+
+/// <reference path="@types/observer.d.ts" />
+
+// import {Observer} from './observer'
 
 (function(_global) {
     'use strict';
@@ -13,7 +16,7 @@ import {Observer} from './observer'
     var Util;
     var ICollection;
     var IList;
-    var MetaObject;
+    // var MetaObject;
     var MetaRegistry;
     
     //==============================================================
@@ -31,7 +34,7 @@ import {Observer} from './observer'
         Type                        = require('./type');
         Util                        = require('./util');
         
-        // var Observer                = require('./observer').Observer;
+        var Observer                = require('./observer').Observer;
         // var Observer                    = _global._L.Observer;
         // var Observer                    = _global.Observer;
         // var Observer                = require('./observer');
@@ -40,7 +43,8 @@ import {Observer} from './observer'
         ICollection                 = require('./i-collection').ICollection;
         IList                       = require('./i-list').IList;
         MetaRegistry                = require('./meta-registry').MetaRegistry;
-        MetaObject                  = require('./meta-object').MetaObject;
+        
+        var MetaObject                  = require('./meta-object').MetaObject;
     } else {
         Message                     = _global._L.Message;
         ExtendError                 = _global._L.ExtendError;
@@ -52,7 +56,7 @@ import {Observer} from './observer'
         ICollection                 = _global._L.ICollection;
         IList                       = _global._L.IList;
         MetaRegistry                = _global._L.MetaRegistry;
-        MetaObject                  = _global._L.MetaObject;
+        // MetaObject                  = _global._L.MetaObject;
     }
 
     //==============================================================
@@ -61,7 +65,7 @@ import {Observer} from './observer'
     if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
-    
+
     if (typeof ICollection === 'undefined') throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
     if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
@@ -90,6 +94,19 @@ import {Observer} from './observer'
             var _descriptors = [];
             var _elemTypes  = []; 
             var __KEYWORD = [];
+
+            // 테스트 코드 위치
+            var jsdom = require('../node_modules/jsdom');
+            var i = new jsdom.JSDOM();
+            // i.
+            // Observer()
+            // __event.
+            
+            var a = new MetaObject()
+            MetaObject()
+            a.
+
+            
 
             /** 
              * 이벤트 객체

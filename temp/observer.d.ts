@@ -75,13 +75,14 @@
 
 
 /**
- * d.ts 정의 옵져서ddd
+ * d.ts 정의 옵져서 [src]
  */
 export class Observer {
     /**
      * 
-     * @param p_caller 소유 객체 ...
+     * @param p_caller 소유 객체 [src]
      */
     constructor(p_caller: object);
 
+    subscribe(p_code: string, p_fn: Function): void;
 }
