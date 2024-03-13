@@ -4,11 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    // var Util;
-    // var IObject;
-    // var IMarshal;
     
     //==============================================================
     // 1. namespace declaration
@@ -18,12 +13,14 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-    } else {    
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+    } else {
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
 
     //==============================================================
     // 3. module dependency check

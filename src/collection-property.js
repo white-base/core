@@ -4,14 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var IPropertyCollection;
-    var BaseCollection;
-    var MetaObject;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -21,24 +13,32 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
-        BaseCollection              = require('./base-collection').BaseCollection;
-        MetaObject                  = require('./meta-object').MetaObject;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _IPropertyCollection        = require('./i-collection-property').IPropertyCollection;
+        var _BaseCollection             = require('./base-collection').BaseCollection;
+        var _MetaObject                 = require('./meta-object').MetaObject;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        IPropertyCollection         = _global._L.IPropertyCollection;
-        BaseCollection              = _global._L.BaseCollection;
-        MetaObject                  = _global._L.MetaObject;
-        MetaRegistry                = _global._L.MetaRegistry;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $IPropertyCollection        = _global._L.IPropertyCollection;
+        var $BaseCollection             = _global._L.BaseCollection;
+        var $MetaObject                 = _global._L.MetaObject;
+        var $MetaRegistry               = _global._L.MetaRegistry;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var IPropertyCollection     = _IPropertyCollection  || $IPropertyCollection;
+    var BaseCollection          = _BaseCollection       || $BaseCollection;
+    var MetaObject              = _MetaObject           || $MetaObject;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
 
     //==============================================================
     // 3. module dependency check

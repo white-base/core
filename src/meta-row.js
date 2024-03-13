@@ -4,15 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var Observer;
-    var IList;
-    var MetaObject;
-    var TransactionCollection;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -23,26 +14,35 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        Observer                    = require('./observer').Observer;
-        IList                       = require('./i-list').IList;
-        MetaObject                  = require('./meta-object').MetaObject;
-        TransactionCollection       = require('./collection-transaction').TransactionCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _Observer                   = require('./observer').Observer;
+        var _IList                      = require('./i-list').IList;
+        var _MetaObject                 = require('./meta-object').MetaObject;
+        var _TransactionCollection      = require('./collection-transaction').TransactionCollection;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
     } else {    // COVER:
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        Observer                    = _global._L.Observer;
-        MetaObject                  = _global._L.MetaObject;
-        IList                       = _global._L.IList;
-        TransactionCollection       = _global._L.TransactionCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $Observer                   = _global._L.Observer;
+        var $MetaObject                 = _global._L.MetaObject;
+        var $IList                      = _global._L.IList;
+        var $TransactionCollection      = _global._L.TransactionCollection;
+        var $MetaRegistry               = _global._L.MetaRegistry;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var Observer                = _Observer             || $Observer;
+    var IList                   = _IList                || $IList;
+    var MetaObject              = _MetaObject           || $MetaObject;
+    var TransactionCollection   = _TransactionCollection|| $TransactionCollection;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
 
     //==============================================================
     // 3. module dependency check

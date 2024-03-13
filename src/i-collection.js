@@ -4,12 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var IPartControl;
-    var ILookupControl;
-    var IBaseCollection;
-    var Util;
 
     //==============================================================
     // 1. namespace declaration
@@ -20,17 +14,17 @@
     // 2. import module
     
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Util                        = require('./util');
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Util                       = require('./util');
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Util                        = _global._L.Util
-        IPartControl                = _global._L.IPartControl;
-        ILookupControl              = _global._L.ILookupControl;
-        IBaseCollection             = _global._L.IBaseCollection;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Util                       = _global._L.Util
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Util                    = _Util                 || $Util;
 
     //==============================================================
     // 3. module dependency check

@@ -4,19 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Util;
-    var ISchemaControl;
-    var IImportControl;
-    var IExportControl;
-    var ISerialize;
-    var ITransaction;
-    var MetaElement;
-    var BaseEntity;
-    var MetaTableCollection;
-    var MetaViewCollection;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -27,34 +14,47 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Util                        = require('./util');
-        ISchemaControl              = require('./i-control-schema').ISchemaControl;
-        IImportControl              = require('./i-control-import').IImportControl;
-        IExportControl              = require('./i-control-export').IExportControl;
-        ISerialize                  = require('./i-serialize').ISerialize;
-        ITransaction                = require('./i-transaction').ITransaction;
-        MetaElement                 = require('./meta-element').MetaElement;
-        BaseEntity                  = require('./base-entity').BaseEntity;
-        MetaTableCollection         = require('./meta-table').MetaTableCollection;
-        MetaViewCollection          = require('./meta-view').MetaViewCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Util                       = require('./util');
+        var _ISchemaControl             = require('./i-control-schema').ISchemaControl;
+        var _IImportControl             = require('./i-control-import').IImportControl;
+        var _IExportControl             = require('./i-control-export').IExportControl;
+        var _ISerialize                 = require('./i-serialize').ISerialize;
+        var _ITransaction               = require('./i-transaction').ITransaction;
+        var _MetaElement                = require('./meta-element').MetaElement;
+        var _BaseEntity                 = require('./base-entity').BaseEntity;
+        var _MetaTableCollection        = require('./meta-table').MetaTableCollection;
+        var _MetaViewCollection         = require('./meta-view').MetaViewCollection;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Util                        = _global._L.Common.Util;
-        ISchemaControl              = _global._L.ISchemaControl;
-        IImportControl              = _global._L.IImportControl;
-        IExportControl              = _global._L.IExportControl;
-        ISerialize                  = _global._L.ISerialize;
-        ITransaction                = _global._L.ITransaction;
-        MetaElement                 = _global._L.MetaElement;
-        BaseEntity                  = _global._L.BaseEntity;
-        MetaTableCollection         = _global._L.MetaTableCollection;
-        MetaViewCollection          = _global._L.MetaViewCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Util                       = _global._L.Common.Util;
+        var $ISchemaControl             = _global._L.ISchemaControl;
+        var $IImportControl             = _global._L.IImportControl;
+        var $IExportControl             = _global._L.IExportControl;
+        var $ISerialize                 = _global._L.ISerialize;
+        var $ITransaction               = _global._L.ITransaction;
+        var $MetaElement                = _global._L.MetaElement;
+        var $BaseEntity                 = _global._L.BaseEntity;
+        var $MetaTableCollection        = _global._L.MetaTableCollection;
+        var $MetaViewCollection         = _global._L.MetaViewCollection;
+        var $MetaRegistry               = _global._L.MetaRegistry;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Util                    = _Util                 || $Util;
+    var ISchemaControl          = _ISchemaControl       || $ISchemaControl;
+    var IImportControl          = _IImportControl       || $IImportControl;
+    var IExportControl          = _IExportControl       || $IExportControl;
+    var ISerialize              = _ISerialize           || $ISerialize;
+    var ITransaction            = _ITransaction         || $ITransaction;
+    var MetaElement             = _MetaElement          || $MetaElement;
+    var BaseEntity              = _BaseEntity           || $BaseEntity;
+    var MetaTableCollection     = _MetaTableCollection  || $MetaTableCollection;
+    var MetaViewCollection      = _MetaViewCollection   || $MetaViewCollection;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
 
     //==============================================================
     // 3. module dependency check

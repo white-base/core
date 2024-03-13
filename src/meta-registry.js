@@ -4,10 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Util;
-    var NamespaceManager;
 
     //==============================================================
     // 1. namespace declaration
@@ -17,16 +13,20 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Util                        = require('./util');
-        NamespaceManager            = require('./namespace-manager').NamespaceManager;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Util                       = require('./util');
+        var _NamespaceManager           = require('./namespace-manager').NamespaceManager;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Util                        = _global._L.Util;
-        NamespaceManager            = _global._L.NamespaceManager;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Util                       = _global._L.Util;
+        var $NamespaceManager           = _global._L.NamespaceManager;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Util                    = _Util                 || $Util;
+    var NamespaceManager        = _NamespaceManager     || $NamespaceManager;
 
     //==============================================================Á
     // 3. module dependency check

@@ -19,20 +19,26 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        ArrayCollection             = require('./collection-array').ArrayCollection;
-        TransactionQueue            = require('./trans-queue').TransactionQueue;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _ArrayCollection            = require('./collection-array').ArrayCollection;
+        var _TransactionQueue           = require('./trans-queue').TransactionQueue;
     } else {    
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        ArrayCollection             = _global._L.ArrayCollection;
-        TransactionQueue            = _global._L.TransactionQueue;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $ArrayCollection            = _global._L.ArrayCollection;
+        var $TransactionQueue           = _global._L.TransactionQueue;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var ArrayCollection         = _ArrayCollection      || $ArrayCollection;
+    var TransactionQueue        = _TransactionQueue     || $TransactionQueue;
 
     //==============================================================
     // 3. module dependency check

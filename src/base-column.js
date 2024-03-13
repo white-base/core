@@ -4,13 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var Observer;
-    var MetaElement;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -21,22 +14,27 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        Observer                    = require('./observer').Observer;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
-        MetaElement                 = require('./meta-element').MetaElement;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
+        var _MetaElement                = require('./meta-element').MetaElement;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        Observer                    = _global._L.Observer;
-        MetaRegistry                = _global._L.MetaRegistry;
-        MetaElement                 = _global._L.MetaElement;
+        var $Message                   = _global._L.Message;
+        var $ExtendError               = _global._L.ExtendError;
+        var $Type                      = _global._L.Type;
+        var $Util                      = _global._L.Util;
+        var $MetaRegistry              = _global._L.MetaRegistry;
+        var $MetaElement               = _global._L.MetaElement;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var MetaElement             = _MetaElement          || $MetaElement;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
+
 
     //==============================================================
     // 3. module dependency check

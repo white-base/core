@@ -4,13 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var IObject;
-    var IMarshal;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -20,22 +13,29 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        IObject                     = require('./i-object').IObject;
-        IMarshal                    = require('./i-marshal').IMarshal;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _IObject                    = require('./i-object').IObject;
+        var _IMarshal                   = require('./i-marshal').IMarshal;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util
-        IObject                     = _global._L.IObject;
-        IMarshal                    = _global._L.IMarshal;
-        MetaRegistry                = _global._L.MetaRegistry;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util
+        var $IObject                    = _global._L.IObject;
+        var $IMarshal                   = _global._L.IMarshal;
+        var $MetaRegistry               = _global._L.MetaRegistry;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var IObject                 = _IObject              || $IObject;
+    var IMarshal                = _IMarshal             || $IMarshal;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
 
     //==============================================================
     // 3. module dependency check

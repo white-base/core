@@ -4,25 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    // var getAllProperties;
-    // var extendType;
-    // var matchType;
-    // var allowType;
-    // var isMatchType;
-    // var isAllowType;
-    // var matchType;
-    // var deepEqual;
-    // var isProtoChain;
-    // var hasType;
-    // var getTypes;
-    // var typeObject;
-    // var typeOf;
-
-    var path = require('path');
-    
 
     //==============================================================
     // 1. 의존 모듈 선언
@@ -32,56 +13,23 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        // getAllProperties            = require('./type').getAllProperties;
-        // extendType                  = require('./type').extendType;
-        // allowType                   = require('./type').allowType;
-        // isMatchType                 = require('./type').isMatchType;
-        // isAllowType                 = require('./type').isAllowType;
-        // matchType                   = require('./type').matchType;
-        // deepEqual                   = require('./type').deepEqual;
-        // isProtoChain                = require('./type').isProtoChain;
-        // hasType                     = require('./type').hasType;
-        // getTypes                    = require('./type').getTypes;
-        // typeObject                  = require('./type').typeObject;
-        // typeOf                      = require('./type').typeOf;
-    } else {    
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        // getAllProperties            = _global._L.Type.getAllProperties
-        // extendType                  = _global._L.Type.extendType
-        // allowType                   = _global._L.Type.allowType
-        // isMatchType                 = _global._L.Type.isMatchType
-        // isAllowType                 = _global._L.Type.isAllowType
-        // matchType                   = _global._L.Type.matchType
-        // deepEqual                   = _global._L.Type.deepEqual
-        // isProtoChain                = _global._L.Type.isProtoChain
-        // hasType                     = _global._L.Type.hasType
-        // getTypes                    = _global._L.Type.getTypes
-        // typeObject                  = _global._L.Type.typeObject
-        // typeOf                      = _global._L.Type.typeOf
+    if (isNode) {     
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+    } else {
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
 
     //==============================================================
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
-    // if (typeof getAllProperties === 'undefined') throw new Error(Message.get('ES012', ['getAllProperties', 'util-type']));
-    // if (typeof extendType === 'undefined') throw new Error(Message.get('ES012', ['extendType', 'util-type']));
-    // if (typeof allowType === 'undefined')throw new Error(Message.get('ES012', ['allowType', 'util-type']));
-    // if (typeof isMatchType === 'undefined') throw new Error(Message.get('ES012', ['isMatchType', 'util-type']));
-    // if (typeof isAllowType === 'undefined') throw new Error(Message.get('ES012', ['isAllowType', 'util-type']));
-    // if (typeof matchType === 'undefined') throw new Error(Message.get('ES012', ['matchType', 'util-type']));
-    // if (typeof deepEqual === 'undefined') throw new Error(Message.get('ES012', ['deepEqual', 'util-type']));
-    // if (typeof isProtoChain === 'undefined') throw new Error(Message.get('ES012', ['isProtoChain', 'util-type']));
-    // if (typeof hasType === 'undefined') throw new Error(Message.get('ES012', ['hasType', 'util-type']));
-    // if (typeof getTypes === 'undefined') throw new Error(Message.get('ES012', ['getTypes', 'util-type']));
-    // if (typeof typeObject === 'undefined') throw new Error(Message.get('ES012', ['typeObject', 'util-type']));
-    // if (typeof typeOf === 'undefined') throw new Error(Message.get('ES012', ['typeOf', 'util-type']));
     
     //==============================================================
     // 4. module implementation   

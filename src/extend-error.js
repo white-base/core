@@ -4,7 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
 
     //==============================================================
     // 1. namespace declaration
@@ -14,10 +13,11 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-    } else {    // COVER:
-        Message                     = _global._L.Message;
+        var _Message                    = require('./message').Message;
+    } else {
+        var $Message                    = _global._L.Message;
     }
+    var Message                 = _Message              || $Message;
 
     //==============================================================Á
     // 3. module dependency check

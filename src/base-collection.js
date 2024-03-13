@@ -12,35 +12,35 @@
     //==============================================================
     // 2. import module
     if (isNode) {
-        var _Message                        = require('./message').Message;
-        var _ExtendError                    = require('./extend-error').ExtendError;
-        var _Type                           = require('./type');
-        var _Util                           = require('./util');
-        var _Observer                       = require('./observer').Observer;
-        var _ICollection                    = require('./i-collection').ICollection;
-        var _IList                          = require('./i-list').IList;
-        var _MetaRegistry                   = require('./meta-registry').MetaRegistry;
-        var _MetaObject                     = require('./meta-object').MetaObject;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _Observer                   = require('./observer').Observer;
+        var _ICollection                = require('./i-collection').ICollection;
+        var _IList                      = require('./i-list').IList;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
+        var _MetaObject                 = require('./meta-object').MetaObject;
     } else {
-        var __Message                       = _global._L.Message;
-        var __ExtendError                   = _global._L.ExtendError;
-        var __Type                          = _global._L.Type;
-        var __Util                          = _global._L.Util;
-        var __Observer                      = _global._L.Observer;
-        var __ICollection                   = _global._L.ICollection;
-        var __IList                         = _global._L.IList;
-        var __MetaRegistry                  = _global._L.MetaRegistry;
-        var __MetaObject                    = _global._L.MetaObject;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $Observer                   = _global._L.Observer;
+        var $ICollection                = _global._L.ICollection;
+        var $IList                      = _global._L.IList;
+        var $MetaRegistry               = _global._L.MetaRegistry;
+        var $MetaObject                 = _global._L.MetaObject;
     }
-    var Message         = _Message          || __Message;
-    var ExtendError     = _ExtendError      || __ExtendError;
-    var Observer        = _Observer         || __Observer;
-    var Type            = _Type             || __Type;
-    var Util            = _Util             || __Util;
-    var ICollection     = _ICollection      || __ICollection;
-    var IList           = _IList            || __IList;
-    var MetaObject      = _MetaObject       || __MetaObject;
-    var MetaRegistry    = _MetaRegistry     || __MetaRegistry;
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Observer                = _Observer             || $Observer;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var ICollection             = _ICollection          || $ICollection;
+    var IList                   = _IList                || $IList;
+    var MetaObject              = _MetaObject           || $MetaObject;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
 
     //==============================================================
     // 3. module dependency check

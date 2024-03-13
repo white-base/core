@@ -4,12 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var Observer;
-    var BaseColumn;
 
     //==============================================================
     // 1. namespace declaration
@@ -20,20 +14,26 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        Observer                    = require('./observer').Observer;
-        BaseColumn                  = require('./base-column').BaseColumn;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _Observer                   = require('./observer').Observer;
+        var _BaseColumn                 = require('./base-column').BaseColumn;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        Observer                    = _global._L.Observer;
-        BaseColumn                  = _global._L.BaseColumn;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $Observer                   = _global._L.Observer;
+        var $BaseColumn                 = _global._L.BaseColumn;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var Observer                = _Observer             || $Observer;
+    var BaseColumn              = _BaseColumn           || $BaseColumn;
 
     //==============================================================
     // 3. module dependency check

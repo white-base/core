@@ -4,10 +4,7 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Util;
-    var ICollection;
+    
 
     //==============================================================
     // 1. namespace declaration
@@ -17,16 +14,20 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Util                        = require('./util');
-        ICollection                 = require('./i-collection').ICollection;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Util                       = require('./util');
+        var _ICollection                = require('./i-collection').ICollection;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Util                        = _global._L.Util;
-        ICollection                 = _global._L.ICollection;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Util                       = _global._L.Util;
+        var $ICollection                = _global._L.ICollection;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Util                    = _Util                 || $Util;
+    var ICollection             = _ICollection          || $ICollection;
 
     //==============================================================
     // 3. module dependency check

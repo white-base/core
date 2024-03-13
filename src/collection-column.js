@@ -4,16 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    // var Observer;
-    var MetaRegistry;
-    var MetaElement;
-    var BaseColumn;
-    var PropertyCollection;
-    var MetaColumn;
 
     //==============================================================
     // 1. namespace declaration
@@ -24,28 +14,35 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        // Observer                    = require('./observer').Observer;
-        MetaElement                 = require('./meta-element').MetaElement;
-        BaseColumn                  = require('./base-column').BaseColumn;
-        PropertyCollection          = require('./collection-property').PropertyCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
-        MetaColumn                  = require('./meta-column').MetaColumn;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _MetaElement                = require('./meta-element').MetaElement;
+        var _BaseColumn                 = require('./base-column').BaseColumn;
+        var _PropertyCollection         = require('./collection-property').PropertyCollection;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
+        var _MetaColumn                 = require('./meta-column').MetaColumn;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        // Observer                    = _global._L.Observer;
-        MetaElement                 = _global._L.MetaElement;
-        BaseColumn                  = _global._L.BaseColumn;
-        PropertyCollection          = _global._L.PropertyCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
-        MetaColumn                  = _global._L.MetaColumn;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $MetaElement                = _global._L.MetaElement;
+        var $BaseColumn                 = _global._L.BaseColumn;
+        var $PropertyCollection         = _global._L.PropertyCollection;
+        var $MetaRegistry               = _global._L.MetaRegistry;
+        var $MetaColumn                 = _global._L.MetaColumn;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
+    var MetaElement             = _MetaElement          || $MetaElement;
+    var BaseColumn              = _BaseColumn           || $BaseColumn;
+    var PropertyCollection      = _PropertyCollection   || $PropertyCollection;
+    var MetaColumn              = _MetaColumn           || $MetaColumn;
 
     //==============================================================
     // 3. module dependency check

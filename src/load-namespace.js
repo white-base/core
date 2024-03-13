@@ -4,48 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var MetaRegistry;
-    var NamespaceManager;
-    var ArrayCollection;
-    var BaseCollection;
-    var PropertyCollection;
-    var TransactionCollection;
-    // var CustomError;
-    var IArrayCollection;
-    // var IBaseCollection;
-    var IPropertyCollection;
-    var ICollection;
-    var IAllControl;
-    var IExportControl;
-    var IGroupControl;
-    var IImportControl;
-    // var ILookupControl;
-    // var IPartControl;
-    var ISchemaControl;
-    var IMarshal;
-    var IObject;
-    var ITransaction;
-    var MetaColumn;
-    var BaseColumnCollection;
-    var MetaViewColumnCollection;
-    var MetaTableColumnCollection;
-    var MetaElement;
-    var BaseEntity;
-    var MetaObject;
-    var MetaRow;
-    var MetaRowCollection;
-    var MetaSet;
-    var MetaTable;
-    var MetaTableCollection;
-    var MetaView;
-    var MetaViewCollection;
-    var Observer;
-    var TransactionQueue;
-
 
     //==============================================================
     // 1. namespace declaration
@@ -56,47 +14,47 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
-        NamespaceManager            = require('./namespace-manager').NamespaceManager;
-        ArrayCollection             = require('./collection-array').ArrayCollection;
-        BaseCollection              = require('./base-collection').BaseCollection;
-        PropertyCollection          = require('./collection-property').PropertyCollection;
-        TransactionCollection       = require('./collection-transaction').TransactionCollection;
+        var Message                     = require('./message').Message;
+        var ExtendError                 = require('./extend-error').ExtendError;
+        var Type                        = require('./type');
+        var Util                        = require('./util');
+        var MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var NamespaceManager            = require('./namespace-manager').NamespaceManager;
+        var ArrayCollection             = require('./collection-array').ArrayCollection;
+        var BaseCollection              = require('./base-collection').BaseCollection;
+        var PropertyCollection          = require('./collection-property').PropertyCollection;
+        var TransactionCollection       = require('./collection-transaction').TransactionCollection;
         // CustomError                 = require('./custom-error').CustomError;
-        IArrayCollection            = require('./i-collection-array').IArrayCollection;
+        var IArrayCollection            = require('./i-collection-array').IArrayCollection;
         // IBaseCollection             = require('./i-base-collection').IBaseCollection;
-        IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
-        ICollection                 = require('./i-collection').ICollection;
+        var IPropertyCollection         = require('./i-collection-property').IPropertyCollection;
+        var ICollection                 = require('./i-collection').ICollection;
         // IAllControl                 = require('./i-control-all').IAllControl;
-        IExportControl              = require('./i-control-export').IExportControl;
-        IGroupControl               = require('./i-control-group').IGroupControl;
-        IImportControl              = require('./i-control-import').IImportControl;
-        // ILookupControl              = require('./i-control-lookup').ILookupControl;
-        // IPartControl                = require('./i-control-part').IPartControl;
-        ISchemaControl              = require('./i-control-schema').ISchemaControl;
-        IMarshal                    = require('./i-marshal').IMarshal;
-        IObject                     = require('./i-object').IObject;
-        ITransaction                = require('./i-transaction').ITransaction;
-        MetaColumn                  = require('./meta-column').MetaColumn;
-        BaseColumnCollection        = require('./collection-column').BaseColumnCollection;
-        MetaViewColumnCollection    = require('./collection-column').MetaViewColumnCollection;
-        MetaTableColumnCollection   = require('./collection-column').MetaTableColumnCollection;
-        MetaElement                 = require('./meta-element').MetaElement;
-        BaseEntity                  = require('./base-entity').BaseEntity;
-        MetaObject                  = require('./meta-object').MetaObject;
-        MetaRow                     = require('./meta-row').MetaRow;
-        MetaRowCollection           = require('./meta-row').MetaRowCollection;
-        MetaSet                     = require('./meta-set').MetaSet;
-        MetaTable                   = require('./meta-table').MetaTable;
-        MetaTableCollection         = require('./meta-table').MetaTableCollection;
-        MetaView                    = require('./meta-view').MetaView;
-        MetaViewCollection          = require('./meta-view').MetaViewCollection;
-        Observer                    = require('./observer').Observer;
-        TransactionQueue            = require('./trans-queue').TransactionQueue;
+        var IExportControl              = require('./i-control-export').IExportControl;
+        var IGroupControl               = require('./i-control-group').IGroupControl;
+        var IImportControl              = require('./i-control-import').IImportControl;
+        // var ILookupControl              = require('./i-control-lookup').ILookupControl;
+        // var IPartControl                = require('./i-control-part').IPartControl;
+        var ISchemaControl              = require('./i-control-schema').ISchemaControl;
+        var IMarshal                    = require('./i-marshal').IMarshal;
+        var IObject                     = require('./i-object').IObject;
+        var ITransaction                = require('./i-transaction').ITransaction;
+        var MetaColumn                  = require('./meta-column').MetaColumn;
+        var BaseColumnCollection        = require('./collection-column').BaseColumnCollection;
+        var MetaViewColumnCollection    = require('./collection-column').MetaViewColumnCollection;
+        var MetaTableColumnCollection   = require('./collection-column').MetaTableColumnCollection;
+        var MetaElement                 = require('./meta-element').MetaElement;
+        var BaseEntity                  = require('./base-entity').BaseEntity;
+        var MetaObject                  = require('./meta-object').MetaObject;
+        var MetaRow                     = require('./meta-row').MetaRow;
+        var MetaRowCollection           = require('./meta-row').MetaRowCollection;
+        var MetaSet                     = require('./meta-set').MetaSet;
+        var MetaTable                   = require('./meta-table').MetaTable;
+        var MetaTableCollection         = require('./meta-table').MetaTableCollection;
+        var MetaView                    = require('./meta-view').MetaView;
+        var MetaViewCollection          = require('./meta-view').MetaViewCollection;
+        var Observer                    = require('./observer').Observer;
+        var TransactionQueue            = require('./trans-queue').TransactionQueue;
     } else {
     }
 

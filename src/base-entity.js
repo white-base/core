@@ -4,20 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Util;
-    var MetaObject;
-    var MetaElement;
-    var IGroupControl;
-    var ISchemaControl;
-    var IImportControl;
-    var IExportControl;
-    var ISerialize;
-    var MetaRowCollection;
-    var MetaRow;
-    var BaseColumnCollection;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -28,36 +14,50 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Util                        = require('./util');
-        IGroupControl               = require('./i-control-group').IGroupControl;
-        ISchemaControl              = require('./i-control-schema').ISchemaControl;
-        IImportControl              = require('./i-control-import').IImportControl;
-        IExportControl              = require('./i-control-export').IExportControl;
-        ISerialize                  = require('./i-serialize').ISerialize;
-        MetaObject                  = require('./meta-object').MetaObject;
-        MetaElement                 = require('./meta-element').MetaElement;
-        MetaRowCollection           = require('./meta-row').MetaRowCollection;
-        MetaRow                     = require('./meta-row').MetaRow;
-        BaseColumnCollection        = require('./collection-column').BaseColumnCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Util                       = require('./util');
+        var _IGroupControl              = require('./i-control-group').IGroupControl;
+        var _ISchemaControl             = require('./i-control-schema').ISchemaControl;
+        var _IImportControl             = require('./i-control-import').IImportControl;
+        var _IExportControl             = require('./i-control-export').IExportControl;
+        var _ISerialize                 = require('./i-serialize').ISerialize;
+        var _MetaObject                 = require('./meta-object').MetaObject;
+        var _MetaElement                = require('./meta-element').MetaElement;
+        var _MetaRowCollection          = require('./meta-row').MetaRowCollection;
+        var _MetaRow                    = require('./meta-row').MetaRow;
+        var _BaseColumnCollection       = require('./collection-column').BaseColumnCollection;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Util                        = _global._L.Util;
-        IGroupControl               = _global._L.IGroupControl;
-        ISchemaControl              = _global._L.ISchemaControl;
-        IImportControl              = _global._L.IImportControl;
-        IExportControl              = _global._L.IExportControl;
-        ISerialize                  = _global._L.ISerialize;
-        MetaObject                  = _global._L.MetaObject;
-        MetaElement                 = _global._L.MetaElement;
-        MetaRowCollection           = _global._L.MetaRowCollection;
-        MetaRow                     = _global._L.MetaRow;
-        BaseColumnCollection        = _global._L.BaseColumnCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Util                       = _global._L.Util;
+        var $IGroupControl              = _global._L.IGroupControl;
+        var $ISchemaControl             = _global._L.ISchemaControl;
+        var $IImportControl             = _global._L.IImportControl;
+        var $IExportControl             = _global._L.IExportControl;
+        var $ISerialize                 = _global._L.ISerialize;
+        var $MetaObject                 = _global._L.MetaObject;
+        var $MetaElement                = _global._L.MetaElement;
+        var $MetaRowCollection          = _global._L.MetaRowCollection;
+        var $MetaRow                    = _global._L.MetaRow;
+        var $BaseColumnCollection       = _global._L.BaseColumnCollection;
+        var $MetaRegistry               = _global._L.MetaRegistry;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Util                    = _Util                 || $Util;
+    var MetaObject              = _MetaObject           || $MetaObject;
+    var MetaElement             = _MetaElement          || $MetaElement;
+    var IGroupControl           = _IGroupControl        || $IGroupControl;
+    var ISchemaControl          = _ISchemaControl       || $ISchemaControl;
+    var IImportControl          = _IImportControl       || $IImportControl;
+    var IExportControl          = _IExportControl       || $IExportControl;
+    var ISerialize              = _ISerialize           || $ISerialize;
+    var MetaRowCollection       = _MetaRowCollection    || $MetaRowCollection;
+    var MetaRow                 = _MetaRow              || $MetaRow;
+    var BaseColumnCollection    = _BaseColumnCollection || $BaseColumnCollection;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
 
     //==============================================================
     // 3. module dependency check
@@ -884,7 +884,6 @@
             var obj = p_obj;
             var rows;
 
-            
             try {
                 if (!_isObject(p_obj)) throw new ExtendError(/EL0535B/, null, [typeof p_obj]);
     

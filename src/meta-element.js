@@ -4,12 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Util;
-    var MetaObject;
-    var IElement;
-    // var IMarshal;
 
     //==============================================================
     // 1. namespace declaration
@@ -19,18 +13,23 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Util                        = require('./util');
-        IElement                    = require('./i-element').IElement;
-        MetaObject                  = require('./meta-object').MetaObject;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Util                       = require('./util');
+        var _MetaObject                 = require('./meta-object').MetaObject;
+        var _IElement                   = require('./i-element').IElement;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Util                        = _global._L.Util;
-        IElement                    = _global._L.IElement;
-        MetaObject                  = _global._L.MetaObject;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Util                       = _global._L.Util;
+        var $MetaObject                 = _global._L.MetaObject;
+        var $IElement                   = _global._L.IElement;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Util                    = _Util                 || $Util;
+    var IElement                = _IElement             || $IElement;
+    var MetaObject              = _MetaObject           || $MetaObject;
 
     //==============================================================
     // 3. module dependency check

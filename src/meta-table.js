@@ -4,15 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var ITransaction;
-    var BaseEntity;
-    var PropertyCollection;
-    var MetaTableColumnCollection;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -23,26 +14,36 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        ITransaction                = require('./i-transaction').ITransaction;
-        PropertyCollection          = require('./collection-property').PropertyCollection;
-        BaseEntity                  = require('./base-entity').BaseEntity;
-        MetaTableColumnCollection   = require('./collection-column').MetaTableColumnCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _BaseEntity                 = require('./base-entity').BaseEntity;
+        var _ITransaction               = require('./i-transaction').ITransaction;
+        var _PropertyCollection         = require('./collection-property').PropertyCollection;
+        var _MetaTableColumnCollection  = require('./collection-column').MetaTableColumnCollection;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
     } else {    
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        ITransaction                = _global._L.ITransaction;
-        PropertyCollection          = _global._L.PropertyCollection;
-        BaseEntity                  = _global._L.BaseEntity;
-        MetaTableColumnCollection   = _global._L.MetaTableColumnCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $MetaRegistry               = _global._L.MetaRegistry;
+        var $ITransaction               = _global._L.ITransaction;
+        var $PropertyCollection         = _global._L.PropertyCollection;
+        var $BaseEntity                 = _global._L.BaseEntity;
+        var $MetaTableColumnCollection  = _global._L.MetaTableColumnCollection;
+        var $ExtendError                = _global._L.ExtendError;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var ITransaction            = _ITransaction         || $ITransaction;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
+    var BaseEntity              = _BaseEntity           || $BaseEntity;
+    var PropertyCollection      = _PropertyCollection   || $PropertyCollection;
+    var MetaTableColumnCollection   = _MetaTableColumnCollection    || $MetaTableColumnCollection;
 
     //==============================================================
     // 3. module dependency check

@@ -4,13 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var IList;
-    var IListControl;
-    var ISerialize;
 
     //==============================================================
     // 1. namespace declaration
@@ -20,23 +13,29 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        IList                       = require('./i-list').IList;
-        IListControl                = require('./i-control-list').IListControl;
-        ISerialize                  = require('./i-serialize').ISerialize;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _IList                      = require('./i-list').IList;
+        var _IListControl               = require('./i-control-list').IListControl;
+        var _ISerialize                 = require('./i-serialize').ISerialize;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        IList                       = _global._L.IList;
-        IListControl                = _global._L.IListControl;
-        ISerialize                  = _global._L.ISerialize;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $IList                      = _global._L.IList;
+        var $IListControl               = _global._L.IListControl;
+        var $ISerialize                 = _global._L.ISerialize;
     }
-    
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var IList                   = _IList                || $IList;
+    var IListControl            = _IListControl         || $IListControl;
+    var ISerialize              = _ISerialize           || $ISerialize;
     
     //==============================================================Á
     // 3. module dependency check

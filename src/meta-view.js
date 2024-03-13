@@ -4,15 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Type;
-    var Util;
-    var MetaObject;
-    var BaseEntity;
-    var MetaViewColumnCollection;
-    var PropertyCollection;
-    var MetaRegistry;
 
     //==============================================================
     // 1. namespace declaration
@@ -23,26 +14,35 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        PropertyCollection          = require('./collection-property').PropertyCollection;
-        MetaObject                  = require('./meta-object').MetaObject;
-        BaseEntity                  = require('./base-entity').BaseEntity;
-        MetaViewColumnCollection    = require('./collection-column').MetaViewColumnCollection;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Type                       = require('./type');
+        var _Util                       = require('./util');
+        var _PropertyCollection         = require('./collection-property').PropertyCollection;
+        var _MetaObject                 = require('./meta-object').MetaObject;
+        var _BaseEntity                 = require('./base-entity').BaseEntity;
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
+        var _MetaViewColumnCollection   = require('./collection-column').MetaViewColumnCollection;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        PropertyCollection          = _global._L.PropertyCollection;
-        MetaObject                  = _global._L.MetaObject;
-        BaseEntity                  = _global._L.BaseEntity;
-        MetaViewColumnCollection    = _global._L.MetaViewColumnCollection;
-        MetaRegistry                = _global._L.MetaRegistry;
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Type                       = _global._L.Type;
+        var $Util                       = _global._L.Util;
+        var $PropertyCollection         = _global._L.PropertyCollection;
+        var $MetaObject                 = _global._L.MetaObject;
+        var $BaseEntity                 = _global._L.BaseEntity;
+        var $MetaRegistry               = _global._L.MetaRegistry;
+        var $MetaViewColumnCollection   = _global._L.MetaViewColumnCollection;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Type                    = _Type                 || $Type;
+    var Util                    = _Util                 || $Util;
+    var PropertyCollection      = _PropertyCollection   || $PropertyCollection;
+    var MetaObject              = _MetaObject           || $MetaObject;
+    var BaseEntity              = _BaseEntity           || $BaseEntity;
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
+    var MetaViewColumnCollection= _MetaViewColumnCollection || $MetaViewColumnCollection;
 
     //==============================================================
     // 3. module dependency check

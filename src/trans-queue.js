@@ -4,11 +4,6 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    var Util;
-    var MetaObject;
-    var IArrayCollection;
 
     //==============================================================
     // 1. namespace declaration
@@ -18,18 +13,23 @@
     //==============================================================
     // 2. import module
     if (isNode) {     
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Util                        = require('./util');
-        MetaObject                  = require('./meta-object').MetaObject;
-        IArrayCollection            = require('./i-collection-array').IArrayCollection;
-    } else {    // COVER:
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Util                        = _global._L.Util;
-        MetaObject                  = _global._L.MetaObject;
-        IArrayCollection            = _global._L.IArrayCollection;
+        var _Message                    = require('./message').Message;
+        var _ExtendError                = require('./extend-error').ExtendError;
+        var _Util                       = require('./util');
+        var _MetaObject                 = require('./meta-object').MetaObject;
+        var _IArrayCollection           = require('./i-collection-array').IArrayCollection;
+    } else {
+        var $Message                    = _global._L.Message;
+        var $ExtendError                = _global._L.ExtendError;
+        var $Util                       = _global._L.Util;
+        var $MetaObject                 = _global._L.MetaObject;
+        var $IArrayCollection           = _global._L.IArrayCollection;
     }
+    var Message                 = _Message              || $Message;
+    var ExtendError             = _ExtendError          || $ExtendError;
+    var Util                    = _Util                 || $Util;
+    var MetaObject              = _MetaObject           || $MetaObject;
+    var IArrayCollection        = _IArrayCollection     || $IArrayCollection;
 
     //==============================================================
     // 3. module dependency check
