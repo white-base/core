@@ -31,8 +31,15 @@
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
 
     //==============================================================
-    // 4. module implementation   
-        var Observer = (function () {
+    // 4. module implementation  
+    var Observer2 = (function () {
+        function Observer2() {
+
+        }
+        return Observer2;
+    }());
+ 
+    var Observer = (function () {
         /**
          * 구독자 클래스 (이벤트에 활용)
          * @constructs _L.Common.Observer

@@ -42,7 +42,7 @@ describe("[target: extend-error.js]", () => {
                     }
                 }
             });
-            describe("MetaObject._type: fun <타입>", () => {
+            describe("ExtendError._type: fun <타입>", () => {
                 it("- _type : function ", () => {
                     expect(()=> {throw new ExtendError('msg')}).toThrow(/msg/);     // Error 와 동일
                     expect(()=> funcA()).toThrow(/ES01[\s\S]*a : err/);             // 속성 메제지
@@ -53,6 +53,15 @@ describe("[target: extend-error.js]", () => {
                     expect(()=> { throw new ExtendError('msg', {aa: '10'}) }).toThrow(/aa/);
                     expect(()=> { throw new ExtendError('msg', {aa: 10}) }).toThrow(/msg/);
                     expect(()=> { throw new ExtendError() }).toThrow();
+                });
+
+                it("- toString()  ", () => {
+                    var err1 = new ExtendError('msg');
+                    var err2 = new Error('msg');
+
+                    err1.toString()
+                    err2.toString()
+                    
                 });
             });
             describe("커버리지", () => {

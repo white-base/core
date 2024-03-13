@@ -25,9 +25,8 @@
     //==============================================================
     // 4. module implementation   
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
-
+    
     var ExtendError = (function () {
-        
         /**
          * @overload
          * @param {string} p_msg 사용자 메세지 내용
@@ -125,15 +124,21 @@
                 return msg;
             }
         }
+
+        ExtendError._NS = 'Common';    // namespace
         
         ExtendError.prototype = Object.create(Error.prototype, {
             constructor: {
-              value: Error,
-              enumerable: false,
-              writable: true,
-              configurable: true,
+                value: Error,
+                enumerable: false,
+                writable: true,
+                configurable: true,
             },
-          });
+        });
+        
+        ExtendError.prototype.toString = function() {
+            return 'ExtendError : ' + this.message;
+        };
           
         // REVIEW: 이부분이 제거 해도 문제 없는게 맞느지 검토해야함
         // if (Object.setPrototypeOf) {
@@ -143,7 +148,6 @@
         // }
         // Util.inherits(ExtendError, _super);
 
-        ExtendError._NS = 'Common';    // namespace
         
         return ExtendError;
 

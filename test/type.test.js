@@ -5860,7 +5860,7 @@ describe("[target: util-type.js.js]", () => {
             expect(()=> matchType(type1, tar12)).toThrow('EL01127')
             expect(()=> matchType(type1, tar13)).toThrow('EL01127')
             expect(()=> matchType(type1, tar14)).toThrow('EL01141')
-            expect(()=> matchType(type1, tar15)).toThrow('EL01141')
+            expect(()=> matchType(type1, tar15)).toThrow('EL0114')
 
             expect(()=> matchType(type2, tar21)).toThrow('EL0122F')
             expect(()=> matchType(type2, tar22)).toThrow('EL01157')

@@ -1,63 +1,46 @@
 /**** base-collection.js | _L.Collection.BaseCollection ****/
-
-/// <reference path="@types/observer.d.ts" />
-
-// import {Observer} from './observer'
-
 (function(_global) {
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    var Message;
-    var ExtendError;
-    // var Observer;    
-
-    var Type;
-    var Util;
-    var ICollection;
-    var IList;
-    // var MetaObject;
-    var MetaRegistry;
     
     //==============================================================
     // 1. namespace declaration
     _global._L                      = _global._L || {};
     _global._L.Collection           = _global._L.Collection || {};
 
-
-
     //==============================================================
     // 2. import module
     if (isNode) {
-        Message                     = require('./message').Message;
-        ExtendError                 = require('./extend-error').ExtendError;
-        Type                        = require('./type');
-        Util                        = require('./util');
-        
-        var Observer                = require('./observer').Observer;
-        // var Observer                    = _global._L.Observer;
-        // var Observer                    = _global.Observer;
-        // var Observer                = require('./observer');
-        // var {Observer}                    = require('./observer');  
-
-        ICollection                 = require('./i-collection').ICollection;
-        IList                       = require('./i-list').IList;
-        MetaRegistry                = require('./meta-registry').MetaRegistry;
-        
-        var MetaObject                  = require('./meta-object').MetaObject;
+        var _Message                        = require('./message').Message;
+        var _ExtendError                    = require('./extend-error').ExtendError;
+        var _Type                           = require('./type');
+        var _Util                           = require('./util');
+        var _Observer                       = require('./observer').Observer;
+        var _ICollection                    = require('./i-collection').ICollection;
+        var _IList                          = require('./i-list').IList;
+        var _MetaRegistry                   = require('./meta-registry').MetaRegistry;
+        var _MetaObject                     = require('./meta-object').MetaObject;
     } else {
-        Message                     = _global._L.Message;
-        ExtendError                 = _global._L.ExtendError;
-        Type                        = _global._L.Type;
-        Util                        = _global._L.Util;
-        // var Observer                    = _global._L.Observer;
-        // Observer                    = _global._L.Observer;
-
-        ICollection                 = _global._L.ICollection;
-        IList                       = _global._L.IList;
-        MetaRegistry                = _global._L.MetaRegistry;
-        // MetaObject                  = _global._L.MetaObject;
+        var __Message                       = _global._L.Message;
+        var __ExtendError                   = _global._L.ExtendError;
+        var __Type                          = _global._L.Type;
+        var __Util                          = _global._L.Util;
+        var __Observer                      = _global._L.Observer;
+        var __ICollection                   = _global._L.ICollection;
+        var __IList                         = _global._L.IList;
+        var __MetaRegistry                  = _global._L.MetaRegistry;
+        var __MetaObject                    = _global._L.MetaObject;
     }
+    var Message         = _Message          || __Message;
+    var ExtendError     = _ExtendError      || __ExtendError;
+    var Observer        = _Observer         || __Observer;
+    var Type            = _Type             || __Type;
+    var Util            = _Util             || __Util;
+    var ICollection     = _ICollection      || __ICollection;
+    var IList           = _IList            || __IList;
+    var MetaObject      = _MetaObject       || __MetaObject;
+    var MetaRegistry    = _MetaRegistry     || __MetaRegistry;
 
     //==============================================================
     // 3. module dependency check
@@ -65,7 +48,6 @@
     if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof Observer === 'undefined') throw new Error(Message.get('ES011', ['Observer', 'observer']));
-
     if (typeof ICollection === 'undefined') throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
     if (typeof IList === 'undefined') throw new Error(Message.get('ES011', ['IList', 'i-list']));
     if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
@@ -94,19 +76,6 @@
             var _descriptors = [];
             var _elemTypes  = []; 
             var __KEYWORD = [];
-
-            // 테스트 코드 위치
-            var jsdom = require('../node_modules/jsdom');
-            var i = new jsdom.JSDOM();
-            // i.
-            // Observer()
-            // __event.
-            
-            var a = new MetaObject()
-            MetaObject()
-            a.
-
-            
 
             /** 
              * 이벤트 객체

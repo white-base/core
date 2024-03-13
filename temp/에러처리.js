@@ -1,8 +1,8 @@
 
 
-const {extendType, typeObject, typeOf}  = require('../src/util-type');
-const {isAllowType, allowType }  = require('../src/util-type');
-const { isMatchType, matchType }  = require('../src/util-type');
+const {extendType, typeObject, typeOf}  = require('../src/type');
+const {isAllowType, allowType }  = require('../src/type');
+const { isMatchType, matchType }  = require('../src/type');
 
  
 
