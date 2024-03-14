@@ -9,30 +9,38 @@
     // 1. namespace declaration
     _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
+    // _global._L.MetaRegistry         = _global._L.MetaRegistry || {}; // 대상의 로딩중
 
     //==============================================================
     // 2. import module
+    var $Message                    = _global._L.Message;
+    var $ExtendError                = _global._L.ExtendError;
+    var $Util                       = _global._L.Util;
+    var $NamespaceManager           = _global._L.NamespaceManager;
+
+    // var $MetaObject                 = _global._L.MetaObject;
+
     if (isNode) {     
         var _Message                    = require('./message').Message;
         var _ExtendError                = require('./extend-error').ExtendError;
         var _Util                       = require('./util');
         var _NamespaceManager           = require('./namespace-manager').NamespaceManager;
-    } else {
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Util                       = _global._L.Util;
-        var $NamespaceManager           = _global._L.NamespaceManager;
+        // if (!$MetaObject) var _MetaObject                 = require('./meta-object').MetaObject;
     }
     var Message                 = _Message              || $Message;
     var ExtendError             = _ExtendError          || $ExtendError;
     var Util                    = _Util                 || $Util;
     var NamespaceManager        = _NamespaceManager     || $NamespaceManager;
 
+    // var MetaObject              = _MetaObject           || $MetaObject;
+
     //==============================================================Á
     // 3. module dependency check
     if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
     if (typeof NamespaceManager === 'undefined') throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
+
+    // if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
     //==============================================================
     // 4. module implementation       
@@ -638,11 +646,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.MetaRegistry = MetaRegistry;
-    } else {
-        _global._L.MetaRegistry = MetaRegistry;
-        _global._L.Meta.MetaRegistry = MetaRegistry;    // namespace
-    }
+    if (isNode) exports.MetaRegistry = MetaRegistry;
+        
+    _global._L.MetaRegistry = MetaRegistry;
+    _global._L.Meta.MetaRegistry = MetaRegistry;    // namespace
 
 }(typeof window !== 'undefined' ? window : global));

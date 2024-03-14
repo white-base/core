@@ -9,9 +9,18 @@
     // 1. namespace declaration
     _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
+    // _global._L.MetaObject           = _global._L.MetaObject || {}; // 대상의 로딩중
 
     //==============================================================
     // 2. import module
+    var $Message                    = _global._L.Message;
+    var $ExtendError                = _global._L.ExtendError;
+    var $Type                       = _global._L.Type;
+    var $Util                       = _global._L.Util
+    var $IObject                    = _global._L.IObject;
+    var $IMarshal                   = _global._L.IMarshal;
+    var $MetaRegistry               = _global._L.MetaRegistry;
+
     if (isNode) {     
         var _Message                    = require('./message').Message;
         var _ExtendError                = require('./extend-error').ExtendError;
@@ -20,15 +29,8 @@
         var _IObject                    = require('./i-object').IObject;
         var _IMarshal                   = require('./i-marshal').IMarshal;
         var _MetaRegistry               = require('./meta-registry').MetaRegistry;
-    } else {
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Type                       = _global._L.Type;
-        var $Util                       = _global._L.Util
-        var $IObject                    = _global._L.IObject;
-        var $IMarshal                   = _global._L.IMarshal;
-        var $MetaRegistry               = _global._L.MetaRegistry;
     }
+
     var Message                 = _Message              || $Message;
     var ExtendError             = _ExtendError          || $ExtendError;
     var Type                    = _Type                 || $Type;
@@ -296,11 +298,8 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.MetaObject = MetaObject;
-    } else {
-        _global._L.MetaObject = MetaObject;
-        _global._L.Meta.MetaObject = MetaObject;    // namespace
-    }
-
+    if (isNode) exports.MetaObject = MetaObject;
+    _global._L.MetaObject = MetaObject;
+    _global._L.Meta.MetaObject = MetaObject;    // namespace
+    
 }(typeof window !== 'undefined' ? window : global));
