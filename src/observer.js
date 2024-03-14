@@ -148,7 +148,7 @@
         };
         
         /**
-         * 초기화
+         * 관찰자를 초기화
          */
         Observer.prototype.init = function() {
             var obj = this._getInitObject();
