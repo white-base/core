@@ -1,3 +1,30 @@
+
+
+
+declare namespace _L {
+
+}
+declare namespace _L.Common {
+    
+}
+declare namespace _L.Interface {
+    
+}
+
+declare namespace _L.Collection {
+    
+}
+
+declare namespace _L.Meta {
+    
+}
+
+// TODO: Entithy 로 분리 대상
+declare namespace _L.Meta.Entity {
+    
+}
+
+
 declare namespace _L.Common {
     
     //~ 'myLib.timeout = 50;' 라고 사용할 수 있습니다.

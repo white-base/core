@@ -303,8 +303,8 @@
     /**
      * 객체를 비교합니다. (proto 제외)
      * @memberof _L.Common.Type
-     * @param {object} obj1 
-     * @param {object} obj2 
+     * @param {any} obj1 
+     * @param {any} obj2 
      * @returns {boolean}
      */
     var deepEqual = function(obj1, obj2) {
