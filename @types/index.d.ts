@@ -59,18 +59,19 @@
 
 import Observer = require("./observer");
 import Util = require("./util");
+import Message = require("./message");
 
 
-declare class Message {
-    static init(): void;
-    /**
-     * 오류 메세지
-     * @param p_code dd
-     * @param p_aValue aa
-     */
-    static get(p_code: string, p_aValue: Array<string>): string;
+// declare class Message {
+//     static init(): void;
+//     /**
+//      * 오류 메세지
+//      * @param p_code dd
+//      * @param p_aValue aa
+//      */
+//     static get(p_code: string, p_aValue: Array<string>): string;
     
-}
+// }
 
 
 

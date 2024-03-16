@@ -30,4 +30,7 @@ var ii = new assert.AssertionError({})
 
 
 console.log(0);
+
+
+console.table()
 // i.

@@ -283,7 +283,7 @@
     /**
      * 전체 프로퍼티를 조회합니다.
      * @memberof _L.Common.Type
-     * @param {object} obj Object를 제외한 프로터피 리턴
+     * @param {object} obj  Object를 제외한 프로퍼티 객체 리턴
      * @param {boolean?} hasObj Object를 포함 여부
      * @returns {array<string>}  
      */

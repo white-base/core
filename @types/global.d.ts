@@ -1,14 +1,35 @@
 
-
+import Util = require("./util");
+import Type = require("./type");
+import Observer = require("./observer");
 
 declare namespace _L {
+}
+
+
+
+// interface common {
+
+// }
+
+declare namespace _L.Common {
+
+    // export ;
+    // const aa: string;
+
+    // type Observer = Observer;
+    // export = Observer;
+    // export {Observer, aa}
+    // export namespace Observer;
+    // namespace Observer;
+    // namespace Observer = O
+    export { Observer, Util, Type };
+    // var aaa: Observer;
+
 
 }
-declare namespace _L.Common {
-    
-}
 declare namespace _L.Interface {
-    
+    const aa: string;
 }
 
 declare namespace _L.Collection {
@@ -25,7 +46,7 @@ declare namespace _L.Meta.Entity {
 }
 
 
-declare namespace _L.Common {
+declare namespace _L.Etc {
     
     //~ 'myLib.timeout = 50;' 라고 사용할 수 있습니다.
     let timeout: number;
@@ -85,7 +106,7 @@ declare class Observer2 {
     publish(p_code: string): void
 }
 
-declare namespace _L {
-    // function checkCat(c: Cat, s?: VetID);
-    // const Observer = Observer2;
-}
+// declare namespace _L {
+//     // function checkCat(c: Cat, s?: VetID);
+//     // const Observer = Observer2;
+// }
