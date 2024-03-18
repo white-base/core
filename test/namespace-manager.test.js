@@ -5,7 +5,7 @@
 // gobal defined
 'use strict';
 
-const { loadNamespace } = require('../src/load-namespace');
+// const { loadNamespace } = require('../src/load-namespace');
 const { NamespaceManager }      = require('../src/namespace-manager');
 const { replacer, reviver, stringify, parse }              = require('telejson');
 

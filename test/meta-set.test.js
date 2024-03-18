@@ -5,25 +5,25 @@
 // gobal defined
 'use strict';
 
-const Util                  = require('../src/util');
-const {IObject}               = require('../src/i-object');
-const {IMarshal}              = require('../src/i-marshal');
-const {MetaObject}            = require('../src/meta-object');
-const {MetaElement}           = require('../src/meta-element');
-const {BaseEntity}                            = require('../src/base-entity');
-const { MetaTable, MetaTableCollection }    = require('../src/meta-table');
-const { MetaView, MetaViewCollection }      = require('../src/meta-view');
-const { MetaRow }           = require('../src/meta-row');
-const { MetaColumn }        = require('../src/meta-column');
-const  {MetaSet}              = require('../src/meta-set');
-const { replacer, reviver, stringify, parse }              = require('telejson');
-const { MetaRegistry } = require('../src/meta-registry');
-const { loadNamespace } = require('../src/load-namespace');
+// const Util                  = require('../src/util');
+// const {IObject}               = require('../src/i-object');
+// const {IMarshal}              = require('../src/i-marshal');
+// const {MetaObject}            = require('../src/meta-object');
+// const {MetaElement}           = require('../src/meta-element');
+// const {BaseEntity}                            = require('../src/base-entity');
+// const { MetaTable, MetaTableCollection }    = require('../src/meta-table');
+// const { MetaView, MetaViewCollection }      = require('../src/meta-view');
+// const { MetaRow }           = require('../src/meta-row');
+// const { MetaColumn }        = require('../src/meta-column');
+// const  {MetaSet}              = require('../src/meta-set');
+// const { replacer, reviver, stringify, parse }              = require('telejson');
+// const { MetaRegistry } = require('../src/meta-registry');
+// const { loadNamespace } = require('../src/load-namespace');
 
 
 //==============================================================
 // test
-describe("[target: meta-set.js]", () => {
+describe.skip("[target: meta-set.js]", () => {
     beforeEach(() => {
        jest.resetModules();
        MetaRegistry.init();

@@ -51,9 +51,9 @@ describe("[target: index.js]", () => {
             expect(typeof index.IMarshal).toBe('function');
             expect(typeof index.ICollection).toBe('function');
             expect(typeof index.IPropertyCollection).toBe('function');
-            expect(typeof index.IExportControl).toBe('function');
-            expect(typeof index.IGroupControl).toBe('function');
-            expect(typeof index.IImportControl).toBe('function');
+            // expect(typeof index.IExportControl).toBe('function');
+            // expect(typeof index.IGroupControl).toBe('function');
+            // expect(typeof index.IImportControl).toBe('function');
         });
         it('- _L.Interface.* ', () => { 
             // namespace
@@ -62,9 +62,9 @@ describe("[target: index.js]", () => {
             expect(typeof index.Interface.IMarshal).toBe('function');
             expect(typeof index.Interface.ICollection).toBe('function');
             expect(typeof index.Interface.IPropertyCollection).toBe('function');
-            expect(typeof index.Interface.IExportControl).toBe('function');
-            expect(typeof index.Interface.IGroupControl).toBe('function');
-            expect(typeof index.Interface.IImportControl).toBe('function');    
+            // expect(typeof index.Interface.IExportControl).toBe('function');
+            // expect(typeof index.Interface.IGroupControl).toBe('function');
+            // expect(typeof index.Interface.IImportControl).toBe('function');    
         });
     });
     describe('BaseCollection, ArrayCollection, PropertyCollection', () => {
@@ -99,40 +99,40 @@ describe("[target: index.js]", () => {
             expect(typeof index.Meta.NamespaceManager).toBe('function');
         });
     });
-    describe(`BaseEntity, 
-    MetaView, MetaViewCollection, 
-    MetaTable, MetaTableCollection,
-    MetaColumn, BaseColumnCollection, 
-    MetaViewColumnCollection, MetaTableColumnCollection,
-    MetaRow, MetaRowCollection`, () => {
-        it('- _L.* ', () => {
-            expect(typeof index.BaseEntity).toBe('function');
-            expect(typeof index.MetaView).toBe('function');
-            expect(typeof index.MetaViewCollection).toBe('function');
-            expect(typeof index.MetaTable).toBe('function');
-            expect(typeof index.MetaTableCollection).toBe('function');
-            expect(typeof index.MetaColumn).toBe('function');
-            expect(typeof index.BaseColumnCollection).toBe('function');
-            expect(typeof index.MetaViewColumnCollection).toBe('function');
-            expect(typeof index.MetaTableColumnCollection).toBe('function');
-            expect(typeof index.MetaRow).toBe('function');
-            expect(typeof index.MetaRowCollection).toBe('function');
-            // namespace
-        });
-        it('- _L.Meta.Entity.* ', () => {
-            expect(typeof index.Meta.Entity).toBe('object');
-            expect(typeof index.Meta.Entity.BaseEntity).toBe('function');
-            expect(typeof index.Meta.Entity.MetaView).toBe('function');
-            expect(typeof index.Meta.Entity.MetaViewCollection).toBe('function');
-            expect(typeof index.Meta.Entity.MetaTable).toBe('function');
-            expect(typeof index.Meta.Entity.MetaTableCollection).toBe('function');
-            expect(typeof index.Meta.Entity.MetaColumn).toBe('function');
-            expect(typeof index.Meta.Entity.BaseColumnCollection).toBe('function');
-            expect(typeof index.Meta.Entity.MetaViewColumnCollection).toBe('function');
-            expect(typeof index.Meta.Entity.MetaTableColumnCollection).toBe('function');
-            expect(typeof index.Meta.Entity.MetaRow).toBe('function');
-            expect(typeof index.Meta.Entity.MetaRowCollection).toBe('function');
-        });
-    });
+    // describe(`BaseEntity, 
+    // MetaView, MetaViewCollection, 
+    // MetaTable, MetaTableCollection,
+    // MetaColumn, BaseColumnCollection, 
+    // MetaViewColumnCollection, MetaTableColumnCollection,
+    // MetaRow, MetaRowCollection`, () => {
+    //     it('- _L.* ', () => {
+    //         expect(typeof index.BaseEntity).toBe('function');
+    //         expect(typeof index.MetaView).toBe('function');
+    //         expect(typeof index.MetaViewCollection).toBe('function');
+    //         expect(typeof index.MetaTable).toBe('function');
+    //         expect(typeof index.MetaTableCollection).toBe('function');
+    //         expect(typeof index.MetaColumn).toBe('function');
+    //         expect(typeof index.BaseColumnCollection).toBe('function');
+    //         expect(typeof index.MetaViewColumnCollection).toBe('function');
+    //         expect(typeof index.MetaTableColumnCollection).toBe('function');
+    //         expect(typeof index.MetaRow).toBe('function');
+    //         expect(typeof index.MetaRowCollection).toBe('function');
+    //         // namespace
+    //     });
+    //     it('- _L.Meta.Entity.* ', () => {
+    //         expect(typeof index.Meta.Entity).toBe('object');
+    //         expect(typeof index.Meta.Entity.BaseEntity).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaView).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaViewCollection).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaTable).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaTableCollection).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaColumn).toBe('function');
+    //         expect(typeof index.Meta.Entity.BaseColumnCollection).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaViewColumnCollection).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaTableColumnCollection).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaRow).toBe('function');
+    //         expect(typeof index.Meta.Entity.MetaRowCollection).toBe('function');
+    //     });
+    // });
 });
 

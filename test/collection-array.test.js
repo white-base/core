@@ -9,7 +9,7 @@ const {ArrayCollection}          = require('../src/collection-array');
 const { MetaElement } = require('../src/meta-element');
 const { replacer, reviver, stringify, parse }              = require('telejson');
 const {MetaRegistry}        = require('../src/meta-registry');
-const { loadNamespace } = require('../src/load-namespace');
+// const { loadNamespace } = require('../src/load-namespace');
 const { BaseCollection } = require('../src/base-collection');
 let Student, School, Corp, Member, House, Space;
 

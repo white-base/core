@@ -8,21 +8,21 @@
 const Util                      = require('../src/util');
 const {MetaObject}              = require('../src/meta-object');
 const {MetaElement}             = require('../src/meta-element');
-const {BaseEntity}              = require('../src/base-entity');
+// const {BaseEntity}              = require('../src/base-entity');
 
 const {IObject}                 = require('../src/i-object');
 const {IMarshal}                = require('../src/i-marshal');
 const {IPropertyCollection}     = require('../src/i-collection-property');
 const {ICollection}             = require('../src/i-collection');
-const {IExportControl}          = require('../src/i-control-export');
-const {IGroupControl}           = require('../src/i-control-group');
-const {IImportControl}          = require('../src/i-control-import');
-const {ISchemaControl}          = require('../src/i-control-schema');
+// const {IExportControl}          = require('../src/i-control-export');
+// const {IGroupControl}           = require('../src/i-control-group');
+// const {IImportControl}          = require('../src/i-control-import');
+// const {ISchemaControl}          = require('../src/i-control-schema');
 const {IList}                   = require('../src/i-list');
 const {IListControl}            = require('../src/i-control-list');
 const {IElement}                = require('../src/i-element');
 const {ISerialize}              = require('../src/i-serialize');
-const {ITransaction}            = require('../src/i-transaction');
+// const {ITransaction}            = require('../src/i-transaction');
 const {IArrayCollection}        = require('../src/i-collection-array');
 
 //==============================================================
@@ -71,42 +71,42 @@ describe("[target: i-* ]", () => {
             expect(()=> i.setObject()).toThrow(/EL02122/);
         });
     });
-    describe("IExportControl :: 인터페이스", () => {
-        it("- IExportControl() : 생성 및 상속 ", () => {
-            class SubClass extends IExportControl {}
-            const s = new SubClass();
-            const i = new IExportControl();
+    // describe.skip("IExportControl :: 인터페이스", () => {
+    //     it("- IExportControl() : 생성 및 상속 ", () => {
+    //         class SubClass extends IExportControl {}
+    //         const s = new SubClass();
+    //         const i = new IExportControl();
 
-            // extends
-            expect(()=> s.write()).toThrow(/EL02311/);
-            // create
-            expect(()=> i.write()).toThrow(/EL02311/);
-        });
-    });
-    describe("IGroupControl :: 인터페이스", () => {
-        it("- IGroupControl() : 생성 및 상속 ", () => {
-            class SubClass extends IGroupControl {}
-            const s = new SubClass();
-            const i = new IGroupControl();
+    //         // extends
+    //         expect(()=> s.write()).toThrow(/EL02311/);
+    //         // create
+    //         expect(()=> i.write()).toThrow(/EL02311/);
+    //     });
+    // });
+    // describe.skip("IGroupControl :: 인터페이스", () => {
+    //     it("- IGroupControl() : 생성 및 상속 ", () => {
+    //         class SubClass extends IGroupControl {}
+    //         const s = new SubClass();
+    //         const i = new IGroupControl();
 
-            // extends
-            expect(()=> s.merge()).toThrow(/EL02331/);
-            // create
-            expect(()=> i.copy()).toThrow(/EL02332/);
-        });
-    });
-    describe("IImportControl :: 인터페이스", () => {
-        it("- IImportControl() : 생성 및 상속 ", () => {
-            class SubClass extends IImportControl {}
-            const s = new SubClass();
-            const i = new IImportControl();
+    //         // extends
+    //         expect(()=> s.merge()).toThrow(/EL02331/);
+    //         // create
+    //         expect(()=> i.copy()).toThrow(/EL02332/);
+    //     });
+    // });
+    // describe.skip("IImportControl :: 인터페이스", () => {
+    //     it("- IImportControl() : 생성 및 상속 ", () => {
+    //         class SubClass extends IImportControl {}
+    //         const s = new SubClass();
+    //         const i = new IImportControl();
 
-            // extends
-            expect(()=> s.read()).toThrow(/EL02321/);
-            // create
-            expect(()=> i.read()).toThrow(/EL02321/);
-        });
-    });
+    //         // extends
+    //         expect(()=> s.read()).toThrow(/EL02321/);
+    //         // create
+    //         expect(()=> i.read()).toThrow(/EL02321/);
+    //     });
+    // });
     
     
     describe("IList :: 인터페이스", () => {
@@ -170,20 +170,20 @@ describe("[target: i-* ]", () => {
             expect(()=> i.output()).toThrow(/EL02351/);
         });
     });
-    describe("ITransaction :: 인터페이스", () => {
-        it("- 생성 및 상속 ", () => {
-            class SubClass extends ITransaction {}
-            const s = new SubClass();
-            const i = new ITransaction();
+    // describe.skip("ITransaction :: 인터페이스", () => {
+    //     it("- 생성 및 상속 ", () => {
+    //         class SubClass extends ITransaction {}
+    //         const s = new SubClass();
+    //         const i = new ITransaction();
 
-            // extends
-            expect(()=> s.acceptChanges()).toThrow(/EL02361/);
-            expect(()=> s.rejectChanges()).toThrow(/EL02362/);
-            // create
-            expect(()=> i.acceptChanges()).toThrow(/EL02361/);
-            expect(()=> i.rejectChanges()).toThrow(/EL02362/);
-        });
-    });
+    //         // extends
+    //         expect(()=> s.acceptChanges()).toThrow(/EL02361/);
+    //         expect(()=> s.rejectChanges()).toThrow(/EL02362/);
+    //         // create
+    //         expect(()=> i.acceptChanges()).toThrow(/EL02361/);
+    //         expect(()=> i.rejectChanges()).toThrow(/EL02362/);
+    //     });
+    // });
 
     // describe("ILookupControl :: 인터페이스", () => {
     //     it("- ILookupControl() : 생성 및 상속 ", () => {
@@ -227,24 +227,24 @@ describe("[target: i-* ]", () => {
     //         expect(()=> i.clear()).toThrow(/ES013/);
     //     });
     // });
-    describe("ISchemaControl :: 인터페이스", () => {
-        it("- ISchemaControl() : 생성 및 상속 ", () => {
-            class SubClass extends ISchemaControl {}
-            const s = new SubClass();
-            const i = new ISchemaControl();
+    // describe.skip("ISchemaControl :: 인터페이스", () => {
+    //     it("- ISchemaControl() : 생성 및 상속 ", () => {
+    //         class SubClass extends ISchemaControl {}
+    //         const s = new SubClass();
+    //         const i = new ISchemaControl();
 
-            // extends
-            // expect(()=> s.read()).toThrow(/ES013/);
-            // expect(()=> s.write()).toThrow(/ES013/);
-            expect(()=> s.readSchema()).toThrow(/EL02341/);
-            expect(()=> s.writeSchema()).toThrow(/EL02342/);
-            // create
-            // expect(()=> i.read()).toThrow(/ES013/);
-            // expect(()=> i.write()).toThrow(/ES013/);
-            expect(()=> i.readSchema()).toThrow(/EL02341/);
-            expect(()=> i.writeSchema()).toThrow(/EL02342/);
-        });
-    });
+    //         // extends
+    //         // expect(()=> s.read()).toThrow(/ES013/);
+    //         // expect(()=> s.write()).toThrow(/ES013/);
+    //         expect(()=> s.readSchema()).toThrow(/EL02341/);
+    //         expect(()=> s.writeSchema()).toThrow(/EL02342/);
+    //         // create
+    //         // expect(()=> i.read()).toThrow(/ES013/);
+    //         // expect(()=> i.write()).toThrow(/ES013/);
+    //         expect(()=> i.readSchema()).toThrow(/EL02341/);
+    //         expect(()=> i.writeSchema()).toThrow(/EL02342/);
+    //     });
+    // });
 
     // describe("< collection >", () => {
     describe("ICollection :: 인터페이스", () => {

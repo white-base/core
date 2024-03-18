@@ -6,18 +6,18 @@
 'use strict';
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {BaseEntity}            = require('../src/base-entity');
+// const {BaseEntity}            = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
-const { MetaTable }         = require('../src/meta-table');
-const { MetaView }          = require('../src/meta-view');
-const { MetaRow }           = require('../src/meta-row');
-const { MetaColumn }        = require('../src/meta-column');
+// const { MetaTable }         = require('../src/meta-table');
+// const { MetaView }          = require('../src/meta-view');
+// const { MetaRow }           = require('../src/meta-row');
+// const { MetaColumn }        = require('../src/meta-column');
 
 //==============================================================
 // test
-describe("[target: base-entity.js]", () => {
+describe.skip("[target: base-entity.js]", () => {
     describe("BaseEntity :: 추상 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();

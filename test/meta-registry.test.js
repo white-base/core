@@ -8,10 +8,10 @@ const Util                  = require('../src/util');
 const {MetaRegistry}        = require('../src/meta-registry');
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const { MetaTable, MetaTableCollection }    = require('../src/meta-table');
+// const { MetaTable }    = require('../src/meta-table');
 const { loadNamespace } = require('../src/load-namespace');
 const { replacer, reviver, stringify, parse }              = require('telejson');
-const { MetaColumn } = require('../src/meta-column');
+// const { MetaColumn } = require('../src/meta-column');
 
 //==============================================================
 // test
@@ -159,7 +159,9 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.isMetaObject(null)).toBe(false);
             });
         });
-        describe("MetaRegistry.createMetaObject() <메타객체 생성>", () => {
+
+        // 제외함 entity 테스트로 이동 필요 TODO:
+        describe.skip("MetaRegistry.createMetaObject() <메타객체 생성>", () => {
             it("- createMetaObject() : 객체로 생성", () => {
                 loadNamespace();    // 클래스 로딩
                 const mObj1 = {_type: 'MetaTable', _ns: 'Meta.Entity', name: 'T1'};
@@ -216,7 +218,8 @@ describe("[target: meta-registry.js]", () => {
                 expect(()=> MetaRegistry.createReferObject({})).toThrow(/EL03226/)
             });
         });
-        describe("MetaRegistry.createNsReferObject() <네임스페이스 속성 생성>", () => {
+        // 제외함 entity 테스트로 이동 필요 TODO:
+        describe.skip("MetaRegistry.createNsReferObject() <네임스페이스 속성 생성>", () => {
             it("- createNsReferObject() : 네임스페이스 객체 생성", () => {
                 loadNamespace();    // 클래스 로딩
                 const class1 = MetaRegistry.ns.find('Meta.Entity.MetaTable');
@@ -476,7 +479,8 @@ describe("[target: meta-registry.js]", () => {
             });
         });
         // TODO: 수정 필요
-        describe("MetaRegistry.hasGuidObject(target, origin) <순환참조 여부>", () => {
+        // 제외함 entity 테스트로 이동 필요 TODO:
+        describe.skip("MetaRegistry.hasGuidObject(target, origin) <순환참조 여부>", () => {
             it("- hasGuidObject() : getObject(0) 검사", () => {
                 const elem1 = new MetaElement('E1');
                 const table1 = new MetaTable('T1');
@@ -811,7 +815,9 @@ describe("[target: meta-registry.js]", () => {
                 expect(()=> MetaRegistry.getClass(-1)).toThrow(/EL03236/)
             });
         });
-        describe("MetaRegistry.loadMetaObject() <로드>", () => {
+        
+        // 제외함 entity 테스트로 이동 필요 TODO:
+        describe.skip("MetaRegistry.loadMetaObject() <로드>", () => {
             it("- loadMetaObject() : ", () => {
                 const t1 = new MetaTable('T1');
                 t1.columns.add('i1');

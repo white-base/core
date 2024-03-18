@@ -7,11 +7,11 @@
 const Util                  = require('../src/util');
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {BaseColumn}           = require('../src/base-column');
-// const {BaseColumn}           = require('../src/object-column');
-const { MetaTable }       = require('../src/meta-table');
-const { MetaView }        = require('../src/meta-view');
-const { MetaRow }               = require('../src/meta-row');
+// const {BaseColumn}           = require('../src/base-column');
+// // const {BaseColumn}           = require('../src/object-column');
+// const { MetaTable }       = require('../src/meta-table');
+// const { MetaView }        = require('../src/meta-view');
+// const { MetaRow }               = require('../src/meta-row');
 // const ComplexElement        = require('../src/meta-element-complex');
 // const {IObject}               = require('../src/i-object');
 // const {IMarshal}              = require('../src/i-marshal');
@@ -22,7 +22,7 @@ let MetaObjectSub, MetaElementSub, ComplexElementSub, EmpytClass;
 
 //==============================================================
 // test
-describe("[target: base-column.js]", () => {
+describe.skip("[target: base-column.js]", () => {
     describe("BaseColumn :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();

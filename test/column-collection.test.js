@@ -6,21 +6,21 @@
 'use strict';
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
-const {BaseEntity}                = require('../src/base-entity');
+// const {BaseEntity}                = require('../src/base-entity');
 const {IObject}               = require('../src/i-object');
 const {IMarshal}              = require('../src/i-marshal');
 const Util                  = require('../src/util');
-const { BaseColumn }       = require('../src/base-column');
+// const { BaseColumn }       = require('../src/base-column');
 
-const { MetaTable }       = require('../src/meta-table');
-const { MetaView, MetaViewCollection }        = require('../src/meta-view');
-const { MetaRow }               = require('../src/meta-row');
-const { BaseColumnCollection }              = require('../src/collection-column');
-const { MetaColumn }              = require('../src/meta-column');
+// const { MetaTable }       = require('../src/meta-table');
+// const { MetaView, MetaViewCollection }        = require('../src/meta-view');
+// const { MetaRow }               = require('../src/meta-row');
+// const { BaseColumnCollection }              = require('../src/collection-column');
+// const { MetaColumn }              = require('../src/meta-column');
 
 //==============================================================
 // test
-describe("[target: meta-column.js]", () => {
+describe.skip("[target: meta-column.js]", () => {
     describe("BaseColumnCollection :: 클래스", () => {
         beforeAll(() => {
             // jest.resetModules();

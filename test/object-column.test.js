@@ -4,25 +4,25 @@
 //==============================================================
 // gobal defined
 'use strict';
-const Util                  = require('../src/util');
-const {MetaObject}            = require('../src/meta-object');
-const {MetaElement}           = require('../src/meta-element');
-const {BaseColumn}           = require('../src/base-column');
-const {ObjectColumn}           = require('../src/object-column');
-const { MetaTable }       = require('../src/meta-table');
-const { MetaView }        = require('../src/meta-view');
-const { MetaRow }               = require('../src/meta-row');
-// const ComplexElement        = require('../src/meta-element-complex');
-// const {IObject}               = require('../src/i-object');
-// const {IMarshal}              = require('../src/i-marshal');
-// const {IPropertyCollection}   = require('../src/i-collection-property');
-const { MetaRegistry } = require('../src/meta-registry');
+// const Util                  = require('../src/util');
+// const {MetaObject}            = require('../src/meta-object');
+// const {MetaElement}           = require('../src/meta-element');
+// const {BaseColumn}           = require('../src/base-column');
+// const {ObjectColumn}           = require('../src/object-column');
+// const { MetaTable }       = require('../src/meta-table');
+// const { MetaView }        = require('../src/meta-view');
+// const { MetaRow }               = require('../src/meta-row');
+// // const ComplexElement        = require('../src/meta-element-complex');
+// // const {IObject}               = require('../src/i-object');
+// // const {IMarshal}              = require('../src/i-marshal');
+// // const {IPropertyCollection}   = require('../src/i-collection-property');
+// const { MetaRegistry } = require('../src/meta-registry');
 
 let MetaObjectSub, MetaElementSub, ComplexElementSub, EmpytClass;
 
 //==============================================================
 // test
-describe("[target: object-column.js]", () => {
+describe.skip("[target: object-column.js]", () => {
     describe("ObjectColumn :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();
