@@ -32,13 +32,6 @@
 
     //==============================================================
     // 4. module implementation  
-    var Observer2 = (function () {
-        function Observer2() {
-
-        }
-        return Observer2;
-    }());
- 
     var Observer = (function () {
         /**
          * 구독자 클래스 (이벤트에 활용)

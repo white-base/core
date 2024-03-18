@@ -31,6 +31,9 @@ var ii = new assert.AssertionError({})
 
 console.log(0);
 
+global.NodeJS.Immediate
 
+// global.
+// NodeRe
 console.table()
 // i.
