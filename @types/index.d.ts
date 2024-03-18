@@ -1,65 +1,28 @@
-// <reference path="observer.d.ts" />
 
-// export declare class Observer {
-//     /**
-//      * 관찰자
-//      * @param p_caller 
-//      */
-//     constructor(p_caller: object);
-//     init(): void;
-//     subscribe(p_fn: Function, p_code: string): void;
-//     // 구독 취고
-//     unsubscribe(p_fn: Function, p_code: string): void;
-//     /**
-//      * 출판
-//      * @param p_code 
-//      */
-//     publish(p_code: string): void
-// }
+import ExtendError          = require("./extend-error");
+import Observer             = require("./observer");
+import Util                 = require("./util");
+import Type                 = require("./type");
+import Message              = require("./message");
 
-// declare class Observer {
-//     /**
-//      * 관찰자
-//      * @param p_caller 
-//      */
-//     constructor(p_caller: object);
-//     init(): void;
-//     subscribe(p_fn: Function, p_code: string): void;
-//     // 구독 취고
-//     unsubscribe(p_fn: Function, p_code: string): void;
-//     /**
-//      * 출판
-//      * @param p_code 
-//      */
-//     publish(p_code: string): void;
-// }
+import IObject              = require("./i-object");
+import IMarshal             = require("./i-marshal");
+import ICollection          = require("./i-collection");
+import IPropertyCollection  = require("./i-collection-property");
+import IElement             = require("./i-element");
+import IList                = require("./i-list");
+import IListControl         = require("./i-control-list");
+import ISerialize           = require("./i-serialize");
+import IArrayCollection     = require("./collection-array");
 
-// var Observer2
-// export type Observer = Observer2;
-// export = type aa: Observer = object;
-// export type Co = string;
-// export type Color = string;
-// export {};
-// export {};
-// type ob = Observer
-// export = ob;
-// type aa = String;
-// export = aa;
+import NamespaceManager     = require("./namespace-manager");
+import MetaRegistry         = require("./meta-registry");
+import MetaObject           = require("./meta-object");
+import MetaElement          = require("./meta-element");
 
-// export declare class Message {
-//     static init(): void;
-//     /**
-//      * 오류 메세지
-//      * @param p_code dd
-//      * @param p_aValue aa
-//      */
-//     static get(p_code: string, p_aValue: Array<string>): string;
-    
-// }
-
-import Observer = require("./observer");
-import Util = require("./util");
-import Message = require("./message");
+import BaseCollection       = require("./base-collection");
+import ArrayCollection      = require("./collection-array");
+import PropertyCollection   = require("./collection-property");
 
 
 // declare class Message {
@@ -76,9 +39,27 @@ import Message = require("./message");
 
 
 export {
-    Util,
+    ExtendError,
     Observer,
+    Util,
+    Type,
     Message,
+    IObject,
+    IMarshal,
+    ICollection,
+    IPropertyCollection,
+    IElement,
+    IList,
+    IListControl,
+    ISerialize,
+    IArrayCollection,
+    NamespaceManager,
+    MetaRegistry,
+    MetaObject,
+    MetaElement,
+    BaseCollection,
+    ArrayCollection,
+    PropertyCollection
 };
 
 // export declare namespace _L {
