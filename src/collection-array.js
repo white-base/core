@@ -175,7 +175,7 @@
         /**
          * 배열 컬렉션에 요소를 추가합니다.
          * @param {any} p_elem 요소
-         * @param {object?} p_desc 프로퍼티 기술자 객체
+         * @param {object} [p_desc] 프로퍼티 기술자 객체
          * @returns {number} 추가한 인덱스
          */
         ArrayCollection.prototype.add = function(p_elem, p_desc) {
@@ -202,7 +202,7 @@
          * 배열 컬렉션의 지정위치에 요소를 추가합니다.
          * @param {number} p_pos 인덱스 위치
          * @param {any} p_elem 요소
-         * @param {object?} p_desc 프로퍼티 기술자 객체
+         * @param {object} [p_desc] 프로퍼티 기술자 객체
          * @returns {boolean} 
          */
         ArrayCollection.prototype.insertAt = function(p_pos, p_elem, p_desc) {

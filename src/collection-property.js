@@ -228,7 +228,7 @@
         /**
          * 프로퍼티 컬렉션의 인덱스 값을 조회합니다.
          * @param {string | any} p_target 키 또는 조회할 객체
-         * @param {boolean?} [p_isKey=false] 키로 조회 여부
+         * @param {boolean} [p_isKey=false] 키로 조회 여부
          * @returns {number} 없을시 -1
          */
         PropertyCollection.prototype.indexOf = function(p_target, p_isKey) {
@@ -244,8 +244,8 @@
         /**
          * 프로퍼티 컬렉션에 요소를 추가합니다.
          * @param {string} p_key 키
-         * @param {any?} p_elem 요소
-         * @param {object?} p_desc 기술자
+         * @param {any} [p_elem] 요소
+         * @param {object} [p_desc] 기술자
          * @returns {boolean} 결과
          */
         PropertyCollection.prototype.add = function(p_key, p_elem, p_desc) {
