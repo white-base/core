@@ -41,7 +41,7 @@
       ],
       "disqus": "",     // disqus의 짧은 이름(사이트 생성 중 하위 도메인)
       "openGraph": {    // 그래프 옵션 열기(대부분 Facebook 및 기타 사이트에서 메타 정보를 쉽게 추출할 수 있음)
-          "title": "",        //  웹사이트 제목
+          "title": "LOGIC framework",        //  웹사이트 제목
           "type": "website",
           "image": "",        // 메인 이미지/로고 
           "site_name": "",    // 사이트 이름 

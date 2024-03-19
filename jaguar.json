@@ -1,10 +1,10 @@
 {
     "templates": {
-        "applicationName": "Automation",
+        "applicationName": "LOGIC",
         "disqus": "",
         "googleAnalytics": "",
         "openGraph": {
-            "title": "Automation",
+            "title": "LOGIC framework",
             "type": "website",
             "image": "",
             "site_name": "",
