@@ -413,6 +413,47 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(m1.equal(a2[0])).toBe(true);
                 expect(m1.equal(a2[1])).toBe(true);
             });
+            it("- setObject() : 빈 컬렉션  ", () => {
+                const a1 = new ArrayCollection();
+                const obj = a1.getObject();
+                const a2 = new ArrayCollection();
+                a2.setObject(obj);
+        
+                expect(a1 !== a2).toBe(true);
+                expect(a1._guid !== a2._guid).toBe(true);
+                expect(a1.count).toBe(0);
+                expect(a2.count).toBe(0);
+            });
+            it("- setObject() : ArrayCollection 속성 ", () => {
+                class Table extends MetaElement {
+                    colleciton = new ArrayCollection(this);
+                    constructor(name){ 
+                        super(name);
+                        this.colleciton._elemTypes = Number;
+                    }
+                    getObject(p_vOpt, p_owned){
+                        var obj = MetaElement.prototype.getObject.call(this, p_vOpt, p_owned);
+                        obj['colleciton'] = this.colleciton.getObject(p_vOpt, p_owned);
+                        return obj;
+                    }
+                    setObject(p_oGuid, p_origin){
+                        MetaElement.prototype.setObject.call(this, p_oGuid, p_origin);
+                        this.colleciton.setObject(p_oGuid['colleciton'], p_oGuid);
+                    }
+                }
+                const desc = {
+                    value: 'A1',
+                    writable: true
+                };
+                var t1 = new Table('t1');
+                t1.colleciton.add(10, desc);
+                const obj = t1.getObject();
+                var t2 = new Table('t2');
+                t2.setObject(obj);
+
+                expect(t2.colleciton.count).toBe(1);
+                expect(t2.colleciton[0]).toBe(10);
+            });
             it("- setObject() : 예외 : $ref 삽입 ", () => {
                 const a1 = new ArrayCollection();
                 const m1 = new MetaElement('E1');

@@ -5,6 +5,7 @@
 // gobal defined
 'use strict';
 const { MetaElement } = require('../src/meta-element');
+const {MetaRegistry}        = require('../src/meta-registry');
 const {PropertyCollection}          = require('../src/collection-property');
 let Student, School, Member, Corp, House, Space;
 
@@ -457,6 +458,59 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(m1.equal(a2['a1'])).toBe(true);
                 expect(m1.equal(a2['a2'])).toBe(true);
             });
+            it("- setObject() : 빈 컬렉션  ", () => {
+                const a1 = new PropertyCollection();
+                const obj = a1.getObject();
+                const a2 = new PropertyCollection();
+                a2.setObject(obj);
+        
+                expect(a1 !== a2).toBe(true);
+                expect(a1._guid !== a2._guid).toBe(true);
+                expect(a1.count).toBe(0);
+                expect(a2.count).toBe(0);
+            });
+            it("- setObject() : PropertyCollection 속성 ", () => {
+                class Table extends MetaElement {
+                    colleciton = new PropertyCollection(this);
+                    constructor(name){ 
+                        super(name);
+                        this.colleciton._elemTypes = Number;
+                    }
+                    getObject(p_vOpt, p_owned){
+                        var obj = MetaElement.prototype.getObject.call(this, p_vOpt, p_owned);
+                        obj['colleciton'] = this.colleciton.getObject(p_vOpt, p_owned);
+                        return obj;
+                    }
+                    setObject(p_oGuid, p_origin){
+                        MetaElement.prototype.setObject.call(this, p_oGuid, p_origin);
+                        this.colleciton.setObject(p_oGuid['colleciton'], p_oGuid);
+                    }
+                }
+                const desc = {
+                    value: 'A1',
+                    writable: true
+                };
+                var t1 = new Table('t1');
+                t1.colleciton.add('n1', 10, desc);
+                const obj = t1.getObject();
+                var t2 = new Table('t2');
+                t2.setObject(obj);
+
+                expect(t2.colleciton.count).toBe(1);
+                expect(t2.colleciton[0]).toBe(10);
+            });
+            it("- setObject() : 예외 : $ref 삽입 ", () => {
+                const a1 = new PropertyCollection();
+                const m1 = new MetaElement('E1');
+                const ref1 = MetaRegistry.createReferObject(m1);
+                ref1.$ref = 'ERR'
+                a1.add('n1', m1);
+                a1.add('n2', ref1);
+                const obj = a1.getObject();
+                const a2 = new PropertyCollection();
+        
+                expect(()=> a2.setObject(obj)).toThrow(/EL04223/)
+            });
             it("- setObject() : 예외 <_key, _dest 크기다름> ", () => {
                 const a1 = new PropertyCollection();
                 a1.add('a1', 10);
@@ -471,6 +525,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(()=> a2.setObject(obj2)).toThrow(/EL04221/)
         
             });
+            
         });
         describe("PropertyCollection.indexOf(obj | str | num): num <인덱스 조회> ", () => {
             it("- indexOf(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {

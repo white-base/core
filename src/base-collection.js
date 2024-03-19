@@ -64,7 +64,7 @@
         * @constructs _L.Collection.BaseCollection
         * @implements {_L.Interface.ICollection}
         * @implements {_L.Interface.IList}
-        * @param {object} p_owner 소유객체
+        * @param {object?} p_owner 소유객체
         */
         function BaseCollection(p_owner) { 
             _super.call(this);

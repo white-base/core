@@ -12,6 +12,7 @@ const {PropertyCollection}  = require('../src/collection-property');
 // const { MetaTable }    = require('../src/meta-table');
 const { loadNamespace } = require('../src/load-namespace');
 const { replacer, reviver, stringify, parse }              = require('telejson');
+const { ArrayCollection } = require('logic-core');
 // const { MetaColumn } = require('../src/meta-column');
 
 //==============================================================
@@ -160,28 +161,27 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.isMetaObject(null)).toBe(false);
             });
         });
-
-        // 제외함 entity 테스트로 이동 필요 TODO:
-        describe.skip("MetaRegistry.createMetaObject() <메타객체 생성>", () => {
+        describe("MetaRegistry.createMetaObject() <메타객체 생성>", () => {
             it("- createMetaObject() : 객체로 생성", () => {
                 loadNamespace();    // 클래스 로딩
-                const mObj1 = {_type: 'MetaTable', _ns: 'Meta.Entity', name: 'T1'};
-                const mObj2 = {_type: 'MetaView', _ns: 'Meta.Entity', name: 'V1'};
-                const table1 = MetaRegistry.createMetaObject(mObj1);
-                const table2 = MetaRegistry.createMetaObject(mObj2);
+                const mObj1 = {_type: 'MetaObject', _ns: 'Meta'};
+                const mObj2 = {_type: 'MetaElement', _ns: 'Meta', name: 'V1'};
+                const m1 = MetaRegistry.createMetaObject(mObj1);
+                const m2 = MetaRegistry.createMetaObject(mObj2);
                 
-                expect(table1.tableName).toBe('T1');
-                expect(table2.viewName).toBe('V1');
+                expect(m1._ns).toBe('Meta');
+                expect(m2._name).toBe('V1');
             });
             it("- createMetaObject() : 참조가 존재하는 객체로 생성", () => {
                 loadNamespace();    // 클래스 로딩
-                const mObj1 = {_type: 'MetaTable', _ns: 'Meta.Entity', name: 'T1'};
-                const table1 = MetaRegistry.createMetaObject(mObj1);
-                const obj1 = table1.columns.getObject();
+                const e1 = new MetaElement('e1')
+                const mObj1 = {_type: 'ArrayCollection', _ns: 'Collection', _owner: e1};
+                const arr1 = MetaRegistry.createMetaObject(mObj1);
+                const obj1 = arr1.getObject();
                 const col1 = MetaRegistry.createMetaObject(obj1);
                 
-                expect(table1.tableName).toBe('T1');
-                expect(table1.columns._owner).toBe(table1);
+                // expect(arr1._name).toBe('T1');
+                expect(arr1._owner).toBe(e1);
                 expect(col1._owner).toBe(null);
             });
             it("- createMetaObject() : PARAM 없는 클래스", () => {
@@ -219,17 +219,16 @@ describe("[target: meta-registry.js]", () => {
                 expect(()=> MetaRegistry.createReferObject({})).toThrow(/EL03226/)
             });
         });
-        // 제외함 entity 테스트로 이동 필요 TODO:
-        describe.skip("MetaRegistry.createNsReferObject() <네임스페이스 속성 생성>", () => {
+        describe("MetaRegistry.createNsReferObject() <네임스페이스 속성 생성>", () => {
             it("- createNsReferObject() : 네임스페이스 객체 생성", () => {
                 loadNamespace();    // 클래스 로딩
-                const class1 = MetaRegistry.ns.find('Meta.Entity.MetaTable');
+                const class1 = MetaRegistry.ns.find('Meta.MetaElement');
                 const obj1 = {
                     cls1: MetaRegistry.createNsReferObject(class1),
                     name: 'OBJ'
                 };
                 const obj2 = {
-                    cls1: {$ns: 'Meta.Entity.MetaTable'},
+                    cls1: {$ns: 'Meta.MetaElement'},
                     name: 'OBJ'   
                 };
                 
@@ -512,6 +511,16 @@ describe("[target: meta-registry.js]", () => {
                 expect(MetaRegistry.hasGuidObject(r1, t1)).toBe(true);
                 expect(MetaRegistry.hasGuidObject(c1, t1)).toBe(true);
             });
+            it("- hasGuidObject() : row 에 테이블 삽입 ", () => {
+                const elem1 = new MetaElement('E1');
+                const arr1 = new ArrayCollection();
+                arr1.add(elem1);
+                const e1 = elem1.getObject();
+                const a1 = arr1.getObject();
+
+                expect(MetaRegistry.hasGuidObject(e1, a1)).toBe(true);
+                expect(MetaRegistry.hasGuidObject(e1._guid, a1)).toBe(true);
+            });
             it.skip("- hasGuidObject() : row 에 테이블 삽입 ", () => {
                 const elem1 = new MetaElement('E1');
                 const table1 = new MetaTable('T1');
@@ -570,14 +579,9 @@ describe("[target: meta-registry.js]", () => {
                  * MEMO: getObject(2) 는 _guid, _ref 가 존재하지 않는다.
                  */
             });
-            it.skip("- hasGuidObject() :예외", () => {
-                const elem1 = new MetaElement('E1');
-                const table1 = new MetaTable('T1');
-
+            it("- hasGuidObject() :예외", () => {
+                expect(()=> MetaRegistry.hasGuidObject({}, null)).toThrow(/EL03252/)
                 expect(()=> MetaRegistry.hasGuidObject('SSS', null)).toThrow(/EL03253/)
-                /**
-                 * MEMO: getObject(2) 는 _guid, _ref 가 존재하지 않는다.
-                 */
             });
         });
         describe("MetaRegistry.findSetObject(mObj, target) <guid로 생성한 객체 조회>", () => {
@@ -871,21 +875,21 @@ describe("[target: meta-registry.js]", () => {
                 // expect(t2.columns['i2']).toBeDefined();
                 // expect(t2.columns['i3']).not.toBeDefined();
             });
-            it.skip("- loadMetaObject() : 외부 parse 사용", () => {
-                const t1 = new MetaTable('T1');
-                t1.columns.add('i1');
-                t1.columns.add('i2');
-                const str = t1.output(0, stringify, '\t');
+            it("- loadMetaObject() : 외부 parse 사용", () => {
+                const t1 = new PropertyCollection();
+                t1.add('i1', 10);
+                t1.add('i2', 20);
+                var obj = t1.getObject();
+                var str = JSON.stringify(obj, null);
                 const t2 = MetaRegistry.loadMetaObject(str, parse);
 
-                expect(t2.tableName).toBe('T1');
-                expect(t2.columns.count).toBe(2);
-                expect(t2.columns['i1']).toBeDefined();
-                expect(t2.columns['i2']).toBeDefined();
-                expect(t2.columns['i3']).not.toBeDefined();
+                expect(t2.count).toBe(2);
+                expect(t2['i1']).toBeDefined();
+                expect(t2['i2']).toBeDefined();
+                expect(t2['i3']).not.toBeDefined();
             });
 
-            it.skip("- loadMetaObject() : 예외 ", () => {
+            it("- loadMetaObject() : 예외 ", () => {
                 expect(()=>  MetaRegistry.loadMetaObject(10, parse)).toThrow(/EL03246/)
                 expect(()=>  MetaRegistry.loadMetaObject("10")).toThrow(/EL03247/)
             });

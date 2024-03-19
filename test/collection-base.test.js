@@ -73,8 +73,15 @@ describe("[target: base-collection.js]", () => {
                 expect(rObj._type).toEqual(obj2._type);
                 expect(rObj.name).toEqual(obj2.name);
             });
-        });
+            it("- setObject() : EL04112 ", () => {
+                var e1 = new MetaElement('e1')
+                var a1 = new ArrayCollection(e1);
+                var o1 = a1.getObject();
+                var a2 = new ArrayCollection();
 
+                expect(()=> a2.setObject(o1)).toThrow('EL04112')
+            });
+        });
         describe("예외 및 커버리지", () => {
 
             it("- _owner : 변경  ", () => {

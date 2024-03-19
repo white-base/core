@@ -24,8 +24,10 @@ describe("[target: util-type.js.js]", () => {
             var tar01 = {}
             var tar02 = 10
 
+            expect(deepEqual(obj01, obj01)).toBe(T);
             expect(deepEqual(obj01, tar01)).toBe(T);
             expect(deepEqual(obj02, tar02)).toBe(false);
+            expect(deepEqual([,], [,,])).toBe(false);
         });
         it('- deepEqual() : prototype 객체 비교 ', () => {
             var sup01 = Object.create({aa: 1})

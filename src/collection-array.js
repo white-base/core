@@ -58,7 +58,7 @@
          * @constructs _L.Collection.ArrayCollection
          * @implements {_L.Interface.IArrayCollection}
          * @extends _L.Collection.BaseCollection
-         * @param {object} p_owner 소유 객체
+         * @param {object} [p_owner] 소유 객체
          */
         function ArrayCollection(p_owner) {
             _super.call(this, p_owner);
