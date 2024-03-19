@@ -75,7 +75,7 @@
              * @member {Array}  _L.Common.Observer#list  
              */
             Object.defineProperty(this, 'list', {
-                get: function() {
+                get: function() {       // Line:
                     var arr = [];
                     for (var prop in this.__subscribers) {
                         var elem = this.__subscribers[prop];

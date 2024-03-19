@@ -504,8 +504,8 @@
             }
             if (p_oGuid['_owner']) {
                 owner = MetaRegistry.findSetObject(p_oGuid['_owner']['$ref'], origin);
-                if (!owner) throw new ExtendError(/EL04112/, null, [p_oGuid['_owner']['$ref']]);
-                this._owner = owner;
+                if (!owner) throw new ExtendError(/EL04112/, null, [p_oGuid['_owner']['$ref']]);    // Branch:
+                this._owner = owner;            
             }
             if (Array.isArray(p_oGuid['_elemTypes']) && p_oGuid['_elemTypes'].length > 0){
                 this._elemTypes = p_oGuid['_elemTypes'];

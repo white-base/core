@@ -6,7 +6,10 @@
 'use strict';
 
 const {BaseCollection}          = require('../src/base-collection');
-const {ArrayCollection}          = require('../src/collection-array');
+const {MetaElement}             = require('../src/meta-element');
+const {ArrayCollection}         = require('../src/collection-array');
+const {MetaRegistry}            = require('../src/meta-registry');
+
 let Student, School, Corp, Member, House, Space;
 
 //==============================================================
@@ -37,6 +40,41 @@ describe("[target: base-collection.js]", () => {
 
         });
 
+        describe("BaseCollection.getObject() : setObject()", () => {
+            it("- getObject() : setObject() ", () => {
+                class SubCollection extends BaseCollection {
+                    constructor(own){ super(own)}
+                    clear(){
+                    }
+                }
+                class Table extends MetaElement {
+                    colleciton = new SubCollection(this);
+                    constructor(name){ 
+                        super(name);
+                        this.colleciton._elemTypes = String;
+                    }
+                    getObject(p_vOpt, p_owned){
+                        var obj = MetaElement.prototype.getObject.call(this, p_vOpt, p_owned);
+                        obj['colleciton'] = this.colleciton.getObject(p_vOpt, p_owned);
+                        return obj;
+                    }
+                    setObject(p_oGuid, p_origin){
+                        MetaElement.prototype.setObject.call(this, p_oGuid, p_origin);
+                        this.colleciton.setObject(p_oGuid['colleciton'], p_oGuid);
+                    }
+                }
+                const t1 = new Table('t1');
+                const rObj = t1.getObject();
+                const mObj = MetaRegistry.transformRefer(rObj);  
+                const t2 = new Table('t2');
+                t2.setObject(mObj);
+                const obj2 = t2.getObject();
+
+                expect(rObj._type).toEqual(obj2._type);
+                expect(rObj.name).toEqual(obj2.name);
+            });
+        });
+
         describe("예외 및 커버리지", () => {
 
             it("- _owner : 변경  ", () => {
@@ -63,6 +101,7 @@ describe("[target: base-collection.js]", () => {
                 const s1 = new SubCollection();
                const obj1 = s1.getObject( 0, {})
             });
+            
             it("- 커버리지 :  this.__GET$_elements() ", () => {
                 class SubCollection extends BaseCollection {
                     constructor(){ super()}

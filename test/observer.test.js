@@ -93,7 +93,21 @@ describe("[target: observer.js]", () => {
                 _onAny(p1) { this._event.publish('', p1) }
             }
         });
+        it("- list ", () => {
+            // 이벤트 생성 및 등록
+            const e = new EventClass();
+            const result = [];
+            function add(p1, p2) { 
+                if (p1) result.push(p1)
+                if (p2) result.push(p2)
+                result.push('ADD1') 
+            }
+            e.onAdd = add;
+            // e.onAdd = add;
     
+            e._onAdd('P1', 'P2');    // 이벤트 강제 호출
+            expect(e._event.list).toEqual([ {'add': {0: add} } ]);  // REVIEW: list 구조 변경 확인 필요
+        });
         it("- 이벤트 등록 및 호출 : 단일 등록/호출", () => {
             // 이벤트 생성 및 등록
             const e = new EventClass();

@@ -429,7 +429,7 @@
             if (!_isString(guid)) throw new ExtendError(/EL03252/, null, [typeof guid]);
 
             if (Array.isArray(p_origin)) arrOrigin = p_origin;
-            else arrOrigin.push(p_origin);
+            else arrOrigin.push(p_origin);      // Line:
 
             for (var i = 0; i < arrOrigin.length; i++) {
                 var origin = arrOrigin[i];
