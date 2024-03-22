@@ -10,7 +10,9 @@
     "test:v": "jest --verbose",
     "doc:j": "jsdoc -c jaguar.json",
     "doc:2": "jsdoc -c jsdoc.json",
-    "http": "npx http-server"
+    "http": "npx http-server",
+    "type:eng": "npx typedoc --out eDocs @types/eng/index.d.ts",
+    "type:kor": "npx typedoc --out kDocs @types/kor/index.d.ts"
   },
   "repository": {
     "type": "git",
@@ -25,13 +27,14 @@
     "jest-environment-jsdom": "^29.5.0",
     "jsdoc": "^4.0.2",
     "jsdom": "^22.0.0",
-    "telejson": "^7.2.0"
+    "telejson": "^7.2.0",
+    "typedoc": "^0.25.12"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@types/logic-core": "file:@types",
+    "@types/logic-core": "file:@types/eng",
     "stringify-parse": "github:bonjs/stringify-parse"
   }
 }

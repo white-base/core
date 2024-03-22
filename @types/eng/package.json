@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
-  "types": "./index.d.ts"
+  "types": "./index.d.ts",
+  "devDependencies": {
+    "typedoc": "^0.25.12"
+  }
 }
