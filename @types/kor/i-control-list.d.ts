@@ -1,4 +1,4 @@
-declare interface IListControl {
+declare class IListControl {
 
 }
 

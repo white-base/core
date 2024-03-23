@@ -1,4 +1,4 @@
-declare interface ICollection {
+declare class ICollection {
 
 }
 

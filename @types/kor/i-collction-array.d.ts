@@ -1,5 +1,5 @@
-declare interface IArrayCollection {
-    
+declare class IArrayCollection {
+
 }
 
 export = IArrayCollection;

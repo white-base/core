@@ -1,4 +1,4 @@
-declare interface IPropertyCollection {
+declare class IPropertyCollection {
 
 }
 

@@ -25,7 +25,7 @@ declare class MetaObject {
     /**
      * 현재 객체의 생성자와 상위(proto) 생성자를 목록으로 가져옵니다.
      */
-    getTypes(): Array<Function>;
+    getTypes(): Function[];
 
     /**
      * 현재 객체의 target 인스턴스 여부를 검사합니다 .(_UNION 포함)
@@ -44,7 +44,7 @@ declare class MetaObject {
      * @example
      * a.getObject(2) == b.getObject(2
      */
-    getObject(vOpt?: number, owned?: object | Array<object>): object;
+    getObject(vOpt?: number, owned?: object | object[]): object;
 
     /**
      * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
