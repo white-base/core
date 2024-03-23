@@ -227,7 +227,7 @@
 
         /**
          * 프로퍼티 컬렉션의 인덱스 값을 조회합니다.
-         * @param {string | any} p_target 키 또는 조회할 객체
+         * @param {string | any} p_target 키 또는 요소
          * @param {boolean} [p_isKey=false] 키로 조회 여부
          * @returns {number} 없을시 -1
          */
@@ -323,7 +323,7 @@
 
         /**
          * 프로퍼티 컬렉션의 키 존재하는지 확인합니다.
-         * @param {string} p_key 프로퍼티 키값
+         * @param {string} p_key 키
          * @returns {boolean}
          */
         PropertyCollection.prototype.exist = function(p_key) {
