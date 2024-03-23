@@ -47,6 +47,42 @@ import PropertyCollection   = require("./collection-property");
 // declare class Collection.ArrayCollection;
 
 // var Array
+// declare const View : {Com: IArrayCollection};
+
+declare namespace View {
+    const IArrayCollection:  IArrayCollection;
+}
+
+// declare type aa = string;
+
+declare namespace Common {
+        const Observer : Observer;
+        // const Util : 
+        // const Util : Util
+        // namespace Ss : Util;
+}
+declare namespace Common.Util {
+    // var inherits : Util.inherits;
+    // export Util
+    // const Observer : Observer; 
+    // const Util : Util
+    // namespace Ss : Util;
+}
+
+    // interface _Common {
+    //     aa: string
+    // }
+    // const Common: {
+    //     // a: _Common
+    //     IArrayCollection
+    // }
+    // namespace Common {
+        // const Util : Util
+    // }
+    // const Common: { 'Util': Util };
+
+    // namespace Util { }
+// }  
 
 export {
     ExtendError,
@@ -69,6 +105,9 @@ export {
     MetaElement,
     BaseCollection,
     Collection,
+    View,
+    Common,
+    d3,
     // Collection.ArrayCollection as aa,
     // as = Collection.ArrayCollection,
     // Collection as ssss,
