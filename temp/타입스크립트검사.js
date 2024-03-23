@@ -15,6 +15,7 @@ var core = require('../');
 // import {Observer} from 'logic-core'
 // const {Observer} = require('logic-core')
 const {Observer} = require('../')
+const {MetaObject} = require('../')
 
 var i  = new core.Observer({})
 i.publish()
@@ -28,6 +29,10 @@ var assert = require('assert')
 var ii = new assert.AssertionError({})
 
 
+
+// var aa = core.()
+
+MetaObject
 
 console.log(0);
 

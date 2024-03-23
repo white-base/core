@@ -137,7 +137,7 @@
      * superCtor 을 상속합니다.
      * @function
      * @memberof _L.Common.Util
-     * @param {function | object} ctor 대상 생성자 또는 객체
+     * @param {function | object} ctor 생성자 또는 생성 객체
      * @param {function | object} superCtor 상속 받을 부모 생성자 또는 객체
      */
     var inherits = (function () {

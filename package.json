@@ -34,7 +34,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@types/logic-core": "file:@types/eng",
+    "@types/logic-core": "file:@types/kor",
     "stringify-parse": "github:bonjs/stringify-parse"
   }
 }

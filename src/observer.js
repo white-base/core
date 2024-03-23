@@ -151,7 +151,7 @@
         /**
          * 구독 신청
          * 이벤트 'p_code'를 입력하지 않으면 전역(any)에 등록 된다.
-         * @param {function?} p_fn  구독 콜백 함수
+         * @param {function} p_fn  구독 콜백 함수
          * @param {string?} [p_code = 'any'] 구독 코드명
          */
         Observer.prototype.subscribe = function(p_fn, p_code) {
