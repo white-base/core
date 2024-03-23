@@ -246,7 +246,7 @@
          * @param {string} p_key 키
          * @param {any} [p_elem] 요소
          * @param {object} [p_desc] 기술자
-         * @returns {boolean} 결과
+         * @returns {number} index 번호
          */
         PropertyCollection.prototype.add = function(p_key, p_elem, p_desc) {
             try {

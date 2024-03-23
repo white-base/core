@@ -24,4 +24,4 @@ declare class ExtendError {
     queue: string[];
 }
 
-export = ExtendError;
+export { ExtendError, Iprop };

@@ -1,3 +1,6 @@
+/**
+ * @interface IObjectIObject
+ */
 declare class IObject {
     
     /** 객체 인터페이스 입니다. (최상위) */

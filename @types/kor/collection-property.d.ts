@@ -10,6 +10,13 @@ interface PropertyDescriptor {
 
 declare class PropertyCollection {
     
+    
+    /**
+     *  프로퍼티 컬렉션을 생성합니다.
+     * @param owner 소유 객체
+     */
+    constructor(owner: object);
+    
     /**
      * 컬렉션 요소의 키값들
      */
@@ -78,4 +85,4 @@ declare class PropertyCollection {
 
 }
 
-export = PropertyCollection;
+export { PropertyCollection, PropertyDescriptor};

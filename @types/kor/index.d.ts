@@ -13,7 +13,7 @@ import IElement             = require("./i-element");
 import IList                = require("./i-list");
 import IListControl         = require("./i-control-list");
 import ISerialize           = require("./i-serialize");
-import IArrayCollection     = require("./collection-array");
+import IArrayCollection     = require("./i-collction-array");
 
 import NamespaceManager     = require("./namespace-manager");
 import MetaRegistry         = require("./meta-registry");
@@ -21,9 +21,16 @@ import MetaObject           = require("./meta-object");
 import MetaElement          = require("./meta-element");
 
 import BaseCollection       = require("./base-collection");
-import ArrayCollection      = require("./collection-array");
+// import {Collection}           = require("./collection-array");
+import Collection           = require("./collection-array");
+// import * as C           = require("./collection-array");
+// import ArrayCollection     = require("./collection-array");
+// declare type ArrayCollection =  ArrayCollection.Collection
+// import ArrayCollection      Collection.ArrayCollection;
+// import ArrayCollection      = require("./collection-array");
 import PropertyCollection   = require("./collection-property");
 
+// declare var ArrayCollection = Collection.ArrayCollection;
 
 // declare class Message {
 //     static init(): void;
@@ -35,8 +42,11 @@ import PropertyCollection   = require("./collection-property");
 //     static get(p_code: string, p_aValue: Array<string>): string;
     
 // }
+//  type ArrayCollection = Collection.ArrayCollection;
+// declare const {ArrayCollection} = Collection.;
+// declare class Collection.ArrayCollection;
 
-
+// var Array
 
 export {
     ExtendError,
@@ -58,7 +68,15 @@ export {
     MetaObject,
     MetaElement,
     BaseCollection,
-    ArrayCollection,
+    Collection,
+    // Collection.ArrayCollection as aa,
+    // as = Collection.ArrayCollection,
+    // Collection as ssss,
+    // Collection.ArrayCollection as ssss,
+    // ArrayCollection,
+    // Collection as ArrayCollection,
+    // Collection.ArrayCollection,
+    // Collection.ArrayCollection as ArrayCollection,
     PropertyCollection
 };
 
