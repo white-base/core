@@ -48,7 +48,7 @@
          * @constructs _L.Common.ExtendError
          * @param {string | Regexp} p_msg  메세지코드 또는 메세지
          * @param {ExtendError | object} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
-         * @param {array<string>} p_codeVal  메세지 코드값
+         * @param {array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
          * @example
          * new ExtendError({code:'', ctx: []})
          * new ExtendError(/E0011/, [''])
