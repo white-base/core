@@ -1,4 +1,5 @@
 
+
 import ExtendError          = require("./extend-error");
 import Observer             = require("./observer");
 import Util                 = require("./util");
@@ -22,16 +23,24 @@ import MetaElement          = require("./meta-element");
 
 import BaseCollection       = require("./base-collection");
 // import {Collection}           = require("./collection-array");
-import Collection           = require("./collection-array");
 // import * as C           = require("./collection-array");
-// import ArrayCollection     = require("./collection-array");
+
+// import Collection           = require("./collection-array");
+import ArrayCollection     = require("./collection-array");
+
 // declare type ArrayCollection =  ArrayCollection.Collection
 // import ArrayCollection      Collection.ArrayCollection;
 // import ArrayCollection      = require("./collection-array");
 import PropertyCollection   = require("./collection-property");
+import T                = require("./T");
 
+export {T}
 // declare var ArrayCollection = Collection.ArrayCollection;
 
+// declare namespace ArrayCollection;
+// export declare var Coll : {ArrayCollection: Collection.ArrayCollection}
+// export {Collection}
+export {ArrayCollection, BaseCollection}
 // declare class Message {
 //     static init(): void;
 //     /**
@@ -49,25 +58,67 @@ import PropertyCollection   = require("./collection-property");
 // var Array
 // declare const View : {Com: IArrayCollection};
 
-declare namespace View {
-    const IArrayCollection:  IArrayCollection;
-}
+// declare namespace View {
+//     const IArrayCollection:  IArrayCollection;
+// }
 
 // declare type aa = string;
 
-declare namespace Common {
-        const Observer : Observer;
-        // const Util : 
-        // const Util : Util
-        // namespace Ss : Util;
-}
-declare namespace Common.Util {
-    // var inherits : Util.inherits;
-    // export Util
-    // const Observer : Observer; 
-    // const Util : Util
-    // namespace Ss : Util;
-}
+// export declare var _L : {Common: {}, };
+
+// export namespace _L {
+    export namespace Common {
+        /** Util 네임스페이스 TODO: */
+        let Util;
+        /** Type 네임스페이스 TODO: */
+        let Type;
+    }
+    export namespace Interface {
+        var IObject : IObject;
+        var IMarshal : IMarshal;
+        var ICollection : ICollection;
+        var IPropertyCollection : IPropertyCollection;
+        var IElement : IElement;
+        var IList : IList;
+        var IListControl : IListControl;
+        var ISerialize : ISerialize;
+        var IArrayCollection : IArrayCollection;
+        // type IObject = IObject;
+    }
+    export namespace Meta {
+        var NamespaceManager : NamespaceManager;
+        var MetaRegistry : MetaRegistry;
+        var MetaObject : MetaObject;
+        var MetaElement : MetaElement;
+        
+    }
+    export namespace Collection {
+        var BaseCollection : BaseCollection;
+        var ArrayCollection : ArrayCollection;
+        var PropertyCollection : PropertyCollection;
+        
+    }
+// }
+
+// _L.Common.Util
+
+// export declare namespace Common {
+//         const Observer : Observer;
+
+//         // const Util : Util 
+//         // const Util : Util
+//         // namespace Ss : Util;
+// }
+// export declare namespace Common.Util {
+//     // Util
+//     var inherits : string;
+//     // export Util
+//     // const Observer : Observer; 
+//     // const Util : Util
+//     // namespace Ss : Util;
+// }
+
+// export declare 
 
     // interface _Common {
     //     aa: string
@@ -83,6 +134,8 @@ declare namespace Common.Util {
 
     // namespace Util { }
 // }  
+
+
 
 export {
     ExtendError,
@@ -103,11 +156,11 @@ export {
     MetaRegistry,
     MetaObject,
     MetaElement,
-    BaseCollection,
-    Collection,
-    View,
-    Common,
-    d3,
+    // BaseCollection as Collection,
+    // ArrayCollection,
+    // Collection,
+    // View,
+    // Common,
     // Collection.ArrayCollection as aa,
     // as = Collection.ArrayCollection,
     // Collection as ssss,
@@ -117,6 +170,7 @@ export {
     // Collection.ArrayCollection,
     // Collection.ArrayCollection as ArrayCollection,
     PropertyCollection
+    // ArrayCollection.
 };
 
 // export declare namespace _L {

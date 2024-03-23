@@ -46,6 +46,7 @@ declare namespace _L.Meta.Entity {
 }
 
 
+
 declare namespace _L.Etc {
     
     //~ 'myLib.timeout = 50;' 라고 사용할 수 있습니다.

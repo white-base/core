@@ -1,16 +1,17 @@
 import Observer             = require("./observer");
+import T                = require("./T");
 
-/**
- * @param idx 인덱스 번호
- * @param elem 요소
- * @param _this 현재 컬렉션
- * 
- */
-declare type OnFunc = (idx: number, elem: any, _this: object)=> void;
+// declare type OnFunc = (idx: number, elem: any, _this: object)=> void;
 
-declare namespace Collection {
+// declare namespace Collection {
+    /**
+     * @param idx 인덱스 번호
+     * @param elem 요소
+     * @param _this 현재 컬렉션
+     */
     type OnFunc = (idx: number, elem: any, _this: object)=> void;
-    class BaseCollection {
+
+    declare class BaseCollection {
         /**
          * 기본 컬렉션을 생성합니다.(최상위)
          * @param owner 소유 객체
@@ -70,25 +71,25 @@ declare namespace Collection {
          * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
          * @event BaseCollection#onAdd
          */
-        onAdd: OnFunc;
+        onAdd: T.OnFunc;
     
         /**
          * 컬렉션 요소를 추가 후에 발생하는 이벤트 입니다.
          * @event BaseCollection#onAdded
          */
-        onAdded: OnFunc;
+        onAdded: T.OnFunc;
     
         /**
          * 컬렉션 요소를 삭제 전에 발생하는 이벤트 입니다.
          * @event BaseCollection#onRemove
          */
-        onRemove: OnFunc;
+        onRemove: T.OnFunc;
         
         /**
          * 컬렉션 요소를 삭제 후에 발생하는 이벤트 입니다.
          * @event BaseCollection#onRemoved
          */
-        onRemoved: OnFunc;
+        onRemoved: T.OnFunc;
     
         /**
          * 컬렉션을 초기화 전에 발생하는 이벤트 입니다.
@@ -108,13 +109,13 @@ declare namespace Collection {
          *  컬렉션 요소를 변경 전에 발생하는 이벤트 입니다.
          * @event BaseCollection#onChanging
          */
-        onChanging: OnFunc;
+        onChanging: T.OnFunc;
     
         /**
          * 컬렉션 요소를 변경 후에 발생하는 이벤트 입니다.
          * @event BaseCollection#onChanged
          */
-        onChanged: OnFunc;
+        onChanged: T.OnFunc;
     
         /**
          * onAdd 이벤트를 발생합니다.
@@ -185,9 +186,10 @@ declare namespace Collection {
     
         /**
          * 컬렉션의 요소를 삭제합니다. (내부)
+         * @param pos 인덱스 위치
          * @abstract
          */
-        _remove();
+        _remove(pos: number): boolean;
     
     
         /**
@@ -239,7 +241,7 @@ declare namespace Collection {
          * 컬렉션에 요소를 추가합니다.
          * @abstract
          */
-        add();
+        add(elem?);
     
         /**
          * 컬렉션을 초기화 합니다.
@@ -248,7 +250,9 @@ declare namespace Collection {
         clear();
     }
 
-}
+// }
 
 // export {BaseCollection, OnFunc};
-export = Collection;
+// export = Collection;
+// export = Collection;
+export = BaseCollection;

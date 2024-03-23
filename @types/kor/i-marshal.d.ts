@@ -1,3 +1,7 @@
+/**
+ * 객체 통제 인터페이스 입니다.
+ * @interface
+ */
 declare class IMarshal {
 
     /** 객체 통제 인터페이스 입니다. */

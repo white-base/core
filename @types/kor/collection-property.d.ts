@@ -1,12 +1,14 @@
 
-interface PropertyDescriptor {
-    configurable?: boolean;
-    enumerable?: boolean;
-    value?: any;
-    writable?: boolean;
-    get?(): any;
-    set?(v: any): void;
-}
+import T                    = require("./T");
+
+// interface PropertyDescriptor {
+//     configurable?: boolean;
+//     enumerable?: boolean;
+//     value?: any;
+//     writable?: boolean;
+//     get?(): any;
+//     set?(v: any): void;
+// }
 
 declare class PropertyCollection {
     
@@ -62,7 +64,7 @@ declare class PropertyCollection {
      * @param elem 요소
      * @param desc 기술자
      */
-    add(key: string, elem: any, desc?: PropertyDescriptor): boolean;
+    add(key: string, elem: any, desc?: T.PropertyDescriptor): boolean;
 
     /**
      * 프로러티 컬렉션을 초기화 합니다.
@@ -85,4 +87,5 @@ declare class PropertyCollection {
 
 }
 
-export { PropertyCollection, PropertyDescriptor};
+// export { PropertyCollection, PropertyDescriptor};
+export = PropertyCollection;
