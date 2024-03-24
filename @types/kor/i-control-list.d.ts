@@ -2,7 +2,7 @@
  * 목록에 대상을 추가합니다.
  * @interface
  */
-declare interface IListControl {
+declare class IListControl {
 
     /** 목록 제어 인터페이스 입니다. */
     // constructor();

@@ -2,7 +2,7 @@
  * 프로퍼티 컬렉션 인터페이스 입니다.
  * @interface
  */
-declare interface IPropertyCollection {
+declare class IPropertyCollection {
 
     /** 프로퍼티 컬렉션 인터페이스 입니다. */
     // constructor();

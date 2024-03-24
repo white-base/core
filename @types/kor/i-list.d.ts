@@ -2,7 +2,7 @@
  * 목록 인터페이스 입니다.
  * @interface
  */
-declare interface IList {
+declare class IList {
 
     /** 목록 인터페이스 입니다. */
     // constructor();

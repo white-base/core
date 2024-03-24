@@ -2,7 +2,7 @@
  * 객체 통제 인터페이스 입니다.
  * @interface
  */
-declare interface IMarshal {
+declare class IMarshal {
 
     /** 객체 통제 인터페이스 입니다. */
     // constructor();

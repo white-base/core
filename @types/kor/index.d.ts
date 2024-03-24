@@ -62,6 +62,7 @@ export namespace Collection {
 
 
 export {
+    T,
     ExtendError,
     Observer,
     Util,
