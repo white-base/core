@@ -1,5 +1,6 @@
 import NamespaceManager     = require("./namespace-manager");
 import MetaObject           = require("./meta-object");
+import T                    = require("./T");
 
 /**
  * 메타 객체 등록소입니다. (static)
@@ -69,39 +70,43 @@ declare class MetaRegistry {
      */
     static createMetaObject(oGuid: object, origin?: object): MetaObject;
 
+    
     /**
      * guid 객체에 대한 guid 참조를 생성합니다.  
      * @param meta 메타 객체
+     * @returns ex> {$ref: '5337877c-49d6-9add-f35a-7bd31d510d4f'}
      * @example
      * var meta = new MetaElement('m1');
      * obj.onwer = MetaRegistry.createReferObject(meta);
-     * console.log(obj.onwer);          // { $ref : '5337877c-49d6-9add-f35a-7bd31d510d4f' }
+     * console.log(obj.onwer); // { $ref : '5337877c-49d6-9add-f35a-7bd31d510d4f' }
      */
-    static createReferObject(meta: MetaObject): object; // TODO: 객체 지정  { $ref: 'guid값' }
+    static createReferObject(meta: MetaObject): T.RefObject;
 
     /**
      * target을 네임스페이스에 등록하고, 참조를 생성합니다.
      * 
      * @param target 함수 또는 생성자
+     * @returns ex> { $ns: 'Meta.MetaObject'}
      * @example
      * var meta = new MetaElement('m1');
      * obj.onwer = MetaRegistry.createReferObject(meta);
      * console.log(obj);                // {onwer: {$ns: 'Meta.MetaElement'}}
      */
-    static createNsReferObject(target: Function): object;   // TODO: 객체 타입 { $ns: string }
+    static createNsReferObject(target: Function): T.NsObject;
 
     /**
      * guid 객체에 메타 객체의 guid 를 설정합니다.  
      * - oGuid.$set = meta._guid
      * @param oGuid guid 타입의 객체
      * @param meta guid을 가지는 객체 
+     * @returns ex> { $set: ''5337877c-49d6-9add-f35a-7bd31d510d4f'}
      * @example
      * var meta = new MetaElement('m1');    // meta.guid = '5337877c-49d6-9add-f35a-7bd31d510d4f'
      * var obj = { name: 'm2' };
      * MetaRegistry.setMetaObject(obj, meta);
      * console.log(obj);                    // {name: 'm2, $set: '5337877c-49d6-9add-f35a-7bd31d510d4f'}
      */
-    static setMetaObject(oGuid: object, meta: MetaObject): object;  // TODO: 객체 타입
+    static setMetaObject(oGuid: object, meta: MetaObject): T.SetObject;
 
     /**
      * guid 객체의 유효성 검사를 합니다.  
