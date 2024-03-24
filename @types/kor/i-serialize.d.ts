@@ -2,16 +2,16 @@
  * 직렬화 인터페이스 입니다.
  * @interface IObject
  */
-declare class ISerialize {
+declare interface ISerialize {
 
     /** 직렬화 인터페이스 입니다. */
-    constructor();
+    // constructor();
     
     /** 내보내기(출력) 합니다. */
-    output();
+    output(...args);
 
     /** 가져오기(로드) 합니다. */
-    load();
+    load(...args);
 }
 
 export = ISerialize;

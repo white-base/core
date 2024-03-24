@@ -2,10 +2,10 @@
  * 목록 인터페이스 입니다.
  * @interface
  */
-declare class IList {
+declare interface IList {
 
     /** 목록 인터페이스 입니다. */
-    constructor();
+    // constructor();
 
     /** 목록 */
     list: any[];

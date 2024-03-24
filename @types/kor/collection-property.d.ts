@@ -1,4 +1,5 @@
-
+import IPropertyCollection  = require("./i-collection-property");
+import BaseCollection       = require("./base-collection");
 import T                    = require("./T");
 
 // interface PropertyDescriptor {
@@ -10,7 +11,7 @@ import T                    = require("./T");
 //     set?(v: any): void;
 // }
 
-declare class PropertyCollection {
+declare class PropertyCollection extends BaseCollection implements IPropertyCollection {
     
     
     /**
@@ -64,7 +65,7 @@ declare class PropertyCollection {
      * @param elem 요소
      * @param desc 기술자
      */
-    add(key: string, elem: any, desc?: T.PropertyDescriptor): boolean;
+    add(key: string, elem: any,  desc?: T.PropertyDescriptor): boolean;
 
     /**
      * 프로러티 컬렉션을 초기화 합니다.

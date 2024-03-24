@@ -61,7 +61,7 @@
     
         /**
          * 메타 객체 목록 (참조값)
-         * @member {string} _L.Meta.MetaRegistry#list
+         * @member {any[]} _L.Meta.MetaRegistry#list
          * @readonly
          */
         Object.defineProperty(MetaRegistry, "list", 
@@ -77,7 +77,7 @@
 
         /**
          * 메타 객체 전체 갯수
-         * @member {string} _L.Meta.MetaRegistry#count
+         * @member {number} _L.Meta.MetaRegistry#count
          * @readonly
          */
         Object.defineProperty(MetaRegistry, "count", 
@@ -89,7 +89,7 @@
 
         /**
          * 메타 객체의 네임스페이스
-         * @member {string} _L.Meta.MetaRegistry#ns
+         * @member {NamespaceManager} _L.Meta.MetaRegistry#ns
          * @readonly
          */
         Object.defineProperty(MetaRegistry, "ns", 
@@ -519,7 +519,7 @@
         /**
          * guid 객체의 참조요소값을 객체 참조로 변환합니다.  
          * 변환대상 : $ns => [object object]
-         * @param {object} p_oGuid 
+         * @param {object} p_oGuid 변환할 guid 객체
          * @returns {object} 참조 변환한 oGuid 객체
          */
         MetaRegistry.transformRefer = function(p_oGuid) {
@@ -559,9 +559,9 @@
          * 네임스페이스(ns)에 생성자 또는 객체를 등록합니다.  
          * - 중복 검사 후 등록  
          * - 기본제공 함수는 내부 저장하지 않음  
-         * @param {function | object} p_target
+         * @param {function | object} p_target 대상
          * @param {string} p_ns fullname 또는 네임스페이스 
-         * @param {string} p_key 
+         * @param {string} p_key 대상 이름
          */
         MetaRegistry.registerClass = function(p_target, p_ns, p_key) {
             var fullName;

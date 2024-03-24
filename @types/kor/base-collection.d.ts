@@ -1,5 +1,7 @@
+import ICollection          = require("./i-collection");
+import MetaObject           = require("./meta-object");
 import Observer             = require("./observer");
-import T                = require("./T");
+import T                    = require("./T");
 
 // declare type OnFunc = (idx: number, elem: any, _this: object)=> void;
 
@@ -11,7 +13,7 @@ import T                = require("./T");
      */
     type OnFunc = (idx: number, elem: any, _this: object)=> void;
 
-    declare class BaseCollection {
+    declare abstract class BaseCollection extends MetaObject implements ICollection{
         /**
          * 기본 컬렉션을 생성합니다.(최상위)
          * @param owner 소유 객체
@@ -189,7 +191,7 @@ import T                = require("./T");
          * @param pos 인덱스 위치
          * @abstract
          */
-        _remove(pos: number): boolean;
+        abstract _remove(pos: number): boolean;
     
     
         /**
@@ -235,19 +237,19 @@ import T                = require("./T");
          * 컬렉션에 요소를 조회합니다.
          * @param elem 요소
          */
-        indexOf(elem: any): number;
+        indexOf(elem?: any): number;
     
         /**
          * 컬렉션에 요소를 추가합니다.
          * @abstract
          */
-        add(elem?);
+        abstract add(...args);
     
         /**
          * 컬렉션을 초기화 합니다.
          * @abstract
          */
-        clear();
+        abstract clear();
     }
 
 // }

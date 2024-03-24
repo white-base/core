@@ -1,3 +1,4 @@
+import IArrayCollection     = require("./i-collction-array");
 import BaseCollection       = require("./base-collection");
 import T                    = require("./T");
 // import {BaseCollection}       from "./base-collection";
@@ -74,7 +75,7 @@ import T                    = require("./T");
 
 // declare namespace Collection {
     
-    declare class ArrayCollection extends BaseCollection {
+    declare class ArrayCollection extends BaseCollection implements IArrayCollection {
     
         /**
          * 배열 컬렉션을 생성합니다.

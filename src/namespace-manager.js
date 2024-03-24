@@ -124,6 +124,7 @@
             /**
              * 네임스페이스 요소 갯수
              * @member {number} _L.Meta.NamespaceManager#count 
+             * @readonly
              */
             Object.defineProperty(this, 'count', 
             {
@@ -206,7 +207,7 @@
 
         /**
          * 네임스페이스 경로객체를 얻습니다.
-         * @param {string | object} p_elem 
+         * @param {string | object} p_elem 얻을 요소
          * @returns {object} {ns: '..', key: '..'}
          * @protected
          */
@@ -239,7 +240,7 @@
 
         /**
          * 네임스페이스에 경로를 추가합니다.
-         * @param {string | array<string>} p_ns 
+         * @param {string | array<string>} p_ns 네임스페이스 이름
          */
         NamespaceManager.prototype.addNamespace = function(p_ns) {
             var parent = this.__storage;
@@ -265,7 +266,7 @@
 
         /**
          * 네임스페이스에 경로를 삭제합니다.
-         * @param {string | array<string>} p_ns 
+         * @param {string | array<string>} p_ns 네임스페이스 이름
          */
         NamespaceManager.prototype.delNamespace = function(p_ns) {
             var parent = this.__storage;
@@ -288,7 +289,7 @@
 
         /**
          * 네임스페이스에 경로 객체를 얻습니다.
-         * @param {string | array<sting>} p_ns 
+         * @param {string | array<sting>} p_ns 네임스페이스 이름
          * @returns {object} 경로에 대한 객체
          */
         NamespaceManager.prototype.path = function(p_ns) {
@@ -315,8 +316,8 @@
 
         /**
          * 네임스페이스의 경로에 요소를 추가합니다.
-         * @param {string} p_fullName 
-         * @param {any} p_elem 
+         * @param {string} p_fullName 네임스페이스 전체 경로명
+         * @param {any} p_elem 요소
          */
         NamespaceManager.prototype.add = function(p_fullName, p_elem) {
             var parent = this.__storage;
@@ -356,7 +357,7 @@
 
         /**
          * 네임스페이스의 경로에 요소를 삭제합니다.
-         * @param {string} p_fullname 
+         * @param {string} p_fullname 네임스페이스 전체 경로명
          * @returns {boolean}
          */
         NamespaceManager.prototype.del = function(p_fullName) {
@@ -395,7 +396,7 @@
 
         /**
          * 네임스페이스의 경로에 요소를 찾아서 돌려줍니다.
-         * @param {string | array<string>} p_fullName 
+         * @param {string | array<string>} p_fullName 네임스페이스 전체 경로명
          * @returns {(object | function)?}
          */
         NamespaceManager.prototype.find = function(p_fullName) {
@@ -420,7 +421,7 @@
         /**
          * 네임스페이스에 요소로 경로를 얻습니다.  
          * (중복시 첫번째 요소 return)
-         * @param {any} p_elem 
+         * @param {any} p_elem 얻을 객체
          * @returns {string?}
          */
         NamespaceManager.prototype.getPath = function(p_elem) {

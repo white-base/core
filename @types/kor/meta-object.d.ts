@@ -1,5 +1,7 @@
+import IObject              = require("./i-object");
+import IMarshal             = require("./i-marshal");
 
-declare class MetaObject {
+declare class MetaObject implements IObject, IMarshal {
     
     /**
      * 메타 최상위 객체를 생성합니다.

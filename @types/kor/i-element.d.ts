@@ -2,10 +2,10 @@
  * 요소(독립) 인터페이스 입니다.
  * @interface
  */
-declare class IElement {
+declare interface IElement {
 
     /** 요소(독립) 인터페이스 입니다. */
-    constructor();
+    // constructor();
 
     /** 요소를 복제합니다. */
     clone();
