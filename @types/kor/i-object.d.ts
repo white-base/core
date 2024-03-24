@@ -2,7 +2,7 @@
  * 객체 인터페이스 입니다. (최상위)
  * @interface
  */
-declare class IObject {
+declare interface IObject {
     
     /** 객체 인터페이스 입니다. (최상위) */
     // constructor();

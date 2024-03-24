@@ -2,7 +2,7 @@
  * 컬렉션 인터페이스 입니다.
  * @interface
  */
-declare class ICollection {
+declare interface ICollection {
 
     /** 컬렉션 인터페이스 입니다. */
     // constructor();

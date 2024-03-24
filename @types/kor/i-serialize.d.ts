@@ -2,7 +2,7 @@
  * 직렬화 인터페이스 입니다.
  * @interface 
  */
-declare class ISerialize {
+declare interface ISerialize {
 
     /** 직렬화 인터페이스 입니다. */
     // constructor();

@@ -2,7 +2,7 @@
  * 배열 컬렉션 인터페이스 입니다.
  * @interface
  */
-declare class IArrayCollection {
+declare interface IArrayCollection {
 
     /** 배열 컬렉션 인터페이스 입니다. */
     // constructor();
