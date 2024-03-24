@@ -44,7 +44,7 @@ export namespace Interface {
     var IListControl : IListControl;
     var ISerialize : ISerialize;
     var IArrayCollection : IArrayCollection;
-    // type IObject = IObject;
+    // type TObject = IObject;
 }
 export namespace Meta {
     var NamespaceManager : NamespaceManager;
