@@ -1,6 +1,6 @@
 /**
  * 직렬화 인터페이스 입니다.
- * @interface IObject
+ * @interface 
  */
 declare interface ISerialize {
 
