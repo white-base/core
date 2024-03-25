@@ -1,5 +1,3 @@
-
-
 import ExtendError          = require("./extend-error");
 import Observer             = require("./observer");
 import Util                 = require("./util");
