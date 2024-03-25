@@ -1,6 +1,17 @@
+/**
+ * 관찰자 클래스 입니다.
+ */
 declare class Observer {
     
-    /** 관찰자 객체를 초기화합니다. */
+    /**
+     * 관찰자 객체를 생성합니다.
+     * @param caller 소유자
+     */
+    constructor(caller: object);
+    
+    /**
+     * 관찰자 객체를 초기화합니다.
+     */
     init();
     
     /**

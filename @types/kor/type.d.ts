@@ -1,3 +1,6 @@
+/**
+ * 타입 모듈 입니다.
+ */
 declare namespace Type {
     
     /**

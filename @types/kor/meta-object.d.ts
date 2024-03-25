@@ -1,6 +1,9 @@
 import IObject              = require("./i-object");
 import IMarshal             = require("./i-marshal");
 
+/**
+ * 메타 객체 클래스 입니다.
+ */
 declare class MetaObject implements IObject, IMarshal {
     
     /**

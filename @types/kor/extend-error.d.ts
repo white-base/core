@@ -6,6 +6,9 @@ import T                    = require("./T");
 // }
 
 
+/**
+ * 확장 에러 클래스 입니다.
+ */
 declare class ExtendError {
     /**
      * 확장오류를 생성합니다.  

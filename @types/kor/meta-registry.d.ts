@@ -3,7 +3,7 @@ import MetaObject           = require("./meta-object");
 import T                    = require("./T");
 
 /**
- * 메타 객체 등록소입니다. (static)
+ * 메타 객체 등록소 클래스 입니다.
  * @static
  */
 declare class MetaRegistry {

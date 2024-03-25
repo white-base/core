@@ -2,15 +2,9 @@ import IPropertyCollection  = require("./i-collection-property");
 import BaseCollection       = require("./base-collection");
 import T                    = require("./T");
 
-// interface PropertyDescriptor {
-//     configurable?: boolean;
-//     enumerable?: boolean;
-//     value?: any;
-//     writable?: boolean;
-//     get?(): any;
-//     set?(v: any): void;
-// }
-
+/**
+ * 프로퍼티 컬렉션 클래스 입니다.
+ */
 declare class PropertyCollection extends BaseCollection implements IPropertyCollection {
     
     

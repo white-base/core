@@ -1,8 +1,10 @@
+import ICollection          = require("./i-collection");
+
 /**
  * 배열 컬렉션 인터페이스 입니다.
  * @interface
  */
-declare interface IArrayCollection {
+declare interface IArrayCollection extends ICollection {
 
     /** 배열 컬렉션 인터페이스 입니다. */
     // constructor();

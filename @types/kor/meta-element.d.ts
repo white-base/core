@@ -1,6 +1,9 @@
 import IElement             = require("./i-element");
 import MetaObject           = require("./meta-object");
 
+/**
+ * 메타 요소 클래스 입니다.
+ */
 declare class MetaElement extends MetaObject implements IElement {
 
     _name: string;

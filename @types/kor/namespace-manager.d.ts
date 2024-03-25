@@ -4,7 +4,7 @@ import ISerialize           = require("./i-serialize");
 import T                    = require("./T");
 
 /**
- * 네임스페이스 관리자를 생성합니다.
+ * 네임스페이스 관리자 클래스 입니다.
  */
 declare class NamespaceManager implements IList, IListControl, ISerialize {
 
@@ -35,6 +35,11 @@ declare class NamespaceManager implements IList, IListControl, ISerialize {
      * 중복 요소 등록 허용 여부, 기본값 = false (중복금지)
      */
     isOverlap: boolean;
+
+    /**
+     * 네임스페이스 관리자를 생성합니다.
+    */
+    constructor();
 
     /**
      * 네임스페이스 저장소 초기화 객체를 생성합니다.

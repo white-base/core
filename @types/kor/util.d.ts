@@ -1,3 +1,6 @@
+/**
+ * 유틸리티 모듈 입니다.
+ */
 declare namespace Util {
     
     /**
