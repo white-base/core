@@ -27,40 +27,6 @@ import PropertyCollection   = require("./collection-property");
 
 import T                    = require("./T");
 
-
-export namespace Common {
-    /** Util 네임스페이스 TODO: */
-    let Util;
-    /** Type 네임스페이스 TODO: */
-    let Type;
-}
-export namespace Interface {
-    var IObject : IObject;
-    var IMarshal : IMarshal;
-    var ICollection : ICollection;
-    var IPropertyCollection : IPropertyCollection;
-    var IElement : IElement;
-    var IList : IList;
-    var IListControl : IListControl;
-    var ISerialize : ISerialize;
-    var IArrayCollection : IArrayCollection;
-    // type TObject = IObject;
-}
-export namespace Meta {
-    var NamespaceManager : NamespaceManager;
-    var MetaRegistry : MetaRegistry;
-    var MetaObject : MetaObject;
-    var MetaElement : MetaElement;
-    
-}
-export namespace Collection {
-    var BaseCollection : BaseCollection;
-    var ArrayCollection : ArrayCollection;
-    var PropertyCollection : PropertyCollection;
-    
-}
-
-
 export {
     T,
     ExtendError,
@@ -85,3 +51,31 @@ export {
     ArrayCollection,
     PropertyCollection
 };
+export namespace Common {
+    /** Util 네임스페이스 TODO: */
+    let Util;
+    /** Type 네임스페이스 TODO: */
+    let Type;
+}
+export namespace Interface {
+    var IObject : IObject;
+    var IMarshal : IMarshal;
+    var ICollection : ICollection;
+    var IPropertyCollection : IPropertyCollection;
+    var IElement : IElement;
+    var IList : IList;
+    var IListControl : IListControl;
+    var ISerialize : ISerialize;
+    var IArrayCollection : IArrayCollection;
+}
+export namespace Meta {
+    var NamespaceManager : NamespaceManager;
+    var MetaRegistry : MetaRegistry;
+    var MetaObject : MetaObject;
+    var MetaElement : MetaElement;
+}
+export namespace Collection {
+    var BaseCollection : BaseCollection;
+    var ArrayCollection : ArrayCollection;
+    var PropertyCollection : PropertyCollection;
+}

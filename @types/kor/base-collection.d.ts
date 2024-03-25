@@ -1,4 +1,5 @@
 import ICollection          = require("./i-collection");
+import IList                = require("./i-list");
 import MetaObject           = require("./meta-object");
 import Observer             = require("./observer");
 import T                    = require("./T");
@@ -13,7 +14,7 @@ import T                    = require("./T");
      */
     type OnFunc = (idx: number, elem: any, _this: object)=> void;
 
-    declare abstract class BaseCollection extends MetaObject implements ICollection{
+    declare abstract class BaseCollection extends MetaObject implements ICollection, IList {
         /**
          * 기본 컬렉션을 생성합니다.(최상위)
          * @param owner 소유 객체
