@@ -3,7 +3,6 @@ import Observer             = require("./observer");
 import Util                 = require("./util");
 import Type                 = require("./type");
 import Message              = require("./message");
-
 import IObject              = require("./i-object");
 import IMarshal             = require("./i-marshal");
 import ICollection          = require("./i-collection");
@@ -13,24 +12,21 @@ import IList                = require("./i-list");
 import IListControl         = require("./i-control-list");
 import ISerialize           = require("./i-serialize");
 import IArrayCollection     = require("./i-collction-array");
-
 import NamespaceManager     = require("./namespace-manager");
 import MetaRegistry         = require("./meta-registry");
 import MetaObject           = require("./meta-object");
 import MetaElement          = require("./meta-element");
-
 import BaseCollection       = require("./base-collection");
 import ArrayCollection      = require("./collection-array");
 import PropertyCollection   = require("./collection-property");
-
 import T                    = require("./T");
 
 export {
     T,
-    ExtendError,
-    Observer,
     Util,
     Type,
+    ExtendError,
+    Observer,
     Message,
     IObject,
     IMarshal,
@@ -51,9 +47,12 @@ export {
 };
 export namespace Common {
     /** Util 네임스페이스 TODO: */
-    let Util;
+    var Util;
     /** Type 네임스페이스 TODO: */
-    let Type;
+    var Type;
+    var ExtendError : ExtendError;
+    var Observer : Observer;
+    var Message  : Message;
 }
 export namespace Interface {
     var IObject : IObject;
