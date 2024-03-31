@@ -63,6 +63,8 @@
         function ArrayCollection(p_owner) {
             _super.call(this, p_owner);
 
+            this.__KEYWORD = ['insertAt'];
+
             Util.implements(ArrayCollection, this);
         }
         Util.inherits(ArrayCollection, _super);

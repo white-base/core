@@ -74,7 +74,9 @@
             });
 
             // 예약어 등록 
-            this.__KEYWORD = this.__KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
+            this.__KEYWORD = ['keys', '_keys', 'indexOf', 'keyOf'];
+            // this.__KEYWORD = this.__KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
+
             Util.implements(this, IPropertyCollection);
         }
         Util.inherits(PropertyCollection, _super);

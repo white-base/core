@@ -194,7 +194,7 @@
             Object.defineProperty(this, '__KEYWORD', 
             {
                 get: function() { return __KEYWORD; },
-                set: function(p_val) { __KEYWORD = p_val; },
+                set: function(newVal) { __KEYWORD = __KEYWORD.concat(newVal); },
                 configurable: false,
                 enumerable: false,
             });
@@ -330,11 +330,11 @@
             }
 
             // 예약어 등록
-            this.__KEYWORD = this.__KEYWORD.concat(['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD']);
-            this.__KEYWORD = this.__KEYWORD.concat(['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged']);
-            this.__KEYWORD = this.__KEYWORD.concat(['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged']);
-            this.__KEYWORD = this.__KEYWORD.concat(['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type']);
-            this.__KEYWORD = this.__KEYWORD.concat(['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'add', 'clear']);
+            this.__KEYWORD = ['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD'];
+            this.__KEYWORD = ['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged'];
+            this.__KEYWORD = ['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged'];
+            this.__KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];
+            this.__KEYWORD = ['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'add', 'clear'];
 
             Util.implements(BaseCollection, this);
         }

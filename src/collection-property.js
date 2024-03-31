@@ -91,7 +91,7 @@
 
 
             // 예약어 등록 
-            this.__KEYWORD = this.__KEYWORD.concat(['_keys', 'indexOf', 'exist', 'keyOf']);
+            this.__KEYWORD = ['_keys', 'indexOf', 'exist', 'keyOf'];
 
             Util.implements(PropertyCollection, this);
         }
