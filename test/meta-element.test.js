@@ -217,13 +217,13 @@ describe("[target: meta-element.js]", () => {
             it("- 커버리지 : this.__SET$_name ", () => {
                 const i = new MetaElement('E1');
                 
-                i.__SET$_name('E2', i)
+                i._name = 'E2'
                 expect(i._name).toBe('E2');
                
-                i.__SET$_name('E3')  // 접근금지
+                // i.__SET$_name('E3')  // 접근금지
                 expect(i._name).toBe('E2');
 
-                expect(()=> i.__SET$_name(10, i)).toThrow(/EL03121/);
+                expect(()=> i._name = 10).toThrow(/EL03121/);
             });
         });
     });

@@ -65,6 +65,20 @@
 
             var _keys = [];
 
+            /**
+             * 내부 변수 접근
+             * @member {string} _L.Collection.PropertyCollection#$_keys
+             * @readonly
+             * @private
+             */
+            Object.defineProperty(this, '$_keys',
+            {
+                get: function() { return _keys; },
+                set: function(nVal) { _keys = nVal; },
+                configurable: false,
+                enumerable: false,
+            });
+
             /** 
              * 컬렉션 요소의 키값들
              * @readonly
@@ -82,12 +96,12 @@
             });
 
             // inner variable access
-            this.__GET$_keys = function(call) {
-                if (call instanceof PropertyCollection) return _keys;
-            }
-            this.__SET$_keys = function(val, call) {
-                if (call instanceof PropertyCollection) _keys = val;
-            }
+            // this.__GET$_keys = function(call) {
+            //     if (call instanceof PropertyCollection) return _keys;
+            // }
+            // this.__SET$_keys = function(val, call) {
+            //     if (call instanceof PropertyCollection) _keys = val;
+            // }
 
 
             // 예약어 등록 
@@ -124,9 +138,9 @@
             
             delete this[propName];      // 프로퍼티 삭제
 
-            this.__GET$_elements(this).splice(p_pos, 1);
-            this.__GET$_keys(this).splice(p_pos, 1);
-            this.__GET$_descriptors(this).splice(p_pos, 1);
+            this.$_elements.splice(p_pos, 1);
+            this.$_keys.splice(p_pos, 1);
+            this.$_descriptors.splice(p_pos, 1);
             
             if (p_pos < count) {        // 참조 자료 변경
                 for (var i = p_pos; i < count; i++) {
@@ -197,14 +211,14 @@
             if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
                 if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) throw new ExtendError(/EL04222/, null, [p_oGuid['_elem'].length, p_oGuid['_desc'].length]);
                 for (var i = 0; i < p_oGuid['_desc'].length; i++) {
-                    this.__GET$_descriptors(this).push(p_oGuid['_desc'][i]);
+                    this.$_descriptors.push(p_oGuid['_desc'][i]);
                 }
             }
 
-            this.__SET$_keys([], this);
+            this.$_keys = [];
             for(var i = 0; i < p_oGuid['_key'].length; i++) {
                 var key = p_oGuid['_key'][i];
-                this.__GET$_keys(this).push(key);
+                this.$_keys.push(key);
                 Object.defineProperty(this, [i], this._getPropDescriptor(i));
                 Object.defineProperty(this, key, this._getPropDescriptor(i));
             }
@@ -214,14 +228,14 @@
                 if (MetaRegistry.isGuidObject(elem)) {
                     var obj = MetaRegistry.createMetaObject(elem, origin);
                     obj.setObject(elem, origin);
-                    this.__GET$_elements(this).push(obj);
+                    this.$_elements.push(obj);
                 
                 } else if (elem['$ref']) {
                     var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
                     if (!meta) throw new ExtendError(/EL04223/, null, [i, elem['$ref']]);
-                    this.__GET$_elements(this).push(meta);
+                    this.$_elements.push(meta);
                     
-                } else this.__GET$_elements(this).push(elem);
+                } else this.$_elements.push(elem);
             }
         };
 
@@ -271,9 +285,9 @@
 
                 this._onAdd(index, p_elem);
                 // data process
-                this.__GET$_elements(this).push(p_elem);
-                this.__GET$_keys(this).push(p_key);
-                this.__GET$_descriptors(this).push(p_desc);
+                this.$_elements.push(p_elem);
+                this.$_keys.push(p_key);
+                this.$_descriptors.push(p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [index], p_desc);
@@ -304,9 +318,9 @@
                 delete this[i];
                 delete this[propName];
             }
-            this.__SET$_elements([], this);
-            this.__SET$_descriptors([], this);
-            this.__SET$_keys([], this);
+            this.$_elements = [];
+            this.$_descriptors = [];
+            this.$_keys = [];
             
             this._onCleared();
         };

@@ -11,7 +11,7 @@ declare class NamespaceManager implements IList, IListControl, ISerialize {
     /**
      * 네임스페이스 저장소
      */
-    __storage: any[];
+    _storage: any[];
 
     /**
      * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용

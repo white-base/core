@@ -363,7 +363,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(a2.count).toBe(2);
                 expect(a2[0]).toBe(10);
                 expect(a2[1]).toBe(20);
-                expect(a2.__event.__subscribers.add).toBeDefined()
+                expect(a2.__event.$subscribers.add).toBeDefined()
             });
             it("- setObject() : MetaElment 삽입 ", () => {
                 const a1 = new ArrayCollection();
@@ -673,14 +673,14 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             it("- 커버리지 : __SET$ ", () => {
                 let s1 = new Student();
                 s1.rows.add('A0');
-                s1.rows.__SET$_elements([])
-                s1.rows.__SET$_descriptors([])
+                s1.rows.$_elements = []
+                // s1.rows.$_descriptors = []
                 let s2 = new Student();
                 s2.rows.add('A0');
-                s2.rows.__SET$_elements([], s2.rows)
-                s2.rows.__SET$_descriptors([], s2.rows)
+                s2.rows.$_elements = [];
+                s2.rows.$_descriptors = []
 
-                expect(s1.rows._elements.length).toBe(1)
+                expect(s1.rows._elements.length).toBe(0)
                 expect(s1.rows._descriptors.length).toBe(1)
                 expect(s2.rows._elements.length).toBe(0)
                 expect(s2.rows._descriptors.length).toBe(0)

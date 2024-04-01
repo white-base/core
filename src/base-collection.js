@@ -77,6 +77,34 @@
             var _elemTypes  = []; 
             var __KEYWORD = [];
 
+            /**
+             * 내부 변수 접근
+             * @member {string} _L.Meta.Entity.BaseColumn#$_elements
+             * @readonly
+             * @private
+             */
+            Object.defineProperty(this, '$_elements',
+            {
+                get: function() { return _elements; },
+                set: function(nVal) { _elements = nVal; },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /**
+             * 내부 변수 접근
+             * @member {string} _L.Meta.Entity.BaseColumn#$_descriptors
+             * @readonly
+             * @private
+             */
+            Object.defineProperty(this, '$_descriptors',
+            {
+                get: function() { return _descriptors; },
+                set: function(nVal) { _descriptors = nVal; },
+                configurable: false,
+                enumerable: false,
+            });
+
             /** 
              * 이벤트 객체
              * @private 
@@ -316,18 +344,18 @@
             });
 
             // inner variable access
-            this.__GET$_elements = function(call) {
-                if (call instanceof BaseCollection) return _elements;
-            }
-            this.__GET$_descriptors = function(call) {
-                if (call instanceof BaseCollection) return _descriptors;
-            }
-            this.__SET$_elements = function(val, call) {
-                if (call instanceof BaseCollection) _elements = val;
-            }
-            this.__SET$_descriptors = function(val, call) {
-                if (call instanceof BaseCollection) _descriptors = val;
-            }
+            // this.__GET$_elements = function(call) {
+            //     if (call instanceof BaseCollection) return _elements;
+            // }
+            // this.__GET$_descriptors = function(call) {
+            //     if (call instanceof BaseCollection) return _descriptors;
+            // }
+            // this.__SET$_elements = function(val, call) {
+            //     if (call instanceof BaseCollection) _elements = val;
+            // }
+            // this.__SET$_descriptors = function(val, call) {
+            //     if (call instanceof BaseCollection) _descriptors = val;
+            // }
 
             // 예약어 등록
             this.__KEYWORD = ['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD'];
@@ -429,14 +457,14 @@
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this.__GET$_elements(this)[p_idx]; },
+                get: function() { return this.$_elements[p_idx]; },
                 set: function(nVal) {
                     // var types = ['_req_'];
                     // types = [types.concat(this._elemTypes)];
                     // if (this._elemTypes.length > 0) Util.matchType(types, nVal);
                     if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
                     this._onChanging(p_idx, nVal);  // before event
-                    this.__GET$_elements(this)[p_idx] = nVal;
+                    this.$_elements[p_idx] = nVal;
                     this._onChanged(p_idx, nVal);   // after event
                 },
                 configurable: true,
@@ -470,8 +498,8 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             var _elems = [];
             
-            if (!Type.deepEqual(this.__event['__subscribers'], this.__event._getInitObject())) {
-                obj['__subscribers'] = this.__event.__subscribers;
+            if (!Type.deepEqual(this.__event['$subscribers'], this.__event._getInitObject())) {
+                obj['$subscribers'] = this.__event.$subscribers;
             }
             if (vOpt < 2 && vOpt > -1 && this._owner) {
                 obj['_owner'] = MetaRegistry.createReferObject(this._owner);
@@ -499,8 +527,8 @@
             var origin = p_origin ? p_origin : p_oGuid;
             
             this.clear();
-            if (p_oGuid['__subscribers']) {
-                this.__event.__SET$__subscribers(p_oGuid['__subscribers'], this.__event);
+            if (p_oGuid['$subscribers']) {
+                this.__event.$subscribers = p_oGuid['$subscribers'];
             }
             if (p_oGuid['_owner']) {
                 owner = MetaRegistry.findSetObject(p_oGuid['_owner']['$ref'], origin);

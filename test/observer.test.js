@@ -57,23 +57,23 @@ describe("[target: observer.js]", () => {
             // subscribe()
             expect(()=> e._event.subscribe()).toThrow('EL01516');
             expect(()=> e._event.subscribe('str')).toThrow('EL01516');
-            // __subscribers
-            // expect(()=> e._event.__subscribers = 1).toThrow('ES064');
-            // expect(()=> e._event.__subscribers = 'str').toThrow('ES064');
-            // expect(()=> e._event.__subscribers = {}).toThrow('ES064');
+            // $subscribers
+            // expect(()=> e._event.$subscribers = 1).toThrow('ES064');
+            // expect(()=> e._event.$subscribers = 'str').toThrow('ES064');
+            // expect(()=> e._event.$subscribers = {}).toThrow('ES064');
             // innner
-            expect(()=> e._event.__SET$__subscribers(1, e._event)).toThrow('EL01514');
-            expect(()=> e._event.__SET$__subscribers('str', e._event)).toThrow('EL01514');
-            expect(()=> e._event.__SET$__subscribers({}, e._event)).toThrow('EL01515');
+            expect(()=> e._event.$subscribers = 1).toThrow('EL01514');
+            expect(()=> e._event.$subscribers = 'str').toThrow('EL01514');
+            expect(()=> e._event.$subscribers = {} ).toThrow('EL01515');
         });
-        it("- __subscribers 강제삽입 : 강제 예외 (any 함수 아닌 값을 삽입) ", () => {
+        it("- $subscribers 강제삽입 : 강제 예외 (any 함수 아닌 값을 삽입) ", () => {
             const result = [];
             const e = new EventClass();
             const subs ={
                 any: ['str', func1 = function(){ result.push('fun1') }]
             };
-            // e._event.__subscribers = subs;
-            e._event.__SET$__subscribers(subs, e._event)
+            // e._event.$subscribers = subs;
+            e._event.$subscribers = subs
             e._event.publish();
     
             expect(result).toEqual(['fun1']);
@@ -259,10 +259,10 @@ describe("[target: observer.js]", () => {
         });
         it("- 커버리지 ", () => {
             const e = new EventClass();
-            var sub = e._event.__subscribers;
-            e._event.__SET$__subscribers(10, {});
+            var sub = e._event.$subscribers;
+            // e._event.__SET$$subscribers 10, {});
 
-            expect(e._event.__subscribers).toEqual(sub);
+            expect(e._event.$subscribers).toEqual(sub);
         });
     
     });

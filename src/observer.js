@@ -41,7 +41,7 @@
         function Observer(p_caller) {
             if (typeof p_caller !== 'object') throw new ExtendError(/EL01511/, null, [typeof p_caller]);
             
-            var __subscribers = this._getInitObject();
+            var $subscribers = this._getInitObject();
             var isLog = false;
             var isSingleMode = false;
 
@@ -51,11 +51,16 @@
             /**
              * 전역 구독자  
              * @private
-             * @member {object}  _L.Common.Observer#__subscribers  
+             * @member {object}  _L.Common.Observer#$subscribers  
              */
-            Object.defineProperty(this, '__subscribers',
+            Object.defineProperty(this, '$subscribers',
             {
-                get: function() { return __subscribers; },
+                get: function() { return $subscribers; },
+                set: function(nVal) { 
+                    if (typeof nVal !== 'object') throw new ExtendError(/EL01514/, null, [typeof val]);
+                    if (typeof nVal.any === 'undefined') throw new ExtendError(/EL01515/, null, []);
+                    $subscribers = nVal;    
+                },
                 configurable: false,
                 enumerable: false
             });
@@ -77,8 +82,8 @@
             Object.defineProperty(this, 'list', {
                 get: function() {       // Line:
                     var arr = [];
-                    for (var prop in this.__subscribers) {
-                        var elem = this.__subscribers[prop];
+                    for (var prop in this.$subscribers) {
+                        var elem = this.$subscribers[prop];
                         for (var i = 0; i < elem.length; i++) {
                             var obj = {};
                             obj[prop] = {};
@@ -120,13 +125,13 @@
             });
 
             // inner variable access
-            this.__SET$__subscribers = function(val, call) {
-                if (call instanceof Observer) { // 상속접근 허용
-                    if (typeof val !== 'object') throw new ExtendError(/EL01514/, null, [typeof val]);
-                    if (typeof val.any === 'undefined') throw new ExtendError(/EL01515/, null, []);
-                    __subscribers = val;    
-                }
-            }
+            // this.__SET$$subscribers = function(val, call) {
+            //     if (call instanceof Observer) { // 상속접근 허용
+            //         if (typeof val !== 'object') throw new ExtendError(/EL01514/, null, [typeof val]);
+            //         if (typeof val.any === 'undefined') throw new ExtendError(/EL01515/, null, []);
+            //         $subscribers = val;    
+            //     }
+            // }
         }
 
         Observer._NS = 'Common';    // namespace
@@ -145,7 +150,7 @@
          */
         Observer.prototype.init = function() {
             var obj = this._getInitObject();
-            this.__SET$__subscribers(obj, this);
+            this.$subscribers = obj;
         };
 
         /**
@@ -159,11 +164,11 @@
 
             if (typeof p_fn !== 'function') throw new ExtendError(/EL01516/, null, [typeof p_fn]);
             
-            if (this.isSingleMode && this.__subscribers[p_code]) this.unsubscribe(p_code);    // 싱글모드시 초기화
-            if (typeof this.__subscribers[p_code] === 'undefined') {
-                this.__subscribers[p_code] = [];
+            if (this.isSingleMode && this.$subscribers[p_code]) this.unsubscribe(p_code);    // 싱글모드시 초기화
+            if (typeof this.$subscribers[p_code] === 'undefined') {
+                this.$subscribers[p_code] = [];
             }
-            this.__subscribers[p_code].push(p_fn);
+            this.$subscribers[p_code].push(p_fn);
         };
         
         /**
@@ -173,19 +178,19 @@
          */
         Observer.prototype.unsubscribe = function(p_code, p_fn) {
             if (typeof p_code === 'undefined')  {
-                // this.__subscribers = {any: []};
+                // this.$subscribers = {any: []};
                 this.init();
                 return;
             }
 
-            if (this.__subscribers[p_code]) {
+            if (this.$subscribers[p_code]) {
                 if (typeof p_fn === 'function') {
-                    for (var i = 0; i < this.__subscribers[p_code].length; i++) {
-                        if (this.__subscribers[p_code][i] === p_fn) {
-                            this.__subscribers[p_code].splice(i, 1);
+                    for (var i = 0; i < this.$subscribers[p_code].length; i++) {
+                        if (this.$subscribers[p_code][i] === p_fn) {
+                            this.$subscribers[p_code].splice(i, 1);
                         }
                     }
-                } else delete this.__subscribers[p_code];
+                } else delete this.$subscribers[p_code];
             } 
         };
 
@@ -199,10 +204,10 @@
             var args = Array.prototype.slice.call(arguments);
             var arr = args.length >= 1 ? args.splice(1) : [];
             
-            if (p_code in this.__subscribers) {
-                for (var i = 0; i < this.__subscribers[p_code].length; i++) {
-                    if (typeof this.__subscribers[p_code][i] === 'function') {
-                        this.__subscribers[p_code][i].apply(this._caller, arr);
+            if (p_code in this.$subscribers) {
+                for (var i = 0; i < this.$subscribers[p_code].length; i++) {
+                    if (typeof this.$subscribers[p_code][i] === 'function') {
+                        this.$subscribers[p_code][i].apply(this._caller, arr);
                     }
                 }
             }

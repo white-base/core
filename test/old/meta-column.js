@@ -493,7 +493,7 @@ describe.skip("[target: meta-column.js ]", () => {
                 expect(cc1.value).toBe(c1.value);
                 expect(cc1.getter).toBe(c1.getter);
                 expect(cc1.setter).toBe(c1.setter);
-                expect(cc1.__event.__subscribers.onChanged).toBeDefined()
+                expect(cc1.__event.$subscribers.onChanged).toBeDefined()
                 /**
                  * MEMO:
                  * - equal() 및 세부 내용 확인

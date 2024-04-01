@@ -66,18 +66,24 @@
             Object.defineProperty(this, '_name',
             {
                 get: function() { return _name; },
+                set: function(nVal) { 
+                    if (typeof nVal !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
+                    if (nVal.length === 0) throw new ExtendError(/EL03122/, null, []);
+                    _name = nVal;
+                },
                 configurable: false,
                 enumerable: true
             });
 
             // inner variable access
-            this.__SET$_name = function(val, call) {
-                if (typeof val !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
-                if (val.length === 0) throw new ExtendError(/EL03122/, null, []);
-                if (call instanceof MetaElement) _name = val;    // 상속접근 허용
-            }
+            // this.__SET$_name = function(val, call) {
+            //     if (typeof val !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
+            //     if (val.length === 0) throw new ExtendError(/EL03122/, null, []);
+            //     if (call instanceof MetaElement) _name = val;    // 상속접근 허용
+            // }
             
-            this.__SET$_name(p_name, this);
+            // this.__SET$_name(p_name, this);
+            this._name = p_name;
 
             Util.implements(MetaElement, this);
         }
@@ -117,7 +123,8 @@
         MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
-            this.__SET$_name(p_oGuid['name'], this);
+            this._name = p_oGuid['name'];
+            // this.__SET$_name(p_oGuid['name'], this);
         };
         
         /**

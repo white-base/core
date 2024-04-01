@@ -55,19 +55,34 @@
          */
         function NamespaceManager() {
 
-            var __storage = this.__createNsRefer();
+            var _storage = this.__createNsRefer();
             var _elemTypes  = []; 
             var isOverlap = false;
             
+            
+            /**
+             * 내부 변수 접근
+             * @member {string} _L.Meta.NamespaceManager#$_storage
+             * @readonly
+             * @private
+             */
+            Object.defineProperty(this, '$_storage',
+            {
+                get: function() { return _storage; },
+                set: function(nVal) { _storage = nVal; },
+                configurable: false,
+                enumerable: false,
+            });
+
             /**
              * 네임스페이스 저장소
-             * @member {array} _L.Meta.NamespaceManager#__storage 
+             * @member {array} _L.Meta.NamespaceManager#_storage 
              * @private
              * @readonly
              */
-            Object.defineProperty(this, '__storage',
+            Object.defineProperty(this, '_storage',
             {
-                get: function() { return __storage; },
+                get: function() { return _storage; },
                 configurable: false,
                 enumerable: false
             });
@@ -98,7 +113,7 @@
             Object.defineProperty(this, 'list', 
             {
                 get: function() {
-                    var storage = this.__storage;
+                    var storage = this._storage;
                     var arr = [];
                     var stack = [];
                     findElement(storage);
@@ -151,9 +166,9 @@
             });
 
             // inner variable access
-            this.__SET$__storage = function(val, call) {
-                if (call instanceof NamespaceManager) __storage = val;
-            }
+            // this.__SET$_storage = function(val, call) {
+            //     if (call instanceof NamespaceManager) _storage = val;
+            // }
 
             this.___KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
 
@@ -235,7 +250,7 @@
          * 네임스페이스를 초기화 합니다.
          */
         NamespaceManager.prototype.init = function() {
-            this.__SET$__storage(this.__createNsRefer(), this);
+            this.$_storage = this.__createNsRefer();
         };
 
         /**
@@ -243,7 +258,7 @@
          * @param {string | array<string>} p_ns 네임스페이스 이름
          */
         NamespaceManager.prototype.addNamespace = function(p_ns) {
-            var parent = this.__storage;
+            var parent = this._storage;
             var sections;
         
             try {
@@ -269,7 +284,7 @@
          * @param {string | array<string>} p_ns 네임스페이스 이름
          */
         NamespaceManager.prototype.delNamespace = function(p_ns) {
-            var parent = this.__storage;
+            var parent = this._storage;
             var sections;
         
             try {
@@ -293,7 +308,7 @@
          * @returns {object} 경로에 대한 객체
          */
         NamespaceManager.prototype.path = function(p_ns) {
-            var parent = this.__storage;
+            var parent = this._storage;
             var sections;
 
             if (!p_ns) return parent;
@@ -320,7 +335,7 @@
          * @param {any} p_elem 요소
          */
         NamespaceManager.prototype.add = function(p_fullName, p_elem) {
-            var parent = this.__storage;
+            var parent = this._storage;
             var sections;
             var oPath;
             var key;
@@ -361,7 +376,7 @@
          * @returns {boolean}
          */
         NamespaceManager.prototype.del = function(p_fullName) {
-            var parent = this.__storage;
+            var parent = this._storage;
             var sections;
 
             try {
@@ -400,7 +415,7 @@
          * @returns {(object | function)?}
          */
         NamespaceManager.prototype.find = function(p_fullName) {
-            var parent = this.__storage;
+            var parent = this._storage;
             var sections;
 
             try {
@@ -425,7 +440,7 @@
          * @returns {string?}
          */
         NamespaceManager.prototype.getPath = function(p_elem) {
-            var namespace = this.__storage;
+            var namespace = this._storage;
             var stack = [];
 
             if (!p_elem) throw new ExtendError(/EL03341/, null, [typeof p_elem]);

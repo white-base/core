@@ -733,10 +733,10 @@
                             msg: 'Observer.isSingleMode 는 \'boolean\' 타입이 아닙니다. typeof isSingleMode = $1'
                         },
                         514: {  // EL01514
-                            msg: 'Observer.____subscribers 값은  \'object\' 타입이 아닙니다. typeof ____subscribers = $1'
+                            msg: 'Observer.__$subscribers 값은  \'object\' 타입이 아닙니다. typeof __$subscribers = $1'
                         },
                         515: {  // EL01515
-                            msg: 'Observer.____subscribers[\'any\'] 객체가 없습니다. { any: undefined }'
+                            msg: 'Observer.__$subscribers[\'any\'] 객체가 없습니다. { any: undefined }'
                         },
                         516: {  // EL01516
                             msg: 'subscribe(fn, code); fn 는 \'function\' 타입이 아닙니다. typeof fn = $1'
@@ -903,10 +903,10 @@
                             msg: ''
                         },
                         121: {  // EL03121
-                            msg: '__SET$_name(val, call); val 은 \'string\' 타입입니다. typeof val = \'$1\''
+                            msg: '$_name; val 은 \'string\' 타입입니다. typeof val = \'$1\''
                         },
                         122: {  // EL03122
-                            msg: '__SET$_name(val, call); val.length 은 0 보다 커야 합니다.'
+                            msg: '$_name; val.length 은 0 보다 커야 합니다.'
                         },
                         
                         200: {  // meta-registry.js
