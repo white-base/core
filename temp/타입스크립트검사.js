@@ -1,4 +1,4 @@
-// ts-check
+// @ts-check
 
 
 
@@ -36,9 +36,46 @@ MetaObject
 
 console.log(0);
 
-global.NodeJS.Immediate
+// global.NodeJS.Immediate
 
 // global.
 // NodeRe
 console.table()
 // i.
+
+Function._TYPE = {
+    // params: [],
+    // return: null,
+    $type: 'string',
+    // kind: '_ANY_',
+    // default: 
+}
+
+Function._NS = 'aaa'
+
+
+// Function._TEST = "sss"
+
+// Function.
+
+function aaa () {
+
+}
+
+// aaa._TYPE = {
+//     kind: '_DEF'
+// }
+
+aaa.name = 10
+
+// AAA._UNION = []
+
+// AAA._UNION = [Function, 1]
+
+// Function._UNION
+
+
+// AAA._FUNC
+
+// AAA.
+// Function.prototype
