@@ -226,10 +226,10 @@ describe("[target: meta-object.js]", () => {
             it("- MetaObject.__SET_guid : 내부 setter ", () => {
                 const i = new MetaObject();
                 
-                i.$_guid = 10
-                expect(i.$_guid).toBe(10);
-                i.$_guid = 20
-                expect(i.$_guid).toBe(20);
+                i.$guid = 10
+                expect(i.$guid).toBe(10);
+                i.$guid = 20
+                expect(i.$guid).toBe(20);
             });
             it("- MetaObject.__compare() : 내부 비교 ", () => {
                 const i = new MetaObject();

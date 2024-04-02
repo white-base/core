@@ -109,13 +109,13 @@ describe("[target: base-collection.js]", () => {
                const obj1 = s1.getObject( 0, {})
             });
             
-            it("- 커버리지 :  this.$_elements ", () => {
+            it("- 커버리지 :  this.$elements ", () => {
                 class SubCollection extends BaseCollection {
                     constructor(){ super()}
                 }
                 const s1 = new SubCollection();
-               const obj1 = s1.$_elements
-               const obj2 = s1.$_descriptors
+               const obj1 = s1.$elements
+               const obj2 = s1.$descriptors
             });
 
         });

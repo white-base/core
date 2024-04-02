@@ -63,11 +63,11 @@
             
             /**
              * 내부 변수 접근
-             * @member {string} _L.Meta.MetaObject#$_guid
+             * @member {string} _L.Meta.MetaObject#$guid
              * @readonly
              * @private
              */
-            Object.defineProperty(this, '$_guid',
+            Object.defineProperty(this, '$guid',
             {
                 get: function() { return _guid; },
                 set: function(nVal) { _guid = nVal; },
@@ -113,7 +113,7 @@
             });
             
             // inner variable access
-            // this.__SET$_guid = function(val, call) {
+            // this.__SET$guid = function(val, call) {
             //     if (call instanceof MetaObject) _guid = val;    // 상속접근 허용
             // }
 

@@ -494,9 +494,9 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns._getPathObject(fun2)).toEqual({ns: 'aa', key:'fun2'})
                 expect(ns._getPathObject(fun3)).toBe(undefined)
             });
-            it("- 커버리지 : this.__SET$_storage ", () => {
+            it("- 커버리지 : this.__SET$storage ", () => {
                 const ns = new NamespaceManager();
-                ns.$_storage = 1
+                ns.$storage = 1
                 
             });
             

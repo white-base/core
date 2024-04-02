@@ -903,10 +903,10 @@
                             msg: ''
                         },
                         121: {  // EL03121
-                            msg: '$_name; val 은 \'string\' 타입입니다. typeof val = \'$1\''
+                            msg: '$name; val 은 \'string\' 타입입니다. typeof val = \'$1\''
                         },
                         122: {  // EL03122
-                            msg: '$_name; val.length 은 0 보다 커야 합니다.'
+                            msg: '$name; val.length 은 0 보다 커야 합니다.'
                         },
                         
                         200: {  // meta-registry.js

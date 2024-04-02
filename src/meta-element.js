@@ -59,11 +59,12 @@
             var _name;
 
             /**
-             * 현재 객체의 이름
+             * 내부 변수 접근
+             * @member {string} _L.Meta.MetaElement#$name
              * @readonly
-             * @member {string} _L.Meta.MetaElement#_name
+             * @private
              */
-            Object.defineProperty(this, '_name',
+            Object.defineProperty(this, '$name',
             {
                 get: function() { return _name; },
                 set: function(nVal) { 
@@ -72,18 +73,22 @@
                     _name = nVal;
                 },
                 configurable: false,
+                enumerable: false,
+            });
+
+            /**
+             * 현재 객체의 이름
+             * @readonly
+             * @member {string} _L.Meta.MetaElement#_name
+             */
+            Object.defineProperty(this, '_name',
+            {
+                get: function() { return _name; },
+                configurable: false,
                 enumerable: true
             });
 
-            // inner variable access
-            // this.__SET$_name = function(val, call) {
-            //     if (typeof val !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
-            //     if (val.length === 0) throw new ExtendError(/EL03122/, null, []);
-            //     if (call instanceof MetaElement) _name = val;    // 상속접근 허용
-            // }
-            
-            // this.__SET$_name(p_name, this);
-            this._name = p_name;
+            this.$name = p_name;
 
             Util.implements(MetaElement, this);
         }
@@ -123,7 +128,7 @@
         MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
-            this._name = p_oGuid['name'];
+            this.$name = p_oGuid['name'];
             // this.__SET$_name(p_oGuid['name'], this);
         };
         

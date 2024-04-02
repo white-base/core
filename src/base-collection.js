@@ -79,11 +79,11 @@
 
             /**
              * 내부 변수 접근
-             * @member {string} _L.Meta.Entity.BaseColumn#$_elements
+             * @member {string} _L.Meta.Entity.BaseColumn#$elements
              * @readonly
              * @private
              */
-            Object.defineProperty(this, '$_elements',
+            Object.defineProperty(this, '$elements',
             {
                 get: function() { return _elements; },
                 set: function(nVal) { _elements = nVal; },
@@ -93,11 +93,11 @@
 
             /**
              * 내부 변수 접근
-             * @member {string} _L.Meta.Entity.BaseColumn#$_descriptors
+             * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
              * @readonly
              * @private
              */
-            Object.defineProperty(this, '$_descriptors',
+            Object.defineProperty(this, '$descriptors',
             {
                 get: function() { return _descriptors; },
                 set: function(nVal) { _descriptors = nVal; },
@@ -344,16 +344,16 @@
             });
 
             // inner variable access
-            // this.__GET$_elements = function(call) {
+            // this.__GET$elements = function(call) {
             //     if (call instanceof BaseCollection) return _elements;
             // }
-            // this.__GET$_descriptors = function(call) {
+            // this.__GET$descriptors = function(call) {
             //     if (call instanceof BaseCollection) return _descriptors;
             // }
-            // this.__SET$_elements = function(val, call) {
+            // this.__SET$elements = function(val, call) {
             //     if (call instanceof BaseCollection) _elements = val;
             // }
-            // this.__SET$_descriptors = function(val, call) {
+            // this.__SET$descriptors = function(val, call) {
             //     if (call instanceof BaseCollection) _descriptors = val;
             // }
 
@@ -457,14 +457,14 @@
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this.$_elements[p_idx]; },
+                get: function() { return this.$elements[p_idx]; },
                 set: function(nVal) {
                     // var types = ['_req_'];
                     // types = [types.concat(this._elemTypes)];
                     // if (this._elemTypes.length > 0) Util.matchType(types, nVal);
                     if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
                     this._onChanging(p_idx, nVal);  // before event
-                    this.$_elements[p_idx] = nVal;
+                    this.$elements[p_idx] = nVal;
                     this._onChanged(p_idx, nVal);   // after event
                 },
                 configurable: true,

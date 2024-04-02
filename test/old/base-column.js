@@ -89,9 +89,9 @@ describe.skip("[target: base-column.js]", () => {
             // it("- MetaObject.__SET_guid : 내부 setter ", () => {
             //     const i = new MetaObject();
                 
-            //     i.__SET$_guid(10, i);
+            //     i.__SET$guid(10, i);
             //     expect(i._guid).toBe(10);
-            //     i.__SET$_guid(20);
+            //     i.__SET$guid(20);
             //     expect(i._guid).toBe(10);
             // });
 

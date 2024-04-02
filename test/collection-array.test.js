@@ -673,12 +673,12 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             it("- 커버리지 : __SET$ ", () => {
                 let s1 = new Student();
                 s1.rows.add('A0');
-                s1.rows.$_elements = []
-                // s1.rows.$_descriptors = []
+                s1.rows.$elements = []
+                // s1.rows.$descriptors = []
                 let s2 = new Student();
                 s2.rows.add('A0');
-                s2.rows.$_elements = [];
-                s2.rows.$_descriptors = []
+                s2.rows.$elements = [];
+                s2.rows.$descriptors = []
 
                 expect(s1.rows._elements.length).toBe(0)
                 expect(s1.rows._descriptors.length).toBe(1)

@@ -214,16 +214,16 @@ describe("[target: meta-element.js]", () => {
             it("- 예외 : 빈 이름 ", () => {
                 expect(()=> new MetaElement('')).toThrow(/EL03122/);
             });
-            it("- 커버리지 : this.__SET$_name ", () => {
+            it("- 커버리지 : this.__SET$name ", () => {
                 const i = new MetaElement('E1');
                 
-                i._name = 'E2'
+                i.$name = 'E2'
                 expect(i._name).toBe('E2');
                
                 // i.__SET$_name('E3')  // 접근금지
-                expect(i._name).toBe('E2');
+                expect(i.$name).toBe('E2');
 
-                expect(()=> i._name = 10).toThrow(/EL03121/);
+                expect(()=> i.$name = 10).toThrow(/EL03121/);
             });
         });
     });

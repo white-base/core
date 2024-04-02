@@ -62,11 +62,11 @@
             
             /**
              * 내부 변수 접근
-             * @member {string} _L.Meta.NamespaceManager#$_storage
+             * @member {string} _L.Meta.NamespaceManager#$storage
              * @readonly
              * @private
              */
-            Object.defineProperty(this, '$_storage',
+            Object.defineProperty(this, '$storage',
             {
                 get: function() { return _storage; },
                 set: function(nVal) { _storage = nVal; },
@@ -166,7 +166,7 @@
             });
 
             // inner variable access
-            // this.__SET$_storage = function(val, call) {
+            // this.__SET$storage = function(val, call) {
             //     if (call instanceof NamespaceManager) _storage = val;
             // }
 
@@ -250,7 +250,7 @@
          * 네임스페이스를 초기화 합니다.
          */
         NamespaceManager.prototype.init = function() {
-            this.$_storage = this.__createNsRefer();
+            this.$storage = this.__createNsRefer();
         };
 
         /**

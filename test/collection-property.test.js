@@ -797,16 +797,16 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             });
         });
         describe("예외, 커버리지 ", () => {
-            it("- this.$_keys : 커버리지 ", () => {
+            it("- this.$keys : 커버리지 ", () => {
                 let s = new Student();
                 s.columns.add('a1', 'A1');
-                // s.columns.__SET$_keys('aa2', {}) // 접근 금지됨
+                // s.columns.__SET$keys('aa2', {}) // 접근 금지됨
 
                 expect(s.columns._keys).toEqual(['a1'])
             });
-            it("- this.$_keys : 커버리지 ", () => {
+            it("- this.$keys : 커버리지 ", () => {
                 let s = new Student();
-                var aa = s.columns.$_keys
+                var aa = s.columns.$keys
             });
         });
         // it("- _remove(not idx) : 예외 ", () => {
