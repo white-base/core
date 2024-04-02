@@ -63,7 +63,7 @@
         function ArrayCollection(p_owner) {
             _super.call(this, p_owner);
 
-            this.__KEYWORD = ['insertAt'];
+            this.$KEYWORD = ['insertAt'];
 
             Util.implements(ArrayCollection, this);
         }

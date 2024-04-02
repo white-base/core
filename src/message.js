@@ -39,7 +39,7 @@
          * 2. 구분코드
          * 3. 순번
          */
-        var __STORAGE = {
+        var $STORAGE = {
             eng: {
                 E: { // Error
                     S01: { // failure
@@ -1711,7 +1711,7 @@
         Object.defineProperty(Message, "lang", {
             get: function() { return lang; },
             set: function(val) { 
-                if (!__STORAGE[val]) throw new Error('The ['+ val +'] language does not exist.');
+                if (!$STORAGE[val]) throw new Error('The ['+ val +'] language does not exist.');
                 lang = val; 
             },
             configurable: false,
@@ -1733,7 +1733,7 @@
 
         // local function
         function _getCodeObject(code){
-            var MSG = __STORAGE[lang];
+            var MSG = $STORAGE[lang];
             var div, part, num;
 
             if (typeof code !== 'string') return;

@@ -105,7 +105,7 @@
 
 
             // 예약어 등록 
-            this.__KEYWORD = ['_keys', 'indexOf', 'exist', 'keyOf'];
+            this.$KEYWORD = ['_keys', 'indexOf', 'exist', 'keyOf'];
 
             Util.implements(PropertyCollection, this);
         }
@@ -272,7 +272,7 @@
                 
                 if (!_isString(p_key)) throw new ExtendError(/EL04225/, null, [p_key]);
                 if(!regex.test(p_key)) throw new ExtendError(/EL04226/, null, [p_key, regex.source]);
-                if (this.__KEYWORD.indexOf(p_key) > -1) throw new ExtendError(/EL04227/, null, [p_key]);
+                if (this.$KEYWORD.indexOf(p_key) > -1) throw new ExtendError(/EL04227/, null, [p_key]);
                 if (this.exist(p_key)) throw new ExtendError(/EL04228/, null, [p_key]);
                 if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);
                 // if (this._elemTypes.length > 0) Util.matchType(types, p_elem);

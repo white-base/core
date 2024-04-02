@@ -170,7 +170,7 @@
             //     if (call instanceof NamespaceManager) _storage = val;
             // }
 
-            this.___KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
+            this._$KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
 
             Util.implements(NamespaceManager, this);
         }
@@ -264,7 +264,7 @@
             try {
                 sections = _getArray(p_ns);
 
-                if (this.___KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
+                if (this._$KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
             
                 for (var i = 0; i < sections.length; i+=1) {
                     var sName = sections[i];

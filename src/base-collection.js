@@ -75,7 +75,7 @@
             var _elements = [];
             var _descriptors = [];
             var _elemTypes  = []; 
-            var __KEYWORD = [];
+            var $KEYWORD = [];
 
             /**
              * 내부 변수 접근
@@ -217,12 +217,12 @@
             /** 
              * 컬렉션 예약어
              * @private
-             * @member {array<string>}  _L.Collection.BaseCollection#__KEYWORD  
+             * @member {array<string>}  _L.Collection.BaseCollection#$KEYWORD  
              */
-            Object.defineProperty(this, '__KEYWORD', 
+            Object.defineProperty(this, '$KEYWORD', 
             {
-                get: function() { return __KEYWORD; },
-                set: function(newVal) { __KEYWORD = __KEYWORD.concat(newVal); },
+                get: function() { return $KEYWORD; },
+                set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },
                 configurable: false,
                 enumerable: false,
             });
@@ -358,11 +358,11 @@
             // }
 
             // 예약어 등록
-            this.__KEYWORD = ['$event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD'];
-            this.__KEYWORD = ['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged'];
-            this.__KEYWORD = ['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged'];
-            this.__KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];
-            this.__KEYWORD = ['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'add', 'clear'];
+            this.$KEYWORD = ['$event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '$KEYWORD'];
+            this.$KEYWORD = ['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged'];
+            this.$KEYWORD = ['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged'];
+            this.$KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];
+            this.$KEYWORD = ['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'add', 'clear'];
 
             Util.implements(BaseCollection, this);
         }
