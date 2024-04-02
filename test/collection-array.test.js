@@ -53,7 +53,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 const c1 = new ArrayCollection();
                 const c2 = new ArrayCollection();
                 const fun1 = function(){return 'F1'};
-                c1.__event.subscribe(fun1, 'fun1');
+                c1.$event.subscribe(fun1, 'fun1');
                 
                 expect(c1.equal(c2)).toBe(false);
             });
@@ -363,7 +363,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(a2.count).toBe(2);
                 expect(a2[0]).toBe(10);
                 expect(a2[1]).toBe(20);
-                expect(a2.__event.$subscribers.add).toBeDefined()
+                expect(a2.$event.$subscribers.add).toBeDefined()
             });
             it("- setObject() : MetaElment 삽입 ", () => {
                 const a1 = new ArrayCollection();

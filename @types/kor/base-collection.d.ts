@@ -27,7 +27,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * 이벤트 객체
      * @private
      */
-    __event: Observer;
+    $event: Observer;
 
     /**
      * 컬렉션 소유자

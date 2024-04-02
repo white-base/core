@@ -70,7 +70,7 @@
             _super.call(this);
             
             // private variable
-            var __event = new Observer(this, this);
+            var $event = new Observer(this, this);
             var _owner = p_owner || null;
             var _elements = [];
             var _descriptors = [];
@@ -108,11 +108,11 @@
             /** 
              * 이벤트 객체
              * @private 
-             * @member {Observer} _L.Collection.BaseCollection#__event  
+             * @member {Observer} _L.Collection.BaseCollection#$event  
              */
-            Object.defineProperty(this, '__event', 
+            Object.defineProperty(this, '$event', 
             {
-                get: function() { return __event; },
+                get: function() { return $event; },
                 configurable: false,
                 enumerable: false,
             });
@@ -237,7 +237,7 @@
              */
             Object.defineProperty(this, 'onAdd', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'add'); },
+                set: function(fun) { this.$event.subscribe(fun, 'add'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -252,7 +252,7 @@
              */
             Object.defineProperty(this, 'onAdded', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'added'); },
+                set: function(fun) { this.$event.subscribe(fun, 'added'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -267,7 +267,7 @@
              */
             Object.defineProperty(this, 'onRemove', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'remove'); },
+                set: function(fun) { this.$event.subscribe(fun, 'remove'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -282,7 +282,7 @@
              */
             Object.defineProperty(this, 'onRemoved', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'removed'); },
+                set: function(fun) { this.$event.subscribe(fun, 'removed'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -295,7 +295,7 @@
              */
             Object.defineProperty(this, 'onClear', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'clear'); },
+                set: function(fun) { this.$event.subscribe(fun, 'clear'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -308,7 +308,7 @@
              */
             Object.defineProperty(this, 'onCleared', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'cleared'); },
+                set: function(fun) { this.$event.subscribe(fun, 'cleared'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -323,7 +323,7 @@
              */
             Object.defineProperty(this, 'onChanging', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'changing'); },
+                set: function(fun) { this.$event.subscribe(fun, 'changing'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -338,7 +338,7 @@
              */
             Object.defineProperty(this, 'onChanged', 
             {
-                set: function(fun) { this.__event.subscribe(fun, 'changed'); },
+                set: function(fun) { this.$event.subscribe(fun, 'changed'); },
                 configurable: false,
                 enumerable: false,
             });
@@ -358,7 +358,7 @@
             // }
 
             // 예약어 등록
-            this.__KEYWORD = ['__event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD'];
+            this.__KEYWORD = ['$event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '__KEYWORD'];
             this.__KEYWORD = ['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged'];
             this.__KEYWORD = ['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged'];
             this.__KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];
@@ -380,7 +380,7 @@
          * @listens _L.Collection.BaseCollection#onAdd
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_elem) {
-            this.__event.publish('add', p_idx, p_elem, this); 
+            this.$event.publish('add', p_idx, p_elem, this); 
         };
 
         /**
@@ -390,7 +390,7 @@
          * @listens _L.Collection.BaseCollection#onAdded
          */
         BaseCollection.prototype._onAdded = function(p_idx, p_elem) {
-            this.__event.publish('added', p_idx, p_elem, this); 
+            this.$event.publish('added', p_idx, p_elem, this); 
         };
 
         /**
@@ -400,7 +400,7 @@
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_elem) {
-            this.__event.publish('remove', p_idx, p_elem, this);
+            this.$event.publish('remove', p_idx, p_elem, this);
         };
 
         /**
@@ -410,7 +410,7 @@
          * @listens _L.Collection.BaseCollection#onRemoved
          */
         BaseCollection.prototype._onRemoved = function(p_idx, p_elem) {
-            this.__event.publish('removed', p_idx, p_elem, this);
+            this.$event.publish('removed', p_idx, p_elem, this);
         };
 
         /** 
@@ -418,7 +418,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
-            this.__event.publish('clear', this); 
+            this.$event.publish('clear', this); 
         };
 
         /** 
@@ -426,7 +426,7 @@
          * @listens _L.Collection.BaseCollection#onCleared
          */
         BaseCollection.prototype._onCleared = function() {
-            this.__event.publish('cleared', this); 
+            this.$event.publish('cleared', this); 
         };
 
 
@@ -437,7 +437,7 @@
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function(p_idx, p_elem) {
-            this.__event.publish('changing', p_idx, p_elem, this); 
+            this.$event.publish('changing', p_idx, p_elem, this); 
         };
 
         /** 
@@ -447,7 +447,7 @@
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function(p_idx, p_elem) {
-            this.__event.publish('changed', p_idx, p_elem, this); 
+            this.$event.publish('changed', p_idx, p_elem, this); 
         };
 
         /**
@@ -498,8 +498,8 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             var _elems = [];
             
-            if (!Type.deepEqual(this.__event['$subscribers'], this.__event._getInitObject())) {
-                obj['$subscribers'] = this.__event.$subscribers;
+            if (!Type.deepEqual(this.$event['$subscribers'], this.$event._getInitObject())) {
+                obj['$subscribers'] = this.$event.$subscribers;
             }
             if (vOpt < 2 && vOpt > -1 && this._owner) {
                 obj['_owner'] = MetaRegistry.createReferObject(this._owner);
@@ -528,7 +528,7 @@
             
             this.clear();
             if (p_oGuid['$subscribers']) {
-                this.__event.$subscribers = p_oGuid['$subscribers'];
+                this.$event.$subscribers = p_oGuid['$subscribers'];
             }
             if (p_oGuid['_owner']) {
                 owner = MetaRegistry.findSetObject(p_oGuid['_owner']['$ref'], origin);
