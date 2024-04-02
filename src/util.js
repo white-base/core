@@ -6,7 +6,7 @@
     var isNode = typeof window !== 'undefined' ? false : true;
 
     //==============================================================
-    // 1. 의존 모듈 선언
+    // 1. namespace declaration
     _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
     _global._L.Common.Util          = _global._L.Common.Util || {};
