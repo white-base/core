@@ -186,7 +186,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param idx 인덱스 번호
      * @protected
      */
-    _getPropDescriptor(idx: number);
+    _getPropDescriptor(idx: number): object;
 
     /**
      * 컬렉션의 요소를 삭제합니다. (내부)

@@ -60,7 +60,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
      * @param elem 요소
      * @param desc 프로퍼티 기술자 객체
      */
-    insertAt(pos: number, elem: any, desc?: PropertyDescriptor): boolean;
+    insertAt(pos: number, elem: any, desc?: T.PropertyDescriptor): boolean;
 
 }
 // }

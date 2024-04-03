@@ -57,7 +57,7 @@ declare class MetaObject implements IObject, IMarshal {
      * @param oGuid 직렬화 할 guid 타입의 객체
      * @param origin [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
      */
-    setObject(oGuid: object, origin?: object)
+    setObject(oGuid: object, origin?: object);
 }
 
 export = MetaObject;
