@@ -1797,7 +1797,7 @@
         }
 
         /**
-         * 메세지를 초기화 합니다.
+         * 메세지를 초기화 합니다. TODO: 꼭 필요할까? 필요없을듯
          */
         Message.init = function() {
             this.lang = 'eng';

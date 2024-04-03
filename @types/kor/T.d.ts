@@ -20,3 +20,10 @@ export type NsTypeObject = { _type: 'ns' };
 
 export type PathObject = { ns: string, key: string };
 
+export interface MessageObject {
+    /** 메세지 */
+    msg: string;
+
+    /** 긴 메세지 */
+    long: string;
+}

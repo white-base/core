@@ -20,42 +20,19 @@ declare type NsTypeObject = { _type: 'ns' };
 
 declare type PathObject = { ns: string, key: string };
 
-
 declare type ArrayKind = '_OPT_' | '_REQ_' | '_SEQ_' | '_ALL_' | '_ANY_';
 
 declare type ChoiceKind = '_OPT_' | '_REQ_' | '_EUM_' | '_DEF_' | '_ERR_' | '_NON_' | '_ALL_' | '_ANY_';
 
-
 declare interface ExtendType {
     
-    /**
-     * 타입
-     * - $type = 'undefined' : undefined 타입
-     * - $type = 'null' : undefined 타입
-     * - $type = 'string' : undefined 타입
-     * - $type = 'number' : undefined 타입
-     * - $type = 'boolean' : undefined 타입
-     * - $type = 'bigint' : undefined 타입
-     * - $type = 'symbol' : undefined 타입
-     * - $type = 'object' : undefined 타입
-     * - $type = 'regexp' : undefined 타입
-     * - $type = 'function' : undefined 타입
-     * - $type = 'class' : undefined 타입
-     * - $type = 'union' : undefined 타입
-     * - $type = 'array' : undefined 타입
-     * - $type = 'choice' : undefined 타입
-     */
     // $type?: 'undefined' | 'null' | 'string' | 'number' | 'boolean' | 'bigint' | 'symbol' | 'regexp' | 'class' | 'union' | 'array' | 'choice';
     
     /**
      * 원본 객체
      */
     ref?: any;
-
-    
-
-    
-};
+}
 
 declare interface ArrayExtendType extends ExtendType {
 
@@ -133,7 +110,7 @@ declare interface FunctionExtendType extends ExtendType {
     /**
      * $type = 'function' 경우, 파라메터 타입
      */
-    params?: array[];
+    params?: AsyncDisposable[];
     
     /**
      * $type = 'function' 경우, 리턴 타입
@@ -190,7 +167,7 @@ declare interface Function {
      * }
      * ClassA._UNION = [InterfaceA];
      */
-    _UNION: function[];
+    _UNION: Function[];
 
     /**
      * 네임스페이스
@@ -223,12 +200,5 @@ declare interface Function {
     _TYPE: ArrayExtendType | ChoiceExtendType | PrimitiveExtendType 
         | FunctionExtendType | ClassExtendType | UnionExtendType;
 
-    /**
-     * 타입 명시적으로 지정
-     * _KIND = 'function' 으로 사용할 경우
-     */
-    // _FUNC: TypeExtend;
-
-    _TEST : "sss"
-};
+}
 

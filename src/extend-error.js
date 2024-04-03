@@ -96,6 +96,7 @@
 
             _instance.queue.push(_msg);
 
+
             if (Error.captureStackTrace && !OLD_ENV) {
                 Error.captureStackTrace(_instance, ExtendError);
             }

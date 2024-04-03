@@ -10,6 +10,8 @@ var a = 1;
 console.log('0');
 
 var core = require('../');
+
+var C = require('logic-core');
 // var {Observer} = require('../');
 
 // import {Observer} from 'logic-core'
@@ -26,7 +28,7 @@ var i2 = new Observer({})
 var assert = require('assert')
 
 
-var ii = new assert.AssertionError({})
+// var ii = new assert.AssertionError({})
 
 
 
@@ -61,6 +63,15 @@ Function._NS = 'aaa'
 function aaa () {
 
 }
+
+// var aa = new core.ExtendError()
+var aa = new C.ExtendError(/aa/, undefined, ['s']);
+// aa.
+// C.Message.
+
+var ee = new Error();
+// ee.
+
 
 // aaa._TYPE = {
 //     kind: '_DEF'
