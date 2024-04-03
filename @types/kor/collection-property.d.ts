@@ -59,7 +59,7 @@ declare class PropertyCollection extends BaseCollection implements IPropertyColl
      * @param elem 요소
      * @param desc 기술자
      */
-    add(key: string, elem: any,  desc?: T.PropertyDescriptor): boolean;
+    add(key: string, elem: any,  desc?: T.PropertyDescriptor): number;
 
     /**
      * 프로러티 컬렉션을 초기화 합니다.
