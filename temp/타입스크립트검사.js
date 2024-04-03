@@ -72,6 +72,7 @@ Function._NS = 'aaa'
 function aaa () {
 
 }
+// aaa.
 
 // var aa = new core.ExtendError()
 var aa = new C.ExtendError(/aa/, undefined, ['s']);
