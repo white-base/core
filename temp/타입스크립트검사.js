@@ -24,6 +24,15 @@ i.publish()
 
 var i2 = new Observer({})
 
+function funA (){
+
+}
+
+
+// funA.
+// funA._NS
+
+// Function
 
 var assert = require('assert')
 
