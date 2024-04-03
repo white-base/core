@@ -69,7 +69,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      *  컬렉션 예약어
      * @private
      */
-    __KEYWORD: string[];
+    $KEYWORD: string[];
 
     /**
      * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.

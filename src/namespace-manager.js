@@ -55,7 +55,7 @@
          */
         function NamespaceManager() {
 
-            var _storage = this.__createNsRefer();
+            var _storage = this.$createNsRefer();
             var _elemTypes  = []; 
             var isOverlap = false;
             
@@ -216,7 +216,7 @@
          * @returns {object} {_type: 'ns'}
          * @private
          */
-        NamespaceManager.prototype.__createNsRefer = function() {
+        NamespaceManager.prototype.$createNsRefer = function() {
             return { _type: 'ns' };
         };
 
@@ -250,7 +250,7 @@
          * 네임스페이스를 초기화 합니다.
          */
         NamespaceManager.prototype.init = function() {
-            this.$storage = this.__createNsRefer();
+            this.$storage = this.$createNsRefer();
         };
 
         /**
@@ -269,7 +269,7 @@
                 for (var i = 0; i < sections.length; i+=1) {
                     var sName = sections[i];
                     if (typeof parent[sections[i]] === 'undefined') {
-                        parent[sections[i]] = this.__createNsRefer();
+                        parent[sections[i]] = this.$createNsRefer();
                     }
                     parent = parent[sections[i]];
                 }
