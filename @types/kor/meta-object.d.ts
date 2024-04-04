@@ -70,18 +70,18 @@ declare class MetaObject implements IObject, IMarshal {
      * 인터페이스
      * @default [IObject, IMarshal]
      */
-    static _UNION: []
+    static readonly _UNION: []
 
     /**
      * 네임스페이스
      * @default 'Meta'
      */
-    static _NS: string;
+    static readonly _NS: string;
 
     /**
      * 생성자 파라메터
      */
-    static _PARAM: [];
+    static readonly _PARAM: [];
 }
 
 export = MetaObject;
