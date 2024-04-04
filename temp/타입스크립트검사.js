@@ -12,6 +12,7 @@ console.log('0');
 var core = require('../');
 
 var C = require('logic-core');
+// var C = require('../');
 // var {Observer} = require('../');
 
 // import {Observer} from 'logic-core'
@@ -40,10 +41,22 @@ var assert = require('assert')
 // var ii = new assert.AssertionError({})
 
 
+var ooo = new C.MetaElement('ㅁㅁ');
+var ooo2 = C.Type.typeObject([[]]);
+
+ooo2.$type
+ooo2.ref
+
+
+// C.MetaElement.__TYPE = {$type: 'array'}
+// C.MetaElement.__TYPE = {$type: 'arraya'}
+
+// C.MetaObject.
+// C.MetaElement.
 
 // var aa = core.()
 
-MetaObject
+// MetaObject
 
 console.log(0);
 
@@ -63,6 +76,7 @@ Function._TYPE = {
 }
 
 Function._NS = 'aaa'
+// Function._NS = 1
 
 
 // Function._TEST = "sss"

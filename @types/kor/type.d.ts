@@ -56,7 +56,7 @@ declare namespace Type {
      *     func: null,     // function
      * }
      */
-    function typeObject(target: any): object;
+    function typeObject(target: any): ExtType;
     
     /**
      * 확장타입명을 얻습니다.

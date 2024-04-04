@@ -1,6 +1,9 @@
+
+/// <reference path="global.d.ts" />
+
 import NamespaceManager     = require("./namespace-manager");
 import MetaObject           = require("./meta-object");
-import T                    = require("./T");
+// import T                    = require("./T");
 
 /**
  * 메타 객체 등록소 클래스 입니다.
@@ -80,7 +83,7 @@ declare class MetaRegistry {
      * obj.onwer = MetaRegistry.createReferObject(meta);
      * console.log(obj.onwer); // { $ref : '5337877c-49d6-9add-f35a-7bd31d510d4f' }
      */
-    static createReferObject(meta: MetaObject): T.RefObject;
+    static createReferObject(meta: MetaObject): RefObject;
 
     /**
      * target을 네임스페이스에 등록하고, 참조를 생성합니다.
@@ -92,7 +95,7 @@ declare class MetaRegistry {
      * obj.onwer = MetaRegistry.createReferObject(meta);
      * console.log(obj);                // {onwer: {$ns: 'Meta.MetaElement'}}
      */
-    static createNsReferObject(target: Function): T.NsObject;
+    static createNsReferObject(target: Function): NsObject;
 
     /**
      * guid 객체에 메타 객체의 guid 를 설정합니다.  
@@ -106,7 +109,7 @@ declare class MetaRegistry {
      * MetaRegistry.setMetaObject(obj, meta);
      * console.log(obj);                    // {name: 'm2, $set: '5337877c-49d6-9add-f35a-7bd31d510d4f'}
      */
-    static setMetaObject(oGuid: object, meta: MetaObject): T.SetObject;
+    static setMetaObject(oGuid: object, meta: MetaObject): SetObject;
 
     /**
      * guid 객체의 유효성 검사를 합니다.  

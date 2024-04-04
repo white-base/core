@@ -1,7 +1,7 @@
 import IList                = require("./i-list");
 import IListControl         = require("./i-control-list");
 import ISerialize           = require("./i-serialize");
-import T                    = require("./T");
+// import T                    = require("./T");
 
 /**
  * 네임스페이스 관리자 클래스 입니다.
@@ -46,7 +46,7 @@ declare class NamespaceManager implements IList, IListControl, ISerialize {
      * @returns ex>  { _type: 'ns' }
      * @private
      */
-    __createNsRefer(): T.NsTypeObject;
+    __createNsRefer(): NsTypeObject;
 
     /**
      * 네임스페이스 경로객체를 얻습니다.
@@ -54,7 +54,7 @@ declare class NamespaceManager implements IList, IListControl, ISerialize {
      * @returns ex>  { ns: '..', key: '...' }
      * @protected
      */
-    _getPathObject(elem: object | string): T.PathObject;
+    _getPathObject(elem: object | string): PathObject;
 
     /**
      * 네임스페이스를 초기화 합니다.

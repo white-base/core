@@ -2,7 +2,7 @@ import ICollection          = require("./i-collection");
 import IList                = require("./i-list");
 import MetaObject           = require("./meta-object");
 import Observer             = require("./observer");
-import T                    = require("./T");
+// import T                    = require("./T");
 
 
 /**
@@ -10,7 +10,7 @@ import T                    = require("./T");
  * @param elem 요소
  * @param _this 현재 컬렉션
  */
-type OnFunc = (idx: number, elem: any, _this: object)=> void;
+// type OnFunc = (idx: number, elem: any, _this: object)=> void;
 
 /**
  * 기본 컬렉션 추상 클래스(최상위) 입니다.
@@ -23,6 +23,8 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      */
     constructor(owner: object);
 
+
+    // aa: TObject;
     /**
      * 이벤트 객체
      * @private
@@ -75,25 +77,25 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
      * @event BaseCollection#onAdd
      */
-    onAdd: T.OnFunc;
+    onAdd: OnFunc;
 
     /**
      * 컬렉션 요소를 추가 후에 발생하는 이벤트 입니다.
      * @event BaseCollection#onAdded
      */
-    onAdded: T.OnFunc;
+    onAdded: OnFunc;
 
     /**
      * 컬렉션 요소를 삭제 전에 발생하는 이벤트 입니다.
      * @event BaseCollection#onRemove
      */
-    onRemove: T.OnFunc;
+    onRemove: OnFunc;
     
     /**
      * 컬렉션 요소를 삭제 후에 발생하는 이벤트 입니다.
      * @event BaseCollection#onRemoved
      */
-    onRemoved: T.OnFunc;
+    onRemoved: OnFunc;
 
     /**
      * 컬렉션을 초기화 전에 발생하는 이벤트 입니다.
@@ -113,13 +115,13 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      *  컬렉션 요소를 변경 전에 발생하는 이벤트 입니다.
      * @event BaseCollection#onChanging
      */
-    onChanging: T.OnFunc;
+    onChanging: OnFunc;
 
     /**
      * 컬렉션 요소를 변경 후에 발생하는 이벤트 입니다.
      * @event BaseCollection#onChanged
      */
-    onChanged: T.OnFunc;
+    onChanged: OnFunc;
 
     /**
      * onAdd 이벤트를 발생합니다.

@@ -6,6 +6,12 @@ import MetaObject           = require("./meta-object");
  */
 declare class MetaElement extends MetaObject implements IElement {
 
+    /**
+     * 메타 요소 생성합니다.
+     * @param name 이름
+     */
+    constructor(name: string);
+    
     _name: string;
 
     /**
@@ -34,6 +40,25 @@ declare class MetaElement extends MetaObject implements IElement {
      * 현제 객체를 복제합니다.
      */
     clone(): this;
+
+
+    /**
+     * 인터페이스
+     * @default [IElement]
+     */
+    static _UNION: []
+
+    /**
+     * 네임스페이스
+     * @default 'Meta'
+     */
+    static _NS: string;
+
+    /**
+     * 생성자 파라메터
+     * @default ['name']
+     */
+    static _PARAM: [];
 }
 
 export = MetaElement;

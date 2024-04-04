@@ -1,6 +1,6 @@
 import IPropertyCollection  = require("./i-collection-property");
 import BaseCollection       = require("./base-collection");
-import T                    = require("./T");
+// import T                    = require("./T");
 
 /**
  * 프로퍼티 컬렉션 클래스 입니다.
@@ -59,7 +59,7 @@ declare class PropertyCollection extends BaseCollection implements IPropertyColl
      * @param elem 요소
      * @param desc 기술자
      */
-    add(key: string, elem: any,  desc?: T.PropertyDescriptor): number;
+    add(key: string, elem: any,  desc?: PropertyDescriptor): number;
 
     /**
      * 프로러티 컬렉션을 초기화 합니다.

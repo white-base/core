@@ -364,6 +364,10 @@ declare interface UnionExtendType extends ExtendType {
     _prop: object;
 }
 
+
+declare type ExtType = ArrayExtendType | ChoiceExtendType | PrimitiveExtendType 
+    | FunctionExtendType | ClassExtendType | UnionExtendType;
+
 declare interface Function {
     
     /**
@@ -409,7 +413,6 @@ declare interface Function {
      * 타입 명시적으로 지정
      * 
      */
-    _TYPE: ArrayExtendType | ChoiceExtendType | PrimitiveExtendType 
-        | FunctionExtendType | ClassExtendType | UnionExtendType;
+    _TYPE: ExtType;
 
 }

@@ -1,6 +1,6 @@
 import IArrayCollection     = require("./i-collction-array");
 import BaseCollection       = require("./base-collection");
-import T                    = require("./T");
+// import T                    = require("./T");
     
 /**
  * 배열 컬렉션 클래스 입니다.
@@ -46,7 +46,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
      * @param elem 요소
      * @param desc 프로퍼티 기술자 객체
      */
-    add(elem: any, desc?: T.PropertyDescriptor): number;
+    add(elem: any, desc?: PropertyDescriptor): number;
 
     /**
      * 배열 컬렉션을 초기화 합니다.
@@ -60,7 +60,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
      * @param elem 요소
      * @param desc 프로퍼티 기술자 객체
      */
-    insertAt(pos: number, elem: any, desc?: T.PropertyDescriptor): boolean;
+    insertAt(pos: number, elem: any, desc?: PropertyDescriptor): boolean;
 
 }
 // }

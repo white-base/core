@@ -21,10 +21,11 @@ import MetaElement          = require("./meta-element");
 import BaseCollection       = require("./base-collection");
 import ArrayCollection      = require("./collection-array");
 import PropertyCollection   = require("./collection-property");
-import T                    = require("./T");
+// import T                    = require("./T");
+
 
 export {
-    T,
+    // T,
     Util,
     Type,
     ExtendError,

@@ -58,6 +58,30 @@ declare class MetaObject implements IObject, IMarshal {
      * @param origin [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
      */
     setObject(oGuid: object, origin?: object);
+
+
+    // /**
+    //  * 타입정보
+    //  * @default {$type: 'array'}
+    //  */
+    // static _: ArrayExtendType;
+
+    /**
+     * 인터페이스
+     * @default [IObject, IMarshal]
+     */
+    static _UNION: []
+
+    /**
+     * 네임스페이스
+     * @default 'Meta'
+     */
+    static _NS: string;
+
+    /**
+     * 생성자 파라메터
+     */
+    static _PARAM: [];
 }
 
 export = MetaObject;
