@@ -1,4 +1,4 @@
-/// <reference path="global.d.ts" />
+// <reference path="global.d.ts" />
 /**
  * 타입 모듈 입니다.
  */
