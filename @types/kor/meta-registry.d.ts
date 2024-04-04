@@ -1,5 +1,4 @@
-
-/// <reference path="global.d.ts" />
+// <reference path="global.d.ts" />
 
 import NamespaceManager     = require("./namespace-manager");
 import MetaObject           = require("./meta-object");

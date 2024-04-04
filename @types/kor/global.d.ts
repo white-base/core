@@ -300,7 +300,7 @@ declare interface PrimitiveExtendType extends ExtendType {
     /**
      * $type = number | string | boolean | BigInt | RegExp 일 경우 기본값
      */
-    default?: number | string | boolean | BigInt | RegExp;
+    default?: number | string | boolean | bigint | RegExp;
 }
 
 declare interface FunctionExtendType extends ExtendType {
@@ -322,7 +322,7 @@ declare interface FunctionExtendType extends ExtendType {
     /**
      * $type = 'function' 경우, 파라메터 타입
      */
-    params?: AsyncDisposable[];
+    params?: any[];
     
     /**
      * $type = 'function' 경우, 리턴 타입
