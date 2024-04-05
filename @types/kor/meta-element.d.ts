@@ -39,7 +39,7 @@ declare class MetaElement extends MetaObject implements IElement {
     /**
      * 현제 객체를 복제합니다.
      */
-    clone(): this;
+    clone(...args): this;
 
 
     /**
