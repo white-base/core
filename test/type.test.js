@@ -1057,6 +1057,10 @@ describe("[target: util-type.js.js]", () => {
             it('- isMatchType() : undefined ', () => {
                 var type1 = undefined
                 var type2 = { aa: undefined }
+                var type3 = { aa: [[{}]] }
+                var type4 = { aa: String }
+                var type5 = { aa: [[String, Number]] }
+                var type6 = { aa: [['_req_', String, Number]] }
                 
                 // type1
                 expect(isMatchType(type1)                   ).toBe(T);
@@ -1064,7 +1068,25 @@ describe("[target: util-type.js.js]", () => {
                 expect(isMatchType(type1, null)             ).toBe(false); 
                 // type2
                 expect(isMatchType(type2, {aa: undefined})  ).toBe(T);
-                expect(isMatchType(type2, {})               ).toBe(false); // aa 프로퍼티 없음
+                expect(isMatchType(type2, {})               ).toBe(T); // aa 프로퍼티 없음
+                // type3
+                expect(isMatchType(type3, {aa: undefined})  ).toBe(T);
+                expect(isMatchType(type3, {})               ).toBe(T);
+                // type4
+                expect(isMatchType(type4, {aa: 'str'})      ).toBe(T);
+                expect(isMatchType(type4, {aa: undefined})  ).toBe(false);
+                expect(isMatchType(type4, {})               ).toBe(false);
+                // type5
+                expect(isMatchType(type5, {aa: 'str'})      ).toBe(T);
+                expect(isMatchType(type5, {aa: 10})         ).toBe(T);
+                expect(isMatchType(type5, {aa: undefined})  ).toBe(T);
+                expect(isMatchType(type5, {})               ).toBe(T);
+                // type6
+                expect(isMatchType(type6, {aa: 'str'})      ).toBe(T);
+                expect(isMatchType(type6, {aa: 10})         ).toBe(T);
+                expect(isMatchType(type6, {aa: undefined})  ).toBe(false);
+                expect(isMatchType(type6, {})               ).toBe(false);
+
             });
             it('- isMatchType() : null ', () => {
                 var type1 = null;
@@ -5877,18 +5899,18 @@ describe("[target: util-type.js.js]", () => {
             var Class1 = function() { this.aa = String }
             var Class2 = function() { this.bb = Number }
     
-            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow('EL01142')
+            expect(()=> matchType(Class2,             {aa: 'STR'}           , 1)).toThrow('EL01102')
             expect(()=> matchType(Class2,             {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
             expect(()=> matchType([[Class1, Class2]], {cc: 'STR'}           , 1)).toThrow('EL01127')
-            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow('EL01142')
-            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow('EL01142')            
+            expect(()=> matchType(Class1,             {cc: 'STR'}           , 1)).toThrow('EL01102')
+            expect(()=> matchType(Class2,             {cc: 'STR'}           , 1)).toThrow('EL01102')            
         });
         it('- isMatchType() : object (객체 기본값) ', () => {
             var Class1 = function() { this.aa = String };
             var Class2 = function() { this.bb = 10 };
 
-            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow('EL01142')
-            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow('EL01142')
+            expect(()=> matchType(Class1,         {bb: 5}               , 1)).toThrow('EL01102')
+            expect(()=> matchType(Class1,         {cc: 'STR'}           , 1)).toThrow('EL01102')
             expect(()=> matchType(Class2,         {aa: 'STR', bb: 'STR'}, 1)).toThrow('EL01102')
         });
         
@@ -6352,12 +6374,13 @@ describe("[target: util-type.js.js]", () => {
                 var thr01 = '[EL01141] 유니언 매치 : target 은 union 타입이 아닙니다. tarType: number(10)'
                 expect(()=> matchType(type1, tar01)).toThrow(thr01)
             });
-            it('- [EL01142] union', () => {
-                var type1 = {aa: String}
-                var tar01 = {}
-                var thr01 = '[EL01142] 유니언 매치 : target[\'aa\'] 키가 존재하지 않습니다. extType[\'aa\'] = string'
-                expect(()=> matchType(type1, tar01)).toThrow(thr01)
-            });
+            // TODO: 오류 코드 사라짐
+            // it('- [EL01142] union', () => { 
+            //     var type1 = {aa: String}
+            //     var tar01 = {}
+            //     var thr01 = '[EL01142] 유니언 매치 : target[\'aa\'] 키가 존재하지 않습니다. extType[\'aa\'] = string'
+            //     expect(()=> matchType(type1, tar01)).toThrow(thr01)
+            // });
             it('- [EL01143] union', () => {
                 var type1 = {aa: String}
                 var tar01 = {aa: 10}

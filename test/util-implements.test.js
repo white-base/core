@@ -455,10 +455,13 @@ describe("[target: util.js]", () => {
             ISuper.prototype.m1 = function() {};
             function ISub() {
                 ISuper.call(this); 
+                // this.obj = [[String]]
+                this.str = [[String]]
                 this.fun = function() {};
             }
             Util.inherits(ISub, ISuper);
             ISub.prototype.m2 = function() {};
+            
             // 클래스 정의
             function CoClass1() {   // 정상 작동
                 this.fun = function() { return 'FUN' };
@@ -467,6 +470,7 @@ describe("[target: util.js]", () => {
             }
             CoClass1.prototype.m1 = function() { return 'M1' };
             CoClass1.prototype.m2 = function() { return 'M2' };
+
             function CoClass2() {
                 this.fun = function() { return 'FUN' };
                 Util.implements(CoClass2, this, ISub); 
@@ -477,7 +481,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/EL01142/);
+            expect(()=> new CoClass2()).toThrow(/EL01111/);
         });
         it('- class 인터페이스 상속 인터페이스 선언 <-- 구현 : 예외 및 구현 ', () => {
             // 인터페이스
@@ -507,7 +511,7 @@ describe("[target: util.js]", () => {
     
             expect(obj.fun()).toBe('FUN');
             expect(obj.m2()).toBe('M2');
-            expect(()=> new CoClass2()).toThrow(/EL01142/);
+            expect(()=> new CoClass2()).toThrow(/EL01111/);
         });
         it('- isImplementOf() : 예외 및 검사 ', () => {
             // 인터페이스

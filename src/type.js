@@ -1198,7 +1198,8 @@
                 // REVIEW: 재귀로 구현 체크
                 if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
                 target[key] = listDefType['default'];
-                if (target !== null && !(key in target)) throw new ExtendError(/EL01142/, prop, [key, typeOf(extType[key])]);    
+                // POINT:
+                // if (target !== null && !(key in target)) throw new ExtendError(/EL01142/, prop, [key, typeOf(extType[key])]);    
                 try {
                     var subPath = pathName +'[\''+ key+'\']';
                     _execMatch(extType[key], target[key], opt, subPath);
