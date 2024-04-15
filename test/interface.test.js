@@ -116,10 +116,10 @@ describe("[target: i-* ]", () => {
             const i = new IList();
 
             // extends
-            expect(s.list).toBe(Array);
+            expect(s._list).toBe(Array);
             expect(s.count).toBe(Number);
             // create
-            expect(i.list).toBe(Array);
+            expect(i._list).toBe(Array);
             expect(i.count).toBe(Number);
         });
     });

@@ -79,7 +79,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).toBeUndefined();
                 expect(s.columns.a1).toBeUndefined();
                 expect(s.columns.count).toBe(0);
-                expect(s.columns.list.length).toBe(0);
+                expect(s.columns._list.length).toBe(0);
                 expect(result > -1).toBeTruthy();
             });
             it("- remove(elem) : number ", () => {
@@ -90,7 +90,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).toBeUndefined();
                 expect(s.columns.a1).toBeUndefined();
                 expect(s.columns.count).toBe(0);
-                expect(s.columns.list.length).toBe(0);
+                expect(s.columns._list.length).toBe(0);
             });
             it("- remove(elem) : object ", () => {
                 let s = new Student();
@@ -101,7 +101,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).toBeUndefined();
                 expect(s.columns.a1).toBeUndefined();
                 expect(s.columns.count).toBe(0);
-                expect(s.columns.list.length).toBe(0);
+                expect(s.columns._list.length).toBe(0);
             });
             it("- remove(elem) : string (없을 경우)", () => {
                 let s = new Student();
@@ -111,7 +111,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).not.toBeUndefined();
                 expect(s.columns.a1).not.toBeUndefined();
                 expect(s.columns.count).toBe(1);
-                expect(s.columns.list.length).toBe(1);
+                expect(s.columns._list.length).toBe(1);
                 expect(result > -1).not.toBeTruthy();
             });
         });
@@ -128,7 +128,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).toBeUndefined();
                 expect(s.columns.a1).toBeUndefined();
                 expect(s.columns.count).toBe(0);
-                expect(s.columns.list.length).toBe(0);
+                expect(s.columns._list.length).toBe(0);
                 expect(result).toBeTruthy();
             });
             it("- removeAt(idx) : 없을 경우", () => {
@@ -140,7 +140,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).toBeTruthy();
                 expect(s.columns.a1).toBeTruthy();
                 expect(s.columns.count).toBe(1);
-                expect(s.columns.list.length).toBe(1);
+                expect(s.columns._list.length).toBe(1);
                 expect(result).not.toBeTruthy();
             });
             it("- removeAt(idx) : 첫째 요소 삭제", () => {
@@ -161,7 +161,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.indexOf('a2', 1)).toBe(0);  // 바뀐 idx 확인
                 expect(s.columns.indexOf('a3', 1)).toBe(1);  // 바뀐 idx 확인
                 expect(s.columns.count).toBe(2);
-                expect(s.columns.list.length).toBe(2);
+                expect(s.columns._list.length).toBe(2);
                 expect(result).toBeTruthy();
             });
             it("- removeAt(idx) : 중간 요소 삭제", () => {
@@ -182,7 +182,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.indexOf('a1', 1)).toBe(0);  
                 expect(s.columns.indexOf('a3', 1)).toBe(1);  // 바뀐 idx 확인
                 expect(s.columns.count).toBe(2);
-                expect(s.columns.list.length).toBe(2);
+                expect(s.columns._list.length).toBe(2);
                 expect(result).toBeTruthy();
             });
             it("- removeAt(idx) : 마지막 요소 삭제 후 추가", () => {
@@ -207,7 +207,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.indexOf('a2', 1)).toBe(1);
                 expect(s.columns.indexOf('a4', 1)).toBe(2);
                 expect(s.columns.count).toBe(3);
-                expect(s.columns.list.length).toBe(3);
+                expect(s.columns._list.length).toBe(3);
                 expect(result).toBeTruthy();
             });
         });
@@ -308,7 +308,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).toBeUndefined();
                 expect(s.columns.a1).toBeUndefined();
                 expect(s.columns.count).toBe(0);
-                expect(s.columns.list.length).toBe(0);
+                expect(s.columns._list.length).toBe(0);
                 expect(result).toBeTruthy();
             });
             it("- removeAt(this.indexOf(name, 1)) : 없는 경우 ", () => {
@@ -321,7 +321,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).not.toBeUndefined();
                 expect(s.columns.a1).not.toBeUndefined();
                 expect(s.columns.count).toBe(1);
-                expect(s.columns.list.length).toBe(1);
+                expect(s.columns._list.length).toBe(1);
                 expect(result).not.toBeTruthy();
             });
         });
@@ -709,7 +709,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(() => s.columns.add('_elements')).toThrow(/EL04227/);
                 expect(() => s.columns.add('$KEYWORD')).toThrow(/EL04229/);
                 expect(() => s.columns.add('_elemTypes')).toThrow(/EL04227/);
-                expect(() => s.columns.add('list')).toThrow(/EL04227/);
+                expect(() => s.columns.add('_list')).toThrow(/EL04227/);
                 expect(() => s.columns.add('count')).toThrow(/EL04227/);
                 expect(() => s.columns.add('onAdd')).toThrow(/EL04227/);
                 expect(() => s.columns.add('onRemove')).toThrow(/EL04227/);
@@ -769,7 +769,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 s.columns.clear();
         
                 expect(s.columns.count).toBe(0);
-                expect(s.columns.list.length).toBe(0);
+                expect(s.columns._list.length).toBe(0);
                 // expect(s.columns._keys.length).toBe(0);  // 내부 함수는 검사에 사용안하는게 원칙임
             });
         });

@@ -107,10 +107,10 @@
 
             /**
              * 네임스페이스 요소 목록
-             * @member {array<string>}  _L.Meta.NamespaceManager#list
+             * @member {array<string>}  _L.Meta.NamespaceManager#_list
              * @readonly
              */
-            Object.defineProperty(this, 'list', 
+            Object.defineProperty(this, '_list', 
             {
                 get: function() {
                     var storage = this._storage;
@@ -144,7 +144,7 @@
             Object.defineProperty(this, 'count', 
             {
                 get: function() {
-                    return this.list.length;
+                    return this._list.length;
                 },
                 configurable: false,
                 enumerable: true,
@@ -483,8 +483,8 @@
             var temp = {list: arr};
 
             try {
-                for (var i = 0; i < this.list.length; i++) {
-                    var fullName    = this.list[i];
+                for (var i = 0; i < this._list.length; i++) {
+                    var fullName    = this._list[i];
                     var fun         = this.find(fullName);
                     var nObj        = this._getPathObject(fullName);
                     obj = { 

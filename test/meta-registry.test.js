@@ -26,14 +26,14 @@ describe("[target: meta-registry.js]", () => {
         it("- 초기값 조회 ", () => {
             expect(MetaRegistry.count).toBe(0);
         });
-        describe("MetaRegistry.list <객체 목록>", () => {
-            it("- list()  ", () => {
+        describe("MetaRegistry._list <객체 목록>", () => {
+            it("- _list()  ", () => {
                 let i1 = new MetaObject();
                 let i2 = new MetaObject();
 
-                expect(MetaRegistry.list.length).toBe(2);
-                expect(MetaRegistry.list[0]).toBe(i1)
-                expect(MetaRegistry.list[1]).toBe(i2)
+                expect(MetaRegistry._list.length).toBe(2);
+                expect(MetaRegistry._list[0]).toBe(i1)
+                expect(MetaRegistry._list[1]).toBe(i2)
             });
         });
         describe("MetaRegistry.init() <초기화>", () => {

@@ -56,19 +56,19 @@
         MetaRegistry._NS = 'Meta';    // namespace
 
         // var define
-        var list = [];
+        var _list = [];
         var namespace = new NamespaceManager();
     
         /**
          * 메타 객체 목록 (참조값)
-         * @member {any[]} _L.Meta.MetaRegistry#list
+         * @member {any[]} _L.Meta.MetaRegistry#_list
          * @readonly
          */
-        Object.defineProperty(MetaRegistry, "list", 
+        Object.defineProperty(MetaRegistry, "_list", 
         {
             get: function() { 
                 var arr = [];
-                for (var i = 0; i < list.length; i++) arr.push(list[i]);
+                for (var i = 0; i < _list.length; i++) arr.push(_list[i]);
                 return arr;
             },
             configurable: false,
@@ -82,7 +82,7 @@
          */
         Object.defineProperty(MetaRegistry, "count", 
         {
-            get: function() { return list.length; },
+            get: function() { return _list.length; },
             configurable: false,
             enumerable: true,
         });        
@@ -140,7 +140,7 @@
          * 등록된 메타 객체 및 네임스페이스를 초기화 합니다.
          */
         MetaRegistry.init = function() {
-            list.length = 0;
+            _list.length = 0;
             this.ns.init();
         };
 
@@ -164,7 +164,7 @@
             key         = type.name;
             fullName    = p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
 
-            list.push(p_meta);  // 객체 등록
+            _list.push(p_meta);  // 객체 등록
             this.registerClass(type, _ns, key); // 클래스 등록
         };
 
@@ -183,9 +183,9 @@
             guid = typeof p_meta === 'string' ? p_meta : p_meta['_guid'];
             if (!_isString(guid)) return false;
 
-            for(var i = 0; i < list.length; i++) {
-                if (list[i]['_guid'] === guid) {
-                    list.splice(i, 1);
+            for(var i = 0; i < _list.length; i++) {
+                if (_list[i]['_guid'] === guid) {
+                    _list.splice(i, 1);
                     return true;
                 }
             }
@@ -205,8 +205,8 @@
             guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             if (!_isString(guid)) return false;
 
-            for(var i = 0; i < list.length; i++) {
-                if (list[i]['_guid'] === guid) return true;
+            for(var i = 0; i < _list.length; i++) {
+                if (_list[i]['_guid'] === guid) return true;
             }
             return false;
         };
@@ -224,8 +224,8 @@
             guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             if (!_isString(guid)) return;
             
-            for(var i = 0; i < list.length; i++) {
-                if (list[i]['_guid'] === guid) return list[i];
+            for(var i = 0; i < _list.length; i++) {
+                if (_list[i]['_guid'] === guid) return _list[i];
             }
         };
 

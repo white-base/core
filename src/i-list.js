@@ -35,11 +35,12 @@
          * @interface
          */
         function IList() {
+
             /**
              * 목록
-             * @member {array} _L.Interface.IList#list
+             * @member {array} _L.Interface.IList#_list
              */
-            this.list = Array;
+            this._list = Array;
             
             /**
              * 목록 갯수

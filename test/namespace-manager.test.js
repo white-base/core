@@ -63,22 +63,22 @@ describe("[target: namespace-manager.js]", () => {
                 expect(()=> ns.isOverlap = 1).toThrow(/EL03311/);
             });
         });
-        describe("NamespaceManager.list <요소 목록>", () => {
-            it("- list : 목록 얻기 ", () => {
+        describe("NamespaceManager._list <요소 목록>", () => {
+            it("- _list : 목록 얻기 ", () => {
                 const ns = new NamespaceManager();
                 ns.add('a1.b1.Fun', Function);
                 ns.add('a1.b2.Str', String);
-                const list = ns.list;
+                const _list = ns._list;
 
-                expect(list.length).toBe(2);
-                expect(list[0]).toBe('a1.b1.Fun');
-                expect(list[1]).toBe('a1.b2.Str');
+                expect(_list.length).toBe(2);
+                expect(_list[0]).toBe('a1.b1.Fun');
+                expect(_list[1]).toBe('a1.b2.Str');
             });
-            it("- list : 빈 목록 얻기 ", () => {
+            it("- _list : 빈 목록 얻기 ", () => {
                 const ns = new NamespaceManager();
-                const list = ns.list;
+                const _list = ns._list;
 
-                expect(list.length).toBe(0);
+                expect(_list.length).toBe(0);
             });
         });
         describe("NamespaceManager.count <요소 갯수>", () => {
@@ -90,7 +90,7 @@ describe("[target: namespace-manager.js]", () => {
 
                 expect(count).toBe(2);
             });
-            it("- list : 빈 목록 얻기 ", () => {
+            it("- _list : 빈 목록 얻기 ", () => {
                 const ns = new NamespaceManager();
                 const count = ns.count;
 

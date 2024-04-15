@@ -189,14 +189,15 @@
             /**
              * 컬렉션 요소의 목록
              * @readonly
-             * @member {array}  _L.Collection.BaseCollection#list  
+             * @member {array}  _L.Collection.BaseCollection#_list  
              */
-            Object.defineProperty(this, 'list', 
+            Object.defineProperty(this, '_list', 
             {
                 get: function() {
-                    var arr = [];
-                    for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
-                    return arr;
+                    return this._elements;
+                    // var arr = [];
+                    // for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
+                    // return arr;
                 },
                 configurable: false,
                 enumerable: false,
@@ -358,7 +359,7 @@
             // }
 
             // 예약어 등록
-            this.$KEYWORD = ['$event', '_owner', '_elements', '_descriptors', '_elemTypes', 'list', 'count', '$KEYWORD'];
+            this.$KEYWORD = ['$event', '_owner', '_elements', '_descriptors', '_elemTypes', '_list', 'count', '$KEYWORD'];
             this.$KEYWORD = ['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged'];
             this.$KEYWORD = ['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged'];
             this.$KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];

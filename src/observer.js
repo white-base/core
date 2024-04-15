@@ -77,9 +77,9 @@
 
             /**
              * 목록 
-             * @member {Array}  _L.Common.Observer#list  
+             * @member {Array}  _L.Common.Observer#_list  
              */
-            Object.defineProperty(this, 'list', {
+            Object.defineProperty(this, '_list', {
                 get: function() {       // Line:
                     var arr = [];
                     for (var prop in this.$subscribers) {
