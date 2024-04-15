@@ -39,6 +39,30 @@ describe("[target: util-type.js.js]", () => {
 
             expect(deepEqual(obj01, tar01)).toBe(T);
         });
+        it('- deepEqual() : 함수 비교 ', () => {
+            var fun1 = function aaa(aa, bb){return true};
+
+            var obj01 = {fun: ()=> ''}
+            var obj02 = {fun: function(){return ''}}
+            var obj03 = {fun: fun1}
+
+            var tar01 = {fun: ()=> ''}
+            var tar02 = {fun: function(){return ''}}
+            var tar03 = {fun: fun1}
+
+            // obj1
+            expect(deepEqual(obj01, tar01)).toBe(T);
+            expect(deepEqual(obj01, tar02)).toBe(false);
+            expect(deepEqual(obj01, tar03)).toBe(false);
+            // obj2
+            expect(deepEqual(obj02, tar01)).toBe(false);
+            expect(deepEqual(obj02, tar02)).toBe(T);
+            expect(deepEqual(obj02, tar03)).toBe(false);
+            // obj3
+            expect(deepEqual(obj03, tar01)).toBe(false);
+            expect(deepEqual(obj03, tar02)).toBe(false);
+            expect(deepEqual(obj03, tar03)).toBe(T);
+        });
     });
     describe('isProtoChain() ', () => {
         it('- isProtoChain() : class ', () => {
