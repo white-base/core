@@ -198,11 +198,8 @@
          * @returns {boolean} 존재 여부
          */
         MetaRegistry.has = function(p_oGuid) {
-            var guid;
+            var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
 
-            if (typeof p_oGuid !== 'object' && typeof p_oGuid !== 'string') return false;
-            
-            guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             if (!_isString(guid)) return false;
 
             for(var i = 0; i < _list.length; i++) {
@@ -217,11 +214,8 @@
          * @returns {MetaObject?}
          */
         MetaRegistry.find = function(p_oGuid) {
-            var guid;
-
-            if (typeof p_oGuid !== 'object' && typeof p_oGuid !== 'string') return;
+            var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
             
-            guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
             if (!_isString(guid)) return;
             
             for(var i = 0; i < _list.length; i++) {
@@ -423,7 +417,7 @@
          * @returns {boolean}
          */
         MetaRegistry.hasGuidObject = function(p_oGuid, p_origin) {
-            var guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
+            var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
             var arrOrigin = [];
 
             if (!_isString(guid)) throw new ExtendError(/EL03252/, null, [typeof guid]);
@@ -480,7 +474,7 @@
          * @returns {MetaObject}
          */
         MetaRegistry.findSetObject = function(p_oGuid, p_origin) {
-            var guid = typeof p_oGuid === 'string' ? p_oGuid : p_oGuid['_guid'];
+            var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
             var origin = p_origin;
 
             if (!_isString(guid)) throw new ExtendError(/EL03256/, null, [guid]);
