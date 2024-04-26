@@ -68,7 +68,6 @@
              */
             Object.defineProperty(this, '$storage',
             {
-                get: function() { return _storage; },
                 set: function(nVal) { _storage = nVal; },
                 configurable: false,
                 enumerable: false,

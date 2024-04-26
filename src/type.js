@@ -333,8 +333,8 @@
         return true;
         // inner function
         function $equalFunction(fun1, fun2) {
-            if (typeof fun1 !== 'function') return false;
-            if (typeof fun2 !== 'function') return false;
+            // if (typeof fun1 !== 'function') return false;
+            // if (typeof fun2 !== 'function') return false;
             if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
             return false;
         }
