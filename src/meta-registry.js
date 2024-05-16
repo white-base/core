@@ -1,5 +1,4 @@
 /**** meta-registry.js | _L.Meta.MetaRegistry ****/
-
 (function(_global) {
     'use strict';
 

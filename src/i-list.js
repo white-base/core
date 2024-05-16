@@ -1,5 +1,4 @@
 /**** i-list.js | _L.Interface.IList ****/
-
 (function(_global) {
     'use strict';
 

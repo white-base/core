@@ -1,5 +1,4 @@
 /**** util-type.js _L.Common.Type.- ****/
-
 (function(_global) {
     'use strict';
 

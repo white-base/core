@@ -1,5 +1,4 @@
 /**** collection-array.js | _L.Collection.ArrayCollection ****/
-
 (function(_global) {
     'use strict';
 

@@ -1,6 +1,6 @@
 {
   "name": "logic-core",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "white framework core",
   "main": "index.js",
   "scripts": {
@@ -22,6 +22,9 @@
   "license": "ISC",
   "devDependencies": {
     "docdash": "github:white-base/docdash",
+    "gulp": "^5.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^3.1.0",
     "jaguarjs-jsdoc": "github:white-base/jaguarjs-jsdoc",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",

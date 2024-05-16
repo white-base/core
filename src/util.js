@@ -1,5 +1,4 @@
 /**** util.js | _L.Common.Util.- ****/
-
 (function(_global) {
     'use strict';
 

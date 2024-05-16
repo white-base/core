@@ -1,5 +1,4 @@
 /**** trans-queue.js | _L.Common.Observer ****/
-
 (function(_global) {
     'use strict';
 

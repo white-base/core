@@ -1,5 +1,4 @@
 /**** namespace-manager.js | _L.Meta.NamespaceManager ****/
-
 (function(_global) {
     'use strict';
 

@@ -1,5 +1,4 @@
 /**** i-marshal.js | _L.Interface.IMarshal ****/
-
 (function(_global) {
     'use strict';
 

@@ -1,5 +1,4 @@
 /**** meta-element.js | _L.Meta.MetaElement ****/
-
 (function(_global) {
     'use strict';
 
