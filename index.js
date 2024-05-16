@@ -1,11 +1,11 @@
 /**
  * ES5
  */
+var Message                     = require('./src/message').Message;
 var ExtendError                 = require('./src/extend-error').ExtendError;
 var Type                        = require('./src/type');
 var Util                        = require('./src/util');
 var Observer                    = require("./src/observer").Observer;
-var Message                     = require('./src/message').Message;
 var IObject                     = require('./src/i-object').IObject;
 var IMarshal                    = require('./src/i-marshal').IMarshal;
 var ICollection                 = require('./src/i-collection').ICollection;
