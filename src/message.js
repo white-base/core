@@ -1183,7 +1183,7 @@
                             msg: 'collection 값이 [MetaObject] 을 상속한 인스턴스가 아닙니다.'
                         },
                         322: {  // EL04322
-                            msg: 'collection 이 [IArrayCollection] 을 구현한 인스턴스가 아닙니다.'
+                            msg: 'collection 이 [ArrayCollection] 의 인스턴스가 아닙니다.'
                         },
                         323: {  // EL04323
                             msg: 'rollback(); \'$1\' 는 처리할 수 없는 cmd 입니다.'
