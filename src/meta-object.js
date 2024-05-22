@@ -227,7 +227,7 @@
          */
         MetaObject.prototype.instanceOf = function(p_target) {
             var _this = this;
-            var unionTypes = this._interface;
+            var unionTypes = this._interface || this._type._UNION;
             // var unionTypes = this._type['_UNION'] || [];
             // var unionTypes = this._interface || [];
             // var thisTypes = this.getTypes();
