@@ -11,21 +11,21 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {     
-        var _Message                    = require('./message').Message;
-        var _ExtendError                = require('./extend-error').ExtendError;
-        var _Util                       = require('./util');
-        var _ICollection                = require('./i-collection').ICollection;
-    } else {
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Util                       = _global._L.Util;
-        var $ICollection                = _global._L.ICollection;
-    }
-    var Message                 = _Message              || $Message;
-    var ExtendError             = _ExtendError          || $ExtendError;
-    var Util                    = _Util                 || $Util;
-    var ICollection             = _ICollection          || $ICollection;
+    if (isNode) {                                                                   // strip:
+        var _Message                    = require('./message').Message;             // strip:
+        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
+        var _Util                       = require('./util');                        // strip:
+        var _ICollection                = require('./i-collection').ICollection;    // strip:
+    }                                                                               // strip:
+    var $Message                    = _global._L.Message;       // modify:
+    var $ExtendError                = _global._L.ExtendError;   // modify:
+    var $Util                       = _global._L.Util;          // modify:
+    var $ICollection                = _global._L.ICollection;   // modify:
+
+    var Message                 = _Message              || $Message;                // strip:
+    var ExtendError             = _ExtendError          || $ExtendError;            // strip:
+    var Util                    = _Util                 || $Util;                   // strip:
+    var ICollection             = _ICollection          || $ICollection;            // strip:
 
     //==============================================================
     // 3. module dependency check

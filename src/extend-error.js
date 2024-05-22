@@ -11,12 +11,12 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {     
-        var _Message                    = require('./message').Message;
-    } else {
-        var $Message                    = _global._L.Message;
-    }
-    var Message                 = _Message              || $Message;
+    if (isNode) {                                                           // strip:
+        var _Message                    = require('./message').Message;     // strip:
+    }                                                                       // strip:
+    var $Message                    = _global._L.Message;   // modify:
+
+    var Message                 = _Message              || $Message;        // strip:
 
     //==============================================================Á
     // 3. module dependency check

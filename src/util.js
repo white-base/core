@@ -12,18 +12,18 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {     
-        var _Message                    = require('./message').Message;
-        var _ExtendError                = require('./extend-error').ExtendError;
-        var _Type                       = require('./type');
-    } else {
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Type                       = _global._L.Type;
-    }
-    var Message                 = _Message              || $Message;
-    var ExtendError             = _ExtendError          || $ExtendError;
-    var Type                    = _Type                 || $Type;
+    if (isNode) {                                                                   // strip:
+        var _Message                    = require('./message').Message;             // strip:
+        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
+        var _Type                       = require('./type');                        // strip:
+    }                                                                               // strip:
+    var $Message                    = _global._L.Message;       // modify:
+    var $ExtendError                = _global._L.ExtendError;   // modify:
+    var $Type                       = _global._L.Type;          // modify:
+
+    var Message                 = _Message              || $Message;                // strip:
+    var ExtendError             = _ExtendError          || $ExtendError;            // strip:
+    var Type                    = _Type                 || $Type;                   // strip:
 
     //==============================================================
     // 3. module dependency check

@@ -3,6 +3,11 @@ var concat = require('gulp-concat');
 const minify = require('gulp-minify');
 // var uglify = require('gulp-uglify');
 // var minifyhtml = require('gulp-minify-html');
+const stripLine  = require('gulp-strip-line');                  // 줄 제거
+const replace = require('gulp-string-replace');                 // 교체
+const removeEmptyLines = require('gulp-remove-empty-lines');    // 빈줄 제거
+const strip = require('gulp-strip-comments')                    // == decomment, 주석제거
+
 var package = require('./package');
 
 var src = '';
@@ -41,6 +46,15 @@ var paths = {
 	html: src + '/**/*.html'
 };
 
+var fileList = [];
+var replaceOpt = { 
+    logs: {
+        enabled: false
+    }
+};
+
+fileList = fileList.concat(paths.js);
+
 /**
  * << 출판 파일 관리 정책 >>
  * 
@@ -58,14 +72,27 @@ var paths = {
  *  - _W.Test.*             | 'test'                | "_w-0.0.0.test.js"            | [전체] 테스크
  */
 
+// gulp.task('meta', function () {
+// 	return gulp.src(paths.js)
+// 		.pipe(concat(PreFileName +'-'+ package.version + '.js'))
+// 		.pipe(gulp.dest(dist));
+// });
 gulp.task('meta', function () {
-	return gulp.src(paths.js)
+	return gulp.src(fileList)
 		.pipe(concat(PreFileName +'-'+ package.version + '.js'))
+        .pipe(stripLine([/strip:/]))     // 라인 제거
+        .pipe(replace(/(var \$)(.*)(\/\/ modify:)/g, (all, p1, p2, p3)=> {
+            return 'var ' + p2;
+        }, replaceOpt))
+        .pipe(removeEmptyLines({
+            removeComments: true
+          }))
 		.pipe(gulp.dest(dist));
 });
 
+
 gulp.task('min', function () {
-	return gulp.src(paths.js)
+	return gulp.src(fileList)
 		.pipe(concat(PreFileName +'-'+ package.version + '.js'))
 		.pipe(minify())
 		.pipe(gulp.dest(dist));

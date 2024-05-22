@@ -11,36 +11,36 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {
-        var _Message                    = require('./message').Message;
-        var _ExtendError                = require('./extend-error').ExtendError;
-        var _Type                       = require('./type');
-        var _Util                       = require('./util');
-        var _Observer                   = require('./observer').Observer;
-        var _ICollection                = require('./i-collection').ICollection;
-        var _IList                      = require('./i-list').IList;
-        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
-        var _MetaObject                 = require('./meta-object').MetaObject;
-    } else {
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Type                       = _global._L.Type;
-        var $Util                       = _global._L.Util;
-        var $Observer                   = _global._L.Observer;
-        var $ICollection                = _global._L.ICollection;
-        var $IList                      = _global._L.IList;
-        var $MetaRegistry               = _global._L.MetaRegistry;
-        var $MetaObject                 = _global._L.MetaObject;
-    }
-    var Message                 = _Message              || $Message;
-    var ExtendError             = _ExtendError          || $ExtendError;
-    var Observer                = _Observer             || $Observer;
-    var Type                    = _Type                 || $Type;
-    var Util                    = _Util                 || $Util;
-    var ICollection             = _ICollection          || $ICollection;
-    var IList                   = _IList                || $IList;
-    var MetaObject              = _MetaObject           || $MetaObject;
-    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
+    if (isNode) {                                                                   // strip:
+        var _Message                    = require('./message').Message;             // strip:
+        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
+        var _Type                       = require('./type');                        // strip:
+        var _Util                       = require('./util');                        // strip:
+        var _Observer                   = require('./observer').Observer;           // strip:
+        var _ICollection                = require('./i-collection').ICollection;    // strip:
+        var _IList                      = require('./i-list').IList;                // strip:
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;  // strip:
+        var _MetaObject                 = require('./meta-object').MetaObject;      // strip:
+    }                                                                               // strip:
+    var $Message                    = _global._L.Message;           // modify:
+    var $ExtendError                = _global._L.ExtendError;       // modify:
+    var $Type                       = _global._L.Type;              // modify:
+    var $Util                       = _global._L.Util;              // modify:
+    var $Observer                   = _global._L.Observer;          // modify:
+    var $ICollection                = _global._L.ICollection;       // modify:
+    var $IList                      = _global._L.IList;             // modify:
+    var $MetaRegistry               = _global._L.MetaRegistry;      // modify:
+    var $MetaObject                 = _global._L.MetaObject;        // modify:
+
+    var Message                 = _Message              || $Message;                // strip:
+    var ExtendError             = _ExtendError          || $ExtendError;            // strip:
+    var Observer                = _Observer             || $Observer;               // strip:
+    var Type                    = _Type                 || $Type;                   // strip:
+    var Util                    = _Util                 || $Util;                   // strip:
+    var ICollection             = _ICollection          || $ICollection;            // strip:
+    var IList                   = _IList                || $IList;                  // strip:
+    var MetaObject              = _MetaObject           || $MetaObject;             // strip:
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;           // strip:
 
     //==============================================================
     // 3. module dependency check
@@ -365,7 +365,7 @@
             this.$KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];
             this.$KEYWORD = ['_remove', 'remove', 'removeAt', 'contains', 'indexOf', 'add', 'clear'];
 
-            Util.implements(BaseCollection, this);
+            Util.implements(BaseCollection, this);          // strip:
         }
         Util.inherits(BaseCollection, _super);
         

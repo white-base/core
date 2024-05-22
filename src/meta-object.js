@@ -12,31 +12,31 @@
 
     //==============================================================
     // 2. import module
-    var $Message                    = _global._L.Message;
-    var $ExtendError                = _global._L.ExtendError;
-    var $Type                       = _global._L.Type;
-    var $Util                       = _global._L.Util
-    var $IObject                    = _global._L.IObject;
-    var $IMarshal                   = _global._L.IMarshal;
-    var $MetaRegistry               = _global._L.MetaRegistry;
+    
+    if (isNode) {                                                                   // strip:
+        var _Message                    = require('./message').Message;             // strip:
+        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
+        var _Type                       = require('./type');                        // strip:
+        var _Util                       = require('./util');                        // strip:
+        var _IObject                    = require('./i-object').IObject;            // strip:
+        var _IMarshal                   = require('./i-marshal').IMarshal;          // strip:
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;  // strip:
+    }                                                                               // strip:
+    var $Message                    = _global._L.Message;           // modify:
+    var $ExtendError                = _global._L.ExtendError;       // modify:
+    var $Type                       = _global._L.Type;              // modify:
+    var $Util                       = _global._L.Util               // modify:
+    var $IObject                    = _global._L.IObject;           // modify:
+    var $IMarshal                   = _global._L.IMarshal;          // modify:
+    var $MetaRegistry               = _global._L.MetaRegistry;      // modify:
 
-    if (isNode) {     
-        var _Message                    = require('./message').Message;
-        var _ExtendError                = require('./extend-error').ExtendError;
-        var _Type                       = require('./type');
-        var _Util                       = require('./util');
-        var _IObject                    = require('./i-object').IObject;
-        var _IMarshal                   = require('./i-marshal').IMarshal;
-        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
-    }
-
-    var Message                 = _Message              || $Message;
-    var ExtendError             = _ExtendError          || $ExtendError;
-    var Type                    = _Type                 || $Type;
-    var Util                    = _Util                 || $Util;
-    var IObject                 = _IObject              || $IObject;
-    var IMarshal                = _IMarshal             || $IMarshal;
-    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
+    var Message                 = _Message              || $Message;                // strip:
+    var ExtendError             = _ExtendError          || $ExtendError;            // strip:
+    var Type                    = _Type                 || $Type;                   // strip:
+    var Util                    = _Util                 || $Util;                   // strip:
+    var IObject                 = _IObject              || $IObject;                // strip:
+    var IMarshal                = _IMarshal             || $IMarshal;               // strip:
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;           // strip:
 
     //==============================================================
     // 3. module dependency check
@@ -129,7 +129,7 @@
             if (this._type && this._type._NS) this._ns = this._type._NS;
             MetaRegistry.register(this);
 
-            Util.implements(MetaObject, this);
+            Util.implements(MetaObject, this);          // strip:
         }
         MetaObject._UNION = [IObject, IMarshal];
         MetaObject._NS = 'Meta';

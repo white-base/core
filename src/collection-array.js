@@ -11,33 +11,33 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {     
-        var _Message                    = require('./message').Message;
-        var _ExtendError                = require('./extend-error').ExtendError;
-        var _Type                       = require('./type');
-        var _Util                       = require('./util');
-        var _IArrayCollection           = require('./i-collection-array').IArrayCollection;
-        var _BaseCollection             = require('./base-collection').BaseCollection;
-        var _MetaObject                 = require('./meta-object').MetaObject;
-        var _MetaRegistry               = require('./meta-registry').MetaRegistry;
-    } else {    
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Type                       = _global._L.Type;
-        var $Util                       = _global._L.Util;
-        var $IArrayCollection           = _global._L.IArrayCollection;
-        var $BaseCollection             = _global._L.BaseCollection;
-        var $MetaObject                 = _global._L.MetaObject;
-        var $MetaRegistry               = _global._L.MetaRegistry;
-    }
-    var Message                 = _Message              || $Message;
-    var ExtendError             = _ExtendError          || $ExtendError;
-    var Type                    = _Type                 || $Type;
-    var Util                    = _Util                 || $Util;
-    var BaseCollection          = _BaseCollection       || $BaseCollection;
-    var IArrayCollection        = _IArrayCollection     || $IArrayCollection;
-    var MetaObject              = _MetaObject           || $MetaObject;
-    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;
+    if (isNode) {                                                                           // strip:
+        var _Message                    = require('./message').Message;                     // strip:
+        var _ExtendError                = require('./extend-error').ExtendError;            // strip:
+        var _Type                       = require('./type');                                // strip:
+        var _Util                       = require('./util');                                // strip:
+        var _IArrayCollection           = require('./i-collection-array').IArrayCollection; // strip:
+        var _BaseCollection             = require('./base-collection').BaseCollection;      // strip:
+        var _MetaObject                 = require('./meta-object').MetaObject;              // strip:
+        var _MetaRegistry               = require('./meta-registry').MetaRegistry;          // strip:
+    }                                                                                       // strip:
+    var $Message                    = _global._L.Message;           // modify:
+    var $ExtendError                = _global._L.ExtendError;       // modify:
+    var $Type                       = _global._L.Type;              // modify:
+    var $Util                       = _global._L.Util;              // modify:
+    var $IArrayCollection           = _global._L.IArrayCollection;  // modify:
+    var $BaseCollection             = _global._L.BaseCollection;    // modify:
+    var $MetaObject                 = _global._L.MetaObject;        // modify:
+    var $MetaRegistry               = _global._L.MetaRegistry;      // modify:
+
+    var Message                 = _Message              || $Message;                        // strip:
+    var ExtendError             = _ExtendError          || $ExtendError;                    // strip:
+    var Type                    = _Type                 || $Type;                           // strip:
+    var Util                    = _Util                 || $Util;                           // strip:
+    var BaseCollection          = _BaseCollection       || $BaseCollection;                 // strip:
+    var IArrayCollection        = _IArrayCollection     || $IArrayCollection;               // strip:
+    var MetaObject              = _MetaObject           || $MetaObject;                     // strip:
+    var MetaRegistry            = _MetaRegistry         || $MetaRegistry;                   // strip:
     
     //==============================================================
     // 3. module dependency check
@@ -64,7 +64,7 @@
 
             this.$KEYWORD = ['insertAt'];
 
-            Util.implements(ArrayCollection, this);
+            Util.implements(ArrayCollection, this);     // strip:
         }
         Util.inherits(ArrayCollection, _super);
         

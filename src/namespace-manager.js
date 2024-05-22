@@ -11,30 +11,30 @@
 
     //==============================================================
     // 2. import module
-    if (isNode) {     
-        var _Message                    = require('./message').Message;
-        var _ExtendError                = require('./extend-error').ExtendError;
-        var _Type                       = require('./type');
-        var _Util                       = require('./util');
-        var _IList                      = require('./i-list').IList;
-        var _IListControl               = require('./i-control-list').IListControl;
-        var _ISerialize                 = require('./i-serialize').ISerialize;
-    } else {
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Type                       = _global._L.Type;
-        var $Util                       = _global._L.Util;
-        var $IList                      = _global._L.IList;
-        var $IListControl               = _global._L.IListControl;
-        var $ISerialize                 = _global._L.ISerialize;
-    }
-    var Message                 = _Message              || $Message;
-    var ExtendError             = _ExtendError          || $ExtendError;
-    var Type                    = _Type                 || $Type;
-    var Util                    = _Util                 || $Util;
-    var IList                   = _IList                || $IList;
-    var IListControl            = _IListControl         || $IListControl;
-    var ISerialize              = _ISerialize           || $ISerialize;
+    if (isNode) {                                                                   // strip:
+        var _Message                    = require('./message').Message;             // strip:
+        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
+        var _Type                       = require('./type');                        // strip:
+        var _Util                       = require('./util');                        // strip:
+        var _IList                      = require('./i-list').IList;                // strip:
+        var _IListControl               = require('./i-control-list').IListControl; // strip:
+        var _ISerialize                 = require('./i-serialize').ISerialize;      // strip:
+    }                                                                               // strip:
+    var $Message                    = _global._L.Message;           // modify:
+    var $ExtendError                = _global._L.ExtendError;       // modify:
+    var $Type                       = _global._L.Type;              // modify:
+    var $Util                       = _global._L.Util;              // modify:
+    var $IList                      = _global._L.IList;             // modify:
+    var $IListControl               = _global._L.IListControl;      // modify:
+    var $ISerialize                 = _global._L.ISerialize;        // modify:
+
+    var Message                 = _Message              || $Message;                // strip:
+    var ExtendError             = _ExtendError          || $ExtendError;            // strip:
+    var Type                    = _Type                 || $Type;                   // strip:
+    var Util                    = _Util                 || $Util;                   // strip:
+    var IList                   = _IList                || $IList;                  // strip:
+    var IListControl            = _IListControl         || $IListControl;           // strip:
+    var ISerialize              = _ISerialize           || $ISerialize;             // strip:
     
     //==============================================================Á
     // 3. module dependency check
@@ -170,7 +170,7 @@
 
             this._$KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
 
-            Util.implements(NamespaceManager, this);
+            Util.implements(NamespaceManager, this);        // strip:
         }
         NamespaceManager._UNION = [IList, IListControl];
         NamespaceManager._NS = 'Meta';

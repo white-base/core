@@ -11,24 +11,24 @@
    
     //==============================================================
     // 2. import module
-    if (isNode) {     
-        var _Message                    = require('./message').Message;
-        var _ExtendError                = require('./extend-error').ExtendError;
-        var _Util                       = require('./util');
-        var _MetaObject                 = require('./meta-object').MetaObject;
-        var _IElement                   = require('./i-element').IElement;
-    } else {
-        var $Message                    = _global._L.Message;
-        var $ExtendError                = _global._L.ExtendError;
-        var $Util                       = _global._L.Util;
-        var $MetaObject                 = _global._L.MetaObject;
-        var $IElement                   = _global._L.IElement;
-    }
-    var Message                 = _Message              || $Message;
-    var ExtendError             = _ExtendError          || $ExtendError;
-    var Util                    = _Util                 || $Util;
-    var IElement                = _IElement             || $IElement;
-    var MetaObject              = _MetaObject           || $MetaObject;
+    if (isNode) {                                                                   // strip:
+        var _Message                    = require('./message').Message;             // strip:
+        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
+        var _Util                       = require('./util');                        // strip:
+        var _MetaObject                 = require('./meta-object').MetaObject;      // strip:
+        var _IElement                   = require('./i-element').IElement;          // strip:
+    }                                                                               // strip:
+    var $Message                    = _global._L.Message;           // modify:
+    var $ExtendError                = _global._L.ExtendError;       // modify:
+    var $Util                       = _global._L.Util;              // modify:
+    var $MetaObject                 = _global._L.MetaObject;        // modify:
+    var $IElement                   = _global._L.IElement;          // modify:
+    
+    var Message                 = _Message              || $Message;                // strip:
+    var ExtendError             = _ExtendError          || $ExtendError;            // strip:
+    var Util                    = _Util                 || $Util;                   // strip:
+    var IElement                = _IElement             || $IElement;               // strip:
+    var MetaObject              = _MetaObject           || $MetaObject;             // strip:
 
     //==============================================================
     // 3. module dependency check
@@ -89,7 +89,7 @@
 
             this.$name = p_name;
 
-            Util.implements(MetaElement, this);
+            Util.implements(MetaElement, this);     // strip:
         }
         Util.inherits(MetaElement, _super);
         
