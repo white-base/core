@@ -155,11 +155,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.ExtendError = ExtendError;
-    } else {
-        _global._L.ExtendError = ExtendError;
-        _global._L.Common.ExtendError = ExtendError;    // namespace
-    }
+    if (isNode) exports.ExtendError = ExtendError;      // strip:
+    
+    _global._L.ExtendError = ExtendError;
+    _global._L.Common.ExtendError = ExtendError;
 
 }(typeof window !== 'undefined' ? window : global));

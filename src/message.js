@@ -1847,11 +1847,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.Message = Message;
-    } else {
-        _global._L.Message = Message;
-        _global._L.Common.Message = Message;    // namespace
-    }
+    if (isNode) exports.Message = Message;      // strip:
+    
+    _global._L.Message = Message;
+    _global._L.Common.Message = Message;
 
 }(typeof window !== 'undefined' ? window : global));

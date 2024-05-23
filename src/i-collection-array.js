@@ -65,11 +65,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.IArrayCollection = IArrayCollection;
-    } else {
-        _global._L.IArrayCollection = IArrayCollection;
-        _global._L.Interface.IArrayCollection = IArrayCollection; // namespace
-    }
+    if (isNode) exports.IArrayCollection = IArrayCollection;    // strip:
+    
+    _global._L.IArrayCollection = IArrayCollection;
+    _global._L.Interface.IArrayCollection = IArrayCollection;
     
 }(typeof window !== 'undefined' ? window : global));

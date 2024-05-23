@@ -1322,36 +1322,36 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {
-        exports.getAllProperties = getAllProperties;
-        exports.deepEqual = deepEqual;
-        exports.isProtoChain = isProtoChain;
-        exports.hasType = hasType;
-        exports.getTypes = getTypes;
-        exports.extendType = extendType;
-        exports.typeObject = typeObject;
-        exports.typeOf = typeOf;
-        exports.matchType = matchType;
-        exports.allowType = allowType;
-        exports.isMatchType = isMatchType;
-        exports.isAllowType = isAllowType;
-    } else {
-        var ns = {
-            getAllProperties: getAllProperties,
-            deepEqual: deepEqual,
-            isProtoChain: isProtoChain,
-            hasType: hasType,
-            getTypes: getTypes,
-            extendType: extendType,
-            typeObject: typeObject,
-            typeOf: typeOf,
-            matchType: matchType,
-            allowType: allowType,
-            isMatchType: isMatchType,
-            isAllowType: isAllowType
-        };
-        _global._L.Type = ns;
-        _global._L.Common.Type = ns;
-    }
+    if (isNode) {                                       // strip:
+        exports.getAllProperties = getAllProperties;    // strip:
+        exports.deepEqual = deepEqual;                  // strip:
+        exports.isProtoChain = isProtoChain;            // strip:
+        exports.hasType = hasType;                      // strip:
+        exports.getTypes = getTypes;                    // strip:
+        exports.extendType = extendType;                // strip:
+        exports.typeObject = typeObject;                // strip:
+        exports.typeOf = typeOf;                        // strip:
+        exports.matchType = matchType;                  // strip:
+        exports.allowType = allowType;                  // strip:
+        exports.isMatchType = isMatchType;              // strip:
+        exports.isAllowType = isAllowType;              // strip:
+    }                                                   // strip:
+    
+    var ns = {
+        getAllProperties: getAllProperties,
+        deepEqual: deepEqual,
+        isProtoChain: isProtoChain,
+        hasType: hasType,
+        getTypes: getTypes,
+        extendType: extendType,
+        typeObject: typeObject,
+        typeOf: typeOf,
+        matchType: matchType,
+        allowType: allowType,
+        isMatchType: isMatchType,
+        isAllowType: isAllowType
+    };
+    _global._L.Type = ns;
+    _global._L.Common.Type = ns;
 
 }(typeof window !== 'undefined' ? window : global));

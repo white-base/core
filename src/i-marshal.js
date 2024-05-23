@@ -73,11 +73,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.IMarshal = IMarshal;
-    } else {
-        _global._L.IMarshal = IMarshal;
-        _global._L.Interface.IMarshal = IMarshal;   // namespace
-    }
+    if (isNode) exports.IMarshal = IMarshal;        // strip:
+    
+    _global._L.IMarshal = IMarshal;
+    _global._L.Interface.IMarshal = IMarshal;
     
 }(typeof window !== 'undefined' ? window : global));

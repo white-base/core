@@ -59,11 +59,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.IElement = IElement;
-    } else {
-        _global._L.IElement = IElement;
-        _global._L.Interface.IElement = IElement;   // namespace
-    }
+    if (isNode) exports.IElement = IElement;    // strip:
+    
+    _global._L.IElement = IElement;
+    _global._L.Interface.IElement = IElement;
     
 }(typeof window !== 'undefined' ? window : global));

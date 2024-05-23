@@ -222,14 +222,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.Observer = Observer;
-        _global._L.Observer = Observer;
-        _global.Observer = Observer;
-
-    } else {
-        _global._L.Observer = Observer;
-        _global._L.Common.Observer = Observer;  // namespace
-    }
+    if (isNode) exports.Observer = Observer;        // strip:
+    
+    _global._L.Observer = Observer;
+    _global._L.Common.Observer = Observer; 
 
 }(typeof window !== 'undefined' ? window : global));

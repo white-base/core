@@ -634,9 +634,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) exports.MetaRegistry = MetaRegistry;
+    if (isNode) exports.MetaRegistry = MetaRegistry;    // strip:
         
     _global._L.MetaRegistry = MetaRegistry;
-    _global._L.Meta.MetaRegistry = MetaRegistry;    // namespace
+    _global._L.Meta.MetaRegistry = MetaRegistry;
 
 }(typeof window !== 'undefined' ? window : global));

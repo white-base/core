@@ -351,11 +351,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.PropertyCollection = PropertyCollection;
-    } else {
-        _global._L.PropertyCollection = PropertyCollection;
-        _global._L.Collection.PropertyCollection = PropertyCollection;      // namespace
-    }
+    if (isNode) exports.PropertyCollection = PropertyCollection;    // strip:
+    
+    _global._L.PropertyCollection = PropertyCollection;
+    _global._L.Collection.PropertyCollection = PropertyCollection;
 
 }(typeof window !== 'undefined' ? window : global));

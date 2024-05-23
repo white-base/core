@@ -535,11 +535,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.NamespaceManager = NamespaceManager;
-    } else {
-        _global._L.NamespaceManager = NamespaceManager;
-        _global._L.Meta.NamespaceManager = NamespaceManager;    // namespace
-    }
+    if (isNode) exports.NamespaceManager = NamespaceManager;    // strip:
+    
+    _global._L.NamespaceManager = NamespaceManager;
+    _global._L.Meta.NamespaceManager = NamespaceManager;
 
 }(typeof window !== 'undefined' ? window : global));

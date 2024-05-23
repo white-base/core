@@ -311,11 +311,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.MetaObject = MetaObject;
-    } else {
-        _global._L.MetaObject = MetaObject;
-        _global._L.Meta.MetaObject = MetaObject;    // namespace
-    }
+    if (isNode) exports.MetaObject = MetaObject;    // strip:
+    
+    _global._L.MetaObject = MetaObject;
+    _global._L.Meta.MetaObject = MetaObject;
     
 }(typeof window !== 'undefined' ? window : global));

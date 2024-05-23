@@ -79,11 +79,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.IListControl = IListControl;
-    } else {
-        _global._L.IListControl = IListControl;
-        _global._L.Interface.IListControl = IListControl;   // namespace
-    }
+    if (isNode) exports.IListControl = IListControl;    // strip:
+    
+    _global._L.IListControl = IListControl;
+    _global._L.Interface.IListControl = IListControl;
     
 }(typeof window !== 'undefined' ? window : global));

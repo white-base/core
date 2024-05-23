@@ -251,11 +251,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.ArrayCollection = ArrayCollection;
-    } else {    
-        _global._L.ArrayCollection = ArrayCollection;
-        _global._L.Collection.ArrayCollection = ArrayCollection;    // namespace
-    }
+    if (isNode) exports.ArrayCollection = ArrayCollection;      // strip:
+    
+    _global._L.ArrayCollection = ArrayCollection;
+    _global._L.Collection.ArrayCollection = ArrayCollection;
 
 }(typeof window !== 'undefined' ? window : global));

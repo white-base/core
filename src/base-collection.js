@@ -612,11 +612,9 @@
     
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.BaseCollection = BaseCollection;
-    } else {    
-        _global._L.BaseCollection = BaseCollection;
-        _global._L.Collection.BaseCollection = BaseCollection;      // namespace
-    }
+    if (isNode) exports.BaseCollection = BaseCollection;    // strip:
+    
+    _global._L.BaseCollection = BaseCollection;
+    _global._L.Collection.BaseCollection = BaseCollection;
 
 }(typeof window !== 'undefined' ? window : global));

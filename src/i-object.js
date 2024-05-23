@@ -73,11 +73,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.IObject = IObject;
-    } else {
-        _global._L.IObject = IObject;
-        _global._L.Interface.IObject = IObject;     // namespace
-    }
+    if (isNode) exports.IObject = IObject;      // strip:
+    
+    _global._L.IObject = IObject;
+    _global._L.Interface.IObject = IObject;
 
 }(typeof window !== 'undefined' ? window : global));

@@ -62,11 +62,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.ISerialize = ISerialize;
-    } else {
-        _global._L.ISerialize = ISerialize;
-        _global._L.Interface.ISerialize = ISerialize;   // namespace
-    }
+    if (isNode) exports.ISerialize = ISerialize;    // strip:
+    
+    _global._L.ISerialize = ISerialize;
+    _global._L.Interface.ISerialize = ISerialize;
     
 }(typeof window !== 'undefined' ? window : global));

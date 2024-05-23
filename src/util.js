@@ -264,49 +264,22 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.inherits = inherits;
-        // exports.isProtoChain = isProtoChain;
-        // exports.getTypes = getTypes;
-        exports.getArrayDepth = getArrayDepth;
-        exports.createGuid = createGuid;
-        exports.implements = implement;
-        // exports.getAllProperties = getAllProperties;
-        // exports.allowType = allowType;
-        // exports.extendType = extendType;
-        // exports.isMatchType = isMatchType;
-        // exports.isAllowType = isAllowType;
-        // exports.matchType = matchType;
-        exports.deepCopy = deepCopy;
-        // exports.deepEqual = deepEqual;
-        // exports.isProtoChain = isProtoChain;
-        // exports.hasType = hasType;
-        // exports.typeObject = typeObject;
-        // exports.typeOf = typeOf;
-
-    } else {
-        var ns = {
-            inherits: inherits,
-            // isProtoChain: isProtoChain,
-            // getTypes: getTypes,
-            getArrayDepth: getArrayDepth,
-            createGuid: createGuid,
-            implements: implement,
-            // getAllProperties: getAllProperties,
-            // allowType: allowType,
-            // extendType: extendType,
-            // isMatchType: isMatchType,
-            // isAllowType: isAllowType,
-            // matchType: matchType,
-            deepCopy: deepCopy,
-            // deepEqual: deepEqual,
-            // isProtoChain: isProtoChain,
-            // hasType: hasType,
-            // typeObject: typeObject,
-            // typeOf: typeOf,
-        };
-        _global._L.Util = ns;
-        _global._L.Common.Util = ns;
-    }
+    if (isNode) {                               // strip:
+        exports.inherits = inherits;            // strip:
+        exports.getArrayDepth = getArrayDepth;  // strip:
+        exports.createGuid = createGuid;        // strip:
+        exports.implements = implement;         // strip:
+        exports.deepCopy = deepCopy;            // strip:
+    }                                           // strip:
+    
+    var ns = {
+        inherits: inherits,
+        getArrayDepth: getArrayDepth,
+        createGuid: createGuid,
+        implements: implement,
+        deepCopy: deepCopy,
+    };
+    _global._L.Util = ns;
+    _global._L.Common.Util = ns;
 
 }(typeof window !== 'undefined' ? window : global));

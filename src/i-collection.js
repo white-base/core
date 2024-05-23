@@ -84,11 +84,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.ICollection = ICollection;
-    } else {
-        _global._L.ICollection = ICollection;
-        _global._L.Interface.ICollection = ICollection;     // namespace
-    }
+    if (isNode) exports.ICollection = ICollection;      // strip:
+    
+    _global._L.ICollection = ICollection;
+    _global._L.Interface.ICollection = ICollection;
 
 }(typeof window !== 'undefined' ? window : global));

@@ -147,11 +147,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.MetaElement = MetaElement;
-    } else {
-        _global._L.MetaElement = MetaElement;
-        _global._L.Meta.MetaElement = MetaElement;  // namespace
-    }
+    if (isNode) exports.MetaElement = MetaElement;      // strip:
+    
+    _global._L.MetaElement = MetaElement;
+    _global._L.Meta.MetaElement = MetaElement;
 
 }(typeof window !== 'undefined' ? window : global));

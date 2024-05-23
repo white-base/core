@@ -154,11 +154,9 @@
 
     //==============================================================
     // 5. module export
-    if (isNode) {     
-        exports.loadNamespace = loadNamespace;
-    } else {
-        _global._L.loadNamespace = loadNamespace;
-        _global._L.Common.loadNamespace = loadNamespace;   // namespace
-    }
+    if (isNode) exports.loadNamespace = loadNamespace;      // strip:
+    
+    _global._L.loadNamespace = loadNamespace;
+    _global._L.Common.loadNamespace = loadNamespace;
 
 }(typeof window !== 'undefined' ? window : global));
