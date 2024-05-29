@@ -1200,9 +1200,9 @@
                             msg: ''
                         },
                         131: {  // EL05131
-                            msg: '$1.isNotNull 는 \'boolean\' 타입입니다. typeof isNotNull = \'$2\''
+                            msg: '$1.required 는 \'boolean\' 타입입니다. typeof required = \'$2\''
                         },
-                        132: {  // EL05132
+                        132: {  // EL05132  TODO: 제거됨
                             msg: '$1.isNullPass 는 \'boolean\' 타입입니다. typeof isNullPass = \'$2\''
                         },
                         133: {  // EL05133
