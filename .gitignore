@@ -1,6 +1,7 @@
 node_modules/
 coverage/
 .gitconfig
+.DS_Store
 docs/
 docs2/
 eDocs/
