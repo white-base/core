@@ -3,15 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};     // Branch:
-    _global._L.Interface            = _global._L.Interface || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
@@ -29,13 +22,13 @@
     var ICollection             = _ICollection          || $ICollection;            // strip:
 
     //==============================================================
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (typeof ICollection === 'undefined') throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
 
     //==============================================================
-    // 4. module implementation   
+    // 3. module implementation   
     var IArrayCollection  = (function (_super) {
         /**
          * 배열 컬렉션 인터페이스 입니다.
@@ -64,9 +57,12 @@
     }(ICollection));
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.IArrayCollection = IArrayCollection;    // strip:
     
+    _global._L                      = _global._L || {};     // Branch:
+    _global._L.Interface            = _global._L.Interface || {};
+
     _global._L.IArrayCollection = IArrayCollection;
     _global._L.Interface.IArrayCollection = IArrayCollection;
     

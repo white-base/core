@@ -3,14 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Meta                 = _global._L.Meta || {};
-   
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
@@ -31,14 +25,14 @@
     var MetaObject              = _MetaObject           || $MetaObject;             // strip:
 
     //==============================================================
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (typeof IElement === 'undefined') throw new Error(Message.get('ES011', ['IElement', 'i-element']));
-    if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (!IElement) throw new Error(Message.get('ES011', ['IElement', 'i-element']));
+    if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
     //==============================================================
-    // 4. module implementation   
+    // 3. module implementation   
     
     // private variable
     
@@ -146,9 +140,12 @@
 
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.MetaElement = MetaElement;      // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
+
     _global._L.MetaElement = MetaElement;
     _global._L.Meta.MetaElement = MetaElement;
 

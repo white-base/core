@@ -3,14 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-    
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
@@ -25,12 +19,12 @@
     var Util                    = _Util                 || $Util;                   // strip:
 
     //==============================================================Á
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 
     //==============================================================
-    // 4. module implementation  
+    // 3. module implementation  
     var Observer = (function () {
         /**
          * 구독자 클래스 (이벤트에 활용)
@@ -221,9 +215,12 @@
     }());
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.Observer = Observer;        // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+
     _global._L.Observer = Observer;
     _global._L.Common.Observer = Observer; 
 

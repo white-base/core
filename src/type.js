@@ -3,15 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
-    _global._L.Common.Type          = _global._L.Common.Type || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
@@ -23,11 +16,11 @@
     var ExtendError             = _ExtendError          || $ExtendError;            // strip:
 
     //==============================================================
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     
     //==============================================================
-    // 4. module implementation 
+    // 3. module implementation 
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
     
     /**
@@ -1321,7 +1314,7 @@
     };
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) {                                       // strip:
         exports.getAllProperties = getAllProperties;    // strip:
         exports.deepEqual = deepEqual;                  // strip:
@@ -1336,6 +1329,10 @@
         exports.isMatchType = isMatchType;              // strip:
         exports.isAllowType = isAllowType;              // strip:
     }                                                   // strip:
+
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+    _global._L.Common.Type          = _global._L.Common.Type || {};
     
     var ns = {
         getAllProperties: getAllProperties,

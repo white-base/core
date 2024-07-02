@@ -3,16 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Meta                 = _global._L.Meta || {};
-    // _global._L.MetaObject           = _global._L.MetaObject || {}; // 대상의 로딩중
-
-    //==============================================================
-    // 2. import module
-    
+    // 1. import module
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
@@ -39,16 +31,16 @@
     var MetaRegistry            = _MetaRegistry         || $MetaRegistry;           // strip:
 
     //==============================================================
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (typeof IObject === 'undefined') throw new Error(Message.get('ES011', ['IObject', 'i-object']));
-    if (typeof IMarshal === 'undefined') throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
-    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+    if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (!IObject) throw new Error(Message.get('ES011', ['IObject', 'i-object']));
+    if (!IMarshal) throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
+    if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
 
     //==============================================================
-    // 4. module implementation   
+    // 3. module implementation   
     var MetaObject  = (function () {
         /**
          * 메타 최상위 객체를 생성합니다.
@@ -310,9 +302,12 @@
     }());
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.MetaObject = MetaObject;    // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
+
     _global._L.MetaObject = MetaObject;
     _global._L.Meta.MetaObject = MetaObject;
     

@@ -3,14 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                           // strip:
         var _Message                    = require('./message').Message;     // strip:
     }                                                                       // strip:
@@ -19,10 +13,9 @@
     var Message                 = _Message              || $Message;        // strip:
 
     //==============================================================Á
-    // 3. module dependency check
-
+    // 2. module dependency check
     //==============================================================
-    // 4. module implementation   
+    // 3. module implementation   
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
     
     var ExtendError = (function () {
@@ -154,8 +147,11 @@
     }());
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.ExtendError = ExtendError;      // strip:
+
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
     
     _global._L.ExtendError = ExtendError;
     _global._L.Common.ExtendError = ExtendError;

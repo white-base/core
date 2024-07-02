@@ -3,35 +3,29 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Interface            = _global._L.Interface || {};    
-    
-    //==============================================================
-    // 2. import module
+    // 1. import module
     
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
-        var _Util                       = require('./util');                        // strip:
+        // var _Util                       = require('./util');                        // strip:
     }                                                                               // strip:
     var $Message                    = _global._L.Message;       // modify:
     var $ExtendError                = _global._L.ExtendError;   // modify:
-    var $Util                       = _global._L.Util;          // modify:
+    // var $Util                       = _global._L.Util;          // modify:
 
     var Message                 = _Message              || $Message;                // strip:
     var ExtendError             = _ExtendError          || $ExtendError;            // strip:
-    var Util                    = _Util                 || $Util;                   // strip:
+    // var Util                    = _Util                 || $Util;                   // strip:
 
     //==============================================================
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    // if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
 
     //==============================================================
-    // 4. module implementation
+    // 3. module implementation
     var ICollection  = (function () {
         /**
          * 컬렉션 인터페이스 입니다.
@@ -83,9 +77,12 @@
     }());
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.ICollection = ICollection;      // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Interface            = _global._L.Interface || {};    
+
     _global._L.ICollection = ICollection;
     _global._L.Interface.ICollection = ICollection;
 

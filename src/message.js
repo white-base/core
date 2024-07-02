@@ -3,20 +3,14 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
 
     //==============================================================Á
-    // 3. module dependency check
+    // 2. module dependency check
 
     //==============================================================
-    // 4. module implementation       
+    // 3. module implementation       
     var Message = (function () {
        /**
         * 메세지와 코드를 관리합니다. (static)
@@ -268,6 +262,8 @@
                 }
             },
             kor: { // 구분 코드 : 중복, 필수, 타입, 범위, 객체
+                ES010: {},
+
                 E: {        // Error
                     S01: {  // 실패
                         0: {    // ES010
@@ -1846,9 +1842,12 @@
     }());
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.Message = Message;      // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+
     _global._L.Message = Message;
     _global._L.Common.Message = Message;
 

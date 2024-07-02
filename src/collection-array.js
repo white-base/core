@@ -3,14 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Collection           = _global._L.Collection || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                                           // strip:
         var _Message                    = require('./message').Message;                     // strip:
         var _ExtendError                = require('./extend-error').ExtendError;            // strip:
@@ -40,17 +34,17 @@
     var MetaRegistry            = _MetaRegistry         || $MetaRegistry;                   // strip:
     
     //==============================================================
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (typeof IArrayCollection === 'undefined') throw new Error(Message.get('ES011', ['IArrayCollection', 'i-collection-array']));
-    if (typeof MetaRegistry === 'undefined') throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-    if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-    if (typeof BaseCollection === 'undefined') throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+    if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (!IArrayCollection) throw new Error(Message.get('ES011', ['IArrayCollection', 'i-collection-array']));
+    if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+    if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+    if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
     
     //==============================================================
-    // 4. module implementation
+    // 3. module implementation
     var ArrayCollection  = (function (_super) {
         /**
          * 배열 컬렉션을 생성합니다.
@@ -250,9 +244,12 @@
     }(BaseCollection));
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.ArrayCollection = ArrayCollection;      // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Collection           = _global._L.Collection || {};
+
     _global._L.ArrayCollection = ArrayCollection;
     _global._L.Collection.ArrayCollection = ArrayCollection;
 

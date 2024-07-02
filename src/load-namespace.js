@@ -3,15 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
-    // _global._L.Common.Util          = _global._L.Common.Util || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {     
         var Message                     = require('./message').Message;
         var ExtendError                 = require('./extend-error').ExtendError;
@@ -58,10 +51,10 @@
     }
 
     //==============================================================
-    // 3. module dependency check
+    // 2. module dependency check
     
     //==============================================================
-    // 4. module implementation
+    // 3. module implementation
     var loadNamespace = function() {
         MetaRegistry.registerClass(Message, Message._NS, Message.name);
         MetaRegistry.registerClass(ExtendError, ExtendError._NS, ExtendError.name);
@@ -153,9 +146,12 @@
     // console.log(0);
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.loadNamespace = loadNamespace;      // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+
     _global._L.loadNamespace = loadNamespace;
     _global._L.Common.loadNamespace = loadNamespace;
 

@@ -3,15 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
-    _global._L.Common.Util          = _global._L.Common.Util || {};
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
@@ -26,12 +19,12 @@
     var Type                    = _Type                 || $Type;                   // strip:
 
     //==============================================================
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Type === 'undefined') throw new Error(Message.get('ES011', ['Type', 'type']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
     
     //==============================================================
-    // 4. module implementation   
+    // 3. module implementation   
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
 
 
@@ -263,7 +256,7 @@
     
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) {                               // strip:
         exports.inherits = inherits;            // strip:
         exports.getArrayDepth = getArrayDepth;  // strip:
@@ -272,6 +265,10 @@
         exports.deepCopy = deepCopy;            // strip:
     }                                           // strip:
     
+    _global._L                      = _global._L || {};
+    _global._L.Common               = _global._L.Common || {};
+    _global._L.Common.Util          = _global._L.Common.Util || {};
+
     var ns = {
         inherits: inherits,
         getArrayDepth: getArrayDepth,

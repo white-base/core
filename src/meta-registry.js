@@ -3,15 +3,8 @@
     'use strict';
 
     var isNode = typeof window !== 'undefined' ? false : true;
-
     //==============================================================
-    // 1. namespace declaration
-    _global._L                      = _global._L || {};
-    _global._L.Meta                 = _global._L.Meta || {};
-    // _global._L.MetaRegistry         = _global._L.MetaRegistry || {}; // 대상의 로딩중
-
-    //==============================================================
-    // 2. import module
+    // 1. import module
     if (isNode) {                                                                           // strip:
         var _Message                    = require('./message').Message;                     // strip:
         var _ExtendError                = require('./extend-error').ExtendError;            // strip:
@@ -29,15 +22,15 @@
     var NamespaceManager        = _NamespaceManager     || $NamespaceManager;               // strip:
 
     //==============================================================Á
-    // 3. module dependency check
-    if (typeof ExtendError === 'undefined') throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-    if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (typeof NamespaceManager === 'undefined') throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
+    // 2. module dependency check
+    if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+    if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+    if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
 
     // if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
     //==============================================================
-    // 4. module implementation       
+    // 3. module implementation       
     var MetaRegistry = (function () {
         /**
          * 메타 객체 등록소입니다. (static)
@@ -633,9 +626,12 @@
     }());
 
     //==============================================================
-    // 5. module export
+    // 4. module export
     if (isNode) exports.MetaRegistry = MetaRegistry;    // strip:
-        
+    
+    _global._L                      = _global._L || {};
+    _global._L.Meta                 = _global._L.Meta || {};
+
     _global._L.MetaRegistry = MetaRegistry;
     _global._L.Meta.MetaRegistry = MetaRegistry;
 
