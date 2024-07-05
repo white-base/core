@@ -6,8 +6,8 @@
     //==============================================================
     // 1. import module
     if (isNode) {                                                                           // strip:
-        var Message             = require('./message2').Message;                         // strip:
-        var messageCode         = require('./message-code').messageCode;            // strip:
+        var _Message             = require('./message2').Message;                         // strip:
+        var _messageCode         = require('./message-code').messageCode;            // strip:
     }    
     var $Message                = _global._L.Message;                   // modify:
     var $messageCode            = _global._L.messageCode;                   // modify:
@@ -27,17 +27,19 @@
     // }());
 
     // TODO:
+    Message.storage = {kor: {aa:"mrg"}}
 
     // Message.storage
 
     //==============================================================
     // 4. module export
     if (isNode) exports.Message = Message;      // strip:
-    
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
 
-    _global._L.Message = Message;
-    _global._L.Common.Message = Message;
+    // POINT:
+    // _global._L                      = _global._L || {};
+    // _global._L.Common               = _global._L.Common || {};
+
+    // _global._L.Message = Message;
+    // _global._L.Common.Message = Message;
 
 }(typeof window !== 'undefined' ? window : global));

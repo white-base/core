@@ -8,9 +8,9 @@
     if (isNode) {                                                                                   // strip:
         var _messageCode                = require('./message-code').messageCode;                             // strip:
     }    
-    var $messageCode                    = _global._L.messageCode;                   // modify:
+    var $messageCode                    = _global._L.messageCode.core;              // modify:
 
-    var messageCode                 = _messageCode              || $messageCode;    // strip:
+    var messageCode                     = _messageCode  || $messageCode;            // strip:
 
     //==============================================================
     // 2. module dependency check
@@ -68,7 +68,7 @@
         
 
         // var define
-        var storage;
+        var storage = {};
         var lang = 'kor';
         var isLong = false;
         
@@ -78,16 +78,19 @@
          */
         Object.defineProperty(Message, "storage", {
             get: function() { 
-                if (!storage) {
-                    var objs = [];
-                    for (var key in messageCode) {
-                        if (Object.prototype.hasOwnProperty.call(messageCode, key)) {
-                            objs.push(messageCode[key]);
-                        }
-                    }
-                    storage = deepMerge.apply(null, {}, objs);
-                }
+                // if (!storage) {
+                //     var objs = [];
+                //     for (var key in messageCode) {
+                //         if (Object.prototype.hasOwnProperty.call(messageCode, key)) {
+                //             objs.push(messageCode[key]);
+                //         }
+                //     }
+                //     storage = deepMerge.apply(null, {}, objs);
+                // }
                 return storage;
+            },
+            set: function(val) { 
+                deepMerge(storage, val);
             },
             configurable: false,
             enumerable: true,
@@ -230,10 +233,11 @@
             console.warn(Message.get(p_code, p_aValue));
         };
 
-
-
         return Message;
     }());
+
+    
+    Message.storage = messageCode;
 
     //==============================================================
     // 4. module export

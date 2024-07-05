@@ -13,7 +13,7 @@ const T = true;
 // test
 describe("[target: util-type.js.js]", () => {
     beforeEach(() => {
-        jest.resetModules();
+        // jest.resetModules();
         global.OLD_ENV = false;
     });
     describe('deepEqual(obj1, obj2) ', () => {
