@@ -4,7 +4,7 @@
 //==============================================================
 // gobal defined
 'use strict';
-const {Message}                  = require('../src/message');
+const {Message}                  = require('../src/message2');
 
 
 //==============================================================

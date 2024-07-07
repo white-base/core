@@ -3,7 +3,7 @@
 var Message                    = require('../src/message2').Message;             // strip:
 
 
-var Message                    = require('../src/message-wrap').Message;             // strip:
+var Message2                    = require('../src/message-wrap').Message;             // strip:
 
 
 console.log('..');
