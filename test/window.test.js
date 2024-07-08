@@ -18,16 +18,19 @@ describe("[L.*]", () => {
                 expect(() => require('../src/observer')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 안 된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/observer')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
         
                 expect(() => require('../src/observer')).toThrow(/Util/);
             });
             it("- namespace : observer.js ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -49,10 +52,12 @@ describe("[L.*]", () => {
                 expect(() => require('../src/type')).toThrow(/Cannot read properties/);
             });
              it("- 예외 : ExtendError 로딩이 안 된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/type')).toThrow(/ExtendError/);
             });
             it("- namespace : util-type.js ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -76,10 +81,12 @@ describe("[L.*]", () => {
                 global._L = null;
              });
              it("- 예외 : extend-error.js", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/util')).toThrow(/ExtendError/);
             });
             it("- 예외 : type.js 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 expect(() => require('../src/util')).toThrow(/Type/);
@@ -183,6 +190,7 @@ describe("[L.*]", () => {
             //     expect(() => require('../src/util')).toThrow(/typeOf/);
             // });
             it("- namespace : util.js ", () => {
+                require('../src/message-code');
                 require('../src/message'); 
                 require('../src/extend-error');
                 require('../src/type');
@@ -224,22 +232,26 @@ describe("[L.*]", () => {
                 expect(() => require('../src/base-collection')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/base-collection')).toThrow(/ExtendError/);
             });
             it("- 예외 : Type 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error'); 
                 // require('../src/util'); 
                 expect(() => require('../src/base-collection')).toThrow(/Type/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error'); 
                 require('../src/type'); 
                 expect(() => require('../src/base-collection')).toThrow(/Util/);
             });
             it("- 예외 : Observer 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -258,6 +270,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/base-collection')).toThrow(/Observer/);
             });
             it("- 예외 : ICollection 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -273,6 +286,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/base-collection')).toThrow(/ICollection/);
             });
             it("- 예외 : IList 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -291,6 +305,7 @@ describe("[L.*]", () => {
             
             
             it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -310,6 +325,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/base-collection')).toThrow(/MetaRegistry/);
             });
             it("- 예외 : MetaObject 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -330,6 +346,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/base-collection')).toThrow(/MetaObject/);
             });
             it("- 로딩 성공 ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -362,16 +379,19 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-array')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/collection-array')).toThrow(/ExtendError/);
             });
             it("- 예외 : Type 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error'); 
                 
                 expect(() => require('../src/collection-array')).toThrow(/Type/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type'); 
@@ -379,6 +399,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-array')).toThrow(/Util/);
             });
             it("- 예외 : IArrayCollection 로딩이 인된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');            // ref
@@ -387,6 +408,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-array')).toThrow(/IArrayCollection/);
             });
             it("- 예외 : MetaRegistry 로딩이 인된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -407,6 +429,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-array')).toThrow(/MetaRegistry/);
             });
             it("- 예외 : MetaObject 로딩이 인된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -428,6 +451,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-array')).toThrow(/MetaObject/);
             });
             it("- 예외 : BaseCollection 로딩이 인된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -450,6 +474,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-array')).toThrow(/BaseCollection/);
             });
             it("- 로딩 성공 ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -484,16 +509,19 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-property')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/collection-property')).toThrow(/ExtendError/);
             });
             it("- 예외 : Type 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error'); 
                 
                 expect(() => require('../src/collection-property')).toThrow(/Type/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type'); 
@@ -501,6 +529,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-property')).toThrow(/Util/);
             });
             it("- 예외 : IPropertyCollection 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');            // ref
@@ -509,6 +538,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-property')).toThrow(/IPropertyCollection/);
             });
             it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -528,6 +558,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-property')).toThrow(/MetaRegistry/);
             });
             it("- 예외 : MetaObject 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -549,6 +580,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/collection-property')).toThrow(/MetaObject/);
             });
             it("- 예외 : BaseCollection 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -572,6 +604,7 @@ describe("[L.*]", () => {
             });
     
             it("- 로딩 성공 ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -778,15 +811,18 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-object')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-object')).toThrow(/ExtendError/);
             });
             it("- 자신만 로딩", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/i-object');
             });
             it("- namespace : IObject ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/i-object');
@@ -804,10 +840,12 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-marshal')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-marshal')).toThrow(/ExtendError/);
             });
             it("- namespace : IMarshal ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/i-marshal');
@@ -825,10 +863,12 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-serialize')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-serialize')).toThrow(/ExtendError/);
             });
             it("- namespace : IMarshal ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
         
@@ -946,15 +986,18 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-list')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-list')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/i-list');
             });
             it("- namespace : IList ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 
@@ -973,15 +1016,18 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-element')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-element')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/i-element');
             });
             it("- namespace : IList ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 
@@ -1026,15 +1072,18 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-control-list')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-control-list')).toThrow(/ExtendError/);
             });
             it("- 예외 : 자신만 로딩", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/i-control-list');
             });
             it("- namespace : IListControl ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 
@@ -1053,6 +1102,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-collection-array')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-collection-array')).toThrow(/ExtendError/);
             });
@@ -1062,12 +1112,14 @@ describe("[L.*]", () => {
             //     expect(() => require('../src/i-collection-array')).toThrow(/Cannot read properties/);
             // });
             it("- 예외 : 전체 로딩 안할 때", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
         
                 expect(() => require('../src/i-collection-array')).toThrow(/ES011/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 // require('../src/type');
@@ -1076,6 +1128,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-collection-array')).toThrow(/Util/);
             });
             it("- 예외 : ICollection 로딩이 안 된 경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1084,6 +1137,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-collection-array')).toThrow(/ICollection/);
             });
             it("- namespace : IArrayCollection ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1105,6 +1159,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-collection')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-collection')).toThrow(/ExtendError/);
             });
@@ -1114,6 +1169,7 @@ describe("[L.*]", () => {
             //     expect(() => require('../src/i-collection')).toThrow(/Cannot read properties/);
             // });
             it("- 예외 : 모두 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 // require('../src/extend-error');
          
@@ -1126,6 +1182,7 @@ describe("[L.*]", () => {
             //     expect(() => require('../src/i-collection')).toThrow(/Util/);
             // });
             it("- namespace : ICollection ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1147,6 +1204,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-collection-property')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/i-collection-property')).toThrow(/ExtendError/);
             });
@@ -1154,6 +1212,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/i-collection-property')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : 모두 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
         
@@ -1168,6 +1227,7 @@ describe("[L.*]", () => {
             //      expect(() => require('../src/i-collection-property')).toThrow(/ICollection/);
             // });
             it("- namespace : IPropertyCollection ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1208,16 +1268,19 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-object')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/meta-object')).toThrow(/ExtendError/);
             });
             it("- 예외 : Type 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error'); 
                 
                 expect(() => require('../src/meta-object')).toThrow(/Type/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type'); 
@@ -1225,9 +1288,10 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-object')).toThrow(/Util/);
             });
             it("- 예외 : MetaRegistry 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
-                    require('../src/extend-error');
-                    require('../src/type');
+                require('../src/extend-error');
+                require('../src/type');
                 require('../src/util');
         
                 require('../src/i-object');
@@ -1242,9 +1306,10 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-object')).toThrow(/MetaRegistry/);
             });
             it("- 예외 : IObject 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
-                    require('../src/extend-error');
-                    require('../src/type');
+                require('../src/extend-error');
+                require('../src/type');
                 require('../src/util');
         
                 // require('../src/i-object');
@@ -1259,9 +1324,10 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-object')).toThrow(/IObject/);
             });
             it("- 예외 : IMarshal 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
-                    require('../src/extend-error');
-                    require('../src/type');
+                require('../src/extend-error');
+                require('../src/type');
                 require('../src/util');
         
                 require('../src/i-object');
@@ -1277,9 +1343,10 @@ describe("[L.*]", () => {
             });
             
             it("- 로딩 성공 ", () => {
+                require('../src/message-code');
                 require('../src/message');
-                    require('../src/extend-error');
-                    require('../src/type');
+                require('../src/extend-error');
+                require('../src/type');
                 require('../src/util');
         
                 require('../src/i-object');
@@ -1306,16 +1373,19 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-element')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/meta-element')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
         
                 expect(() => require('../src/meta-element')).toThrow(/Util/);
             });
             it("- 예외 : IElement 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1327,6 +1397,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-element')).toThrow(/IElement/);
             });
             it("- 예외 : MetaObject 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1346,6 +1417,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-element')).toThrow(/MetaObject/);
             });
             it("- 로딩 성공 ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1379,16 +1451,19 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-registry')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/meta-registry')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
         
                 expect(() => require('../src/meta-registry')).toThrow(/Util/);
             });
             it("- 예외 : NamespaceManager 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1401,6 +1476,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/meta-registry')).toThrow(/NamespaceManager/);
             });
             it("- 로딩 성공 ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1427,16 +1503,19 @@ describe("[L.*]", () => {
                 expect(() => require('../src/namespace-manager')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 expect(() => require('../src/namespace-manager')).toThrow(/ExtendError/);
             });
             it("- 예외 : Type 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error'); 
                 
                 expect(() => require('../src/namespace-manager')).toThrow(/Type/);
             });
             it("- 예외 : Util 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type'); 
@@ -1444,6 +1523,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/namespace-manager')).toThrow(/Util/);
             });
             it("- 예외 : IList 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1456,6 +1536,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/namespace-manager')).toThrow(/IList/);
             });
             it("- 예외 : IListControl 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1468,6 +1549,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/namespace-manager')).toThrow(/IListControl/);
             });
             it("- 예외 : ISerialize 로딩이 인된경우", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');
@@ -1480,6 +1562,7 @@ describe("[L.*]", () => {
                 expect(() => require('../src/namespace-manager')).toThrow(/ISerialize/);
             });
             it("- 로딩 성공 ", () => {
+                require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
                 require('../src/type');

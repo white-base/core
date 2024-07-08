@@ -6,7 +6,7 @@
     //==============================================================
     // 1. import module
     if (isNode) {                                                                           // strip:
-        var _Message             = require('./message2').Message;                         // strip:
+        var _Message             = require('./message').Message;                         // strip:
         var _messageCode         = require('./message-code').messageCode;            // strip:
     }    
     var $Message                = _global._L.Message;                   // modify:

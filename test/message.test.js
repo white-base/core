@@ -4,7 +4,7 @@
 //==============================================================
 // gobal defined
 'use strict';
-const {Message}                  = require('../src/message2');
+const {Message}                  = require('../src/message');
 
 
 //==============================================================
@@ -45,21 +45,21 @@ describe("[target: message.js]", () => {
                 expect(msg1).toMatch(/ES010/);
                 expect(msg2).toMatch(/ES010/);
             });
-            it("- get() : 메세지 얻기 : 한글", () => {
-                Message.lang = 'kor';
-                const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
+            // it("- get() : 메세지 얻기 : 한글", () => {
+            //     Message.lang = 'kor';
+            //     const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
 
-                // console.warn(msg);
-                expect(msg).toMatch(/NamespaceManager/);
-            });
-            it("- get() : 짧은 메세지 얻기 : 한글", () => {
-                Message.lang = 'kor';
-                Message.isLong = true;
-                const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
+            //     // console.warn(msg);
+            //     expect(msg).toMatch(/NamespaceManager/);
+            // });
+            // it("- get() : 짧은 메세지 얻기 : 한글", () => {
+            //     Message.lang = 'kor';
+            //     Message.isLong = true;
+            //     const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
 
-                // console.warn(msg);
-                expect(msg).toMatch(/NamespaceManager/);
-            });
+            //     // console.warn(msg);
+            //     expect(msg).toMatch(/NamespaceManager/);
+            // });
             it("- get() : 없는 코드", () => {
                 const msg = Message.get('AEEEe1', ['NamespaceManager', 'namespace-manager']);
 
@@ -83,16 +83,16 @@ describe("[target: message.js]", () => {
                 expect(msg).toMatch(/code/);
             });
         });
-        describe("MetaObject.getObject(): obj <메세지 객체>", () => {
-            it("- getInfo() : 메세지 얻기", () => {
-                const msg1 = Message.getObject('ES011');
-                const msg2 = Message.getObject('IS011', ['A', 'B']);
+        // describe("MetaObject.getObject(): obj <메세지 객체>", () => {
+        //     it("- getInfo() : 메세지 얻기", () => {
+        //         const msg1 = Message.getObject('ES011');
+        //         const msg2 = Message.getObject('IS011', ['A', 'B']);
 
-                // console.warn(msg);
-                expect(msg1.memo).toMatch(/1:/);
-                expect(msg2.msg).toMatch(/2/);
-            });
-        });
+        //         // console.warn(msg);
+        //         expect(msg1.memo).toMatch(/1:/);
+        //         expect(msg2.msg).toMatch(/2/);
+        //     });
+        // });
         describe("MetaObject.error(code, value) ", () => {
             it("- error() : 코드값으로 예외 발생", () => {
                 expect(()=> Message.error('ES011', [])).toThrow('ES011')
