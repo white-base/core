@@ -141,7 +141,7 @@
             var str = _getCodeObject(code);
             var msg, long;
 
-            if (typeof str !== 'string') return $intro(code) + 'There are no messages about the code.' 
+            if (typeof str !== 'string') return 'There are no messages about the code.' 
             
             msg = $build(str);
             // if (isLong) {
