@@ -1,6 +1,7 @@
 /**
  * ES5
  */
+var messageCode                 = require('./src/message-code').messageCode;
 var Message                     = require('./src/message').Message;
 var ExtendError                 = require('./src/extend-error').ExtendError;
 var Type                        = require('./src/type');
@@ -28,6 +29,7 @@ module.exports = {
     Type: Type,
     Observer: Observer,
     ExtendError: ExtendError,
+    messageCode: messageCode,
     Message: Message,
     IObject: IObject,
     IMarshal: IMarshal,
@@ -51,6 +53,7 @@ module.exports = {
         Type: Type,
         Observer: Observer,
         ExtendError: ExtendError,
+        messageCode: messageCode,
         Message: Message,
     },
     Collection: {
