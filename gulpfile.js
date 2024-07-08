@@ -18,6 +18,7 @@ var PreFileName = '_L.Core';
 var paths = {
 	js: [
         // 폴리심 + 확장
+        'src/message-code.js', 
         'src/message.js', 
         'src/extend-error.js', 
         'src/type.js', 

@@ -234,6 +234,14 @@
         return Message;
     }());
 
+    /**
+     * DEBUG:
+     * POINT: 빨강
+     * TODO: 할것
+     * ETC:
+     * Branch: 커버리지
+     * Line: 
+     */
     
     Message.storage = messageCode;
 
