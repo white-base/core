@@ -150,8 +150,8 @@
     // 4. module export
     if (isNode) exports.ExtendError = ExtendError;      // strip:
 
-    _global._L                      = _global._L || {};
-    _global._L.Common               = _global._L.Common || {};
+    // _global._L                      = _global._L || {};
+    // _global._L.Common               = _global._L.Common || {};
     
     _global._L.ExtendError = ExtendError;
     _global._L.Common.ExtendError = ExtendError;

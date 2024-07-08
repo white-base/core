@@ -345,6 +345,30 @@ describe("[L.*]", () => {
                 
                 expect(() => require('../src/base-collection')).toThrow(/MetaObject/);
             });
+            // it("- 로딩 성공 : 커버리지 ", () => {
+            //     require('../src/message-code');
+            //     require('../src/message');
+            //     require('../src/extend-error');
+            //     require('../src/type');
+            //     require('../src/util');
+                
+            //     require('../src/i-collection');
+            //     require('../src/i-list');
+            //     require('../src/i-control-list');
+            //     require('../src/i-serialize');
+            //     require('../src/i-object');
+            //     require('../src/i-marshal');
+                
+            //     require('../src/observer');
+            //     require('../src/namespace-manager');
+            //     require('../src/meta-registry');  
+            //     require('../src/meta-object');  
+            //     global._L = null;
+            //     require('../src/base-collection');
+        
+            //     expect(global._L.BaseCollection).toBeDefined();
+            //     expect(global._L.Collection.BaseCollection).toBeDefined();
+            // });
             it("- 로딩 성공 ", () => {
                 require('../src/message-code');
                 require('../src/message');

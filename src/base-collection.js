@@ -608,7 +608,7 @@
     // 4. module export
     if (isNode) exports.BaseCollection = BaseCollection;    // strip:
     
-    _global._L                      = _global._L || {};
+    // _global._L                      = _global._L || {};
     _global._L.Collection           = _global._L.Collection || {};
 
     _global._L.BaseCollection = BaseCollection;

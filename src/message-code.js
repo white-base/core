@@ -352,6 +352,8 @@
             EL04321: 'collection 값이 [MetaObject] 을 상속한 인스턴스가 아닙니다.',
             EL04322: 'collection 이 [ArrayCollection] 의 인스턴스가 아닙니다.',
             EL04323: 'rollback(); \'$1\' 는 처리할 수 없는 cmd 입니다.',
+            // Warn
+            WS011: '[$1] 대상 [$2]는 삭제 할 수 없습니다.',
         }
     };
 

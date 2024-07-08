@@ -347,8 +347,8 @@
     // 4. module export
     if (isNode) exports.PropertyCollection = PropertyCollection;    // strip:
     
-    _global._L                      = _global._L || {};
-    _global._L.Collection           = _global._L.Collection || {};
+    // _global._L                      = _global._L || {};
+    // _global._L.Collection           = _global._L.Collection || {};
 
     _global._L.PropertyCollection = PropertyCollection;
     _global._L.Collection.PropertyCollection = PropertyCollection;

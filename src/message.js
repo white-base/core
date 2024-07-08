@@ -31,33 +31,22 @@
         function isObject(obj) {
             return obj && typeof obj === 'object' && !Array.isArray(obj);
         }
-        function deepMerge(target) {
-            var sources = Array.prototype.slice.call(arguments, 1);
-
-            for (var i = 0; i < sources.length; i++) {
-                var source = sources[i];
-                for (var key in source) {
-                    if (source.hasOwnProperty(key)) {
-                        var targetValue = target[key];
-                        var sourceValue = source[key];
-                        if (Array.isArray(sourceValue)) {
-                            if (!Array.isArray(targetValue)) {
-                                targetValue = [];
-                            }
-                            var newArray = targetValue.slice();
-                            for (var j = 0; j < sourceValue.length; j++) {
-                                var item = sourceValue[j];
-                                newArray.push(isObject(item) ? deepMerge({}, item) : item);
-                            }
-                            target[key] = newArray;
-                        } else if (isObject(sourceValue)) {
-                            if (!isObject(targetValue)) {
-                                target[key] = {};
-                            }
-                            target[key] = deepMerge(target[key], sourceValue);
-                        } else {
-                            target[key] = sourceValue;
+        function _isString(obj) {    // 공백아닌 문자 여부
+            if (typeof obj === 'string' && obj.length > 0) return true;
+            return false;
+        }
+        function deepMerge(target, source) {
+            for (var key in source) {
+                if (source.hasOwnProperty(key)) {
+                    var targetValue = target[key];
+                    var sourceValue = source[key];
+                    if (isObject(sourceValue)) {
+                        if (!isObject(targetValue)) {
+                            target[key] = {};
                         }
+                        target[key] = deepMerge(target[key], sourceValue);
+                    } else {
+                        target[key] = sourceValue;
                     }
                 }
             }
@@ -67,7 +56,7 @@
         // var define
         var storage = {};
         var lang = 'kor';
-        var isLong = false;
+        // var isLong = false;
         
         /**
          * 메시지 코드 스토리지
@@ -111,21 +100,21 @@
          * 긴 메세지 여부
          * @member {string} _L.Common.Message#isLong
          */
-        Object.defineProperty(Message, "isLong", {
-            get: function() { return isLong; },
-            set: function(val) { 
-                isLong = val; 
-            },
-            configurable: false,
-            enumerable: false,
-        });
+        // Object.defineProperty(Message, "isLong", {
+        //     get: function() { return isLong; },
+        //     set: function(val) { 
+        //         isLong = val; 
+        //     },
+        //     configurable: false,
+        //     enumerable: false,
+        // });
 
         // local function
         function _getCodeObject(code){
             var MSG = Message.storage[lang];
             // var div, part, num;
 
-            if (typeof code !== 'string') return;
+            if (!_isString(code)) return;
 
             // div = code.substring(0, 1);
             // part = code.substring(1, 4);
@@ -139,9 +128,10 @@
 
         function _buildMessage(code, arr) {
             var str = _getCodeObject(code);
-            var msg, long;
+            var msg;
 
-            if (typeof str !== 'string') return 'There are no messages about the code.' 
+            if (!_isString(str)) return 'There are no messages about the code.' ;
+            // if (typeof str !== 'string') return 'There are no messages about the code.' 
             
             msg = $build(str);
             // if (isLong) {
@@ -152,37 +142,30 @@
 
             // inner function
             function $build(p_msg) {
-                var msg = p_msg || '';
+                var msg = p_msg;
                 var result;
                 var max = 0;
                 
-                if (msg === '') return msg;
+                // if (!msg) return msg;
                 result = msg.match(/\$\d+/g);
                 if (!Array.isArray(result)) return msg;
-
-                max = result.reduce((acc, cur, idx) => { 
-                    var num = Number(cur.replace('$',''));
-                    return acc < num ? num : acc; 
-                }, 0);
-                    
+                for (var i = 0; i < result.length; i++) {
+                    var num = Number(result[i].replace('$', ''));
+                    if (num > max) max = num;
+                }
                 for (var i = 1; i <= max; i++) {
-                    var val = arr[i -1];
+                    var val = arr[i - 1];
                     msg = msg.replace(new RegExp('\\$'+ i, 'g'), val);
                 }
                 return msg;
             }
             function $intro(code) {
-                var div;
                 var intro = '';
-
-                if (typeof code === 'string' && code.length > 0) {
-                    div = code.substring(0, 1);
-                    if (div === 'E') intro = '['+code+'] ';
-                    else if (div === 'W') intro = '['+code+'] ';
-                    else if (div === 'I') intro = '['+code+'] ';
-                    else intro = '['+code+'] ';
-                }
-                return intro;
+                var firstChar = code.substring(0, 1);
+                
+                if (firstChar === 'E') intro = 'Error';
+                else if (firstChar === 'W') intro = 'Warn';
+                return intro + ' ['+ code +'] ';
             }
         }
 
@@ -190,8 +173,8 @@
          * 메세지를 초기화 합니다. TODO: 꼭 필요할까? 필요없을듯
          */
         Message.init = function() {
-            this.lang = 'eng';
-            this.isLong = false;
+            this.lang = 'kor';
+            // this.isLong = false;
         };
 
         /**

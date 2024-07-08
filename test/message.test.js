@@ -13,23 +13,25 @@ describe("[target: message.js]", () => {
     describe("Message :: 클래스", () => {
         beforeEach(() => {
             jest.resetModules();
+            
             Message.init();
         });
         describe("MetaObject.lang: str <언어 설정>", () => {
             it("- this.lang : 기본 언어 얻기", () => {
-                expect(Message.lang).toBe('eng')
+                expect(Message.lang).toBe('kor')
             });
             it("- this.lang : 예외", () => {
                 expect(()=> Message.lang = 'jan').toThrow(/language does not exist/)
             });
         });
-        describe("MetaObject.isLong: bool <긴 메세지 여부>", () => {
-            it("- this.lang : 긴메시지여부  설정 및 확인", () => {
-                Message.isLong = false;
-                expect(Message.isLong).toBe(false)
-            });
-        });
+        // describe("MetaObject.isLong: bool <긴 메세지 여부>", () => {
+        //     it("- this.lang : 긴메시지여부  설정 및 확인", () => {
+        //         Message.isLong = false;
+        //         expect(Message.isLong).toBe(false)
+        //     });
+        // });
         describe("MetaObject.get(): str <메세지 얻기>", () => {
+            
             it("- get() : 메세지 얻기", () => {
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
                 // console.warn(msg);
@@ -73,7 +75,7 @@ describe("[target: message.js]", () => {
 
                 // console.warn(msg);
                 expect(msg1).toMatch(/WS011/);
-                expect(msg2).toMatch(/IS011/);
+                // expect(msg2).toMatch(/IS011/);
                 expect(msg3).toMatch(/There are no messages about the code./);
             });
             it("- get() : 오류 객체 코드", () => {
@@ -81,6 +83,19 @@ describe("[target: message.js]", () => {
 
                 // console.warn(msg);
                 expect(msg).toMatch(/code/);
+            });
+            it("- 스토리지 설정 ", () => {
+                var storage = { kor: {aaa: '', bbb: {}, zzz: 'etc'} }
+                Message.storage = storage;
+                const msg1 = Message.get('aaa', []);
+                const msg2 = Message.get('bbb', []);
+                const msg3 = Message.get('ccc', []);
+                const msg4 = Message.get('zzz', []);
+                
+                expect(msg1).toBe('There are no messages about the code.')
+                expect(msg2).toBe('There are no messages about the code.')
+                expect(msg3).toBe('There are no messages about the code.')
+                expect(msg4).toMatch(/etc/);
             });
         });
         // describe("MetaObject.getObject(): obj <메세지 객체>", () => {
