@@ -49,7 +49,7 @@
          * @abstract
          */
         IArrayCollection.prototype.insertAt  = function() {
-            throw new ExtendError(/EL02221/, null, ['IArrayCollection']);
+            throw new ExtendError(/EL02171/, null, ['IArrayCollection']);
         };
     
         return IArrayCollection;

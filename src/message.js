@@ -223,7 +223,10 @@
      * TODO: 할것
      * ETC:
      * Branch: 커버리지
-     * Line: 
+     * Line:
+     * REVIEW:
+     * HACK:
+     * 
      */
     
     Message.storage = messageCode;

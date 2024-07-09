@@ -39,7 +39,7 @@
          * @abstract
          */
         ISerialize.prototype.output  = function() {
-            throw new ExtendError(/EL02351/, null, ['ISerialize']);
+            throw new ExtendError(/EL02191/, null, ['ISerialize']);
         };
 
         /**
@@ -47,7 +47,7 @@
          * @abstract
          */
         ISerialize.prototype.load  = function(String) {
-            throw new ExtendError(/EL02352/, null, ['ISerialize']);
+            throw new ExtendError(/EL02192/, null, ['ISerialize']);
         };
 
         return ISerialize;

@@ -172,7 +172,9 @@
             EL01514: 'Observer.__$subscribers 값은  \'object\' 타입이 아닙니다. typeof __$subscribers = $1',
             EL01515: 'Observer.__$subscribers[\'any\'] 객체가 없습니다. { any: undefined }',
             EL01516: 'subscribe(fn, code); fn 는 \'function\' 타입이 아닙니다. typeof fn = $1',
+            
             // Interface.*
+            // EL02
             EL02100: '',
             // i-object.js
             EL02110: '',
@@ -194,44 +196,24 @@
             EL02152: 'del(key) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             EL02153: 'has(key): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             EL02154: 'find(any): any 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            // Collection.*
-            EL02200: '',
             // i-collection.js
-            EL02210: '',
-            EL02211: 'add(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            EL02212: 'remove(elem): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            EL02213: 'cantains(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            EL02214: 'indexOf(any): number 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02160: '',
+            EL02161: 'add(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02162: 'remove(elem): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02163: 'cantains(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02164: 'indexOf(any): number 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             // i-collection-array.js
-            EL02220: '',
-            EL02221: 'insertAt(pos, val, ..): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02170: '',
+            EL02171: 'insertAt(pos, val, ..): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             // i-collection-property.js
-            EL02230: '',
-            EL02231: 'keyOf(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02180: '',
+            EL02181: 'keyOf(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            // i-serialize.js
+            EL02190: '',
+            EL02191: 'output(opt, ...): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02192: 'load(any, ...) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             // Meta.Entity.*
             EL02300: '',
-            // i-control-export.js
-            EL02310: '',
-            EL02311: 'write(opt): object 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            // i-control-import.js
-            EL02320: '',
-            EL02321: 'read(object) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            // i-control-group.js
-            EL02330: '',
-            EL02331: 'merge(any, opt) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            EL02332: 'copy(filter) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            // i-control-schema.js
-            EL02340: '',
-            EL02341: 'readSchema(json) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            EL02342: 'writeSchema(opt): object 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            // i-serialize.js
-            EL02350: '',
-            EL02351: 'output(opt, ...): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            EL02352: 'load(any, ...) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            // i-transaction.js
-            EL02360: '',
-            EL02361: 'acceptChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
-            EL02362: 'rejectChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             // Meta.*
             EL03100: '',
             // meta-object.js

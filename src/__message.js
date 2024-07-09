@@ -797,28 +797,28 @@
                         210: {  // i-collection.js
                             msg: ''
                         },
-                        211: {  // EL02211
+                        211: {  // EL02161
                             msg: 'add(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        212: {  // EL02212
+                        212: {  // EL02162
                             msg: 'remove(elem): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        213: {  // EL02213
+                        213: {  // EL02163
                             msg: 'cantains(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        214: {  // EL02214
+                        214: {  // EL02164
                             msg: 'indexOf(any): number 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         220: {  // i-collection-array.js
                             msg: ''
                         },
-                        221: {  // EL02221
+                        221: {  // EL02171
                             msg: 'insertAt(pos, val, ..): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         230: {  // i-collection-property.js
                             msg: ''
                         },
-                        231: {  // EL02231
+                        231: {  // EL02181
                             msg: 'keyOf(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
 
@@ -859,19 +859,19 @@
                         350: {  // i-serialize.js
                             msg: ''
                         },
-                        351: {  // EL02351
+                        351: {  // EL02191
                             msg: 'output(opt, ...): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        352: {  // EL02352
+                        352: {  // EL02192
                             msg: 'load(any, ...) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         360: {  // i-transaction.js
                             msg: ''
                         },
-                        361: {  // EL02361
+                        361: {  // EL02191
                             msg: 'acceptChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        362: {  // EL02362
+                        362: {  // EL02192
                             msg: 'rejectChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                     },

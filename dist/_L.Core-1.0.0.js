@@ -772,28 +772,28 @@
                         210: {  // i-collection.js
                             msg: ''
                         },
-                        211: {  // EL02211
+                        211: {  // EL02161
                             msg: 'add(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        212: {  // EL02212
+                        212: {  // EL02162
                             msg: 'remove(elem): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        213: {  // EL02213
+                        213: {  // EL02163
                             msg: 'cantains(any): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        214: {  // EL02214
+                        214: {  // EL02164
                             msg: 'indexOf(any): number 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         220: {  // i-collection-array.js
                             msg: ''
                         },
-                        221: {  // EL02221
+                        221: {  // EL02171
                             msg: 'insertAt(pos, val, ..): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         230: {  // i-collection-property.js
                             msg: ''
                         },
-                        231: {  // EL02231
+                        231: {  // EL02181
                             msg: 'keyOf(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         // use Meta.Entity.*
@@ -833,19 +833,19 @@
                         350: {  // i-serialize.js
                             msg: ''
                         },
-                        351: {  // EL02351
+                        351: {  // EL02191
                             msg: 'output(opt, ...): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        352: {  // EL02352
+                        352: {  // EL02192
                             msg: 'load(any, ...) 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                         360: {  // i-transaction.js
                             msg: ''
                         },
-                        361: {  // EL02361
+                        361: {  // EL02191
                             msg: 'acceptChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
-                        362: {  // EL02362
+                        362: {  // EL02192
                             msg: 'rejectChanges() 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
                     },
@@ -3665,14 +3665,14 @@
          * @abstract
          */
         ICollection.prototype.add  = function() {
-            throw new ExtendError(/EL02211/, null, ['ICollection']);
+            throw new ExtendError(/EL02161/, null, ['ICollection']);
         };
         /**
          * 컬렉션에서 요소를 제거합니다.
          * @abstract
          */
         ICollection.prototype.remove  = function() {
-            throw new ExtendError(/EL02212/, null, ['ICollection']);
+            throw new ExtendError(/EL02162/, null, ['ICollection']);
         };
         /**
          * 요소가 컬렉션에 존재하는지 확인합니다.
@@ -3680,7 +3680,7 @@
          * @abstract
          */
         ICollection.prototype.contains  = function() {
-            throw new ExtendError(/EL02213/, null, ['ICollection']);
+            throw new ExtendError(/EL02163/, null, ['ICollection']);
         };
         /**
          * 컬렉션에서 요소을 조회합니다.
@@ -3688,7 +3688,7 @@
          * @abstract
          */
         ICollection.prototype.indexOf  = function() {
-            throw new ExtendError(/EL02214/, null, ['ICollection']);
+            throw new ExtendError(/EL02164/, null, ['ICollection']);
         };
         return ICollection;
     }());
@@ -3737,7 +3737,7 @@
          * @abstract
          */
         IPropertyCollection.prototype.keyOf  = function() {
-            throw new ExtendError(/EL02231/, null, ['IPropertyCollection']);
+            throw new ExtendError(/EL02181/, null, ['IPropertyCollection']);
         };
         return IPropertyCollection;
     }(ICollection));
@@ -3934,14 +3934,14 @@
          * @abstract
          */
         ISerialize.prototype.output  = function() {
-            throw new ExtendError(/EL02351/, null, ['ISerialize']);
+            throw new ExtendError(/EL02191/, null, ['ISerialize']);
         };
         /**
          * 가져오기(로드) 합니다.
          * @abstract
          */
         ISerialize.prototype.load  = function(String) {
-            throw new ExtendError(/EL02352/, null, ['ISerialize']);
+            throw new ExtendError(/EL02192/, null, ['ISerialize']);
         };
         return ISerialize;
     }());
@@ -3989,7 +3989,7 @@
          * @abstract
          */
         IArrayCollection.prototype.insertAt  = function() {
-            throw new ExtendError(/EL02221/, null, ['IArrayCollection']);
+            throw new ExtendError(/EL02171/, null, ['IArrayCollection']);
         };
         return IArrayCollection;
     }(ICollection));

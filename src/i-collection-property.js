@@ -50,7 +50,7 @@
          * @abstract
          */
         IPropertyCollection.prototype.keyOf  = function() {
-            throw new ExtendError(/EL02231/, null, ['IPropertyCollection']);
+            throw new ExtendError(/EL02181/, null, ['IPropertyCollection']);
         };
 
         return IPropertyCollection;

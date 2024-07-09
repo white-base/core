@@ -43,7 +43,7 @@
          * @abstract
          */
         ICollection.prototype.add  = function() {
-            throw new ExtendError(/EL02211/, null, ['ICollection']);
+            throw new ExtendError(/EL02161/, null, ['ICollection']);
         };
 
         /**
@@ -51,7 +51,7 @@
          * @abstract
          */
         ICollection.prototype.remove  = function() {
-            throw new ExtendError(/EL02212/, null, ['ICollection']);
+            throw new ExtendError(/EL02162/, null, ['ICollection']);
         };
 
         /**
@@ -60,7 +60,7 @@
          * @abstract
          */
         ICollection.prototype.contains  = function() {
-            throw new ExtendError(/EL02213/, null, ['ICollection']);
+            throw new ExtendError(/EL02163/, null, ['ICollection']);
         };
 
         /**
@@ -69,7 +69,7 @@
          * @abstract
          */
         ICollection.prototype.indexOf  = function() {
-            throw new ExtendError(/EL02214/, null, ['ICollection']);
+            throw new ExtendError(/EL02164/, null, ['ICollection']);
         };
 
         return ICollection;

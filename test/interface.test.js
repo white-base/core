@@ -163,11 +163,11 @@ describe("[target: i-* ]", () => {
             const i = new ISerialize();
 
             // extends 
-            expect(()=> s.load()).toThrow(/EL02352/);
-            expect(()=> s.output()).toThrow(/EL02351/);
+            expect(()=> s.load()).toThrow(/EL02192/);
+            expect(()=> s.output()).toThrow(/EL02191/);
             // create
-            expect(()=> i.load()).toThrow(/EL02352/);
-            expect(()=> i.output()).toThrow(/EL02351/);
+            expect(()=> i.load()).toThrow(/EL02192/);
+            expect(()=> i.output()).toThrow(/EL02191/);
         });
     });
     // describe.skip("ITransaction :: 인터페이스", () => {
@@ -177,11 +177,11 @@ describe("[target: i-* ]", () => {
     //         const i = new ITransaction();
 
     //         // extends
-    //         expect(()=> s.acceptChanges()).toThrow(/EL02361/);
-    //         expect(()=> s.rejectChanges()).toThrow(/EL02362/);
+    //         expect(()=> s.acceptChanges()).toThrow(/EL02191/);
+    //         expect(()=> s.rejectChanges()).toThrow(/EL02192/);
     //         // create
-    //         expect(()=> i.acceptChanges()).toThrow(/EL02361/);
-    //         expect(()=> i.rejectChanges()).toThrow(/EL02362/);
+    //         expect(()=> i.acceptChanges()).toThrow(/EL02191/);
+    //         expect(()=> i.rejectChanges()).toThrow(/EL02192/);
     //     });
     // });
 
@@ -254,20 +254,20 @@ describe("[target: i-* ]", () => {
             const i = new ICollection();
 
             // extends
-            expect(()=> s.add()).toThrow(/EL02211/);
-            expect(()=> s.remove()).toThrow(/EL02212/);
+            expect(()=> s.add()).toThrow(/EL02161/);
+            expect(()=> s.remove()).toThrow(/EL02162/);
             // expect(()=> s.removeAt()).toThrow(/ES013/);
             // expect(()=> s.clear()).toThrow(/ES013/);
-            expect(()=> s.contains()).toThrow(/EL02213/);
-            expect(()=> s.indexOf()).toThrow(/EL02214/);
+            expect(()=> s.contains()).toThrow(/EL02163/);
+            expect(()=> s.indexOf()).toThrow(/EL02164/);
             // expect(()=> s.exist()).toThrow(/ES013/);
             // create
-            expect(()=> i.add()).toThrow(/EL02211/);
-            expect(()=> i.remove()).toThrow(/EL02212/);
+            expect(()=> i.add()).toThrow(/EL02161/);
+            expect(()=> i.remove()).toThrow(/EL02162/);
             // expect(()=> i.removeAt()).toThrow(/ES013/);
             // expect(()=> i.clear()).toThrow(/ES013/);
-            expect(()=> i.contains()).toThrow(/EL02213/);
-            expect(()=> i.indexOf()).toThrow(/EL02214/);
+            expect(()=> i.contains()).toThrow(/EL02163/);
+            expect(()=> i.indexOf()).toThrow(/EL02164/);
             // expect(()=> i.exist()).toThrow(/ES013/);
         });
     });
@@ -278,16 +278,16 @@ describe("[target: i-* ]", () => {
             const i = new IArrayCollection();
 
             // extends
-            expect(()=> s.add()).toThrow(/EL02211/);
-            expect(()=> s.remove()).toThrow(/EL02212/);
-            expect(()=> s.contains()).toThrow(/EL02213/);
-            expect(()=> s.indexOf()).toThrow(/EL02214/);
+            expect(()=> s.add()).toThrow(/EL02161/);
+            expect(()=> s.remove()).toThrow(/EL02162/);
+            expect(()=> s.contains()).toThrow(/EL02163/);
+            expect(()=> s.indexOf()).toThrow(/EL02164/);
             // create
-            expect(()=> i.add()).toThrow(/EL02211/);
-            expect(()=> i.remove()).toThrow(/EL02212/);
-            expect(()=> i.contains()).toThrow(/EL02213/);
-            expect(()=> i.indexOf()).toThrow(/EL02214/);
-            expect(()=> i.insertAt()).toThrow(/EL02221/);
+            expect(()=> i.add()).toThrow(/EL02161/);
+            expect(()=> i.remove()).toThrow(/EL02162/);
+            expect(()=> i.contains()).toThrow(/EL02163/);
+            expect(()=> i.indexOf()).toThrow(/EL02164/);
+            expect(()=> i.insertAt()).toThrow(/EL02171/);
 
         });
     });
@@ -298,25 +298,25 @@ describe("[target: i-* ]", () => {
             const i = new IPropertyCollection();
 
             // extends
-            expect(()=> s.add()).toThrow(/EL02211/);
-            expect(()=> s.remove()).toThrow(/EL02212/);
+            expect(()=> s.add()).toThrow(/EL02161/);
+            expect(()=> s.remove()).toThrow(/EL02162/);
             // expect(()=> s.removeAt()).toThrow(/ES013/);
             // expect(()=> s.clear()).toThrow(/ES013/);
-            expect(()=> s.contains()).toThrow(/EL02213/);
-            expect(()=> s.indexOf()).toThrow(/EL02214/);
+            expect(()=> s.contains()).toThrow(/EL02163/);
+            expect(()=> s.indexOf()).toThrow(/EL02164/);
             // expect(()=> s.exist()).toThrow(/ES013/);
-            expect(()=> s.keyOf()).toThrow(/EL02231/);
+            expect(()=> s.keyOf()).toThrow(/EL02181/);
             // expect(()=> s.removeByProp()).toThrow(/ES013/);
             // expect(()=> s.indexOfProp()).toThrow(/ES013/);
             // create
-            expect(()=> i.add()).toThrow(/EL02211/);
-            expect(()=> i.remove()).toThrow(/EL02212/);
+            expect(()=> i.add()).toThrow(/EL02161/);
+            expect(()=> i.remove()).toThrow(/EL02162/);
             // expect(()=> i.removeAt()).toThrow(/ES013/);
             // expect(()=> i.clear()).toThrow(/ES013/);
-            expect(()=> i.contains()).toThrow(/EL02213/);
-            expect(()=> i.indexOf()).toThrow(/EL02214/);
+            expect(()=> i.contains()).toThrow(/EL02163/);
+            expect(()=> i.indexOf()).toThrow(/EL02164/);
             // expect(()=> i.exist()).toThrow(/ES013/);
-            expect(()=> i.keyOf()).toThrow(/EL02231/);
+            expect(()=> i.keyOf()).toThrow(/EL02181/);
             // expect(()=> i.removeByProp()).toThrow(/ES013/);
             // expect(()=> i.indexOfProp()).toThrow(/ES013/);
         });
