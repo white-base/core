@@ -48,12 +48,14 @@
         function ExtendError(p_msg, p_prop, p_codeVal) {
             var _build = '';
             var _prop;
-            var _queue;    
+            var _queue = [];    
             var _msg;
 
             if (p_prop instanceof ExtendError) {
                 _queue = p_prop.queue;
                 _prop = p_prop.prop;
+            } else if (p_prop instanceof Error) {
+                _queue.push(p_prop.message);
             } else if (typeof p_prop  === 'object' && p_prop !== null) {
                 _prop = p_prop;
             }
