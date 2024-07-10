@@ -26,7 +26,6 @@ module.exports = {
     Type: Type,
     Observer: Observer,
     ExtendError: ExtendError,
-    messageCode: messageCode,
     Message: Message,
     IObject: IObject,
     IMarshal: IMarshal,
