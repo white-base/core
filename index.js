@@ -1,4 +1,3 @@
-// const messageCode                 = require('./src/message-code').messageCode;
 require('./src/message-code');
 const Message                     = require('./src/message').Message;
 const ExtendError                 = require('./src/extend-error').ExtendError;
@@ -75,7 +74,4 @@ module.exports = {
         IArrayCollection: IArrayCollection,
     
     },
-    // messageCode: {
-    //     core: messageCode_core
-    // }
 }
