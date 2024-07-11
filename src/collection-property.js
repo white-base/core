@@ -8,8 +8,8 @@
     if (isNode) {                                                                                   // strip:
         var _Message                    = require('./message').Message;                             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;                    // strip:
-        var _Type                       = require('./type');                                        // strip:
-        var _Util                       = require('./util');                                        // strip:
+        var _Type                       = require('./type').Type;                                   // strip:
+        var _Util                       = require('./util').Util;                                   // strip:
         var _IPropertyCollection        = require('./i-collection-property').IPropertyCollection;   // strip:
         var _BaseCollection             = require('./base-collection').BaseCollection;              // strip:
         var _MetaObject                 = require('./meta-object').MetaObject;                      // strip:

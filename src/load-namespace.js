@@ -9,7 +9,7 @@
         var Message                     = require('./message').Message;
         var ExtendError                 = require('./extend-error').ExtendError;
         var Type                        = require('./type');
-        var Util                        = require('./util');
+        var Util                        = require('./util').Util;
         var MetaRegistry                = require('./meta-registry').MetaRegistry;
         var NamespaceManager            = require('./namespace-manager').NamespaceManager;
         var ArrayCollection             = require('./collection-array').ArrayCollection;

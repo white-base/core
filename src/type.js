@@ -23,6 +23,8 @@
     // 3. module implementation 
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
     
+    var Type = {};  // namespace
+    
     /**
      * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부
      * @param {*} obj 
@@ -279,7 +281,7 @@
      * @param {boolean?} hasObj Object를 포함 여부
      * @returns {array<string>}  
      */
-    var getAllProperties = function(obj, hasObj) {
+    function getAllProperties(obj, hasObj) {
         var allProps = [], cur = obj;
         var is = hasObj || false;
         do {
@@ -291,6 +293,7 @@
         } while (cur = Object.getPrototypeOf(cur))
         return allProps;
     };
+    Type.getAllProperties = getAllProperties;
 
     /**
      * 객체를 비교합니다. (proto 제외)
@@ -299,7 +302,7 @@
      * @param {any} obj2 
      * @returns {boolean}
      */
-    var deepEqual = function(obj1, obj2) {
+    function deepEqual(obj1, obj2) {
         if (obj1 === obj2) return true;
         if (typeof obj1 !== typeof obj2) return false;
         if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
@@ -336,6 +339,7 @@
             return false;
         }
     }
+    Type.deepEqual = deepEqual;
 
     /**
      * 함수 타입을 가져옵니다. (_UNION 포함)  
@@ -345,7 +349,7 @@
      * @param {boolean} [hasUnion= true] _UNION 포함 여부
      * @returns {array<function>} 
      */
-    var getTypes = function (ctor, hasUnion) {
+    function getTypes(ctor, hasUnion) {
         var arr = [];
         var tempArr = [];
         var union;
@@ -381,6 +385,8 @@
             return !OLD_ENV && typeof Object.getPrototypeOf === 'function' ? Object.getPrototypeOf(ctor) : ctor.__proto__;
         }
     }
+    Type.getTypes = getTypes;
+
     /**
      * 함수 타입의 prototype(상속) 타입 여부를 검사합니다.
      * @memberof _L.Common.Type
@@ -388,7 +394,7 @@
      * @param {function | string} target 검사 대상
      * @returns {boolean}
      */
-    var isProtoChain = function(ctor, target) {
+    function isProtoChain(ctor, target) {
         var arr;
         if (typeof ctor !== 'function') return false;
         if (!(typeof target === 'function' || typeof target === 'string')) return false;
@@ -403,6 +409,7 @@
         }
         return false;
     }
+    Type.isProtoChain = isProtoChain;
 
     /**
      * 함수 타입의 prototype(상속) 또는 _UNION 타입 여부를 검사합니다.
@@ -411,7 +418,7 @@
      * @param {function | string} target 검사 대상
      * @returns {boolean}
      */
-    var hasType = function(ctor, target) {
+    function hasType(ctor, target) {
         var arr;
         if (typeof ctor !== 'function') return false;
         if (!(typeof target === 'function' || typeof target === 'string')) return false;
@@ -426,6 +433,7 @@
         }
         return false;
     }
+    Type.hasType = hasType;
 
     /**
      * 확장타입 객체를 얻습니다. (하위 타입 포함)  
@@ -443,7 +451,7 @@
      *      name: name, func: null,
      * }
      */
-    var typeObject = function(target) {
+    function typeObject(target) {
         var obj = {};
         var typeObj = _isObject(target) && target['$type'] ? target : extendType(target);
         var leafType = ['null', 'undefined', 'number', 'string', 'boolean', 'symbol', 'bigi¡nt', 'object', 'regexp'];
@@ -492,6 +500,7 @@
         }
         return obj;
     };
+    Type.typeObject = typeObject;
 
     /**
      * 확장타입명을 얻습니다.
@@ -499,9 +508,10 @@
      * @param {*} target 
      * @returns {string}
      */
-    var typeOf = function (target) {
+    function typeOf(target) {
         return extendType(target)['$type'];
     };
+    Type.typeOf = typeOf;
 
     /**
      * 확장타입을 얻는다.
@@ -512,7 +522,7 @@
      * var singleType = ['undefined', 'null', 'number', 'string', 'boolean', 'regexp', 'object', 'symbol'];
      * var unionType = ['array', 'choice', 'function', 'class', 'union'];
      */
-    var extendType = function(target) {
+    function extendType(target) {
         var obj =  { $type: '', ref: undefined };
 
         obj.toString = function(){
@@ -662,6 +672,7 @@
         // } else throw new ExtendError(/EL01309/, null, []);    // REVIEW: 커버리지 확인시 주석 처리
         return obj;
     }
+    Type.extendType = extendType;
 
     /**
      * 원본타입에 대상타입이 덮어쓰기가 허용 가능한지 검사합니다.  
@@ -672,7 +683,7 @@
      * @param {string?} pathName '' 공백시 성공
      * @returns {throw?}
      */
-    var _execAllow = function (extType, tarType, opt, pathName) {
+    function _execAllow(extType, tarType, opt, pathName) {
         var eType = extendType(extType);
         var tType = extendType(tarType);
         var prop = {};
@@ -972,7 +983,7 @@
      * @param {string?} pathName '' 공백시 성공
      * @returns {throw?}
      */
-    var _execMatch = function(extType, target, opt, pathName) {
+    function _execMatch(extType, target, opt, pathName) {
         var eType = extendType(extType);
         var tType = extendType(target);
         var prop = {};
@@ -1255,13 +1266,14 @@
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
      * @returns {throw?} 실패시 예외
      */
-    var allowType = function(extType, tarType, opt) {
+    function allowType(extType, tarType, opt) {
         try {
             _execAllow(extType, tarType, opt);
         } catch (error) {
             throw new ExtendError(/EL0130A/, error);
         }
     };    
+    Type.allowType = allowType;
 
     /**
      * 확장타입이 대상과 매치되는지 검사합니다.
@@ -1271,13 +1283,14 @@
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
      * @returns {throw?} 실패시 예외
      */
-    var matchType = function(extType, target, opt) {
+    function matchType(extType, target, opt) {
         try {
             _execMatch(extType, target, opt);
         } catch (error) {
             throw new ExtendError(/EL0130B/, error);
         }
     };
+    Type.matchType = matchType;
 
     /**
      * 확장타입이 대상타입을 허용하는지 검사합니다.
@@ -1287,7 +1300,7 @@
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
      * @returns {boolean} 검사 통과 여부
      */
-    var isAllowType = function(extType, tarType, opt) {
+    function isAllowType(extType, tarType, opt) {
         try {
             _execAllow(extType, tarType, opt);
         } catch (error) {
@@ -1295,6 +1308,7 @@
         }
         return true;
     };  
+    Type.isAllowType = isAllowType;
 
     /**
      * 확장타입이 대상과 매치되는지 검사합니다.
@@ -1304,7 +1318,7 @@
      * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
      * @returns {boolean} 검사 통과 여부
      */
-    var isMatchType = function(extType, target, opt) {
+    function isMatchType(extType, target, opt) {
         try {
             _execMatch(extType, target, opt);
             return true;
@@ -1312,43 +1326,17 @@
             return false;
         }
     };
+    Type.isMatchType = isMatchType;
 
     //==============================================================
     // 4. module export
-    if (isNode) {                                       // strip:
-        exports.getAllProperties = getAllProperties;    // strip:
-        exports.deepEqual = deepEqual;                  // strip:
-        exports.isProtoChain = isProtoChain;            // strip:
-        exports.hasType = hasType;                      // strip:
-        exports.getTypes = getTypes;                    // strip:
-        exports.extendType = extendType;                // strip:
-        exports.typeObject = typeObject;                // strip:
-        exports.typeOf = typeOf;                        // strip:
-        exports.matchType = matchType;                  // strip:
-        exports.allowType = allowType;                  // strip:
-        exports.isMatchType = isMatchType;              // strip:
-        exports.isAllowType = isAllowType;              // strip:
-    }                                                   // strip:
+    if (isNode) exports.Type = Type;    // strip:
 
     _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
     _global._L.Common.Type          = _global._L.Common.Type || {};
     
-    var ns = {
-        getAllProperties: getAllProperties,
-        deepEqual: deepEqual,
-        isProtoChain: isProtoChain,
-        hasType: hasType,
-        getTypes: getTypes,
-        extendType: extendType,
-        typeObject: typeObject,
-        typeOf: typeOf,
-        matchType: matchType,
-        allowType: allowType,
-        isMatchType: isMatchType,
-        isAllowType: isAllowType
-    };
-    _global._L.Type = ns;
-    _global._L.Common.Type = ns;
+    _global._L.Type = Type;
+    _global._L.Common.Type = Type;
 
 }(typeof window !== 'undefined' ? window : global));

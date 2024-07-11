@@ -8,8 +8,8 @@
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
-        var _Type                       = require('./type');                        // strip:
-        var _Util                       = require('./util');                        // strip:
+        var _Type                       = require('./type').Type;                   // strip:
+        var _Util                       = require('./util').Util;                   // strip:
         var _IObject                    = require('./i-object').IObject;            // strip:
         var _IMarshal                   = require('./i-marshal').IMarshal;          // strip:
         var _MetaRegistry               = require('./meta-registry').MetaRegistry;  // strip:

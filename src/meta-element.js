@@ -8,7 +8,7 @@
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
-        var _Util                       = require('./util');                        // strip:
+        var _Util                       = require('./util').Util;                   // strip:
         var _MetaObject                 = require('./meta-object').MetaObject;      // strip:
         var _IElement                   = require('./i-element').IElement;          // strip:
     }                                                                               // strip:

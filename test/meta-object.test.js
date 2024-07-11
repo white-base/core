@@ -4,8 +4,8 @@
 //==============================================================
 // gobal defined
 'use strict';
-const Util                  = require('../src/util');
-const Type                  = require('../src/type');
+const Util                  = require('../src/util').Util;
+const Type                  = require('../src/type').Type;
 const {MetaObject}            = require('../src/meta-object');
 const {MetaElement}           = require('../src/meta-element');
 // const ComplexElement        = require('../src/meta-element-complex');

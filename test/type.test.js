@@ -3,10 +3,10 @@
  */
 //==============================================================
 // gobal defined
-const { getAllProperties, deepEqual, isProtoChain, getTypes } = require('../src/type');
-const { extendType, typeObject, typeOf } = require('../src/type');
-const { isAllowType, allowType }  = require('../src/type');
-const { isMatchType, matchType }  = require('../src/type');
+const { getAllProperties, deepEqual, isProtoChain, getTypes } = require('../src/type').Type;
+const { extendType, typeObject, typeOf } = require('../src/type').Type;
+const { isAllowType, allowType }  = require('../src/type').Type;
+const { isMatchType, matchType }  = require('../src/type').Type;
 const T = true;
 
 //==============================================================
@@ -93,7 +93,7 @@ describe("[target: util-type.js.js]", () => {
             var Type = require('../src/type');
             class ClassA { a = 1 }
             class ClassB extends ClassA { b = 2 }
-            var type1 = Type.getTypes(ClassB);
+            var type1 = getTypes(ClassB);
             var tar01 = [ClassB, ClassA];
 
             expect(type1).toEqual(tar01)
@@ -1062,11 +1062,11 @@ describe("[target: util-type.js.js]", () => {
         });
         describe('커버리지 ', () => {
             it('- typeObject() : undefined ', () => {
-                const Util      = require('../src/util');
+                const Util      = require('../src/util').Util;
                 function IClassA() { this.aa = String }
                 function ClassB() { 
                     this.aa = '';
-                    Util.implements(ClassB, this, IClassA );  
+                    Util.implements(ClassB, this, IClassA );
                 }
                 // Util.inherits(ClassB, ClassA)
                 var type1 = new ClassB()

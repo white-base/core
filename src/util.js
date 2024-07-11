@@ -8,7 +8,7 @@
     if (isNode) {                                                                   // strip:
         var _Message                    = require('./message').Message;             // strip:
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
-        var _Type                       = require('./type');                        // strip:
+        var _Type                       = require('./type').Type;                   // strip:
     }                                                                               // strip:
     var $Message                    = _global._L.Message;       // modify:
     var $ExtendError                = _global._L.ExtendError;   // modify:
@@ -26,6 +26,8 @@
     //==============================================================
     // 3. module implementation   
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
+
+    var Util = {};  // namespace
 
 
     // local function
@@ -68,7 +70,7 @@
      * @param {number} p_depts 
      * @returns {number} 
      */
-    var getArrayDepth  = function(p_elem, p_depts) {
+    Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
         var MAX     = 10;
         var level   = 0;
         
@@ -86,7 +88,7 @@
      * @memberof _L.Common.Util
      * @returns {string} 예> 'b806a5b5-75f7-a1ba-3736-17f56fb5d65a'
      */
-    var createGuid = function() {
+    Util.createGuid = function createGuid() {
         function _p8(s) {  
             var p = (Math.random().toString(16)+'000000000').substring(2,10);  
             return s ? '-' + p.substring(0, 4) + '-' + p.substring(4, 8) : p ;  
@@ -100,7 +102,7 @@
      * @param {object} p_target 대상 객체
      * @returns {object}
      */
-    var deepCopy = function(p_target) {
+    Util.deepCopy = function deepCopy(p_target) {
         var nobj;
 
         if (!_isObject(p_target)) {
@@ -132,7 +134,7 @@
      * @param {function | object} ctor 생성자 또는 생성 객체
      * @param {function | object} superCtor 상속 받을 부모 생성자 또는 객체
      */
-    var inherits = (function () {
+    Util.inherits = (function () {
         if (typeof Object.create === 'function' && !OLD_ENV) {
             // implementation from standard node.js 'Util' module
             return function(ctor, superCtor) {
@@ -172,7 +174,7 @@
      * @param {object} p_obj 검사 대상 인스턴스 객체
      * @param {function?} args 인터페이스들, ctor._UNION 정적 속성으로 설정 가능
      */
-    var implement = function(p_ctor, p_obj, args) {
+    Util.implements = function(p_ctor, p_obj, args) {
         var _interface = [];
         var addCnt = 0;
 
@@ -253,30 +255,15 @@
         }
     };
 
-    
-
     //==============================================================
     // 4. module export
-    if (isNode) {                               // strip:
-        exports.inherits = inherits;            // strip:
-        exports.getArrayDepth = getArrayDepth;  // strip:
-        exports.createGuid = createGuid;        // strip:
-        exports.implements = implement;         // strip:
-        exports.deepCopy = deepCopy;            // strip:
-    }                                           // strip:
+    if (isNode) exports.Util = Util;    // strip:
     
     _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
     _global._L.Common.Util          = _global._L.Common.Util || {};
 
-    var ns = {
-        inherits: inherits,
-        getArrayDepth: getArrayDepth,
-        createGuid: createGuid,
-        implements: implement,
-        deepCopy: deepCopy,
-    };
-    _global._L.Util = ns;
-    _global._L.Common.Util = ns;
+    _global._L.Util = Util;
+    _global._L.Common.Util = Util;
 
 }(typeof window !== 'undefined' ? window : global));

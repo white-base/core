@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-// const Util      = require('../src/util');
+// const Util      = require('../src/util').util;
 
 //==============================================================
 // test
@@ -20,7 +20,7 @@ describe('Util.*', () => {
     // it('- Array.isArray() : polyfill', () => {
     //     // polyfill 강제 지움
     //     Array.isArray = null;
-    //     const Util      = require('../src/util');
+    //     const Util      = require('../src/util').util;
     //     const arr = [];
         
     //     expect(Array.isArray(arr)).toBe(true);
@@ -28,7 +28,7 @@ describe('Util.*', () => {
     // // it.skip('- Object.keys() : polyfill', () => {
     // //     // polyfill 강제 지움
     // //     Object.keys = null;
-    // //     const Util      = require('../src/util');
+    // //     const Util      = require('../src/util').util;
     // //     const arr = ['aa'];
     // //     const obj1 = {aa: {bb: 1}}
         
@@ -38,7 +38,7 @@ describe('Util.*', () => {
     // // });
     
     it('- Util.getArrayDepth() : 배열 깊이 얻기 ', () => {
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
         const lvl3 = [[[]]];
         // const lvl3 = [[[]]];
 
@@ -46,7 +46,7 @@ describe('Util.*', () => {
     });
 
     it('- Util.createGuid() : 난수 비교와 길이 검사 ', () => {
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
         const guid1 = Util.createGuid();
         const guid2 = Util.createGuid();
         
@@ -56,7 +56,7 @@ describe('Util.*', () => {
     });
 
     it('- Util.deepCopy() : 깊은 복사 ', () => {
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
         const arr1 = [{aa: {bb:1}}];
         const arr2 = Util.deepCopy(arr1);
         const obj1 = {aa: {bb:1}};
@@ -75,7 +75,7 @@ describe('Util.*', () => {
         expect(reg1).toEqual(reg2);
     });
     it('- Util.deepCopy() : prototype 복제 안함 ', () => {
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
         var sup01 = Object.create({aa: 1})
         sup01.bb = 2
         var obj01 = Object.create(sup01)
@@ -89,7 +89,7 @@ describe('Util.*', () => {
         // const temp = Object.create; // 임시 저장
         // delete Object.create;  // 비우기
         global.OLD_ENV = true;  // 디버깅 
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
 
         // Object.create = temp;       // 복귀
         const Super = function() { this.foo = 1 };
@@ -106,7 +106,7 @@ describe('Util.*', () => {
         expect(i.bar).toBe(10);
     });
     it('- Util.inherits : Object.create() ', () => {
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
         const Super = function() { this.foo = 1 };
         const Bar = function() { 
             Super.call(this);
@@ -120,7 +120,7 @@ describe('Util.*', () => {
         expect(i.bar).toBe(10);
     });
     it('- Util.inherits : 부모 삽입 안함 ', () => {
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
         const Super = function() { this.foo = 1 };
         const Bar = function() { 
             Super.call(this);
@@ -135,7 +135,7 @@ describe('Util.*', () => {
     });
     it('- Util.inherits : 부모 삽입 안함, old env ', () => {
         global.OLD_ENV = true;  // 디버깅 
-        const Util      = require('../src/util');
+        const Util      = require('../src/util').Util;
         const Super = function() { this.foo = 1 };
         const Bar = function() { 
             Super.call(this);
@@ -153,7 +153,7 @@ describe('Util.*', () => {
 
     //     const temp = Object.create; // 임시 저장
     //     Object.create = undefined;  // 비우기
-    //     const Util      = require('../src/util');
+    //     const Util      = require('../src/util').util;
     //     Object.create = temp;       // 복귀
     //     const Super = function() { this.foo = 1 };
     //     const Bar = function() { 
@@ -168,8 +168,8 @@ describe('Util.*', () => {
     //     expect(i.bar).toBe(10);
     // });
     it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
-        const Util      = require('../src/util');
-        const Type      = require('../src/type');
+        const Util      = require('../src/util').Util;
+        const Type      = require('../src/type').Type;
 
         // const IClassA = function IClassA() {this.a = true}
         // const IClassB = function IClassB() {this.b = true}
@@ -185,8 +185,8 @@ describe('Util.*', () => {
         expect(arr.length).toBe(2);
     });
     it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES5 ', () => {
-        const Util      = require('../src/util');
-        const Type      = require('../src/type');
+        const Util      = require('../src/util').Util;
+        const Type      = require('../src/type').Type;
 
         const IClassA = function IClassA() {this.a = true}
         const IClassB = function IClassB() {this.b = true}
@@ -202,8 +202,8 @@ describe('Util.*', () => {
         expect(arr.length).toBe(5);
     });
     it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES6 + ES5 class ', () => {
-        const Util      = require('../src/util');
-        const Type      = require('../src/type');
+        const Util      = require('../src/util').util;
+        const Type      = require('../src/type').Type;
         
         const Class0 = function Class0() {this.a = true}
         class ClassA extends Class0{ aa = true; }
@@ -213,8 +213,8 @@ describe('Util.*', () => {
         expect(arr.length).toBe(3);
     });
     it('- Type.getTypes() :  생성자의 타입 목록 얻기, ES6 class ', () => {
-        const Util      = require('../src/util');
-        const Type      = require('../src/type');
+        const Util      = require('../src/util').util;
+        const Type      = require('../src/type').Type;
         
         class IClassA { a = true; }
         class IClassC { b = true; }
@@ -229,8 +229,8 @@ describe('Util.*', () => {
     });
 
     it('- Type.isProtoChain() : 상속 여부 검사 ', () => {    // TODO: util-type 이동 요망
-        const Util      = require('../src/util');
-        const Type      = require('../src/type');
+        const Util      = require('../src/util').Util;
+        const Type      = require('../src/type').Type;
         
         const IClassA = function IClassA() {this.ia = true}
         const IClassA1 = function IClassA1() {this.ia1 = true}
@@ -247,8 +247,8 @@ describe('Util.*', () => {
     });
 
     it('- Type.hasType() : 상속 또는 인터페이스 타입 검사 ', () => {    // TODO: util-type 이동 요망
-        const Util      = require('../src/util');
-        const Type      = require('../src/type');
+        const Util      = require('../src/util').Util;
+        const Type      = require('../src/type').Type;
         
         const IClassA = function IClassA() {this.ia = true}
         const IClassA1 = function IClassA1() {this.ia1 = true}

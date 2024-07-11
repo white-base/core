@@ -3,7 +3,7 @@
  */
 //==============================================================
 // gobal defined
-const Util      = require('../src/util');
+const Util      = require('../src/util').Util;
 
 //==============================================================
 // test
@@ -596,7 +596,7 @@ describe("[target: util.js]", () => {
         });
         it('- implements() : 커버리지, 오류명, old env ', () => {
             global.OLD_ENV = true;  // 디버깅 
-            const Util      = require('../src/util');
+            const Util      = require('../src/util').Util;
 
             function ISuper1() {
                 this.arr = Array;
