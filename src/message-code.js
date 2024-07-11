@@ -1,4 +1,4 @@
-/**** base-collection.js | _L.Collection.BaseCollection ****/
+/**** message-code.js | _L.messageCode.core ****/
 (function(_global) {
     'use strict';
 
