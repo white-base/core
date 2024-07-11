@@ -344,8 +344,7 @@
     if (isNode) exports.messageCode = messageCode;    // strip:
 
     _global._L                      = _global._L || {};
-    _global._L.messageCode          = _global._L.message || {};
-    _global._L.messageCode.core     = {};
+    _global._L.messageCode          = _global._L.messageCode || {};
 
     _global._L.messageCode.core     = messageCode;
 

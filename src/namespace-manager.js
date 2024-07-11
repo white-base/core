@@ -531,7 +531,6 @@
     // 4. module export
     if (isNode) exports.NamespaceManager = NamespaceManager;    // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
 
     _global._L.NamespaceManager = NamespaceManager;

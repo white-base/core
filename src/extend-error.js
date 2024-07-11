@@ -69,7 +69,7 @@
             _build = _msg + '\n';
             
             if (_prop) _build += $buildMessageProp(_prop);
-            if (_queue) _build += $buildMsgQueue(_queue); 
+            if (_queue.length > 0) _build += $buildMsgQueue(_queue);
 
             // var _instance = _super.call(this, _build);
             var _instance = new Error(_build);
@@ -78,9 +78,10 @@
              * 이전에 발생한 message 큐
              * @member {array<string>} _L.Common.ExtendError#queue
              */
-            if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
-            else _instance.queue = [];
-            
+            // if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
+            // else _instance.queue = [];
+            _instance.queue = _queue;
+
             /**
              * 속성타입 오류 메세지
              * @member {object} _L.Common.ExtendError#prop
@@ -152,8 +153,7 @@
     // 4. module export
     if (isNode) exports.ExtendError = ExtendError;      // strip:
 
-    // _global._L                      = _global._L || {};
-    // _global._L.Common               = _global._L.Common || {};
+    _global._L.Common               = _global._L.Common || {};
     
     _global._L.ExtendError = ExtendError;
     _global._L.Common.ExtendError = ExtendError;

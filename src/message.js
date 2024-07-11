@@ -235,7 +235,6 @@
     // 4. module export
     if (isNode) exports.Message = Message;      // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
 
     _global._L.Message = Message;

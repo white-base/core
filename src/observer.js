@@ -218,7 +218,6 @@
     // 4. module export
     if (isNode) exports.Observer = Observer;        // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
 
     _global._L.Observer = Observer;

@@ -1332,9 +1332,7 @@
     // 4. module export
     if (isNode) exports.Type = Type;    // strip:
 
-    _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
-    _global._L.Common.Type          = _global._L.Common.Type || {};
     
     _global._L.Type = Type;
     _global._L.Common.Type = Type;

@@ -25,7 +25,7 @@
     // 2. module dependency check
     if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (!ICollection === 'undefined') throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
+    if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
 
     //==============================================================
     // 3. module implementation   
@@ -61,7 +61,6 @@
     // 4. module export
     if (isNode) exports.IPropertyCollection = IPropertyCollection;      // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Interface            = _global._L.Interface || {};
     
     _global._L.IPropertyCollection = IPropertyCollection;

@@ -305,7 +305,6 @@
     // 4. module export
     if (isNode) exports.MetaObject = MetaObject;    // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
 
     _global._L.MetaObject = MetaObject;

@@ -55,7 +55,6 @@
     // 4. module export
     if (isNode) exports.IElement = IElement;    // strip:
 
-    _global._L                      = _global._L || {};
     _global._L.Interface            = _global._L.Interface || {};
     
     _global._L.IElement = IElement;

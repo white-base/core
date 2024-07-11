@@ -629,7 +629,6 @@
     // 4. module export
     if (isNode) exports.MetaRegistry = MetaRegistry;    // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
 
     _global._L.MetaRegistry = MetaRegistry;

@@ -259,9 +259,7 @@
     // 4. module export
     if (isNode) exports.Util = Util;    // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
-    _global._L.Common.Util          = _global._L.Common.Util || {};
 
     _global._L.Util = Util;
     _global._L.Common.Util = Util;

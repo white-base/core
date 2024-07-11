@@ -69,7 +69,6 @@
     // 4. module export
     if (isNode) exports.IMarshal = IMarshal;        // strip:
 
-    _global._L                      = _global._L || {};
     _global._L.Interface            = _global._L.Interface || {};
     
     _global._L.IMarshal = IMarshal;

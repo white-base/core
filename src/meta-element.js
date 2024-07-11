@@ -143,7 +143,6 @@
     // 4. module export
     if (isNode) exports.MetaElement = MetaElement;      // strip:
     
-    _global._L                      = _global._L || {};
     _global._L.Meta                 = _global._L.Meta || {};
 
     _global._L.MetaElement = MetaElement;

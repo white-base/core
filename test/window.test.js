@@ -9,6 +9,24 @@
 // test
 describe("[L.*]", () => {
     describe("[Common.*]", () => {
+        describe("load: extend-error.js <ExtendError>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+            });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/extend-error')).toThrow(/Cannot read properties/);
+            });
+            it("- 성공 ", () => {
+                require('../src/message-code');
+                require('../src/message');
+                delete global._L.Common
+                require('../src/extend-error');
+                
+                expect(global._L.ExtendError).toBeDefined();
+                expect(global._L.Common.ExtendError).toBeDefined();
+            });
+        });
         describe("load: observer.js <Observer>", () => {
             beforeEach(() => {
                 jest.resetModules();
@@ -35,7 +53,7 @@ describe("[L.*]", () => {
                 require('../src/extend-error');
                 require('../src/type');
                 require('../src/util');
-        
+                delete global._L.Common
                 require('../src/observer');
                 
                 expect(global._L.Observer).toBeDefined();
@@ -60,6 +78,7 @@ describe("[L.*]", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
+                delete global._L.Common
                 require('../src/type');
                 
                 expect(global._L.Common.Type.getAllProperties).toBeDefined();
@@ -194,19 +213,20 @@ describe("[L.*]", () => {
                 require('../src/message'); 
                 require('../src/extend-error');
                 require('../src/type');
+                delete global._L.Common
                 require('../src/util');
                 
-                expect(global._L.Common.Type.getAllProperties).toBeDefined();
-                expect(global._L.Common.Type.deepEqual).toBeDefined();
-                expect(global._L.Common.Type.isMatchType).toBeDefined();
-                expect(global._L.Common.Type.isAllowType).toBeDefined();
-                expect(global._L.Common.Type.matchType).toBeDefined();
-                expect(global._L.Common.Type.allowType).toBeDefined();
-                expect(global._L.Common.Type.getTypes).toBeDefined();
-                expect(global._L.Common.Type.extendType).toBeDefined();
-                expect(global._L.Common.Type.typeObject).toBeDefined();
-                expect(global._L.Common.Type.typeOf).toBeDefined();
-                expect(global._L.Common.Type.isProtoChain).toBeDefined();
+                // expect(global._L.Common.Type.getAllProperties).toBeDefined();
+                // expect(global._L.Common.Type.deepEqual).toBeDefined();
+                // expect(global._L.Common.Type.isMatchType).toBeDefined();
+                // expect(global._L.Common.Type.isAllowType).toBeDefined();
+                // expect(global._L.Common.Type.matchType).toBeDefined();
+                // expect(global._L.Common.Type.allowType).toBeDefined();
+                // expect(global._L.Common.Type.getTypes).toBeDefined();
+                // expect(global._L.Common.Type.extendType).toBeDefined();
+                // expect(global._L.Common.Type.typeObject).toBeDefined();
+                // expect(global._L.Common.Type.typeOf).toBeDefined();
+                // expect(global._L.Common.Type.isProtoChain).toBeDefined();
                 /// util.js
                 expect(global._L.Common.Util.inherits).toBeDefined();
                 expect(global._L.Common.Util.getArrayDepth).toBeDefined();
@@ -221,6 +241,7 @@ describe("[L.*]", () => {
             // });
             
         });
+        
     });
     describe("[Collection.*]", () => {
         describe("base-collection.js <BaseCollection>", () => {
@@ -387,6 +408,7 @@ describe("[L.*]", () => {
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 require('../src/meta-object');  
+                delete global._L.Collection
                 require('../src/base-collection');
         
                 expect(global._L.BaseCollection).toBeDefined();
@@ -517,6 +539,7 @@ describe("[L.*]", () => {
                 require('../src/meta-registry');  
                 require('../src/meta-object');  
                 require('../src/base-collection');
+                delete global._L.Collection
                 require('../src/collection-array');
         
                 expect(global._L.ArrayCollection).toBeDefined();
@@ -647,6 +670,7 @@ describe("[L.*]", () => {
                 require('../src/meta-registry');  
                 require('../src/meta-object');  
                 require('../src/base-collection');
+                delete global._L.Collection
                 require('../src/collection-property');
         
                 expect(global._L.PropertyCollection).toBeDefined();
@@ -849,6 +873,7 @@ describe("[L.*]", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
+                delete global._L.Interface
                 require('../src/i-object');
                 
                 expect(global._L.IObject).toBeDefined();
@@ -872,6 +897,7 @@ describe("[L.*]", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
+                delete global._L.Interface
                 require('../src/i-marshal');
                 
                 expect(global._L.IMarshal).toBeDefined();
@@ -895,7 +921,7 @@ describe("[L.*]", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
-        
+                delete global._L.Interface
                 require('../src/i-serialize');
                 
                 expect(global._L.ISerialize).toBeDefined();
@@ -1024,7 +1050,7 @@ describe("[L.*]", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
-                
+                delete global._L.Interface
                 require('../src/i-list');
                 
                 expect(global._L.IList).toBeDefined();
@@ -1054,7 +1080,7 @@ describe("[L.*]", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
-                
+                delete global._L.Interface
                 require('../src/i-element');
                 
                 expect(global._L.IElement).toBeDefined();
@@ -1110,7 +1136,7 @@ describe("[L.*]", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
-                
+                delete global._L.Interface
                 require('../src/i-control-list');
                 
                 expect(global._L.IListControl).toBeDefined();
@@ -1168,6 +1194,7 @@ describe("[L.*]", () => {
                 require('../src/util');
         
                 require('../src/i-collection');
+                delete global._L.Interface;
                 require('../src/i-collection-array');
                 
                 expect(global._L.IArrayCollection).toBeDefined();
@@ -1211,7 +1238,7 @@ describe("[L.*]", () => {
                 require('../src/extend-error');
                 require('../src/type');
                 require('../src/util');
-                
+                delete global._L.Interface
                 require('../src/i-collection');
         
                 expect(global._L.ICollection).toBeDefined();
@@ -1242,14 +1269,15 @@ describe("[L.*]", () => {
         
                 expect(() => require('../src/i-collection-property')).toThrow(/ES011/);
             });
-            // it("- 예외 : ICollection 로딩이 인된경우", () => {
-            //     require('../src/message');
-            //     require('../src/extend-error');
-            //     require('../src/type');
-            //      require('../src/util');
+            it("- 예외 : ICollection 로딩이 인된경우", () => {
+                require('../src/message-code');
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/type');
+                require('../src/util');
          
-            //      expect(() => require('../src/i-collection-property')).toThrow(/ICollection/);
-            // });
+                 expect(() => require('../src/i-collection-property')).toThrow(/ICollection/);
+            });
             it("- namespace : IPropertyCollection ", () => {
                 require('../src/message-code');
                 require('../src/message');
@@ -1258,6 +1286,7 @@ describe("[L.*]", () => {
                 require('../src/util');
                 
                 require('../src/i-collection');
+                delete global._L.Interface;
                 require('../src/i-collection-property');
         
                 expect(global._L.IPropertyCollection).toBeDefined();
@@ -1276,7 +1305,7 @@ describe("[L.*]", () => {
             //     expect(() => require('../src/custom-error')).toThrow(/Cannot read properties/);
             // });
             it("- 로딩 성공 ", () => {
-    
+                // delete global._L.Common;
                 require('../src/load-namespace');
                 
                 expect(global._L.loadNamespace).toBeDefined();
@@ -1381,6 +1410,7 @@ describe("[L.*]", () => {
         
                 require('../src/namespace-manager');
                 require('../src/meta-registry');
+                delete global._L.Meta
                 require('../src/meta-object');
         
                 expect(global._L.MetaObject).toBeDefined();
@@ -1459,6 +1489,7 @@ describe("[L.*]", () => {
                 require('../src/meta-registry');
                 
                 require('../src/meta-object');
+                delete global._L.Meta
                 require('../src/meta-element');
         
                 expect(global._L.MetaElement).toBeDefined();
@@ -1511,6 +1542,7 @@ describe("[L.*]", () => {
                 require('../src/i-serialize');
                 
                 require('../src/namespace-manager');
+                delete global._L.Meta
                 require('../src/meta-registry');
         
                 expect(global._L.MetaRegistry).toBeDefined();
@@ -1595,7 +1627,7 @@ describe("[L.*]", () => {
                 require('../src/i-list');
                 require('../src/i-control-list');
                 require('../src/i-serialize');
-                
+                delete global._L.Meta
                 require('../src/namespace-manager');
         
                 expect(global._L.NamespaceManager).toBeDefined();

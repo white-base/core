@@ -60,7 +60,6 @@
     // 4. module export
     if (isNode) exports.IArrayCollection = IArrayCollection;    // strip:
     
-    _global._L                      = _global._L || {};     // Branch:
     _global._L.Interface            = _global._L.Interface || {};
 
     _global._L.IArrayCollection = IArrayCollection;
