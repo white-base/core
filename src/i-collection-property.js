@@ -61,7 +61,8 @@
     // 4. module export
     if (isNode) exports.IPropertyCollection = IPropertyCollection;      // strip:
     
-    _global._L.Interface            = _global._L.Interface || {};
+    // create namespace
+    _global._L.Interface                    = _global._L.Interface || {};
     
     _global._L.IPropertyCollection = IPropertyCollection;
     _global._L.Interface.IPropertyCollection = IPropertyCollection;

@@ -56,8 +56,9 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.ISerialize = ISerialize;    // strip:
+    if (isNode) exports.ISerialize  = ISerialize;    // strip:
     
+    // create namespace
     _global._L.Interface            = _global._L.Interface || {};
 
     _global._L.ISerialize = ISerialize;

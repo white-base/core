@@ -5,16 +5,15 @@
     var isNode = typeof window !== 'undefined' ? false : true;
     //==============================================================
     // 1. import module
-    if (isNode) {                                                                                   // strip:
-        var _messageCode                = require('./message-code').messageCode;                             // strip:
-    }    
+    if (isNode) {                                                                   // strip:
+        var _messageCode                = require('./message-code').messageCode;    // strip:
+    }                                                                               // strip:
     var $messageCode                    = _global._L.messageCode.core;              // modify:
 
     var messageCode                     = _messageCode  || $messageCode;            // strip:
 
     //==============================================================
     // 2. module dependency check
-
     //==============================================================
     // 3. module implementation       
     var Message = (function () {
@@ -217,24 +216,13 @@
         return Message;
     }());
 
-    /**
-     * DEBUG:
-     * POINT: 빨강
-     * TODO: 할것
-     * ETC:
-     * Branch: 커버리지
-     * Line:
-     * REVIEW:
-     * HACK:
-     * 
-     */
-    
     Message.storage = messageCode;
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.Message = Message;      // strip:
+    if (isNode) exports.Message     = Message;      // strip:
     
+    // create namespace
     _global._L.Common               = _global._L.Common || {};
 
     _global._L.Message = Message;

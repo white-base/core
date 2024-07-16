@@ -21,8 +21,8 @@
     
     //==============================================================
     // 3. module implementation 
-    var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
     
+    var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
     var Type = {};  // namespace
     
     /**
@@ -1330,9 +1330,10 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.Type = Type;    // strip:
-
-    _global._L.Common               = _global._L.Common || {};
+    if (isNode) exports.Type    = Type;    // strip:
+    
+    // create namespace
+    _global._L.Common           = _global._L.Common || {};
     
     _global._L.Type = Type;
     _global._L.Common.Type = Type;

@@ -608,6 +608,7 @@
     // 4. module export
     if (isNode) exports.BaseCollection = BaseCollection;    // strip:
     
+    // create namespace
     _global._L.Collection           = _global._L.Collection || {};
 
     _global._L.BaseCollection = BaseCollection;

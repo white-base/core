@@ -58,9 +58,10 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.IArrayCollection = IArrayCollection;    // strip:
+    if (isNode) exports.IArrayCollection    = IArrayCollection;    // strip:
     
-    _global._L.Interface            = _global._L.Interface || {};
+    // create namespace
+    _global._L.Interface                    = _global._L.Interface || {};
 
     _global._L.IArrayCollection = IArrayCollection;
     _global._L.Interface.IArrayCollection = IArrayCollection;

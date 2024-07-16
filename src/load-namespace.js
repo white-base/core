@@ -149,6 +149,7 @@
     // 4. module export
     if (isNode) exports.loadNamespace = loadNamespace;      // strip:
     
+    // create namespace
     _global._L                      = _global._L || {};
     _global._L.Common               = _global._L.Common || {};
 

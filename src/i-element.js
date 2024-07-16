@@ -53,8 +53,9 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.IElement = IElement;    // strip:
-
+    if (isNode) exports.IElement    = IElement;    // strip:
+    
+    // create namespace
     _global._L.Interface            = _global._L.Interface || {};
     
     _global._L.IElement = IElement;

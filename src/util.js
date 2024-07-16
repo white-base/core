@@ -25,8 +25,8 @@
     
     //==============================================================
     // 3. module implementation   
+    
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
-
     var Util = {};  // namespace
 
 
@@ -259,6 +259,7 @@
     // 4. module export
     if (isNode) exports.Util = Util;    // strip:
     
+    // create namespace
     _global._L.Common               = _global._L.Common || {};
 
     _global._L.Util = Util;

@@ -67,8 +67,9 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.IObject = IObject;      // strip:
+    if (isNode) exports.IObject     = IObject;      // strip:
     
+    // create namespace
     _global._L.Interface            = _global._L.Interface || {};
 
     _global._L.IObject = IObject;

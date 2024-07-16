@@ -73,9 +73,10 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.IListControl = IListControl;    // strip:
-
-    _global._L.Interface            = _global._L.Interface || {};
+    if (isNode) exports.IListControl    = IListControl;    // strip:
+    
+    // create namespace
+    _global._L.Interface                = _global._L.Interface || {};
     
     _global._L.IListControl = IListControl;
     _global._L.Interface.IListControl = IListControl;

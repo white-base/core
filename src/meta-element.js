@@ -33,9 +33,6 @@
 
     //==============================================================
     // 3. module implementation   
-    
-    // private variable
-    
     var MetaElement  = (function (_super) {
 
         /**
@@ -138,11 +135,11 @@
 
     }(MetaObject));
 
-
     //==============================================================
     // 4. module export
     if (isNode) exports.MetaElement = MetaElement;      // strip:
     
+    // create namespace
     _global._L.Meta                 = _global._L.Meta || {};
 
     _global._L.MetaElement = MetaElement;

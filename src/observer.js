@@ -216,8 +216,9 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.Observer = Observer;        // strip:
+    if (isNode) exports.Observer    = Observer;        // strip:
     
+    // create namespace
     _global._L.Common               = _global._L.Common || {};
 
     _global._L.Observer = Observer;

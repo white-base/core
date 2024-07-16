@@ -303,8 +303,9 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.MetaObject = MetaObject;    // strip:
+    if (isNode) exports.MetaObject  = MetaObject;    // strip:
     
+    // create namespace
     _global._L.Meta                 = _global._L.Meta || {};
 
     _global._L.MetaObject = MetaObject;

@@ -72,3 +72,14 @@ https://wlqmffl0102.github.io/posts/Making-Git-blogs-for-beginners-1/
 23년 11월 13일
 TODO: core 의 type 의 and, & 조건의 추가
 
+/**
+* DEBUG:
+* POINT: 빨강
+* TODO: 할것
+* ETC:
+* Branch: 커버리지
+* Line:
+* REVIEW:
+* HACK:
+* 
+*/

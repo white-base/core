@@ -247,6 +247,7 @@
     // 4. module export
     if (isNode) exports.ArrayCollection = ArrayCollection;      // strip:
     
+    // create namespace
     _global._L.Collection           = _global._L.Collection || {};
 
     _global._L.ArrayCollection = ArrayCollection;

@@ -152,7 +152,8 @@
     //==============================================================
     // 4. module export
     if (isNode) exports.ExtendError = ExtendError;      // strip:
-
+    
+    // create namespace
     _global._L.Common               = _global._L.Common || {};
     
     _global._L.ExtendError = ExtendError;

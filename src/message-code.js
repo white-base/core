@@ -342,7 +342,8 @@
     //==============================================================
     // 4. module export
     if (isNode) exports.messageCode = messageCode;    // strip:
-
+    
+    // create namespace
     _global._L                      = _global._L || {};
     _global._L.messageCode          = _global._L.messageCode || {};
 

@@ -27,8 +27,6 @@
     if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
     if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
 
-    // if (typeof MetaObject === 'undefined') throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-
     //==============================================================
     // 3. module implementation       
     var MetaRegistry = (function () {
@@ -627,9 +625,10 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.MetaRegistry = MetaRegistry;    // strip:
+    if (isNode) exports.MetaRegistry    = MetaRegistry;    // strip:
     
-    _global._L.Meta                 = _global._L.Meta || {};
+    // create namespace
+    _global._L.Meta                     = _global._L.Meta || {};
 
     _global._L.MetaRegistry = MetaRegistry;
     _global._L.Meta.MetaRegistry = MetaRegistry;

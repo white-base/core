@@ -67,8 +67,9 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.IMarshal = IMarshal;        // strip:
-
+    if (isNode) exports.IMarshal    = IMarshal;        // strip:
+    
+    // create namespace
     _global._L.Interface            = _global._L.Interface || {};
     
     _global._L.IMarshal = IMarshal;

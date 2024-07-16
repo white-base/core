@@ -80,6 +80,7 @@
     // 4. module export
     if (isNode) exports.ICollection = ICollection;      // strip:
     
+    // create namespace
     _global._L.Interface            = _global._L.Interface || {};    
 
     _global._L.ICollection = ICollection;

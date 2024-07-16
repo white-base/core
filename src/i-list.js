@@ -51,9 +51,10 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.IList = IList;      // strip:
+    if (isNode) exports.IList   = IList;      // strip:
     
-    _global._L.Interface            = _global._L.Interface || {};
+    // create namespace
+    _global._L.Interface        = _global._L.Interface || {};
 
     _global._L.IList = IList;
     _global._L.Interface.IList = IList;

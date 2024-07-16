@@ -529,9 +529,10 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.NamespaceManager = NamespaceManager;    // strip:
+    if (isNode) exports.NamespaceManager    = NamespaceManager;    // strip:
     
-    _global._L.Meta                 = _global._L.Meta || {};
+    // create namespace
+    _global._L.Meta                         = _global._L.Meta || {};
 
     _global._L.NamespaceManager = NamespaceManager;
     _global._L.Meta.NamespaceManager = NamespaceManager;
