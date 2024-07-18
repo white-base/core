@@ -27,25 +27,25 @@ describe("[L.*]", () => {
                 expect(global._L.Common.ExtendError).toBeDefined();
             });
         });
-        describe("load: observer.js <Observer>", () => {
+        describe.skip("load: observer.js <Observer>", () => {
             beforeEach(() => {
                 jest.resetModules();
                 global._L = null;
              });
             it("- 예외 : 전체 로딩이 인된경우", () => {
-                expect(() => require('../src/observer')).toThrow(/Cannot read properties/);
+                expect(() => require('../src/temp/observer')).toThrow(/Cannot read properties/);
             });
             it("- 예외 : ExtendError 로딩이 안 된 경우", () => {
                 require('../src/message-code');
                 require('../src/message');
-                expect(() => require('../src/observer')).toThrow(/ExtendError/);
+                expect(() => require('../src/temp/observer')).toThrow(/ExtendError/);
             });
             it("- 예외 : Util 로딩이 안 된 경우", () => {
                 require('../src/message-code');
                 require('../src/message');
                 require('../src/extend-error');
         
-                expect(() => require('../src/observer')).toThrow(/Util/);
+                expect(() => require('../src/temp/observer')).toThrow(/Util/);
             });
             it("- namespace : observer.js ", () => {
                 require('../src/message-code');
@@ -54,10 +54,43 @@ describe("[L.*]", () => {
                 require('../src/type');
                 require('../src/util');
                 delete global._L.Common
-                require('../src/observer');
+                require('../src/temp/observer');
                 
                 expect(global._L.Observer).toBeDefined();
                 expect(global._L.Common.Observer).toBeDefined();
+            });
+        });
+        describe("load: event-emitter.js <EventEmitter>", () => {
+            beforeEach(() => {
+                jest.resetModules();
+                global._L = null;
+             });
+            it("- 예외 : 전체 로딩이 인된경우", () => {
+                expect(() => require('../src/event-emitter')).toThrow(/Cannot read properties/);
+            });
+            it("- 예외 : ExtendError 로딩이 안 된 경우", () => {
+                require('../src/message-code');
+                require('../src/message');
+                expect(() => require('../src/event-emitter')).toThrow(/ExtendError/);
+            });
+            it("- 예외 : Util 로딩이 안 된 경우", () => {
+                require('../src/message-code');
+                require('../src/message');
+                require('../src/extend-error');
+        
+                expect(() => require('../src/event-emitter')).toThrow(/Util/);
+            });
+            it("- namespace : observer.js ", () => {
+                require('../src/message-code');
+                require('../src/message');
+                require('../src/extend-error');
+                require('../src/type');
+                require('../src/util');
+                delete global._L.Common
+                require('../src/event-emitter');
+                
+                expect(global._L.EventEmitter).toBeDefined();
+                expect(global._L.Common.EventEmitter).toBeDefined();
             });
         });
         describe("load: type.js <Util.type >", () => {
@@ -288,7 +321,7 @@ describe("[L.*]", () => {
                 // require('../src/observer');
                 // require('../src/namespace-manager');
     
-                expect(() => require('../src/base-collection')).toThrow(/Observer/);
+                expect(() => require('../src/base-collection')).toThrow(/EventEmitter/);
             });
             it("- 예외 : ICollection 로딩이 인된경우", () => {
                 require('../src/message-code');
@@ -296,7 +329,7 @@ describe("[L.*]", () => {
                 require('../src/extend-error');
                 require('../src/type');
                 require('../src/util');
-                require('../src/observer');
+                require('../src/event-emitter');
                 
                 // require('../src/i-collection');
                 require('../src/i-list');
@@ -312,7 +345,7 @@ describe("[L.*]", () => {
                 require('../src/extend-error');
                 require('../src/type');
                 require('../src/util');
-                require('../src/observer');
+                require('../src/event-emitter');
                 
                 require('../src/i-collection');
                 // require('../src/i-list');
@@ -337,9 +370,9 @@ describe("[L.*]", () => {
                 require('../src/i-control-list');
                 require('../src/i-serialize');
                 require('../src/i-object');
-                require('../src/i-marshal');
-                
-                require('../src/observer');
+                require('../src/i-marshal');                
+                require('../src/event-emitter');
+
                 // require('../src/namespace-manager');
                 // require('../src/meta-registry');  
                 
@@ -359,7 +392,7 @@ describe("[L.*]", () => {
                 require('../src/i-object');
                 require('../src/i-marshal');
                 
-                require('../src/observer');
+                require('../src/event-emitter');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 // require('../src/meta-object');  
@@ -404,7 +437,7 @@ describe("[L.*]", () => {
                 require('../src/i-object');
                 require('../src/i-marshal');
                 
-                require('../src/observer');
+                require('../src/event-emitter');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 require('../src/meta-object');  
@@ -468,7 +501,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-array');
                 
-                require('../src/observer');
+                require('../src/temp/observer');
                 require('../src/namespace-manager');
                 // require('../src/meta-registry');  
     
@@ -489,7 +522,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-array');
                 
-                require('../src/observer');
+                require('../src/temp/observer');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 // require('../src/meta-object');  
@@ -511,7 +544,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-array');
                 
-                require('../src/observer');
+                require('../src/temp/observer');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 require('../src/meta-object');  
@@ -534,7 +567,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-array');
                 
-                require('../src/observer');
+                require('../src/event-emitter');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 require('../src/meta-object');  
@@ -598,7 +631,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-property');
                 
-                require('../src/observer');
+                require('../src/temp/observer');
                 require('../src/namespace-manager');
                 // require('../src/meta-registry');  
         
@@ -619,7 +652,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-property');
                 
-                require('../src/observer');
+                require('../src/temp/observer');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 // require('../src/meta-object');  
@@ -641,7 +674,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-property');
                 
-                require('../src/observer');
+                require('../src/temp/observer');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 require('../src/meta-object');  
@@ -665,7 +698,7 @@ describe("[L.*]", () => {
                 require('../src/i-marshal');
                 require('../src/i-collection-property');
                 
-                require('../src/observer');
+                require('../src/event-emitter');
                 require('../src/namespace-manager');
                 require('../src/meta-registry');  
                 require('../src/meta-object');  

@@ -1,7 +1,7 @@
 import ICollection          = require("./i-collection");
 import IList                = require("./i-list");
 import MetaObject           = require("./meta-object");
-import Observer             = require("./observer");
+import EventEmitter         = require("./event-emitter");
 // import T                    = require("./T");
 
 
@@ -29,7 +29,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * 이벤트 객체
      * @private
      */
-    $event: Observer;
+    $event: EventEmitter;
 
     /**
      * 컬렉션 소유자

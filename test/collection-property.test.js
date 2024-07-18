@@ -38,7 +38,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 const c1 = new PropertyCollection();
                 const c2 = new PropertyCollection();
                 const fun1 = function(){return 'F1'};
-                c1.$event.subscribe(fun1, 'fun1');
+                c1.$event.on('fun1', fun1);
                 
                 expect(c1.equal(c2)).toBe(false);
             });

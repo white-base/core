@@ -13,14 +13,31 @@ describe("[target: event-emitter.js]", () => {
         beforeAll(() => {
             jest.resetModules();
         });
-        describe("EventEmitter.eventName : 이벤트명 얻기", () => {
+        describe("EventEmitter.$storage : 저장소", () => {
+            it("- 확인 ", () => {
+                const e = new EventEmitter();
+                e.on('e1', ()=>{})
+                e.on('e1', ()=>{})
+                e.on('e2', ()=>{})
+                e.once('e3', ()=>{})
+
+                expect(e.$storage.e1.length).toBe(2);
+                expect(e.$storage.e2.length).toBe(1);
+                expect(e.$storage.e3.length).toBe(1);
+            });
+            it("- 예외 ", () => {
+                const e = new EventEmitter();
+                expect(()=>e.$storage = 1).toThrow('EL01501')
+            });
+        });
+        describe("EventEmitter.list : 이벤트명 얻기", () => {
             it("- 확인 ", () => {
                 const e = new EventEmitter();
                 e.on('e1', ()=>{})
                 e.on('e2', ()=>{})
                 e.once('e3', ()=>{})
 
-                expect(e.eventNames).toEqual(['e1', 'e2', 'e3']);
+                expect(e.list).toEqual(['e1', 'e2', 'e3']);
             });
         });
         describe("EventEmitter.isLog : 이벤트 로그", () => {
@@ -48,7 +65,16 @@ describe("[target: event-emitter.js]", () => {
                 e.on('e1', ()=>{})
                 e.addListener('e2', ()=>{})
 
-                expect(e.eventNames).toEqual(['e1', 'e2']);
+                expect(e.list).toEqual(['e1', 'e2']);
+            });
+            it("- 확인 : 중복 등록", () => {
+                const e = new EventEmitter();
+                const fun1 = (a,b)=> {}
+                e.on('e1', fun1)
+                e.on('e1', fun1)
+
+                expect(e.list).toEqual(['e1']);
+                expect(e.$storage.e1.length).toBe(1);
             });
             it("- 발신 확인 ", () => {
                 const e = new EventEmitter();
@@ -72,7 +98,7 @@ describe("[target: event-emitter.js]", () => {
                 e.once('e1', ()=>{})
                 e.once('e2', ()=>{})
 
-                expect(e.eventNames).toEqual(['e1', 'e2']);
+                expect(e.list).toEqual(['e1', 'e2']);
                 expect(e.emit('e1')).toBe(true)
                 expect(e.emit('e1')).toBe(false)
             });
@@ -102,11 +128,18 @@ describe("[target: event-emitter.js]", () => {
                 e.on('e1', fun1)
                 e.on('e1', fun2)
 
-                expect(e.eventNames).toEqual(['e1']);
-                expect(e.$events.e1.length).toBe(2);
+                expect(e.list).toEqual(['e1']);
+                expect(e.$storage.e1.length).toBe(2);
                 e.off('e1', fun2)
-                expect(e.eventNames).toEqual(['e1']);
-                expect(e.$events.e1.length).toBe(1);
+                expect(e.list).toEqual(['e1']);
+                expect(e.$storage.e1.length).toBe(1);
+            });
+            it("- 없는 이벤트 제거 ", () => {
+                const e = new EventEmitter();
+                var fun1 = ()=>{ result.push('E1') };
+                e.on('e1', fun1)
+                e.off('e2', fun1)
+                expect(e.list).toEqual(['e1']);
             });
             it("- 발신 확인 ", () => {
                 const e = new EventEmitter();
@@ -138,11 +171,11 @@ describe("[target: event-emitter.js]", () => {
                 e.once('e2', fun1)
                 e.once('e2', fun2)
 
-                expect(e.eventNames).toEqual(['e1', 'e2']);
-                expect(e.$events.e1.length).toBe(2);
+                expect(e.list).toEqual(['e1', 'e2']);
+                expect(e.$storage.e1.length).toBe(2);
                 e.removeAllListeners('e1')
-                expect(e.eventNames).toEqual(['e2']);
-                expect(e.$events.e2.length).toBe(2);
+                expect(e.list).toEqual(['e2']);
+                expect(e.$storage.e2.length).toBe(2);
             });
             it("- 전체 제거 ", () => {
                 const e = new EventEmitter();
@@ -153,10 +186,10 @@ describe("[target: event-emitter.js]", () => {
                 e.once('e2', fun1)
                 e.once('e2', fun2)
 
-                expect(e.eventNames).toEqual(['e1', 'e2']);
-                expect(e.$events.e1.length).toBe(2);
+                expect(e.list).toEqual(['e1', 'e2']);
+                expect(e.$storage.e1.length).toBe(2);
                 e.removeAllListeners()
-                expect(e.eventNames).toEqual([]);
+                expect(e.list).toEqual([]);
             });
         });
         describe("EventEmitter.emit() : 이벤트 발생", () => {
@@ -168,8 +201,8 @@ describe("[target: event-emitter.js]", () => {
                 e.on('e1', fun1)
                 e.once('e1', fun2)
 
-                expect(e.eventNames).toEqual(['e1']);
-                expect(e.$events.e1.length).toBe(2);
+                expect(e.list).toEqual(['e1']);
+                expect(e.$storage.e1.length).toBe(2);
                 expect(e.emit('e1')).toEqual(true);
                 expect(result).toEqual(['E1', 'E2']);
                 result = []

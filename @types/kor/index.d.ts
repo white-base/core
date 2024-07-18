@@ -1,7 +1,7 @@
 /// <reference path="global.d.ts" />
 
 import ExtendError          = require("./extend-error");
-import Observer             = require("./observer");
+import EventEmitter         = require("./event-emitter");
 import Util                 = require("./util");
 import Type                 = require("./type");
 import Message              = require("./message");
@@ -29,7 +29,7 @@ export {
     Util,
     Type,
     ExtendError,
-    Observer,
+    EventEmitter,
     Message,
     IObject,
     IMarshal,
@@ -54,7 +54,7 @@ export namespace Common {
     /** Type 네임스페이스 TODO: */
     var Type;
     var ExtendError : ExtendError;
-    var Observer : Observer;
+    var EventEmitter : EventEmitter;
     var Message  : Message;
 }
 export namespace Interface {

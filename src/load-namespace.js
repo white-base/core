@@ -45,7 +45,8 @@
         // var MetaTableCollection         = require('./meta-table').MetaTableCollection;
         // var MetaView                    = require('./meta-view').MetaView;
         // var MetaViewCollection          = require('./meta-view').MetaViewCollection;
-        var Observer                    = require('./observer').Observer;
+        // var Observer                    = require('./observer').Observer;
+        var EventEmitter                = require('./event-emitter').EventEmitter;
         // var TransactionQueue            = require('./trans-queue').TransactionQueue;
     } else {
     }
@@ -93,7 +94,8 @@
         // MetaRegistry.registerClass(MetaView, MetaView._NS, MetaView.name, MetaView);
         // MetaRegistry.registerClass(MetaViewCollection, MetaViewCollection._NS, MetaViewCollection.name);
         // MetaRegistry.registerClass(TransactionQueue, TransactionQueue._NS, TransactionQueue.name);
-        MetaRegistry.registerClass(Observer, Observer._NS, Observer.name);
+        // MetaRegistry.registerClass(Observer, Observer._NS, Observer.name);
+        MetaRegistry.registerClass(EventEmitter, EventEmitter._NS, EventEmitter.name);
         // MetaRegistry.registerClass(CustomError, CustomError._NS, CustomError.name);
         MetaRegistry.registerClass(NamespaceManager, NamespaceManager._NS, NamespaceManager.name);
         MetaRegistry.registerClass(Util, 'Common', 'Util');

@@ -6,9 +6,9 @@
     //==============================================================
     // 1. import module
     if (isNode) {                                                                   // strip:
-        var _Message                    = require('./message').Message;             // strip:
-        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
-        var _Util                       = require('./util').Util;                   // strip:
+        var _Message                    = require('../message').Message;             // strip:
+        var _ExtendError                = require('../extend-error').ExtendError;    // strip:
+        var _Util                       = require('../util').Util;                   // strip:
     }                                                                               // strip:
     var $Message                    = _global._L.Message;           // modify:
     var $ExtendError                = _global._L.ExtendError;       // modify:

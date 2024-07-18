@@ -20,7 +20,7 @@
     var $ExtendError                = _global._L.ExtendError;       // modify:
     var $Type                       = _global._L.Type;              // modify:
     var $Util                       = _global._L.Util;              // modify:
-    var $EventEmitter               = _global._L._EventEmitter;     // modify:
+    var $EventEmitter               = _global._L.EventEmitter;      // modify:
     var $ICollection                = _global._L.ICollection;       // modify:
     var $IList                      = _global._L.IList;             // modify:
     var $MetaRegistry               = _global._L.MetaRegistry;      // modify:
@@ -102,7 +102,7 @@
             /** 
              * 이벤트 객체
              * @private 
-             * @member {Observer} _L.Collection.BaseCollection#$event  
+             * @member {EventEmitter} _L.Collection.BaseCollection#$event  
              */
             Object.defineProperty(this, '$event', 
             {
@@ -493,9 +493,10 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             var _elems = [];
             
-            if (!Type.deepEqual(this.$event['$events'], this.$event._getInitObject())) {
-                obj['$subscribers'] = this.$event.$subscribers;
+            if (!Type.deepEqual(this.$event['$storage'], {})) {
+                obj['$storage'] = this.$event.$storage;
             }
+            
             if (vOpt < 2 && vOpt > -1 && this._owner) {
                 obj['_owner'] = MetaRegistry.createReferObject(this._owner);
             }
@@ -522,8 +523,8 @@
             var origin = p_origin ? p_origin : p_oGuid;
             
             this.clear();
-            if (p_oGuid['$subscribers']) {
-                this.$event.$subscribers = p_oGuid['$subscribers'];
+            if (p_oGuid['$storage']) {
+                this.$event.$storage = p_oGuid['$storage'];
             }
             if (p_oGuid['_owner']) {
                 owner = MetaRegistry.findSetObject(p_oGuid['_owner']['$ref'], origin);

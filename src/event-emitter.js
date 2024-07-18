@@ -32,7 +32,7 @@
          */
         function EventEmitter() {
             
-            var $events = {};
+            var $storage = {};
             var isLog = false;
 
             /**
@@ -40,12 +40,12 @@
              * @private
              * @member {object}  _L.Common.EventEmitter#$subscribers  
              */
-            Object.defineProperty(this, '$events',
+            Object.defineProperty(this, '$storage',
             {
-                get: function() { return $events; },
+                get: function() { return $storage; },
                 set: function(nVal) { 
                     if (!_isObject(nVal)) throw new ExtendError(/EL01501/, null, [this.constructor.name, nVal]);
-                    $events = nVal;
+                    $storage = nVal;
                 },
                 configurable: false,
                 enumerable: false
@@ -54,12 +54,12 @@
             /**
              * 전체 이벤트명
              * @private
-             * @member {object}  _L.Common.EventEmitter#eventNames  
+             * @member {object}  _L.Common.EventEmitter#list  
              */
-            Object.defineProperty(this, 'eventNames',
+            Object.defineProperty(this, 'list',
                 {
                     get: function() { 
-                        return Object.keys(this.$events);
+                        return Object.keys(this.$storage);
                     },
                     configurable: false,
                     enumerable: false
@@ -95,17 +95,20 @@
          * @param {string} p_event 이벤트 명
          * @param {function} p_listener 리스너 함수
          */
-        EventEmitter.prototype.addListener = function(p_event, p_listener) {
+        EventEmitter.prototype.on = function(p_event, p_listener) {
             if (!_isString(p_event)) throw new ExtendError(/EL01503/, null, [typeof p_event]);
             if (typeof p_listener !== 'function') throw new ExtendError(/EL01504/, null, [typeof p_listener]);
             
-            if (typeof this.$events[p_event] !== 'object') {
-                this.$events[p_event] = [];
+            if (typeof this.$storage[p_event] !== 'object') {
+                this.$storage[p_event] = [];
             }
-            this.$events[p_event].push(p_listener);
+            if (this.$storage[p_event].indexOf(p_listener) === -1) {
+                this.$storage[p_event].push(p_listener);
+            }
+            // this.$storage[p_event].push(p_listener);
 
         };
-        EventEmitter.prototype.on = EventEmitter.prototype.addListener; // 별칭
+        EventEmitter.prototype.addListener = EventEmitter.prototype.on; // 별칭
         
         /**
          * 이벤트에 대한 일회성 함수를 추가합니다. 
@@ -130,18 +133,18 @@
          * @param {string} p_event 이벤트 명
          * @param {function} p_listener 리스너 함수
          */
-        EventEmitter.prototype.removeListener = function(p_event, p_listener) {
+        EventEmitter.prototype.off = function(p_event, p_listener) {
             if (!_isString(p_event)) throw new ExtendError(/EL01507/, null, [typeof p_event]);
             if (typeof p_listener !== 'function') throw new ExtendError(/EL01508/, null, [typeof p_listener]);
             
-            if (typeof this.$events[p_event] === 'object') {
-                var idx = this.$events[p_event].indexOf(p_listener);
+            if (typeof this.$storage[p_event] === 'object') {
+                var idx = this.$storage[p_event].indexOf(p_listener);
                 if (idx > -1) {
-                    this.$events[p_event].splice(idx, 1);
+                    this.$storage[p_event].splice(idx, 1);
                 }
             }
         };
-        EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+        EventEmitter.prototype.removeListener = EventEmitter.prototype.off; // 별칭
 
         /**
          * 전체 이벤트 또는 지정한 이벤트에 등록된 이벤트명과 리스너를 모두 제거합니다.
@@ -149,17 +152,17 @@
          */
         EventEmitter.prototype.removeAllListeners = function(p_event) {
             if (!p_event) {
-                this.$events = {};  // 초기화
+                this.$storage = {};  // 초기화
             }
-            if (typeof this.$events[p_event] === 'object') {
-                delete this.$events[p_event];
+            if (typeof this.$storage[p_event] === 'object') {
+                delete this.$storage[p_event];
             }
         };
 
         /**
          * 이벤트명으로 등록된 리스너(함수)를 실행합니다.
          * @param {string} p_event 이벤트명
-         * @returns {boolean} 이벤트 실행 여부를 
+         * @returns {boolean} 리스너가 실행되었는지 여부
          */
         EventEmitter.prototype.emit = function(p_event) {
             var args = [].slice.call(arguments, 1);
@@ -168,8 +171,8 @@
 
             if (!_isString(p_event)) throw new ExtendError(/EL01509/, null, [typeof p_event]);
 
-            if (typeof this.$events[p_event] === 'object') {
-                listeners = this.$events[p_event].slice();
+            if (typeof this.$storage[p_event] === 'object') {
+                listeners = this.$storage[p_event].slice();
                 for (var i = 0; i < listeners.length; i++) {
                     listeners[i].apply(this, args);
                 }
@@ -191,7 +194,7 @@
     if (isNode) exports.EventEmitter    = EventEmitter;        // strip:
     
     // create namespace
-    _global._L.Common               = _global._L.Common || {};
+    _global._L.Common                   = _global._L.Common || {};
 
     _global._L.EventEmitter = EventEmitter;
     _global._L.Common.EventEmitter = EventEmitter; 
