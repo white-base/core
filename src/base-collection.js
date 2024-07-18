@@ -10,7 +10,7 @@
         var _ExtendError                = require('./extend-error').ExtendError;    // strip:
         var _Type                       = require('./type').Type;                   // strip:
         var _Util                       = require('./util').Util;                   // strip:
-        var _Observer                   = require('./observer').Observer;           // strip:
+        var _EventEmitter               = require('./event-emitter').EventEmitter;  // strip:
         var _ICollection                = require('./i-collection').ICollection;    // strip:
         var _IList                      = require('./i-list').IList;                // strip:
         var _MetaRegistry               = require('./meta-registry').MetaRegistry;  // strip:
@@ -20,7 +20,7 @@
     var $ExtendError                = _global._L.ExtendError;       // modify:
     var $Type                       = _global._L.Type;              // modify:
     var $Util                       = _global._L.Util;              // modify:
-    var $Observer                   = _global._L.Observer;          // modify:
+    var $EventEmitter               = _global._L._EventEmitter;     // modify:
     var $ICollection                = _global._L.ICollection;       // modify:
     var $IList                      = _global._L.IList;             // modify:
     var $MetaRegistry               = _global._L.MetaRegistry;      // modify:
@@ -28,7 +28,7 @@
 
     var Message                 = _Message              || $Message;                // strip:
     var ExtendError             = _ExtendError          || $ExtendError;            // strip:
-    var Observer                = _Observer             || $Observer;               // strip:
+    var EventEmitter            = _EventEmitter         || $EventEmitter;           // strip:
     var Type                    = _Type                 || $Type;                   // strip:
     var Util                    = _Util                 || $Util;                   // strip:
     var ICollection             = _ICollection          || $ICollection;            // strip:
@@ -41,7 +41,7 @@
     if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
     if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
     if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-    if (!Observer) throw new Error(Message.get('ES011', ['Observer', 'observer']));
+    if (!EventEmitter) throw new Error(Message.get('ES011', ['EventEmitter', 'event-emitter']));
     if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
     if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
     if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
@@ -64,7 +64,7 @@
             _super.call(this);
             
             // private variable
-            var $event = new Observer(this, this);
+            var $event = new EventEmitter();
             var _owner = p_owner || null;
             var _elements = [];
             var _descriptors = [];
@@ -232,7 +232,7 @@
              */
             Object.defineProperty(this, 'onAdd', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'add'); },
+                set: function(fun) { this.$event.on('add', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -247,7 +247,7 @@
              */
             Object.defineProperty(this, 'onAdded', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'added'); },
+                set: function(fun) { this.$event.on('added', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -262,7 +262,7 @@
              */
             Object.defineProperty(this, 'onRemove', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'remove'); },
+                set: function(fun) { this.$event.on('remove', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -277,7 +277,7 @@
              */
             Object.defineProperty(this, 'onRemoved', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'removed'); },
+                set: function(fun) { this.$event.on('removed', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -290,7 +290,7 @@
              */
             Object.defineProperty(this, 'onClear', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'clear'); },
+                set: function(fun) { this.$event.on('clear', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -303,7 +303,7 @@
              */
             Object.defineProperty(this, 'onCleared', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'cleared'); },
+                set: function(fun) { this.$event.on('cleared', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -318,7 +318,7 @@
              */
             Object.defineProperty(this, 'onChanging', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'changing'); },
+                set: function(fun) { this.$event.on('changing', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -333,7 +333,7 @@
              */
             Object.defineProperty(this, 'onChanged', 
             {
-                set: function(fun) { this.$event.subscribe(fun, 'changed'); },
+                set: function(fun) { this.$event.on('changed', fun); },
                 configurable: false,
                 enumerable: false,
             });
@@ -375,7 +375,7 @@
          * @listens _L.Collection.BaseCollection#onAdd
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_elem) {
-            this.$event.publish('add', p_idx, p_elem, this); 
+            this.$event.emit('add', p_idx, p_elem, this); 
         };
 
         /**
@@ -385,7 +385,7 @@
          * @listens _L.Collection.BaseCollection#onAdded
          */
         BaseCollection.prototype._onAdded = function(p_idx, p_elem) {
-            this.$event.publish('added', p_idx, p_elem, this); 
+            this.$event.emit('added', p_idx, p_elem, this); 
         };
 
         /**
@@ -395,7 +395,7 @@
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_elem) {
-            this.$event.publish('remove', p_idx, p_elem, this);
+            this.$event.emit('remove', p_idx, p_elem, this);
         };
 
         /**
@@ -405,7 +405,7 @@
          * @listens _L.Collection.BaseCollection#onRemoved
          */
         BaseCollection.prototype._onRemoved = function(p_idx, p_elem) {
-            this.$event.publish('removed', p_idx, p_elem, this);
+            this.$event.emit('removed', p_idx, p_elem, this);
         };
 
         /** 
@@ -413,7 +413,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
-            this.$event.publish('clear', this); 
+            this.$event.emit('clear', this); 
         };
 
         /** 
@@ -421,7 +421,7 @@
          * @listens _L.Collection.BaseCollection#onCleared
          */
         BaseCollection.prototype._onCleared = function() {
-            this.$event.publish('cleared', this); 
+            this.$event.emit('cleared', this); 
         };
 
 
@@ -432,7 +432,7 @@
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function(p_idx, p_elem) {
-            this.$event.publish('changing', p_idx, p_elem, this); 
+            this.$event.emit('changing', p_idx, p_elem, this); 
         };
 
         /** 
@@ -442,7 +442,7 @@
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function(p_idx, p_elem) {
-            this.$event.publish('changed', p_idx, p_elem, this); 
+            this.$event.emit('changed', p_idx, p_elem, this); 
         };
 
         /**
@@ -493,7 +493,7 @@
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
             var _elems = [];
             
-            if (!Type.deepEqual(this.$event['$subscribers'], this.$event._getInitObject())) {
+            if (!Type.deepEqual(this.$event['$events'], this.$event._getInitObject())) {
                 obj['$subscribers'] = this.$event.$subscribers;
             }
             if (vOpt < 2 && vOpt > -1 && this._owner) {

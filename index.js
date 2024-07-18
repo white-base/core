@@ -3,7 +3,7 @@ const Message                     = require('./src/message').Message;
 const ExtendError                 = require('./src/extend-error').ExtendError;
 const Type                        = require('./src/type').Type;
 const Util                        = require('./src/util').Util;
-const Observer                    = require("./src/observer").Observer;
+const EventEmitter                = require("./src/event-emitter").EventEmitter;
 const IObject                     = require('./src/i-object').IObject;
 const IMarshal                    = require('./src/i-marshal').IMarshal;
 const ICollection                 = require('./src/i-collection').ICollection;
@@ -24,7 +24,7 @@ const PropertyCollection          = require("./src/collection-property").Propert
 module.exports = {
     Util: Util,
     Type: Type,
-    Observer: Observer,
+    EventEmitter: EventEmitter,
     ExtendError: ExtendError,
     Message: Message,
     IObject: IObject,
@@ -47,7 +47,7 @@ module.exports = {
     Common: {
         Util: Util,
         Type: Type,
-        Observer: Observer,
+        EventEmitter: EventEmitter,
         ExtendError: ExtendError,
         Message: Message,
     },

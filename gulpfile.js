@@ -23,7 +23,7 @@ var paths = {
         'src/extend-error.js', 
         'src/type.js', 
         'src/util.js', 
-        'src/observer.js', 
+        'src/event-emitter.js', 
         'src/i-object.js', 
         'src/i-marshal.js', 
         'src/i-collection.js', 

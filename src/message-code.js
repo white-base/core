@@ -165,13 +165,24 @@
             // etc
             EL01500: '',
             // observer.js
+            // REVIEW: 전체 변겯
             EL01510: '',
-            EL01511: 'new Observer(caller); caller 는 \'object\' 타입이 아닙니다. typeof caller = $1',
-            EL01512: 'Observer.isLog 는 \'boolean\' 타입이 아닙니다. typeof isLog = $1',
-            EL01513: 'Observer.isSingleMode 는 \'boolean\' 타입이 아닙니다. typeof isSingleMode = $1',
-            EL01514: 'Observer.__$subscribers 값은  \'object\' 타입이 아닙니다. typeof __$subscribers = $1',
-            EL01515: 'Observer.__$subscribers[\'any\'] 객체가 없습니다. { any: undefined }',
-            EL01516: 'subscribe(fn, code); fn 는 \'function\' 타입이 아닙니다. typeof fn = $1',
+            // EL01511: 'new Observer(caller); caller 는 \'object\' 타입이 아닙니다. typeof caller = $1',
+            // EL01512: 'Observer.isLog 는 \'boolean\' 타입이 아닙니다. typeof isLog = $1',
+            // EL01513: 'Observer.isSingleMode 는 \'boolean\' 타입이 아닙니다. typeof isSingleMode = $1',
+            // EL01514: 'Observer.__$subscribers 값은  \'object\' 타입이 아닙니다. typeof __$subscribers = $1',
+            // EL01515: 'Observer.__$subscribers[\'any\'] 객체가 없습니다. { any: undefined }',
+            // EL01516: 'subscribe(fn, code); fn 는 \'function\' 타입이 아닙니다. typeof fn = $1',
+            EL01501: '$1.$events 는 obejct 타입입니다. typeof $events $2',
+            EL01502: '$1.isLog 는 boolean 타입입니다. typeof isLog $2',
+            EL01503: 'on(event, listener); event 는 <string> 타입이 아닙니다. typeof event == \'$1\'',
+            EL01504: 'on(event, listener); listener 는 <function> 타입이 아닙니다. typeof listener == \'$1\'',
+            EL01505: 'once(event, listener); event 는 string 타입이 아닙니다. typeof event == \'$1\'',
+            EL01506: 'once(event, listener); listener 는 <function> 타입이 아닙니다. typeof listener == \'$1\'',
+            EL01507: 'off(event, listener); event 는 <string> 타입이 아닙니다. typeof event == \'$1\'',
+            EL01508: 'off(event, listener); listener 는 <function> 타입이 아닙니다. typeof listener == \'$1\'',
+            EL01509: 'emit(event); event 는 <string> 타입이 아닙니다. typeof event == \'$1\'',
+            EL01510: '',
             
             // Interface.*
             // EL02

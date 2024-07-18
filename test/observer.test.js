@@ -8,7 +8,7 @@ let EventClass;
 
 //==============================================================
 // test
-describe("[target: observer.js]", () => {
+describe.skip("[target: observer.js]", () => {
     describe("< 이벤트 단독 사용 >", () => {
         beforeAll(() => {
             jest.resetModules();
