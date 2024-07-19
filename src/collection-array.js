@@ -82,7 +82,7 @@
             var count = this.count - 1;   // [idx] 포인트 이동
             
             this.$elements.splice(p_pos, 1);
-            this.$descriptors.splice(p_pos, 1);
+            this._descriptors.splice(p_pos, 1);
             
             if (p_pos < count) {
                 for (var i = p_pos; i < count; i++) {   // 참조 변경(이동)
@@ -143,7 +143,7 @@
 
             if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
                 for (var i = 0; i < p_oGuid['_desc'].length; i++) {
-                    this.$descriptors.push(p_oGuid['_desc'][i]);
+                    this._descriptors.push(p_oGuid['_desc'][i]);
                 }
             }
             for(var i = 0; i < p_oGuid['_elem'].length; i++) {
@@ -188,7 +188,7 @@
 
             for (var i = 0; i < this.count; i++) delete this[i];
             this.$elements = [];
-            this.$descriptors = [];
+            this._descriptors = [];
             
             this._onCleared();    // event
         };
@@ -218,7 +218,7 @@
                 this._onAdd(p_pos, p_elem);
                 // data process
                 this.$elements.splice(p_pos, 0, p_elem);            
-                this.$descriptors.splice(p_pos, 0, p_desc);
+                this._descriptors.splice(p_pos, 0, p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [p_pos], p_desc);

@@ -133,7 +133,7 @@
 
             this.$elements.splice(p_pos, 1);
             this.$keys.splice(p_pos, 1);
-            this.$descriptors.splice(p_pos, 1);
+            this._descriptors.splice(p_pos, 1);
             
             if (p_pos < count) {        // 참조 자료 변경
                 for (var i = p_pos; i < count; i++) {
@@ -204,7 +204,7 @@
             if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
                 if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) throw new ExtendError(/EL04222/, null, [p_oGuid['_elem'].length, p_oGuid['_desc'].length]);
                 for (var i = 0; i < p_oGuid['_desc'].length; i++) {
-                    this.$descriptors.push(p_oGuid['_desc'][i]);
+                    this._descriptors.push(p_oGuid['_desc'][i]);
                 }
             }
 
@@ -280,7 +280,7 @@
                 // data process
                 this.$elements.push(p_elem);
                 this.$keys.push(p_key);
-                this.$descriptors.push(p_desc);
+                this._descriptors.push(p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [index], p_desc);
@@ -312,7 +312,7 @@
                 delete this[propName];
             }
             this.$elements = [];
-            this.$descriptors = [];
+            this._descriptors = [];
             this.$keys = [];
             
             this._onCleared();

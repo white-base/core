@@ -65,39 +65,27 @@
             
             // private variable
             var $event = new EventEmitter();
+            var $elements = [];
+            var $KEYWORD = [];
+            // protected variable
             var _owner = p_owner || null;
-            var _elements = [];
             var _descriptors = [];
             var _elemTypes  = []; 
-            var $KEYWORD = [];
 
-            /**
-             * 내부 변수 접근
-             * @member {string} _L.Meta.Entity.BaseColumn#$elements
-             * @readonly
-             * @private
-             */
-            Object.defineProperty(this, '$elements',
-            {
-                get: function() { return _elements; },
-                set: function(nVal) { _elements = nVal; },
-                configurable: false,
-                enumerable: false,
-            });
-
-            /**
-             * 내부 변수 접근
-             * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
-             * @readonly
-             * @private
-             */
-            Object.defineProperty(this, '$descriptors',
-            {
-                get: function() { return _descriptors; },
-                set: function(nVal) { _descriptors = nVal; },
-                configurable: false,
-                enumerable: false,
-            });
+            
+            // /**
+            //  * 내부 변수 접근
+            //  * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
+            //  * @readonly
+            //  * @private
+            //  */
+            // Object.defineProperty(this, '$descriptors',
+            // {
+            //     get: function() { return _descriptors; },
+            //     set: function(nVal) { _descriptors = nVal; },
+            //     configurable: false,
+            //     enumerable: false,
+            // });
 
             /** 
              * 이벤트 객체
@@ -107,6 +95,33 @@
             Object.defineProperty(this, '$event', 
             {
                 get: function() { return $event; },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /**
+             * 내부 변수 접근
+             * @member {string} _L.Meta.Entity.BaseColumn#$elements
+             * @readonly
+             * @private
+             */
+            Object.defineProperty(this, '$elements',
+            {
+                get: function() { return $elements; },
+                set: function(nVal) { $elements = nVal; },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /** 
+             * 컬렉션 예약어
+             * @private
+             * @member {array<string>}  _L.Collection.BaseCollection#$KEYWORD  
+             */
+            Object.defineProperty(this, '$KEYWORD', 
+            {
+                get: function() { return $KEYWORD; },
+                set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },
                 configurable: false,
                 enumerable: false,
             });
@@ -147,11 +162,13 @@
              */
             Object.defineProperty(this, '_descriptors', 
             {
-                get: function() {
-                    var arr = [];
-                    for (var i = 0; i < _descriptors.length; i++) arr.push(_descriptors[i]);
-                    return arr;
-                },
+                // get: function() {
+                //     var arr = [];
+                //     for (var i = 0; i < _descriptors.length; i++) arr.push(_descriptors[i]);
+                //     return arr;
+                // },
+                get: function() { return _descriptors; },
+                set: function(nVal) { _descriptors = nVal; },
                 configurable: false,
                 enumerable: false,
             });
@@ -207,19 +224,6 @@
                 get: function() { return this._elements.length; },
                 enumerable: false,
                 configurable: false
-            });
-            
-            /** 
-             * 컬렉션 예약어
-             * @private
-             * @member {array<string>}  _L.Collection.BaseCollection#$KEYWORD  
-             */
-            Object.defineProperty(this, '$KEYWORD', 
-            {
-                get: function() { return $KEYWORD; },
-                set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },
-                configurable: false,
-                enumerable: false,
             });
 
             /**

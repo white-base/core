@@ -678,7 +678,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 let s2 = new Student();
                 s2.rows.add('A0');
                 s2.rows.$elements = [];
-                s2.rows.$descriptors = []
+                s2.rows._descriptors = []
 
                 expect(s1.rows._elements.length).toBe(0)
                 expect(s1.rows._descriptors.length).toBe(1)
