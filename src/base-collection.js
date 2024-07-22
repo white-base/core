@@ -50,9 +50,8 @@
     //==============================================================
     // 3. module implementation
     var BaseCollection  = (function (_super) {
-
         /**
-        * 기본 컬렉션을 생성합니다.(최상위)
+        * 기본 컬렉션을 생성합니다.
         * @abstract
         * @extends _L.Meta.MetaObject
         * @constructs _L.Collection.BaseCollection
@@ -74,7 +73,7 @@
             var _elemTypes  = [];
 
             /** 
-             * 이벤트 객체
+             * 이벤트 객체입니다.
              * @private
              * @member {EventEmitter} _L.Collection.BaseCollection#$event  
              */
@@ -86,9 +85,9 @@
             });
 
             /**
-             * 내부 변수 접근
-             * @member {string} _L.Meta.Entity.BaseColumn#$elements
+             * 컬렉션 요소들입니다.
              * @private
+             * @member {string} _L.Meta.Entity.BaseColumn#$elements
              */
             Object.defineProperty(this, '$elements',
             {
@@ -99,9 +98,9 @@
             });
 
             /**
-             * 내부 변수 접근
-             * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
+             * 컬렉션 요소의 기술자들 (getter, setter)입니다.
              * @private
+             * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
              */
             Object.defineProperty(this, '$descriptors',
             {
@@ -112,9 +111,9 @@
             });
 
             /** 
-             * 컬렉션 예약어
+             * 컬렉션 예약어입니다.
              * @private
-             * @member {array<string>}  _L.Collection.BaseCollection#$KEYWORD  
+             * @member {array<string>}  _L.Collection.BaseCollection#$KEYWORD
              */
             Object.defineProperty(this, '$KEYWORD', 
             {
@@ -125,7 +124,7 @@
             });
 
             /** 
-             * 컬렉션 소유자
+             * 컬렉션 소유자입니다.
              * @protected 
              * @member {object} _L.Collection.BaseCollection#_owner  
              */
@@ -138,7 +137,7 @@
             });
 
             /** 
-             * 컬렉션 요소의 타입 (제약조건)
+             * 컬렉션 요소의 타입 제약조건입니다.
              * @protected 
              * @member {array<any>}  _L.Collection.BaseCollection#_elemTypes  
              */
@@ -162,7 +161,7 @@
             });
 
             /**
-             * 컬렉션 요소의 목록, _elements 의 별칭
+             * 컬렉션 요소의 목록입니다.
              * @protected 
              * @readonly
              * @member {array}  _L.Collection.BaseCollection#_list  
@@ -179,7 +178,7 @@
             });
 
             /**
-             * 컬렉션 요소의 갯수
+             * 컬렉션 요소의 갯수입니다.
              * @readonly
              * @member {number} _L.Collection.BaseCollection#count 
              */
@@ -191,7 +190,7 @@
             });
 
             /**
-             * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다. 
+             * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onAdd
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -206,7 +205,7 @@
             });
 
             /** 
-             * 컬렉션 요소를 추가 후에 발생하는 이벤트 입니다.
+             * 컬렉션 요소를 추가한 후에 발생하는 이벤트입니다.
              * @event _L.Collection.BaseCollection#onAdded
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -221,7 +220,7 @@
             });
 
             /** 
-             * 컬렉션 요소를 삭제 전에 발생하는 이벤트 입니다.
+             * 컬렉션 요소를 삭제하기 전에 발생하는 이벤트입니다.
              * @event _L.Collection.BaseCollection#onRemove
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -236,7 +235,7 @@
             });
 
             /** 
-             * 컬렉션 요소를 삭제 후에 발생하는 이벤트 입니다.
+             * 컬렉션 요소를 삭제한 후에 발생하는 이벤트입니다.
              * @event _L.Collection.BaseCollection#onRemoved
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -251,7 +250,7 @@
             });
 
             /** 
-             * 컬렉션을 초기화 전에 발생하는 이벤트 입니다.
+             *컬렉션을 초기화하기 전에 발생하는 이벤트입니다.
              * @event _L.Collection.BaseCollection#onClear
              * @param {function}    p_callback
              * @param {this}        p_callback.p_this 현재 컬렉션
@@ -264,7 +263,7 @@
             });
 
             /** 
-             * 컬렉션을 초기화 후에 발생하는 이벤트 입니다.
+             * 컬렉션을 초기화한 후에 발생하는 이벤트입니다.
              * @event _L.Collection.BaseCollection#onCleared
              * @param {function}    p_callback
              * @param {this}        p_callback.p_this 현재 컬렉션
@@ -277,7 +276,7 @@
             });
 
             /** 
-             * 컬렉션 요소를 변경 전에 발생하는 이벤트 입니다.
+             * 컬렉션 요소를 변경하기 전에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onChanging 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -292,7 +291,7 @@
             });
 
             /** 
-             * 컬렉션 요소를 변경 후에 발생하는 이벤트 입니다.
+             * 컬렉션 요소를 변경한 후에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onChanged 
              * @param {function}    p_callback
              * @param {number}      p_callback.p_idx 삭제하는 index
@@ -326,7 +325,7 @@
         BaseCollection._KIND = 'abstract';
         
         /**
-         * onAdd 이벤트를 발생합니다.
+         * onAdd 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onAdd
@@ -336,7 +335,7 @@
         };
 
         /**
-         * onAdded 이벤트를 발생합니다.
+         * onAdded 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onAdded
@@ -346,7 +345,7 @@
         };
 
         /**
-         * onRemove 이벤트를 발생합니다.
+         * onRemove 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onRemove
@@ -356,7 +355,7 @@
         };
 
         /**
-         * onRemoved 이벤트를 발생합니다.
+         * onRemoved 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onRemoved
@@ -366,7 +365,7 @@
         };
 
         /** 
-         * onClear 이벤트를 발생합니다.
+         * onClear 이벤트를 발생시킵니다.
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
@@ -374,16 +373,15 @@
         };
 
         /** 
-         * onCheared 이벤트를 발생합니다.
+         * onCheared 이벤트를 발생시킵니다.
          * @listens _L.Collection.BaseCollection#onCleared
          */
         BaseCollection.prototype._onCleared = function() {
             this.$event.emit('cleared', this); 
         };
 
-
         /** 
-         * onChanging 이벤트를 발생합니다.
+         * onChanging 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onChanging
@@ -393,7 +391,7 @@
         };
 
         /** 
-         * onChanged 이벤트를 발생합니다.
+         * onChanged 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
          * @listens _L.Collection.BaseCollection#onChanged
@@ -403,7 +401,7 @@
         };
 
         /**
-         * 컬렉션에 요소를 추가 할 때 설정되는 기본 기술자입니다.
+         * 컬렉션에 요소를 추가할 때 설정되는 기본 기술자입니다.
          * @protected
          * @param {number} p_idx 인덱스 번호
          */
@@ -411,9 +409,6 @@
             return {
                 get: function() { return this.$elements[p_idx]; },
                 set: function(nVal) {
-                    // var types = ['_req_'];
-                    // types = [types.concat(this._elemTypes)];
-                    // if (this._elemTypes.length > 0) Util.matchType(types, nVal);
                     if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
                     this._onChanging(p_idx, nVal);  // before event
                     this.$elements[p_idx] = nVal;
@@ -425,7 +420,7 @@
         };
 
         /** 
-         * 컬렉션의 요소를 삭제합니다. (내부)
+         * 컬렉션의 요소를 삭제합니다. (내부 사용)
          * @abstract 
          */
         BaseCollection.prototype._remove  = function() {
@@ -433,7 +428,7 @@
         };
 
         /**
-         * 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
+         * 컬렉션 객체를 직렬화(guid 타입) 객체로 반환합니다.  
          * (순환참조는 $ref 값으로 대체된다.)  
          * @param {number} [p_vOpt=0] 가져오기 옵션
          * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
@@ -453,11 +448,9 @@
             if (!Type.deepEqual(this.$event['$storage'], {})) {
                 obj['$storage'] = this.$event.$storage;
             }
-            
             if (vOpt < 2 && vOpt > -1 && this._owner) {
                 obj['_owner'] = MetaRegistry.createReferObject(this._owner);
             }
-            
             for (var i = 0; i < this._elemTypes.length; i++) {
                 var elem = this._elemTypes[i];
                 if (typeof elem === 'function') _elems.push(MetaRegistry.createNsReferObject(elem));
@@ -500,12 +493,13 @@
          */
         BaseCollection.prototype.remove = function(p_elem) {
             var idx = this.$elements.indexOf(p_elem);
+
             if (idx >= 0 && this.removeAt(idx)) return idx;
             return -1;
         };
         
         /**
-         * 컬렉션의 지정위치에 요소를 삭제합니다. 
+         * 컬렉션에서 지정된 위치의 요소를 삭제합니다.
          * @param {number} p_pos 인덱스 번호
          * @returns {boolean} 처리 결과  
          */
@@ -533,7 +527,7 @@
         };
 
         /**
-         * 컬렉션에 요소를 조회합니다.
+         *  컬렉션에서 요소를 조회합니다.
          * @param {any} p_elem 요소
          * @returns {number} 0 보다 작으면 존재하지 않음
          */
@@ -546,7 +540,7 @@
          * @abstract 
          */
         BaseCollection.prototype.add  = function() {
-            throw new ExtendError(/EL04114/, null, ['add(any): number']);
+            throw new ExtendError(/EL04114/, null, []);
         };
         
         /**
@@ -555,7 +549,7 @@
          * @fires _L.Collection.BaseCollection#onClear 
          */
         BaseCollection.prototype.clear  = function() {
-            throw new ExtendError(/EL04115/, null, ['clear()']);
+            throw new ExtendError(/EL04115/, null, []);
         };
 
         return BaseCollection;

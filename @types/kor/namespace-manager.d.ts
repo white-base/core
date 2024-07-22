@@ -23,7 +23,7 @@ declare class NamespaceManager implements IList, IListControl, ISerialize {
      * 네임스페이스 요소 목록
      * @readonly
      */
-    list: string[];
+    _list: string[];
 
     /**
      * 네임스페이스 요소 갯수
