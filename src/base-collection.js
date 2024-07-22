@@ -66,30 +66,16 @@
             // private variable
             var $event = new EventEmitter();
             var $elements = [];
+            var $descriptors = [];
             var $KEYWORD = [];
-            // protected variable
-            var _owner = p_owner || null;
-            var _descriptors = [];
-            var _elemTypes  = []; 
-
             
-            // /**
-            //  * 내부 변수 접근
-            //  * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
-            //  * @readonly
-            //  * @private
-            //  */
-            // Object.defineProperty(this, '$descriptors',
-            // {
-            //     get: function() { return _descriptors; },
-            //     set: function(nVal) { _descriptors = nVal; },
-            //     configurable: false,
-            //     enumerable: false,
-            // });
+            // protected variable
+            var _owner ;
+            var _elemTypes  = [];
 
             /** 
              * 이벤트 객체
-             * @private 
+             * @private
              * @member {EventEmitter} _L.Collection.BaseCollection#$event  
              */
             Object.defineProperty(this, '$event', 
@@ -102,13 +88,25 @@
             /**
              * 내부 변수 접근
              * @member {string} _L.Meta.Entity.BaseColumn#$elements
-             * @readonly
              * @private
              */
             Object.defineProperty(this, '$elements',
             {
                 get: function() { return $elements; },
                 set: function(nVal) { $elements = nVal; },
+                configurable: false,
+                enumerable: false,
+            });
+
+            /**
+             * 내부 변수 접근
+             * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
+             * @private
+             */
+            Object.defineProperty(this, '$descriptors',
+            {
+                get: function() { return $descriptors; },
+                set: function(nVal) { $descriptors = nVal; },
                 configurable: false,
                 enumerable: false,
             });
@@ -121,7 +119,7 @@
             Object.defineProperty(this, '$KEYWORD', 
             {
                 get: function() { return $KEYWORD; },
-                set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },
+                set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },  // REVIEW: 예약어 중복
                 configurable: false,
                 enumerable: false,
             });
@@ -135,40 +133,6 @@
             {   
                 get: function() { return _owner; },
                 set: function(val) { _owner = val; },
-                configurable: false,
-                enumerable: false,
-            });
-
-            /** 
-             * 컬렉션 요소들
-             * @readonly
-             * @member {array<any>} _L.Collection.BaseCollection#_elements  
-             */
-            Object.defineProperty(this, '_elements', 
-            {
-                get: function() {
-                    var arr = [];
-                    for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
-                    return arr;
-                },
-                configurable: false,
-                enumerable: false,
-            });
-
-            /** 
-             * 컬렉션 요소의 기술들 (getter, setter)
-             * @readonly
-             * @member {array<any>} _L.Collection.BaseCollection#_descriptors  
-             */
-            Object.defineProperty(this, '_descriptors', 
-            {
-                // get: function() {
-                //     var arr = [];
-                //     for (var i = 0; i < _descriptors.length; i++) arr.push(_descriptors[i]);
-                //     return arr;
-                // },
-                get: function() { return _descriptors; },
-                set: function(nVal) { _descriptors = nVal; },
                 configurable: false,
                 enumerable: false,
             });
@@ -198,17 +162,17 @@
             });
 
             /**
-             * 컬렉션 요소의 목록
+             * 컬렉션 요소의 목록, _elements 의 별칭
+             * @protected 
              * @readonly
              * @member {array}  _L.Collection.BaseCollection#_list  
              */
             Object.defineProperty(this, '_list', 
             {
                 get: function() {
-                    return this._elements;
-                    // var arr = [];
-                    // for (var i = 0; i < _elements.length; i++) arr.push(_elements[i]);
-                    // return arr;
+                    var arr = [];
+                    for (var i = 0; i < $elements.length; i++) arr.push(this.$elements[i]);
+                    return arr;
                 },
                 configurable: false,
                 enumerable: false,
@@ -221,7 +185,7 @@
              */
             Object.defineProperty(this, 'count', 
             {
-                get: function() { return this._elements.length; },
+                get: function() { return this.$elements.length; },
                 enumerable: false,
                 configurable: false
             });
@@ -342,22 +306,11 @@
                 enumerable: false,
             });
 
-            // inner variable access
-            // this.__GET$elements = function(call) {
-            //     if (call instanceof BaseCollection) return _elements;
-            // }
-            // this.__GET$descriptors = function(call) {
-            //     if (call instanceof BaseCollection) return _descriptors;
-            // }
-            // this.__SET$elements = function(val, call) {
-            //     if (call instanceof BaseCollection) _elements = val;
-            // }
-            // this.__SET$descriptors = function(val, call) {
-            //     if (call instanceof BaseCollection) _descriptors = val;
-            // }
+            // object settging
+            this._owner = p_owner || null;
 
             // 예약어 등록
-            this.$KEYWORD = ['$event', '_owner', '_elements', '_descriptors', '_elemTypes', '_list', 'count', '$KEYWORD'];
+            this.$KEYWORD = ['$event', '_owner', '$elements', '$descriptors', '_elemTypes', '_list', 'count', '$KEYWORD'];
             this.$KEYWORD = ['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged'];
             this.$KEYWORD = ['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged'];
             this.$KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];
@@ -546,7 +499,7 @@
          * @returns {number} 삭제한 인덱스 번호
          */
         BaseCollection.prototype.remove = function(p_elem) {
-            var idx = this._elements.indexOf(p_elem);
+            var idx = this.$elements.indexOf(p_elem);
             if (idx >= 0 && this.removeAt(idx)) return idx;
             return -1;
         };
@@ -560,7 +513,7 @@
             var elem;
             
             if (typeof p_pos !== 'number') throw new ExtendError(/EL04113/, null, [typeof p_pos]);
-            elem = this._elements[p_pos];
+            elem = this.$elements[p_pos];
             if (elem) {
                 this._onRemove(p_pos, elem);
                 if (!this._remove(p_pos)) return false;
@@ -576,7 +529,7 @@
          * @returns {boolean}
          */
         BaseCollection.prototype.contains = function(p_elem) {
-            return this._elements.indexOf(p_elem) > -1;
+            return this.$elements.indexOf(p_elem) > -1;
         };
 
         /**
@@ -585,7 +538,7 @@
          * @returns {number} 0 보다 작으면 존재하지 않음
          */
         BaseCollection.prototype.indexOf = function(p_elem) {
-            return this._elements.indexOf(p_elem);
+            return this.$elements.indexOf(p_elem);
         };
 
         /** 

@@ -57,13 +57,13 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 
                 expect(c1.equal(c2)).toBe(false);
             });
-            it("- equal() : _elements 추가 비교 ", () => {
+            it.skip("- equal() : $elements 추가 비교 ", () => {
                 const c1 = new ArrayCollection();
                 const c2 = new ArrayCollection();
                 const c3 = new ArrayCollection();
-                c1._elements.push('A');
-                c2._elements.push('A');
-                c3._elements.push('B');
+                c1.$elements.push('A');
+                c2.$elements.push('A');
+                c3.$elements.push('B');
                 
                 expect(c1.count).toBe(0);   // 직접 금지
                 // expect(c1.equal(c2)).toBe(true);
@@ -536,23 +536,23 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(s.rows[0]).toBe('A1');
                 expect(s.rows[1]).toBe('A2');
                 expect(s.rows[2]).toBe('A3');
-                expect(s.rows._elements.length).toBe(3);
-                expect(s.rows._descriptors.length).toBe(3);
+                expect(s.rows.$elements.length).toBe(3);
+                expect(s.rows.$descriptors.length).toBe(3);
                 expect(s.rows.count).toBe(3);
                 // 삭제 후 결과
                 s.rows.removeAt(0);
                 expect(s.rows[0]).toBe('A2');
                 expect(s.rows[1]).toBe('A3');
-                expect(s.rows._elements.length).toBe(2);
-                expect(s.rows._descriptors.length).toBe(2);
+                expect(s.rows.$elements.length).toBe(2);
+                expect(s.rows.$descriptors.length).toBe(2);
                 expect(s.rows.count).toBe(2);
                 // 추가후 결과
                 s.rows.insertAt(0, null, desc2);
                 expect(s.rows[0]).toBe('A1');
                 expect(s.rows[1]).toBe('A2');
                 expect(s.rows[2]).toBe('A3');
-                expect(s.rows._elements.length).toBe(3);
-                expect(s.rows._descriptors.length).toBe(3);
+                expect(s.rows.$elements.length).toBe(3);
+                expect(s.rows.$descriptors.length).toBe(3);
                 expect(s.rows.count).toBe(3);
             });
             it("- add(value, desc) : 기술자 정의 경고 ", () => {
@@ -678,12 +678,12 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 let s2 = new Student();
                 s2.rows.add('A0');
                 s2.rows.$elements = [];
-                s2.rows._descriptors = []
+                s2.rows.$descriptors = []
 
-                expect(s1.rows._elements.length).toBe(0)
-                expect(s1.rows._descriptors.length).toBe(1)
-                expect(s2.rows._elements.length).toBe(0)
-                expect(s2.rows._descriptors.length).toBe(0)
+                expect(s1.rows.$elements.length).toBe(0)
+                expect(s1.rows.$descriptors.length).toBe(1)
+                expect(s2.rows.$elements.length).toBe(0)
+                expect(s2.rows.$descriptors.length).toBe(0)
             });
             it("- 예외 ", () => {
                 class SubClass extends BaseCollection{

@@ -48,7 +48,7 @@
          */
         function NamespaceManager() {
 
-            var _storage = this.$createNsRefer();
+            var $storage = this.$createNsRefer();
             var _elemTypes  = []; 
             var isOverlap = false;
             
@@ -61,23 +61,24 @@
              */
             Object.defineProperty(this, '$storage',
             {
-                set: function(nVal) { _storage = nVal; },
+                get: function() { return $storage; },
+                set: function(nVal) { $storage = nVal; },
                 configurable: false,
                 enumerable: false,
             });
 
-            /**
-             * 네임스페이스 저장소
-             * @member {array} _L.Meta.NamespaceManager#_storage 
-             * @private
-             * @readonly
-             */
-            Object.defineProperty(this, '_storage',
-            {
-                get: function() { return _storage; },
-                configurable: false,
-                enumerable: false
-            });
+            // /**
+            //  * 네임스페이스 저장소
+            //  * @member {array} _L.Meta.NamespaceManager#$storage 
+            //  * @private
+            //  * @readonly
+            //  */
+            // Object.defineProperty(this, '$storage',
+            // {
+            //     get: function() { return $storage; },
+            //     configurable: false,
+            //     enumerable: false
+            // });
 
             /** 
              * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용
@@ -105,7 +106,7 @@
             Object.defineProperty(this, '_list', 
             {
                 get: function() {
-                    var storage = this._storage;
+                    var storage = this.$storage;
                     var arr = [];
                     var stack = [];
                     findElement(storage);
@@ -159,7 +160,7 @@
 
             // inner variable access
             // this.__SET$storage = function(val, call) {
-            //     if (call instanceof NamespaceManager) _storage = val;
+            //     if (call instanceof NamespaceManager) $storage = val;
             // }
 
             this._$KEYWORD = ['namespace', 'ns', 'NS', '_type'];    // 금지단어
@@ -250,7 +251,7 @@
          * @param {string | array<string>} p_ns 네임스페이스 이름
          */
         NamespaceManager.prototype.addNamespace = function(p_ns) {
-            var parent = this._storage;
+            var parent = this.$storage;
             var sections;
         
             try {
@@ -276,7 +277,7 @@
          * @param {string | array<string>} p_ns 네임스페이스 이름
          */
         NamespaceManager.prototype.delNamespace = function(p_ns) {
-            var parent = this._storage;
+            var parent = this.$storage;
             var sections;
         
             try {
@@ -300,7 +301,7 @@
          * @returns {object} 경로에 대한 객체
          */
         NamespaceManager.prototype.path = function(p_ns) {
-            var parent = this._storage;
+            var parent = this.$storage;
             var sections;
 
             if (!p_ns) return parent;
@@ -327,7 +328,7 @@
          * @param {any} p_elem 요소
          */
         NamespaceManager.prototype.add = function(p_fullName, p_elem) {
-            var parent = this._storage;
+            var parent = this.$storage;
             var sections;
             var oPath;
             var key;
@@ -368,7 +369,7 @@
          * @returns {boolean}
          */
         NamespaceManager.prototype.del = function(p_fullName) {
-            var parent = this._storage;
+            var parent = this.$storage;
             var sections;
 
             try {
@@ -407,7 +408,7 @@
          * @returns {(object | function)?}
          */
         NamespaceManager.prototype.find = function(p_fullName) {
-            var parent = this._storage;
+            var parent = this.$storage;
             var sections;
 
             try {
@@ -432,7 +433,7 @@
          * @returns {string?}
          */
         NamespaceManager.prototype.getPath = function(p_elem) {
-            var namespace = this._storage;
+            var namespace = this.$storage;
             var stack = [];
 
             if (!p_elem) throw new ExtendError(/EL03341/, null, [typeof p_elem]);

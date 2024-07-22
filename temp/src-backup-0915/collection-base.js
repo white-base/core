@@ -185,7 +185,7 @@
              */
             Object.defineProperty(this, 'count', {
                 get: function() {
-                    return this._elements.length;
+                    return this.$elements.length;
                 },
                 enumerable: false,
                 configurable: true
@@ -314,11 +314,11 @@
          */
         BaseCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this._elements[p_idx]; },
+                get: function() { return this.$elements[p_idx]; },
                 set: function(newValue) {
                     var typeName;
                     if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
-                    this._elements[p_idx] = newValue; 
+                    this.$elements[p_idx] = newValue; 
                 },
                 enumerable: true,
                 configurable: true
@@ -344,7 +344,7 @@
             
         //     if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
         //     if (!this._compare(this._owner, p_target._owner)) return false;
-        //     if (!this._compare(this._elements, p_target._elements)) return false;
+        //     if (!this._compare(this.$elements, p_target._elements)) return false;
         //     if (!this._compare(this._descriptors, p_target._descriptors)) return false;
         //     if (!this._compare(this._elemTypes, p_target._elemTypes)) return false;
         //     return true;
@@ -420,8 +420,8 @@
             obj._elemTypes = _elems;
 
             // obj._elem = [];
-            // for (var i = 0; i < this._elements.length; i++) {
-            //     var elem = this._elements[i];
+            // for (var i = 0; i < this.$elements.length; i++) {
+            //     var elem = this.$elements[i];
             //     if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
             //     else obj._elem.push(elem);
             // }
@@ -458,7 +458,7 @@
          * @returns {boolean} 처리결과
          */
         BaseCollection.prototype.remove = function(p_elem) {
-            var idx = this._elements.indexOf(p_elem);
+            var idx = this.$elements.indexOf(p_elem);
             return idx < 0 ? false : this.removeAt(idx);
         };
         
@@ -471,7 +471,7 @@
             var elem;
             
             if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
-            elem = this._elements[p_idx];
+            elem = this.$elements[p_idx];
             if (this.exist(p_idx)) {
                 // before event
                 this._onChanging();
@@ -491,7 +491,7 @@
          * @returns {Boolean}
          */
         BaseCollection.prototype.contains = function(p_elem) {
-            return this._elements.indexOf(p_elem) > -1;
+            return this.$elements.indexOf(p_elem) > -1;
         };
 
         /**
@@ -500,7 +500,7 @@
          * @returns {Number}
          */
         BaseCollection.prototype.indexOf = function(p_elem) {
-            return this._elements.indexOf(p_elem);
+            return this.$elements.indexOf(p_elem);
         };
 
         /**

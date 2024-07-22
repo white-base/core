@@ -117,10 +117,10 @@
          */
         TransactionCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this._elements[p_idx]; },
+                get: function() { return this.$elements[p_idx]; },
                 set: function(nVal) {
                     if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
-                    this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
+                    this._transQueue.update(p_idx, nVal, this.$elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
                 },
                 configurable: true,

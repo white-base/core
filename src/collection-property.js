@@ -56,7 +56,7 @@
         function PropertyCollection(p_owner) {
             _super.call(this, p_owner); 
 
-            var _keys = [];
+            var $keys = [];
 
             /**
              * 내부 변수 접근
@@ -66,39 +66,30 @@
              */
             Object.defineProperty(this, '$keys',
             {
-                get: function() { return _keys; },
-                set: function(nVal) { _keys = nVal; },
+                get: function() { return $keys; },
+                set: function(nVal) { $keys = nVal; },
                 configurable: false,
                 enumerable: false,
             });
 
-            /** 
-             * 컬렉션 요소의 키값들
-             * @readonly
-             * @member {array<string>} _L.Collection.PropertyCollection#_keys 
-             */
-            Object.defineProperty(this, '_keys',
-            {
-                get: function() {
-                    var arr = [];
-                    for (var i = 0; i < _keys.length; i++) arr.push(_keys[i]);
-                    return arr;
-                },
-                configurable: false,
-                enumerable: false
-            });
-
-            // inner variable access
-            // this.__GET$keys = function(call) {
-            //     if (call instanceof PropertyCollection) return _keys;
-            // }
-            // this.__SET$keys = function(val, call) {
-            //     if (call instanceof PropertyCollection) _keys = val;
-            // }
-
+            // /** 
+            //  * 컬렉션 요소의 키값들
+            //  * @readonly
+            //  * @member {array<string>} _L.Collection.PropertyCollection#_keys 
+            //  */
+            // Object.defineProperty(this, '_keys',
+            // {
+            //     get: function() {
+            //         var arr = [];
+            //         for (var i = 0; i < _keys.length; i++) arr.push(_keys[i]);
+            //         return arr;
+            //     },
+            //     configurable: false,
+            //     enumerable: false
+            // });
 
             // 예약어 등록 
-            this.$KEYWORD = ['_keys', 'indexOf', 'exist', 'keyOf'];
+            this.$KEYWORD = ['$keys', 'indexOf', 'exist', 'keyOf'];
 
             Util.implements(PropertyCollection, this);      // strip:
         }
@@ -133,11 +124,11 @@
 
             this.$elements.splice(p_pos, 1);
             this.$keys.splice(p_pos, 1);
-            this._descriptors.splice(p_pos, 1);
+            this.$descriptors.splice(p_pos, 1);
             
             if (p_pos < count) {        // 참조 자료 변경
                 for (var i = p_pos; i < count; i++) {
-                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
+                    var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
                     propName = this.keyOf(i);
                     Object.defineProperty(this, [i], desc);
                     Object.defineProperty(this, propName, desc);
@@ -166,15 +157,15 @@
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
-            if (this._descriptors.length > 0) {
+            if (this.$descriptors.length > 0) {
                 obj['_desc'] = [];
-                for (var i = 0; i < this._descriptors.length; i++) {
-                    obj['_desc'].push(this._descriptors[i]);
+                for (var i = 0; i < this.$descriptors.length; i++) {
+                    obj['_desc'].push(this.$descriptors[i]);
                 }
             }
             obj['_elem'] = [];
             for (var i = 0; i < this.count; i++) {
-                var elem = this._elements[i];
+                var elem = this.$elements[i];
                 if (elem instanceof MetaObject) {
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
                         obj['_elem'].push(MetaRegistry.createReferObject(elem));
@@ -182,8 +173,8 @@
                 } else obj['_elem'].push(elem);
             }
             obj['_key'] = [];
-            for (var i = 0; i < this._keys.length; i++) {
-                var key = this._keys[i];
+            for (var i = 0; i < this.$keys.length; i++) {
+                var key = this.$keys[i];
                 obj['_key'].push(key);
             }
             return obj;                        
@@ -204,7 +195,7 @@
             if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
                 if (p_oGuid['_elem'].length !== p_oGuid['_desc'].length) throw new ExtendError(/EL04222/, null, [p_oGuid['_elem'].length, p_oGuid['_desc'].length]);
                 for (var i = 0; i < p_oGuid['_desc'].length; i++) {
-                    this._descriptors.push(p_oGuid['_desc'][i]);
+                    this.$descriptors.push(p_oGuid['_desc'][i]);
                 }
             }
 
@@ -241,10 +232,10 @@
         PropertyCollection.prototype.indexOf = function(p_target, p_isKey) {
             var isKey = p_isKey || false;
             
-            if (!isKey) return this._elements.indexOf(p_target);
+            if (!isKey) return this.$elements.indexOf(p_target);
             else {
                 if (!_isString(p_target))  throw new ExtendError(/EL04224/, null, [typeof p_target]);
-                return this._keys.indexOf(p_target);
+                return this.$keys.indexOf(p_target);
             }
         };
 
@@ -280,7 +271,7 @@
                 // data process
                 this.$elements.push(p_elem);
                 this.$keys.push(p_key);
-                this._descriptors.push(p_desc);
+                this.$descriptors.push(p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [index], p_desc);
@@ -312,7 +303,7 @@
                 delete this[propName];
             }
             this.$elements = [];
-            this._descriptors = [];
+            this.$descriptors = [];
             this.$keys = [];
             
             this._onCleared();
@@ -325,7 +316,7 @@
          */
         PropertyCollection.prototype.keyOf = function(p_idx) {
             if (typeof p_idx !== 'number') throw new ExtendError(/EL0422A/, null, [typeof p_idx]);
-            return this._keys[p_idx];
+            return this.$keys[p_idx];
         };
 
         /**

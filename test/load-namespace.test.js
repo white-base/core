@@ -21,7 +21,7 @@ describe("[target: load-namespace.js]", () => {
             it("- loadNamespace() ", () => {
                 loadNamespace()
 
-                expect(MetaRegistry.ns.find('Meta.MetaObject')).toBeDefined()
+                expect(MetaRegistry.namespace.find('Meta.MetaObject')).toBeDefined()
                 
             });
         });

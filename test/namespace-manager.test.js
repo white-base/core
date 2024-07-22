@@ -111,7 +111,7 @@ describe("[target: namespace-manager.js]", () => {
             it("- addNamespace() : 등록 ", () => {
                 const ns = new NamespaceManager();
                 ns.addNamespace('aa.bb');
-                const s = ns._storage;
+                const s = ns.$storage;
 
                 expect(s.aa.bb).toBeDefined();
             });
@@ -119,7 +119,7 @@ describe("[target: namespace-manager.js]", () => {
                 const ns = new NamespaceManager();
                 ns.addNamespace('ns.aa');
                 ns.addNamespace(['ns', 'bb']);
-                const s = ns._storage;
+                const s = ns.$storage;
     
                 expect(s.aa).toBeDefined();
                 expect(s.bb).toBeDefined();
@@ -156,7 +156,7 @@ describe("[target: namespace-manager.js]", () => {
         describe("NamespaceManager.delNamespace(ns) <네임스페이스 해제>", () => {
             it("- delNamespace() : leaf 해제 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 // 등록
                 ns.addNamespace('a1.b1');
                 ns.addNamespace('a1.b2');
@@ -175,7 +175,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- delNamespace() : node 해제 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
 
                 // 등록
                 ns.addNamespace('a1.b1');
@@ -193,7 +193,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- delNamespace() : 없는 경우 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.addNamespace('a1.b1');
                 ns.delNamespace('a1.b2');
 
@@ -203,7 +203,7 @@ describe("[target: namespace-manager.js]", () => {
         describe("NamespaceManager.path(ns?) <네임스페이스 경로 얻기>", () => {
             it("- path() : 전체 경로 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.addNamespace('a1.b1');
                 const p = ns.path();
 
@@ -211,7 +211,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- path(ns) : 대상 경로 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.addNamespace('a1.b1');
                 ns.addNamespace('a1.b2.c1');
                 const p1 = ns.path('a1.b1');
@@ -222,7 +222,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- path(ns) : 잘못된 경로", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.addNamespace('a1.b1');
                 const p = ns.path('a1.b2');
 
@@ -230,14 +230,14 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- 예외 : 타입 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 expect(()=> ns.path([-1])).toThrow(/EL03314/)
             });
         });
         describe("NamespaceManager.add(fullName, elem) <네임스페이스에 요소 설정>", () => {
             it("- add() : Function 등록 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.add('a1.b1.Fun', Function);
 
                 expect(s.a1.b1).toBeDefined();
@@ -246,7 +246,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- add() : 다중 등록 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 const fun1 = function(){ return 'fun1' };
                 const fun2 = function(){ return 'fun2' };
                 const fun3 = function(){ return 'fun3' };
@@ -259,7 +259,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- add() : 최상위에 등록 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.add('Fun', Function);
 
                 expect(s.Fun).toBeDefined();
@@ -287,7 +287,7 @@ describe("[target: namespace-manager.js]", () => {
         describe("NamespaceManager.del(fullName): bool <네임스페이스에 요소 삭제>", () => {
             it("- del(fullName) : 요소 삭제", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.add('Fun', Function);
                 ns.add('a1.b1.Str', String);
                 ns.add('a1.b1.c1.Arr', Array);
@@ -306,7 +306,7 @@ describe("[target: namespace-manager.js]", () => {
         describe("NamespaceManager.getPath(elem) <네임스페이스 얻기>", () => {
             it("- getPathd(elem) : 네임스페이스 얻기", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 var fun = function(){return 'Fun'};
                 var str = function(){return 'Str'};
                 var arr = function(){return 'Arr'};
@@ -325,7 +325,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- getPath(elem) : 없는 경우 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.add('a1.b1', 'Fun', Function);
                 const str = ns.getPath(Array);
 
@@ -339,7 +339,7 @@ describe("[target: namespace-manager.js]", () => {
         describe("NamespaceManager.has(elem): bool <네임스페이스에 요소 유무>", () => {
             it("- has(elem) : 객체로 요소 검사 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.add('Fun', Function);
                 ns.add('a1.b1.Str', String);
                 ns.add('a1.b1.c1.Arr', Array);
@@ -351,7 +351,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- has(elem) : 이름으로 요소 검사 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.add('Fun', Function);
                 ns.add('a1.b1.Str', String);
                 ns.add('a1.b1.c1.Arr', Array);
@@ -366,7 +366,7 @@ describe("[target: namespace-manager.js]", () => {
         // describe("this.getPath(elem | str): str<ns> <네임스페이스 얻기>", () => {
         //     it("- getPath(elem) : 객체로 얻기 ", () => {
         //         const ns = new NamespaceManager();
-        //         const s = ns._storage;
+        //         const s = ns.$storage;
         //         const fun1 = function(){ return 'fun1' };
         //         const fun2 = function(){ return 'fun2' };
         //         const fun3 = function(){ return 'fun3' };
@@ -382,7 +382,7 @@ describe("[target: namespace-manager.js]", () => {
         describe("NamespaceManager.output(stringify?, space?, vOpt?): str <네임스페이스에 출력>", () => {
             it("- output(stringify) : 함수 출력 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 const fun1 = function(){ return 'fun1' };
                 const fun2 = function(){ return 'fun2' };
                 const fun3 = function(){ return 'fun3' };
@@ -401,7 +401,7 @@ describe("[target: namespace-manager.js]", () => {
                 
                 // ns.init();
                 const ns2 = new NamespaceManager();
-                const s2 = ns2._storage;
+                const s2 = ns2.$storage;
 
                 expect(ns2.count).toBe(0);
                 // 로드
@@ -421,7 +421,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- output() : 함수 출력 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 ns.add('str1', 'STR');
                 ns.add('a1.num1', 10);
                 const str = ns.output();
@@ -436,7 +436,7 @@ describe("[target: namespace-manager.js]", () => {
         describe("NamespaceManager.load(str, parse?) <네임스페이스 불러오기>", () => {
             it("- load(str) : 객체로 얻기 ", () => {
                 const ns = new NamespaceManager();
-                const s = ns._storage;
+                const s = ns.$storage;
                 const fun1 = function(){ return 'fun1' };
                 const fun2 = function(){ return 'fun2' };
                 const fun3 = function(){ return 'fun3' };
@@ -453,7 +453,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- load(obj | str) : 객체로 얻기 ", () => {
                 const ns1 = new NamespaceManager();
-                const s = ns1._storage;
+                const s = ns1.$storage;
                 ns1.add('str1', 'STR');
                 ns1.add('a1.num1', 10);
                 const str = ns1.output();
@@ -470,7 +470,7 @@ describe("[target: namespace-manager.js]", () => {
             });
             it("- load(?) : 예외 ", () => {
                 const ns1 = new NamespaceManager();
-                const s = ns1._storage;
+                const s = ns1.$storage;
                 ns1.add('str1', 'STR');
                 ns1.add('a1.num1', 10);
                 const str = ns1.output();

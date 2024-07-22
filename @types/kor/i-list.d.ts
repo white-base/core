@@ -8,7 +8,7 @@ declare interface IList {
     // constructor();
 
     /** 목록 */
-    list: any[];
+    _list: any[];
 
     /** 목록 갯수 */
     count: number

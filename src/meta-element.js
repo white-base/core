@@ -48,23 +48,23 @@
             
             var _name;
 
-            /**
-             * 내부 변수 접근
-             * @member {string} _L.Meta.MetaElement#$name
-             * @readonly
-             * @private
-             */
-            Object.defineProperty(this, '$name',
-            {
-                get: function() { return _name; },
-                set: function(nVal) { 
-                    if (typeof nVal !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
-                    if (nVal.length === 0) throw new ExtendError(/EL03122/, null, []);
-                    _name = nVal;
-                },
-                configurable: false,
-                enumerable: false,
-            });
+            // /**
+            //  * 내부 변수 접근
+            //  * @member {string} _L.Meta.MetaElement#$name
+            //  * @readonly
+            //  * @private
+            //  */
+            // Object.defineProperty(this, '$name',
+            // {
+            //     get: function() { return _name; },
+            //     set: function(nVal) { 
+            //         if (typeof nVal !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
+            //         if (nVal.length === 0) throw new ExtendError(/EL03122/, null, []);
+            //         _name = nVal;
+            //     },
+            //     configurable: false,
+            //     enumerable: false,
+            // });
 
             /**
              * 현재 객체의 이름
@@ -74,11 +74,16 @@
             Object.defineProperty(this, '_name',
             {
                 get: function() { return _name; },
+                set: function(nVal) {
+                    if (typeof nVal !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
+                    if (nVal.length === 0) throw new ExtendError(/EL03122/, null, []);
+                    _name = nVal;
+                },
                 configurable: false,
                 enumerable: true
             });
 
-            this.$name = p_name;
+            this._name = p_name;
 
             Util.implements(MetaElement, this);     // strip:
         }
@@ -118,7 +123,7 @@
         MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
             _super.prototype.setObject.call(this, p_oGuid, p_origin);
             var origin = p_origin ? p_origin : p_oGuid;
-            this.$name = p_oGuid['name'];
+            this._name = p_oGuid['name'];
             // this.__SET$_name(p_oGuid['name'], this);
         };
         

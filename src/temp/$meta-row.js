@@ -393,11 +393,11 @@
          */
         MetaRowCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this._elements[p_idx]; },
+                get: function() { return this.$elements[p_idx]; },
                 set: function(nVal) {
                     if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
                     if (nVal._entity !== this._owner) throw new ExtendError(/EL05221/, null, [this.constructor.name]);
-                    this._transQueue.update(p_idx, nVal, this._elements[p_idx]); 
+                    this._transQueue.update(p_idx, nVal, this.$elements[p_idx]); 
                     this.__GET$_elements(this)[p_idx] = nVal;
                 },
                 configurable: true,
@@ -412,7 +412,7 @@
          * @returns {number}
          */
         MetaRowCollection.prototype.add  = function(p_row, p_isCheck) {
-            return this.insertAt(this._elements.length, p_row, p_isCheck);
+            return this.insertAt(this.$elements.length, p_row, p_isCheck);
         };
 
         /**

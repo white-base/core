@@ -82,11 +82,11 @@
             var count = this.count - 1;   // [idx] 포인트 이동
             
             this.$elements.splice(p_pos, 1);
-            this._descriptors.splice(p_pos, 1);
+            this.$descriptors.splice(p_pos, 1);
             
             if (p_pos < count) {
                 for (var i = p_pos; i < count; i++) {   // 참조 변경(이동)
-                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
+                    var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }
                 delete this[count];     // 마지막 idx 삭제
@@ -113,15 +113,15 @@
             var vOpt = p_vOpt || 0;
             var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
-            if (this._descriptors.length > 0) {
+            if (this.$descriptors.length > 0) {
                 obj['_desc'] = [];
-                for (var i = 0; i < this._descriptors.length; i++) {
-                    obj['_desc'].push(this._descriptors[i]);
+                for (var i = 0; i < this.$descriptors.length; i++) {
+                    obj['_desc'].push(this.$descriptors[i]);
                 }
             }
             obj['_elem'] = [];
-            for (var i = 0; i < this._elements.length; i++) {
-                var elem = this._elements[i];
+            for (var i = 0; i < this.$elements.length; i++) {
+                var elem = this.$elements[i];
                 if (elem instanceof MetaObject) {
                     if (MetaRegistry.hasGuidObject(elem, owned)) {
                         obj['_elem'].push(MetaRegistry.createReferObject(elem));
@@ -143,7 +143,7 @@
 
             if (Array.isArray(p_oGuid['_desc']) && p_oGuid['_desc'].length > 0) {
                 for (var i = 0; i < p_oGuid['_desc'].length; i++) {
-                    this._descriptors.push(p_oGuid['_desc'][i]);
+                    this.$descriptors.push(p_oGuid['_desc'][i]);
                 }
             }
             for(var i = 0; i < p_oGuid['_elem'].length; i++) {
@@ -188,7 +188,7 @@
 
             for (var i = 0; i < this.count; i++) delete this[i];
             this.$elements = [];
-            this._descriptors = [];
+            this.$descriptors = [];
             
             this._onCleared();    // event
         };
@@ -218,7 +218,7 @@
                 this._onAdd(p_pos, p_elem);
                 // data process
                 this.$elements.splice(p_pos, 0, p_elem);            
-                this._descriptors.splice(p_pos, 0, p_desc);
+                this.$descriptors.splice(p_pos, 0, p_desc);
                 // property define
                 if (_isObject(p_desc)) {
                     Object.defineProperty(this, [p_pos], p_desc);
@@ -227,7 +227,7 @@
                 }
                 // reindexing
                 for (var i = p_pos + 1; i < this.count; i++) {
-                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
+                    var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }
                 this._onAdded(p_pos, p_elem);

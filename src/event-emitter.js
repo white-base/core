@@ -53,10 +53,10 @@
 
             /**
              * 전체 이벤트명
-             * @private
-             * @member {object}  _L.Common.EventEmitter#list  
+             * @protected
+             * @member {object}  _L.Common.EventEmitter#_list  
              */
-            Object.defineProperty(this, 'list',
+            Object.defineProperty(this, '_list',
                 {
                     get: function() { 
                         return Object.keys(this.$storage);

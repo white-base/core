@@ -248,7 +248,7 @@
 
         //     if (!this._compare(this.__event.__subscribers, p_target.__event.__subscribers)) return false;
         //     if (!this._compare(this._entity, p_target._entity)) return false;
-        //     if (!this._compare(this._elements, p_target._elements)) return false;
+        //     if (!this._compare(this.$elements, p_target._elements)) return false;
         //     if (!this._compare(this._keys, p_target._keys)) return false;
         //     return true;
         // };
@@ -304,8 +304,8 @@
             } 
             for(var i = 0; i < mObj._elem.length; i++) {
                 var elem = mObj._elem[i];
-                if (MetaRegistry.isGuidObject(elem)) this._elements[i].setObject(elem, origin);
-                else this._elements[i] = elem;
+                if (MetaRegistry.isGuidObject(elem)) this.$elements[i].setObject(elem, origin);
+                else this.$elements[i] = elem;
                 // if (obj[prop] !== null && elem['_guid'] && elem['_type']) {   // REVIEW: add() 통해서 생성되는 데이터 타입도 검사해야함
                 //     this.list[i].setObject(elem);
                 // } else {
@@ -324,7 +324,7 @@
             var clone = new MetaRow(entity);
 
             for (var i = 0; i < this.count; i++) {
-                clone._elements[i] = this._elements[i];   // 내부 복사
+                clone._elements[i] = this.$elements[i];   // 내부 복사
             }
             return clone;
         };
@@ -360,13 +360,13 @@
          */
         MetaRowCollection.prototype._getPropDescriptor = function(p_idx) {
             return {
-                get: function() { return this._elements[p_idx]; },
+                get: function() { return this.$elements[p_idx]; },
                 set: function(newValue) {
                     var typeName;
                     if (this._elemTypes.length > 0) Util.validType(newValue, this._elemTypes);
                     if (newValue._entity !== this._owner) Message.error('ES032', ['_entity', 'this._owner']);
-                    this._transQueue.update(p_idx, newValue, this._elements[p_idx]); 
-                    this._elements[p_idx] = newValue;
+                    this._transQueue.update(p_idx, newValue, this.$elements[p_idx]); 
+                    this.$elements[p_idx] = newValue;
                 },
                 enumerable: true,
                 configurable: true
@@ -380,7 +380,7 @@
          * @returns 
          */
         MetaRowCollection.prototype.add  = function(p_row, p_checkValid) {
-            return this.insertAt(this._elements.length, p_row, p_checkValid);
+            return this.insertAt(this.$elements.length, p_row, p_checkValid);
         };
 
         /**

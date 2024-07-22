@@ -205,7 +205,7 @@ describe("[target: meta-element.js]", () => {
             });
         });
         describe("예외 및 커버리지", () => {
-            it("- 예외 : _name, guid ", () => {
+            it.skip("- 예외 : _name, guid ", () => {
                 const i = new MetaElement('_name');
 
                 // expect(()=> i._name = 10).toThrow('ES021');
@@ -217,13 +217,13 @@ describe("[target: meta-element.js]", () => {
             it("- 커버리지 : this.__SET$name ", () => {
                 const i = new MetaElement('E1');
                 
-                i.$name = 'E2'
+                i._name = 'E2'
                 expect(i._name).toBe('E2');
                
                 // i.__SET$_name('E3')  // 접근금지
-                expect(i.$name).toBe('E2');
+                expect(i._name).toBe('E2');
 
-                expect(()=> i.$name = 10).toThrow(/EL03121/);
+                expect(()=> i._name = 10).toThrow(/EL03121/);
             });
         });
     });

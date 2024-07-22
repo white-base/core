@@ -91,7 +91,7 @@
          * @returns {number} 삭제한 인덱스
          */
         PropertyCollection.prototype._remove = function(p_idx) {
-            var count = this._elements.length - 1;
+            var count = this.$elements.length - 1;
             var propName = this.keyOf(p_idx);   // number 검사함
             
             // if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added'); 
@@ -99,13 +99,13 @@
             // 프로퍼티 삭제
             delete this[propName];                      
             // 원시 자료 변경
-            this._elements.splice(p_idx, 1);
+            this.$elements.splice(p_idx, 1);
             this._keys.splice(p_idx, 1);
-            this._descriptors.splice(p_idx, 1);
+            this.$descriptors.splice(p_idx, 1);
             // 참조 자료 변경
             if (p_idx < count) {
                 for (var i = p_idx; i < count; i++) {
-                    var desc = this._descriptors[i] ? this._descriptors[i] : this._getPropDescriptor(i);
+                    var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
                     propName = this.keyOf(i);
                     Object.defineProperty(this, [i], desc);
                     Object.defineProperty(this, propName, desc);
@@ -140,15 +140,15 @@
         PropertyCollection.prototype.getObject = function(p_vOpt) {
             var obj = _super.prototype.getObject.call(this, p_vOpt);
 
-            if (this._descriptors.length > 0) {
+            if (this.$descriptors.length > 0) {
                 obj._desc = [];
-                for (var i = 0; i < this._descriptors.length; i++) {
-                    obj._desc.push(this._descriptors[i]);
+                for (var i = 0; i < this.$descriptors.length; i++) {
+                    obj._desc.push(this.$descriptors[i]);
                 }
             }
             obj._elem = [];
-            for (var i = 0; i < this._elements.length; i++) {
-                var elem = this._elements[i];
+            for (var i = 0; i < this.$elements.length; i++) {
+                var elem = this.$elements[i];
                 if (elem instanceof MetaObject) obj._elem.push(elem.getObject(p_vOpt));
                 else obj._elem.push(elem);
             }
@@ -175,7 +175,7 @@
             if (Array.isArray(mObj._desc) && mObj._desc.length > 0) {
                 if (mObj._elem.length !== mObj._desc.length) Message.error('ES063', ['_elem', '_desc']);
                 for (var i = 0; i < mObj._desc.length; i++) {
-                    this._descriptors.push(mObj._desc[i]);
+                    this.$descriptors.push(mObj._desc[i]);
                 }
             }
 
@@ -192,8 +192,8 @@
                 if (elem['_guid'] && elem['_type']) {   // REVIEW: MetaRegistry.isGuidObject 변공
                     var obj = MetaRegistry.createMetaObject(elem, oObj);
                     obj.setObject(elem, origin);
-                    this._elements.push(obj);
-                } else this._elements.push(elem);
+                    this.$elements.push(obj);
+                } else this.$elements.push(elem);
             }
         };
 
@@ -208,7 +208,7 @@
          */
         PropertyCollection.prototype.add = function(p_name, p_value, p_desc) {
             // p_value = typeof p_value === 'undefined' ? null : p_value;
-            var index   = this._elements.length;;
+            var index   = this.$elements.length;;
             
             if (typeof p_name !== 'string') Message.error('ES021', ['name', 'string']);
             if (this._elemTypes.length > 0) Util.validType(p_value, this._elemTypes);
@@ -224,9 +224,9 @@
             this._onChanging();
             this._onAdd(index, p_value);
             // data process
-            this._elements.push(p_value);
+            this.$elements.push(p_value);
             this._keys.push(p_name);
-            this._descriptors.push(p_desc);
+            this.$descriptors.push(p_desc);
             // property define
             if (typeof p_desc === 'object') {
                 Object.defineProperty(this, [index], p_desc);
@@ -250,12 +250,12 @@
            this._onChanging();
            this._onClear();
             // process
-           for (var i = 0; i < this._elements.length; i++) {
+           for (var i = 0; i < this.$elements.length; i++) {
                propName = this.keyOf(i);
                delete this[i];
                delete this[propName];
             }
-            this._elements = [];
+            this.$elements = [];
             this._keys = [];
             // after event
             this._onChanged();
@@ -271,11 +271,11 @@
             var opt = p_opt || 0;
             
             if (opt === 0) {
-                return this._elements.indexOf(p_obj);
+                return this.$elements.indexOf(p_obj);
             }
             if (opt === 1) {    
                 if (typeof p_obj !== 'string')  Message.error('ES021', ['opt=1', 'string']);
-                // return this._elements.indexOf(this[p_obj]);
+                // return this.$elements.indexOf(this[p_obj]);
                 for (var i = 0; i < this._keys.length; i++) {
                     if (this._keys[i] === p_obj) return i;
                  }

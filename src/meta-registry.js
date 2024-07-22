@@ -74,10 +74,10 @@
 
         /**
          * 메타 객체의 네임스페이스
-         * @member {NamespaceManager} _L.Meta.MetaRegistry#ns
+         * @member {NamespaceManager} _L.Meta.MetaRegistry#namespace
          * @readonly
          */
-        Object.defineProperty(MetaRegistry, "ns", 
+        Object.defineProperty(MetaRegistry, "namespace", 
         {
             get: function() { return namespace; },
             configurable: false,
@@ -126,7 +126,7 @@
          */
         MetaRegistry.init = function() {
             _list.length = 0;
-            this.ns.init();
+            this.namespace.init();
         };
 
         /**
@@ -555,7 +555,7 @@
             if (_isBuiltFunction(p_target)) return;    // 내장함수 제외
             if (typeof _global[fullName] === 'function') return;
             
-            if (!this.ns.find(fullName)) this.ns.add(fullName, p_target);  // 중복 검사 후 등록
+            if (!this.namespace.find(fullName)) this.namespace.add(fullName, p_target);  // 중복 검사 후 등록
         };
         
         /**
@@ -567,7 +567,7 @@
             if (!_isString(p_fullName)) throw new ExtendError(/EL03234/, null, [typeof p_fullName]);
             
             if (typeof _global[p_fullName] === 'function') return true; // 내장함수 & 전역 함수
-            return this.ns.del(p_fullName);
+            return this.namespace.del(p_fullName);
         };
         
         /**
@@ -582,7 +582,7 @@
             
             fullName = p_target.name;
             if (typeof _global[fullName] === 'function') return fullName;   // 내장함수 & 전역 함수
-            return this.ns.getPath(p_target);
+            return this.namespace.getPath(p_target);
         };
         
         /**
@@ -594,7 +594,7 @@
             if (!_isString(p_fullName)) throw new ExtendError(/EL03236/, null, [typeof p_fullName]);
             
             if (typeof _global[p_fullName] === 'function') return _global[p_fullName];  // 내장함수 & 전역 함수
-            return this.ns.find(p_fullName);
+            return this.namespace.find(p_fullName);
         };
 
         /**

@@ -23,13 +23,29 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      */
     constructor(owner: object);
 
-
-    // aa: TObject;
     /**
      * 이벤트 객체
      * @private
      */
     $event: EventEmitter;
+    
+    /**
+     * 컬렉션 요소들
+     * @private
+     */
+    $elements: any[];
+
+    /**
+     * 컬렉션 요소의 기술들 (getter, setter)
+     * @private
+     */
+    $descriptors: object[];
+
+    /**
+     * 컬렉션 예약어
+     * @private
+     */
+    $KEYWORD: string[];
 
     /**
      * 컬렉션 소유자
@@ -37,18 +53,6 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      */
     _owner: object;
     
-    /**
-     * 컬렉션 요소들
-     * @readonly
-     */
-    _elements: any[];
-
-    /**
-     *  컬렉션 요소의 기술들 (getter, setter)
-     * @readonly
-     */
-    _descriptors: object[];
-
     /**
      * 컬렉션 요소의 타입 (제약조건)
      * @protected
@@ -59,19 +63,13 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * 컬렉션 요소의 목록
      * @readonly
      */
-    list: any[];
+    _list: any[];
 
     /**
      * 컬렉션 요소의 갯수
      * @readonly
      */
     count: number;
-
-    /**
-     *  컬렉션 예약어
-     * @private
-     */
-    $KEYWORD: string[];
 
     /**
      * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.

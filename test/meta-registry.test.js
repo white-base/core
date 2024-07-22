@@ -186,7 +186,7 @@ describe("[target: meta-registry.js]", () => {
             });
             it("- createMetaObject() : PARAM 없는 클래스", () => {
                 const Member = function() {};
-                MetaRegistry.ns.add('Member', Member)
+                MetaRegistry.namespace.add('Member', Member)
                 const mObj1 = {_type: 'Member', _ns: ''};
                 const obj1 = MetaRegistry.createMetaObject(mObj1);
                 
@@ -222,7 +222,7 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.createNsReferObject() <네임스페이스 속성 생성>", () => {
             it("- createNsReferObject() : 네임스페이스 객체 생성", () => {
                 loadNamespace();    // 클래스 로딩
-                const class1 = MetaRegistry.ns.find('Meta.MetaElement');
+                const class1 = MetaRegistry.namespace.find('Meta.MetaElement');
                 const obj1 = {
                     cls1: MetaRegistry.createNsReferObject(class1),
                     name: 'OBJ'
@@ -734,7 +734,7 @@ describe("[target: meta-registry.js]", () => {
             it("- registerClass() : 초기 자동 등록", () => {
                 // 메타객체는 자동 등록됨
                 const a = new MetaObject();
-                expect(MetaRegistry.ns.count).toBe(1);
+                expect(MetaRegistry.namespace.count).toBe(1);
             });
             it("- registerClass() : 내장 함수 등록", () => {
                 MetaRegistry.registerClass(String, 'str');
@@ -746,30 +746,30 @@ describe("[target: meta-registry.js]", () => {
                 MetaRegistry.registerClass(Boolean, 'bool');
                 MetaRegistry.registerClass(Object, 'arr');
                 
-                expect(MetaRegistry.ns.count).toBe(0);
+                expect(MetaRegistry.namespace.count).toBe(0);
             });
             it("- registerClass() : 전역 함수 등록", () => {
                 global.gFun1 = function() {return 'gFun1'};
                 
                 // 전역변수와 동일이름 사용시 등록 안함
                 MetaRegistry.registerClass(global.gFun1, 'gFun1');
-                expect(MetaRegistry.ns.count).toBe(0);
+                expect(MetaRegistry.namespace.count).toBe(0);
                 // 위치 변경시 등록됨
                 MetaRegistry.registerClass(global.gFun1, 'a1.gFun1');
-                expect(MetaRegistry.ns.count).toBe(1);
+                expect(MetaRegistry.namespace.count).toBe(1);
 
             });
             it("- registerClass() :사용자 클래스(함수) 등록", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.ns.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.isOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 MetaRegistry.registerClass(fun1, 'a1.b1', 'fun1');
 
-                expect(MetaRegistry.ns.count).toBe(3);
-                expect(MetaRegistry.ns.has('fun1')).toBe(true);
-                expect(MetaRegistry.ns.has('a1.fun1')).toBe(true);
-                expect(MetaRegistry.ns.has('a1.b1.fun1')).toBe(true);
+                expect(MetaRegistry.namespace.count).toBe(3);
+                expect(MetaRegistry.namespace.has('fun1')).toBe(true);
+                expect(MetaRegistry.namespace.has('a1.fun1')).toBe(true);
+                expect(MetaRegistry.namespace.has('a1.b1.fun1')).toBe(true);
             });
             it("- 예외 : 타입 ", () => {
                 expect(()=> MetaRegistry.registerClass(-1)).toThrow(/EL03231/)
@@ -782,19 +782,19 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.releaseClass() <클래스 해제>", () => {
             it("- releaseClass() : ns에서 클래스 해제", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.ns.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.isOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 MetaRegistry.registerClass(fun1, 'a1.b1', 'fun1');
 
                 // 등록
-                expect(MetaRegistry.ns.count).toBe(3);
+                expect(MetaRegistry.namespace.count).toBe(3);
                 // 해제
                 MetaRegistry.releaseClass('fun1');
                 MetaRegistry.releaseClass('a1.fun1');
                 MetaRegistry.releaseClass('a1.b1.fun1');
                 MetaRegistry.releaseClass('String');
-                expect(MetaRegistry.ns.count).toBe(0);
+                expect(MetaRegistry.namespace.count).toBe(0);
             });
             it("- 예외 : 타입 ", () => {
                 expect(()=> MetaRegistry.releaseClass(-1)).toThrow(/EL03234/)
@@ -803,7 +803,7 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.findClass() <클래스 조화>", () => {
             it("- findClass() : 같은 클래스를 여러 곳에 등록한 경우", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.ns.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.isOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 const fullName1 = MetaRegistry.findClass(fun1);
@@ -819,7 +819,7 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.getClass() <클래스 얻기>", () => {
             it("- getClass() : 클래스 얻기 ", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.ns.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.isOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 const elem1 = MetaRegistry.getClass('a1.fun1');

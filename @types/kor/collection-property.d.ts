@@ -17,7 +17,7 @@ declare class PropertyCollection extends BaseCollection implements IPropertyColl
     /**
      * 컬렉션 요소의 키값들
      */
-    _keys: string[];
+    $keys: string[];
 
     /**
      * 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)

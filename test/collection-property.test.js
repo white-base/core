@@ -652,32 +652,32 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns['a1']).toBe('A1');
                 expect(s.columns['a2']).toBe('A2');
                 expect(s.columns['a3']).toBe('A3');
-                expect(s.columns._elements.length).toBe(3);
-                expect(s.columns._descriptors.length).toBe(3);
+                expect(s.columns.$elements.length).toBe(3);
+                expect(s.columns.$descriptors.length).toBe(3);
                 expect(s.columns.count).toBe(3);
-                expect(s.columns._descriptors[0]).toBe(undefined);
-                expect(s.columns._descriptors[1]).toBe(desc1);
-                expect(s.columns._descriptors[2]).toBe(undefined);
+                expect(s.columns.$descriptors[0]).toBe(undefined);
+                expect(s.columns.$descriptors[1]).toBe(desc1);
+                expect(s.columns.$descriptors[2]).toBe(undefined);
                 // 삭제 후 결과
                 s.columns.removeAt(0);
                 expect(s.columns['a2']).toBe('A2');
                 expect(s.columns['a3']).toBe('A3');
-                expect(s.columns._elements.length).toBe(2);
-                expect(s.columns._descriptors.length).toBe(2);
+                expect(s.columns.$elements.length).toBe(2);
+                expect(s.columns.$descriptors.length).toBe(2);
                 expect(s.columns.count).toBe(2);
-                expect(s.columns._descriptors[0]).toBe(desc1);
-                expect(s.columns._descriptors[1]).toBe(undefined);
+                expect(s.columns.$descriptors[0]).toBe(desc1);
+                expect(s.columns.$descriptors[1]).toBe(undefined);
                 // 추가후 결과
                 s.columns.add('a1', null, desc2);
                 expect(s.columns['a1']).toBe('A1');
                 expect(s.columns['a2']).toBe('A2');
                 expect(s.columns['a3']).toBe('A3');
-                expect(s.columns._elements.length).toBe(3);
-                expect(s.columns._descriptors.length).toBe(3);
+                expect(s.columns.$elements.length).toBe(3);
+                expect(s.columns.$descriptors.length).toBe(3);
                 expect(s.columns.count).toBe(3);
-                expect(s.columns._descriptors[0]).toBe(desc1);
-                expect(s.columns._descriptors[1]).toBe(undefined);
-                expect(s.columns._descriptors[2]).toBe(desc2);
+                expect(s.columns.$descriptors[0]).toBe(desc1);
+                expect(s.columns.$descriptors[1]).toBe(undefined);
+                expect(s.columns.$descriptors[2]).toBe(desc2);
 
             });
             // it("- add(name) : 중복 이름 등록시 (경고)", () => {
@@ -706,7 +706,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             it("- add(name) : 예약어 사용시 (예외)", () => {
                 let s = new Student();
                 expect(() => s.columns.add('_owner')).toThrow(/EL04227/);
-                expect(() => s.columns.add('_elements')).toThrow(/EL04227/);
+                expect(() => s.columns.add('$elements')).toThrow(/EL04229/);
                 expect(() => s.columns.add('$KEYWORD')).toThrow(/EL04229/);
                 expect(() => s.columns.add('_elemTypes')).toThrow(/EL04227/);
                 expect(() => s.columns.add('_list')).toThrow(/EL04227/);
@@ -724,7 +724,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(() => s.columns.add('indexOf')).toThrow(/EL04227/);
                 expect(() => s.columns.add('exist')).toThrow(/EL04227/);
                 // expect(() => s.columns.add('keys')).toThrow(/ES048/);
-                expect(() => s.columns.add('_keys')).toThrow(/EL04227/);
+                expect(() => s.columns.add('$keys')).toThrow(/EL04229/);
                 // expect(() => s.columns.add('indexOfProp')).toThrow(/ES048/);
                 expect(() => s.columns.add('keyOf')).toThrow(/EL04227/);
                 // expect(() => s.columns.add('removeByProp')).toThrow(/ES048/);
@@ -802,7 +802,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 s.columns.add('a1', 'A1');
                 // s.columns.__SET$keys('aa2', {}) // 접근 금지됨
 
-                expect(s.columns._keys).toEqual(['a1'])
+                expect(s.columns.$keys).toEqual(['a1'])
             });
             it("- this.$keys : 커버리지 ", () => {
                 let s = new Student();

@@ -53,20 +53,6 @@
             var _guid;
             
             /**
-             * 내부 변수 접근
-             * @member {string} _L.Meta.MetaObject#$guid
-             * @readonly
-             * @private
-             */
-            Object.defineProperty(this, '$guid',
-            {
-                get: function() { return _guid; },
-                set: function(nVal) { _guid = nVal; },
-                configurable: false,
-                enumerable: false,
-            });
-
-            /**
              * 현재 객체의 고유식별자(guid)
              * @readonly
              * @member {string} _L.Meta.MetaObject#_guid 
@@ -80,6 +66,7 @@
                     if (!_guid) _guid = Util.createGuid();
                     return _guid;
                 },
+                set: function(nVal) { _guid = nVal; },
                 configurable: false,
                 enumerable: true
             });
@@ -103,11 +90,6 @@
                 enumerable: true
             });
             
-            // inner variable access
-            // this.__SET$guid = function(val, call) {
-            //     if (call instanceof MetaObject) _guid = val;    // 상속접근 허용
-            // }
-
             // 추상클래스 검사
             if (Object.prototype.hasOwnProperty.call(this._type, '_KIND')) {
             // if (this._type.hasOwnProperty('_KIND')) {
