@@ -26,7 +26,7 @@ declare class MetaRegistry {
      * 메타 객체의 네임스페이스
      * @readonly
      */
-    static ns: NamespaceManager;
+    static namespace: NamespaceManager;
 
     /**
      * 등록된 메타 객체 및 네임스페이스를 초기화 합니다.
