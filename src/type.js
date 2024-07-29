@@ -1153,7 +1153,51 @@
                     target = eType['list'][0];
                     return;
                 }
+            
+            // _IDX_ (index)
+            } else if (eType['kind'] === '_IDX_') {
+                /**
+                 * POINT:
+                 * - 검사
+                 *  + target object 검사
+                 *  -\+ 파라메터 2개 검사
+                 * 
+                 * - 인덱스 타입 목록 추출
+                 * 
+                 * - 초이스로 변환
+                 *  + 허용타입들 + 
+                 * 
+                 * this.command = [['_AND_',  { aa: 1 }, ClassA ]]
+                 * [['_IDX_', String]]
+                 * [['_KEY_', Number, String, '리터럴']]
+                 * 
+                 * this.command = [['_AND_', [['_IDX_', String]], [['_KEY_', Number, String, '리터럴']] ]]
+                 * 
+                 * 마지막에 리턴 및 실패 처리
+                 */
 
+                /**
+                 * - 검사
+                 *  + 타겟의 object 여부 검사
+                 *  + 파라메터 1개 이상 검사
+                 * - 조건문 처리
+                 *  + 둘다 성공해야 성공
+                 */
+                if (eType['list'].length === 0) throw new ExtendError('TODO: IDX 는 검사 타입이 없습니다. 하나이상 있어야 합니다.', prop, []);
+                if (tType['$type'] !== 'union') throw new ExtendError('TODO: IDX 는 검사 대상이 object(union) 타입만 가능합니다.', prop, ['object', sTar]);
+
+                for(var i = 0; i < eType['list'].length; i++) {
+                    var _elem   = eType['list'][i];
+                    
+                    // var _tar    = tType['list'][i];
+                    try {
+                        _execMatch(_elem, target);
+                    } catch (error) {
+                        throw new ExtendError('TODO: ', error, []);
+                    }
+                    
+                }
+            
             // _ETC_
             } else {
                 throw new ExtendError(/EL01126/,  prop, [eType['kind']]);
