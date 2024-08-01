@@ -9,7 +9,7 @@ declare class EventEmitter {
     constructor();
     
     /**
-     * 전역 구독자 
+     * 이벤트 저장소 
      */
     $storage: object;
 

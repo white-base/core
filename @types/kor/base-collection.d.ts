@@ -295,7 +295,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * 컬렉션에 요소를 추가합니다.
      * @abstract
      */
-    abstract add(...args: any[]): void;
+    abstract add(...args: any[]): number;
 
     /**
      * 컬렉션을 초기화 합니다.

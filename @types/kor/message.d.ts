@@ -1,10 +1,8 @@
-
 /**
  * 메시지와 코드를 관리하는 클래스입니다. (static)
  * @static
  */
 declare class Message {
- 
     
     /**
      * 메시지 코드 저장소입니다.
