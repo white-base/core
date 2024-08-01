@@ -14,7 +14,7 @@ describe("[target: message.js]", () => {
         beforeEach(() => {
             jest.resetModules();
             
-            Message.init();
+            // Message.init();
         });
         describe("MetaObject.lang: str <언어 설정>", () => {
             it("- this.lang : 기본 언어 얻기", () => {
@@ -86,7 +86,7 @@ describe("[target: message.js]", () => {
             });
             it("- 스토리지 설정 ", () => {
                 var storage = { kor: {aaa: '', bbb: {}, zzz: 'etc'} }
-                Message.storage = storage;
+                Message.$storage = storage;
                 const msg1 = Message.get('aaa', []);
                 const msg2 = Message.get('bbb', []);
                 const msg3 = Message.get('ccc', []);

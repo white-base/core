@@ -53,29 +53,29 @@
         }
 
         // var define
-        var storage = {};
+        var $storage = {};
         var lang = 'kor';
         // var isLong = false;
         
         /**
          * 메시지 코드 스토리지
-         * @member {string} _L.Common.Message#storage
+         * @member {string} _L.Common.Message#$storage
          */
-        Object.defineProperty(Message, "storage", {
+        Object.defineProperty(Message, "$storage", {
             get: function() { 
-                // if (!storage) {
+                // if (!$storage) {
                 //     var objs = [];
                 //     for (var key in messageCode) {
                 //         if (Object.prototype.hasOwnProperty.call(messageCode, key)) {
                 //             objs.push(messageCode[key]);
                 //         }
                 //     }
-                //     storage = deepMerge.apply(null, {}, objs);
+                //     $storage = deepMerge.apply(null, {}, objs);
                 // }
-                return storage;
+                return $storage;
             },
             set: function(val) { 
-                deepMerge(storage, val);
+                deepMerge($storage, val);
             },
             configurable: false,
             enumerable: true,
@@ -88,7 +88,7 @@
         Object.defineProperty(Message, "lang", {
             get: function() { return lang; },
             set: function(val) { 
-                if (!Message.storage[val]) throw new Error('The ['+ val +'] language does not exist.');
+                if (!Message.$storage[val]) throw new Error('The ['+ val +'] language does not exist.');
                 lang = val;
             },
             configurable: false,
@@ -110,7 +110,7 @@
 
         // local function
         function _getCodeObject(code){
-            var MSG = Message.storage[lang];
+            var MSG = Message.$storage[lang];
             // var div, part, num;
 
             if (!_isString(code)) return;
@@ -169,14 +169,6 @@
         }
 
         /**
-         * 메세지를 초기화 합니다. TODO: 꼭 필요할까? 필요없을듯
-         */
-        Message.init = function() {
-            this.lang = 'kor';
-            // this.isLong = false;
-        };
-
-        /**
          * 메세지 코드에 대한 문자열를 얻습니다.
          * @param {string} p_code 메세지 코드
          * @param {array<string>} p_aValue msg $1, $2... 매창값
@@ -185,15 +177,6 @@
         Message.get = function(p_code, p_aValue) {
             return _buildMessage(p_code, p_aValue);
         };
-
-        /**
-         * 메세지 코드에 대한 객체를 얻습니다.
-         * @param {string} p_code 메시지 코드
-         * @returns {object} {msg: '메세지', long: '긴메세지'}
-         */
-        // Message.getObject = function(p_code) {
-        //     return _getCodeObject(p_code);
-        // };
 
         /**
          * 메세지 코드에 대한 Error 객체를 생성해서 예외룰 발생합니다.
@@ -216,7 +199,7 @@
         return Message;
     }());
 
-    Message.storage = messageCode;
+    Message.$storage = messageCode;
 
     //==============================================================
     // 4. module export
