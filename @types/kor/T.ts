@@ -38,7 +38,7 @@ declare interface PropertyDescriptor {
  * 인덱스와 요소, 그리고 현재 컨텍스트를 받아 처리하는 함수 타입을 정의합니다.
  * @type
  */
-declare type OnFunc = (idx: number, elem: any, _this: object) => void;
+// declare type OnFunc = (idx: number, elem: any, _this: object) => void;
 
 /**
  * 문자열 키와 값으로 구성된 객체 타입을 정의합니다.

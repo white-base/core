@@ -218,7 +218,7 @@ declare interface PropertyDescriptor {
     get?(): any;
     set?(v: any): void;
 }
-declare type OnFunc = (idx: number, elem: any, _this: object)=> void;
+// declare type OnFunc = (idx: number, elem: any, _this: object) => void;
 
 declare type Iprop = {[key: string]: string}
 
