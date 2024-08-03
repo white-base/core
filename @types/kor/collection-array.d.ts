@@ -17,6 +17,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
 
     /**
      * ArrayCollection 클래스의 인스턴스를 생성합니다.
+     * 
      * @param owner 이 컬렉션을 소유하는 객체입니다.
      */
     constructor(owner);
@@ -25,6 +26,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
      * 컬렉션의 지정된 위치에 있는 요소를 삭제합니다.
      * 이 메서드는 추상 메서드 `_remove`를 구현하여 요소를 삭제합니다.
      * (템플릿 메소드 패턴을 사용합니다)
+     * 
      * @param pos - 삭제할 요소의 인덱스입니다.
      * @returns 삭제 성공 여부를 나타내는 불리언 값입니다.
      * 
@@ -36,6 +38,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
 
     /**
      * 배열 컬렉션 객체를 직렬화하여 반환합니다. 순환 참조는 `$ref` 값으로 대체됩니다.
+     * 
      * @param {number} [vOpt=0] - 직렬화 옵션입니다. (기본값: 0)
      * - 0: 참조 구조 (_guid: 예, $ref: 예)
      * - 1: 중복 구조 (_guid: 예, $ref: 예)
@@ -51,6 +54,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
 
     /**
      * 직렬화된 객체를 사용하여 배열 컬렉션 객체를 초기화합니다. 이 과정에서 컬렉션이 초기화됩니다.
+     * 
      * @param oGuid - 직렬화된 객체입니다.
      * @param {object} [origin=oGuid] - 원본 객체입니다. 기본값은 `oGuid`입니다.
      */
@@ -58,6 +62,7 @@ declare class ArrayCollection extends BaseCollection implements IArrayCollection
 
     /**
      * 배열 컬렉션에 요소를 추가합니다.
+     * 
      * @param elem - 추가할 요소입니다.
      * @param {PropertyDescriptor} [desc] - 요소에 대한 프로퍼티 기술자 객체입니다. 옵션입니다.
      * @returns {number} 추가된 요소의 인덱스입니다.

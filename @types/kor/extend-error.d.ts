@@ -49,6 +49,7 @@ declare class ExtendError {
 
     /**
      * 오류 메시지를 출력합니다.
+     * 
      * @returns {string} this.message를 반환합니다.
      */
     stack?: string | undefined;

@@ -21,6 +21,7 @@ declare class EventEmitter {
     
     /**
      * 지정한 이벤트에 리스너를 등록합니다.
+     * 
      * @param {string} event - 이벤트 이름입니다.
      * @param {Function} listener - 이벤트 발생 시 호출될 함수입니다.
      * 
@@ -43,6 +44,7 @@ declare class EventEmitter {
     
     /**
      * 한 번만 실행되는 이벤트 리스너를 등록합니다.
+     * 
      * @param {string} event - 이벤트 이름입니다.
      * @param {Function} listener - 이벤트 발생 시 한 번만 호출될 함수입니다.
      * 
@@ -58,6 +60,7 @@ declare class EventEmitter {
 
     /**
      * 지정한 이벤트의 리스너를 제거합니다.
+     * 
      * @param {string} event - 이벤트 이름입니다.
      * @param {Function} listener - 제거할 리스너 함수입니다.
      * 
@@ -82,6 +85,7 @@ declare class EventEmitter {
     /**
      * 지정한 이벤트에 대해 모든 리스너를 제거합니다. 
      * 이벤트 이름을 생략하면 모든 이벤트의 리스너를 제거합니다.
+     * 
      * @param {string} [event] - 이벤트 이름입니다. 생략할 수 있습니다.
      * 
      * @example
@@ -104,6 +108,7 @@ declare class EventEmitter {
 
     /**
      * 이벤트를 발행하고 등록된 리스너를 호출합니다.
+     * 
      * @param {string} event - 이벤트 이름입니다.
      * @param {...*} args - 이벤트 리스너로 전달될 인수들입니다.
      * 

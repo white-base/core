@@ -240,7 +240,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
     _onRemove(idx: number, elem: any): void;
     
     /**
-     * onRemoved 이벤트를 발생시킵니다. 
+     * `onRemoved` 이벤트를 발생시킵니다. 
      * @param idx - 삭제할 요소의 인덱스입니다.
      * @param elem - 삭제할 요소입니다.
      * @listens BaseCollection#onRemoved
@@ -248,19 +248,19 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
     _onRemoved(idx: number, elem: any): void;
     
     /**
-     * onClear 이벤트를 발생시킵니다.
+     * `onClear` 이벤트를 발생시킵니다.
      * @listens BaseCollection#onClear
      */
     _onClear();
     
     /**
-     * onCheared 이벤트를 발생시킵니다.
+     * `onCheared` 이벤트를 발생시킵니다.
      * @listens BaseCollection#onCleared
      */
     _onCleared();
 
     /**
-     * onChanging 이벤트를 발생시킵니다.
+     * `onChanging` 이벤트를 발생시킵니다.
      * @param idx - 변경할 요소의 인덱스입니다.
      * @param elem - 변경할 요소입니다.
      * @listens BaseCollection#onChanging
@@ -268,7 +268,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
     _onChanging(idx: number, elem: any);
 
     /**
-     * onChanged 이벤트를 발생시킵니다.
+     * `onChanged` 이벤트를 발생시킵니다.
      * @param idx - 변경된 요소의 인덱스입니다.
      * @param elem - 변경된 요소입니다.
      * @listens BaseCollection#onChanged
@@ -277,6 +277,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 컬렉션에 요소를 추가할 때 설정되는 기본 기술자입니다.
+     * 
      * @param idx - 기술자를 가져올 요소의 인덱스입니다.
      * @protected
      */
@@ -284,6 +285,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 컬렉션의 요소를 삭제합니다. (내부 사용)
+     * 
      * @param pos - 삭제할 요소의 인덱스입니다.
      * @returns 삭제 성공 여부를 나타내는 불리언 값입니다.
      * @abstract
@@ -293,6 +295,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
     /**
      * 컬렉션 객체를 직렬화(guid 타입) 객체로 반환합니다.  
      * 순환 참조는 $ref 값으로 대체됩니다.
+     * 
      * @param {number} [vOpt=0] - 직렬화 옵션입니다.
      * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
      * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
@@ -307,6 +310,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
     /**
      * 직렬화(guid 타입) 객체를 컬렉션 객체에 설정합니다.  
      * 객체는 초기화됩니다.
+     * 
      * @param oGuid - 직렬화된 객체입니다.
      * @param {object} [origin=p_oGuid] - 현재 객체를 설정하는 원본 객체입니다. 기본값은 oGuid입니다.
      */
@@ -314,6 +318,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 컬렉션에 요소를 삭제합니다.
+     * 
      * @param elem - 삭제할 요소입니다.
      * @returns 삭제된 요소의 인덱스입니다.
      * 
@@ -325,6 +330,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 컬렉션에서 지정된 위치의 요소를 삭제합니다.
+     * 
      * @param pos - 삭제할 요소의 인덱스입니다.
      * @returns 요소 삭제 성공 여부를 나타내는 불리언 값입니다.
      * 
@@ -336,6 +342,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 요소가 컬렉션에 존재하는지 확인합니다.
+     * 
      * @param elem - 확인할 요소입니다.
      * @returns 요소의 존재 여부를 나타내는 불리언 값입니다.
      * 
@@ -347,6 +354,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 컬렉션에서 요소를 조회합니다.
+     * 
      * @param elem - 조회할 요소입니다.
      * @returns 요소의 인덱스입니다. 요소가 존재하지 않으면 -1을 반환합니다.
      * 
@@ -358,6 +366,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 컬렉션에 요소를 추가합니다.
+     * 
      * @abstract
      */
     abstract add(...args: any[]): number;

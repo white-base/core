@@ -11,6 +11,11 @@ bb.emit()
 var aa = new core.ArrayCollection()
 aa.count = '';
 var Base = core.BaseCollection
+var cc = new core.PropertyCollection();
+
+cc.$event
+
+cc.getObject(1)
 
 aa.onAdd
 
