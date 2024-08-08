@@ -85,7 +85,7 @@ declare class PropertyCollection extends BaseCollection implements IPropertyColl
      * 
      * @param key - key 요소의 키입니다.
      * @param elem - 추가할 요소입니다.
-     * @param {PropertyDescriptor} [desc] - 요소에 대한 프로퍼티 기술자 객체입니다. 옵션입니다.
+     * @param {PropertyDescriptor} [desc] - 요소에 대한 프로퍼티 기술자 객체입니다. 선택값입니다.
      * @returns {number} 추가된 요소의 인덱스입니다.
      */
     add(key: string, elem: any,  desc?: PropertyDescriptor): number;

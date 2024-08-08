@@ -106,11 +106,11 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onAdd = (idx, elem, _this) => {
+     * myCollection.onAdd = function(idx, elem, _this) {
      *     console.log(`요소 추가 전: 인덱스 ${idx}, 요소 ${elem}`);
      * };
      */
-    onAdd: (idx: number, elem: any, _this: object) => void;;
+    onAdd: (idx: number, elem: any, _this: object) => void;
 
     /**
      * 컬렉션에 요소를 추가한 후에 발생하는 이벤트입니다.
@@ -121,11 +121,11 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onAdded = (idx, elem, _this) => {
+     * myCollection.onAdded = function(idx, elem, _this) {
      *     console.log(`요소 추가 후: 인덱스 ${idx}, 요소 ${elem}`);
      * };
      */
-    onAdded: (idx: number, elem: any, _this: object) => void;;
+    onAdded: (idx: number, elem: any, _this: object) => void;
 
     /**
      * 컬렉션에서 요소를 삭제하기 전에 발생하는 이벤트입니다.
@@ -136,11 +136,11 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onRemove = (idx, elem, _this) => {
+     * myCollection.onRemove = function(idx, elem, _this) {
      *     console.log(`요소 삭제 전: 인덱스 ${idx}, 요소 ${elem}`);
      * };
      */
-    onRemove: (idx: number, elem: any, _this: object) => void;;
+    onRemove: (idx: number, elem: any, _this: object) => void;
     
     /**
      * 컬렉션에서 요소를 삭제한 후에 발생하는 이벤트입니다.
@@ -151,11 +151,11 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onRemoved = (idx, elem, _this) => {
+     * myCollection.onRemoved = function(idx, elem, _this) {
      *     console.log(`요소 삭제 후: 인덱스 ${idx}, 요소 ${elem}`);
      * };
      */
-    onRemoved: (idx: number, elem: any, _this: object) => void;;
+    onRemoved: (idx: number, elem: any, _this: object) => void;
 
     /**
      * 컬렉션을 초기화하기 전에 발생하는 이벤트입니다.
@@ -164,7 +164,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onClear = (_this) => {
+     * myCollection.onClear = function(_this) {
      *     console.log('컬렉션 초기화 전');
      * };
      */
@@ -177,7 +177,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onCleared = (_this) => {
+     * myCollection.onCleared = function(_this) {
      *     console.log('컬렉션 초기화 후');
      * };
      */
@@ -192,11 +192,11 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onChanging = (idx, elem, _this) => {
+     * myCollection.onChanging = function(idx, elem, _this) {
      *     console.log(`요소 변경 전: 인덱스 ${idx}, 요소 ${elem}`);
      * };
      */
-    onChanging: (idx: number, elem: any, _this: object) => void;;
+    onChanging: (idx: number, elem: any, _this: object) => void;
 
     /**
      * 컬렉션의 요소를 변경한 후에 발생하는 이벤트입니다.
@@ -207,11 +207,11 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @param _this - 현재 컬렉션 객체입니다.
      * 
      * @example
-     * myCollection.onChanged = (idx, elem, _this) => {
+     * myCollection.onChanged = function(idx, elem, _this) {
      *     console.log(`요소 변경 후: 인덱스 ${idx}, 요소 ${elem}`);
      * };
      */
-    onChanged: (idx: number, elem: any, _this: object) => void;;
+    onChanged: (idx: number, elem: any, _this: object) => void;
 
     /**
      * `onAdd` 이벤트를 발생시킵니다.
