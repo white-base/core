@@ -12,7 +12,7 @@ import BaseCollection       = require("./base-collection");
  * @example
  * const myCollection = new PropertyCollection(someOwner);
  * myCollection.add("key1", someElement);
- * console.log(myCollection.keyOf(0)); // "key1"
+ * console.log(myCollection.indexToKey(0)); // "key1"
  */
 declare class PropertyCollection extends BaseCollection implements IPropertyCollection {
     
@@ -67,18 +67,18 @@ declare class PropertyCollection extends BaseCollection implements IPropertyColl
      */
     setObject(oGuid: object, origin?: object): void;
 
-    /**
-     * 프로퍼티 컬렉션에서 지정된 키 또는 요소의 인덱스를 반환합니다.
-     * 
-     * @param target - target 조회할 키 또는 요소입니다. 키로 조회할 경우 문자열을 전달할 수 있습니다.
-     * @param {boolean} [isKey=false] - 키로 조회할지 여부를 결정하는 불리언 값입니다. 기본값은 `false`입니다.
-     * @returns {number} 요소의 인덱스입니다. 요소가 존재하지 않을 경우 `-1`을 반환합니다.
-     * 
-     * @example
-     * const index = myCollection.indexOf("key1", true);
-     * console.log(`키의 인덱스: ${index}`);
-     */
-    indexOf(target: any | string, isKey?: boolean): number;
+    // /**
+    //  * 프로퍼티 컬렉션에서 지정된 키 또는 요소의 인덱스를 반환합니다.
+    //  * 
+    //  * @param target - target 조회할 키 또는 요소입니다. 키로 조회할 경우 문자열을 전달할 수 있습니다.
+    //  * @param {boolean} [isKey=false] - 키로 조회할지 여부를 결정하는 불리언 값입니다. 기본값은 `false`입니다.
+    //  * @returns {number} 요소의 인덱스입니다. 요소가 존재하지 않을 경우 `-1`을 반환합니다.
+    //  * 
+    //  * @example
+    //  * const index = myCollection.indexOf("key1", true);
+    //  * console.log(`키의 인덱스: ${index}`);
+    //  */
+    // indexOf(target: any | string, isKey?: boolean): number;
 
     /**
      * 프로퍼티 컬렉션에 요소를 추가합니다.
@@ -102,16 +102,28 @@ declare class PropertyCollection extends BaseCollection implements IPropertyColl
     clear(): void;
 
     /**
+     * 프로퍼티 컬렉션에서 지정된 키 또는 요소의 인덱스를 반환합니다.
+     * 
+     * @param key - key 조회할 키입니다.
+     * @returns {number} 요소의 인덱스입니다. 요소가 존재하지 않을 경우 `-1`을 반환합니다.
+     * 
+     * @example
+     * const index = myCollection.keyToIndex("key1");
+     * console.log(`키의 인덱스: ${index}`);
+     */
+    keyToIndex(key: string): number;
+    
+    /**
      * 프로퍼티 컬렉션의 인덱스에 해당하는 키를 반환합니다.
      * 
      * @param idx - 조회할 인덱스 값입니다.
      * @returns {string} 인덱스에 해당하는 키입니다. 인덱스가 범위를 벗어나면 `undefined`를 반환할 수 있습니다.
      * 
      * @example
-     * const key = myCollection.keyOf(0);
+     * const key = myCollection.indexToKey(0);
      * console.log(`인덱스 0의 키: ${key}`);
      */
-    keyOf(idx: number): string;
+    indexToKey(idx: number): string;
 
     /**
      * 프로퍼티 컬렉션에 지정된 키가 존재하는지 확인합니다.

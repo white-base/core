@@ -89,7 +89,7 @@
             // });
 
             // 예약어 등록 
-            this.$KEYWORD = ['$keys', 'indexOf', 'exist', 'keyOf'];
+            this.$KEYWORD = ['$keys', 'indexOf', 'exist', 'indexToKey'];
 
             Util.implements(PropertyCollection, this);      // strip:
         }
@@ -118,7 +118,7 @@
          */
         PropertyCollection.prototype._remove = function(p_pos) {
             var count = this.count - 1;
-            var propName = this.keyOf(p_pos);   // number 검사함
+            var propName = this.indexToKey(p_pos);   // number 검사함
             
             delete this[propName];      // 프로퍼티 삭제
 
@@ -129,7 +129,7 @@
             if (p_pos < count) {        // 참조 자료 변경
                 for (var i = p_pos; i < count; i++) {
                     var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
-                    propName = this.keyOf(i);
+                    propName = this.indexToKey(i);
                     Object.defineProperty(this, [i], desc);
                     Object.defineProperty(this, propName, desc);
                 }
@@ -223,22 +223,22 @@
             }
         };
 
-        /**
-         * 프로퍼티 컬렉션의 인덱스 값을 조회합니다.
-         * @param {string | any} p_target 키 또는 요소
-         * @param {boolean} [p_isKey=false] 키로 조회 여부
-         * @returns {number} 없을시 -1
-         */
-        PropertyCollection.prototype.indexOf = function(p_target, p_isKey) {
-            var isKey = p_isKey || false;
+        // /**
+        //  * 프로퍼티 컬렉션의 인덱스 값을 조회합니다.
+        //  * @param {string | any} p_target 키 또는 요소
+        //  * @param {boolean} [p_isKey=false] 키로 조회 여부
+        //  * @returns {number} 없을시 -1
+        //  */
+        // PropertyCollection.prototype.indexOf = function(p_target, p_isKey) {
+        //     var isKey = p_isKey || false;
             
-            if (!isKey) return this.$elements.indexOf(p_target);
-            else {
-                if (!_isString(p_target))  throw new ExtendError(/EL04224/, null, [typeof p_target]);
-                return this.$keys.indexOf(p_target);
-            }
-        };
-
+        //     if (!isKey) return this.$elements.indexOf(p_target);
+        //     else {
+        //         if (!_isString(p_target))  throw new ExtendError(/EL04224/, null, [typeof p_target]);
+        //         return this.$keys.indexOf(p_target);
+        //     }
+        // };
+        
         /**
          * 프로퍼티 컬렉션에 요소를 추가합니다.
          * @param {string} p_key 키
@@ -298,7 +298,7 @@
             this._onClear();
             
             for (var i = 0; i < this.count; i++) {
-                var propName = this.keyOf(i);
+                var propName = this.indexToKey(i);
                 delete this[i];
                 delete this[propName];
             }
@@ -310,11 +310,21 @@
         };
     
         /**
+         * 프로퍼티 컬렉션키의 인덱스 값을 조회합니다.
+         * @param {string} p_key 키
+         * @returns {number} 없을시 -1
+         */
+        PropertyCollection.prototype.keyToIndex = function(p_key) {
+            if (!_isString(p_key))  throw new ExtendError(/EL04224/, null, [typeof p_key]);
+            return this.$keys.indexOf(p_key);
+        };
+
+        /**
          * 프로퍼티 컬렉션의 인덱스에 대한 키값을 조회합니다.
          * @param {number} p_idx 인덱스 값
          * @returns {string}
          */
-        PropertyCollection.prototype.keyOf = function(p_idx) {
+        PropertyCollection.prototype.indexToKey = function(p_idx) {
             if (typeof p_idx !== 'number') throw new ExtendError(/EL0422A/, null, [typeof p_idx]);
             return this.$keys[p_idx];
         };

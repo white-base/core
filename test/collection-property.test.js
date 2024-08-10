@@ -122,7 +122,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             it("- removeAt(idx) ", () => {
                 let s = new Student();
                 s.columns.add('a1', 'A1');
-                const idx = s.columns.indexOf('a1', 1);
+                const idx = s.columns.keyToIndex('a1');
                 const result = s.columns.removeAt(idx);
     
                 expect(s.columns['a1']).toBeUndefined();
@@ -134,7 +134,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             it("- removeAt(idx) : 없을 경우", () => {
                 let s = new Student();
                 s.columns.add('a1', 'A1');
-                const idx = s.columns.indexOf('a1', 1);
+                const idx = s.columns.keyToIndex('a1');
                 const result = s.columns.removeAt(idx + 1);
     
                 expect(s.columns['a1']).toBeTruthy();
@@ -158,8 +158,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.a3).toBeDefined();
                 expect(s.columns[0] === s.columns['a2']).toBe(true);
                 expect(s.columns[1] === s.columns['a3']).toBe(true);
-                expect(s.columns.indexOf('a2', 1)).toBe(0);  // 바뀐 idx 확인
-                expect(s.columns.indexOf('a3', 1)).toBe(1);  // 바뀐 idx 확인
+                expect(s.columns.keyToIndex('a2')).toBe(0);  // 바뀐 idx 확인
+                expect(s.columns.keyToIndex('a3')).toBe(1);  // 바뀐 idx 확인
                 expect(s.columns.count).toBe(2);
                 expect(s.columns._list.length).toBe(2);
                 expect(result).toBeTruthy();
@@ -179,8 +179,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.a3).toBeDefined();
                 expect(s.columns[0] === s.columns['a1']).toBe(true);
                 expect(s.columns[1] === s.columns['a3']).toBe(true);
-                expect(s.columns.indexOf('a1', 1)).toBe(0);  
-                expect(s.columns.indexOf('a3', 1)).toBe(1);  // 바뀐 idx 확인
+                expect(s.columns.keyToIndex('a1')).toBe(0);  
+                expect(s.columns.keyToIndex('a3')).toBe(1);  // 바뀐 idx 확인
                 expect(s.columns.count).toBe(2);
                 expect(s.columns._list.length).toBe(2);
                 expect(result).toBeTruthy();
@@ -203,9 +203,9 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.a4).toBeDefined();
                 expect(s.columns[0] === s.columns['a1']).toBe(true);
                 expect(s.columns[1] === s.columns['a2']).toBe(true);
-                expect(s.columns.indexOf('a1', 1)).toBe(0);  
-                expect(s.columns.indexOf('a2', 1)).toBe(1);
-                expect(s.columns.indexOf('a4', 1)).toBe(2);
+                expect(s.columns.keyToIndex('a1')).toBe(0);  
+                expect(s.columns.keyToIndex('a2')).toBe(1);
+                expect(s.columns.keyToIndex('a4')).toBe(2);
                 expect(s.columns.count).toBe(3);
                 expect(s.columns._list.length).toBe(3);
                 expect(result).toBeTruthy();
@@ -303,7 +303,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
     
                 s.columns.add('a1', a1);
                 // const result = s.columns.removeByProp('a1');
-                const result = s.columns.removeAt(s.columns.indexOf('a1', 1));
+                const result = s.columns.removeAt(s.columns.keyToIndex('a1'));
     
                 expect(s.columns['a1']).toBeUndefined();
                 expect(s.columns.a1).toBeUndefined();
@@ -541,7 +541,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.indexOf(10)).toBe(2);    // 원시타입 사용시 값으로 조회해서 a4는 조회 못함
                 expect(s.columns.count).toBe(4);
             });
-            it("- indexOf(name, 1) ", () => {
+            it.skip("- indexOf(name, 1) ", () => {
                 let s = new Student();
                 const a2 = { style: 1};
                 s.columns.add('a1', 'A1');
@@ -556,14 +556,14 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.indexOf('a5', 1)).toBe(-1); // 없는 경우
                 expect(s.columns.count).toBe(4);
             });
-            it("- indexOf(name, 1) : 예외 ", () => {
+            it.skip("- indexOf(name, 1) : 예외 ", () => {
                 let s = new Student();
                 s.columns.add('a1', 'A1');
         
                 expect(s.columns.indexOf('a5', 2)).toBe(-1); // 없는 경우
                 expect(()=> s.columns.indexOf(100, 1)).toThrow(/EL04224/);  
             });
-            // it("- keyOf(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
+            // it("- indexToKey(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
             //     let s = new Student();
             //     const a2 = { style: 1};
             //     s.columns.add('a1', 'A1');
@@ -571,11 +571,50 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             //     s.columns.add('a3', 10);
             //     s.columns.add('a4', 10);
         
-            //     expect(s.columns.keyOf('A1')).toBe('a1');
-            //     expect(s.columns.keyOf(a2)).toBe('a2');
-            //     expect(s.columns.keyOf(10)).toBe('a3');
-            //     expect(s.columns.keyOf(10)).toBe('a3');
-            //     expect(s.columns.keyOf(4)).toBeUndefined();
+            //     expect(s.columns.indexToKey('A1')).toBe('a1');
+            //     expect(s.columns.indexToKey(a2)).toBe('a2');
+            //     expect(s.columns.indexToKey(10)).toBe('a3');
+            //     expect(s.columns.indexToKey(10)).toBe('a3');
+            //     expect(s.columns.indexToKey(4)).toBeUndefined();
+            //     expect(s.columns.count).toBe(4);
+            // });
+        });
+        describe("PropertyCollection.keyToIndex(str): num <키의 인덱스 조회> ", () => {
+            it("- keyToIndex(name) ", () => {
+                let s = new Student();
+                const a2 = { style: 1};
+                s.columns.add('a1', 'A1');
+                s.columns.add('a2', a2);
+                s.columns.add('a3', 10);
+                s.columns.add('a4', 10);
+        
+                expect(s.columns.keyToIndex('a1')).toBe(0);
+                expect(s.columns.keyToIndex('a2')).toBe(1);
+                expect(s.columns.keyToIndex('a3')).toBe(2);
+                expect(s.columns.keyToIndex('a4')).toBe(3);
+                expect(s.columns.keyToIndex('a5')).toBe(-1); // 없는 경우
+                expect(s.columns.count).toBe(4);
+            });
+            it("- keyToIndex(name) : 예외 ", () => {
+                let s = new Student();
+                s.columns.add('a1', 'A1');
+        
+                expect(s.columns.keyToIndex('a5', 2)).toBe(-1); // 없는 경우
+                expect(()=> s.columns.keyToIndex(100, 1)).toThrow(/EL04224/);  
+            });
+            // it("- indexToKey(elem) : {동일객체 있을경우 첫번째 값을 리턴} ", () => {
+            //     let s = new Student();
+            //     const a2 = { style: 1};
+            //     s.columns.add('a1', 'A1');
+            //     s.columns.add('a2', a2);
+            //     s.columns.add('a3', 10);
+            //     s.columns.add('a4', 10);
+        
+            //     expect(s.columns.indexToKey('A1')).toBe('a1');
+            //     expect(s.columns.indexToKey(a2)).toBe('a2');
+            //     expect(s.columns.indexToKey(10)).toBe('a3');
+            //     expect(s.columns.indexToKey(10)).toBe('a3');
+            //     expect(s.columns.indexToKey(4)).toBeUndefined();
             //     expect(s.columns.count).toBe(4);
             // });
         });
@@ -726,7 +765,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 // expect(() => s.columns.add('keys')).toThrow(/ES048/);
                 expect(() => s.columns.add('$keys')).toThrow(/EL04229/);
                 // expect(() => s.columns.add('indexOfProp')).toThrow(/ES048/);
-                expect(() => s.columns.add('keyOf')).toThrow(/EL04227/);
+                expect(() => s.columns.add('indexToKey')).toThrow(/EL04227/);
                 // expect(() => s.columns.add('removeByProp')).toThrow(/ES048/);
             });
             it("- add(name) : 이름을 숫자로 사용할 경우 (예외)", () => {
@@ -773,8 +812,8 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 // expect(s.columns._keys.length).toBe(0);  // 내부 함수는 검사에 사용안하는게 원칙임
             });
         });
-        describe("PropertyCollection.keyOf(idx) <인덱스로 키 조회> ", () => {
-            it("- keyOf(idx) ", () => {
+        describe("PropertyCollection.indexToKey(idx) <인덱스로 키 조회> ", () => {
+            it("- indexToKey(idx) ", () => {
                 let s = new Student();
                 const a2 = { style: 1};
                 s.columns.add('a1', 'A1');
@@ -782,18 +821,18 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 s.columns.add('a3', 10);
                 s.columns.add('a4', 10);
         
-                expect(s.columns.keyOf(0)).toBe('a1');
-                expect(s.columns.keyOf(1)).toBe('a2');
-                expect(s.columns.keyOf(2)).toBe('a3');
-                expect(s.columns.keyOf(3)).toBe('a4');
-                expect(s.columns.keyOf(4)).toBeUndefined();
+                expect(s.columns.indexToKey(0)).toBe('a1');
+                expect(s.columns.indexToKey(1)).toBe('a2');
+                expect(s.columns.indexToKey(2)).toBe('a3');
+                expect(s.columns.indexToKey(3)).toBe('a4');
+                expect(s.columns.indexToKey(4)).toBeUndefined();
                 expect(s.columns.count).toBe(4);
             });
-            it("- keyOf(string) : 예외 ", () => {
+            it("- indexToKey(string) : 예외 ", () => {
                 let s = new Student();
                 s.columns.add('a1', 'A1');
         
-                expect(()=> s.columns.keyOf('a1')).toThrow('EL0422A');
+                expect(()=> s.columns.indexToKey('a1')).toThrow('EL0422A');
             });
         });
         describe("예외, 커버리지 ", () => {

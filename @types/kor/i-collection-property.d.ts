@@ -12,7 +12,7 @@ declare interface IPropertyCollection extends ICollection {
      * @param idx - 확인할 프로퍼티의 인덱스
      * @returns 프로퍼티 키가 존재하면 true, 존재하지 않으면 false
      */
-    keyOf(idx: number);
+    indexToKey(idx: number);
 }
 
 export = IPropertyCollection;

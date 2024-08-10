@@ -342,13 +342,13 @@
                 this.setName = p_obj.setName;
 
                 for (var i = 0; i < p_obj.tables.count; i++) {
-                    var key = p_obj.tables.keyOf(i);
+                    var key = p_obj.tables.indexToKey(i);
                     if (this.tables.indexOf(key, 1) < 0) this.tables.add(key);
                     entity = this.tables[key];
                     entity._readEntity(p_obj.tables[key], p_opt);
                 }
                 for (var i = 0; i < p_obj.views.count; i++) {
-                    var key = p_obj.views.keyOf(i);
+                    var key = p_obj.views.indexToKey(i);
                     if (this.views.indexOf(key, 1) < 0) this.views.add(key);
                     entity = this.views[key];
                     entity._readEntity(p_obj.views[key], p_opt);

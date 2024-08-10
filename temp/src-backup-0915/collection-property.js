@@ -74,8 +74,8 @@
             });
 
             // 예약어 등록 
-            this.__KEYWORD = ['keys', '_keys', 'indexOf', 'keyOf'];
-            // this.__KEYWORD = this.__KEYWORD.concat(['keys', '_keys', 'indexOf', 'keyOf']);
+            this.__KEYWORD = ['keys', '_keys', 'indexOf', 'indexToKey'];
+            // this.__KEYWORD = this.__KEYWORD.concat(['keys', '_keys', 'indexOf', 'indexToKey']);
 
             Util.implements(this, IPropertyCollection);
         }
@@ -92,7 +92,7 @@
          */
         PropertyCollection.prototype._remove = function(p_idx) {
             var count = this.$elements.length - 1;
-            var propName = this.keyOf(p_idx);   // number 검사함
+            var propName = this.indexToKey(p_idx);   // number 검사함
             
             // if (typeof p_idx !== 'number') throw new Error('Only [p_idx] type "number" can be added'); 
 
@@ -106,11 +106,11 @@
             if (p_idx < count) {
                 for (var i = p_idx; i < count; i++) {
                     var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
-                    propName = this.keyOf(i);
+                    propName = this.indexToKey(i);
                     Object.defineProperty(this, [i], desc);
                     Object.defineProperty(this, propName, desc);
                     // Object.defineProperty(this, [i], this._getPropDescriptor(i));
-                    // propName = this.keyOf(i);
+                    // propName = this.indexToKey(i);
                     // Object.defineProperty(this, propName, this._getPropDescriptor(i));
                 }
                 delete this[count];                     // 마지막 idx 삭제
@@ -251,7 +251,7 @@
            this._onClear();
             // process
            for (var i = 0; i < this.$elements.length; i++) {
-               propName = this.keyOf(i);
+               propName = this.indexToKey(i);
                delete this[i];
                delete this[propName];
             }
@@ -288,7 +288,7 @@
          * @param {number} p_obj 대상객체 또는 idx
          * @returns {string}
          */
-        PropertyCollection.prototype.keyOf = function(p_idx) {
+        PropertyCollection.prototype.indexToKey = function(p_idx) {
             if (typeof p_idx !== 'number') Message.error('ES021', ['idx', 'number']);
             return this._keys[p_idx];
         };

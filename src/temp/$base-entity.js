@@ -364,7 +364,7 @@
                 if (_this.rows.count > 0 ) throw new ExtendError(/EL05327/, null, [opt]);
                 for (let i = 0; i < p_entity.columns.count; i++) {
                     var column = p_entity.columns[i].clone();
-                    var key = p_entity.columns.keyOf(i);
+                    var key = p_entity.columns.indexToKey(i);
                     if (_this.columns.exist(key)) throw new ExtendError(/EL05328/, null, [key]);
                     _this.columns.add(column);
                 }
@@ -373,7 +373,7 @@
                 for (let i = 0; i < p_entity.rows.count; i++) {
                     var row = _this.newRow(this);
                     for (let ii = 0; ii < _this.columns.count; ii++) {
-                        var key = _this.columns.keyOf(ii);
+                        var key = _this.columns.indexToKey(ii);
                         row[key] = p_entity.rows[i][key];
                     }
                     _this.rows.add(row);

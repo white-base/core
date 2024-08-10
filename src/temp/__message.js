@@ -819,7 +819,7 @@
                             msg: ''
                         },
                         231: {  // EL02181
-                            msg: 'keyOf(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
+                            msg: 'indexToKey(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.'
                         },
 
                         // use Meta.Entity.*
@@ -1157,7 +1157,7 @@
                             msg: 'add(name, value, desc); 추가가 실패하였습니다. name = \'$1\', value = \'$2\''
                         },
                         '22A': {  // EL0422A
-                            msg: 'keyOf(idx); idx 이 \'number\' 타입이 아닙니다. typeof idx = $1'
+                            msg: 'indexToKey(idx); idx 이 \'number\' 타입이 아닙니다. typeof idx = $1'
                         },
                         '22B': {  // EL0422B
                             msg: 'exist(key); key 이 \'string\' 타입이 아닙니다.(length > 0) typeof key = $1'

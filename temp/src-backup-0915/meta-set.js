@@ -206,7 +206,7 @@
                     Message.error('ES032', ['target', 'MetaTableCollection, MetaTableCollection']);
                 }
                 for (var i = 0; i < p_target.count; i++) {
-                    var key = p_target.keyOf(i);
+                    var key = p_target.indexToKey(i);
                     if (p_orignal.exist(key)) Message.error('ES046', ['collection', key]);
                     p_orignal._loadEntity(p_target[i], opt);
                 }

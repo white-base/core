@@ -49,8 +49,8 @@
         /**
          * 조회 : 인덱스로 이름 조회
          */
-        IPropertyCollection.prototype.keyOf  = function() {
-            Message.error('ES013', ['keyOf(idx): str']);
+        IPropertyCollection.prototype.indexToKey  = function() {
+            Message.error('ES013', ['indexToKey(idx): str']);
         };
 
         return IPropertyCollection;

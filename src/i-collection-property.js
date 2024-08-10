@@ -49,7 +49,7 @@
          * @returns {boolean}
          * @abstract
          */
-        IPropertyCollection.prototype.keyOf  = function() {
+        IPropertyCollection.prototype.indexToKey  = function() {
             throw new ExtendError(/EL02181/, null, ['IPropertyCollection']);
         };
 

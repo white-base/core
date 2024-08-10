@@ -2266,8 +2266,8 @@ describe.skip("[target: meta-view.js]", () => {
                 c2.columnName = 'c1';
                 expect(c1.columnName).toBe('cc1');
                 expect(c2.columnName).toBe('c1');
-                expect(view1.columns.keyOf(0)).toBe('c1');
-                expect(view1.columns.keyOf(1)).toBe('c2');
+                expect(view1.columns.indexToKey(0)).toBe('c1');
+                expect(view1.columns.indexToKey(1)).toBe('c2');
             });
             it("- 참조뷰 ", () => {   // REVIEW: 좋은 참조 샘플
                 const view1 = new MetaView('V1');
@@ -2316,8 +2316,8 @@ describe.skip("[target: meta-view.js]", () => {
                 expect(c2.alias).toBe('c1');
                 expect(c1.columnName).toBe('c1');
                 expect(c2.columnName).toBe('c2');
-                expect(view1.columns.keyOf(0)).toBe('c1');
-                expect(view1.columns.keyOf(1)).toBe('c2');
+                expect(view1.columns.indexToKey(0)).toBe('c1');
+                expect(view1.columns.indexToKey(1)).toBe('c2');
             });
             it("- 참조뷰 ", () => {
                 const view1 = new MetaView('V1');

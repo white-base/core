@@ -366,7 +366,7 @@ const { ISerialize } = require('./i-serialize');
                 
                 for (let i = 0; i < p_entity.columns.count; i++) {
                     var column = p_entity.columns[i].clone();
-                    var key = p_entity.columns.keyOf(i);
+                    var key = p_entity.columns.indexToKey(i);
                     if (_this.columns.exist(key)) Message.error('ES046', ['columns', key]);
                     _this.columns.add(column);
                 }
@@ -378,7 +378,7 @@ const { ISerialize } = require('./i-serialize');
                     // _this.columns.add(column);
                     var row = _this.newRow(this);
                     for (let ii = 0; ii < _this.columns.count; ii++) {
-                        var key = _this.columns.keyOf(ii);
+                        var key = _this.columns.indexToKey(ii);
                         row[key] = p_entity.rows[i][key];
                     }
                     _this.rows.add(row);
@@ -749,7 +749,7 @@ const { ISerialize } = require('./i-serialize');
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
                         alias = this.columns[ii].alias;
-                        // key = this.columns.keyOf(ii);
+                        // key = this.columns.indexToKey(ii);
                         if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
                     }
                     this.rows.add(newRow, p_checkValid);
@@ -819,7 +819,7 @@ const { ISerialize } = require('./i-serialize');
                 this.rows.clear();
                 // 컬럼 추가
                 for (var i = 0; i < tarColumns.count; i++) {
-                    // key = tarColumns.keyOf(i);
+                    // key = tarColumns.indexToKey(i);
                     alias = tarColumns[i].alias;
                     if (!this.columns.exist(alias)) {
                         clone = tarColumns[i].clone(this);
@@ -838,7 +838,7 @@ const { ISerialize } = require('./i-serialize');
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
                         alias = this.columns[ii].alias;
-                        // key = this.columns.keyOf(ii);
+                        // key = this.columns.indexToKey(ii);
                         if (tempRows[i][alias]) newRow[alias] = tempRows[i][alias];
                     }
                     this.rows.add(newRow, p_checkValid);
@@ -848,7 +848,7 @@ const { ISerialize } = require('./i-serialize');
                     newRow = this.newRow();
                     for (var ii = 0; ii < this.columns.count; ii++) {
                         alias = this.columns[ii].alias;
-                        // key = this.columns.keyOf(ii);
+                        // key = this.columns.indexToKey(ii);
                         if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
                     }
                     this.rows.add(newRow, p_checkValid);
@@ -860,7 +860,7 @@ const { ISerialize } = require('./i-serialize');
                 tarRows = target.rows;
                 // 컬럼 중복 검사
                 for (var i = 0; i < tarColumns.count; i++) {
-                    // key = tarColumns.keyOf(i);
+                    // key = tarColumns.indexToKey(i);
                     alias = tarColumns[i].alias;
                     if (this.columns.exist(alias)) Message.error('ES042', ['columnName', alias]);
                     if (this.columns.existAlias(alias)) Message.error('ES042', ['alais', alias]);
@@ -898,7 +898,7 @@ const { ISerialize } = require('./i-serialize');
                         }
                         if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias]; // 타겟 로우
 
-                        // key = this.columns.keyOf(ii);
+                        // key = this.columns.indexToKey(ii);
                         // if (tempRows[i][key]) {                         // 원본 로우
                         //     newRow[key] = tempRows[i][key];
                         //     continue;
@@ -914,7 +914,7 @@ const { ISerialize } = require('./i-serialize');
                         for (var ii = 0; ii < this.columns.count; ii++) {
                             alias = this.columns[ii].alias;
                             if (tarRows[i][alias]) newRow[alias] = tarRows[i][alias];
-                            // key = this.columns.keyOf(ii);
+                            // key = this.columns.indexToKey(ii);
                             // if (tarRows[i][key]) newRow[key] = tarRows[i][key];
                         }
                         this.rows.add(newRow, p_checkValid);
@@ -1240,7 +1240,7 @@ const { ISerialize } = require('./i-serialize');
         //     if (this.instanceOf('MetaTable')) obj.tableName = this.tableName;
 
         //     for(var i = 0; i < this.columns.count; i++) {
-        //         var key = this.columns.keyOf(i);
+        //         var key = this.columns.indexToKey(i);
         //         obj.columns[key] = this.columns[i].getObject(p_vOpt);
         //     }
         //     return obj;
@@ -1253,7 +1253,7 @@ const { ISerialize } = require('./i-serialize');
 
             for(var i = 0; i < this.columns.count; i++) {
                 var column = this.columns[i];
-                var key = this.columns.keyOf(i);
+                var key = this.columns.indexToKey(i);
                 var cObj = {};
                 var rObj = column.getObject();
 

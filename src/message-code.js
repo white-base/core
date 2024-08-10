@@ -218,7 +218,7 @@
             EL02171: 'insertAt(pos, val, ..): boolean 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             // i-collection-property.js
             EL02180: '',
-            EL02181: 'keyOf(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
+            EL02181: 'indexToKey(idx): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
             // i-serialize.js
             EL02190: '',
             EL02191: 'output(opt, ...): string 은 추상메소드 입니다. [$1] 을 구현해야 합니다.',
@@ -333,7 +333,7 @@
             EL04227: 'add(name, value, desc); name = \'$1\' 이 예약어 입니다.',
             EL04228: 'add(name, value, desc); name = \'$1\' 이 기존 이름과 중복이 발생했습니다.',
             EL04229: 'add(name, value, desc); 추가가 실패하였습니다. name = \'$1\', value = \'$2\'',
-            EL0422A: 'keyOf(idx); idx 이 \'number\' 타입이 아닙니다. typeof idx = $1',
+            EL0422A: 'indexToKey(idx); idx 이 \'number\' 타입이 아닙니다. typeof idx = $1',
             EL0422B: 'exist(key); key 이 \'string\' 타입이 아닙니다.(length > 0) typeof key = $1',
             //
             EL04300: '',

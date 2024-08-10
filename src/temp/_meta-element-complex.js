@@ -97,7 +97,7 @@
         ComplexElement.prototype.indexOf = function() {};
         ComplexElement.prototype.exist = function() {};
         ComplexElement.prototype.contains = function() {};
-        ComplexElement.prototype.keyOf = function() {};
+        ComplexElement.prototype.indexToKey = function() {};
         // ComplexElement.prototype.removeByProp = function() {};
         ComplexElement.prototype.indexOf  = function() {};
 
