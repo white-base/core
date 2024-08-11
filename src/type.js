@@ -1155,7 +1155,7 @@
                 }
             
             // _IDX_ (index)
-            } else if (eType['kind'] === '_IDX_') {
+            // } else if (eType['kind'] === '_IDX_') {
                 /**
                  * POINT:
                  * - 검사
@@ -1183,20 +1183,21 @@
                  * - 조건문 처리
                  *  + 둘다 성공해야 성공
                  */
-                if (eType['list'].length === 0) throw new ExtendError('TODO: IDX 는 검사 타입이 없습니다. 하나이상 있어야 합니다.', prop, []);
-                if (tType['$type'] !== 'union') throw new ExtendError('TODO: IDX 는 검사 대상이 object(union) 타입만 가능합니다.', prop, ['object', sTar]);
+                // POINT: 개발 해야함
+                // if (eType['list'].length === 0) throw new ExtendError('TODO: IDX 는 검사 타입이 없습니다. 하나이상 있어야 합니다.', prop, []);
+                // if (tType['$type'] !== 'union') throw new ExtendError('TODO: IDX 는 검사 대상이 object(union) 타입만 가능합니다.', prop, ['object', sTar]);
 
-                for(var i = 0; i < eType['list'].length; i++) {
-                    var _elem   = eType['list'][i];
+                // for(var i = 0; i < eType['list'].length; i++) {
+                //     var _elem   = eType['list'][i];
                     
-                    // var _tar    = tType['list'][i];
-                    try {
-                        _execMatch(_elem, target);
-                    } catch (error) {
-                        throw new ExtendError('TODO: ', error, []);
-                    }
+                //     // var _tar    = tType['list'][i];
+                //     try {
+                //         _execMatch(_elem, target);
+                //     } catch (error) {
+                //         throw new ExtendError('TODO: ', error, []);
+                //     }
                     
-                }
+                // }
             
             // _ETC_
             } else {
