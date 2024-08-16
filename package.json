@@ -8,12 +8,11 @@
     "test:c": "jest --coverage",
     "test:u": "jest --updateSnapshot",
     "test:v": "jest --verbose",
-    "doc:j": "jsdoc -c jaguar.json",
-    "doc:2": "jsdoc -c jsdoc.json",
     "http": "npx http-server",
     "type:eng": "npx typedoc --out eDocs @types/eng/index.d.ts",
     "type:kor": "npx typedoc --out kDocs @types/kor/index.d.ts @types/kor/global.d.ts",
-    "gulp:meta": "gulp meta"
+    "gulp:meta": "gulp meta",
+    "gulp:meta-min": "gulp meta-min"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,6 @@
     "gulp-string-replace": "^1.1.2",
     "gulp-strip-comments": "^2.6.0",
     "gulp-strip-line": "^0.0.1",
-    "jaguarjs-jsdoc": "github:white-base/jaguarjs-jsdoc",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "jsdoc": "^4.0.2",

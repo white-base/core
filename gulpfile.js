@@ -92,7 +92,7 @@ gulp.task('meta', function () {
 });
 
 
-gulp.task('min', function () {
+gulp.task('meta-min', function () {
 	return gulp.src(fileList)
 		.pipe(concat(PreFileName +'-'+ package.version + '.js'))
 		.pipe(minify())
