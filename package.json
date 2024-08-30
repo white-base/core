@@ -1,6 +1,6 @@
 {
   "name": "logic-core",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "white framework core",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "gulp:meta": "gulp meta",
     "gulp:meta-min": "gulp meta-min"
   },
-  "types": "./types/en/index.d.ts",
+  "types": "./types/kr/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/white-base/core.git"
