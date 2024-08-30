@@ -1,4 +1,4 @@
-require('./src/message-code');
+const messageCode                 = require('./src/message-code').messageCode;
 const Message                     = require('./src/message').Message;
 const ExtendError                 = require('./src/extend-error').ExtendError;
 const Type                        = require('./src/type').Type;
@@ -22,6 +22,7 @@ const ArrayCollection             = require("./src/collection-array").ArrayColle
 const PropertyCollection          = require("./src/collection-property").PropertyCollection;
 
 module.exports = {
+    default: MetaObject,
     Util: Util,
     Type: Type,
     EventEmitter: EventEmitter,

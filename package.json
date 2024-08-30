@@ -1,6 +1,6 @@
 {
   "name": "logic-core",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "white framework core",
   "main": "index.js",
   "scripts": {
@@ -9,11 +9,12 @@
     "test:u": "jest --updateSnapshot",
     "test:v": "jest --verbose",
     "http": "npx http-server",
-    "type:eng": "npx typedoc --out eDocs @types/eng/index.d.ts",
-    "type:kor": "npx typedoc --out kDocs @types/kor/index.d.ts @types/kor/global.d.ts",
+    "type:en": "npx typedoc --out eDocs types/en/index.d.ts",
+    "type:ko": "npx typedoc --out kDocs types/ko/index.d.ts types/ko/global.d.ts",
     "gulp:meta": "gulp meta",
     "gulp:meta-min": "gulp meta-min"
   },
+  "types": "./types/en/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/white-base/core.git"
