@@ -66,4 +66,7 @@ declare class ExtendError {
     toString(): string;
 }
 
-export = ExtendError;
+export {
+    ExtendError as default,
+    ExtendError
+}

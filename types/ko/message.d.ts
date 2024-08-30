@@ -59,4 +59,7 @@ declare class Message {
     static warn(code: string, value: string[]);
 }
 
-export = Message;
+export {
+    Message as default,
+    Message
+}

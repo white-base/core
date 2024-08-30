@@ -1,4 +1,0 @@
-{
-    "out": "kDocs/",
-    "entryPoints": ["@eng_types/index.d.ts"]
-}

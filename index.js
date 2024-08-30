@@ -22,7 +22,6 @@ const ArrayCollection             = require("./src/collection-array").ArrayColle
 const PropertyCollection          = require("./src/collection-property").PropertyCollection;
 
 module.exports = {
-    default: MetaObject,
     Util: Util,
     Type: Type,
     EventEmitter: EventEmitter,

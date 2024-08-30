@@ -14,7 +14,7 @@
     "gulp:meta": "gulp meta",
     "gulp:meta-min": "gulp meta-min"
   },
-  "types": "./types/kr/index.d.ts",
+  "types": "./types/ko/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/white-base/core.git"

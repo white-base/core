@@ -1,7 +1,8 @@
 import ICollection          = require("./i-collection");
 import IList                = require("./i-list");
 import MetaObject           = require("./meta-object");
-import EventEmitter         = require("./event-emitter");
+// import EventEmitter         = require("./event-emitter");
+import EventEmitter        from "./event-emitter";
 // import T                    = require("./T");
 
 /**
