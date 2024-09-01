@@ -366,6 +366,11 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
     indexOf(elem?: any): number;
 
     /**
+     * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+     */
+    map(callback: (value: any, index: number, array: any[]) => any, thisArg?: any): any[];
+
+    /**
      * 컬렉션에 요소를 추가합니다.
      * 
      * @abstract
@@ -377,6 +382,7 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
      * @abstract
      */
     abstract clear(): void;
+
 }
 
 export = BaseCollection;

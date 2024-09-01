@@ -580,6 +580,23 @@ describe("[target: collection-array.js, base-collection.js]", () => {
         describe("ArrayCollection.clear() <초기화>", () => {
             it("- clear() ", () => {
                 let s = new Student();
+                var arr = [];
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                var arr = s.rows.map((elem, i, thisArg)=> {
+                    return {a: elem, b: i, c: thisArg};
+                });
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows})
+            });
+        });
+        describe("ArrayCollection.map()", () => {
+            it("- clear() ", () => {
+                let s = new Student();
                 s.rows.add('A1');
                 s.rows.add('A2');
                 s.rows.add('A3');
