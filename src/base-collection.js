@@ -190,6 +190,19 @@
             });
 
             /**
+             * 컬렉션 요소의 갯수입니다.
+             * @readonly
+             * @member {number} _L.Collection.BaseCollection#length 
+             */
+            Object.defineProperty(this, 'length', 
+            {
+                get: function() { return this.$elements.length; },
+                enumerable: false,
+                configurable: false
+            });
+    
+
+            /**
              * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
              * @event _L.Collection.BaseCollection#onAdd
              * @param {function}    p_callback
@@ -309,7 +322,7 @@
             this._owner = p_owner || null;
 
             // 예약어 등록
-            this.$KEYWORD = ['$event', '_owner', '$elements', '$descriptors', '_elemTypes', '_list', 'count', '$KEYWORD'];
+            this.$KEYWORD = ['$event', '_owner', '$elements', '$descriptors', '_elemTypes', '_list', 'count', 'length', '$KEYWORD'];
             this.$KEYWORD = ['onAdd', 'onAdded', 'onRemove', 'onRemoved', 'onClear', 'onCleared', 'onChanging', 'onChanged'];
             this.$KEYWORD = ['_onAdd', '_onAdded', '_onRemove', '_onRemoved', '_onClear', '_onCleared', '_onChanging', '_onChanged'];
             this.$KEYWORD = ['_getPropDescriptor', 'getObject', 'setObject', '_guid', '_type'];
@@ -565,23 +578,43 @@
         /**
          * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
          * @param {Function} callback 콜백함수 (currentValue, index, array) => {}
-         * @param {any} thisArg 호출한 컬렉션
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
          * 
          * @returns  {Array}
          */
         BaseCollection.prototype.map  = function(callback, thisArg) {
             var newArr = [];
 
-            if (typeof this.count != 'number') return;
-            if (typeof callback != 'function') return;
+            if (typeof callback != 'function') throw Error(`callBack} is not a function`);
      
             if (typeof this == 'object') {
-    
-                for (var i = 0; i < this.count; i++) {
+                for (var i = 0; i < this.length; i++) {
                     if (i in this) {
                         newArr[i] = callback.call(thisArg || this, this[i], i, this);
                     } else {
                         return;
+                    }
+                }
+            }
+            return newArr; [].filter
+        };
+
+        /**
+         * 배열의 일부에 대한 얕은 복사본을 생성하고, 주어진 배열에서 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => {}
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * 
+         * @returns  {Array}
+         */
+        BaseCollection.prototype.filter = function (callback, thisArg) {
+            let newArr = [];
+
+            if (typeof callback != 'function') throw Error(`callBack} is not a function`);
+
+            for (let i = 0; i < this.length; i++) {
+                if (i in this) {
+                    if (callback.call(thisArg, this[i], i, this)) {
+                        newArr.push(this[i]);
                     }
                 }
             }

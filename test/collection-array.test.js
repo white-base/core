@@ -577,24 +577,85 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(count).toBe(2)
             });
         });
-        describe("ArrayCollection.clear() <초기화>", () => {
-            it("- clear() ", () => {
+        describe("ArrayCollection.map()", () => {
+            it("- map() : function ", () => {
                 let s = new Student();
                 var arr = [];
                 s.rows.add('A1');
                 s.rows.add('A2');
                 s.rows.add('A3');
-                var arr = s.rows.map((elem, i, thisArg)=> {
-                    return {a: elem, b: i, c: thisArg};
-                });
+                var arr = s.rows.map(function(elem, i, array) {
+                    return {a: elem, b: i, c: array, d: this};
+                }, s);
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s})
+            });
+            it("- map() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                var arr = s.rows.map((elem, i, array) => {
+                    return {a: elem, b: i, c: array, d: this};
+                }, s);
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {}})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {}})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: {}})
             });
         });
-        describe("ArrayCollection.map()", () => {
+        describe("ArrayCollection.filter()", () => {
+            it("- filter() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var arr2 = [];
+
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                var arr = s.rows.filter(function(elem, i, array) {
+                    if (elem == 'A1') {
+                        arr2.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+        
+                // arr
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual('A1')
+                // arr2
+                expect(arr2.length).toBe(1);
+                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
+            });
+            it("- filter() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var arr2 = [];
+
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                var arr = s.rows.filter((elem, i, array) => {
+                    if (elem == 'A1') {
+                        arr2.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+        
+                // arr
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual('A1')
+                // arr2
+                expect(arr2.length).toBe(1);
+                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {}})
+            });
+        });
+        describe("ArrayCollection.clear() <초기화>", () => {
             it("- clear() ", () => {
                 let s = new Student();
                 s.rows.add('A1');
