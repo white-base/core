@@ -1,5 +1,5 @@
-import IArrayCollection     = require("./i-collction-array");
-import BaseCollection       = require("./base-collection");
+import IArrayCollection     from './i-collction-array';
+import BaseCollection       from './base-collection';
     
 /**
  * `ArrayCollection` 클래스는 `BaseCollection`을 상속받으며 `IArrayCollection` 인터페이스를 구현합니다.

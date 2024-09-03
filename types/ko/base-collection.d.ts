@@ -1,9 +1,7 @@
-import ICollection          = require("./i-collection");
-import IList                = require("./i-list");
-import MetaObject           = require("./meta-object");
-// import EventEmitter         = require("./event-emitter");
-import EventEmitter        from "./event-emitter";
-// import T                    = require("./T");
+import ICollection          from './i-collection';
+import IList                from './i-list';
+import MetaObject           from './meta-object';
+import EventEmitter         from './event-emitter';
 
 /**
  * 기본 컬렉션 추상 클래스입니다. 모든 컬렉션의 최상위 클래스 역할을 합니다.

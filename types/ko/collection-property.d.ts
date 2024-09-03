@@ -1,6 +1,5 @@
-import IPropertyCollection  = require("./i-collection-property");
-import BaseCollection       = require("./base-collection");
-// import T                    = require("./T");
+import IPropertyCollection  from './i-collection-property';
+import BaseCollection       from './base-collection';
 
 /**
  * `PropertyCollection` 클래스는 `BaseCollection`을 상속하며 `IPropertyCollection` 인터페이스를 구현합니다.

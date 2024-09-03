@@ -61,12 +61,9 @@ declare class ExtendError {
      * 
      * @example
      * const error = new ExtendError('An error occurred');
-     * console.log(error.toString());  // "An error occurred"
+     * console.log(error.toString());  // 'An error occurred'
      */
     toString(): string;
 }
 
-export {
-    ExtendError as default,
-    ExtendError
-}
+export = ExtendError

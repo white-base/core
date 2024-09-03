@@ -1,6 +1,6 @@
-import IList = require("./i-list");
-import IListControl = require("./i-control-list");
-import ISerialize = require("./i-serialize");
+import IList            from './i-list';
+import IListControl     from './i-control-list';
+import ISerialize       from './i-serialize';
 
 /**
  * 네임스페이스를 관리하는 클래스입니다.

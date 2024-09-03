@@ -123,7 +123,4 @@ declare class EventEmitter {
     emit(event: string, ...args: any[]): boolean;
 }
 
-export {
-    EventEmitter as default,
-    EventEmitter
-}
+export = EventEmitter

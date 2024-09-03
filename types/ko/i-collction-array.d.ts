@@ -1,4 +1,4 @@
-import ICollection          = require("./i-collection");
+import ICollection          from './i-collection';
 
 /**
  * 배열 컬렉션 인터페이스입니다.

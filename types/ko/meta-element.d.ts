@@ -1,5 +1,5 @@
-import IElement             = require("./i-element");
-import MetaObject           = require("./meta-object");
+import IElement             from './i-element';
+import MetaObject           from './meta-object';
 
 /**
  * MetaElement 클래스는 MetaObject를 상속하며, IElement 인터페이스를 구현합니다.  
