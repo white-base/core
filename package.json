@@ -20,7 +20,7 @@
     "url": "https://github.com/white-base/core.git"
   },
   "author": "logic",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "docdash": "github:white-base/docdash",
     "gulp": "^5.0.0",
