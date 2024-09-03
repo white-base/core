@@ -578,7 +578,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             });
         });
         describe("ArrayCollection.map()", () => {
-            it("- map() : function ", () => {
+            it("- map() : function, thisArg ", () => {
                 let s = new Student();
                 var arr = [];
                 s.rows.add('A1');
@@ -592,6 +592,21 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
                 expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
                 expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s})
+            });
+            it("- map() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                var arr = s.rows.map(function(elem, i, array) {
+                    return {a: elem, b: i, c: array, d: this};
+                });
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s.rows})
             });
             it("- map() : ()=> {} ", () => {
                 let s = new Student();
@@ -608,9 +623,13 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {}})
                 expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: {}})
             });
+            it("- map() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.map({})).toThrow(/EL04116/);
+            });
         });
         describe("ArrayCollection.filter()", () => {
-            it("- filter() : function ", () => {
+            it("- filter() : function, thisArg ", () => {
                 let s = new Student();
                 var arr = [];
                 var arr2 = [];
@@ -631,6 +650,28 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 // arr2
                 expect(arr2.length).toBe(1);
                 expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
+            });
+            it("- filter() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var arr2 = [];
+
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                var arr = s.rows.filter(function(elem, i, array) {
+                    if (elem == 'A1') {
+                        arr2.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                });
+        
+                // arr
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual('A1')
+                // arr2
+                expect(arr2.length).toBe(1);
+                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
             });
             it("- filter() : ()=> {} ", () => {
                 let s = new Student();
@@ -654,7 +695,400 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(arr2.length).toBe(1);
                 expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {}})
             });
+            it("- filter() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.filter({})).toThrow(/EL04117/);
+            });
         });
+        describe("ArrayCollection.reduce()", () => {
+            it("- reduce() : ()=> {} 초기값 = 10 ", () => {
+                let s = new Student();
+                var sum = [];
+
+                s.rows.add(1);
+                s.rows.add(2);
+                s.rows.add(3);
+                var sum = s.rows.reduce((accumulator, currentValue) => {
+                    return accumulator + currentValue;
+                }, 10);
+        
+                expect(s.rows.length).toBe(3);
+                expect(sum).toEqual(16)
+            });
+            it("- reduce() : ()=> {} ", () => {
+                let s = new Student();
+                var sum = [];
+
+                s.rows.add(1);
+                s.rows.add(2);
+                s.rows.add(3);
+                var sum = s.rows.reduce((accumulator, currentValue) => {
+                    return accumulator + currentValue;
+                });
+        
+                expect(s.rows.length).toBe(3);
+                expect(sum).toEqual(6)
+            });
+            it("- reduce() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.reduce({})).toThrow(/EL04118/);
+            });
+        });
+        describe("ArrayCollection.find()", () => {
+            it("- find() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.find(function(elem, i, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(result).toBe(3);
+            });
+            it("- find() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.find(function(elem, i, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                });
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(result).toBe(3);
+            });
+            it("- find() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.find((elem, i, array) => {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
+                expect(result).toBe(3);
+            });
+            it("- find() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.find({})).toThrow(/EL04119/);
+            });
+        });
+
+        describe("ArrayCollection.forEach()", () => {
+            it("- forEach() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                s.rows.forEach(function(elem, i, array) {
+                    arr.push({a: elem, b: i, c: array, d: this});
+                }, s);
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s})
+            });
+            it("- forEach() : function ", () => {
+                let s = new Student();
+                var arr = [];
+
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                s.rows.forEach(function(elem, i, array) {
+                    arr.push({a: elem, b: i, c: array, d: this});
+                });
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s.rows})
+            });
+            it("- forEach() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.add('A3');
+                s.rows.forEach((elem, i, array) => {
+                    arr.push({a: elem, b: i, c: array, d: this});
+                }, s);
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {} })
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: {} })
+            });
+            it("- forEach() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.forEach({})).toThrow(/EL041110/);
+            });
+        });
+        describe("ArrayCollection.some()", () => {
+            it("- some() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.some(function(elem, i, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.rows.some(function(elem, i, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- some() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.some(function(elem, i, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                });
+                var result2 = s.rows.some(function(elem, i, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                });
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- some() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.some((elem, i, array) => {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
+                expect(result).toBe(true);
+            });
+            it("- some() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.some({})).toThrow(/EL041111/);
+            });
+        });
+
+        describe("ArrayCollection.every()", () => {
+            it("- every() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.every(function(elem, i, array) {
+                    if (elem > 0) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.rows.every(function(elem, i, array) {
+                    if (elem > 3) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- every() : function, ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.every(function(elem, i, array) {
+                    if (elem > 0) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                });
+                var result2 = s.rows.every(function(elem, i, array) {
+                    if (elem > 3) {
+                        return true;    
+                    }
+                });
+        
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s.rows})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- every() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.every((elem, i, array) => {
+                    if (elem > 0) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.rows.every((elem, i, array) => {
+                    if (elem > 3) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {}})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {}})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: {}})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- every() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.every({})).toThrow(/EL041112/);
+            });
+        });
+
+        describe("ArrayCollection.findIndex()", () => {
+            it("- findIndex() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.findIndex(function(elem, i, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.rows.findIndex(function(elem, i, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(result).toBe(1);
+                expect(result2).toBe(-1);
+            });
+            it("- findIndex() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.findIndex(function(elem, i, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                });
+                var result2 = s.rows.findIndex(function(elem, i, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                });
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(result).toBe(1);
+                expect(result2).toBe(-1);
+            });
+            it("- findIndex() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.findIndex((elem, i, array) => {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
+                expect(result).toBe(1);
+            });
+            it("- findIndex() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.rows.findIndex({})).toThrow(/EL041113/);
+            });
+        });
+
         describe("ArrayCollection.clear() <초기화>", () => {
             it("- clear() ", () => {
                 let s = new Student();

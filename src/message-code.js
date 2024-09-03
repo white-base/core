@@ -9,8 +9,8 @@
     // 2. module dependency check
     //==============================================================
     var messageCode = {
-        eng: {},
-        kor: {
+        en: {},
+        ko: {
             // 실패
             ES010: '기타 오류',
             ES011: '["$1"] 모듈을 가져오는데 실패하였습니다.',
@@ -313,6 +313,14 @@
             EL04113: 'removeAt(idx); idx 는 \'number\' 타입이 아닙니다. typeof idx = $1',
             EL04114: 'add(any): number 는 추상메소드 입니다. 구현해야 합니다.',
             EL04115: 'clear() 는 추상메소드 입니다. 구현해야 합니다.',
+            EL04116: 'map(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
+            EL04117: 'filter(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
+            EL04118: 'reduce(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
+            EL04119: 'find(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
+            EL041110: 'forEach(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
+            EL041111: 'some(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
+            EL041112: 'every(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
+            EL041113: 'findIndex(callback); callback 이 function 타입이 아닙니다. typeof callback = $1',
             //
             EL04200: '',
             // collection-array.js

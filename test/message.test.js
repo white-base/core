@@ -18,7 +18,12 @@ describe("[target: message.js]", () => {
         });
         describe("MetaObject.lang: str <언어 설정>", () => {
             it("- this.lang : 기본 언어 얻기", () => {
-                expect(Message.lang).toBe('kor')
+                expect(Message.lang).toBe('ko')
+            });
+            it("- this.lang : 기본 언어 얻기", () => {
+                Message.lang = 'en'
+                expect(Message.lang).toBe('en')
+                Message.lang = 'ko'
             });
             it("- this.lang : 예외", () => {
                 expect(()=> Message.lang = 'jan').toThrow(/language does not exist/)
@@ -85,7 +90,7 @@ describe("[target: message.js]", () => {
                 expect(msg).toMatch(/code/);
             });
             it("- 스토리지 설정 ", () => {
-                var storage = { kor: {aaa: '', bbb: {}, zzz: 'etc'} }
+                var storage = { ko: {aaa: '', bbb: {}, zzz: 'etc'} }
                 Message.$storage = storage;
                 const msg1 = Message.get('aaa', []);
                 const msg2 = Message.get('bbb', []);

@@ -54,7 +54,7 @@
 
         // var define
         var $storage = {};
-        var lang = 'kor';
+        var lang = 'ko';
         // var isLong = false;
         
         /**

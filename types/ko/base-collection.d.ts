@@ -99,6 +99,13 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
     count: number;
 
     /**
+     * 현재 컬렉션의 요소 수를 반환합니다.
+     * 
+     * @readonly
+     */
+    length: number;
+
+    /**
      * 컬렉션에 요소를 추가하기 전에 발생하는 이벤트입니다.
      * 
      * @event BaseCollection#onAdd
@@ -367,8 +374,66 @@ declare abstract class BaseCollection extends MetaObject implements ICollection,
 
     /**
      * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+     * @param callback - 콜백함수 입니다.(currentValue, index, array) => any[]
+     * @param  thisArg - 콜백함수를 실행할 때 this로 사용할 값입니다.
+     * @returns {any[]} 결과를 모은 새로운 배열을 반환합니다.
      */
-    map(callback: (value: any, index: number, array: any[]) => any, thisArg?: any): any[];
+    map(callback: (value: any, index: number, array: this) => any, thisArg?: any): any[];
+
+    /**
+     * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
+     * @param callback - 콜백함수 입니다.(currentValue, index, array) => boolean
+     * @param  thisArg - 콜백함수를 실행할 때 this로 사용할 값입니다.
+     * @returns {any[]} 결과를 모은 새로운 배열을 반환합니다.
+     */
+    filter(callback: (value: any, index: number, array: this) => any, thisArg?: any): any[];
+
+    /**
+     * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
+     * @param callback - 콜백함수 입니다. (accumulator, currentValue, index, array) => any
+     * @param  initialValue - 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용합니다.
+     * @returns {any} 결과를 모은 새로운 배열을 반환합니다.
+     */
+    reduce(callback: (value: any, index: number, array: this) => any, initialValue?: any): any;
+
+    /**
+     * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
+     * @param callback - 콜백함수 입니다. (currentValue, index, array) => any
+     * @param  thisArg - 콜백함수를 실행할 때 this로 사용할 값입니다.
+     * @returns {any | undefined}  만족하는 배열의 첫 번째 요소입니다. 테스트 함수를 만족하는 요소가 없으면, undefined가 반환됩니다.
+     */
+    find(callback: (value: any, index: number, array: this) => any, thisArg?: any): any | undefined;
+
+    /**
+     * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
+     * @param callback - 콜백함수 입니다. (currentValue, index, array) => void
+     * @param  thisArg - 콜백함수를 실행할 때 this로 사용할 값입니다.
+     */
+    forEach(callback: (value: any, index: number, array: this) => void, thisArg?: any): void;
+
+    /**
+     * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
+     * @param callback - 콜백함수 입니다. (currentValue, index, array) => boolean
+     * @param  thisArg - 콜백함수를 실행할 때 this로 사용할 값입니다.
+     * @returns {boolean} 하나의 요소에 대해 참인 값을 반환하면 true를 반환하며, 그렇지 않으면 false를 반환합니다.
+     */
+    some(callback: (value: any, index: number, array: this) => any, thisArg?: any): boolean;
+
+    /**
+     * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다.
+     * @param callback - 콜백함수 입니다. (currentValue, index, array) => boolean
+     * @param  thisArg - 콜백함수를 실행할 때 this로 사용할 값입니다.
+     * @returns {boolean} 모든 배열 요소에 대해 참 값을 반환하면 true입니다. 그렇지 않으면 false입니다.
+     */
+    every(callback: (value: any, index: number, array: this) => any, thisArg?: any): boolean;
+
+    /**
+     * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
+     * @param callback - 콜백함수 입니다. (currentValue, index, array) => boolean
+     * @param  thisArg - 콜백함수를 실행할 때 this로 사용할 값입니다.
+     * @returns {number}  테스트를 통과하는 첫 번째 요소의 인덱스입니다. 일치하는 요소가 없으면 -1을 반환합니다.
+     */
+    findIndex(callback: (value: any, index: number, array: this) => any, thisArg?: any): any | undefined;
 
     /**
      * 컬렉션에 요소를 추가합니다.

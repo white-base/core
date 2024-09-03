@@ -550,75 +550,131 @@
 
         /**
          * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
-         * @param {Function} callback.currValue 처리할 현재 객체
-         * @param {Function} callback.index 요소의 인덱스
-         * @param {Function} callback.thisArg 호출한 컬렉션
-         * @returns  {Array}
-         */
-        BaseCollection.prototype.forEach  = function(callback) {
-            var arr = [];
-            
-            for(var i = 0; i < this.count; i++) {
-                arr.push(callback(this[i], i, this));
-            }
-            return arr;
-        };
-        // Array.prototype.forEach = function forEach (callback, thisArg) {
-        //     if (typeof callback !== 'function') {
-        //       throw new TypeError(callback + ' is not a function');
-        //     }
-        //     var array = this;
-        //     thisArg = thisArg || this;
-        //     for (var i = 0, l = array.length; i !== l; ++i) {
-        //       callback.call(thisArg, array[i], i, array);
-        //     }
-        //   };
-
-
-        /**
-         * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
-         * @param {Function} callback 콜백함수 (currentValue, index, array) => {}
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
          * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-         * 
          * @returns  {Array}
          */
         BaseCollection.prototype.map  = function(callback, thisArg) {
             var newArr = [];
 
-            if (typeof callback != 'function') throw Error(`callBack} is not a function`);
+            if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
      
-            if (typeof this == 'object') {
-                for (var i = 0; i < this.length; i++) {
-                    if (i in this) {
-                        newArr[i] = callback.call(thisArg || this, this[i], i, this);
-                    } else {
-                        return;
-                    }
-                }
+            for (var i = 0; i < this.length; i++) {
+                newArr[i] = callback.call(thisArg || this, this[i], i, this);
             }
-            return newArr; [].filter
+            return newArr;
         };
 
         /**
-         * 배열의 일부에 대한 얕은 복사본을 생성하고, 주어진 배열에서 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
-         * @param {Function} callback 콜백함수 (currentValue, index, array) => {}
+         * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
          * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-         * 
          * @returns  {Array}
          */
         BaseCollection.prototype.filter = function (callback, thisArg) {
             let newArr = [];
 
-            if (typeof callback != 'function') throw Error(`callBack} is not a function`);
+            if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
 
             for (let i = 0; i < this.length; i++) {
-                if (i in this) {
-                    if (callback.call(thisArg, this[i], i, this)) {
-                        newArr.push(this[i]);
-                    }
+                if (callback.call(thisArg || this, this[i], i, this)) {
+                    newArr.push(this[i]);
                 }
             }
             return newArr;
+        };
+
+        /**
+         * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
+         * @param {Function} callback 콜백함수 (accumulator, currentValue, index, array) => any
+         * @param {any} initialValue 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용합니다.
+         * @returns  {any}
+         */
+        BaseCollection.prototype.reduce = function(callback, initialValue) {
+            var acc = initialValue;
+
+            if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
+
+            for(let i=0; i < this.length; i++) {
+                acc = acc ? callback(acc, this[i], i, this) : this[i];
+            }
+            return acc;
+        }
+
+        /**
+         * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => any
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {any}
+         */
+        BaseCollection.prototype.find = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
+            
+            for (var i = 0; i < this.length; i++) {
+              if ( callback.call(thisArg || this, this[i], i, this) ) {
+                return this[i];
+              }
+            }
+        };
+
+        /**
+         * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => void
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         */
+        BaseCollection.prototype.forEach = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
+            
+            for (var i = 0; i <this.length; i++) {
+              callback.call(thisArg || this, this[i], i, this);
+            }
+        };
+
+        /**
+         * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {boolean}
+         */
+        BaseCollection.prototype.some = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
+            
+            for(var i=0; i < this.length; i++){
+                if (callback.call(thisArg || this, this[i], i, this)) return true;
+            }
+            return false;
+        };
+
+        /**
+         * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {boolean}
+         */
+        BaseCollection.prototype.every = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
+            
+            for(var i=0; i < this.length; i++){
+                if (!callback.call(thisArg || this, this[i], i, this)) return false;
+              }
+              return true;
+        };
+
+        /**
+         * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => number
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {any}
+         */
+        BaseCollection.prototype.findIndex = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
+            
+            for (var i = 0; i < this.length; i++) {
+              if ( callback.call(thisArg || this, this[i], i, this) ) {
+                return i;
+              }
+            }
+            return -1;
         };
 
         /** 
