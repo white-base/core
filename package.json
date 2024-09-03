@@ -9,7 +9,7 @@
     "test:u": "jest --updateSnapshot",
     "test:v": "jest --verbose",
     "http": "npx http-server",
-    "type:en": "npx typedoc --out eDocs types/en/index.d.ts",
+    "type:en": "npx typedoc --out eDocs types/en/index.d.ts types/en/global.d.ts",
     "type:ko": "npx typedoc --out kDocs types/ko/index.d.ts types/ko/global.d.ts",
     "gulp:meta": "gulp meta",
     "gulp:meta-min": "gulp meta-min"
