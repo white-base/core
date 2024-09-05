@@ -113,6 +113,9 @@
             obj['name'] = this._name;
             return obj;
         };
+        Object.defineProperty(MetaElement.prototype, 'getObject', {
+            enumerable: false
+        });
 
         /**
          * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
@@ -126,7 +129,10 @@
             this._name = p_oGuid['name'];
             // this.__SET$_name(p_oGuid['name'], this);
         };
-        
+        Object.defineProperty(MetaElement.prototype, 'setObject', {
+            enumerable: false
+        });
+
         /**
          * 현제 객체를 복제합니다.
          * @returns {MetaElement}
@@ -135,6 +141,9 @@
             var clone = new MetaElement(this._name);
             return clone;
         };
+        Object.defineProperty(MetaElement.prototype, 'clone', {
+            enumerable: false
+        });
 
         return MetaElement;
 

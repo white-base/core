@@ -204,6 +204,18 @@ describe("[target: meta-element.js]", () => {
                 expect(m1._name === m2._name).toBe(true);
             });
         });
+        describe("for in 열거 속성 검사", () => {
+            it("- for in", () => {
+                var arr = [];
+                const m1 = new MetaElement('E1');
+                for (var prop in m1) {
+                    arr.push(prop);
+                }
+            
+                expect(arr.length).toBe(0);
+            });
+        });
+
         describe("예외 및 커버리지", () => {
             it.skip("- 예외 : _name, guid ", () => {
                 const i = new MetaElement('_name');
