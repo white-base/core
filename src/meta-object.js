@@ -51,6 +51,7 @@
         function MetaObject() {
 
             var _guid;
+            var _ns;
             
             /**
              * 현재 객체의 고유식별자(guid)
@@ -68,7 +69,7 @@
                 },
                 set: function(nVal) { _guid = nVal; },
                 configurable: false,
-                enumerable: true
+                enumerable: false
             });
 
             /**
@@ -87,7 +88,19 @@
                     return proto.constructor;
                 },
                 configurable: false,
-                enumerable: true
+                enumerable: false
+            });
+
+            Object.defineProperty(this, '_ns', 
+            {
+                get: function() { 
+                    return _ns;
+                },
+                set: function(nVal) { 
+                    _ns = nVal;
+                },
+                configurable: false,
+                enumerable: false
             });
             
             // 추상클래스 검사
@@ -145,6 +158,9 @@
         MetaObject.prototype.equal = function(p_target) {
             return _compare(this, p_target);
         };
+        Object.defineProperty(MetaObject.prototype, 'equal', {
+            enumerable: false
+        });
 
         /**
          * 현재 객체의 생성자와 상위(proto) 생성자를 목록으로 가져옵니다.  
@@ -177,6 +193,9 @@
                 return list;
             }
         };
+        Object.defineProperty(MetaObject.prototype, 'getTypes', {
+            enumerable: false
+        });
 
         /**
          * 현재 객체의 target 인스턴스 여부를 검사합니다 .(_UNION 포함)
@@ -233,6 +252,9 @@
                 return false;
             }
         };
+        Object.defineProperty(MetaObject.prototype, 'instanceOf', {
+            enumerable: false
+        });
 
         /**
          * 현재 객체를 직렬화(guid 타입) 객체로 얻습니다.  
@@ -255,6 +277,9 @@
             obj['_type'] = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
             return obj;                        
         };
+        Object.defineProperty(MetaObject.prototype, 'getObject', {
+            enumerable: false
+        });
 
         /**
          * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
@@ -278,6 +303,9 @@
             
             MetaRegistry.setMetaObject(p_oGuid, this); // $set attach
         };
+        Object.defineProperty(MetaObject.prototype, 'setObject', {
+            enumerable: false
+        });
 
         return MetaObject;
 

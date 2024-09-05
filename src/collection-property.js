@@ -128,10 +128,10 @@
             
             if (p_pos < count) {        // 참조 자료 변경
                 for (var i = p_pos; i < count; i++) {
-                    var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
+                    // var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
                     propName = this.indexToKey(i);
-                    Object.defineProperty(this, [i], desc);
-                    Object.defineProperty(this, propName, desc);
+                    Object.defineProperty(this, [i], this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i, false));
+                    Object.defineProperty(this, propName, this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i));
                 }
                 delete this[count];     // 마지막 idx 삭제
             } else {
@@ -139,6 +139,9 @@
             }
             return true;
         };
+        Object.defineProperty(PropertyCollection.prototype, '_remove', {
+            enumerable: false
+        });
 
         /**
          * 프로퍼티 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
@@ -179,6 +182,9 @@
             }
             return obj;                        
         };
+        Object.defineProperty(PropertyCollection.prototype, 'getObject', {
+            enumerable: false
+        });
 
         /**
          * 직렬화(guid 타입) 객체를 프로퍼티 컬렉션 객체에 설정합니다.  
@@ -203,7 +209,7 @@
             for(var i = 0; i < p_oGuid['_key'].length; i++) {
                 var key = p_oGuid['_key'][i];
                 this.$keys.push(key);
-                Object.defineProperty(this, [i], this._getPropDescriptor(i));
+                Object.defineProperty(this, [i], this._getPropDescriptor(i, false));
                 Object.defineProperty(this, key, this._getPropDescriptor(i));
             }
 
@@ -222,6 +228,9 @@
                 } else this.$elements.push(elem);
             }
         };
+        Object.defineProperty(PropertyCollection.prototype, 'setObject', {
+            enumerable: false
+        });
 
         // /**
         //  * 프로퍼티 컬렉션의 인덱스 값을 조회합니다.
@@ -277,7 +286,7 @@
                     Object.defineProperty(this, [index], p_desc);
                     Object.defineProperty(this, p_key, p_desc);
                 } else {
-                    Object.defineProperty(this, [index], this._getPropDescriptor(index));
+                    Object.defineProperty(this, [index], this._getPropDescriptor(index, false));
                     Object.defineProperty(this, p_key, this._getPropDescriptor(index));
                 }
                 this._onAdded(index, p_elem);
@@ -288,6 +297,9 @@
                 throw new ExtendError(/EL04229/, error, [p_key, p_elem]);
             }
         };
+        Object.defineProperty(PropertyCollection.prototype, 'add', {
+            enumerable: false
+        });
 
         /**
          * 프로러티 컬렉션을 초기화 합니다.
@@ -308,6 +320,9 @@
             
             this._onCleared();
         };
+        Object.defineProperty(PropertyCollection.prototype, 'clear', {
+            enumerable: false
+        });
     
         /**
          * 프로퍼티 컬렉션키의 인덱스 값을 조회합니다.
@@ -318,6 +333,9 @@
             if (!_isString(p_key))  throw new ExtendError(/EL04224/, null, [typeof p_key]);
             return this.$keys.indexOf(p_key);
         };
+        Object.defineProperty(PropertyCollection.prototype, 'keyToIndex', {
+            enumerable: false
+        });
 
         /**
          * 프로퍼티 컬렉션의 인덱스에 대한 키값을 조회합니다.
@@ -328,6 +346,9 @@
             if (typeof p_idx !== 'number') throw new ExtendError(/EL0422A/, null, [typeof p_idx]);
             return this.$keys[p_idx];
         };
+        Object.defineProperty(PropertyCollection.prototype, 'indexToKey', {
+            enumerable: false
+        });
 
         /**
          * 프로퍼티 컬렉션의 키 존재하는지 확인합니다.
@@ -338,6 +359,9 @@
             if (!_isString(p_key)) throw new ExtendError(/EL0422B/, null, [typeof p_key]);
             return Object.prototype.hasOwnProperty.call(this, p_key);
         };
+        Object.defineProperty(PropertyCollection.prototype, 'exist', {
+            enumerable: false
+        });
 
         return PropertyCollection;
 

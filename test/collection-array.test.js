@@ -1178,6 +1178,31 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(()=> s.rows.insertAt('ERR', 'A2')).toThrow(/EL04212/);
             });
         });
+        describe("for in 열거 속성 검사", () => {
+            it("- for in", () => {
+                var arr = [];
+                let s = new Student();
+                s.rows.add('A1');
+                for (var prop in s.rows) {
+                    arr.push(prop);
+                }
+            
+                expect(arr.length).toBe(1);
+            });
+
+            it("- for in 삭제 ", () => {
+                var arr = [];
+                let s = new Student();
+                s.rows.add('A1');
+                s.rows.add('A2');
+                s.rows.remove('A1')
+                for (var prop in s.rows) {
+                    arr.push(prop);
+                }
+            
+                expect(arr.length).toBe(1);
+            });
+        });
         describe("예외 및 커버리지 ", () => {
             // beforeAll(() => {
             //     let s = new Student();

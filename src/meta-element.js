@@ -80,7 +80,7 @@
                     _name = nVal;
                 },
                 configurable: false,
-                enumerable: true
+                enumerable: false
             });
 
             this._name = p_name;

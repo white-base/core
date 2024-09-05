@@ -95,6 +95,9 @@
             }
             return true;
         };
+        Object.defineProperty(ArrayCollection.prototype, '_remove', {
+            enumerable: false
+        });
 
         /**
          * 배열 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
@@ -130,6 +133,9 @@
             }
             return obj;                        
         };
+        Object.defineProperty(ArrayCollection.prototype, 'getObject', {
+            enumerable: false
+        });
 
         /**
          * 직렬화(guid 타입) 객체를 배열 컬렉션 객체에 설정합니다.  
@@ -164,8 +170,10 @@
                 
                 } else this.$elements.push(elem);
             }
-
         };        
+        Object.defineProperty(ArrayCollection.prototype, 'setObject', {
+            enumerable: false
+        });
 
         /**
          * 배열 컬렉션에 요소를 추가합니다.
@@ -178,6 +186,9 @@
             this.insertAt(pos, p_elem, p_desc);
             return pos;
         };
+        Object.defineProperty(ArrayCollection.prototype, 'add', {
+            enumerable: false
+        });
 
         /**
          * 배열 컬렉션을 초기화 합니다.
@@ -192,6 +203,9 @@
             
             this._onCleared();    // event
         };
+        Object.defineProperty(ArrayCollection.prototype, 'clear', {
+            enumerable: false
+        });
 
         /**
          * 배열 컬렉션의 지정위치에 요소를 추가합니다.
@@ -238,6 +252,9 @@
                 throw new ExtendError(/EL04215/, error, [p_pos, p_elem]);
             }
         };
+        Object.defineProperty(ArrayCollection.prototype, 'insertAt', {
+            enumerable: false
+        });
 
         return ArrayCollection;
 

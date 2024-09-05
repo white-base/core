@@ -302,42 +302,82 @@
      * @param {any} obj2 
      * @returns {boolean}
      */
-    function deepEqual(obj1, obj2) {
-        if (obj1 === obj2) return true;
-        if (typeof obj1 !== typeof obj2) return false;
-        if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
-        if (typeof obj1 === 'function' && !$equalFunction(obj1, obj2)) return false;
+    // function deepEqual(obj1, obj2) {
+    //     if (obj1 === obj2) return true;
+    //     if (typeof obj1 !== typeof obj2) return false;
+    //     if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
+    //     if (typeof obj1 === 'function' && !$equalFunction(obj1, obj2)) return false;
 
-        if (Array.isArray(obj1)) {
+    //     if (Array.isArray(obj1)) {
+    //         if (obj1.length !== obj2.length) return false;
+    //         for (var i = 0; i < obj1.length; i++) {
+    //             var val1 = obj1[i];
+    //             var val2 = obj2[i];
+    //             if (!deepEqual(val1, val2)) return false;
+    //         }
+    //     } else {
+    //         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+    //         for (var key in obj1) {
+    //             if (Object.prototype.hasOwnProperty.call(obj1, key)) {
+    //                 var val1 = obj1[key];
+    //                 var val2 = obj2[key];
+    //                 if (!deepEqual(val1, val2)) return false;
+    //             }
+    //         }
+    //     }
+    //     return true;
+    //     // inner function
+    //     function $equalFunction(fun1, fun2) {
+    //         // if (typeof fun1 !== 'function') return false;
+    //         // if (typeof fun2 !== 'function') return false;
+    //         if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
+    //         return false;
+    //     }
+    //     function $_isPrimitiveType(obj) {
+    //         if (typeof obj === 'string' || typeof obj === 'number' 
+    //             || typeof obj === 'boolean' || typeof obj === 'undefined' || typeof obj === 'bigint') return true;
+    //         return false;
+    //     }
+    // }
+
+    function deepEqual(obj1, obj2) {
+        // 두 객체가 동일한 참조를 가지면 true를 반환
+        if (obj1 === obj2) return true;
+    
+        // 두 객체 중 하나가 null이거나 타입이 다르면 false를 반환
+        if (obj1 === null || obj2 === null || typeof obj1 !== typeof obj2) return false;
+    
+        // 함수 비교
+        if (typeof obj1 === 'function' && typeof obj2 === 'function') {
+            return obj1.toString() === obj2.toString();
+        }
+    
+        // 원시 값 비교
+        if (typeof obj1 !== 'object' || typeof obj2 !== 'object') return false;
+    
+        // 배열 비교
+        if (Array.isArray(obj1) && Array.isArray(obj2)) {
             if (obj1.length !== obj2.length) return false;
             for (var i = 0; i < obj1.length; i++) {
-                var val1 = obj1[i];
-                var val2 = obj2[i];
-                if (!deepEqual(val1, val2)) return false;
+                if (!deepEqual(obj1[i], obj2[i])) return false;
             }
-        } else {
-            if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
-            for (var key in obj1) {
-                if (Object.prototype.hasOwnProperty.call(obj1, key)) {
-                    var val1 = obj1[key];
-                    var val2 = obj2[key];
-                    if (!deepEqual(val1, val2)) return false;
-                }
-            }
+            return true;
         }
+    
+        // 객체 비교
+        // var keys1 = Object.keys(obj1);
+        // var keys2 = Object.keys(obj2);
+        var keys1 = Object.getOwnPropertyNames(obj1);
+        var keys2 = Object.getOwnPropertyNames(obj2);
+
+        if (keys1.length !== keys2.length) return false;
+    
+        for (var i = 0; i < keys1.length; i++) {
+            var key = keys1[i];
+            if (keys2.indexOf(key) === -1 || !deepEqual(obj1[key], obj2[key])) return false;
+        }
+    
         return true;
-        // inner function
-        function $equalFunction(fun1, fun2) {
-            // if (typeof fun1 !== 'function') return false;
-            // if (typeof fun2 !== 'function') return false;
-            if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
-            return false;
-        }
-        function $_isPrimitiveType(obj) {
-            if (typeof obj === 'string' || typeof obj === 'number' 
-                || typeof obj === 'boolean' || typeof obj === 'undefined' || typeof obj === 'bigint') return true;
-            return false;
-        }
     }
     Type.deepEqual = deepEqual;
 

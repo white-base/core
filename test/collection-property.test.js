@@ -835,6 +835,31 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(()=> s.columns.indexToKey('a1')).toThrow('EL0422A');
             });
         });
+        describe("for in 열거 속성 검사", () => {
+            it("- for in", () => {
+                var arr = [];
+                let s = new Student();
+                s.columns.add('a1', 'A1');
+                for (var prop in s.columns) {
+                    arr.push(prop);
+                }
+            
+                expect(arr.length).toBe(1);
+            });
+
+            it("- for in 삭제 ", () => {
+                var arr = [];
+                let s = new Student();
+                s.columns.add('A1');
+                s.columns.add('A2');
+                s.columns.removeAt(0)
+                for (var prop in s.columns) {
+                    arr.push(prop);
+                }
+            
+                expect(arr.length).toBe(1);
+            });
+        });
         describe("예외, 커버리지 ", () => {
             it("- this.$keys : 커버리지 ", () => {
                 let s = new Student();

@@ -346,6 +346,9 @@
         BaseCollection.prototype._onAdd = function(p_idx, p_elem) {
             this.$event.emit('add', p_idx, p_elem, this); 
         };
+        Object.defineProperty(BaseCollection.prototype, '_onAdd', {
+            enumerable: false
+        });
 
         /**
          * onAdded 이벤트를 발생시킵니다.
@@ -356,6 +359,9 @@
         BaseCollection.prototype._onAdded = function(p_idx, p_elem) {
             this.$event.emit('added', p_idx, p_elem, this); 
         };
+        Object.defineProperty(BaseCollection.prototype, '_onAdded', {
+            enumerable: false
+        });
 
         /**
          * onRemove 이벤트를 발생시킵니다.
@@ -366,6 +372,9 @@
         BaseCollection.prototype._onRemove = function(p_idx, p_elem) {
             this.$event.emit('remove', p_idx, p_elem, this);
         };
+        Object.defineProperty(BaseCollection.prototype, '_onRemove', {
+            enumerable: false
+        });
 
         /**
          * onRemoved 이벤트를 발생시킵니다.
@@ -376,6 +385,9 @@
         BaseCollection.prototype._onRemoved = function(p_idx, p_elem) {
             this.$event.emit('removed', p_idx, p_elem, this);
         };
+        Object.defineProperty(BaseCollection.prototype, '_onRemoved', {
+            enumerable: false
+        });
 
         /** 
          * onClear 이벤트를 발생시킵니다.
@@ -384,6 +396,9 @@
         BaseCollection.prototype._onClear = function() {
             this.$event.emit('clear', this); 
         };
+        Object.defineProperty(BaseCollection.prototype, '_onClear', {
+            enumerable: false
+        });
 
         /** 
          * onCheared 이벤트를 발생시킵니다.
@@ -392,6 +407,9 @@
         BaseCollection.prototype._onCleared = function() {
             this.$event.emit('cleared', this); 
         };
+        Object.defineProperty(BaseCollection.prototype, '_onCleared', {
+            enumerable: false
+        });
 
         /** 
          * onChanging 이벤트를 발생시킵니다.
@@ -402,6 +420,9 @@
         BaseCollection.prototype._onChanging = function(p_idx, p_elem) {
             this.$event.emit('changing', p_idx, p_elem, this); 
         };
+        Object.defineProperty(BaseCollection.prototype, '_onChanging', {
+            enumerable: false
+        });
 
         /** 
          * onChanged 이벤트를 발생시킵니다.
@@ -412,13 +433,17 @@
         BaseCollection.prototype._onChanged = function(p_idx, p_elem) {
             this.$event.emit('changed', p_idx, p_elem, this); 
         };
+        Object.defineProperty(BaseCollection.prototype, '_onChanged', {
+            enumerable: false
+        });
 
         /**
          * 컬렉션에 요소를 추가할 때 설정되는 기본 기술자입니다.
          * @protected
          * @param {number} p_idx 인덱스 번호
          */
-        BaseCollection.prototype._getPropDescriptor = function(p_idx) {
+        BaseCollection.prototype._getPropDescriptor = function(p_idx, p_enum) {
+            if (typeof p_enum !== 'boolean') p_enum = true;
             return {
                 get: function() { return this.$elements[p_idx]; },
                 set: function(nVal) {
@@ -428,9 +453,12 @@
                     this._onChanged(p_idx, nVal);   // after event
                 },
                 configurable: true,
-                enumerable: true,
+                enumerable: p_enum,
             };
         };
+        Object.defineProperty(BaseCollection.prototype, '_getPropDescriptor', {
+            enumerable: false
+        });
 
         /** 
          * 컬렉션의 요소를 삭제합니다. (내부 사용)
@@ -439,6 +467,9 @@
         BaseCollection.prototype._remove  = function() {
             throw new ExtendError(/EL04111/, null, []);
         };
+        Object.defineProperty(BaseCollection.prototype, '_remove', {
+            enumerable: false
+        });
 
         /**
          * 컬렉션 객체를 직렬화(guid 타입) 객체로 반환합니다.  
@@ -472,6 +503,9 @@
             obj['_elemTypes'] = _elems;
             return obj;                        
         };
+        Object.defineProperty(BaseCollection.prototype, 'getObject', {
+            enumerable: false
+        });
 
         /**
          * 직렬화(guid 타입) 객체를 컬렉션 객체에 설정합니다.  
@@ -498,6 +532,9 @@
                 this._elemTypes = p_oGuid['_elemTypes'];
             }
         };
+        Object.defineProperty(BaseCollection.prototype, 'setObject', {
+            enumerable: false
+        });
 
         /**
          * 컬렉션에 요소를 삭제합니다.
@@ -510,6 +547,9 @@
             if (idx >= 0 && this.removeAt(idx)) return idx;
             return -1;
         };
+        Object.defineProperty(BaseCollection.prototype, 'remove', {
+            enumerable: false
+        });
         
         /**
          * 컬렉션에서 지정된 위치의 요소를 삭제합니다.
@@ -520,8 +560,10 @@
             var elem;
             
             if (typeof p_pos !== 'number') throw new ExtendError(/EL04113/, null, [typeof p_pos]);
+            if (p_pos < 0 ) return false;
+            
             elem = this.$elements[p_pos];
-            if (elem) {
+            if (this.$elements.length > p_pos) {
                 this._onRemove(p_pos, elem);
                 if (!this._remove(p_pos)) return false;
                 this._onRemoved(p_pos, elem);
@@ -529,6 +571,9 @@
             }
             return false;
         };
+        Object.defineProperty(BaseCollection.prototype, 'removeAt', {
+            enumerable: false
+        });
 
         /**
          * 요소가 컬렉션에 존재하는지 확인합니다.
@@ -538,6 +583,9 @@
         BaseCollection.prototype.contains = function(p_elem) {
             return this.$elements.indexOf(p_elem) > -1;
         };
+        Object.defineProperty(BaseCollection.prototype, 'contains', {
+            enumerable: false
+        });
 
         /**
          *  컬렉션에서 요소를 조회합니다.
@@ -547,6 +595,9 @@
         BaseCollection.prototype.indexOf = function(p_elem) {
             return this.$elements.indexOf(p_elem);
         };
+        Object.defineProperty(BaseCollection.prototype, 'indexOf', {
+            enumerable: false
+        });
 
         /**
          * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
@@ -564,6 +615,9 @@
             }
             return newArr;
         };
+        Object.defineProperty(BaseCollection.prototype, 'map', {
+            enumerable: false
+        });
 
         /**
          * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
@@ -583,6 +637,9 @@
             }
             return newArr;
         };
+        Object.defineProperty(BaseCollection.prototype, 'filter', {
+            enumerable: false
+        });
 
         /**
          * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
@@ -600,6 +657,9 @@
             }
             return acc;
         }
+        Object.defineProperty(BaseCollection.prototype, 'reduce', {
+            enumerable: false
+        });
 
         /**
          * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
@@ -616,6 +676,9 @@
               }
             }
         };
+        Object.defineProperty(BaseCollection.prototype, 'find', {
+            enumerable: false
+        });
 
         /**
          * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
@@ -629,6 +692,9 @@
               callback.call(thisArg || this, this[i], i, this);
             }
         };
+        Object.defineProperty(BaseCollection.prototype, 'forEach', {
+            enumerable: false
+        });
 
         /**
          * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
@@ -644,6 +710,9 @@
             }
             return false;
         };
+        Object.defineProperty(BaseCollection.prototype, 'some', {
+            enumerable: false
+        });
 
         /**
          * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
@@ -659,6 +728,9 @@
               }
               return true;
         };
+        Object.defineProperty(BaseCollection.prototype, 'every', {
+            enumerable: false
+        });
 
         /**
          * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
@@ -676,6 +748,9 @@
             }
             return -1;
         };
+        Object.defineProperty(BaseCollection.prototype, 'findIndex', {
+            enumerable: false
+        });
 
         /** 
          * 컬렉션에 요소를 추가합니다.
@@ -684,6 +759,9 @@
         BaseCollection.prototype.add  = function() {
             throw new ExtendError(/EL04114/, null, []);
         };
+        Object.defineProperty(BaseCollection.prototype, 'add', {
+            enumerable: false
+        });
         
         /**
          * 컬렉션을 초기화 합니다.
@@ -692,6 +770,9 @@
         BaseCollection.prototype.clear  = function() {
             throw new ExtendError(/EL04115/, null, []);
         };
+        Object.defineProperty(BaseCollection.prototype, 'clear', {
+            enumerable: false
+        });
 
         return BaseCollection;
         
