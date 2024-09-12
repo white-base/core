@@ -9,12 +9,12 @@
     "test:u": "jest --updateSnapshot",
     "test:v": "jest --verbose",
     "http": "npx http-server",
-    "type:en": "npx typedoc --out eDocs types/en/index.d.ts types/en/global.d.ts",
-    "type:ko": "npx typedoc --out kDocs types/ko/index.d.ts types/ko/global.d.ts",
+    "type:en": "npx typedoc --out docs/en types/en/index.d.ts types/en/global.d.ts",
+    "type:ko": "npx typedoc --out docs/ko types/ko/index.d.ts types/ko/global.d.ts",
     "gulp:meta": "gulp meta",
     "gulp:meta-min": "gulp meta-min"
   },
-  "types": "./types/ko/index.d.ts",
+  "types": "./types/en/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/white-base/core.git"
