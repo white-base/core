@@ -85,7 +85,7 @@
  * Defines a message object.
  * @interface
  */
-declare interface MessageObject {
+export declare interface MessageObject {
     /** Message */
     msg: string;
 
@@ -93,7 +93,7 @@ declare interface MessageObject {
     long: string;
 }
 
-declare interface PropertyDescriptor {
+export declare interface PropertyDescriptor {
     configurable?: boolean;
     enumerable?: boolean;
     value?: any;
@@ -103,23 +103,23 @@ declare interface PropertyDescriptor {
 }
 // declare type OnFunc = (idx: number, elem: any, _this: object) => void;
 
-declare type Iprop = {[key: string]: string}
+export declare type Iprop = {[key: string]: string}
 
-declare type RefObject = { $ref: string /** 2333-234234-... */ };
+export declare type RefObject = { $ref: string /** 2333-234234-... */ };
 
-declare type NsObject = { $ns: string /** Meta.MetaObject */ };
+export declare type NsObject = { $ns: string /** Meta.MetaObject */ };
 
-declare type SetObject = { $set: string/** guid */};
+export declare type SetObject = { $set: string/** guid */};
 
-declare type NsTypeObject = { _type: 'ns' };
+export declare type NsTypeObject = { _type: 'ns' };
 
-declare type PathObject = { ns: string, key: string };
+export declare type PathObject = { ns: string, key: string };
 
-declare type ArrayKind = '_OPT_' | '_REQ_' | '_SEQ_' | '_ALL_' | '_ANY_';
+export declare type ArrayKind = '_OPT_' | '_REQ_' | '_SEQ_' | '_ALL_' | '_ANY_';
 
-declare type ChoiceKind = '_OPT_' | '_REQ_' | '_EUM_' | '_DEF_' | '_ERR_' | '_NON_' | '_ALL_' | '_ANY_';
+export declare type ChoiceKind = '_OPT_' | '_REQ_' | '_EUM_' | '_DEF_' | '_ERR_' | '_NON_' | '_ALL_' | '_ANY_';
 
-declare interface ExtendType {
+export declare interface ExtendType {
     
     // $type?: 'undefined' | 'null' | 'string' | 'number' | 'boolean' | 'bigint' | 'symbol' | 'regexp' | 'class' | 'union' | 'array' | 'choice';
     
@@ -129,7 +129,7 @@ declare interface ExtendType {
     ref?: any;
 }
 
-declare interface ArrayExtendType extends ExtendType {
+export declare interface ArrayExtendType extends ExtendType {
 
     /**
      * Array Type
@@ -150,7 +150,7 @@ declare interface ArrayExtendType extends ExtendType {
      */
     kind?: ArrayKind;
 }
-declare interface ChoiceExtendType extends ExtendType {
+export declare interface ChoiceExtendType extends ExtendType {
     /**
      * CHOICE TYPE
      */
@@ -174,7 +174,7 @@ declare interface ChoiceExtendType extends ExtendType {
     kind?: ChoiceKind;
 }
 
-declare interface PrimitiveExtendType extends ExtendType {
+export declare interface PrimitiveExtendType extends ExtendType {
     /**
      * Raw Type
      */
@@ -186,7 +186,7 @@ declare interface PrimitiveExtendType extends ExtendType {
     default?: number | string | boolean | bigint | RegExp;
 }
 
-declare interface FunctionExtendType extends ExtendType {
+export declare interface FunctionExtendType extends ExtendType {
     /**
      * Function type
      */
@@ -213,7 +213,7 @@ declare interface FunctionExtendType extends ExtendType {
     return?: any;
 }
 
-declare interface ClassExtendType extends ExtendType {
+export declare interface ClassExtendType extends ExtendType {
     /**
      * Class Type
      */
@@ -235,7 +235,7 @@ declare interface ClassExtendType extends ExtendType {
     _instance: object;
 }
 
-declare interface UnionExtendType extends ExtendType {
+export declare interface UnionExtendType extends ExtendType {
     /**
      * Combination type
      */
@@ -248,10 +248,10 @@ declare interface UnionExtendType extends ExtendType {
 }
 
 
-declare type ExtType = ArrayExtendType | ChoiceExtendType | PrimitiveExtendType 
+export declare type ExtType = ArrayExtendType | ChoiceExtendType | PrimitiveExtendType 
     | FunctionExtendType | ClassExtendType | UnionExtendType;
 
-declare interface Function {
+export declare interface Function {
     
     /**
      * Sets the interface combination list.
@@ -300,4 +300,4 @@ declare interface Function {
 
 }
 
-export {}
+// export {}

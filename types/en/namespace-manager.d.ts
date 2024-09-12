@@ -1,6 +1,7 @@
 import IList            from './i-list';
 import IListControl     from './i-control-list';
 import ISerialize       from './i-serialize';
+import {NsTypeObject, PathObject}           from './T';
 
 /**
  * Classes that manage the namespaces.

@@ -2,6 +2,7 @@
 
 import NamespaceManager     from './namespace-manager';
 import MetaObject           from './meta-object';
+import {RefObject, NsObject, SetObject}           from './T';
 
 /**
  * The 'MetaRegistry' class is responsible for registering and managing meta objects.

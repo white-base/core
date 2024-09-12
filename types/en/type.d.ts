@@ -1,3 +1,5 @@
+import {ExtType}           from './T';
+
 /**
  * This is a type module.
  */
