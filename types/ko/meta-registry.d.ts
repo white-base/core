@@ -43,7 +43,7 @@ declare class MetaRegistry {
      * 네임스페이스에 생성자가 없을 경우 등록합니다.
      * 
      * @param meta - 등록할 메타 객체입니다.
-     * @throws {Error} 객체가 이미 등록된 경우 예외가 발생합니다.
+     * @throws {Error | void} 객체가 이미 등록된 경우 예외가 발생합니다.
      */
     static register(meta: MetaObject): void;
 
