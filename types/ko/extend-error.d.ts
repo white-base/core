@@ -1,3 +1,5 @@
+import {Iprop}        from './T';
+
 /**
  * `ExtendError` 클래스는 확장된 오류 정보를 제공하는 사용자 정의 오류 클래스입니다.
  * 이 클래스는 기본 JavaScript `Error` 클래스를 확장하여 추가적인 속성 및 기능을 제공합니다.

@@ -1,6 +1,7 @@
 import IList            from './i-list';
 import IListControl     from './i-control-list';
 import ISerialize       from './i-serialize';
+import {NsTypeObject, PathObject}           from './T';
 
 /**
  * 네임스페이스를 관리하는 클래스입니다.

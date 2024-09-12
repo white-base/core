@@ -2,6 +2,7 @@
 
 import NamespaceManager     from './namespace-manager';
 import MetaObject           from './meta-object';
+import {RefObject, NsObject, SetObject}           from './T';
 
 /**
  * `MetaRegistry` 클래스는 메타 객체의 등록과 관리를 담당하는 클래스입니다.

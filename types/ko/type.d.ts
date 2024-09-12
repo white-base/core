@@ -1,3 +1,5 @@
+import {ExtType}           from './T';
+
 /**
  * 타입 모듈입니다.
  */
