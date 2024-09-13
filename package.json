@@ -1,6 +1,6 @@
 {
   "name": "logic-core",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "white framework core",
   "main": "index.js",
   "files": [
@@ -9,7 +9,8 @@
     "types/",
     "package.json",
     "README.md",
-    "index.js"
+    "index.js",
+    "gulpfile.js"
   ],
   "scripts": {
     "test": "jest",
