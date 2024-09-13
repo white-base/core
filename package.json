@@ -3,6 +3,14 @@
   "version": "1.0.4",
   "description": "white framework core",
   "main": "index.js",
+  "files": [
+    "src/",
+    "dist/",
+    "types/",
+    "package.json",
+    "README.md",
+    "index.js"
+  ],
   "scripts": {
     "test": "jest",
     "test:c": "jest --coverage",
@@ -34,13 +42,11 @@
     "jest-environment-jsdom": "^29.5.0",
     "jsdoc": "^4.0.2",
     "jsdom": "^22.0.0",
+    "stringify-parse": "^1.0.6",
     "telejson": "^7.2.0",
     "typedoc": "^0.25.12"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "stringify-parse": "github:bonjs/stringify-parse"
   }
 }
