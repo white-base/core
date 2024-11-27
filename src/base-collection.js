@@ -414,11 +414,12 @@
         /** 
          * onChanging 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_elem 요소
+         * @param {any} p_nVal 변경값
+         * @param {any} p_oVal 기존값
          * @listens _L.Collection.BaseCollection#onChanging
          */
-        BaseCollection.prototype._onChanging = function(p_idx, p_elem) {
-            this.$event.emit('changing', p_idx, p_elem, this); 
+        BaseCollection.prototype._onChanging = function(p_idx, p_nVal, p_oVal) {
+            this.$event.emit('changing', p_idx, p_nVal, p_oVal, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onChanging', {
             enumerable: false
@@ -427,11 +428,12 @@
         /** 
          * onChanged 이벤트를 발생시킵니다.
          * @param {number} p_idx 인덱스 번호
-         * @param {any} p_elem 요소
+         * @param {any} p_nVal 변경값
+         * @param {any} p_oVal 기존값
          * @listens _L.Collection.BaseCollection#onChanged
          */        
-        BaseCollection.prototype._onChanged = function(p_idx, p_elem) {
-            this.$event.emit('changed', p_idx, p_elem, this); 
+        BaseCollection.prototype._onChanged = function(p_idx, p_nVal, p_oVal) {
+            this.$event.emit('changed', p_idx, p_nVal, p_oVal, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onChanged', {
             enumerable: false
@@ -447,10 +449,11 @@
             return {
                 get: function() { return this.$elements[p_idx]; },
                 set: function(nVal) {
+                    var oVal = this.$elements[p_idx];
                     if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
-                    this._onChanging(p_idx, nVal);  // before event
+                    this._onChanging(p_idx, nVal, oVal);  // before event
                     this.$elements[p_idx] = nVal;
-                    this._onChanged(p_idx, nVal);   // after event
+                    this._onChanged(p_idx, nVal, oVal);   // after event
                 },
                 configurable: true,
                 enumerable: p_enum,

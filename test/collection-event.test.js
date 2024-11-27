@@ -41,11 +41,11 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
                     this.columns.onCleared = function(_this) {
                         arrResult.push(`CLEARED.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onChanging = function(i, v, _this) {
-                        arrResult.push(`CHANGING.${i}.${v}.${_this._owner.constructor.name}`);
+                    this.columns.onChanging = function(i, n, o, _this) {
+                        arrResult.push(`CHANGING.${i}.${n}.${o}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onChanged = function(i, v, _this) {
-                        arrResult.push(`CHANGED.${i}.${v}.${_this._owner.constructor.name}`);
+                    this.columns.onChanged = function(i, n, o, _this) {
+                        arrResult.push(`CHANGED.${i}.${n}.${o}.${_this._owner.constructor.name}`);
                     }
                 }
             }
@@ -116,8 +116,8 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
             arrResult = [];
             i.columns['a1'] = 'AA1'
     
-            expect(arrResult[0]).toBe('CHANGING.0.AA1.School');
-            expect(arrResult[1]).toBe('CHANGED.0.AA1.School');
+            expect(arrResult[0]).toBe('CHANGING.0.AA1.A1.School');
+            expect(arrResult[1]).toBe('CHANGED.0.AA1.A1.School');
             expect(arrResult.length).toBe(2);
             expect(result1 > -1).toBeTruthy();
         });
