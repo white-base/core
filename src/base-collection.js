@@ -614,7 +614,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
      
             for (var i = 0; i < this.length; i++) {
-                newArr[i] = callback.call(thisArg || this, this[i], i, this);
+                newArr[i] = callback.call(thisArg || this, this[i], i, this._list);
             }
             return newArr;
         };
@@ -634,7 +634,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
 
             for (let i = 0; i < this.length; i++) {
-                if (callback.call(thisArg || this, this[i], i, this)) {
+                if (callback.call(thisArg || this, this[i], i, this._list)) {
                     newArr.push(this[i]);
                 }
             }
@@ -656,7 +656,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
 
             for(let i=0; i < this.length; i++) {
-                acc = acc ? callback(acc, this[i], i, this) : this[i];
+                acc = acc ? callback(acc, this[i], i, this._list) : this[i];
             }
             return acc;
         }
@@ -674,7 +674,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
             
             for (var i = 0; i < this.length; i++) {
-              if ( callback.call(thisArg || this, this[i], i, this) ) {
+              if ( callback.call(thisArg || this, this[i], i, this._list) ) {
                 return this[i];
               }
             }
@@ -692,7 +692,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
             
             for (var i = 0; i <this.length; i++) {
-              callback.call(thisArg || this, this[i], i, this);
+              callback.call(thisArg || this, this[i], i, this._list);
             }
         };
         Object.defineProperty(BaseCollection.prototype, 'forEach', {
@@ -709,7 +709,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
             
             for(var i=0; i < this.length; i++){
-                if (callback.call(thisArg || this, this[i], i, this)) return true;
+                if (callback.call(thisArg || this, this[i], i, this._list)) return true;
             }
             return false;
         };
@@ -727,7 +727,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
             
             for(var i=0; i < this.length; i++){
-                if (!callback.call(thisArg || this, this[i], i, this)) return false;
+                if (!callback.call(thisArg || this, this[i], i, this._list)) return false;
               }
               return true;
         };
@@ -745,7 +745,7 @@
             if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
             
             for (var i = 0; i < this.length; i++) {
-              if ( callback.call(thisArg || this, this[i], i, this) ) {
+              if ( callback.call(thisArg || this, this[i], i, this._list) ) {
                 return i;
               }
             }

@@ -589,10 +589,19 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: s})
             });
+            it("- map() : 연산 ", () => {
+                const collection = new ArrayCollection();
+                collection.add(1);
+                collection.add(2);
+                collection.add(3);
+                const doubledValues = collection.map((value) => value * 2);
+        
+                expect(doubledValues).toEqual([2, 4, 6]);
+            });            
             it("- map() : function ", () => {
                 let s = new Student();
                 var arr = [];
@@ -604,9 +613,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 });
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s.rows})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s.rows})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s.rows})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: s.rows})
             });
             it("- map() : ()=> {} ", () => {
                 let s = new Student();
@@ -619,10 +628,11 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {}})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {}})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: {}})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: {}})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: {}})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: {}})
             });
+
             it("- map() : 예외 함수타입 ", () => {
                 let s = new Student();
                 expect(()=> s.rows.map({})).toThrow(/EL04116/);
@@ -649,7 +659,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(arr[0]).toEqual('A1')
                 // arr2
                 expect(arr2.length).toBe(1);
-                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
+                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s})
             });
             it("- filter() : function ", () => {
                 let s = new Student();
@@ -671,7 +681,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(arr[0]).toEqual('A1')
                 // arr2
                 expect(arr2.length).toBe(1);
-                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
+                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s.rows})
             });
             it("- filter() : ()=> {} ", () => {
                 let s = new Student();
@@ -693,7 +703,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(arr[0]).toEqual('A1')
                 // arr2
                 expect(arr2.length).toBe(1);
-                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {}})
+                expect(arr2[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: {}})
             });
             it("- filter() : 예외 함수타입 ", () => {
                 let s = new Student();
@@ -751,8 +761,27 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s})
                 expect(result).toBe(3);
+            });
+            it("- find() : return undefined ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.rows.add(1);
+                s.rows.add(3);
+                s.rows.add(5);
+                var result = s.rows.find(function(elem, i, array) {
+                    if (elem > 10) {
+                        arr.push({a: elem, b: i, c: array, d: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(0);
+                // expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s})
+                expect(result).toBe(undefined);
             });
             it("- find() : function ", () => {
                 let s = new Student();
@@ -770,7 +799,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 });
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s.rows})
                 expect(result).toBe(3);
             });
             it("- find() : ()=> {} ", () => {
@@ -789,7 +818,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: {} })
                 expect(result).toBe(3);
             });
             it("- find() : 예외 함수타입 ", () => {
@@ -811,9 +840,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: s})
             });
             it("- forEach() : function ", () => {
                 let s = new Student();
@@ -827,9 +856,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 });
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s.rows})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s.rows})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s.rows})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: s.rows})
             });
             it("- forEach() : ()=> {} ", () => {
                 let s = new Student();
@@ -843,9 +872,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {} })
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: {} })
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: {} })
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: {} })
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: {} })
             });
             it("- forEach() : 예외 함수타입 ", () => {
                 let s = new Student();
@@ -874,7 +903,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s})
                 expect(result).toBe(true);
                 expect(result2).toBe(false);
             });
@@ -899,7 +928,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 });
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s.rows})
                 expect(result).toBe(true);
                 expect(result2).toBe(false);
             });
@@ -919,7 +948,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: {} })
                 expect(result).toBe(true);
             });
             it("- some() : 예외 함수타입 ", () => {
@@ -949,9 +978,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                     }
                 }, s);
         
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: s})
                 expect(result).toBe(true);
                 expect(result2).toBe(false);
             });
@@ -975,9 +1004,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                     }
                 });
         
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: s.rows})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: s.rows})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: s.rows})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s.rows})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: s.rows})
                 expect(result).toBe(true);
                 expect(result2).toBe(false);
             });
@@ -1001,9 +1030,9 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                     }
                 }, s);
         
-                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows, d: {}})
-                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {}})
-                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows, d: {}})
+                expect(arr[0]).toEqual({a: s.rows[0], b: 0, c: s.rows._list, d: {}})
+                expect(arr[1]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: {}})
+                expect(arr[2]).toEqual({a: s.rows[2], b: 2, c: s.rows._list, d: {}})
                 expect(result).toBe(true);
                 expect(result2).toBe(false);
             });
@@ -1035,7 +1064,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s})
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s})
                 expect(result).toBe(1);
                 expect(result2).toBe(-1);
             });
@@ -1060,7 +1089,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 });
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: s.rows})
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: s.rows})
                 expect(result).toBe(1);
                 expect(result2).toBe(-1);
             });
@@ -1080,7 +1109,7 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows, d: {} })
+                expect(arr[0]).toEqual({a: s.rows[1], b: 1, c: s.rows._list, d: {} })
                 expect(result).toBe(1);
             });
             it("- findIndex() : 예외 함수타입 ", () => {
