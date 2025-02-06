@@ -195,7 +195,8 @@
          * 대상 : _element =[], _descriptors = []  
          */
         ArrayCollection.prototype.clear = function() {
-            this._onClear();    // event
+            // this._onClear();    // event
+            if (typeof this._onClear() === 'undefined') return -1;
 
             for (var i = 0; i < this.count; i++) delete this[i];
             this.$elements = [];
@@ -229,7 +230,8 @@
                     Message.warn('WS011', ['writable = false', 'element']);
                 }
 
-                this._onAdd(p_pos, p_elem);
+                if (typeof this._onAdd(p_pos, p_elem) === 'undefined') return false;
+
                 // data process
                 this.$elements.splice(p_pos, 0, p_elem);            
                 this.$descriptors.splice(p_pos, 0, p_desc);

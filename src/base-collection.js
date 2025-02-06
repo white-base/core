@@ -344,7 +344,7 @@
          * @listens _L.Collection.BaseCollection#onAdd
          */
         BaseCollection.prototype._onAdd = function(p_idx, p_elem) {
-            this.$event.emit('add', p_idx, p_elem, this); 
+            return this.$event.emit('add', p_idx, p_elem, this); 
         };
         Object.defineProperty(BaseCollection.prototype, '_onAdd', {
             enumerable: false
@@ -357,7 +357,7 @@
          * @listens _L.Collection.BaseCollection#onAdded
          */
         BaseCollection.prototype._onAdded = function(p_idx, p_elem) {
-            this.$event.emit('added', p_idx, p_elem, this); 
+            return this.$event.emit('added', p_idx, p_elem, this); 
         };
         Object.defineProperty(BaseCollection.prototype, '_onAdded', {
             enumerable: false
@@ -370,7 +370,7 @@
          * @listens _L.Collection.BaseCollection#onRemove
          */
         BaseCollection.prototype._onRemove = function(p_idx, p_elem) {
-            this.$event.emit('remove', p_idx, p_elem, this);
+            return this.$event.emit('remove', p_idx, p_elem, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onRemove', {
             enumerable: false
@@ -383,7 +383,7 @@
          * @listens _L.Collection.BaseCollection#onRemoved
          */
         BaseCollection.prototype._onRemoved = function(p_idx, p_elem) {
-            this.$event.emit('removed', p_idx, p_elem, this);
+            return this.$event.emit('removed', p_idx, p_elem, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onRemoved', {
             enumerable: false
@@ -394,7 +394,7 @@
          * @listens _L.Collection.BaseCollection#onClear
          */
         BaseCollection.prototype._onClear = function() {
-            this.$event.emit('clear', this); 
+            return this.$event.emit('clear', this); 
         };
         Object.defineProperty(BaseCollection.prototype, '_onClear', {
             enumerable: false
@@ -405,7 +405,7 @@
          * @listens _L.Collection.BaseCollection#onCleared
          */
         BaseCollection.prototype._onCleared = function() {
-            this.$event.emit('cleared', this); 
+            return this.$event.emit('cleared', this); 
         };
         Object.defineProperty(BaseCollection.prototype, '_onCleared', {
             enumerable: false
@@ -419,7 +419,7 @@
          * @listens _L.Collection.BaseCollection#onChanging
          */
         BaseCollection.prototype._onChanging = function(p_idx, p_nVal, p_oVal) {
-            this.$event.emit('changing', p_idx, p_nVal, p_oVal, this);
+            return this.$event.emit('changing', p_idx, p_nVal, p_oVal, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onChanging', {
             enumerable: false
@@ -433,7 +433,7 @@
          * @listens _L.Collection.BaseCollection#onChanged
          */        
         BaseCollection.prototype._onChanged = function(p_idx, p_nVal, p_oVal) {
-            this.$event.emit('changed', p_idx, p_nVal, p_oVal, this);
+            return this.$event.emit('changed', p_idx, p_nVal, p_oVal, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onChanged', {
             enumerable: false
@@ -567,7 +567,9 @@
             
             elem = this.$elements[p_pos];
             if (this.$elements.length > p_pos) {
-                this._onRemove(p_pos, elem);
+                // this._onRemove(p_pos, elem);
+                if (typeof this._onRemove(p_pos, elem) === 'undefined') return false;
+
                 if (!this._remove(p_pos)) return false;
                 this._onRemoved(p_pos, elem);
                 return true;

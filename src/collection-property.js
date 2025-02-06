@@ -276,7 +276,9 @@
                     Message.warn('WS011', ['writable = true', 'element']);
                 }
 
-                this._onAdd(index, p_elem);
+                // this._onAdd(index, p_elem);
+                if (typeof this._onAdd(index, p_elem) === 'undefined') return -1;
+
                 // data process
                 this.$elements.push(p_elem);
                 this.$keys.push(p_key);
@@ -307,7 +309,8 @@
          * - 이벤트는 초기화 되지 않습니다.
          */
         PropertyCollection.prototype.clear = function() {
-            this._onClear();
+            // this._onClear();
+            if (typeof this._onClear() === 'undefined') return -1;
             
             for (var i = 0; i < this.count; i++) {
                 var propName = this.indexToKey(i);

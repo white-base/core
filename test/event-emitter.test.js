@@ -209,6 +209,19 @@ describe("[target: event-emitter.js]", () => {
                 expect(e.emit('e1')).toEqual(true);
                 expect(result).toEqual(['E1']);
             });
+            it("- 콜백함수 false 리턴, 중단 처리 ", () => {
+                const e = new EventEmitter();
+                var result = [];
+                var fun1 = ()=>{ result.push('E1'); return false };
+                var fun2 = ()=>{ result.push('E2') };
+                e.on('e1', fun1)
+                e.once('e1', fun2)
+
+                expect(e._list).toEqual(['e1']);
+                expect(e.$storage.e1.length).toBe(2);
+                expect(e.emit('e1')).toEqual(undefined);
+                expect(result).toEqual(['E1']);
+            });
             it("- 예외 ", () => {
                 const e = new EventEmitter();
                 

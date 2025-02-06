@@ -162,19 +162,22 @@
         /**
          * 이벤트명으로 등록된 리스너(함수)를 실행합니다.
          * @param {string} p_event 이벤트명
-         * @returns {boolean} 리스너가 실행되었는지 여부
+         * @returns {boolean | undefined} 리스너가 실행되었는지 여부 
+         * true: 실행 함, false: 실행 안함, undefined: 처리 실패 
          */
         EventEmitter.prototype.emit = function(p_event) {
             var args = [].slice.call(arguments, 1);
             var listeners;
             var isListener = false;
+            var isReturn;
 
             if (!_isString(p_event)) throw new ExtendError(/EL01509/, null, [typeof p_event]);
 
             if (typeof this.$storage[p_event] === 'object') {
                 listeners = this.$storage[p_event].slice();
                 for (var i = 0; i < listeners.length; i++) {
-                    listeners[i].apply(this, args);
+                    isReturn = listeners[i].apply(this, args);
+                    if (isReturn === false) return;
                 }
                 if (listeners.length > 0) isListener = true;
             }
