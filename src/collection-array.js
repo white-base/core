@@ -230,7 +230,7 @@
                     Message.warn('WS011', ['writable = false', 'element']);
                 }
 
-                if (typeof this._onAdd(p_pos, p_elem) === 'undefined') return false;
+                if (typeof this._onAdd(p_elem, p_pos) === 'undefined') return false;
 
                 // data process
                 this.$elements.splice(p_pos, 0, p_elem);            
@@ -246,7 +246,7 @@
                     var desc = this.$descriptors[i] ? this.$descriptors[i] : this._getPropDescriptor(i);
                     Object.defineProperty(this, [i], desc);
                 }
-                this._onAdded(p_pos, p_elem);
+                this._onAdded(p_elem, p_pos);
                 
                 return true;
 

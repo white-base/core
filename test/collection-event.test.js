@@ -23,16 +23,16 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
                 columns = new PropertyCollection(this);
                 constructor(level) { 
                     this.level = level;
-                    this.columns.onAdd = function(i, v, _this) {
+                    this.columns.onAdd = function(v, i, _this) {
                         arrResult.push(`ADD.${i}.${v}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onAdded = function(i, v, _this) {
+                    this.columns.onAdded = function(v, i, _this) {
                         arrResult.push(`ADDED.${i}.${v}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onRemove = function(i, v, _this) {
+                    this.columns.onRemove = function(v, i, _this) {
                         arrResult.push(`REMOVE.${i}.${v}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onRemoved = function(i, v, _this) {
+                    this.columns.onRemoved = function(v, i, _this) {
                         arrResult.push(`REMOVED.${i}.${v}.${_this._owner.constructor.name}`);
                     }
                     this.columns.onClear = function(_this) {
@@ -41,10 +41,10 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
                     this.columns.onCleared = function(_this) {
                         arrResult.push(`CLEARED.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onChanging = function(i, n, o, _this) {
+                    this.columns.onChanging = function(n, o, i,  _this) {
                         arrResult.push(`CHANGING.${i}.${n}.${o}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onChanged = function(i, n, o, _this) {
+                    this.columns.onChanged = function(n, o, i, _this) {
                         arrResult.push(`CHANGED.${i}.${n}.${o}.${_this._owner.constructor.name}`);
                     }
                 }
@@ -132,16 +132,16 @@ describe("[target: collection-property.js, ollection-array.js, base-collection.j
                 columns = new ArrayCollection(this);
                 constructor(level) { 
                     this.level = level;
-                    this.columns.onAdd = function(i, v, _this) {
+                    this.columns.onAdd = function(v, i, _this) {
                         arrResult.push(`ADD.${i}.${v}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onAdded = function(i, v, _this) {
+                    this.columns.onAdded = function(v, i, _this) {
                         arrResult.push(`ADDED.${i}.${v}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onRemove = function(i, v, _this) {
+                    this.columns.onRemove = function(v, i, _this) {
                         arrResult.push(`REMOVE.${i}.${v}.${_this._owner.constructor.name}`);
                     }
-                    this.columns.onRemoved = function(i, v, _this) {
+                    this.columns.onRemoved = function(v, i, _this) {
                         arrResult.push(`REMOVED.${i}.${v}.${_this._owner.constructor.name}`);
                     }
                     this.columns.onClear = function(_this) {

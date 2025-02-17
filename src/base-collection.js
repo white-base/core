@@ -339,12 +339,12 @@
         
         /**
          * onAdd 이벤트를 발생시킵니다.
-         * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
+         * @param {number} p_idx 인덱스 번호
          * @listens _L.Collection.BaseCollection#onAdd
          */
-        BaseCollection.prototype._onAdd = function(p_idx, p_elem) {
-            return this.$event.emit('add', p_idx, p_elem, this); 
+        BaseCollection.prototype._onAdd = function(p_elem, p_idx) {
+            return this.$event.emit('add', p_elem, p_idx, this); 
         };
         Object.defineProperty(BaseCollection.prototype, '_onAdd', {
             enumerable: false
@@ -352,12 +352,12 @@
 
         /**
          * onAdded 이벤트를 발생시킵니다.
-         * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
+         * @param {number} p_idx 인덱스 번호
          * @listens _L.Collection.BaseCollection#onAdded
          */
-        BaseCollection.prototype._onAdded = function(p_idx, p_elem) {
-            return this.$event.emit('added', p_idx, p_elem, this); 
+        BaseCollection.prototype._onAdded = function(p_elem, p_idx) {
+            return this.$event.emit('added', p_elem, p_idx, this); 
         };
         Object.defineProperty(BaseCollection.prototype, '_onAdded', {
             enumerable: false
@@ -365,12 +365,12 @@
 
         /**
          * onRemove 이벤트를 발생시킵니다.
-         * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
+         * @param {number} p_idx 인덱스 번호
          * @listens _L.Collection.BaseCollection#onRemove
          */
-        BaseCollection.prototype._onRemove = function(p_idx, p_elem) {
-            return this.$event.emit('remove', p_idx, p_elem, this);
+        BaseCollection.prototype._onRemove = function(p_elem, p_idx) {
+            return this.$event.emit('remove', p_elem, p_idx, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onRemove', {
             enumerable: false
@@ -378,12 +378,12 @@
 
         /**
          * onRemoved 이벤트를 발생시킵니다.
-         * @param {number} p_idx 인덱스 번호
          * @param {any} p_elem 요소
+         * @param {number} p_idx 인덱스 번호
          * @listens _L.Collection.BaseCollection#onRemoved
          */
-        BaseCollection.prototype._onRemoved = function(p_idx, p_elem) {
-            return this.$event.emit('removed', p_idx, p_elem, this);
+        BaseCollection.prototype._onRemoved = function(p_elem, p_idx) {
+            return this.$event.emit('removed', p_elem, p_idx, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onRemoved', {
             enumerable: false
@@ -413,13 +413,13 @@
 
         /** 
          * onChanging 이벤트를 발생시킵니다.
-         * @param {number} p_idx 인덱스 번호
          * @param {any} p_nVal 변경값
          * @param {any} p_oVal 기존값
+         * @param {number} p_idx 인덱스 번호
          * @listens _L.Collection.BaseCollection#onChanging
          */
-        BaseCollection.prototype._onChanging = function(p_idx, p_nVal, p_oVal) {
-            return this.$event.emit('changing', p_idx, p_nVal, p_oVal, this);
+        BaseCollection.prototype._onChanging = function(p_nVal, p_oVal, p_idx) {
+            return this.$event.emit('changing', p_nVal, p_oVal, p_idx, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onChanging', {
             enumerable: false
@@ -427,13 +427,13 @@
 
         /** 
          * onChanged 이벤트를 발생시킵니다.
-         * @param {number} p_idx 인덱스 번호
          * @param {any} p_nVal 변경값
          * @param {any} p_oVal 기존값
+         * @param {number} p_idx 인덱스 번호
          * @listens _L.Collection.BaseCollection#onChanged
          */        
-        BaseCollection.prototype._onChanged = function(p_idx, p_nVal, p_oVal) {
-            return this.$event.emit('changed', p_idx, p_nVal, p_oVal, this);
+        BaseCollection.prototype._onChanged = function(p_nVal, p_oVal, p_idx) {
+            return this.$event.emit('changed', p_nVal, p_oVal, p_idx, this);
         };
         Object.defineProperty(BaseCollection.prototype, '_onChanged', {
             enumerable: false
@@ -451,9 +451,9 @@
                 set: function(nVal) {
                     var oVal = this.$elements[p_idx];
                     if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], nVal);
-                    this._onChanging(p_idx, nVal, oVal);  // before event
+                    this._onChanging(nVal, oVal, p_idx);  // before event
                     this.$elements[p_idx] = nVal;
-                    this._onChanged(p_idx, nVal, oVal);   // after event
+                    this._onChanged(nVal, oVal, p_idx);   // after event
                 },
                 configurable: true,
                 enumerable: p_enum,
@@ -568,10 +568,10 @@
             elem = this.$elements[p_pos];
             if (this.$elements.length > p_pos) {
                 // this._onRemove(p_pos, elem);
-                if (typeof this._onRemove(p_pos, elem) === 'undefined') return false;
+                if (typeof this._onRemove(elem, p_pos) === 'undefined') return false;
 
                 if (!this._remove(p_pos)) return false;
-                this._onRemoved(p_pos, elem);
+                this._onRemoved(elem, p_pos);
                 return true;
             }
             return false;

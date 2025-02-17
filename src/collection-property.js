@@ -277,7 +277,7 @@
                 }
 
                 // this._onAdd(index, p_elem);
-                if (typeof this._onAdd(index, p_elem) === 'undefined') return -1;
+                if (typeof this._onAdd(p_elem, index) === 'undefined') return -1;
 
                 // data process
                 this.$elements.push(p_elem);
@@ -291,7 +291,7 @@
                     Object.defineProperty(this, [index], this._getPropDescriptor(index, false));
                     Object.defineProperty(this, p_key, this._getPropDescriptor(index));
                 }
-                this._onAdded(index, p_elem);
+                this._onAdded(p_elem, index);
 
                 return index;
 
