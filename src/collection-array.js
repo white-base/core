@@ -258,6 +258,160 @@
             enumerable: false
         });
 
+        /**
+         * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {Array}
+         */
+        ArrayCollection.prototype.map  = function(callback, thisArg) {
+            var newArr = [];
+
+            if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
+     
+            for (var i = 0; i < this.length; i++) {
+                newArr[i] = callback.call(thisArg || this, this[i], i, this._list);
+            }
+            return newArr;
+        };
+        Object.defineProperty(ArrayCollection.prototype, 'map', {
+            enumerable: false
+        });
+
+        /**
+         * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {Array}
+         */
+        ArrayCollection.prototype.filter = function (callback, thisArg) {
+            let newArr = [];
+
+            if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
+
+            for (let i = 0; i < this.length; i++) {
+                if (callback.call(thisArg || this, this[i], i, this._list)) {
+                    newArr.push(this[i]);
+                }
+            }
+            return newArr;
+        };
+        Object.defineProperty(ArrayCollection.prototype, 'filter', {
+            enumerable: false
+        });
+
+        /**
+         * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
+         * @param {Function} callback 콜백함수 (accumulator, currentValue, index, array) => any
+         * @param {any} initialValue 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용합니다.
+         * @returns  {any}
+         */
+        ArrayCollection.prototype.reduce = function(callback, initialValue) {
+            var acc = initialValue;
+
+            if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
+
+            for(let i=0; i < this.length; i++) {
+                acc = acc ? callback(acc, this[i], i, this._list) : this[i];
+            }
+            return acc;
+        }
+        Object.defineProperty(ArrayCollection.prototype, 'reduce', {
+            enumerable: false
+        });
+
+        /**
+         * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => any
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {any}
+         */
+        ArrayCollection.prototype.find = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
+            
+            for (var i = 0; i < this.length; i++) {
+              if ( callback.call(thisArg || this, this[i], i, this._list) ) {
+                return this[i];
+              }
+            }
+        };
+        Object.defineProperty(ArrayCollection.prototype, 'find', {
+            enumerable: false
+        });
+
+        /**
+         * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => void
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         */
+        ArrayCollection.prototype.forEach = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
+            
+            for (var i = 0; i <this.length; i++) {
+              callback.call(thisArg || this, this[i], i, this._list);
+            }
+        };
+        Object.defineProperty(ArrayCollection.prototype, 'forEach', {
+            enumerable: false
+        });
+
+        /**
+         * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {boolean}
+         */
+        ArrayCollection.prototype.some = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
+            
+            for(var i=0; i < this.length; i++){
+                if (callback.call(thisArg || this, this[i], i, this._list)) return true;
+            }
+            return false;
+        };
+        Object.defineProperty(ArrayCollection.prototype, 'some', {
+            enumerable: false
+        });
+
+        /**
+         * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {boolean}
+         */
+        ArrayCollection.prototype.every = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
+            
+            for(var i=0; i < this.length; i++){
+                if (!callback.call(thisArg || this, this[i], i, this._list)) return false;
+              }
+              return true;
+        };
+        Object.defineProperty(ArrayCollection.prototype, 'every', {
+            enumerable: false
+        });
+
+        /**
+         * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
+         * @param {Function} callback 콜백함수 (currentValue, index, array) => number
+         * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+         * @returns  {any}
+         */
+        ArrayCollection.prototype.findIndex = function(callback, thisArg) {
+            if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
+            
+            for (var i = 0; i < this.length; i++) {
+              if ( callback.call(thisArg || this, this[i], i, this._list) ) {
+                return i;
+              }
+            }
+            return -1;
+        };
+        Object.defineProperty(ArrayCollection.prototype, 'findIndex', {
+            enumerable: false
+        });
+
+
         return ArrayCollection;
 
     }(BaseCollection));

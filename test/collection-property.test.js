@@ -835,6 +835,547 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(()=> s.columns.indexToKey('a1')).toThrow('EL0422A');
             });
         });
+
+        describe("PropertyCollection.map()", () => {
+            it("- map() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                s.columns.add('A1', 10);
+                s.columns.add('A2', 20);
+                s.columns.add('A3', 30);
+                var arr = s.columns.map(function(elem, i, k, array) {
+                    return {a: elem, b: i, c: k, d:array, e: this};
+                }, s);
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c:'A1', d: s.columns._list, e: s})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c:'A2', d: s.columns._list, e: s})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c:'A3', d: s.columns._list, e: s})
+            });
+            it("- map() : 연산 ", () => {
+                const collection = new PropertyCollection();
+                collection.add('k1', 1);
+                collection.add('k2', 2);
+                collection.add('k3', 3);
+                const doubledValues = collection.map((value) => value * 2);
+        
+                expect(doubledValues).toEqual([2, 4, 6]);
+            });            
+            it("- map() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                s.columns.add('A1', 10);
+                s.columns.add('A2', 20);
+                s.columns.add('A3', 30);
+                var arr = s.columns.map(function(elem, i, k, array) {
+                    return {a: elem, b: i, c:k, d: array, e: this};
+                });
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c:'A1', d: s.columns._list, e: s.columns})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c:'A2', d: s.columns._list, e: s.columns})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c:'A3', d: s.columns._list, e: s.columns})
+            });
+            it("- map() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                s.columns.add('A1', 10);
+                s.columns.add('A2', 20);
+                s.columns.add('A3', 30);
+                var arr = s.columns.map((elem, i, k, array) => {
+                    return {a: elem, b: i, c: k, d: array, e: this};
+                }, s);
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'A1', d: s.columns._list, e: {}})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'A2', d: s.columns._list, e: {}})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'A3', d: s.columns._list, e: {}})
+            });
+
+            it("- map() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.map({})).toThrow(/EL04116/);
+            });
+        });
+        describe("PropertyCollection.filter()", () => {
+            it("- filter() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var arr2 = [];
+
+                s.columns.add('A1', 10);
+                s.columns.add('A2', 20);
+                s.columns.add('A3', 30);
+                var arr = s.columns.filter(function(elem, i, k, array) {
+                    if (k == 'A1') {
+                        arr2.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+        
+                // arr
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual(10)
+                // arr2
+                expect(arr2.length).toBe(1);
+                expect(arr2[0]).toEqual({a: s.columns[0], b: 0, c:'A1', d: s.columns._list, e: s})
+            });
+            it("- filter() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var arr2 = [];
+
+                s.columns.add('k1', 'A1');
+                s.columns.add('k2', 'A2');
+                s.columns.add('k3', 'A3');
+                var arr = s.columns.filter(function(elem, i, k, array) {
+                    if (elem == 'A1') {
+                        arr2.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                });
+        
+                // arr
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual('A1')
+                // arr2
+                expect(arr2.length).toBe(1);
+                expect(arr2[0]).toEqual({a: s.columns[0], b: 0, c:'k1', d: s.columns._list, e: s.columns})
+            });
+            it("- filter() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var arr2 = [];
+
+                s.columns.add('k1', 'A1');
+                s.columns.add('k2', 'A2');
+                s.columns.add('k3', 'A3');
+                var arr = s.columns.filter((elem, i, k, array) => {
+                    if (elem == 'A1') {
+                        arr2.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+        
+                // arr
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual('A1')
+                // arr2
+                expect(arr2.length).toBe(1);
+                expect(arr2[0]).toEqual({a: s.columns[0], b: 0, c:'k1', d: s.columns._list, e: {}})
+            });
+            it("- filter() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.filter({})).toThrow(/EL04117/);
+            });
+        });
+        describe("PropertyCollection.reduce()", () => {
+            it("- reduce() : ()=> {} 초기값 = 10 ", () => {
+                let s = new Student();
+                var sum = [];
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 2);
+                s.columns.add('k3', 3);
+                var sum = s.columns.reduce((accumulator, currentValue) => {
+                    return accumulator + currentValue;
+                }, 10);
+        
+                expect(s.columns.length).toBe(3);
+                expect(sum).toEqual(16)
+            });
+            it("- reduce() : ()=> {} ", () => {
+                let s = new Student();
+                var sum = [];
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 2);
+                s.columns.add('k3', 3);
+                var sum = s.columns.reduce((accumulator, currentValue) => {
+                    return accumulator + currentValue;
+                });
+        
+                expect(s.columns.length).toBe(3);
+                expect(sum).toEqual(6)
+            });
+            it("- reduce() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.reduce({})).toThrow(/EL04118/);
+            });
+        });
+        describe("PropertyCollection.find()", () => {
+            it("- find() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.find(function(elem, i, k, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c:'k2', d: s.columns._list, e: s})
+                expect(result).toBe(3);
+            });
+            it("- find() : return undefined ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.find(function(elem, i, k, array) {
+                    if (elem > 10) {
+                        arr.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(0);
+                // expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: s.columns._list, d: s})
+                expect(result).toBe(undefined);
+            });
+            it("- find() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.find(function(elem, i, k, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                });
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s.columns})
+                expect(result).toBe(3);
+            });
+            it("- find() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.find((elem, i, k, array) => {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c:'k2', d: s.columns._list, e: {} })
+                expect(result).toBe(3);
+            });
+            it("- find() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.find({})).toThrow(/EL04119/);
+            });
+        });
+
+        describe("PropertyCollection.forEach()", () => {
+            it("- forEach() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+
+                s.columns.add('k1', 'A1');
+                s.columns.add('k2', 'A2');
+                s.columns.add('k3', 'A3');
+                s.columns.forEach(function(elem, i, k, array) {
+                    arr.push({a: elem, b: i, c:k, d: array, e: this});
+                }, s);
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: s})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: s})
+            });
+            it("- forEach() : function ", () => {
+                let s = new Student();
+                var arr = [];
+
+                s.columns.add('k1', 'A1');
+                s.columns.add('k2', 'A2');
+                s.columns.add('k3', 'A3');
+                s.columns.forEach(function(elem, i, k, array) {
+                    arr.push({a: elem, b: i, c: k, d: array, e: this});
+                });
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: s.columns})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s.columns})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: s.columns})
+            });
+            it("- forEach() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+
+                s.columns.add('k1', 'A1');
+                s.columns.add('k2', 'A2');
+                s.columns.add('k3', 'A3');
+                s.columns.forEach((elem, i, k, array) => {
+                    arr.push({a: elem, b: i, c: k, d: array, e: this});
+                }, s);
+        
+                expect(arr.length).toBe(3);
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: {} })
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: {} })
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: {} })
+            });
+            it("- forEach() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.forEach({})).toThrow(/EL041110/);
+            });
+        });
+        describe("PropertyCollection.some()", () => {
+            it("- some() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.some(function(elem, i, k, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.columns.some(function(elem, i, k, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- some() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.some(function(elem, i, k, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: k, d: array, e: this});
+                        return true;    
+                    }
+                });
+                var result2 = s.columns.some(function(elem, i, k, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                });
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s.columns})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- some() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.some((elem, i, k, array) => {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c:k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c:'k2', d: s.columns._list, e: {} })
+                expect(result).toBe(true);
+            });
+            it("- some() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.some({})).toThrow(/EL041111/);
+            });
+        });
+
+        describe("PropertyCollection.every()", () => {
+            it("- every() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.every(function(elem, i, k, array) {
+                    if (elem > 0) {
+                        arr.push({a: elem, b: i, c: k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.columns.every(function(elem, i, k, array) {
+                    if (elem > 3) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: s})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: s})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- every() : function, ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.every(function(elem, i, k, array) {
+                    if (elem > 0) {
+                        arr.push({a: elem, b: i, c: k, d: array, e: this});
+                        return true;    
+                    }
+                });
+                var result2 = s.columns.every(function(elem, i, k, array) {
+                    if (elem > 3) {
+                        return true;    
+                    }
+                });
+        
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: s.columns})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s.columns})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: s.columns})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- every() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.every((elem, i, k, array) => {
+                    if (elem > 0) {
+                        arr.push({a: elem, b: i, c: k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.columns.every((elem, i, k, array) => {
+                    if (elem > 3) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: {}})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: {}})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: {}})
+                expect(result).toBe(true);
+                expect(result2).toBe(false);
+            });
+            it("- every() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.every({})).toThrow(/EL041112/);
+            });
+        });
+
+        describe("PropertyCollection.findIndex()", () => {
+            it("- findIndex() : function, thisArg ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.findIndex(function(elem, i, k, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+                var result2 = s.columns.findIndex(function(elem, i, k, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s})
+                expect(result).toBe(1);
+                expect(result2).toBe(-1);
+            });
+            it("- findIndex() : function ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.findIndex(function(elem, i, k, array) {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: k, d: array, e: this});
+                        return true;    
+                    }
+                });
+                var result2 = s.columns.findIndex(function(elem, i, k, array) {
+                    if (elem > 5) {
+                        return true;    
+                    }
+                });
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: s.columns})
+                expect(result).toBe(1);
+                expect(result2).toBe(-1);
+            });
+            it("- findIndex() : ()=> {} ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.findIndex((elem, i, k, array) => {
+                    if (elem > 2) {
+                        arr.push({a: elem, b: i, c: k, d: array, e: this});
+                        return true;    
+                    }
+                }, s);
+        
+                expect(arr.length).toBe(1);
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: {} })
+                expect(result).toBe(1);
+            });
+            it("- findIndex() : 예외 함수타입 ", () => {
+                let s = new Student();
+                expect(()=> s.columns.findIndex({})).toThrow(/EL041113/);
+            });
+        });
         describe("for in 열거 속성 검사", () => {
             it("- for in", () => {
                 var arr = [];
