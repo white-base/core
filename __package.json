@@ -3,24 +3,7 @@
   "version": "1.0.5",
   "description": "white framework core",
   "main": "index.js",
-  "exports": {
-    ".": { 
-      "types": {
-        "require": "./index.d.cts",
-        "default": "./index.d.ts"
-      },
-      "browser": {
-        "require": "./dist/browser/logic-core.cjs",
-        "default": "./index.js"
-      },
-      "default": {
-        "require": "./dist/node/logic-core.cjs",
-        "default": "./index.js"
-      }
-    }
-  },
   "type": "module",
-  "types": "index.d.ts",
   "files": [
     "src/",
     "dist/",
@@ -41,7 +24,7 @@
     "gulp:meta": "gulp meta",
     "gulp:meta-min": "gulp meta-min"
   },
-  
+  "types": "./types/en/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/white-base/core.git"

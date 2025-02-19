@@ -1,22 +1,26 @@
 /**** util.js | _L.Common.Util.- ****/
-(function(_global) {
+// (function(_global) {
     'use strict';
 
-    var isNode = typeof window !== 'undefined' ? false : true;
+    // var isNode = typeof window !== 'undefined' ? false : true;
     //==============================================================
     // 1. import module
-    if (isNode) {                                                                   // strip:
-        var _Message                    = require('./message').Message;             // strip:
-        var _ExtendError                = require('./extend-error').ExtendError;    // strip:
-        var _Type                       = require('./type').Type;                   // strip:
-    }                                                                               // strip:
-    var $Message                    = _global._L.Message;       // modify:
-    var $ExtendError                = _global._L.ExtendError;   // modify:
-    var $Type                       = _global._L.Type;          // modify:
+    // if (isNode) {                                                                   // strip:
+    //     var _Message                    = require('./message').Message;             // strip:
+    //     var _ExtendError                = require('./extend-error').ExtendError;    // strip:
+    //     var _Type                       = require('./type').Type;                   // strip:
+    // }                                                                               // strip:
+    // var $Message                    = _global._L.Message;       // modify:
+    // var $ExtendError                = _global._L.ExtendError;   // modify:
+    // var $Type                       = _global._L.Type;          // modify:
 
-    var Message                 = _Message              || $Message;                // strip:
-    var ExtendError             = _ExtendError          || $ExtendError;            // strip:
-    var Type                    = _Type                 || $Type;                   // strip:
+    // var Message                 = _Message              || $Message;                // strip:
+    // var ExtendError             = _ExtendError          || $ExtendError;            // strip:
+    // var Type                    = _Type                 || $Type;                   // strip:
+
+    import Message from './message.js';
+    import ExtendError from './extend-error.js';
+    import Type from './type.js';
 
     //==============================================================
     // 2. module dependency check
@@ -25,6 +29,7 @@
     
     //==============================================================
     // 3. module implementation   
+    var _global = globalThis;
     
     var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
     var Util = {};  // namespace
@@ -257,12 +262,13 @@
 
     //==============================================================
     // 4. module export
-    if (isNode) exports.Util = Util;    // strip:
+    export default Util;
+//     if (isNode) exports.Util = Util;    // strip:
     
-    // create namespace
-    _global._L.Common               = _global._L.Common || {};
+//     // create namespace
+//     _global._L.Common               = _global._L.Common || {};
 
-    _global._L.Util = Util;
-    _global._L.Common.Util = Util;
+//     _global._L.Util = Util;
+//     _global._L.Common.Util = Util;
 
-}(typeof window !== 'undefined' ? window : global));
+// }(typeof window !== 'undefined' ? window : global));
