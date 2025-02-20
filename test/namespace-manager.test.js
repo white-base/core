@@ -1,13 +1,8 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-
-// const { loadNamespace } = require('../src/load-namespace');
-const { NamespaceManager }      = require('../src/namespace-manager');
-const { replacer, reviver, stringify, parse }              = require('telejson');
+import NamespaceManager from '../src/namespace-manager';
+import { replacer, reviver, stringify, parse } from 'telejson';
+import {jest} from '@jest/globals';
 
 //==============================================================
 // test

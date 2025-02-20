@@ -1,9 +1,8 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-const {EventEmitter}          = require('../src/event-emitter');
+import EventEmitter from '../src/event-emitter';
+import {jest} from '@jest/globals';
+
 let EventClass;
 
 //==============================================================

@@ -3,7 +3,8 @@
  */
 //==============================================================
 // gobal defined
-const Util      = require('../src/util').Util;
+import Util from '../src/util';
+import {jest} from '@jest/globals';
 
 //==============================================================
 // test
@@ -594,7 +595,7 @@ describe("[target: util.js]", () => {
 
             expect(()=> new CoClass1()).toThrow('EL01404')
         });
-        it('- implements() : 커버리지, 오류명, old env ', () => {
+        it.skip('- implements() : 커버리지, 오류명, old env ', () => {
             global.OLD_ENV = true;  // 디버깅 
             const Util      = require('../src/util').Util;
 

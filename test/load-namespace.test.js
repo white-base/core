@@ -1,13 +1,8 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-// require('../src/namespace');
-const {loadNamespace}                  = require('../src/load-namespace');
-const {MetaRegistry}        = require('../src/meta-registry');
- 
+import loadNamespace from '../src/load-namespace';
+import MetaRegistry from '../src/meta-registry';
+import {jest} from '@jest/globals';
 
 //==============================================================
 // test

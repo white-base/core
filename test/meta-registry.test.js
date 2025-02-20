@@ -1,20 +1,15 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-const Util                  = require('../src/util');
-const {MetaRegistry}        = require('../src/meta-registry');
-const {MetaObject}          = require('../src/meta-object');
-const {MetaElement}         = require('../src/meta-element');
-const {PropertyCollection}  = require('../src/collection-property');
-// const { MetaTable }    = require('../src/meta-table');
-const { loadNamespace } = require('../src/load-namespace');
-const { replacer, reviver, stringify, parse }              = require('telejson');
-const { ArrayCollection } = require('logic-core');
-// const { MetaColumn } = require('../src/meta-column');
+import Util from '../src/util.js';
+import MetaRegistry from '../src/meta-registry';
+import MetaObject from '../src/meta-object';
+import MetaElement from '../src/meta-element';
+import PropertyCollection from '../src/collection-property';
+import loadNamespace from '../src/load-namespace';
+import ArrayCollection from '../src/collection-array.js';
+import { replacer, reviver, stringify, parse } from 'telejson';
 
+import {jest} from '@jest/globals';
 //==============================================================
 // test
 describe("[target: meta-registry.js]", () => {

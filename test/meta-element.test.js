@@ -1,20 +1,15 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-const Util                  = require('../src/util').Util;
-const Type                  = require('../src/type');
-const {MetaObject}            = require('../src/meta-object');
-const {MetaElement}           = require('../src/meta-element');
-// const ComplexElement        = require('../src/meta-element-complex');
-const {IObject}               = require('../src/i-object');
-const {IMarshal}              = require('../src/i-marshal');
-const {IPropertyCollection}   = require('../src/i-collection-property');
-const { MetaRegistry } = require('../src/meta-registry');
+import Util from '../src/util';
+import MetaObject from '../src/meta-object';
+import MetaElement from '../src/meta-element';
+import IObject from '../src/i-object';
+import IMarshal from '../src/i-marshal';
+
+import {jest} from '@jest/globals';
 
 let MetaObjectSub, MetaElementSub, ComplexElementSub, EmpytClass;
+
 
 //==============================================================
 // test

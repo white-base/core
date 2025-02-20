@@ -1,14 +1,10 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-
-const {BaseCollection}          = require('../src/base-collection');
-const {MetaElement}             = require('../src/meta-element');
-const {ArrayCollection}         = require('../src/collection-array');
-const {MetaRegistry}            = require('../src/meta-registry');
+import BaseCollection from '../src/base-collection';
+import MetaElement from '../src/meta-element';
+import ArrayCollection from '../src/collection-array';
+import MetaRegistry from '../src/meta-registry';
+import {jest} from '@jest/globals';
 
 let Student, School, Corp, Member, House, Space;
 

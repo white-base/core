@@ -1,4 +1,6 @@
 /**** trans-queue.js | _L.Common.EventEmitter ****/
+//==============================================================
+// 1. import module
 import ExtendError from './extend-error.js';
 import Util from './util.js';
 import Message from './message.js';

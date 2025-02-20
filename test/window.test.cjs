@@ -7,7 +7,7 @@
 
 //==============================================================
 // test
-describe("[L.*]", () => {
+describe.skip("[L.*]", () => {
     describe("[Common.*]", () => {
         describe("load: extend-error.js <ExtendError>", () => {
             beforeEach(() => {

@@ -1,11 +1,7 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-const {Message}                  = require('../src/message');
-
+import Message from '../src/message';
+import {jest} from '@jest/globals';
 
 //==============================================================
 // test

@@ -1,6 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import {terser} from "rollup-plugin-terser";
+import terser from '@rollup/plugin-terser';
 import json from '@rollup/plugin-json';
 import { babel } from '@rollup/plugin-babel';
 import autoExternal from 'rollup-plugin-auto-external';
@@ -10,7 +10,7 @@ import path from 'path';
 
 const lib = require("./package.json");
 const outputFileName = 'logic-core';
-const name = "logic-core";
+const name = "_L";
 const namedInput = './index.js';
 const defaultInput = './index.js';
 
@@ -60,7 +60,7 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
 
 export default async () => {
   const year = new Date().getFullYear();
-  const banner = `/*! Axios v${lib.version} Copyright (c) ${year} ${lib.author} and contributors */`;
+  const banner = `/*! logic Core v${lib.version} Copyright (c) ${year} ${lib.author} and contributors */`;
 
   return [
     // browser ESM bundle for CDN
@@ -98,7 +98,7 @@ export default async () => {
         file: `dist/${outputFileName}.js`,
         name,
         format: "umd",
-        exports: "default",
+        exports: "named",
         banner
       }
     }),
@@ -109,10 +109,10 @@ export default async () => {
       es5: false,
       minifiedVersion: false,
       output: {
-        file: `dist/browser/${name}.cjs`,
+        file: `dist/browser/${outputFileName}.cjs`,
         name,
         format: "cjs",
-        exports: "default",
+        exports: "named",
         banner
       }
     }),
@@ -121,10 +121,10 @@ export default async () => {
     {
       input: defaultInput,
       output: {
-        file: `dist/node/${name}.cjs`,
+        file: `dist/node/${outputFileName}.cjs`,
         format: "cjs",
         preferConst: true,
-        exports: "default",
+        exports: "named",
         banner
       },
       plugins: [

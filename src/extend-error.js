@@ -8,7 +8,7 @@ import Message from './message.js';
 // 2. module dependency check
 //==============================================================
 // 3. module implementation   
-// var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
+var OLD_ENV = globalThis.OLD_ENV ? globalThis.OLD_ENV : false;    // 커버리지 테스트 역활
 
 const ExtendError = (function () {
     /**
@@ -140,93 +140,6 @@ const ExtendError = (function () {
     return ExtendError;
 
 }());
-
-// class ExtendError {
-    
-//     static _NS = 'Common';
-
-//     constructor(p_msg, p_prop, p_codeVal) {
-//         super(p_msg);
-
-//         var _build = '';
-//         var _prop;
-//         var _queue = [];    
-//         var _msg;
-
-//         if (p_prop instanceof ExtendError) {
-//             _queue = p_prop.queue;
-//             _prop = p_prop.prop;
-//         } else if (p_prop instanceof Error) {
-//             _queue.push(p_prop.message);
-//         } else if (typeof p_prop  === 'object' && p_prop !== null) {
-//             _prop = p_prop;
-//         }
-        
-//         if (typeof p_msg === 'string') {
-//             _msg = p_msg;
-//         } else if (p_msg instanceof RegExp) {
-//             _msg = Message.get(p_msg.source, p_codeVal);
-//         } else _msg = '';
-        
-//         _build = _msg + '\n';
-        
-//         if (_prop) _build += $buildMessageProp(_prop);
-//         if (_queue.length > 0) _build += $buildMsgQueue(_queue);
-
-//         // var _instance = _super.call(this, _build);
-//         var _instance = new Error(_build);
-        
-//         /**
-//          * 이전에 발생한 message 큐
-//          * @member {array<string>} _L.Common.ExtendError#queue
-//          */
-//         // if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
-//         // else _instance.queue = [];
-//         _instance.queue = _queue;
-
-//         /**
-//          * 속성타입 오류 메세지
-//          * @member {object} _L.Common.ExtendError#prop
-//          */
-//         if (_prop) _instance.prop = _prop;
-//         else _instance.prop = {};
-
-//         _instance.queue.push(_msg);
-
-
-//         if (Error.captureStackTrace && !OLD_ENV) {
-//             Error.captureStackTrace(_instance, ExtendError);
-//         }
-
-//         Object.setPrototypeOf(_instance, Object.getPrototypeOf(this));
-    
-//         return _instance;
-
-//         // inner function 
-//         function $buildMessageProp(obj) {
-//             var msg = '';
-//             for (var prop in obj) {
-//                 if (typeof obj[prop] === 'string') msg += prop + ' : '+ obj[prop] + '\n';
-//                 else continue;
-//             }
-//             return msg;
-//         }
-//         function $buildMsgQueue(queue) {
-//             var msg = '';
-//             var queue_cnt = queue.length;
-//             for (var i = queue_cnt; i > 0; i--) {
-//                 var mark = '';
-//                 for (var ii = i; ii <= queue_cnt; ii++) { mark += '#'; }
-//                 msg += '' + mark + ' '+ queue[i - 1] + '\n';
-//             }
-//             return msg;
-//         }
-//     }
-
-//     toString() {
-//         return 'ExtendError : ' + this.message;
-//     }
-// }
 
 //==============================================================
 // 4. module export

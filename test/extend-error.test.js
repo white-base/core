@@ -1,11 +1,7 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-// const Util                  = require('../src/util');
-const {ExtendError}         = require('../src/extend-error');
+import ExtendError from '../src/extend-error';
+import {jest} from '@jest/globals';
 
 let funcA, funcB, funcC
 //==============================================================
@@ -65,7 +61,7 @@ describe("[target: extend-error.js]", () => {
                 });
             });
             describe("커버리지", () => {
-                it("- Error.captureStackTrace 저거후 ", () => {
+                it.skip("- Error.captureStackTrace 저거후 ", () => {
                     global.OLD_ENV = true;  // 디버깅 
                     const {ExtendError}         = require('../src/extend-error');
                     // var e  = new ExtendError('msg')

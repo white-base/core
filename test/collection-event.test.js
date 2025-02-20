@@ -1,15 +1,11 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
+import PropertyCollection from '../src/collection-property';
+import ArrayCollection from '../src/collection-array';
+import {jest} from '@jest/globals';
 
-const {PropertyCollection}            = require('../src/collection-property');
-const {ArrayCollection}               = require('../src/collection-array');
 let School;
 let arrResult = [];
-
 
 //==============================================================
 // test

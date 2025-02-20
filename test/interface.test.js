@@ -1,35 +1,21 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-
-const Util                      = require('../src/util');
-const {MetaObject}              = require('../src/meta-object');
-const {MetaElement}             = require('../src/meta-element');
-// const {BaseEntity}              = require('../src/base-entity');
-
-const {IObject}                 = require('../src/i-object');
-const {IMarshal}                = require('../src/i-marshal');
-const {IPropertyCollection}     = require('../src/i-collection-property');
-const {ICollection}             = require('../src/i-collection');
-// const {IExportControl}          = require('../src/i-control-export');
-// const {IGroupControl}           = require('../src/i-control-group');
-// const {IImportControl}          = require('../src/i-control-import');
-// const {ISchemaControl}          = require('../src/i-control-schema');
-const {IList}                   = require('../src/i-list');
-const {IListControl}            = require('../src/i-control-list');
-const {IElement}                = require('../src/i-element');
-const {ISerialize}              = require('../src/i-serialize');
-// const {ITransaction}            = require('../src/i-transaction');
-const {IArrayCollection}        = require('../src/i-collection-array');
+import IObject from '../src/i-object';
+import IMarshal from '../src/i-marshal';
+import IPropertyCollection from '../src/i-collection-property';
+import ICollection from '../src/i-collection';
+import IList from '../src/i-list';
+import IListControl from '../src/i-control-list';
+import IElement from '../src/i-element';
+import ISerialize from '../src/i-serialize';
+import IArrayCollection from '../src/i-collection-array';
+import {jest} from '@jest/globals';
 
 //==============================================================
 // test
 describe("[target: i-* ]", () => {
     beforeAll(() => {
-        // jest.resetModules();
+        jest.resetModules();
     });
     describe("IObject :: 인터페이스", () => {
         it("- IObject() : 생성 및 상속 ", () => {

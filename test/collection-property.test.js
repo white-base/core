@@ -1,18 +1,14 @@
-/**
- * ES6 + CJS + JEST
- */
 //==============================================================
 // gobal defined
-'use strict';
-const { MetaElement } = require('../src/meta-element');
-const {MetaRegistry}        = require('../src/meta-registry');
-const {PropertyCollection}          = require('../src/collection-property');
-let Student, School, Member, Corp, House, Space;
+import MetaElement from '../src/meta-element';
+import MetaRegistry from '../src/meta-registry';
+import PropertyCollection from '../src/collection-property';
+import {jest} from '@jest/globals';
 
+let Student, School, Member, Corp, House, Space;
 //==============================================================
 // test
 describe("[target: collection-property.js, base-collection.js]", () => {
-        
     describe("PropertyCollection :: 클래스", () => {
         beforeAll(() => {
             jest.resetModules();
@@ -887,9 +883,9 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'A1', d: s.columns._list, e: {}})
-                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'A2', d: s.columns._list, e: {}})
-                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'A3', d: s.columns._list, e: {}})
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'A1', d: s.columns._list, e: undefined})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'A2', d: s.columns._list, e: undefined})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'A3', d: s.columns._list, e: undefined})
             });
 
             it("- map() : 예외 함수타입 ", () => {
@@ -962,7 +958,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(arr[0]).toEqual('A1')
                 // arr2
                 expect(arr2.length).toBe(1);
-                expect(arr2[0]).toEqual({a: s.columns[0], b: 0, c:'k1', d: s.columns._list, e: {}})
+                expect(arr2[0]).toEqual({a: s.columns[0], b: 0, c:'k1', d: s.columns._list, e: undefined})
             });
             it("- filter() : 예외 함수타입 ", () => {
                 let s = new Student();
@@ -1077,7 +1073,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c:'k2', d: s.columns._list, e: {} })
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c:'k2', d: s.columns._list, e: undefined })
                 expect(result).toBe(3);
             });
             it("- find() : 예외 함수타입 ", () => {
@@ -1131,9 +1127,9 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(3);
-                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: {} })
-                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: {} })
-                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: {} })
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: undefined })
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: undefined })
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: undefined })
             });
             it("- forEach() : 예외 함수타입 ", () => {
                 let s = new Student();
@@ -1207,7 +1203,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c:'k2', d: s.columns._list, e: {} })
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c:'k2', d: s.columns._list, e: undefined })
                 expect(result).toBe(true);
             });
             it("- some() : 예외 함수타입 ", () => {
@@ -1289,9 +1285,9 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                     }
                 }, s);
         
-                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: {}})
-                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: {}})
-                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: {}})
+                expect(arr[0]).toEqual({a: s.columns[0], b: 0, c: 'k1', d: s.columns._list, e: undefined})
+                expect(arr[1]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: undefined})
+                expect(arr[2]).toEqual({a: s.columns[2], b: 2, c: 'k3', d: s.columns._list, e: undefined})
                 expect(result).toBe(true);
                 expect(result2).toBe(false);
             });
@@ -1368,7 +1364,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 }, s);
         
                 expect(arr.length).toBe(1);
-                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: {} })
+                expect(arr[0]).toEqual({a: s.columns[1], b: 1, c: 'k2', d: s.columns._list, e: undefined })
                 expect(result).toBe(1);
             });
             it("- findIndex() : 예외 함수타입 ", () => {
