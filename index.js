@@ -1,3 +1,5 @@
+/// <reference path="./types/index.d.ts" />
+
 import messageCode from "./src/message-code";
 import Message from "./src/message";
 import ExtendError from "./src/extend-error";

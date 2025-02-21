@@ -8,7 +8,7 @@
     ".": {
       "types": {
         "require": "./types/ko/index.d.cts",
-        "default": "./types/ko/index.d.ts"
+        "default": "./types/index.d.ts"
       },
       "browser": {
         "require": "./dist/browser/logic-core.cjs",
@@ -20,7 +20,7 @@
       }
     }
   },
-  "types": "./types/ko/index.d.ts",
+  "types": "./types/index.d.ts",
   "files": [
     "src/",
     "dist/",
@@ -40,7 +40,10 @@
     "type:ko": "npx typedoc --out docs/ko types/ko/index.d.ts types/ko/global.d.ts",
     "gulp:meta": "gulp meta",
     "gulp:meta-min": "gulp meta-min",
-    "rollup": "rollup -c --bundleConfigAsCjs"
+    "build": "rollup -c --bundleConfigAsCjs",
+    "check:ts": "npx tsc --noEmit",
+    "check:js": "npx eslint src/ --ext .js",
+    "check:all": "npm run check:ts && npm run check:js"
   },
   "repository": {
     "type": "git",
@@ -59,6 +62,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "babel-jest": "^29.7.0",
     "docdash": "github:white-base/docdash",
+    "eslint": "^9.21.0",
     "gulp": "^5.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",

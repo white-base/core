@@ -8,7 +8,6 @@ import  messageCode  from './message-code.js';
 /**
  * @class Message
  * @description 메시지 코드 관리 클래스 (static)
- * @namespace _L.Common.Message
  */
 var Message = (function () {
     /**

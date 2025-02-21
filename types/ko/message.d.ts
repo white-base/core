@@ -56,7 +56,7 @@ declare class Message {
      * Message.warn('deprecated_method', ['saveData']);
      * // Logs: "Warning: The method 'saveData' is deprecated."
      */
-    static warn(code: string, value: string[]);
+    static warn(code: string, value: string[]): any;
 }
 
 export {
