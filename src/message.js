@@ -5,12 +5,15 @@ import  messageCode  from './message-code.js';
 // 2. module dependency check
 //==============================================================
 // 3. module implementation       
+/**
+ * @class Message
+ * @description 메시지 코드 관리 클래스 (static)
+ * @namespace _L.Common.Message
+ */
 var Message = (function () {
     /**
-    * 메세지와 코드를 관리합니다. (static)
-    * @constructs _L.Common.Message
-    * @static
-    */
+     * @constructor
+     */
     function Message() { 
     }
     Message._NS = 'Common';     // namespace
@@ -160,8 +163,9 @@ var Message = (function () {
     /**
      * 메세지 코드에 대한 문자열를 얻습니다.
      * @param {string} p_code 메세지 코드
-     * @param {array<string>} p_aValue msg $1, $2... 매창값
+     * @param {Array<string>} p_aValue msg $1, $2... 매창값
      * @returns {string}
+     * @static
      */
     Message.get = function(p_code, p_aValue) {
         return _buildMessage(p_code, p_aValue);
@@ -170,7 +174,8 @@ var Message = (function () {
     /**
      * 메세지 코드에 대한 Error 객체를 생성해서 예외룰 발생합니다.
      * @param {string} p_code 메세지 코드
-     * @param {array<string>} p_aValue msg $1, $2... 매창값
+     * @param {Array<string>} p_aValue msg $1, $2... 매창값
+     * @static
      */
     Message.error = function(p_code, p_aValue) {
         throw new Error(Message.get(p_code, p_aValue));
@@ -179,7 +184,8 @@ var Message = (function () {
     /**
      * 메세지 코드에 대한 console.warn 을 발생합니다.
      * @param {string} p_code 메세지 코드
-     * @param {array<string>} p_aValue msg $1, $2... 매창값
+     * @param {Array<string>} p_aValue msg $1, $2... 매창값
+     * @static
      */
     Message.warn = function(p_code, p_aValue) {
         console.warn(Message.get(p_code, p_aValue));

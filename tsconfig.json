@@ -4,6 +4,9 @@
       "module": "commonjs",
       "target": "es6",
       "outDir": "output",
+      "checkJs": false, // 오류 검사를 하지 않음
+      "strict": true,
+      "noEmit": true,
       "esModuleInterop": true,
       "sourceMap": true,
       "experimentalDecorators": true,

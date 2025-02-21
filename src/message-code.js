@@ -5,6 +5,12 @@
 //==============================================================
 // 2. module dependency check
 //==============================================================
+
+/**
+ * @type {Object} MessageCode
+ * @property {Object} en
+ * @property {Object} ko
+ */
 const messageCode = {
     en: {
 
@@ -163,7 +169,6 @@ const messageCode = {
         EL01500: '',
         // observer.js
         // REVIEW: Full change
-        EL01510: '',
         // EL01511: 'new Observer(caller); caller is not of type \'object\. typeofcaller = $1',
         // EL01512: 'Observer.isLog is not of type \'boolean\. type isLog = $1',
         // EL01513: 'Observer.isSingleMode is not of type \'boolean\. typeofisSingleMode = $1',
@@ -287,7 +292,7 @@ const messageCode = {
         EL03320: '',
         EL03321: 'addNamespace(ns); addition of namespace failed',
         EL03322: 'delNamespace(ns); Namespace deletion failed',
-        EL03223: 'path(ns); failed to get the namespace path',
+        EL03323: 'path(ns); failed to get the namespace path',
         // add, del 
         EL03330: '',
         EL03331: 'add(fullName,lem); [$1] is not a valid name rule',
@@ -508,7 +513,6 @@ const messageCode = {
         EL01500: '',
         // observer.js
         // REVIEW: 전체 변겯
-        EL01510: '',
         // EL01511: 'new Observer(caller); caller 는 \'object\' 타입이 아닙니다. typeof caller = $1',
         // EL01512: 'Observer.isLog 는 \'boolean\' 타입이 아닙니다. typeof isLog = $1',
         // EL01513: 'Observer.isSingleMode 는 \'boolean\' 타입이 아닙니다. typeof isSingleMode = $1',

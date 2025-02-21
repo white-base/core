@@ -18,6 +18,7 @@ var EventEmitter = (function () {
     /**
      * 이벤트 발행 클래스
      * @constructs _L.Common.EventEmitter
+     * @class 이벤트 발행 클래스
      */
     function EventEmitter() {
         

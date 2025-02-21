@@ -1,27 +1,5 @@
 /// <reference path='global.d.ts' />
 
-// import ExtendError          = require('./extend-error');
-// import EventEmitter         = require('./event-emitter');
-// import Util                 = require('./util');
-// import Type                 = require('./type');
-// import Message              = require('./message');
-// import IObject              = require('./i-object');
-// import IMarshal             = require('./i-marshal');
-// import ICollection          = require('./i-collection');
-// import IPropertyCollection  = require('./i-collection-property');
-// import IElement             = require('./i-element');
-// import IList                = require('./i-list');
-// import IListControl         = require('./i-control-list');
-// import ISerialize           = require('./i-serialize');
-// import IArrayCollection     = require('./i-collction-array');
-// import NamespaceManager     = require('./namespace-manager');
-// import MetaRegistry         = require('./meta-registry');
-// import MetaObject           = require('./meta-object');
-// import MetaElement          = require('./meta-element');
-// import BaseCollection       = require('./base-collection');
-// import ArrayCollection      = require('./collection-array');
-// import PropertyCollection   = require('./collection-property');
-
 import ExtendError          from './extend-error';
 import EventEmitter         from './event-emitter';
 import Util                 from './util';

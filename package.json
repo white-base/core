@@ -7,8 +7,8 @@
   "exports": {
     ".": {
       "types": {
-        "require": "./index.d.cts",
-        "default": "./index.d.ts"
+        "require": "./types/ko/index.d.cts",
+        "default": "./types/ko/index.d.ts"
       },
       "browser": {
         "require": "./dist/browser/logic-core.cjs",
@@ -20,7 +20,7 @@
       }
     }
   },
-  "types": "index.d.ts",
+  "types": "./types/ko/index.d.ts",
   "files": [
     "src/",
     "dist/",

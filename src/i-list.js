@@ -10,6 +10,9 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 
 //==============================================================
 // 3. module implementation   
+
+
+/** @type {Function} */
 var IList  = (function () {
     /**
      * 목록 인터페이스 입니다.

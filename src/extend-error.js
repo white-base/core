@@ -30,9 +30,9 @@ const ExtendError = (function () {
      * 확장오류를 생성합니다.  
      * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
      * @constructs _L.Common.ExtendError
-     * @param {string | Regexp} p_msg  메세지코드 또는 메세지
+     * @param {string | RegExp} p_msg  메세지코드 또는 메세지
      * @param {ExtendError | object} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
-     * @param {array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
+     * @param {Array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
      * @example
      * new ExtendError({code:'', ctx: []})
      * new ExtendError(/E0011/, [''])
