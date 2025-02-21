@@ -1405,12 +1405,5 @@ Type.isMatchType = isMatchType;
 //==============================================================
 // 4. module export
 // export default Type;
-export { 
-    Type as default,
-    getAllProperties, 
-    deepEqual, 
-    getTypes, 
-    isProtoChain, 
-    hasType, typeObject, typeOf, extendType, 
-    allowType, matchType, isAllowType, isMatchType
-};
+export default Type;
+export { Type };

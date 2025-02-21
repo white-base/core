@@ -63,3 +63,4 @@ var IListControl  = (function () {
 //==============================================================
 // 4. module export
 export default IListControl;
+export { IListControl };

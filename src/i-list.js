@@ -44,3 +44,4 @@ var IList  = (function () {
 //==============================================================
 // 4. module export
 export default IList;
+export { IList };

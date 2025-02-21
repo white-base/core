@@ -706,4 +706,5 @@ const messageCode = {
 //==============================================================
 // 4. module export
 export default messageCode;
+export { messageCode };
 

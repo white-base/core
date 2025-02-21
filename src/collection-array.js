@@ -8,7 +8,7 @@ import Type from './type.js';
 import IArrayCollection from './i-collection-array.js';
 import MetaRegistry from './meta-registry.js';
 import MetaObject from './meta-object.js';
-import BaseCollection from './base-collection.js';
+import {BaseCollection} from './base-collection.js';
 
 //==============================================================
 // 2. module dependency check
@@ -396,3 +396,4 @@ var ArrayCollection  = (function (_super) {
 //==============================================================
 // 4. module export
 export default ArrayCollection;
+export {ArrayCollection};

@@ -510,3 +510,4 @@ var NamespaceManager = (function () {
 //==============================================================
 // 4. module export
 export default NamespaceManager;
+export { NamespaceManager };

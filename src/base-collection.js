@@ -608,4 +608,4 @@ var BaseCollection  = (function (_super) {
 //==============================================================
 // 4. module export
 export default BaseCollection;
-// export { BaseCollection };
+export { BaseCollection };

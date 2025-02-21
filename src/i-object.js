@@ -57,3 +57,4 @@ var IObject  = (function () {
 //==============================================================
 // 4. module export
 export default IObject;
+export { IObject };

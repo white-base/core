@@ -611,3 +611,4 @@ var MetaRegistry = (function () {
 //==============================================================
 // 4. module export
 export default MetaRegistry;
+export { MetaRegistry };

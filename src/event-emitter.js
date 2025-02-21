@@ -12,8 +12,6 @@ if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 
 //==============================================================
 // 3. module implementation  
-
-
 var EventEmitter = (function () {
     /**
      * 이벤트 발행 클래스
@@ -182,6 +180,7 @@ var EventEmitter = (function () {
     
 }());
 
-
-
+//==============================================================
+// 4. module export
 export default EventEmitter;
+export { EventEmitter };

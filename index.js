@@ -17,7 +17,7 @@ import NamespaceManager from "./src/namespace-manager";
 import MetaRegistry from "./src/meta-registry";
 import MetaObject from "./src/meta-object";
 import MetaElement from "./src/meta-element";
-import BaseCollection from "./src/base-collection";
+import {BaseCollection} from "./src/base-collection";
 import ArrayCollection from "./src/collection-array";
 import PropertyCollection from "./src/collection-property";
 

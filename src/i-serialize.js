@@ -46,3 +46,4 @@ var ISerialize  = (function () {
 //==============================================================
 // 4. module export
 export default ISerialize;
+export { ISerialize };

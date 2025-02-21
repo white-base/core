@@ -2684,8 +2684,6 @@ if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 
 //==============================================================
 // 3. module implementation  
-
-
 var EventEmitter = (function () {
     /**
      * 이벤트 발행 클래스
@@ -5397,7 +5395,6 @@ var BaseCollection  = (function (_super) {
     return BaseCollection;
     
 }(MetaObject));
-// export { BaseCollection };
 
 /**** collection-array.js | _L.Collection.ArrayCollection ****/
 //==============================================================

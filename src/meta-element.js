@@ -135,3 +135,4 @@ var MetaElement  = (function (_super) {
 //==============================================================
 // 4. module export
 export default MetaElement;
+export { MetaElement };

@@ -144,3 +144,4 @@ const ExtendError = (function () {
 //==============================================================
 // 4. module export
 export default ExtendError;
+export { ExtendError };

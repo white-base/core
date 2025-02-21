@@ -44,3 +44,4 @@ var IArrayCollection  = (function (_super) {
 //==============================================================
 // 4. module export
 export default IArrayCollection;
+export { IArrayCollection };

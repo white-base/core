@@ -2601,7 +2601,6 @@
 
     //==============================================================
     // 3. module implementation  
-
     var EventEmitter = function () {
       /**
        * 이벤트 발행 클래스
@@ -5178,7 +5177,6 @@
       });
       return BaseCollection;
     }(MetaObject);
-    // export { BaseCollection };
 
     //==============================================================
     // 2. module dependency check

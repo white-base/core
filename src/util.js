@@ -246,3 +246,4 @@ Util.implements = function(p_ctor, p_obj, args) {
 //==============================================================
 // 4. module export
 export default Util;
+export { Util};

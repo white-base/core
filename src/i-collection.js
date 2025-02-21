@@ -64,3 +64,4 @@ var ICollection  = (function () {
 //==============================================================
 // 4. module export
 export default ICollection;
+export { ICollection };

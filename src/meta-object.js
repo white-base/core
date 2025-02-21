@@ -293,3 +293,4 @@ var MetaObject  = (function () {
 //==============================================================
 // 4. module export
 export default MetaObject;
+export { MetaObject };

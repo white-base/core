@@ -43,3 +43,4 @@ var IElement  = (function () {
 //==============================================================
 // 4. module export
 export default IElement;
+export { IElement };

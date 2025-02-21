@@ -47,3 +47,4 @@ var loadNamespace = function() {
 //==============================================================
 // 4. module export
 export default loadNamespace;
+export { loadNamespace };

@@ -512,3 +512,4 @@ var PropertyCollection  = (function (_super) {
 //==============================================================
 // 4. module export
 export default PropertyCollection;
+export { PropertyCollection };

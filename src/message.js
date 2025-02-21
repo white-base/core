@@ -199,5 +199,6 @@ Message.$storage = messageCode;
 //==============================================================
 // 4. module export
 export default Message;
+export { Message };
 
 

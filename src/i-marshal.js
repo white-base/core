@@ -57,3 +57,4 @@ var IMarshal  = (function () {
 //==============================================================
 // 4. module export
 export default IMarshal;
+export { IMarshal };
