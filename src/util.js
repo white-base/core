@@ -162,7 +162,7 @@ Util.inherits = (function () {
  * @param {object} p_obj 검사 대상 인스턴스 객체
  * @param {function?} args 인터페이스들, ctor._UNION 정적 속성으로 설정 가능
  */
-Util.implements = function(p_ctor, p_obj, args) {
+Util.implements = function(p_ctor, p_obj) {
     var _interface = [];
     var addCnt = 0;
 
@@ -190,19 +190,19 @@ Util.implements = function(p_ctor, p_obj, args) {
         } else throw new ExtendError(/EL01403/, null, [i - 2, typeof arguments[i]]);
     } 
 
-    for (var i = 0; i < p_ctor['_UNION'].length; i++) {
-        if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {    // 인터페이스 중복 검사 후 등록
-            p_obj._interface.push(p_ctor['_UNION'][i]);
+    for (var j = 0; j < p_ctor['_UNION'].length; j++) {
+        if (p_obj._interface.indexOf(p_ctor['_UNION'][j]) < 0) {    // 인터페이스 중복 검사 후 등록
+            p_obj._interface.push(p_ctor['_UNION'][j]);
             addCnt++;
         }
     }
 
     try {
         var beginIdx = p_obj._interface.length - addCnt;
-        for (var i = beginIdx; i < p_obj._interface.length; i++) {
+        for (var k = beginIdx; k < p_obj._interface.length; k++) {
             if (p_ctor['_KIND'] === 'interface') {  // 인터페이스 타입과 분리
-                Type.allowType(p_obj._interface[i], p_obj, 1);
-            } else Type.matchType(p_obj._interface[i], p_obj, 1);
+                Type.allowType(p_obj._interface[k], p_obj, 1);
+            } else Type.matchType(p_obj._interface[k], p_obj, 1);
         }
     } catch (error) { 
         throw new ExtendError(/EL01404/, error, [$typeName(p_obj), $typeName(p_obj._interface[i]), p_ctor['_KIND'] || 'class']);
@@ -224,8 +224,8 @@ Util.implements = function(p_ctor, p_obj, args) {
                 if (this._interface[i] === target) return true;  
             }
         } else if (typeof target === 'string') {
-            for (var i = 0; i < this._interface.length; i++) {
-                if (this._interface[i].name === target) return true;  
+            for (var j = 0; j < this._interface.length; j++) {
+                if (this._interface[j].name === target) return true;  
             }
         } else throw new ExtendError(/EL01405/, null, [typeof target]);
         return false;

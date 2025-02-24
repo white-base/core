@@ -7,7 +7,6 @@ import Util from '../src/util.js';
 test("빌드된 ESM 모듈 테스트", () => {
   
   var a = new EventEmitter();
-  a.addListener()
   
   expect(typeof EventEmitter === 'function').toBe(true);
   expect(typeof Util === 'object').toBe(true);

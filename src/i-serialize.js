@@ -35,7 +35,7 @@ var ISerialize  = (function () {
      * 가져오기(로드) 합니다.
      * @abstract
      */
-    ISerialize.prototype.load  = function(String) {
+    ISerialize.prototype.load  = function() {
         throw new ExtendError(/EL02192/, null, ['ISerialize']);
     };
 

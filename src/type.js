@@ -158,7 +158,7 @@ function _parseFunc(funBody) {
     var regFunc1 = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
     var regFunc2 = /\(?([\[\]{:}\s\w,]*)\)?\s*(?:=>)\s*{?(?:\s*return\s+|\s*)?([\[\]\s\w,]*);?\s*}?/;
     
-    var arrFunc, arrParam;
+    var arrFunc;
     var result = { params: [], return: undefined };
     var arrParam = [];
     var arrRetrun;
@@ -361,8 +361,8 @@ function deepEqual(obj1, obj2) {
 
     if (keys1.length !== keys2.length) return false;
 
-    for (var i = 0; i < keys1.length; i++) {
-        var key = keys1[i];
+    for (var j = 0; j < keys1.length; j++) {
+        var key = keys1[j];
         if (keys2.indexOf(key) === -1 || !deepEqual(obj1[key], obj2[key])) return false;
     }
 
@@ -401,9 +401,9 @@ function getTypes(ctor, hasUnion) {
         }
     }
 
-    for (var i = 0; i < arr.length; i++) {
-        var idx = tempArr.indexOf(arr[i]);
-        if (idx < 0) tempArr.push(arr[i]);
+    for (var j = 0; j < arr.length; j++) {
+        var idx = tempArr.indexOf(arr[j]);
+        if (idx < 0) tempArr.push(arr[j]);
     }
     return tempArr;
 
@@ -505,8 +505,8 @@ function typeObject(target) {
         }
     }
     if (obj['$type'] === 'function') {
-        for(var i = 0; i < obj['params'].length; i++) {
-            obj['params'][i] = typeObject(typeObj['params'][i]);
+        for(var j = 0; j < obj['params'].length; j++) {
+            obj['params'][j] = typeObject(typeObj['params'][j]);
         }
         if (typeObj['return']) obj['return'] = typeObject(typeObj['return']);
     }
@@ -519,12 +519,12 @@ function typeObject(target) {
     }
     if (obj['$type'] === 'union') {
         obj['_prop'] = {};
-        var temp = typeObj['ref'] || typeObj['_prop'];
-        var list = getAllProperties(temp);
-        for (var i = 0; i < list.length; i++) {
-            var key = list[i];
+        var temp2 = typeObj['ref'] || typeObj['_prop'];
+        var list = getAllProperties(temp2);
+        for (var k = 0; k < list.length; k++) {
+            var key = list[k];
             if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-            obj['_prop'][key] = typeObject(temp[key]);
+            obj['_prop'][key] = typeObject(temp2[key]);
         }
     }
     return obj;
@@ -667,7 +667,7 @@ function extendType(target) {
                 var funcType  = target['_TYPE'] ? target['_TYPE'] : _parseFunc(target.toString());
                 obj['params'] = funcType['params'];
                 obj['return'] = funcType['return'];
-            } catch (err) {
+            } catch (_err) {
                 obj['params'] = [];
             }
         }
@@ -808,16 +808,16 @@ function _execAllow(extType, tarType, opt, pathName) {
         }
 
         // element check
-        for (var i = 0; i < tType['list'].length; i++) {
+        for (var k = 0; k < tType['list'].length; k++) {
             var success = false;
-            for (var ii = 0; ii < eType['list'].length; ii++) {
+            for (var j = 0; j < eType['list'].length; j++) {
                 try {
                     if (success) break;
-                    if (extendType(tType['list'][i])['$type'] === 'choice' && extendType(eType['list'][ii])['$type'] !== 'choice' ) {
+                    if (extendType(tType['list'][k])['$type'] === 'choice' && extendType(eType['list'][j])['$type'] !== 'choice' ) {
                         var oriChoice = { $type: 'choice', kind: '_OPT_', list: eType['list'] };
-                        _execAllow(oriChoice, tType['list'][i], opt, pathName);
+                        _execAllow(oriChoice, tType['list'][k], opt, pathName);
                     } else {
-                        _execAllow(eType['list'][ii], tType['list'][i], opt, pathName);
+                        _execAllow(eType['list'][j], tType['list'][k], opt, pathName);
                     }
                     success = true;
                 } catch (error) {
@@ -882,11 +882,11 @@ function _execAllow(extType, tarType, opt, pathName) {
             if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
                 throw new ExtendError(/EL01228/, prop, []);
             }
-            for (var ii = 0; ii < eType['list'].length; ii++) {
-                if (!_isLiteral(eType['list'][ii])) throw new ExtendError(/EL01229/, prop, [ii, extendType(eType['list'][ii])]);
+            for (var i = 0; i < eType['list'].length; i++) {
+                if (!_isLiteral(eType['list'][i])) throw new ExtendError(/EL01229/, prop, [i, extendType(eType['list'][i])]);
             }
-            for (var ii = 0; ii < tType['list'].length; ii++) {
-                if (!_isLiteral(tType['list'][ii])) throw new ExtendError(/EL0122A/, prop, [ii, extendType(tType['list'][ii])]);
+            for (var j = 0; j < tType['list'].length; j++) {
+                if (!_isLiteral(tType['list'][j])) throw new ExtendError(/EL0122A/, prop, [j, extendType(tType['list'][j])]);
             }
 
         // _DEF_ (default)
@@ -904,29 +904,31 @@ function _execAllow(extType, tarType, opt, pathName) {
 
         // element check
         var arrTarget = (tType['kind']) ? tType['list'] : [tarType];
-        for (var i = 0; i < arrTarget.length; i++) {
+        for (var m = 0; m < arrTarget.length; m++) {
             var success = false;
-            for (var ii = 0; ii < eType['list'].length; ii++) {
+            for (var n = 0; n < eType['list'].length; n++) {
                 try {
                     if (success) continue;
-                    _execAllow(eType['list'][ii], arrTarget[i], opt, pathName);
+                    _execAllow(eType['list'][n], arrTarget[m], opt, pathName);
                     success = true;
                 } catch (error) {
                     continue;
                 }
             }
-            if (!success) throw new ExtendError(/EL0122F/, prop, [i, eType, extendType(arrTarget[i])['$type']]);
+            if (!success) throw new ExtendError(/EL0122F/, prop, [m, eType, extendType(arrTarget[m])['$type']]);
         }
     }
     
     function $classAllow() {
+        var oriObj;
+        var tarObj;
         if (tType['$type'] === 'class') {         // # class to class
             if (isProtoChain(tType['ref'], eType['ref'])) return;   // 1.proto check
             if (opt === 1) {
                 try {
                     // 생성비교
-                    var oriObj = new eType['ref']();
-                    var tarObj = new tType['ref']();
+                    oriObj = new eType['ref']();
+                    tarObj = new tType['ref']();
                     return _execAllow(oriObj, tarObj, opt, pathName);
                 } catch (error) {
                     throw new ExtendError(/EL01231/, error, []);
@@ -938,7 +940,7 @@ function _execAllow(extType, tarType, opt, pathName) {
             if (opt === 1) {
                 try {
                     // 생성비교
-                    var oriObj = new eType['ref']();
+                    oriObj = new eType['ref']();
                     return _execAllow(oriObj, tType['ref'], opt, pathName);
                 } catch (error) {
                     throw new ExtendError(/EL01233/, error, []);
@@ -1008,9 +1010,9 @@ function _execAllow(extType, tarType, opt, pathName) {
  * 타입을 검사하여 메세지를 리턴
  * @param {any} extType 검사할 타입 , extType 
  * @param {any} target 검사대상
- * @param {number} opt 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
- * @param {string?} pathName '' 공백시 성공
- * @returns {throw?}
+ * @param {number} [opt] 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
+ * @param {string} [pathName] '' 공백시 성공
+ * @throws {ExtendError}
  */
 function _execMatch(extType, target, opt, pathName) {
     var eType = extendType(extType);
@@ -1116,12 +1118,12 @@ function _execMatch(extType, target, opt, pathName) {
         
 
         // element check
-        for (var i = 0; i < target.length; i++) {
-            var tar = target[i];
+        for (var k = 0; k < target.length; k++) {
+            var tar = target[k];
             var success = false;
-            for (var ii = 0; ii < eType['list'].length; ii++) {
+            for (var j = 0; j < eType['list'].length; j++) {
                 try {
-                    var elem = eType['list'][ii];
+                    var elem = eType['list'][j];
                     if (_isLiteral(elem)) {
                         if (_equalLiternal(elem, tar)) {
                             success = true;
@@ -1171,8 +1173,8 @@ function _execMatch(extType, target, opt, pathName) {
 
         // _EUN_ (enumeration)
         } else if (eType['kind'] === '_EUM_') {
-            for (var ii = 0; ii < eType['list'].length; ii++) {
-                if (!_isLiteral(eType['list'][ii])) throw new ExtendError(/EL01124/, prop, [ii, typeOf(eType['list'][ii])]);
+            for (var i = 0; i < eType['list'].length; i++) {
+                if (!_isLiteral(eType['list'][i])) throw new ExtendError(/EL01124/, prop, [i, typeOf(eType['list'][i])]);
             }
 
         // _DEF_ (default)
@@ -1234,9 +1236,9 @@ function _execMatch(extType, target, opt, pathName) {
         }
 
         // element check
-        for (var ii = 0; ii < eType['list'].length; ii++) {
+        for (var j = 0; j < eType['list'].length; j++) {
             try {
-                var elem = eType['list'][ii];
+                var elem = eType['list'][j];
                 if (_isLiteral(elem)) {
                     if (_equalLiternal(elem, target)) return;
                 } else {
@@ -1371,12 +1373,12 @@ Type.matchType = matchType;
  * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상 타입
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+ * @param {number} opt 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
  * @returns {boolean} 검사 통과 여부
  */
-function isAllowType(extType, tarType, opt) {
+function isAllowType(extType, target, opt) {
     try {
-        _execAllow(extType, tarType, opt);
+        _execAllow(extType, target, opt);
     } catch (error) {
         return false;
     }
@@ -1389,7 +1391,7 @@ Type.isAllowType = isAllowType;
  * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+ * @param {number} [opt] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
  * @returns {boolean} 검사 통과 여부
  */
 function isMatchType(extType, target, opt) {

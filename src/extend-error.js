@@ -11,27 +11,13 @@ import Message from './message.js';
 var OLD_ENV = globalThis.OLD_ENV ? globalThis.OLD_ENV : false;    // 커버리지 테스트 역활
 
 const ExtendError = (function () {
-    /**
-     * @overload
-     * @param {string} p_msg 사용자 메세지 내용
-     * @param {ExtendError | object} p_prop  상위 Error 객체
-     * @returns {Error}
-     */
-
-    /**
-     * @overload
-     * @param {Regexp} p_msg 메세지 코드
-     * @param {ExtendError | object} p_prop  메세지 코드 전달 파라메터
-     * @param {array<string>} p_codeVal  메세지 코드 전달 파라메터
-     * @returns {Error}
-     */
 
     /**
      * 확장오류를 생성합니다.  
      * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
      * @constructs _L.Common.ExtendError
      * @param {string | RegExp} p_msg  메세지코드 또는 메세지
-     * @param {ExtendError | object} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
+     * @param {ExtendError | object | null} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
      * @param {Array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
      * @example
      * new ExtendError({code:'', ctx: []})
@@ -106,7 +92,7 @@ const ExtendError = (function () {
             var queue_cnt = queue.length;
             for (var i = queue_cnt; i > 0; i--) {
                 var mark = '';
-                for (var ii = i; ii <= queue_cnt; ii++) { mark += '#'; }
+                for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
                 msg += '' + mark + ' '+ queue[i - 1] + '\n';
             }
             return msg;

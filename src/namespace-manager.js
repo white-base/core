@@ -239,7 +239,7 @@ var NamespaceManager = (function () {
             if (this._$KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
         
             for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
+                // var sName = sections[i];
                 if (typeof parent[sections[i]] === 'undefined') {
                     parent[sections[i]] = this.$createNsRefer();
                 }
@@ -401,7 +401,7 @@ var NamespaceManager = (function () {
             }
             
         } catch (error) {
-            return;                
+            return;              
         }
     };
     

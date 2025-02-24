@@ -34,7 +34,7 @@ var MetaRegistry = (function () {
      * @member {any[]} _L.Meta.MetaRegistry#_list
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, "_list", 
+    Object.defineProperty(MetaRegistry, '_list', 
     {
         get: function() { 
             var arr = [];
@@ -50,7 +50,7 @@ var MetaRegistry = (function () {
      * @member {number} _L.Meta.MetaRegistry#count
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, "count", 
+    Object.defineProperty(MetaRegistry, 'count', 
     {
         get: function() { return _list.length; },
         configurable: false,
@@ -62,7 +62,7 @@ var MetaRegistry = (function () {
      * @member {NamespaceManager} _L.Meta.MetaRegistry#namespace
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, "namespace", 
+    Object.defineProperty(MetaRegistry, 'namespace', 
     {
         get: function() { return namespace; },
         configurable: false,
@@ -124,7 +124,7 @@ var MetaRegistry = (function () {
         var _ns;
         var key;
         var type;
-        var fullName;
+        // var fullName;
 
         if (!this.isMetaObject(p_meta)) throw new ExtendError(/EL03211/, null, [p_meta._type, p_meta._guid]);
         if (this.has(p_meta)) throw new ExtendError(/EL03212/, null, [p_meta._guid]);
@@ -132,7 +132,7 @@ var MetaRegistry = (function () {
         _ns         = p_meta['_ns'] || '';
         type        = p_meta['_type'];
         key         = type.name;
-        fullName    = p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
+        // fullName    = p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
 
         _list.push(p_meta);  // 객체 등록
         this.registerClass(type, _ns, key); // 클래스 등록
@@ -361,8 +361,8 @@ var MetaRegistry = (function () {
         }
         function $validUniqueGuid() {    // guid 유일한 값인지 검사
             for (var i = 0; i < arrObj.length; i++) {
-                for (var ii = 0; ii < arrObj.length; ii++) {
-                    if (arrObj[i]['_guid'] === arrObj[ii]['_guid'] && i !== ii) return false; // 중복
+                for (var j = 0; j < arrObj.length; j++) {
+                    if (arrObj[i]['_guid'] === arrObj[j]['_guid'] && i !== j) return false; // 중복
                 }
             }
             return true;
@@ -399,8 +399,8 @@ var MetaRegistry = (function () {
             var origin = arrOrigin[i];
             var arrObj = _getGuidList(origin);
             if (!_isObject(origin)) throw new ExtendError(/EL03253/, null, [i, typeof guid]);
-            for (var ii = 0; ii < arrObj.length; ii++) {
-                if (arrObj[ii]._guid === guid) return true;
+            for (var j = 0; j < arrObj.length; j++) {
+                if (arrObj[j]._guid === guid) return true;
             }
         }
         return false;

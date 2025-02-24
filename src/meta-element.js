@@ -90,8 +90,8 @@ var MetaElement  = (function (_super) {
      */
     MetaElement.prototype.getObject = function(p_vOpt, p_owned) {
         var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
-        var vOpt = p_vOpt || 0;
-        var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+        // var vOpt = p_vOpt || 0;
+        // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
         obj['name'] = this._name;
         return obj;
@@ -108,7 +108,7 @@ var MetaElement  = (function (_super) {
      */
     MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
-        var origin = p_origin ? p_origin : p_oGuid;
+        // var origin = p_origin ? p_origin : p_oGuid;
         this._name = p_oGuid['name'];
         // this.__SET$_name(p_oGuid['name'], this);
     };

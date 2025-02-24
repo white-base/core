@@ -52,7 +52,7 @@ var Message = (function () {
      * 메시지 코드 스토리지
      * @member {string} _L.Common.Message#$storage
      */
-    Object.defineProperty(Message, "$storage", {
+    Object.defineProperty(Message, '$storage', {
         get: function() { 
             // if (!$storage) {
             //     var objs = [];
@@ -76,7 +76,7 @@ var Message = (function () {
      * 메세지 언어 
      * @member {string} _L.Common.Message#lang
      */
-    Object.defineProperty(Message, "lang", {
+    Object.defineProperty(Message, 'lang', {
         get: function() { return lang; },
         set: function(val) { 
             if (!Message.$storage[val]) throw new Error('The ['+ val +'] language does not exist.');
@@ -143,9 +143,9 @@ var Message = (function () {
                 var num = Number(result[i].replace('$', ''));
                 if (num > max) max = num;
             }
-            for (var i = 1; i <= max; i++) {
-                var val = arr[i - 1];
-                msg = msg.replace(new RegExp('\\$'+ i, 'g'), val);
+            for (var j = 1; j <= max; j++) {
+                var val = arr[j - 1];
+                msg = msg.replace(new RegExp('\\$'+ j, 'g'), val);
             }
             return msg;
         }

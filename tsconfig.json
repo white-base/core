@@ -4,6 +4,7 @@
       "module": "commonjs",
       "target": "es6",
       "outDir": "output",
+      "allowJs": true,
       "checkJs": true, // 오류 검사를 하지 않음
       "strict": true,
       "noEmit": true,
@@ -11,12 +12,18 @@
       "sourceMap": true,
       "experimentalDecorators": true,
       "moduleResolution": "node",
-      "typeRoots": ["./node_modules/@types", "./types"],
+      "typeRoots": ["./node_modules/@types"],
       "baseUrl": "./"
     },
     "files": ["types/index.d.ts"],
     "exclude": [
       "node_modules",
-      "output"
+      "output",
+      "types/en/**/*",
+      "types/ko/**/*",
+      "src/temp/**/*",
+    ],
+    "include": [
+      "src/**/*"
     ]
   }

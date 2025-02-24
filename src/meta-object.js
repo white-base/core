@@ -215,8 +215,8 @@ var MetaObject  = (function () {
                 if (fun === types[i]) return true;
             }
             
-            for (var i = 0; i < unionTypes.length; i++) {
-                if (fun ===  unionTypes[i]) return true;
+            for (var k = 0; k < unionTypes.length; k++) {
+                if (fun ===  unionTypes[k]) return true;
             }
             return false;
         }
@@ -225,8 +225,8 @@ var MetaObject  = (function () {
             for (var i = 0; i < types.length; i++) {
                 if (funName === types[i].name) return true;
             }
-            for (var i = 0; i < unionTypes.length; i++) {
-                if (funName === unionTypes[i].name) return true;
+            for (var k = 0; k < unionTypes.length; k++) {
+                if (funName === unionTypes[k].name) return true;
             }
             return false;
         }
@@ -247,10 +247,10 @@ var MetaObject  = (function () {
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
-    MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
+    MetaObject.prototype.getObject = function(p_vOpt) {
         var vOpt = p_vOpt || 0;
         var obj = {};
-        var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
+        // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
         if (vOpt < 2 && vOpt > -1) obj['_guid'] = this._guid;
         obj['_type'] = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;

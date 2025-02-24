@@ -21,7 +21,7 @@ declare class ExtendError {
      * 메시지 코드를 사용하여 `ExtendError` 클래스의 인스턴스를 생성합니다.
      * 
      * @param {RegExp} msgCode - 오류 메시지 코드입니다.
-     * @param {Iprop | ExtendError} [prop] - (선택적) 이전 `ExtendError` 객체 또는 속성 타입 오류 메시지입니다.
+     * @param {Iprop | ExtendError | null} [prop] - (선택적) 이전 `ExtendError` 객체 또는 속성 타입 오류 메시지입니다.
      * @param {string[]} [codeValue] - (선택적) 메시지 코드 값($1, $2..)의 변환 값들입니다.
      * 
      * @example

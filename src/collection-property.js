@@ -144,8 +144,8 @@ var PropertyCollection  = (function (_super) {
             }
         }
         obj['_elem'] = [];
-        for (var i = 0; i < this.count; i++) {
-            var elem = this.$elements[i];
+        for (var j = 0; j < this.count; j++) {
+            var elem = this.$elements[j];
             if (elem instanceof MetaObject) {
                 if (MetaRegistry.hasGuidObject(elem, owned)) {
                     obj['_elem'].push(MetaRegistry.createReferObject(elem));
@@ -153,8 +153,8 @@ var PropertyCollection  = (function (_super) {
             } else obj['_elem'].push(elem);
         }
         obj['_key'] = [];
-        for (var i = 0; i < this.$keys.length; i++) {
-            var key = this.$keys[i];
+        for (var k = 0; k < this.$keys.length; k++) {
+            var key = this.$keys[k];
             obj['_key'].push(key);
         }
         return obj;                        
@@ -183,15 +183,15 @@ var PropertyCollection  = (function (_super) {
         }
 
         this.$keys = [];
-        for(var i = 0; i < p_oGuid['_key'].length; i++) {
-            var key = p_oGuid['_key'][i];
+        for(var j = 0; j < p_oGuid['_key'].length; j++) {
+            var key = p_oGuid['_key'][j];
             this.$keys.push(key);
-            Object.defineProperty(this, [i], this._getPropDescriptor(i, false));
-            Object.defineProperty(this, key, this._getPropDescriptor(i));
+            Object.defineProperty(this, [j], this._getPropDescriptor(j, false));
+            Object.defineProperty(this, key, this._getPropDescriptor(j));
         }
 
-        for(var i = 0; i < p_oGuid['_elem'].length; i++) {
-            var elem = p_oGuid['_elem'][i];
+        for(var k = 0; k < p_oGuid['_elem'].length; k++) {
+            var elem = p_oGuid['_elem'][k];
             if (MetaRegistry.isGuidObject(elem)) {
                 var obj = MetaRegistry.createMetaObject(elem, origin);
                 obj.setObject(elem, origin);
@@ -199,7 +199,7 @@ var PropertyCollection  = (function (_super) {
             
             } else if (elem['$ref']) {
                 var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                if (!meta) throw new ExtendError(/EL04223/, null, [i, elem['$ref']]);
+                if (!meta) throw new ExtendError(/EL04223/, null, [k, elem['$ref']]);
                 this.$elements.push(meta);
                 
             } else this.$elements.push(elem);
