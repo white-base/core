@@ -69,7 +69,7 @@ var EventEmitter = (function () {
     EventEmitter._NS = 'Common';    // namespace
 
     // local function
-    function _isString(obj) {    // 공백아닌 문자 여부
+    function _isString(obj) {    // 공백 아닌 문자 여부
         if (typeof obj === 'string' && obj.length > 0) return true;
         return false;
     }

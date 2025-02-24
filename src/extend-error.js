@@ -19,6 +19,7 @@ const ExtendError = (function () {
      * @param {string | RegExp} p_msg  메세지코드 또는 메세지
      * @param {ExtendError | object | null} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
      * @param {Array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
+     * @kor 메세지코드 또는 메세지를 입력하여 확장 오류를 생성합니다.
      * @example
      * new ExtendError({code:'', ctx: []})
      * new ExtendError(/E0011/, [''])
