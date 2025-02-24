@@ -13,7 +13,7 @@ var OLD_ENV = globalThis.OLD_ENV ? globalThis.OLD_ENV : false;    // 커버리�
 const ExtendError = (function () {
 
     /**
-     * 확장오류를 생성합니다.
+     * 확장오류를 생성합니다..
      * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
      * @constructs _L.Common.ExtendError
      * @param {string | RegExp} p_msg  메세지코드 또는 메세지
