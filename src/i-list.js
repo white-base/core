@@ -1,4 +1,4 @@
-/**** i-list.js | _L.Interface.IList ****/
+/**** i-list.js | IList ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -10,26 +10,23 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 
 //==============================================================
 // 3. module implementation   
-
-
-/** @type {Function} */
 var IList  = (function () {
     /**
      * 목록 인터페이스 입니다.
-     * @constructs _L.Interface.IList
+     * @constructs IList
      * @interface
      */
     function IList() {
 
         /**
-         * 목록
-         * @member {array} _L.Interface.IList#_list
+         * 목록 데이터입니다.
+         * @member {array} IList#_list
          */
         this._list = Array;
         
         /**
-         * 목록 갯수
-         * @member {number} _L.Interface.IList#count
+         * 목록 갯수입니다.
+         * @member {number} IList#count
          */
         this.count = Number;
     }

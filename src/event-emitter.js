@@ -1,4 +1,4 @@
-/**** trans-queue.js | _L.Common.EventEmitter ****/
+/**** trans-queue.js | EventEmitter ****/
 //==============================================================
 // 1. import module
 import ExtendError from './extend-error.js';
@@ -15,7 +15,7 @@ if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 var EventEmitter = (function () {
     /**
      * 이벤트 발행 클래스
-     * @constructs _L.Common.EventEmitter
+     * @constructs EventEmitter
      * @class 이벤트 발행 클래스
      */
     function EventEmitter() {
@@ -26,7 +26,7 @@ var EventEmitter = (function () {
         /**
          * 리스너 객체 스토리지
          * @private
-         * @member {object}  _L.Common.EventEmitter#$subscribers  
+         * @member {object}  EventEmitter#$subscribers  
          */
         Object.defineProperty(this, '$storage',
         {
@@ -42,7 +42,7 @@ var EventEmitter = (function () {
         /**
          * 전체 이벤트명
          * @protected
-         * @member {object}  _L.Common.EventEmitter#_list  
+         * @member {object}  EventEmitter#_list  
          */
         Object.defineProperty(this, '_list',
             {
@@ -55,7 +55,7 @@ var EventEmitter = (function () {
 
         /**
          * log 출력 여부
-         * @member {boolean}  _L.Common.EventEmitter#isLog  
+         * @member {boolean}  EventEmitter#isLog  
          */
         Object.defineProperty(this, 'isLog', 
         {

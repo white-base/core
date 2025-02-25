@@ -1,4 +1,4 @@
-/**** i-object.js | _L.Interface.IObject ****/
+/**** i-object.js | IObject ****/
 //==============================================================
 // 1. import module    
 import Message from './message.js';    
@@ -13,7 +13,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IObject  = (function () {
     /**
      * 객체 인터페이스 입니다. (최상위)
-     * @constructs _L.Interface.IObject 
+     * @constructs IObject 
      * @interface
      */
     function IObject() {
@@ -24,7 +24,7 @@ var IObject  = (function () {
 
     /**
      * 객체 타입들을 얻습니다.
-     * @returns {array<any>}
+     * @returns {Function[]}
      * @abstract
      */
     IObject.prototype.getTypes  = function() {

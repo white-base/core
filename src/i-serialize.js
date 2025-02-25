@@ -1,4 +1,4 @@
-/**** i-serialize.js | _L.Interface.ISerialize ****/
+/**** i-serialize.js | ISerialize ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -13,7 +13,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var ISerialize  = (function () {
     /**
      * 직렬화 인터페이스 입니다.
-     * @constructs _L.Interface.ISerialize
+     * @constructs ISerialize
      * @interface
      */
     function ISerialize() {
@@ -24,7 +24,7 @@ var ISerialize  = (function () {
 
     /**
      * 내보내기(출력)를 합니다.
-     * @returns {any}
+     * @returns {string}
      * @abstract
      */
     ISerialize.prototype.output  = function() {

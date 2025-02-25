@@ -1,4 +1,4 @@
-/**** collection-array.js | _L.Collection.ArrayCollection ****/
+/**** collection-array.js | ArrayCollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -25,9 +25,9 @@ if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'ba
 var ArrayCollection  = (function (_super) {
     /**
      * 배열 컬렉션을 생성합니다.
-     * @constructs _L.Collection.ArrayCollection
-     * @implements {_L.Interface.IArrayCollection}
-     * @extends _L.Collection.BaseCollection
+     * @constructs ArrayCollection
+     * @implements {IArrayCollection}
+     * @extends BaseCollection
      * @param {object} [p_owner] 소유 객체
      */
     function ArrayCollection(p_owner) {

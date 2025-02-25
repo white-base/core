@@ -1,4 +1,4 @@
-/**** i-element.js | _L.Interface.IElement ****/
+/**** i-element.js | IElement ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -13,13 +13,13 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IElement  = (function () {
     /**
      * 요소(독립) 인터페이스 입니다.
-     * @constructs _L.Interface.IElement
+     * @constructs IElement
      * @interface
      */
     function IElement() {
         /**
          * 요소명
-         * @member {string} _L.Interface.IElement#_name
+         * @member {string} IElement#_name
          */
         this._name = String;
     }
@@ -29,7 +29,7 @@ var IElement  = (function () {
 
     /**
      * 요소를 복제합니다.
-     * @returns {any}
+     * @returns {object}
      * @abstract
      */
     IElement.prototype.clone  = function() {

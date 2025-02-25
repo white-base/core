@@ -1,8 +1,17 @@
+/**
+ * 이벤트를 발생시키고 리스너를 등록하는 클래스입니다.
+ */
 declare class EventEmitter {
+
     /**
-     * 네임스페이스
+     * 이벤트를 저장하는 내부 객체입니다.
      */
-    static readonly _NS: string;
+    $storage: object;
+
+    /**
+     * 전체 이벤트명
+     */
+    _list: object;
 
     /**
      * log 출력 여부
@@ -10,11 +19,20 @@ declare class EventEmitter {
     isLog: boolean;
 
     /**
+     * `EventEmitter` 클래스의 인스턴스를 생성합니다.
+     */
+    constructor();
+
+    /**
      * 이벤트에 대한 리스너(함수)를 추가합니다.
      * @param p_event 이벤트 명
      * @param p_listener 리스너 함수
      */
     on(p_event: string, p_listener: (...args: any[]) => void): void;
+    /**
+     * `on()` 메서드의 별칭입니다.
+     * @alias on
+     */
     addListener(p_event: string, p_listener: (...args: any[]) => void): void;
 
     /**
@@ -30,6 +48,10 @@ declare class EventEmitter {
      * @param p_listener 리스너 함수
      */
     off(p_event: string, p_listener: (...args: any[]) => void): void;
+    /**
+     * `off()` 메서드의 별칭입니다.
+     * @alias off
+     */
     removeListener(p_event: string, p_listener: (...args: any[]) => void): void;
 
     /**

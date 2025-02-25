@@ -1,4 +1,4 @@
-/**** meta-registry.js | _L.Meta.MetaRegistry ****/
+/**** meta-registry.js | MetaRegistry ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -17,7 +17,7 @@ if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager',
 var MetaRegistry = (function () {
     /**
      * 메타 객체 등록소입니다. (static)
-     * @constructs _L.Meta.MetaRegistry
+     * @constructs MetaRegistry
      * @static
      */
     function MetaRegistry() { 
@@ -31,7 +31,7 @@ var MetaRegistry = (function () {
 
     /**
      * 메타 객체 목록 (참조값)
-     * @member {any[]} _L.Meta.MetaRegistry#_list
+     * @member {any[]} MetaRegistry#_list
      * @readonly
      */
     Object.defineProperty(MetaRegistry, '_list', 
@@ -47,7 +47,7 @@ var MetaRegistry = (function () {
 
     /**
      * 메타 객체 전체 갯수
-     * @member {number} _L.Meta.MetaRegistry#count
+     * @member {number} MetaRegistry#count
      * @readonly
      */
     Object.defineProperty(MetaRegistry, 'count', 
@@ -59,7 +59,7 @@ var MetaRegistry = (function () {
 
     /**
      * 메타 객체의 네임스페이스
-     * @member {NamespaceManager} _L.Meta.MetaRegistry#namespace
+     * @member {NamespaceManager} MetaRegistry#namespace
      * @readonly
      */
     Object.defineProperty(MetaRegistry, 'namespace', 

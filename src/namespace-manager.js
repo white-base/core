@@ -1,4 +1,4 @@
-/**** namespace-manager.js | _L.Meta.NamespaceManager ****/
+/**** namespace-manager.js | NamespaceManager ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -23,7 +23,7 @@ if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serializ
 var NamespaceManager = (function () {
     /**
      * 네임스페이스 관리자를 생성합니다.
-     * @constructs _L.Meta.NamespaceManager
+     * @constructs NamespaceManager
      */
     function NamespaceManager() {
 
@@ -34,7 +34,7 @@ var NamespaceManager = (function () {
         
         /**
          * 내부 변수 접근
-         * @member {string} _L.Meta.NamespaceManager#$storage
+         * @member {string} NamespaceManager#$storage
          * @readonly
          * @private
          */
@@ -48,7 +48,7 @@ var NamespaceManager = (function () {
 
         // /**
         //  * 네임스페이스 저장소
-        //  * @member {array} _L.Meta.NamespaceManager#$storage 
+        //  * @member {array} NamespaceManager#$storage 
         //  * @private
         //  * @readonly
         //  */
@@ -61,7 +61,7 @@ var NamespaceManager = (function () {
 
         /** 
          * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용
-         * @member {array<any>}  _L.Meta.NamespaceManager#_elemTypes  
+         * @member {array<any>}  NamespaceManager#_elemTypes  
          * @protected
          */
         Object.defineProperty(this, '_elemTypes', 
@@ -79,7 +79,7 @@ var NamespaceManager = (function () {
 
         /**
          * 네임스페이스 요소 목록
-         * @member {array<string>}  _L.Meta.NamespaceManager#_list
+         * @member {array<string>}  NamespaceManager#_list
          * @readonly
          */
         Object.defineProperty(this, '_list', 
@@ -110,7 +110,7 @@ var NamespaceManager = (function () {
 
         /**
          * 네임스페이스 요소 갯수
-         * @member {number} _L.Meta.NamespaceManager#count 
+         * @member {number} NamespaceManager#count 
          * @readonly
          */
         Object.defineProperty(this, 'count', 
@@ -124,7 +124,7 @@ var NamespaceManager = (function () {
 
         /**
          * 중복 요소 등록 허용 여부, 기본값 = false (중복금지)
-         * @member {boolean} _L.Meta.NamespaceManager#isOverlap
+         * @member {boolean} NamespaceManager#isOverlap
          */
         Object.defineProperty(this, 'isOverlap',
         {

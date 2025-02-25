@@ -1,4 +1,4 @@
-/**** load-namespace.js | _L.Common.- ****/
+/**** load-namespace.js loadNamespace ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';

@@ -1,4 +1,4 @@
-/**** base-collection.js | _L.Collection.BaseCollection ****/
+/**** base-collection.js | BaseCollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -28,10 +28,10 @@ var BaseCollection  = (function (_super) {
     /**
     * 기본 컬렉션을 생성합니다.
     * @abstract
-    * @extends _L.Meta.MetaObject
-    * @constructs _L.Collection.BaseCollection
-    * @implements {_L.Interface.ICollection}
-    * @implements {_L.Interface.IList}
+    * @extends MetaObject
+    * @constructs BaseCollection
+    * @implements {ICollection}
+    * @implements {IList}
     * @param {object} [p_owner] 소유객체
     */
     function BaseCollection(p_owner) { 
@@ -50,7 +50,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 이벤트 객체입니다.
          * @private
-         * @member {EventEmitter} _L.Collection.BaseCollection#$event  
+         * @member {EventEmitter} BaseCollection#$event  
          */
         Object.defineProperty(this, '$event', 
         {
@@ -62,7 +62,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소들입니다.
          * @private
-         * @member {string} _L.Meta.Entity.BaseColumn#$elements
+         * @member {string} BaseCollection#$elements
          */
         Object.defineProperty(this, '$elements',
         {
@@ -75,7 +75,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소의 기술자들 (getter, setter)입니다.
          * @private
-         * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
+         * @member {string} BaseCollection#$descriptors
          */
         Object.defineProperty(this, '$descriptors',
         {
@@ -88,7 +88,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 컬렉션 예약어입니다.
          * @private
-         * @member {array<string>}  _L.Collection.BaseCollection#$KEYWORD
+         * @member {array<string>}  BaseCollection#$KEYWORD
          */
         Object.defineProperty(this, '$KEYWORD', 
         {
@@ -101,7 +101,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 컬렉션 소유자입니다.
          * @protected 
-         * @member {object} _L.Collection.BaseCollection#_owner  
+         * @member {object} BaseCollection#_owner  
          */
         Object.defineProperty(this, '_owner', 
         {   
@@ -114,7 +114,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 컬렉션 요소의 타입 제약조건입니다.
          * @protected 
-         * @member {array<any>}  _L.Collection.BaseCollection#_elemTypes  
+         * @member {array<any>}  BaseCollection#_elemTypes  
          */
         Object.defineProperty(this, '_elemTypes', 
         {
@@ -139,7 +139,7 @@ var BaseCollection  = (function (_super) {
          * 컬렉션 요소의 목록입니다.
          * @protected 
          * @readonly
-         * @member {array}  _L.Collection.BaseCollection#_list  
+         * @member {array}  BaseCollection#_list  
          */
         Object.defineProperty(this, '_list', 
         {
@@ -155,7 +155,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소의 갯수입니다.
          * @readonly
-         * @member {number} _L.Collection.BaseCollection#count 
+         * @member {number} BaseCollection#count 
          */
         Object.defineProperty(this, 'count', 
         {
@@ -167,7 +167,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소의 갯수입니다.
          * @readonly
-         * @member {number} _L.Collection.BaseCollection#length 
+         * @member {number} BaseCollection#length 
          */
         Object.defineProperty(this, 'length', 
         {
@@ -179,7 +179,7 @@ var BaseCollection  = (function (_super) {
 
         /**
          * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
-         * @event _L.Collection.BaseCollection#onAdd
+         * @event BaseCollection#onAdd
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -194,7 +194,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 추가한 후에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onAdded
+         * @event BaseCollection#onAdded
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -209,7 +209,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 삭제하기 전에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onRemove
+         * @event BaseCollection#onRemove
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -224,7 +224,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 삭제한 후에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onRemoved
+         * @event BaseCollection#onRemoved
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -239,7 +239,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          *컬렉션을 초기화하기 전에 발생하는 이벤트입니다.
-            * @event _L.Collection.BaseCollection#onClear
+            * @event BaseCollection#onClear
             * @param {function}    p_callback
             * @param {this}        p_callback.p_this 현재 컬렉션
             */
@@ -252,7 +252,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션을 초기화한 후에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onCleared
+         * @event BaseCollection#onCleared
          * @param {function}    p_callback
          * @param {this}        p_callback.p_this 현재 컬렉션
          */
@@ -265,7 +265,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 변경하기 전에 발생하는 이벤트 입니다.
-         * @event _L.Collection.BaseCollection#onChanging 
+         * @event BaseCollection#onChanging 
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -280,7 +280,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 변경한 후에 발생하는 이벤트 입니다.
-         * @event _L.Collection.BaseCollection#onChanged 
+         * @event BaseCollection#onChanged 
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -316,7 +316,7 @@ var BaseCollection  = (function (_super) {
      * onAdd 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onAdd
+     * @listens BaseCollection#onAdd
      */
     BaseCollection.prototype._onAdd = function(p_elem, p_idx) {
         return this.$event.emit('add', p_elem, p_idx, this); 
@@ -329,7 +329,7 @@ var BaseCollection  = (function (_super) {
      * onAdded 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onAdded
+     * @listens BaseCollection#onAdded
      */
     BaseCollection.prototype._onAdded = function(p_elem, p_idx) {
         return this.$event.emit('added', p_elem, p_idx, this); 
@@ -342,7 +342,7 @@ var BaseCollection  = (function (_super) {
      * onRemove 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onRemove
+     * @listens BaseCollection#onRemove
      */
     BaseCollection.prototype._onRemove = function(p_elem, p_idx) {
         return this.$event.emit('remove', p_elem, p_idx, this);
@@ -355,7 +355,7 @@ var BaseCollection  = (function (_super) {
      * onRemoved 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onRemoved
+     * @listens BaseCollection#onRemoved
      */
     BaseCollection.prototype._onRemoved = function(p_elem, p_idx) {
         return this.$event.emit('removed', p_elem, p_idx, this);
@@ -366,7 +366,7 @@ var BaseCollection  = (function (_super) {
 
     /** 
      * onClear 이벤트를 발생시킵니다.
-     * @listens _L.Collection.BaseCollection#onClear
+     * @listens BaseCollection#onClear
      */
     BaseCollection.prototype._onClear = function() {
         return this.$event.emit('clear', this); 
@@ -377,7 +377,7 @@ var BaseCollection  = (function (_super) {
 
     /** 
      * onCheared 이벤트를 발생시킵니다.
-     * @listens _L.Collection.BaseCollection#onCleared
+     * @listens BaseCollection#onCleared
      */
     BaseCollection.prototype._onCleared = function() {
         return this.$event.emit('cleared', this); 
@@ -391,7 +391,7 @@ var BaseCollection  = (function (_super) {
      * @param {any} p_nVal 변경값
      * @param {any} p_oVal 기존값
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onChanging
+     * @listens BaseCollection#onChanging
      */
     BaseCollection.prototype._onChanging = function(p_nVal, p_oVal, p_idx) {
         return this.$event.emit('changing', p_nVal, p_oVal, p_idx, this);
@@ -405,7 +405,7 @@ var BaseCollection  = (function (_super) {
      * @param {any} p_nVal 변경값
      * @param {any} p_oVal 기존값
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onChanged
+     * @listens BaseCollection#onChanged
      */        
     BaseCollection.prototype._onChanged = function(p_nVal, p_oVal, p_idx) {
         return this.$event.emit('changed', p_nVal, p_oVal, p_idx, this);

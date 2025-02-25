@@ -1,4 +1,4 @@
-/**** meta-object.js | _L.Meta.MetaObject ****/
+/**** meta-object.js | MetaObject ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -23,9 +23,9 @@ if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-r
 var MetaObject  = (function () {
     /**
      * 메타 최상위 객체를 생성합니다.
-     * @constructs _L.Meta.MetaObject
-     * @implements {_L.Interface.IObject}
-     * @implements {_L.Interface.IMarshal}
+     * @constructs MetaObject
+     * @implements {IObject}
+     * @implements {IMarshal}
      */
     function MetaObject() {
 
@@ -35,7 +35,7 @@ var MetaObject  = (function () {
         /**
          * 현재 객체의 고유식별자(guid)
          * @readonly
-         * @member {string} _L.Meta.MetaObject#_guid 
+         * @member {string} MetaObject#_guid 
          * @example
          * var obj = MetaObject();
          * console.log(obj._guid);      // '5337877c-49d6-9add-f35a-7bd31d510d4f' unique key code
@@ -54,7 +54,7 @@ var MetaObject  = (function () {
         /**
          * 현재 객체의 생성자
          * @readonly
-         * @member {function} _L.Meta.MetaObject#_type 
+         * @member {function} MetaObject#_type 
          * @example
          * var obj = new MetaObject();
          * obj._type === MetaObject;        // true
@@ -178,7 +178,7 @@ var MetaObject  = (function () {
 
     /**
      * 현재 객체의 target 인스턴스 여부를 검사합니다 .(_UNION 포함)
-     * @param {function | string} p_target 함수명 또는 생성자
+     * @param {Function | string} p_target 함수명 또는 생성자
      * @returns {boolean}
      * @example
      * var obj = new MetaObject();

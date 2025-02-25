@@ -1,4 +1,4 @@
-/**** i-control-list.js | _L.Interface.IListControl ****/
+/**** i-control-list.js | IListControl ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -13,7 +13,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IListControl  = (function () {
     /**
      * 목록 제어 인터페이스 입니다.
-     * @constructs _L.Interface.IListControl
+     * @constructs IListControl
      * @interface
      */
     function IListControl() {

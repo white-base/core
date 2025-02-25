@@ -1,4 +1,4 @@
-/**** meta-element.js | _L.Meta.MetaElement ****/
+/**** meta-element.js | MetaElement ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -21,9 +21,9 @@ var MetaElement  = (function (_super) {
     /**
      * 메타 요소 객체를 생성합니다.  
      * (독립체 사용 단위)
-     * @constructs _L.Meta.MetaElement
-     * @extends _L.Meta.MetaObject
-     * @implements {_L.Interface.IElement}
+     * @constructs MetaElement
+     * @extends MetaObject
+     * @implements {IElement}
      * @param {string} p_name 
      */
     function MetaElement(p_name) {
@@ -33,7 +33,7 @@ var MetaElement  = (function (_super) {
 
         // /**
         //  * 내부 변수 접근
-        //  * @member {string} _L.Meta.MetaElement#$name
+        //  * @member {string} MetaElement#$name
         //  * @readonly
         //  * @private
         //  */
@@ -52,7 +52,7 @@ var MetaElement  = (function (_super) {
         /**
          * 현재 객체의 이름
          * @readonly
-         * @member {string} _L.Meta.MetaElement#_name
+         * @member {string} MetaElement#_name
          */
         Object.defineProperty(this, '_name',
         {

@@ -3,11 +3,6 @@ import IMarshal from "./i-marshal";
 
 declare class MetaObject implements IObject, IMarshal {
     /**
-     * 네임스페이스
-     */
-    static readonly _NS: string;
-
-    /**
      * 고유 식별자
      */
     readonly _guid: string;
@@ -20,8 +15,11 @@ declare class MetaObject implements IObject, IMarshal {
     /**
      * 네임스페이스
      */
-    _ns: string;
+    readonly _ns: string;
 
+    /**
+     * MetaObject 클래스의 인스턴스를 생성합니다.
+     */
     constructor();
 
     /**
@@ -48,14 +46,15 @@ declare class MetaObject implements IObject, IMarshal {
      * 직렬화된 객체를 가져옵니다.
      * @param p_vOpt 가져오기 옵션
      * @returns 직렬화된 객체
-     */
-    getObject(p_vOpt?: number): object;
-
+    */
+   getObject(p_vOpt?: number): object;
+   
     /**
      * 직렬화된 객체를 설정합니다.
+     * @param p_origin 원본 객체
      * @param p_oGuid 직렬화 객체
      */
-    setObject(p_oGuid: object): void;
+    setObject(p_oGuid: object, p_origin?: object): void;
 }
 
 export default MetaObject;

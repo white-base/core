@@ -7,7 +7,7 @@
   "exports": {
     ".": {
       "types": {
-        "require": "./types/ko/index.d.cts",
+        "require": "./types/index.d.ts",
         "default": "./types/index.d.ts"
       },
       "browser": {
@@ -16,7 +16,7 @@
       },
       "default": {
         "require": "./dist/node/logic-core.cjs",
-        "default": "./index.js"
+        "default": "./index. js"
       }
     }
   },
@@ -36,13 +36,12 @@
     "test:u": "jest --updateSnapshot",
     "test:v": "jest --verbose",
     "http": "npx http-server",
-    "type:en": "npx typedoc --out docs/en types/en/index.d.ts types/en/global.d.ts",
-    "type:ko": "npx typedoc --out docs/ko types/ko/index.d.ts types/ko/global.d.ts",
-    "gulp:meta": "gulp meta",
-    "gulp:meta-min": "gulp meta-min",
+    "doc:en": "npx typedoc --out docs/en types/en/index.d.ts types/en/global.d.ts",
+    "doc:ko": "npx typedoc --out docs/ko types/ko/index.d.ts types/ko/global.d.ts",
+    "doc:test": "typedoc --out docs/test types/index.d.ts types/T.d.ts",
     "build": "rollup -c --bundleConfigAsCjs",
-    "check:ts": "npx tsc --noEmit",
-    "check:js": "npx eslint src/ --ext .js",
+    "check:ts": "tsc --noEmit",
+    "check:js": "eslint src/ --ext .js",
     "check:all": "npm run check:ts && npm run check:js"
   },
   "repository": {

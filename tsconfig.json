@@ -1,9 +1,9 @@
 {
-    "compileOnSave": true,
+    // "compileOnSave": true,
     "compilerOptions": {
       "module": "commonjs",
       "target": "es6",
-      "outDir": "output",
+      // "outDir": "output",
       "allowJs": true,
       "checkJs": true, // 오류 검사를 하지 않음
       "strict": true,
@@ -15,7 +15,7 @@
       "typeRoots": ["./node_modules/@types"],
       "baseUrl": "./"
     },
-    "files": ["types/index.d.ts"],
+    // "files": ["types/index.d.ts"],
     "exclude": [
       "node_modules",
       "output",
@@ -24,6 +24,6 @@
       "src/temp/**/*",
     ],
     "include": [
-      "src/**/*"
+      "types/**/*",
     ]
   }

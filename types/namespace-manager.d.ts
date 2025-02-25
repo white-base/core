@@ -1,8 +1,25 @@
 import IList from "./i-list";
 import IListControl from "./i-control-list";
 import ISerialize from "./i-serialize";
+import {NsTypeObject, PathObject}           from './T';
 
+/**
+ * 네임스페이스를 관리하는 클래스입니다.
+ */
 declare class NamespaceManager implements IList<string>, IListControl, ISerialize {
+
+
+    /**
+     * 네임스페이스 저장소입니다.
+     */
+    $storage: any[];
+
+    /**
+     * 네임스페이스 요소 타입 목록입니다.
+     * 요소 타입이 비어 있을 경우 전체 타입이 허용됩니다.
+     */
+    _elemTypes: any[];
+
     /**
      * 네임스페이스 요소 목록
      */
@@ -11,14 +28,34 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
     /**
      * 네임스페이스 요소 개수
      */
-    count: number;
+    get count(): number;
 
     /**
      * 중복 요소 등록 허용 여부 (기본값: false)
      */
     isOverlap: boolean;
 
+    /**
+     * 네임스페이스를 초기화합니다.
+     */
     constructor();
+
+    /**
+     * 네임스페이스 저장소 초기화 객체를 생성합니다.
+     * 
+     * @returns {NsTypeObject} 초기화된 네임스페이스 타입 객체입니다. { _type: 'ns' }
+     * @private
+     */
+    $createNsRefer(): NsTypeObject;
+
+    /**
+     * 네임스페이스 경로 객체를 얻습니다.
+     * 
+     * @param elem - 경로를 얻을 요소입니다.
+     * @returns {PathObject} 네임스페이스 경로 객체입니다. { ns: '..', key: '...' }
+     * @protected
+     */
+    $getPathObject(elem: object | string): PathObject;
 
     /**
      * 네임스페이스를 초기화합니다.

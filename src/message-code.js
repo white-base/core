@@ -1,4 +1,4 @@
-/**** message-code.js | _L.messageCode.core ****/
+/**** message-code.js | messageCode ****/
 
 //==============================================================
 // 1. import module

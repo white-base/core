@@ -1,4 +1,4 @@
-/**** collection-property.js | _L.Collection.PropertyCollection ****/
+/**** collection-property.js | PropertyCollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';
@@ -25,9 +25,9 @@ if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'ba
 var PropertyCollection  = (function (_super) {
     /**
      * 프로퍼티 컬렉션을 생성합니다.
-     * @constructs _L.Collection.PropertyCollection
-     * @implements {_L.Interface.IPropertyCollection}
-     * @extends _L.Collection.BaseCollection
+     * @constructs PropertyCollection
+     * @implements {IPropertyCollection}
+     * @extends BaseCollection
      * @param {object} p_owner 소유 객체
      */
     function PropertyCollection(p_owner) {
@@ -37,7 +37,7 @@ var PropertyCollection  = (function (_super) {
 
         /**
          * 내부 변수 접근
-         * @member {string} _L.Collection.PropertyCollection#$keys
+         * @member {string} PropertyCollection#$keys
          * @readonly
          * @private
          */
@@ -52,7 +52,7 @@ var PropertyCollection  = (function (_super) {
         // /** 
         //  * 컬렉션 요소의 키값들
         //  * @readonly
-        //  * @member {array<string>} _L.Collection.PropertyCollection#_keys 
+        //  * @member {array<string>} PropertyCollection#_keys 
         //  */
         // Object.defineProperty(this, '_keys',
         // {

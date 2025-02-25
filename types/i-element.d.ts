@@ -1,4 +1,8 @@
-interface IElement {
+/**
+ * 요소(독립) 인터페이스 입니다.
+ * @interface
+ */
+declare interface IElement {
     /**
      * 요소명
      */
@@ -6,9 +10,10 @@ interface IElement {
 
     /**
      * 요소를 복제합니다.
-     * @returns 복제된 요소
+     * @param {...any} args - 로드에 필요한 인수들
+     * @returns {object} 복제된 요소
      */
-    clone(): any;
+    clone(...args: any[]): object;
 }
 
 export default IElement;

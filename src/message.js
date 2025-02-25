@@ -1,4 +1,4 @@
-/**** message.js | _L.Common.Message ****/
+/**** message.js | Message ****/
 import  messageCode  from './message-code.js';
 
 //==============================================================
@@ -50,7 +50,7 @@ var Message = (function () {
     
     /**
      * 메시지 코드 스토리지
-     * @member {string} _L.Common.Message#$storage
+     * @member {string} Message#$storage
      */
     Object.defineProperty(Message, '$storage', {
         get: function() { 
@@ -74,7 +74,7 @@ var Message = (function () {
 
     /**
      * 메세지 언어 
-     * @member {string} _L.Common.Message#lang
+     * @member {string} Message#lang
      */
     Object.defineProperty(Message, 'lang', {
         get: function() { return lang; },
@@ -88,7 +88,7 @@ var Message = (function () {
 
     /**
      * 긴 메세지 여부
-     * @member {string} _L.Common.Message#isLong
+     * @member {string} Message#isLong
      */
     // Object.defineProperty(Message, "isLong", {
     //     get: function() { return isLong; },

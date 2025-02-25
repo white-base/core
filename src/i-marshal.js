@@ -1,4 +1,4 @@
-/**** i-marshal.js | _L.Interface.IMarshal ****/
+/**** i-marshal.js | IMarshal ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -13,20 +13,19 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IMarshal  = (function () {
     /**
      * 객체 통제 인터페이스 입니다.
-     * @constructs _L.Interface.IMarshal
      * @interface
      */
     function IMarshal() {
 
         /**
          * 객체의 고유 식별자
-         * @member {string} _L.Interface.IMarshal#_guid
+         * @member {string} IMarshal#_guid
          */
         this._guid = String;
 
         /**
          * 객체의 타입
-         * @member {string} _L.Interface.IMarshal#_type REVIEW:
+         * @member {string} IMarshal#_type REVIEW:
          */
         this._type = [['_req_', Function, {$type: 'class'} ]];
     }

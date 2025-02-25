@@ -4,10 +4,6 @@
  * 메시지 코드 관리 클래스 (static)
  */
 declare class Message {
-    /**
-     * 네임스페이스
-     */
-    static readonly _NS: string;
 
     /**
      * 메시지 코드 스토리지

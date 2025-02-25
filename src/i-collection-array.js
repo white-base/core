@@ -1,4 +1,4 @@
-/**** i-colleciton-array.js | _L.Interface.IArrayCollection ****/
+/**** i-colleciton-array.js | IArrayCollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -17,9 +17,7 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 var IArrayCollection  = (function (_super) {
     /**
      * 배열 컬렉션 인터페이스 입니다.
-     * @constructs _L.Interface.IArrayCollection
-     * @interface
-     * @extends  _L.Interface.ICollection
+     * @extends ICollection
      */
     function IArrayCollection() {
         _super.call(this);

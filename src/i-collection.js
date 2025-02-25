@@ -1,4 +1,4 @@
-/**** i-colleciton.js | _L.Interface.ICollection ****/
+/**** i-colleciton.js | ICollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';
@@ -14,7 +14,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var ICollection  = (function () {
     /**
      * 컬렉션 인터페이스 입니다.
-     * @constructs _L.Interface.ICollection
+     * @constructs ICollection
      * @interface
      */
     function ICollection() {

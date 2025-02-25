@@ -1,4 +1,4 @@
-/**** i-colleciton-property.js | _L.Interface.IPropertyCollection ****/
+/**** i-colleciton-property.js | IPropertyCollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    
@@ -17,9 +17,9 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 var IPropertyCollection  = (function (_super) {
     /**
      * 프로퍼티 컬렉션 인터페이스 입니다.
-     * @constructs _L.Interface.IPropertyCollection
+     * @constructs IPropertyCollection
      * @interface
-     * @extends  _L.Interface.ICollection
+     * @extends  ICollection
      */
     function IPropertyCollection() {
         _super.call(this);
