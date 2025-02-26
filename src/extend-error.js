@@ -55,11 +55,12 @@ const ExtendError = (function () {
         
         /**
          * 이전에 발생한 message 큐
-         * @member {array<string>} ExtendError#queue
+         * @member {string[]} ExtendError#queue
          */
         // if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
         // else _instance.queue = [];
         _instance.queue = _queue;
+        _instance.queue.push(_msg);
 
         /**
          * 속성 타입 오류 메시지입니다.
@@ -67,13 +68,6 @@ const ExtendError = (function () {
          */
         if (_prop) _instance.prop = _prop;
         else _instance.prop = {};
-
-        /**
-         *  이전에 발생한 메시지 큐입니다.
-         * @member {object} ExtendError#queue
-         */
-        _instance.queue.push(_msg);
-
 
         if (Error.captureStackTrace && !OLD_ENV) {
             Error.captureStackTrace(_instance, ExtendError);

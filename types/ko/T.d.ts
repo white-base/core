@@ -1,5 +1,6 @@
 /**
  * 메시지 객체를 정의합니다.
+ * 
  * @interface
  */
 export declare interface MessageObject {
@@ -12,6 +13,7 @@ export declare interface MessageObject {
 
 /**
  * 객체 속성 설명자를 정의합니다.
+ * 
  * @interface
  */
 export declare interface PropertyDescriptor {
@@ -35,44 +37,32 @@ export declare interface PropertyDescriptor {
 }
 
 /**
- * 인덱스와 요소, 그리고 현재 컨텍스트를 받아 처리하는 함수 타입을 정의합니다.
- * @type
- */
-// declare type OnFunc = (idx: number, elem: any, _this: object) => void;
-
-/**
  * 문자열 키와 값으로 구성된 객체 타입을 정의합니다.
- * @type
  */
 export declare type Iprop = { [key: string]: string };
 
 /**
  * 참조 객체를 정의합니다.
- * @type
  */
 export declare type RefObject = { $ref: string /** 예: 2333-234234-... */ };
 
 /**
  * 네임스페이스 객체를 정의합니다.
- * @type
  */
 export declare type NsObject = { $ns: string /** 예: Meta.MetaObject */ };
 
 /**
  * 설정 객체를 정의합니다.
- * @type
  */
 export declare type SetObject = { $set: string /** 예: guid */ };
 
 /**
  * 네임스페이스 타입 객체를 정의합니다.
- * @type
  */
 export declare type NsTypeObject = { _type: 'ns' };
 
 /**
  * 네임스페이스 경로 객체를 정의합니다.
- * @type
  */
 export declare type PathObject = { ns: string, key: string };
 
@@ -90,6 +80,9 @@ export declare interface ExtendType {
     ref?: any;
 }
 
+/**
+ * 배열 확장 타입입니다.
+ */
 export declare interface ArrayExtendType extends ExtendType {
 
     /**
@@ -111,10 +104,14 @@ export declare interface ArrayExtendType extends ExtendType {
      */
     kind?: ArrayKind;
 }
+
+/**
+ * 초이스 확장 타입입니다.
+ */
 export declare interface ChoiceExtendType extends ExtendType {
     /**
      * 초이스 타입
-     */
+     */       
     $type: 'choice';
 
     /**
@@ -135,6 +132,9 @@ export declare interface ChoiceExtendType extends ExtendType {
     kind?: ChoiceKind;
 }
 
+/**
+ * 원시 확장 타입입니다.
+ */
 export declare interface PrimitiveExtendType extends ExtendType {
     /**
      * 원시 타입
@@ -147,6 +147,9 @@ export declare interface PrimitiveExtendType extends ExtendType {
     default?: number | string | boolean | bigint | RegExp;
 }
 
+/**
+ * 함수 확장 타입입니다.
+ */
 export declare interface FunctionExtendType extends ExtendType {
     /**
      * 함수 타입
@@ -174,6 +177,9 @@ export declare interface FunctionExtendType extends ExtendType {
     return?: any;
 }
 
+/**
+ * 클래스 확장 타입입니다.
+ */
 export declare interface ClassExtendType extends ExtendType {
     /**
      * 클래스 타입
@@ -196,6 +202,9 @@ export declare interface ClassExtendType extends ExtendType {
     _instance: object;
 }
 
+/**
+ * 조합 확장 타입입니다.
+ */
 export declare interface UnionExtendType extends ExtendType {
     /**
      * 조합 타입
@@ -211,6 +220,9 @@ export declare interface UnionExtendType extends ExtendType {
 export declare type ExtType = ArrayExtendType | ChoiceExtendType | PrimitiveExtendType 
     | FunctionExtendType | ClassExtendType | UnionExtendType;
 
+/**
+ * 함수 오버라이딩을 위한 인터페이스입니다.
+ */
 export declare interface Function {
     
     /**
@@ -255,8 +267,4 @@ export declare interface Function {
      * 
      */
     _TYPE: ExtType;
-
 }
-
-
-// export {}

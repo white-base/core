@@ -17,14 +17,21 @@ declare class ExtendError extends Error {
 
     /**
      * `ExtendError` 클래스의 인스턴스를 생성합니다.
-     * @param msg 메시지 코드 또는 사용자 메시지 내용
-     * @param prop 이전 ExtendError 객체 또는 속성타입 오류 메시지
-     * @param codeVal 메시지 코드의 $1, $2 치환값 배열
+     * 
+     * @param msg - 메시지 코드 또는 사용자 메시지 내용
+     * @param prop - 이전 ExtendError 객체 또는 속성타입 오류 메시지
+     * @param codeVal - 메시지 코드의 $1, $2 치환값 배열
+     * 
+     * @example
+     * new ExtendError({code:'', ctx: []})
+     * new ExtendError(/E0011/, ['a', 'b'])
      */
     constructor(msg: string | RegExp, prop?: ExtendError | Record<string, string>, codeVal?: string[]);
 
     /**
      * 오류 메시지를 출력합니다.
+     * 
+     * @return 오류 메시지
      */
     toString(): string;
 }

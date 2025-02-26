@@ -1,4 +1,4 @@
-/**** i-colleciton.js | ICollection ****/
+/**** i-collection.js | ICollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';

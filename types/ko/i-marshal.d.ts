@@ -15,6 +15,8 @@ declare interface IMarshal {
 
     /**
      * 대상의 직렬화 객체를 얻습니다.
+     * 
+     * @returns 직렬화된 객체
      */
     getObject(...args: any[]): object;
 

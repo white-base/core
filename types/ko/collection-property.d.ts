@@ -13,31 +13,38 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
 
     /**
      * `PropertyCollection` 클래스의 인스턴스를 생성합니다.
-     * @param owner 이 컬렉션을 소유하는 객체입니다.
+     * 
+     * @param owner - 이 컬렉션을 소유하는 객체입니다.
      */
     constructor(owner?: any);
 
     /**
      * 요소를 컬렉션에서 제거합니다.
-     * @param pos 제거할 요소의 인덱스
+     * 
+     * @param index - 제거할 요소의 인덱스
      * @returns 성공 여부
      */
-    _remove(pos: number): boolean;
+    _remove(index: number): boolean;
 
     /**
      * 프로퍼티 컬렉션 객체를 직렬화(guid 타입) 객체로 가져옵니다.
-     * @param vOpt 옵션 값
-     * @param owned 소유 객체
+     * 
+     * @param mode - 가져오기 옵션
+     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)  
+     * @param context - 현재 객체를 소유하는 상위 객체들
      * @returns 직렬화된 객체
      */
-    getObject(vOpt?: number, owned?: object | object[]): object;
+    getObject(mode?: number, context?: object | object[]): object;
 
     /**
      * 직렬화된 객체를 설정합니다.
-     * @param oGuid 직렬화 객체
-     * @param origin 원본 객체
+     * 
+     * @param serializedObj - 직렬화 객체
+     * @param originalObj - 원본 객체
      */
-    setObject(oGuid: object, origin?: object): void;
+    setObject(serializedObj: object, originalObj?: object): void;
 
     /**
      * 프로퍼티 컬렉션에 요소를 추가합니다.
@@ -56,79 +63,95 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
 
     /**
      * 키를 기반으로 인덱스를 조회합니다.
-     * @param key 조회할 키
+     * 
+     * @param key - 조회할 키
+     * @returns 없을시 -1
      */
     keyToIndex(key: string): number;
 
     /**
      * 인덱스 값을 기반으로 키를 조회합니다.
-     * @param index 조회할 인덱스
+     * 
+     * @param index - 조회할 인덱스
      * @returns 해당 인덱스의 키
      */
     indexToKey(index: number): string;
 
     /**
      * 컬렉션의 키 존재 여부를 확인합니다.
-     * @param key 키 값
+     * 
+     * @param key - 키 값
      * @returns 존재 여부
      */
     exist(key: string): boolean;
 
     /**
-     * 컬렉션의 요소를 키를 기반으로 조회합니다.
-     * @param callbackfn 조회할 콜백 함수
-     * @param thisArg 콜백 함수 내부에서 this로 사용할 객체
+     * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+     * 
+     * @param callbackfn - 조회할 콜백 함수, (elem, index, key, list) => any
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     * @returns 리턴
      */
-    map(callbackfn: (value: T, idx: number, key: string, list: T[]) => any, thisArg?: any): T[];
+    map(callbackfn: (elem: T, index: number, key: string, list: T[]) => any, thisArg?: any): T[];
 
     /**
      * 컬렉션의 요소를 필터링합니다.
-     * @param callbackfn 필터링할 콜백 함수
-     * @param thisArg 콜백 함수 내부에서 this로 사용할 객체 
+     * 
+     * @param callbackfn - 필터링할 콜백 함수, (elem, index, key, list) => any
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체 
+     * @returns 리턴
      */
-    filter(callbackfn: (value: T, idx: number, key: string, list: T[]) => any, thisArg?: any): T[];
+    filter(callbackfn: (elem: T, index: number, key: string, list: T[]) => any, thisArg?: any): T[];
 
     /**
      * 컬렉션의 요소를 순회하며 콜백 함수를 실행합니다.
-     * @param callbackfn 콜백 함수
-     * @param initialValue 초기값
+     * 
+     * @param callbackfn - 콜백 함수, (acc, elem, index, list) => any
+     * @param initialValue - 초기값
+     * @returns 반환값
      */
-    reduce(callbackfn: (prev: any, curr: T, idx: number, key: string, list: T[]) => any, initialValue: any): any;
+    reduce<U>(callbackfn: (acc: T, elem: T, index: number, key: string, list: T[]) => U, initialValue: U): U;
 
     /**
      * 컬렉션의 요소를 순회하며 콜백 함수를 실행합니다.
-     * @param callbackfn 콜백 함수
-     * @param thisArg 콜백 함수 내부에서 this로 사용할 객체
+     * 
+     * @param callbackfn - 콜백 함수, (elem, index, key, list) => any
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      */
-    find(callbackfn: (value: T, idx: number, key: string, list: T[]) => any, thisArg?: any): T;
+    find(callbackfn: (elem: T, index: number, key: string, list: T[]) => any, thisArg?: any): T;
 
     /**
      * 컬렉션의 요소를 순회하며 콜백 함수를 실행합니다.
-     * @param callbackfn 콜백 함수
-     * @param thisArg 콜백 함수 내부에서 this로 사용할 객체
+     * 
+     * @param callbackfn - 콜백 함수, (elem, index, key, list) => void
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      */
-    forEach(callbackfn: (value: T, idx: number, key: string, list: T[]) => void, thisArg?: any): void;
+    forEach(callbackfn: (elem: T, index: number, key: string, list: T[]) => void, thisArg?: any): void;
 
     /**
      * 컬렉션의 요소를 순회하며 콜백 함수를 실행합니다.
-     * @param callbackfn 콜백 함수
-     * @param thisArg 콜백 함수 내부에서 this로 사용할 객체
+     * 
+     * @param callbackfn - 콜백 함수, (elem, index, key, list) => any
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      */
-    some(callbackfn: (value: T, idx: number, key: string, list: T[]) => any, thisArg?: any): boolean;
+    some(callbackfn: (elem: T, index: number, key: string, list: T[]) => any, thisArg?: any): boolean;
 
     /**
-     * 컬렉션의 요소를 순회하며 콜백 함수를 실행합니다.
-     * @param callbackfn 콜백 함수
-     * @param thisArg 콜백 함수 내부에서 this로 사용할 객체
+     * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
+     * 
+     * @param callbackfn - 콜백 함수, (elem, index, key, list) => any
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     * @returns 통과 여부
      */
-    every(callbackfn: (value: T, idx: number, key: string, list: T[]) => any, thisArg?: any): boolean;
+    every(callbackfn: (elem: T, index: number, key: string, list: T[]) => any, thisArg?: any): boolean;
 
     /**
-     * 컬렉션의 요소를 순회하며 콜백 함수를 실행합니다.
-     * @param callbackfn 콜백 함수
-     * @param thisArg 콜백 함수 내부에서 this로 사용할 객체
+     * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
+     * 
+     * @param callbackfn - 콜백 함수, (elem, index, key, list) => any
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      */
-    findIndex(callbackfn: (value: T, idx: number, key: string, list: T[]) => any, thisArg?: any): number;
+    findIndex(callbackfn: (elem: T, index: number, key: string, list: T[]) => boolean, thisArg?: any): number;
 }
 
 export default PropertyCollection;

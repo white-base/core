@@ -10,7 +10,7 @@ declare namespace Type {
      * @param hasObj - `Object`를 포함할지 여부입니다.
      * @returns 프로퍼티 이름 배열입니다.
      */
-    function getAllProperties(obj: object, hasObj: boolean): Array<string>;
+    function getAllProperties(obj: object, hasObj: boolean): string[];
 
     /**
      * 객체를 비교합니다. (프로토타입 제외)
@@ -54,6 +54,17 @@ declare namespace Type {
      * 
      * @param target - 대상 타입입니다.
      * @returns 확장 타입 객체입니다.
+     * 
+     * @example
+     * var obj = {
+     *      $ype: '',
+     *      default: null,                  // string, number, boolean, regexp
+     *      kind: '',                       // array, choice
+     *      creator: null, _instance: {},   // class
+     *      _prop: {},                      // union
+     *      params: [], return: null,       // function
+     *      name: name, func: null,
+     * }
      */
     function typeObject(target: any): Record<string, any>;
 
@@ -70,6 +81,10 @@ declare namespace Type {
      * 
      * @param target - 대상 객체입니다.
      * @returns 확장 타입 객체입니다.
+     * 
+     * @example
+     * var singleType = ['undefined', 'null', 'number', 'string', 'boolean', 'regexp', 'object', 'symbol'];
+     * var unionType = ['array', 'choice', 'function', 'class', 'union'];
      */
     function extendType(target: any): Record<string, any>;
 
@@ -79,6 +94,7 @@ declare namespace Type {
      * @param extType - 확장 타입입니다.
      * @param tarType - 검사 대상 타입입니다.
      * @param opt - 허용 옵션입니다: 0 = 기존 유지, 1 = 클래스 타입 생성.
+     * @throws 실패시 예외
      */
     function allowType(extType: any, tarType: any, opt?: number): void;
 
@@ -88,6 +104,7 @@ declare namespace Type {
      * @param extType - 확장 타입입니다.
      * @param target - 검사 대상 타입입니다.
      * @param opt - 허용 옵션입니다: 0 = 기존 유지, 1 = 클래스 타입 생성.
+     * @throws 실패시 예외
      */
     function matchType(extType: any, target: any, opt?: number): void;
 

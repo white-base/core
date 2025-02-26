@@ -1,4 +1,4 @@
-/**** util.js | _L.Common.Util.- ****/
+/**** util.js | Util ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';
@@ -53,7 +53,6 @@ if (!Array.isArray || OLD_ENV) {
 /**
  * 배열의 깊이를 가져옵니다.  
  * REVIEW: 필요성 검토 필요!
- * @memberof _L.Common.Util
  * @param {array} p_elem 
  * @param {number} p_depts 
  * @returns {number} 
@@ -73,7 +72,6 @@ Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
 
 /**
  * guid 값을 생성합니다. (36자)
- * @memberof _L.Common.Util
  * @returns {string} 예> 'b806a5b5-75f7-a1ba-3736-17f56fb5d65a'
  */
 Util.createGuid = function createGuid() {
@@ -86,7 +84,6 @@ Util.createGuid = function createGuid() {
 
 /**
  * 객체를 깊은 복사를합니다. (proto제외)
- * @memberof _L.Common.Util
  * @param {object} p_target 대상 객체
  * @returns {object}
  */
@@ -118,7 +115,6 @@ Util.deepCopy = function deepCopy(p_target) {
 /**
  * superCtor 을 상속합니다.
  * @function
- * @memberof _L.Common.Util
  * @param {function | object} ctor 생성자 또는 생성 객체
  * @param {function | object} superCtor 상속 받을 부모 생성자 또는 객체
  */
@@ -154,10 +150,9 @@ Util.inherits = (function () {
 
 /**
  * ctor 로 생성한 obj 객체의 args<funtion>의 구현 여부를 검사합니다.
- * 종류(ctor._KIND)가 'inteface'이면 allowType(), 아니면 matchType()로 검사한다.
+ * 종류(ctor._KIND)가 'Interface' 타입이면 allowType(), 아니면 matchType()로 검사한다.
  * @name implements
  * @function
- * @memberof _L.Common.Util
  * @param {function} p_ctor 검사 대상 생성자
  * @param {object} p_obj 검사 대상 인스턴스 객체
  * @param {function?} args 인터페이스들, ctor._UNION 정적 속성으로 설정 가능

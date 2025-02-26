@@ -1,4 +1,4 @@
-/**** util-type.js _L.Common.Type.- ****/
+/**** util-type.js Type ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';
@@ -265,7 +265,6 @@ function _hasKindArray(name) {
 
 /**
  * 전체 프로퍼티를 조회합니다.
- * @memberof _L.Common.Type
  * @param {object} obj  Object를 제외한 프로퍼티 객체 리턴
  * @param {boolean?} hasObj Object를 포함 여부
  * @returns {array<string>}  
@@ -286,7 +285,6 @@ Type.getAllProperties = getAllProperties;
 
 /**
  * 객체를 비교합니다. (proto 제외)
- * @memberof _L.Common.Type
  * @param {any} obj1 
  * @param {any} obj2 
  * @returns {boolean}
@@ -328,7 +326,6 @@ Type.getAllProperties = getAllProperties;
 //         return false;
 //     }
 // }
-
 function deepEqual(obj1, obj2) {
     // 두 객체가 동일한 참조를 가지면 true를 반환
     if (obj1 === obj2) return true;
@@ -373,7 +370,6 @@ Type.deepEqual = deepEqual;
 /**
  * 함수 타입을 가져옵니다. (_UNION 포함)  
  * ctor 자신부터 리턴 배열에 push
- * @memberof _L.Common.Type
  * @param {function} ctor 생성자
  * @param {boolean} [hasUnion= true] _UNION 포함 여부
  * @returns {array<function>} 
@@ -418,7 +414,6 @@ Type.getTypes = getTypes;
 
 /**
  * 함수 타입의 prototype(상속) 타입 여부를 검사합니다.
- * @memberof _L.Common.Type
  * @param {function} ctor 생성자
  * @param {function | string} target 검사 대상
  * @returns {boolean}
@@ -442,7 +437,6 @@ Type.isProtoChain = isProtoChain;
 
 /**
  * 함수 타입의 prototype(상속) 또는 _UNION 타입 여부를 검사합니다.
- * @memberof _L.Common.Type
  * @param {function} ctor 생성자
  * @param {function | string} target 검사 대상
  * @returns {boolean}
@@ -466,7 +460,6 @@ Type.hasType = hasType;
 
 /**
  * 확장타입 객체를 얻습니다. (하위 타입 포함)  
- * @memberof _L.Common.Type
  * @param {*} target 
  * @returns {object}
  * @example
@@ -533,7 +526,6 @@ Type.typeObject = typeObject;
 
 /**
  * 확장타입명을 얻습니다.
- * @memberof _L.Common.Type
  * @param {*} target 
  * @returns {string}
  */
@@ -544,7 +536,6 @@ Type.typeOf = typeOf;
 
 /**
  * 확장타입을 얻는다.
- * @memberof _L.Common.Type
  * @param {any} target 대상타입
  * @returns {object} 
  * @example
@@ -1336,7 +1327,6 @@ function _execMatch(extType, target, opt, pathName) {
 
 /**
  * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} tarType 검사 대상 타입
  * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -1353,7 +1343,6 @@ Type.allowType = allowType;
 
 /**
  * 확장타입이 대상과 매치되는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상
  * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -1370,7 +1359,6 @@ Type.matchType = matchType;
 
 /**
  * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상 타입
  * @param {number} opt 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -1388,7 +1376,6 @@ Type.isAllowType = isAllowType;
 
 /**
  * 확장타입이 대상과 매치되는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상
  * @param {number} [opt] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성

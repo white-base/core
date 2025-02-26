@@ -276,7 +276,7 @@ var NamespaceManager = (function () {
 
     /**
      * 네임스페이스에 경로 객체를 얻습니다.
-     * @param {string | array<sting>} p_ns 네임스페이스 이름
+     * @param {string | sting[]} p_ns 네임스페이스 이름
      * @returns {object} 경로에 대한 객체
      */
     NamespaceManager.prototype.path = function(p_ns) {

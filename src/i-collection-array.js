@@ -1,4 +1,4 @@
-/**** i-colleciton-array.js | IArrayCollection ****/
+/**** i-collection-array.js | IArrayCollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    

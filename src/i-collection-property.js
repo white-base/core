@@ -1,4 +1,4 @@
-/**** i-colleciton-property.js | IPropertyCollection ****/
+/**** i-collection-property.js | IPropertyCollection ****/
 //==============================================================
 // 1. import module
 import Message from './message.js';    

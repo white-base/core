@@ -15,12 +15,14 @@ declare interface IListControl {
 
     /**
      * 목록에 대상의 존재 여부를 확인합니다.
+     * 
      * @returns 존재 여부
      */
     has(...args: any[]): boolean;
 
     /**
      * 목록에서 대상을 찾습니다.
+     * 
      * @returns 찾은 대상 또는 undefined
      */
     find(...args: any[]): any | undefined;

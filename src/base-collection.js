@@ -139,7 +139,7 @@ var BaseCollection  = (function (_super) {
          * 컬렉션 요소의 목록입니다.
          * @protected 
          * @readonly
-         * @member {array}  BaseCollection#_list  
+         * @member {Array}  BaseCollection#_list  
          */
         Object.defineProperty(this, '_list', 
         {

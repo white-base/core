@@ -5,6 +5,7 @@
 declare interface ISerialize {
     /**
      * 내보내기(출력)를 합니다.
+     * 
      * @returns 직렬화된 문자열
      */
     output(...args: any[]): string;
