@@ -1,4 +1,4 @@
-/// <reference path="./types/index.d.ts" />
+/// <reference path="./types/ko/index.d.ts" />
 
 import messageCode from "./src/message-code";
 import Message from "./src/message";

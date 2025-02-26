@@ -1,23 +1,37 @@
-import NamespaceManager from "./namespace-manager";
-import MetaObject from "./meta-object";
-import { RefObject, NsObject, SetObject } from "./T";
+// <reference path='global.d.ts' />
 
+import NamespaceManager     from './namespace-manager';
+import MetaObject           from './meta-object';
+import {RefObject, NsObject, SetObject}           from './T';
+
+/**
+ * `MetaRegistry` 클래스는 메타 객체의 등록과 관리를 담당하는 클래스입니다.
+ * 이 클래스는 메타 객체를 등록, 해제, 검색, 참조하는 다양한 기능을 제공합니다.
+ * 
+ * @static
+ */
 declare class MetaRegistry {
-    
+
     /**
-     * 메타 객체 목록 (참조값)
+     * 메타 객체 목록입니다. 참조값으로 저장됩니다.
+     * 
+     * @readonly
      */
     static _list: any[];
 
     /**
-     * 메타 객체 전체 갯수
+     * 현재 등록된 메타 객체의 총 갯수입니다.
+     * 
+     * @readonly
      */
-    static get count(): number;
+    static count: number;
 
     /**
-     * 메타 객체의 네임스페이스
+     * 메타 객체의 네임스페이스 관리자입니다.
+     * 
+     * @readonly
      */
-    static get namespace(): NamespaceManager;
+    static namespace: NamespaceManager;
 
     /**
      * 등록된 메타 객체 및 네임스페이스를 초기화합니다.
@@ -26,64 +40,60 @@ declare class MetaRegistry {
 
     /**
      * 메타 객체를 등록하고, 생성자를 네임스페이스에 등록합니다.
-     * @param p_meta 메타 객체
+     * 기존에 객체가 등록되어 있으면 예외가 발생합니다.
+     * 네임스페이스에 생성자가 없을 경우 등록합니다.
+     * 
+     * @param meta - 등록할 메타 객체입니다.
+     * @throws {Error | void} 객체가 이미 등록된 경우 예외가 발생합니다.
      */
-    static register(p_meta: any): void;
+    static register(meta: MetaObject): void;
 
     /**
      * 등록소에서 메타 객체를 해제합니다.
-     * @param p_meta 메타 객체 또는 GUID
-     * @returns 성공 여부
+     * 
+     * @param meta - 해제할 메타 객체 또는 GUID 문자열입니다.
+     * @returns {boolean} 해제 성공 여부를 반환합니다.
      */
-    static release(p_meta: any | string): boolean;
+    static release(meta: MetaObject | string): boolean;
 
     /**
-     * 등록소에 메타 객체 여부를 확인합니다.
-     * @param p_oGuid GUID 타입의 객체 또는 GUID
-     * @returns 존재 여부
+     * 등록소에 메타 객체가 있는지 여부를 확인합니다.
+     * 
+     * @param oGuid - 확인할 GUID 객체 또는 GUID 문자열입니다.
+     * @returns {boolean} 메타 객체의 존재 여부를 반환합니다.
      */
-    static has(p_oGuid: any | string): boolean;
+    static has(oGuid: object | string): boolean;
 
     /**
      * 등록소에서 메타 객체를 찾습니다.
-     * @param p_oGuid GUID 타입의 객체 또는 GUID
-     * @returns 메타 객체 또는 undefined
+     * 
+     * @param oGuid - 검색할 GUID 객체 또는 GUID 문자열입니다.
+     * @returns {MetaObject | undefined} 찾은 메타 객체 또는 `undefined`를 반환합니다.
      */
-    static find(p_oGuid: any | string): any | undefined;
+    static find(oGuid: object | string): MetaObject | undefined;
 
     /**
-     * 매타 객체 여부를 확인합니다.
-     * @param p_target 대상 객체
-     * @returns 존재 여부
+     * 대상 객체가 메타 객체인지 여부를 확인합니다.
+     * 
+     * @param target - 확인할 대상 객체입니다.
+     * @returns {boolean} 메타 객체 여부를 반환합니다.
      */
-    static isMetaObject(p_target: any): boolean;
+    static isMetaObject(target: object): boolean;
 
     /**
      * GUID 객체에 대한 메타 객체를 생성합니다.
-     * @param oGuid  GUID 타입의 객체입니다.
-     * @param origin 현재 객체를 설정하는 원본 객체입니다. 기본값은 `oGuid`입니다.
+     * 
+     * @param oGuid - GUID 타입의 객체입니다.
+     * @param {object} [origin=oGuid] - 현재 객체를 설정하는 원본 객체입니다. 기본값은 `oGuid`입니다.
+     * @returns {MetaObject} 생성된 메타 객체를 반환합니다.
      */
     static createMetaObject(oGuid: object, origin?: object): MetaObject;
 
     /**
      * GUID 객체에 대한 참조 객체를 생성합니다.
-     * @param meta 메타 객체입니다.
-     */
-    static createReferObject(meta: MetaObject): RefObject;
-
-    /**
-     * 네임스페이스(ns)에 생성자 또는 객체를 등록합니다.
-     * @param p_target 대상 객체
-     * @param p_ns 네임스페이스
-     * @param p_key 대상 이름
-     */
-    static registerClass(p_target: any, p_ns: string, p_key: string): void;
-
-    /**
-     * GUID 객체에 대한 참조 객체를 생성합니다.
      * 
      * @param meta - 메타 객체입니다.
-     * @returns 생성된 참조 객체를 반환합니다.
+     * @returns {RefObject} 생성된 참조 객체를 반환합니다.
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -97,7 +107,7 @@ declare class MetaRegistry {
      * 함수를 네임스페이스에 등록하고 참조 객체를 생성합니다.
      * 
      * @param target - 함수 또는 생성자입니다.
-     * @returns 생성된 네임스페이스 참조 객체를 반환합니다.
+     * @returns {NsObject} 생성된 네임스페이스 참조 객체를 반환합니다.
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -112,7 +122,7 @@ declare class MetaRegistry {
      * 
      * @param oGuid - GUID 타입의 객체입니다.
      * @param meta - GUID를 가지는 메타 객체입니다.
-     * @returns 설정된 객체를 반환합니다.
+     * @returns {SetObject} 설정된 객체를 반환합니다.
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -131,7 +141,7 @@ declare class MetaRegistry {
      * 4. 객체의 '_key'와 '_elem' 갯수 검사
      * 
      * @param oGuid - 검사할 GUID 객체입니다.
-     * @returns GUID 객체 여부를 반환합니다.
+     * @returns {boolean} GUID 객체 여부를 반환합니다.
      */
     static validObject(oGuid: object): boolean;
 
@@ -148,7 +158,7 @@ declare class MetaRegistry {
      * 
      * @param oGuid - 확인할 GUID 객체 또는 문자열입니다.
      * @param origin - 원본 객체입니다.
-     * @returns 포함 여부를 반환합니다.
+     * @returns {boolean} 포함 여부를 반환합니다.
      */
     static hasGuidObject(oGuid: object | string, origin: object | object[]): boolean;
 
@@ -157,7 +167,7 @@ declare class MetaRegistry {
      * 참조 타입은 `$ref`와 `$ns`입니다.
      * 
      * @param oGuid - 확인할 GUID 객체입니다.
-     * @returns 포함 여부를 반환합니다.
+     * @returns {boolean} 포함 여부를 반환합니다.
      */
     static hasRefer(oGuid: object): boolean;
 
@@ -166,7 +176,7 @@ declare class MetaRegistry {
      * 
      * @param oGuid - 조회할 GUID 값 또는 GUID 객체입니다.
      * @param origin - 원본 객체입니다.
-     * @returns 조회된 메타 객체를 반환합니다.
+     * @returns {MetaObject} 조회된 메타 객체를 반환합니다.
      */
     static findSetObject(oGuid: object | string, origin: object): MetaObject;
 
@@ -175,7 +185,7 @@ declare class MetaRegistry {
      * 변환 대상: `$ns`는 `[object Object]`로 변환됩니다.
      * 
      * @param oGuid - 변환할 GUID 객체입니다.
-     * @returns 변환된 객체를 반환합니다.
+     * @returns {object} 변환된 객체를 반환합니다.
      */
     static transformRefer(oGuid: object): object;
 
@@ -190,35 +200,37 @@ declare class MetaRegistry {
     static registerClass(target: Function | object, ns: string, key: string): void;
 
     /**
-     * 네임스페이스(ns)에서 생성자 또는 객체를 해제합니다.
-     * @param p_fullName 네임스페이스 전체 이름
-     * @returns 삭제 성공 여부
+     * 네임스페이스에서 생성자 또는 객체를 해제합니다.
+     * 
+     * @param fullName - 네임스페이스 전체 이름입니다.
+     * @returns {boolean} 해제 성공 여부를 반환합니다.
      */
-    static releaseClass(p_fullName: string): boolean;
+    static releaseClass(fullName: string): boolean;
 
     /**
-     * 네임스페이스(ns)에서 생성자 또는 객체를 찾아 전체 경로를 돌려줍니다.
-     * @param p_target 생성자 또는 객체
-     * @returns 네임스페이스 전체 이름 또는 undefined
+     * 네임스페이스에서 생성자 또는 객체를 찾아 전체 경로를 반환합니다.
+     * 
+     * @param target - 생성자 또는 객체입니다.
+     * @returns {string | undefined} 전체 경로 또는 `undefined`를 반환
      */
-    static findClass(p_target: any): string | undefined;
+    static findClass(target: Function): string | undefined;
 
     /**
-     * 네임스페이스(ns)에서 전체 이름에 대한 생성자 또는 객체를 얻습니다.
-     * @param p_fullName 전체 경로
-     * @returns 객체 또는 생성자
+     * 네임스페이스에서 전체 이름에 대한 생성자 또는 객체를 반환합니다.
+     * 
+     * @param fullName - 전체 경로입니다.
+     * @returns {object | Function | undefined} 생성자 또는 객체, 없으면 `undefined`를 반환합니다.
      */
-    static getClass(p_fullName: string): any;
+    static getClass(fullName: string): object | Function | undefined;
 
     /**
      * 직렬화된 GUID 문자열을 파싱하여 `MetaObject`로 변환합니다.
      * 
      * @param str - 직렬화된 GUID 문자열입니다.
      * @param parse - JSON 파서 함수입니다. 기본값은 `JSON.parse`입니다.
-     * @returns 파싱된 메타 객체를 반환합니다.
+     * @returns {MetaObject} 파싱된 메타 객체를 반환합니다.
      */
     static loadMetaObject(str: string, parse?: Function): MetaObject;
 }
 
-export default MetaRegistry;
-export { MetaRegistry };
+export = MetaRegistry;

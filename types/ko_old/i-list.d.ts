@@ -2,17 +2,19 @@
  * 목록 인터페이스입니다.
  * @interface
  */
-declare interface IList<T> {
+declare interface IList {
+
     /**
-     * 목록 데이터입니다.
+     * 목록입니다.
+     * @type {any[]}
      */
-    _list: T[];
+    _list: any[];
 
     /**
      * 목록 갯수입니다.
+     * @type {number}
      */
     count: number;
 }
 
-export default IList;
-export { IList };
+export = IList;

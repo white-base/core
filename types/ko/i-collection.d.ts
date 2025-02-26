@@ -2,35 +2,32 @@
  * 컬렉션 인터페이스입니다.
  * @interface
  */
-declare interface ICollection {
-
+declare interface ICollection<T> {
     /**
      * 컬렉션에 요소를 추가합니다.
-     * @param args - 추가할 요소들
-     * @returns 추가한 요소의 인덱스
      */
-    add(...args: any[]): number;
+    add(...args: any[]): void;
 
     /**
      * 컬렉션에서 요소를 제거합니다.
-     * @param args - 제거할 요소들
-     * @returns 제가한 요소의 인덱스. 요소가 존재하지 않으면 -1
+     * @param item 제거할 요소
      */
-    remove(...args: any[]): number;
+    remove(item: T): void;
 
     /**
      * 요소가 컬렉션에 존재하는지 확인합니다.
-     * @param args - 확인할 요소들
-     * @returns 요소가 존재하면 true, 그렇지 않으면 false
+     * @param item 확인할 요소
+     * @returns 존재 여부
      */
-    contains(...args: any[]): boolean;
+    contains(item: T): boolean;
 
     /**
-     * 컬렉션에서 요소를 조회합니다.
-     * @param args - 조회할 요소들
-     * @returns 요소의 인덱스. 요소가 존재하지 않으면 -1
+     * 컬렉션에서 요소의 인덱스를 조회합니다.
+     * @param item 조회할 요소
+     * @returns 요소의 인덱스 (없으면 -1)
      */
-    indexOf(...args: any[]): number;
+    indexOf(item: T): number;
 }
 
-export = ICollection;
+export default ICollection;
+export { ICollection };

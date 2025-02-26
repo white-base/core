@@ -7,8 +7,8 @@
   "exports": {
     ".": {
       "types": {
-        "require": "./types/index.d.ts",
-        "default": "./types/index.d.ts"
+        "require": "./types/ko/index.d.ts",
+        "default": "./types/ko/index.d.ts"
       },
       "browser": {
         "require": "./dist/browser/logic-core.cjs",
@@ -20,7 +20,7 @@
       }
     }
   },
-  "types": "./types/index.d.ts",
+  "types": "./types/ko/index.d.ts",
   "files": [
     "src/",
     "dist/",
@@ -36,8 +36,8 @@
     "test:u": "jest --updateSnapshot",
     "test:v": "jest --verbose",
     "http": "npx http-server",
-    "doc:en": "npx typedoc --out docs/en types/en/index.d.ts types/en/global.d.ts",
-    "doc:ko": "npx typedoc --out docs/ko types/ko/index.d.ts types/ko/global.d.ts",
+    "doc:en": "typedoc --out docs/en types/index.d.ts types/T.d.ts",
+    "doc:ko": "typedoc --out docs/ko types/ko/index.d.ts types/ko/T.d.ts",
     "doc:test": "typedoc --out docs/test types/index.d.ts types/T.d.ts",
     "build": "rollup -c --bundleConfigAsCjs",
     "check:ts": "tsc --noEmit",

@@ -19,8 +19,7 @@
     "exclude": [
       "node_modules",
       "output",
-      "types/en/**/*",
-      "types/ko/**/*",
+      "types/ko_old/**/*",
       "src/temp/**/*",
     ],
     "include": [

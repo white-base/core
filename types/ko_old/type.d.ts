@@ -1,3 +1,5 @@
+import {ExtType}           from './T';
+
 /**
  * 타입 모듈입니다.
  */
@@ -29,7 +31,7 @@ declare namespace Type {
      * @param hasUnion - `_UNION` 포함 여부입니다. 기본값은 `true`입니다.
      * @returns 함수 타입 배열입니다.
      */
-    function getTypes(ctor: Function, hasUnion?: boolean): Array<Function>;
+    function getTypes(ctor: Function, hasUnion: boolean | true): Array<Function>;
 
     /**
      * 함수 타입의 프로토타입(상속) 타입 여부를 검사합니다.
@@ -54,8 +56,22 @@ declare namespace Type {
      * 
      * @param target - 대상 타입입니다.
      * @returns 확장 타입 객체입니다.
+     * 
+     * @example
+     * var returnObject = {
+     *     $ype: '',       // common
+     *     default: null,  // string, number, boolean, regexp
+     *     kind: '',       // array, choice
+     *     creator: null,  // class
+     *     _instance: {},  // class
+     *     _prop: {},      // union
+     *     params: [],     // function
+     *     return: null,   // function
+     *     name: name,     // function
+     *     func: null,     // function
+     * }
      */
-    function typeObject(target: any): Record<string, any>;
+    function typeObject(target: any): ExtType;
 
     /**
      * 확장 타입명을 얻습니다.
@@ -70,8 +86,12 @@ declare namespace Type {
      * 
      * @param target - 대상 객체입니다.
      * @returns 확장 타입 객체입니다.
+     * 
+     * @example
+     * var singleType = ['undefined', 'null', 'number', 'string', 'boolean', 'regexp', 'object', 'symbol'];
+     * var unionType = ['array', 'choice', 'function', 'class', 'union'];
      */
-    function extendType(target: any): Record<string, any>;
+    function extendType(target: any): object;
 
     /**
      * 확장 타입이 대상 타입을 허용하는지 검사합니다.
@@ -79,8 +99,9 @@ declare namespace Type {
      * @param extType - 확장 타입입니다.
      * @param tarType - 검사 대상 타입입니다.
      * @param opt - 허용 옵션입니다: 0 = 기존 유지, 1 = 클래스 타입 생성.
+     * @returns 에러 객체 또는 성공시 `undefined`입니다.
      */
-    function allowType(extType: any, tarType: any, opt?: number): void;
+    function allowType(extType: any, tarType: any, opt?: number): Error | undefined;
 
     /**
      * 확장 타입이 대상과 매치되는지 검사합니다.
@@ -88,11 +109,12 @@ declare namespace Type {
      * @param extType - 확장 타입입니다.
      * @param target - 검사 대상 타입입니다.
      * @param opt - 허용 옵션입니다: 0 = 기존 유지, 1 = 클래스 타입 생성.
+     * @returns 에러 객체 또는 성공시 `undefined`입니다.
      */
-    function matchType(extType: any, target: any, opt?: number): void;
+    function matchType(extType: any, target: any, opt?: number): Error | undefined;
 
     /**
-     * 확장 타입이 대상 타입을 허용하는지 여부를 확인합니다.
+     *  확장 타입이 대상 타입을 허용하는지 여부를 확인합니다.
      * 
      * @param extType - 확장 타입입니다.
      * @param tarType - 검사 대상 타입입니다.
@@ -110,7 +132,7 @@ declare namespace Type {
      * @returns 매치 여부를 나타냅니다.
      */
     function isMatchType(extType: any, target: any, opt?: number): boolean;
+
 }
 
-export default Type;
-export { Type };
+export = Type;

@@ -1,18 +1,18 @@
-import ICollection          from './i-collection';
+import ICollection from "./i-collection";
 
 /**
  * 프로퍼티 컬렉션 인터페이스입니다.
  * @interface
  * @extends ICollection
  */
-declare interface IPropertyCollection extends ICollection {
-
+declare interface IPropertyCollection<T> extends ICollection<T> {
     /**
      * 프로퍼티 키가 존재하는지 확인합니다.
-     * @param idx - 확인할 프로퍼티의 인덱스
-     * @returns 프로퍼티 키가 존재하면 true, 존재하지 않으면 false
+     * @param index 확인할 프로퍼티의 인덱스
+     * @returns 해당 인덱스의 키
      */
-    indexToKey(idx: number);
+    indexToKey(index: number): string;
 }
 
-export = IPropertyCollection;
+export default IPropertyCollection;
+export { IPropertyCollection };

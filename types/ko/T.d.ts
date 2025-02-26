@@ -76,8 +76,6 @@ export declare type NsTypeObject = { _type: 'ns' };
  */
 export declare type PathObject = { ns: string, key: string };
 
-
-
 export declare type ArrayKind = '_OPT_' | '_REQ_' | '_SEQ_' | '_ALL_' | '_ANY_';
 
 export declare type ChoiceKind = '_OPT_' | '_REQ_' | '_EUM_' | '_DEF_' | '_ERR_' | '_NON_' | '_ALL_' | '_ANY_';
@@ -210,7 +208,6 @@ export declare interface UnionExtendType extends ExtendType {
     _prop: object;
 }
 
-
 export declare type ExtType = ArrayExtendType | ChoiceExtendType | PrimitiveExtendType 
     | FunctionExtendType | ClassExtendType | UnionExtendType;
 
@@ -237,7 +234,6 @@ export declare interface Function {
      */
     _NS: string;
 
-    
     /**
      * 생성자의 파라메터 파라메터 변수에 대한 내부속성명을 작성한다.
      * 필요시!,   getObject(), setObject() 시점에 활용함
@@ -253,7 +249,6 @@ export declare interface Function {
      * 'function'
      */
     _KIND: string;
-
 
     /**
      * 타입 명시적으로 지정
