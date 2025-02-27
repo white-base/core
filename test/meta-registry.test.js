@@ -756,7 +756,7 @@ describe("[target: meta-registry.js]", () => {
             });
             it("- registerClass() :사용자 클래스(함수) 등록", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.namespace.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.allowOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 MetaRegistry.registerClass(fun1, 'a1.b1', 'fun1');
@@ -777,7 +777,7 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.releaseClass() <클래스 해제>", () => {
             it("- releaseClass() : ns에서 클래스 해제", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.namespace.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.allowOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 MetaRegistry.registerClass(fun1, 'a1.b1', 'fun1');
@@ -798,7 +798,7 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.findClass() <클래스 조화>", () => {
             it("- findClass() : 같은 클래스를 여러 곳에 등록한 경우", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.namespace.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.allowOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 const fullName1 = MetaRegistry.findClass(fun1);
@@ -814,7 +814,7 @@ describe("[target: meta-registry.js]", () => {
         describe("MetaRegistry.getClass() <클래스 얻기>", () => {
             it("- getClass() : 클래스 얻기 ", () => {
                 const fun1 = function() {return 'Fun1'};
-                MetaRegistry.namespace.isOverlap = true; // 중복허용
+                MetaRegistry.namespace.allowOverlap = true; // 중복허용
                 MetaRegistry.registerClass(fun1, 'fun1');
                 MetaRegistry.registerClass(fun1, 'a1.fun1');
                 const elem1 = MetaRegistry.getClass('a1.fun1');

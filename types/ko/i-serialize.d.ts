@@ -1,8 +1,10 @@
 /**
  * 직렬화 인터페이스 입니다.
+ * 
  * @interface 
  */
 declare interface ISerialize {
+    
     /**
      * 내보내기(출력)를 합니다.
      * 

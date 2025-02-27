@@ -99,7 +99,7 @@ describe("[target: event-emitter.js]", () => {
 
                 expect(e._list).toEqual(['e1', 'e2']);
                 expect(e.emit('e1')).toBe(true)
-                expect(e.emit('e1')).toBe(false)
+                expect(e.emit('e1')).toBe(undefined)
             });
             it("- 발신 확인 ", () => {
                 const e = new EventEmitter();
@@ -109,7 +109,7 @@ describe("[target: event-emitter.js]", () => {
                 
                 expect(result).toEqual(['E1']);
                 result = [];
-                expect(e.emit('e1')).toEqual(false);
+                expect(e.emit('e1')).toEqual(undefined);
                 expect(result).toEqual([]);
             });
             it("- 예외 ", () => {
@@ -150,7 +150,7 @@ describe("[target: event-emitter.js]", () => {
                 expect(result).toEqual(['E1']);
                 result = [];
                 e.off('e1', fun1)
-                expect(e.emit('e1')).toEqual(false);
+                expect(e.emit('e1')).toEqual(undefined);
                 expect(result).toEqual([]);
             });
             it("- 예외 ", () => {
@@ -218,7 +218,7 @@ describe("[target: event-emitter.js]", () => {
 
                 expect(e._list).toEqual(['e1']);
                 expect(e.$storage.e1.length).toBe(2);
-                expect(e.emit('e1')).toEqual(undefined);
+                expect(e.emit('e1')).toEqual(false);
                 expect(result).toEqual(['E1']);
             });
             it("- 예외 ", () => {

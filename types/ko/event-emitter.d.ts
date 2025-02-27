@@ -73,7 +73,7 @@ declare class EventEmitter {
      * 
      * @param event - 이벤트명
      * @returns 리스너가 실행되었는지 여부 
-     * true: 실행 함, false: 실행 안함, undefined: 처리 실패 
+     * true: 리스너가 호출 성공, false: 실패, undefined: 리스너 없음
      */
     emit(event: string, ...args: any[]): boolean | undefined;
 }

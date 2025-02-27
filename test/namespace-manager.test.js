@@ -33,11 +33,11 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns3.find('num')).toBe(100);
             });
         });
-        describe("NamespaceManager.isOverlap <중복 허용 여부>", () => {
-            it("- this.isOverlap : 중복 허용 ", () => {
+        describe("NamespaceManager.allowOverlap <중복 허용 여부>", () => {
+            it("- this.allowOverlap : 중복 허용 ", () => {
                 const ns = new NamespaceManager();
                 const fun1 = function() {return 'Fun1'};
-                ns.isOverlap = true; // 중복허용
+                ns.allowOverlap = true; // 중복허용
                 ns.add('fun1', fun1);
                 ns.add('a1.fun1', fun1);
 
@@ -45,7 +45,7 @@ describe("[target: namespace-manager.js]", () => {
                 expect(ns.has('fun1')).toBe(true);
                 expect(ns.has('a1.fun1')).toBe(true);
             });
-            it("- this.isOverlap : 중복 허용 ", () => {
+            it("- this.allowOverlap : 중복 허용 ", () => {
                 const ns = new NamespaceManager();
                 const fun1 = function() {return 'Fun1'};
                 ns.add('fun1', fun1);
@@ -53,9 +53,9 @@ describe("[target: namespace-manager.js]", () => {
                 expect(()=> ns.add('a1.fun1', fun1)).toThrow(/EL03333/);
                 expect(()=> ns.add('a1.fun1', fun1)).toThrow(/EL03332/);
             });
-            it("- this.isOverlap : 예외 ", () => {
+            it("- this.allowOverlap : 예외 ", () => {
                 const ns = new NamespaceManager();
-                expect(()=> ns.isOverlap = 1).toThrow(/EL03311/);
+                expect(()=> ns.allowOverlap = 1).toThrow(/EL03311/);
             });
         });
         describe("NamespaceManager._list <요소 목록>", () => {

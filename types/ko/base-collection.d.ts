@@ -59,7 +59,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param elem 추가될 요소
      * @param index 추가될 인덱스
      * @param collection 현재 객체의 참조
-     * @returns false일 경우 추가가 중단됨, true 또는 undefined(void)일 경우 계속 진행
+     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
      */
     onAdd: (elem: T, index: number, collection: object) => boolean | void;
 
@@ -78,7 +78,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param elem 제거될 요소
      * @param index 제거될 인덱스
      * @param collection 현재 객체의 참조
-     * @returns false일 경우 제거가 중단됨, true 또는 undefined(void)일 경우 계속 진행
+     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
      */
     onRemove: (elem: T, index: number, collection: object) => boolean | void;
 
@@ -95,7 +95,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 모든 요소를 삭제하기 전에 호출되는 이벤트 핸들러
      * 
      * @param collection 현재 객체의 참조
-     * @returns false일 경우 삭제가 중단됨, true 또는 undefined(void)일 경우 계속 진행
+     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
      */
     onClear: (collection: object) => boolean | void;
 
@@ -113,7 +113,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param prevValue 기존 값
      * @param index 변경될 요소의 인덱스
      * @param collection 현재 객체의 참조
-     * @returns false일 경우 변경이 중단됨, true 또는 undefined(void)일 경우 계속 진행
+     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
      */
     onChanging: (nextValue: T, prevValue: T, index: number, collection: object) => boolean | void;
 
@@ -139,50 +139,50 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 
      * @param elem 추가될 요소
      * @param index 추가될 인덱스
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onAdd(elem: T, index: number): boolean | void;
+    _onAdd(elem: T, index: number): boolean | undefined;
 
     /**
      * 요소가 추가된 후 호출되는 내부 이벤트 핸들러
      * 
      * @param elem 추가된 요소
      * @param index 추가된 인덱스
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onAdded(elem: T, index: number): boolean | void;
+    _onAdded(elem: T, index: number): boolean | undefined;
 
     /**
      * 요소를 제거하기 전에 호출되는 내부 이벤트 핸들러
      * 
      * @param elem 제거될 요소
      * @param index 제거될 인덱스
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onRemove(elem: T, index: number): boolean | void;
+    _onRemove(elem: T, index: number): boolean | undefined;
 
     /**
      * 요소가 제거된 후 호출되는 내부 이벤트 핸들러
      * 
      * @param elem 제거된 요소
      * @param index 제거된 인덱스
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onRemoved(elem: T, index: number): boolean | void;
+    _onRemoved(elem: T, index: number): boolean | undefined;
 
     /**
      * 모든 요소를 삭제하기 전에 호출되는 내부 이벤트 핸들러
      * 
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onClear(): boolean | void;
+    _onClear(): boolean | undefined;
 
     /**
      * 모든 요소가 삭제된 후 호출되는 내부 이벤트 핸들러
      * 
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onCleard(): boolean | void;
+    _onCleard(): boolean | undefined;
 
     /**
      * 요소가 변경되기 전에 호출되는 내부 이벤트 핸들러
@@ -190,9 +190,9 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param nextValue 변경될 새로운 값
      * @param prevValue 기존 값
      * @param index 변경될 요소의 인덱스
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onChanging(nextValue: T, prevValue: T, index: number): boolean | void;
+    _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * 요소가 변경된 후 호출되는 내부 이벤트 핸들러
@@ -200,9 +200,9 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param nextValue 변경된 새로운 값
      * @param prevValue 기존 값
      * @param index 변경된 요소의 인덱스
-     * @returns true: 이벤트가 존재하고 실행됨, false: 이벤트가 없거나 실행되지 않음, undefined: 이벤트 처리 실패
+     * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onChanged(nextValue: T, prevValue: T, index: number): boolean | void;
+    _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * 특정 인덱스에 해당하는 속성의 디스크립터(설명자)를 설정하는 내부 메서드
@@ -221,10 +221,10 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     /**
      * 컬렉션 객체를 직렬화(guid 타입) 객체로 반환합니다.  
      * 
-     * @param mode - 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
+     * @param mode - 가져오기 옵션  
+     * opt=0 : 참조 구조(_guid:Yes, $ref:Yes)   
+     * opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+     * opt=2 : 비침조 구조(_guid:No,  $ref:No)   
      * @param context - 현재 객체를 포함하는 상위 객체 목록 (선택 사항)
      * @returns 직렬화된 객체
      */

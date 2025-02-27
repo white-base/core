@@ -283,7 +283,7 @@ const messageCode = {
         EL03300: '',
         // private function, proterty
         EL03310: '',
-        EL03311: 'NamespaceManager.isOverlap can only be of type \'boolean\. type is Overlap = $1',
+        EL03311: 'NamespaceManager.allowOverlap can only be of type \'boolean\. type is Overlap = $1',
         EL03312: '_getArray(ns); ns is not a valid Namespace Name Rule. ns = $1',
         EL03313: '_getArray(ns); ns type is \'string\', \'array<string>\' type. typeofns = $1',
         EL03314: '_getArray(ns); ns[$1] is not of type \'string\'. typeofns[$1] = $2',
@@ -296,7 +296,7 @@ const messageCode = {
         // add, del 
         EL03330: '',
         EL03331: 'add(fullName,lem); [$1] is not a valid name rule',
-        EL03332: 'add(fullName,lem);lem already registered. Allow duplication [this.isOverlap = \'true\'',
+        EL03332: 'add(fullName,lem);lem already registered. Allow duplication [this.allowOverlap = \'true\'',
         EL03333: 'add(fullName, element); element registration failed in namespace',
         EL03334: 'del(fullName); Failed to delete element in Namespace',
         // getPath, output, load
@@ -627,7 +627,7 @@ const messageCode = {
         EL03300: '',
         // private function, proterty
         EL03310: '',
-        EL03311: 'NamespaceManager.isOverlap 은  \'boolean\' 타입만 가능합니다. typeof isOverlap = $1',
+        EL03311: 'NamespaceManager.allowOverlap 은  \'boolean\' 타입만 가능합니다. typeof allowOverlap = $1',
         EL03312: '_getArray(ns); ns 는 유효한 네임스페이스 이름 규칙이 아닙니다. ns = $1',
         EL03313: '_getArray(ns); ns 타입은 \'string\', \'array<string>\' 타입만 가능합니다. typeof ns = $1',
         EL03314: '_getArray(ns); ns[$1] 는 \'string\' 타입이 아닙니다. typeof ns[$1] = $2',
@@ -640,7 +640,7 @@ const messageCode = {
         // add, del 
         EL03330: '',
         EL03331: 'add(fullName, elem); [$1] 는 유효한 이름 규칙이 아닙니다.',
-        EL03332: 'add(fullName, elem); elem 이 이미 등록되었습니다. 중복허용 [this.isOverlap = \'true\']',
+        EL03332: 'add(fullName, elem); elem 이 이미 등록되었습니다. 중복허용 [this.allowOverlap = \'true\']',
         EL03333: 'add(fullName, elem); 네임스페이스에 요소 등록이 실패하였습니다.',
         EL03334: 'del(fullName); 네임스페이스에 요소 삭제가 실패하였습니다.',
         // getPath, output, load

@@ -1,8 +1,10 @@
 /**
  * 객체 통제 인터페이스 입니다.
+ * 
  * @interface
  */
 declare interface IMarshal {
+    
     /**
      * 객체의 고유 식별자
      */

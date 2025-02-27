@@ -1,8 +1,10 @@
 /**
  * 컬렉션 인터페이스입니다.
+ * 
  * @interface
  */
 declare interface ICollection<T> {
+    
     /**
      * 컬렉션에 요소를 추가합니다.
      */

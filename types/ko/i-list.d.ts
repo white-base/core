@@ -1,8 +1,10 @@
 /**
  * 목록 인터페이스입니다.
+ * 
  * @interface
  */
 declare interface IList<T> {
+    
     /**
      * 목록 데이터입니다.
      */

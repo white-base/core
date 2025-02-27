@@ -29,7 +29,7 @@ var NamespaceManager = (function () {
 
         var $storage = this.$createNsRefer();
         var _elemTypes  = []; 
-        var isOverlap = false;
+        var allowOverlap = false;
         
         
         /**
@@ -124,14 +124,14 @@ var NamespaceManager = (function () {
 
         /**
          * 중복 요소 등록 허용 여부, 기본값 = false (중복금지)
-         * @member {boolean} NamespaceManager#isOverlap
+         * @member {boolean} NamespaceManager#allowOverlap
          */
-        Object.defineProperty(this, 'isOverlap',
+        Object.defineProperty(this, 'allowOverlap',
         {
-            get: function() { return isOverlap; },
+            get: function() { return allowOverlap; },
             set: function(val) { 
                 if (typeof val !== 'boolean') throw new ExtendError(/EL03311/, null, [typeof val]);
-                isOverlap = val;
+                allowOverlap = val;
             },
             configurable: false,
             enumerable: true
@@ -321,7 +321,7 @@ var NamespaceManager = (function () {
 
             if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);  // []로 감싸서 choice 타입으로 변환됨
             if (!_validName(key)) throw new ExtendError(/EL03331/, null, [key]);
-            if (!this.isOverlap && this.getPath(p_elem)) {
+            if (!this.allowOverlap && this.getPath(p_elem)) {
                 throw new ExtendError(/EL03332/, null, []);
             }
             

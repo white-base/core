@@ -1,8 +1,10 @@
 /**
  * 목록 제어 인터페이스입니다.
+ * 
  * @interface
  */
 declare interface IListControl {
+    
     /**
      * 목록에 대상을 추가합니다.
      */

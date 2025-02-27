@@ -43,7 +43,7 @@ declare class NamespaceManager implements IList, IListControl, ISerialize {
      * 중복 요소 등록 허용 여부를 설정합니다.
      * 기본값은 `false`이며, 중복을 허용하지 않습니다.
      */
-    isOverlap: boolean;
+    allowOverlap: boolean;
 
     /**
      * 네임스페이스 관리자를 생성합니다.

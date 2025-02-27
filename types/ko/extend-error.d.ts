@@ -5,6 +5,7 @@ import Message from "./message";
  * 이 클래스는 기본 `Error` 클래스를 확장하여 추가적인 속성 및 기능을 제공합니다.
  */
 declare class ExtendError extends Error {
+    
     /**
      * 이전에 발생한 message 큐
      */
@@ -16,18 +17,38 @@ declare class ExtendError extends Error {
     prop: Record<string, string>;
 
     /**
-     * `ExtendError` 클래스의 인스턴스를 생성합니다.
-     * 
-     * @param msg - 메시지 코드 또는 사용자 메시지 내용
-     * @param prop - 이전 ExtendError 객체 또는 속성타입 오류 메시지
-     * @param codeVal - 메시지 코드의 $1, $2 치환값 배열
-     * 
+     * 문자열 메시지 코드 또는 사용자 메시지를 사용하여 `ExtendError` 인스턴스를 생성합니다.
+     *
+     * @param msg - 오류 메시지 문자열
+     * @param causeOrProp - 기존 `ExtendError`, `Error` 객체 또는 속성별 오류 메시지 (`Record<string, string>`), 생략하면 기본 메시지만 저장됩니다.
+     *
      * @example
-     * new ExtendError({code:'', ctx: []})
-     * new ExtendError(/E0011/, ['a', 'b'])
+     * throw new ExtendError("Custom error message");
+     * throw new ExtendError("Custom error message", error);
+     * throw new ExtendError("Custom error message", { style: "required" });
      */
-    constructor(msg: string | RegExp, prop?: ExtendError | Record<string, string>, codeVal?: string[]);
+    constructor(msg: string, causeOrProp?: Error | ExtendError | Record<string, string>);
 
+    /**
+     * 정규식 메시지 코드와 치환값을 사용하여 `ExtendError` 인스턴스를 생성합니다.
+     *
+     * @param msgPattern - 정규식 메시지 코드값 (`RegExp`)
+     * @param causeOrProp - 기존 `ExtendError`, `Error` 객체 또는 속성별 오류 메시지 (`Record<string, string>`), 생략하면 기본 메시지만 저장됩니다.
+     * @param placeholders - 메시지 코드 내 `$1`, `$2` 등의 치환값을 담은 문자열 배열
+     *
+     * @example
+     * // 치환값이 없는 메세지의 경우
+     * throw new ExtendError(/EL01504/);
+     * throw new ExtendError(/EL01504/, error);
+     * throw new ExtendError(/EL01504/, { style: "required" });
+     * // 치환값이 있는 메세지의 경우
+     * throw new ExtendError(/EL01504/, undefined, ['value1', 'value2']);
+     * throw new ExtendError(/EL01504/, error, ['value1', 'value2']););
+     * throw new ExtendError(/EL01504/, { style: "required" }, ['value1', 'value2']);
+     */
+    constructor(msgPattern: RegExp, causeOrProp?: Error | ExtendError | Record<string, string>, placeholders?: string[]);
+    
+    
     /**
      * 오류 메시지를 출력합니다.
      * 

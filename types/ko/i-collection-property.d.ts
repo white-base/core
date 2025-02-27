@@ -2,6 +2,7 @@ import ICollection from "./i-collection";
 
 /**
  * 프로퍼티 컬렉션 인터페이스입니다.
+ * 
  * @interface
  * @extends ICollection
  */

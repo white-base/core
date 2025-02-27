@@ -543,7 +543,7 @@ var BaseCollection  = (function (_super) {
         elem = this.$elements[p_pos];
         if (this.$elements.length > p_pos) {
             // this._onRemove(p_pos, elem);
-            if (typeof this._onRemove(elem, p_pos) === 'undefined') return false;
+            if (this._onRemove(elem, p_pos) === false) return false;
 
             if (!this._remove(p_pos)) return false;
             this._onRemoved(elem, p_pos);

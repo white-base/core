@@ -1,5 +1,3 @@
-/**** message.d.ts ****/
-
 /**
  * 메시지 코드 관리 클래스 (static)
  */
@@ -19,26 +17,26 @@ declare class Message {
      * 메시지 코드에 대한 문자열을 얻습니다.
      * 
      * @param code - 메시지 코드
-     * @param aValue - 메시지에서 치환될 값 배열
+     * @param placeholders - 메시지에서 치환될 값 배열
      * @returns 메시지 문자열
      */
-    static get(code: string, aValue?: string[]): string;
+    static get(code: string, placeholders?: string[]): string;
 
     /**
      * 메시지 코드에 대한 Error 객체를 생성하여 예외를 발생시킵니다.
      * 
      * @param code - 메시지 코드
-     * @param aValue - 메시지에서 치환될 값 배열
+     * @param placeholders - 메시지에서 치환될 값 배열
      */
-    static error(code: string, aValue?: string[]): never;
+    static error(code: string, placeholders?: string[]): never;
 
     /**
      * 메시지 코드에 대한 console.warn을 출력합니다.
      * 
      * @param code - 메시지 코드
-     * @param aValue - 메시지에서 치환될 값 배열
+     * @param placeholders - 메시지에서 치환될 값 배열
      */
-    static warn(code: string, aValue?: string[]): void;
+    static warn(code: string, placeholders?: string[]): void;
 }
 
 export default Message;

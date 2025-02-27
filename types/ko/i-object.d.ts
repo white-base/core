@@ -1,5 +1,6 @@
 /**
  * 객체 인터페이스 입니다.
+ * 
  * @interface
  */
 declare interface IObject {
@@ -14,6 +15,7 @@ declare interface IObject {
     /**
      * 객체의 인스턴스 여부를 확인합니다.
      * 
+     * @param target 생성자명 문자열 또는 생성자
      * @returns 인스턴스 여부
      */
     instanceOf(target: Function | string): boolean;

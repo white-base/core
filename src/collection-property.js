@@ -254,7 +254,7 @@ var PropertyCollection  = (function (_super) {
             }
 
             // this._onAdd(index, p_elem);
-            if (typeof this._onAdd(p_elem, index) === 'undefined') return -1;
+            if (this._onAdd(p_elem, index) === false) return -1;
 
             // data process
             this.$elements.push(p_elem);
@@ -287,7 +287,7 @@ var PropertyCollection  = (function (_super) {
      */
     PropertyCollection.prototype.clear = function() {
         // this._onClear();
-        if (typeof this._onClear() === 'undefined') return -1;
+        if (this._onClear() === false) return -1;
         
         for (var i = 0; i < this.count; i++) {
             var propName = this.indexToKey(i);

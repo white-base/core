@@ -155,8 +155,8 @@ var EventEmitter = (function () {
      */
     EventEmitter.prototype.emit = function(p_event) {
         var args = [].slice.call(arguments, 1);
-        var listeners;
-        var isListener = false;
+        var listeners = [];
+        // var isListener = false;
         var isReturn;
 
         if (!_isString(p_event)) throw new ExtendError(/EL01509/, null, [typeof p_event]);
@@ -165,15 +165,12 @@ var EventEmitter = (function () {
             listeners = this.$storage[p_event].slice();
             for (var i = 0; i < listeners.length; i++) {
                 isReturn = listeners[i].apply(this, args);
-                if (isReturn === false) return;
+                if (isReturn === false) return false;
             }
-            if (listeners.length > 0) isListener = true;
         }
+        if (this.isLog) console.log('['+p_event+'] 이벤트가 밸생하였습니다.');
 
-        if (this.isLog) {
-            console.log('['+p_event+'] 이벤트가 밸생하였습니다.');
-        }
-        return isListener;
+        return listeners.length > 0 ? true : undefined;
     };
 
     return EventEmitter;

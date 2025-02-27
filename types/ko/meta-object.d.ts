@@ -10,7 +10,7 @@ declare class MetaObject implements IObject, IMarshal {
      * 
      * @example
      * var obj = MetaObject();
-     * console.log(obj._guid);      // '5337877c-49d6-9add-f35a-7bd31d510d4f' unique key code
+     * console.log(obj._guid);      // Out: '5337877c-49d6-9add-f35a-7bd31d510d4f'
      */
     readonly _guid: string;
 
@@ -20,7 +20,7 @@ declare class MetaObject implements IObject, IMarshal {
      * @example
      * var obj = new MetaObject();
      * obj._type === MetaObject;        // true
-     * console.log(typeof obj._type);   // 'function'
+     * console.log(typeof obj._type);   // [Class MetaObject]
      */
     readonly _type: Function;
 
@@ -63,7 +63,7 @@ declare class MetaObject implements IObject, IMarshal {
      * obj.instanceOf(Object);          // true
      * obj.instanceOf(String);          // false
      * 
-     * var elem = new MetaElement('e1');// Inherited MetaObject 
+     * var obj = new MetaElement('e1'); // Inherited MetaObject 
      * obj.instanceOf('MetaElement');   // true
      * obj.instanceOf('MetaObject');    // true
      * obj.instanceOf('Object');        // true
@@ -77,10 +77,10 @@ declare class MetaObject implements IObject, IMarshal {
     /**
      * 직렬화된 객체를 가져옵니다.
      * 
-     * @param mode - 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
+     * @param mode - 가져오기 옵션  
+     * opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+     * opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+     * opt=2 : 비침조 구조(_guid:No,  $ref:No)    
      * @returns 직렬화된 객체
     */
    getObject(mode?: number): object;

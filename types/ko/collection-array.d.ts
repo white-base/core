@@ -24,10 +24,10 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 요소를 직렬화된 객체로 가져옵니다.
      * 
-     * @param mode - 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
+     * @param mode - 가져오기 옵션  
+     * opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+     * opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+     * opt=2 : 비침조 구조(_guid:No,  $ref:No)   
      * @param context - 현재 객체를 소유하는 상위 객체들
      * @returns 직렬화된 객체
      */
@@ -65,6 +65,75 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
      */
     insertAt(pos: number, elem: T, desc?: PropertyDescriptor): boolean;
 
+    /**
+     * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+     * 
+     * @param callbackfn - 조회할 콜백 함수, (elem: T, index: number, list: T[]) => U
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     * @returns 리턴
+     */
+    map<U>(callbackfn: (elem: T, index: number, list: T[]) => U, thisArg?: any): U[];
+
+    /**
+     * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
+     * 
+     * @param callbackfn - 필터링할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체 
+     * @returns 리턴
+     */
+    filter(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): T[];
+
+    /**
+     * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
+     * 
+     * @param callbackfn - 콜백 함수, (acc: U, elem: T, index: number, list: T[]) => U
+     * @param initialValue - 초기값
+     * @returns 반환값
+     */
+    reduce<U>(callbackfn: (acc: U, elem: T, index: number, list: T[]) => U, initialValue: U): U;
+
+    /**
+     * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
+     * 
+     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     */
+    find(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): T | undefined;
+
+    /**
+     * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
+     * 
+     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => void
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     */
+    forEach(callbackfn: (elem: T, index: number, list: T[]) => void, thisArg?: any): void;
+
+    /**
+     * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
+     * 
+     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     */
+    some(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): boolean;
+
+    /**
+     * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
+     * 
+     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     * @returns 통과 여부
+     */
+    every(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): boolean;
+
+    /**
+     * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
+     * 
+     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     */
+    findIndex(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): number;
+
+    ////
     /**
      * 컬렉션의 요소를 키를 기반으로 조회합니다.
      * 

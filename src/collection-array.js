@@ -173,7 +173,7 @@ var ArrayCollection  = (function (_super) {
      */
     ArrayCollection.prototype.clear = function() {
         // this._onClear();    // event
-        if (typeof this._onClear() === 'undefined') return -1;
+        if (this._onClear() === false) return -1;
 
         for (var i = 0; i < this.count; i++) delete this[i];
         this.$elements = [];
@@ -207,7 +207,7 @@ var ArrayCollection  = (function (_super) {
                 Message.warn('WS011', ['writable = false', 'element']);
             }
 
-            if (typeof this._onAdd(p_elem, p_pos) === 'undefined') return false;
+            if (this._onAdd(p_elem, p_pos) === false) return false;
 
             // data process
             this.$elements.splice(p_pos, 0, p_elem);            

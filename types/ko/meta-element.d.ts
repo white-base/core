@@ -21,10 +21,10 @@ declare class MetaElement extends MetaObject implements IElement {
     /**
      * 직렬화된 객체를 가져옵니다.
      * 
-     * @param mode - 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)  
+     * @param mode - 가져오기 옵션   
+     * opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
+     * opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
+     * opt=2 : 비침조 구조(_guid:No,  $ref:No)  
      * @param context - 현재 객체를 소유하는 상위 객체들
      * @returns guid 타입 객체
      */
