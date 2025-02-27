@@ -214,7 +214,7 @@ declare class MetaRegistry {
      * 직렬화된 GUID 문자열을 파싱하여 `MetaObject`로 변환합니다.
      * 
      * @param str - 직렬화된 GUID 문자열입니다.
-     * @param parse - JSON 파서 함수입니다. 기본값은 `JSON.parse`입니다.
+     * @param jsonParser - JSON 파서 함수입니다. 기본값은 `JSON.parse`입니다.
      * @returns 파싱된 메타 객체를 반환합니다.
      */
     static loadMetaObject(str: string, jsonParser?: Function): MetaObject;

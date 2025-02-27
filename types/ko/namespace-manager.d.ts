@@ -90,7 +90,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * @param nsPath - 네임스페이스 전체 경로명
      * @param typeDef - 추가할 함수, 클래스 또는 객체
      */
-    add(nsPath: string, elem: Function | object): void;
+    add(nsPath: string, typeDef: Function | object): void;
 
     /**
      * 네임스페이스의 경로에 요소를 삭제합니다.

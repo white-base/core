@@ -4,7 +4,32 @@ import IList from "./i-list";
 import MetaObject from "./meta-object";
 
 /**
- * 컬렉션의 최상위 기본 클래스입니다.
+ * 기본 컬렉션 클래스입니다.  
+ * 모든 컬렉션의 최상위 클래스 역할을 합니다.  
+ * 
+ * @example
+ * class MyCollection extends BaseCollection {
+ *     constructor(owner: object) {
+ *         super(owner);
+ *     }
+ * 
+ *     add(element: any) {
+ *         // 요소 추가 로직
+ *     }
+ * 
+ *     clear() {
+ *         // 컬렉션 초기화 로직
+ *     }
+ * 
+ *     _remove(pos: number): boolean {
+ *         // 요소 삭제 로직
+ *         return true;
+ *     }
+ * }
+ * 
+ * const myCollection = new MyCollection(someOwner);
+ * myCollection.add(someElement);
+ * console.log(myCollection.count);
  */
 declare abstract class BaseCollection<T> extends MetaObject implements ICollection<T>, IList<T> {
 
@@ -44,31 +69,31 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     _list: T[];
 
     /**
-     * 컬렉션 요소 개수
+     * 컬렉션의 요소 수를 반환합니다.
      */
     get count(): number;
 
     /**
-     * 컬렉션 요소 개수 (길이)
+     * 컬렉션 컬렉션의 요소 수를 반환합니다.
      */
     get length(): number;
 
     /**
-     * 요소를 추가하기 전에 호출되는 이벤트 핸들러
+     * 컬렉션에 요소를 추가하기 전에 호출되는 이벤트 핸들러입니다.
      * 
-     * @param elem 추가될 요소
-     * @param index 추가될 인덱스
-     * @param collection 현재 객체의 참조
-     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
+     * @param elem 추가할 요소의 인덱스
+     * @param index 추가할 요소
+     * @param collection 현재 컬렉션 객체
+     * @returns `false`를 반환하면 변경이 중단되고, 반환값이 없거나 `true`이면 변경이 계속 진행됩니다.
      */
     onAdd: (elem: T, index: number, collection: object) => boolean | void;
 
     /**
-     * 요소가 추가된 후 호출되는 이벤트 핸들러
+     * 요소가 추가된 후 호출되는 이벤트 핸들러입니다.
      * 
      * @param elem 추가된 요소
      * @param index 추가된 인덱스
-     * @param collection 현재 객체의 참조
+     * @param collection 현재 컬렉션 객체
      */
     onAdded: (elem: T, index: number, collection: object) => void;
 
@@ -77,8 +102,8 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 
      * @param elem 제거될 요소
      * @param index 제거될 인덱스
-     * @param collection 현재 객체의 참조
-     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
+     * @param collection 현재 컬렉션 객체
+     * @returns `false`를 반환하면 변경이 중단되고, 반환값이 없거나 `true`이면 변경이 계속 진행됩니다.
      */
     onRemove: (elem: T, index: number, collection: object) => boolean | void;
 
@@ -87,22 +112,22 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 
      * @param elem 제거된 요소
      * @param index 제거된 인덱스
-     * @param collection 현재 객체의 참조
+     * @param collection 현재 컬렉션 객체
      */
     onRemoved: (elem: T, index: number, collection: object) => void;
 
     /**
      * 모든 요소를 삭제하기 전에 호출되는 이벤트 핸들러
      * 
-     * @param collection 현재 객체의 참조
-     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
+     * @param collection 현재 컬렉션 객체
+     * @returns `false`를 반환하면 변경이 중단되고, 반환값이 없거나 `true`이면 변경이 계속 진행됩니다.
      */
     onClear: (collection: object) => boolean | void;
 
     /**
      * 모든 요소가 삭제된 후 호출되는 이벤트 핸들러
      * 
-     * @param collection 현재 객체의 참조
+     * @param collection 현재 컬렉션 객체
      */
     onCleard: (collection: object) => void;
 
@@ -112,8 +137,8 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param nextValue 변경될 새로운 값
      * @param prevValue 기존 값
      * @param index 변경될 요소의 인덱스
-     * @param collection 현재 객체의 참조
-     * @returns `false`를 반환하면 변경이 중단됨. 반환값이 없거나 `true`이면 변경이 계속 진행됨.
+     * @param collection 현재 컬렉션 객체
+     * @returns `false`를 반환하면 변경이 중단되고, 반환값이 없거나 `true`이면 변경이 계속 진행됩니다.
      */
     onChanging: (nextValue: T, prevValue: T, index: number, collection: object) => boolean | void;
 
@@ -123,12 +148,13 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param nextValue 변경된 새로운 값
      * @param prevValue 기존 값
      * @param index 변경된 요소의 인덱스
-     * @param collection 현재 객체의 참조
+     * @param collection 현재 컬렉션 객체
      */
     onChanged: (nextValue: T, prevValue: T, index: number, collection: object) => void;
 
     /**
-     * 컬렉션을 생성합니다.
+     * 기본 컬렉션을 생성합니다.  
+     * 이 클래스는 추상 클래스이므로 상속을 통해 인스턴스를 생성해야 합니다.
      * 
      * @param owner - 이 컬렉션을 소유하는 객체
      */
