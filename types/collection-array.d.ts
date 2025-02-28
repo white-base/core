@@ -2,9 +2,9 @@ import IArrayCollection from "./i-collection-array";
 import BaseCollection from "./base-collection";
 
 /**
- * `ArrayCollection` 클래스는 `BaseCollection`을 상속받으며 `IArrayCollection` 인터페이스를 구현합니다.  
- * 이 클래스는 배열 형태의 컬렉션을 관리하고, 배열 관련 작업을 위한 다양한 메서드를 제공합니다.
- */
+* The 'Array Collection' class inherits the 'Base Collection' and implements the 'IAray Collection' interface.  
+* This class manages collections in the form of arrays and provides a variety of methods for array-related tasks.  
+*/
 declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayCollection<T> {
     
     /**
