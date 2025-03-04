@@ -343,7 +343,7 @@ const messageCode = {
         EL04228: 'add(name, value, desc); name = \'$1\' is duplicated with an existing name',
         EL04229: 'add(name, value, desc); addition failed. name = \'$1\', value = \'$2\'',
         EL0422A: 'indexToKey(idx); idx is not of type \'number\. typeof idx = $1',
-        EL0422B: 'exist(key); key is not of type \'string\' (length > 0) type of key = $1',
+        EL0422B: 'exists(key); key is not of type \'string\' (length > 0) type of key = $1',
         //
         EL04300: '',
         // collection-transaction.js
@@ -687,7 +687,7 @@ const messageCode = {
         EL04228: 'add(name, value, desc); name = \'$1\' 이 기존 이름과 중복이 발생했습니다.',
         EL04229: 'add(name, value, desc); 추가가 실패하였습니다. name = \'$1\', value = \'$2\'',
         EL0422A: 'indexToKey(idx); idx 이 \'number\' 타입이 아닙니다. typeof idx = $1',
-        EL0422B: 'exist(key); key 이 \'string\' 타입이 아닙니다.(length > 0) typeof key = $1',
+        EL0422B: 'exists(key); key 이 \'string\' 타입이 아닙니다.(length > 0) typeof key = $1',
         //
         EL04300: '',
         // collection-transaction.js

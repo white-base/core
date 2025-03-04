@@ -8,7 +8,7 @@ import BaseCollection from "./base-collection";
 declare class PropertyCollection<T> extends BaseCollection<T> implements IPropertyCollection<T> {
  
     /**
-     * 컬렉션 요소의 키 값들을 배열로 저장합니다.
+     * 컬렉션의 모든 키 값을 배열로 반환합니다.
      */
     get $keys(): string[];
 
@@ -20,7 +20,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     constructor(owner?: object);
 
     /**
-     * 요소를 컬렉션에서 제거합니다.
+     * 컬렉션에서 지정된 요소를 제거하는 내부 메서드입니다.
      * 
      * @param index - 제거할 요소의 인덱스
      * @returns 성공 여부
@@ -48,7 +48,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     setObject(guidObj: object, guidRootObj?: object): void;
     
     /**
-     * 프로퍼티 컬렉션에 요소를 추가합니다.
+     * 요소를 컬렉션에 추가합니다.
      * 
      * @param key - 요소의 키
      * @param elem - 추가할 요소
@@ -59,7 +59,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
 
     /**
      * 컬렉션을 초기화합니다.  
-     * 이 메서드는 `$elements`, `$descriptors`, `$keys` 배열을 초기화합니다.
+     * 초기화 시 $elements, $descriptors, $keys 를 비웁니다.  
      */
     clear(): void;
 
@@ -80,15 +80,15 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     indexToKey(index: number): string;
 
     /**
-     * 지정된 키가 존재하는지 확인합니다.
+     * 지정된 키가 컬렉션에 존재하는지 확인합니다. 
      * 
      * @param key - 키 값
      * @returns 존재 여부
      */
-    exist(key: string): boolean;
+    exists(key: string): boolean;
 
     /**
-     * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+     * 모든 요소에 제공된 함수를 실행한 결과를 새로운 배열로 반환합니다.
      * 
      * @param callbackfn - 조회할 콜백 함수, (elem: T, index: number, key: string, list: T[]) => U
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
@@ -97,7 +97,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     map<U>(callbackfn: (elem: T, index: number, key: string, list: T[]) => U, thisArg?: any): U[];
 
     /**
-     * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
+     * 제공된 함수의 조건을 만족하는 요소만 포함하는 새로운 배열을 반환합니다.
      * 
      * @param callbackfn - 필터링할 콜백 함수, (elem: T, index: number, key: string, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체 
@@ -106,7 +106,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     filter(callbackfn: (elem: T, index: number, key: string, list: T[]) => boolean, thisArg?: any): T[];
 
     /**
-     * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
+     * 모든 요소에 제공된 리듀서(reducer) 함수를 실행하여 누적된 결과를 반환합니다.
      * 
      * @param callbackfn - 콜백 함수, (acc: U, elem: T, index: number, key: string, list: T[]) => U
      * @param initialValue - 초기값
@@ -115,7 +115,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     reduce<U>(callbackfn: (acc: U, elem: T, index: number, key: string, list: T[]) => U, initialValue: U): U;
 
     /**
-     * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
+     * 제공된 함수의 조건과 일치하는 첫 번째 요소를 반환합니다.
      * 
      * @param callbackfn - 콜백 함수, (elem: T, index: number, key: string, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
@@ -124,7 +124,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     find(callbackfn: (elem: T, index: number, key: string, list: T[]) => boolean, thisArg?: any): T | undefined;
 
     /**
-     * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
+     * 모든 요소에 대해 제공된 함수를 실행합니다.
      * 
      * @param callbackfn - 콜백 함수, (elem: T, index: number, key: string, list: T[]) => void
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
@@ -132,7 +132,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     forEach(callbackfn: (elem: T, index: number, key: string, list: T[]) => void, thisArg?: any): void;
 
     /**
-     * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
+     * 최소한 하나의 요소가 제공된 함수의 조건과 일치하는지 확인합니다.
      * 
      * @param callbackfn - 콜백 함수, (elem: T, index: number, key: string, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
@@ -141,7 +141,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     some(callbackfn: (elem: T, index: number, key: string, list: T[]) => boolean, thisArg?: any): boolean;
 
     /**
-     * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
+     * 모든 요소가 제공된 함수의 조건을 만족하는지 확인합니다. 
      * 
      * @param callbackfn - 콜백 함수, (elem: T, index: number, key: string, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
@@ -150,7 +150,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     every(callbackfn: (elem: T, index: number, key: string, list: T[]) => boolean, thisArg?: any): boolean;
 
     /**
-     * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
+     * 제공된 함수의 조건과 일치하는 첫 번째 요소의 인덱스를 반환합니다. 
      * 
      * @param callbackfn - 콜백 함수, (elem: T, index: number, key: string, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체

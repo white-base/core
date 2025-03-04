@@ -246,7 +246,7 @@ describe("[target: i-* ]", () => {
             // expect(()=> s.clear()).toThrow(/ES013/);
             expect(()=> s.contains()).toThrow(/EL02163/);
             expect(()=> s.indexOf()).toThrow(/EL02164/);
-            // expect(()=> s.exist()).toThrow(/ES013/);
+            // expect(()=> s.exists()).toThrow(/ES013/);
             // create
             expect(()=> i.add()).toThrow(/EL02161/);
             expect(()=> i.remove()).toThrow(/EL02162/);
@@ -254,7 +254,7 @@ describe("[target: i-* ]", () => {
             // expect(()=> i.clear()).toThrow(/ES013/);
             expect(()=> i.contains()).toThrow(/EL02163/);
             expect(()=> i.indexOf()).toThrow(/EL02164/);
-            // expect(()=> i.exist()).toThrow(/ES013/);
+            // expect(()=> i.exists()).toThrow(/ES013/);
         });
     });
     describe("ArrayCollection :: 인터페이스", () => {
@@ -290,7 +290,7 @@ describe("[target: i-* ]", () => {
             // expect(()=> s.clear()).toThrow(/ES013/);
             expect(()=> s.contains()).toThrow(/EL02163/);
             expect(()=> s.indexOf()).toThrow(/EL02164/);
-            // expect(()=> s.exist()).toThrow(/ES013/);
+            // expect(()=> s.exists()).toThrow(/ES013/);
             expect(()=> s.indexToKey()).toThrow(/EL02181/);
             // expect(()=> s.removeByProp()).toThrow(/ES013/);
             // expect(()=> s.indexOfProp()).toThrow(/ES013/);
@@ -301,7 +301,7 @@ describe("[target: i-* ]", () => {
             // expect(()=> i.clear()).toThrow(/ES013/);
             expect(()=> i.contains()).toThrow(/EL02163/);
             expect(()=> i.indexOf()).toThrow(/EL02164/);
-            // expect(()=> i.exist()).toThrow(/ES013/);
+            // expect(()=> i.exists()).toThrow(/ES013/);
             expect(()=> i.indexToKey()).toThrow(/EL02181/);
             // expect(()=> i.removeByProp()).toThrow(/ES013/);
             // expect(()=> i.indexOfProp()).toThrow(/ES013/);

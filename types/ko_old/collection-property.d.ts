@@ -130,7 +130,7 @@ declare class PropertyCollection extends BaseCollection implements IPropertyColl
      * @param key - 확인할 키입니다.
      * @returns 키의 존재 여부를 나타내는 불리언 값입니다.
      */
-    exist(key: string): boolean;
+    exists(key: string): boolean;
 
 }
 

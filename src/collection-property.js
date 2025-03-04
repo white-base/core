@@ -66,7 +66,7 @@ var PropertyCollection  = (function (_super) {
         // });
 
         // 예약어 등록 
-        this.$KEYWORD = ['$keys', 'indexOf', 'exist', 'indexToKey'];
+        this.$KEYWORD = ['$keys', 'indexOf', 'exists', 'indexToKey'];
 
         Util.implements(PropertyCollection, this);      // strip:
     }
@@ -243,7 +243,7 @@ var PropertyCollection  = (function (_super) {
             if (!_isString(p_key)) throw new ExtendError(/EL04225/, null, [p_key]);
             if(!regex.test(p_key)) throw new ExtendError(/EL04226/, null, [p_key, regex.source]);
             if (this.$KEYWORD.indexOf(p_key) > -1) throw new ExtendError(/EL04227/, null, [p_key]);
-            if (this.exist(p_key)) throw new ExtendError(/EL04228/, null, [p_key]);
+            if (this.exists(p_key)) throw new ExtendError(/EL04228/, null, [p_key]);
             if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);
             // if (this._elemTypes.length > 0) Util.matchType(types, p_elem);
             if (_isObject(p_desc) && p_desc.configurable === false) {
@@ -335,11 +335,11 @@ var PropertyCollection  = (function (_super) {
      * @param {string} p_key 키
      * @returns {boolean}
      */
-    PropertyCollection.prototype.exist = function(p_key) {
+    PropertyCollection.prototype.exists = function(p_key) {
         if (!_isString(p_key)) throw new ExtendError(/EL0422B/, null, [typeof p_key]);
         return Object.prototype.hasOwnProperty.call(this, p_key);
     };
-    Object.defineProperty(PropertyCollection.prototype, 'exist', {
+    Object.defineProperty(PropertyCollection.prototype, 'exists', {
         enumerable: false
     });
 

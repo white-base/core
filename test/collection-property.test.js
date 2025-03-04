@@ -336,24 +336,24 @@ describe("[target: collection-property.js, base-collection.js]", () => {
             });
         });
         
-        describe("BaseCollection.exist(key) <키 유무 검사> ", () => {
-            it("- exist(key) : 유무 검사  ", () => {
+        describe("BaseCollection.exists(key) <키 유무 검사> ", () => {
+            it("- exists(key) : 유무 검사  ", () => {
                 const i = new Student();
                 const result1 = i.columns.add('a1', 'A1');
                 const result2 = i.columns.add('a2', true);
                 
                 expect(result1 > -1).toBeTruthy();
                 expect(result2).toBeTruthy();
-                expect(i.columns.exist('a1')).toBe(true);
-                expect(i.columns.exist('a2')).toBe(true);
-                expect(i.columns.exist('a3')).toBe(false);
-                // expect(i.columns.exist(0)).toBe(false);
-                // expect(i.columns.exist(1)).toBe(true);
-                // expect(i.columns.exist(2)).toBe(false);
-                expect(i.columns.exist('0')).toBe(true);
-                expect(i.columns.exist('1')).toBe(true);
-                expect(i.columns.exist('2')).toBe(false);
-                expect(()=> i.columns.exist(true)).toThrow(/EL0422B/);
+                expect(i.columns.exists('a1')).toBe(true);
+                expect(i.columns.exists('a2')).toBe(true);
+                expect(i.columns.exists('a3')).toBe(false);
+                // expect(i.columns.exists(0)).toBe(false);
+                // expect(i.columns.exists(1)).toBe(true);
+                // expect(i.columns.exists(2)).toBe(false);
+                expect(i.columns.exists('0')).toBe(true);
+                expect(i.columns.exists('1')).toBe(true);
+                expect(i.columns.exists('2')).toBe(false);
+                expect(()=> i.columns.exists(true)).toThrow(/EL0422B/);
             });
         });
 
@@ -757,7 +757,7 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(() => s.columns.add('remove')).toThrow(/EL04227/);
                 expect(() => s.columns.add('removeAt')).toThrow(/EL04227/);
                 expect(() => s.columns.add('indexOf')).toThrow(/EL04227/);
-                expect(() => s.columns.add('exist')).toThrow(/EL04227/);
+                expect(() => s.columns.add('exists')).toThrow(/EL04227/);
                 // expect(() => s.columns.add('keys')).toThrow(/ES048/);
                 expect(() => s.columns.add('$keys')).toThrow(/EL04229/);
                 // expect(() => s.columns.add('indexOfProp')).toThrow(/ES048/);

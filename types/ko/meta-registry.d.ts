@@ -108,6 +108,7 @@ declare class MetaRegistry {
     /**
      * GUID 객체에 메타 객체의 GUID를 설정합니다.  
      * guidObj.$set = meta._guid  
+     * 
      * @param guidObj - GUID 타입의 객체
      * @param metaObj - 메타 객체
      * @returns 설정된 객체를 반환합니다.

@@ -274,22 +274,22 @@ describe("[target: collection-array.js, base-collection.js]", () => {
                 expect(s.rows.count).toBe(4);
             });
         });
-        describe("BaseCollection.exist(key): bool <키 여부 조회>", () => {
-            it.skip("- exist(key) : number, string 타입으로 키 여부 조회 ", () => {
+        describe("BaseCollection.exists(key): bool <키 여부 조회>", () => {
+            it.skip("- exists(key) : number, string 타입으로 키 여부 조회 ", () => {
                 let s = new Student();
                 const a2 = { style: 1};
                 s.rows.add('A1');
                 s.rows.add(a2);
                 s.rows.add(10);
                 
-                expect(s.rows.exist('A1')).toBe(false);
-                expect(s.rows.exist(10)).toBe(false);
-                expect(s.rows.exist(0)).toBe(true);
-                expect(s.rows.exist(1)).toBe(true);
-                expect(s.rows.exist(2)).toBe(true);
-                expect(s.rows.exist('0')).toBe(true);
-                expect(s.rows.exist('1')).toBe(true);
-                expect(s.rows.exist('2')).toBe(true);
+                expect(s.rows.exists('A1')).toBe(false);
+                expect(s.rows.exists(10)).toBe(false);
+                expect(s.rows.exists(0)).toBe(true);
+                expect(s.rows.exists(1)).toBe(true);
+                expect(s.rows.exists(2)).toBe(true);
+                expect(s.rows.exists('0')).toBe(true);
+                expect(s.rows.exists('1')).toBe(true);
+                expect(s.rows.exists('2')).toBe(true);
             });
         });
         describe("ArrayCollection.getObject(): obj<ref> <객체 얻기>", () => {
@@ -1407,21 +1407,21 @@ describe("[target: collection-array.js, base-collection.js]", () => {
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
         });
-        it.skip("- 유무 검사 : exist(key) ", () => {
+        it.skip("- 유무 검사 : exists(key) ", () => {
             const i = new Corp();
             const result1 = i.rows.add('A1');
             const result2 = i.rows.add(true);
             
             expect(result1 > -1).toBeTruthy();
             expect(result2).toBeTruthy();
-            expect(i.rows.exist(0)).toBe(true);
-            expect(i.rows.exist(1)).toBe(true);
-            expect(i.rows.exist(2)).toBe(false);    // 실패 조건
-            expect(i.rows.exist('0')).toBe(true);
-            expect(i.rows.exist('1')).toBe(true);
-            expect(i.rows.exist('2')).toBe(false);  // 실패 조건
+            expect(i.rows.exists(0)).toBe(true);
+            expect(i.rows.exists(1)).toBe(true);
+            expect(i.rows.exists(2)).toBe(false);    // 실패 조건
+            expect(i.rows.exists('0')).toBe(true);
+            expect(i.rows.exists('1')).toBe(true);
+            expect(i.rows.exists('2')).toBe(false);  // 실패 조건
             // 예외 조건
-            expect(()=> i.rows.exist(true)).toThrow(/key.*number.*string/);     
+            expect(()=> i.rows.exists(true)).toThrow(/key.*number.*string/);     
         });
         it("- _elemTypes 삭제할 경우 : 예외 ", () => {
             const i = new Corp();
