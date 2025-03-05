@@ -4,26 +4,26 @@
 declare interface IListControl {
     
     /**
-     * 목록에 대상을 추가합니다.
+     * 목록에 요소를 추가합니다.
      */
     add(...args: any[]): void;
 
     /**
-     * 목록에서 대상을 삭제합니다.
+     * 목록에서 요소를 제거합니다. 
      */
     del(...args: any[]): void;
 
     /**
-     * 목록에 대상의 존재 여부를 확인합니다.
+     * 목록에서 요소가 존재하는지 확인합니다.
      * 
-     * @returns 존재 여부
+     * @returns 요소가 존재하면 `true`, 그렇지 않으면 `false`
      */
     has(...args: any[]): boolean;
 
     /**
-     * 목록에서 대상을 찾습니다.
+     * 목록에서 요소를 검색합니다.
      * 
-     * @returns 찾은 대상 또는 undefined
+     * @returns 요소가 존재하면 `true`, 그렇지 않으면 `false`
      */
     find(...args: any[]): any | undefined;
 }

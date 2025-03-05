@@ -4,7 +4,7 @@ import ISerialize from "./i-serialize";
 import { NsTypeObject, PathObject } from './T';
 
 /**
- * 네임스페이스를 관리하는 클래스입니다.
+ * `NamespaceManager`는 네임스페이스를 관리하는 클래스입니다.
  */
 declare class NamespaceManager implements IList<string>, IListControl, ISerialize {
 
@@ -16,7 +16,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
 
     /**
      * 네임스페이스 요소 타입 목록입니다.  
-     * _elemTypes 비어 있을 경우 전체 타입이 허용됩니다.  
+     * 비어 있으면 모든 타입을 허용합니다.  
      */
     _elemTypes: any[];
 
@@ -26,7 +26,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
     _list: string[];
 
     /**
-     * 네임스페이스 요소의 총 갯수입니다.
+     * 네임스페이스 요소의 총 개수입니다.
      */
     get count(): number;
 
@@ -50,7 +50,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
     $createNsRefer(): NsTypeObject;
 
     /**
-     * 네임스페이스 경로 객체를 얻습니다.
+     * 네임스페이스 경로 객체를 반환합니다. 
      * 
      * @param target - 경로를 얻을 요소
      * @returns 네임스페이스 경로 객체 { ns: '..', key: '...' }
@@ -78,7 +78,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
     delNamespace(nsPath: string | string[]): void;
 
     /**
-     * 네임스페이스의 경로 객체를 얻습니다.
+     * 네임스페이스의 경로 객체를 반환합니다.    
      * 
      * @param nsPath - 네임스페이스 이름, 점(`.`)으로 구분된 문자열 또는 배열 형태의 경로
      * @returns 경로 객체
@@ -97,7 +97,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * 지정된 네임스페이스 경로에서 요소를 삭제합니다.  
      * 
      * @param nsPath - 네임스페이스 전체 경로
-     * @returns - 성공 여부
+     * @returns - 삭제 성공 여부 (`true` 또는 `false`)
      */
     del(nsPath: string): boolean;
 
@@ -105,7 +105,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * 네임스페이스에 지정된 요소가 존재하는지 확인합니다.
      * 
      * @param target - 확인할 함수, 클래스 또는 객체
-     * @returns - 존재 여부
+     * @returns - 존재 여부 (`true` 또는 `false`)
      */
     has(target: string | Function | object): boolean;
 
@@ -119,16 +119,16 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
 
     /**
      * 네임스페이스에서 지정된 요소의 경로를 반환합니다.  
-     * (중복된 경우 첫 번째 요소의 경로를 반환)  
+     * (중복된 경우 첫 번째 요소의 경로)    
      * 
      * @param target - 찾을 요소 (함수 또는 객체)
-     * @returns 요소의 경로
+     * @returns 요소의 경로, 찾지 못한 경우 `undefined`
      */
     getPath(target: Function | object): string | undefined;
 
     /**
-     * 네임스페이스 저장소를 문자열로 내보냅니다.  
-     * 함수를 JSON 으로 출력하려면 별도의 `stringify` 함수를 지정해야 합니다.  
+     * 네임스페이스 저장소를 직렬화하여 문자열로 변환합니다.  
+     * 함수를 JSON으로 변환하려면 별도의 `stringify` 함수를 지정해야 합니다.  
      * 
      * @param jsonStringify - JSON stringify 함수 (선택 사항)
      * @param space - 출력 시 적용할 공백 설정
@@ -137,7 +137,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
     output(jsonStringify?: (data: any, options?: any) => string, space?: string): string;
 
     /**
-     * 직렬화된 문자열을 파싱하여 네임스페이스 저장소로 로드합니다.
+     * 직렬화된 문자열을 파싱하여 네임스페이스 저장소로 불러옵니다.
      * 
      * @param str - 직렬화된 문자열
      * @param jsonParse - JSON 파서 함수

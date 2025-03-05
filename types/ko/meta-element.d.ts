@@ -7,12 +7,12 @@ import MetaObject from "./meta-object";
 declare class MetaElement extends MetaObject implements IElement {
 
     /**
-     * 요소의 이름입니다.
+     * 요소의 이름을 저장하는 내부 속성입니다. 
      */
     _name: string;
 
     /**
-     * MetaElement 인스턴스를 생성합니다.
+     * MetaElement 클래스의 인스턴스를 생성합니다.
      * 
      * @param name - 요소의 이름
      */
@@ -39,7 +39,7 @@ declare class MetaElement extends MetaObject implements IElement {
     setObject(guidObj: object, guidRootObj?: object): void;
 
     /**
-     * 현재 객체를 복제합니다.
+     * 현재 객체의 복제본을 생성합니다.  
      * 
      * @returns 복제된 객체
      */

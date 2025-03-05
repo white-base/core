@@ -4,15 +4,14 @@
 declare interface ISerialize {
     
     /**
-     * 객체를 직렬화하여 문자열(JSON 등)로 변환합니다.
-     * 내보내기(출력)를 합니다.
+     * 객체를 직렬화하여 문자열(JSON 등)로 변환하고 내보냅니다.
      * 
      * @returns 직렬화된 문자열
      */
     output(...args: any[]): string;
 
     /**
-     * 직렬화된 데이터를 로드하여 객체 상태를 복원합니다.
+     * 직렬화된 데이터를 로드하여 객체를 복원합니다. 
      */
     load(...args: any[]): void;
 }

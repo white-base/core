@@ -7,7 +7,7 @@ import IMarshal from "./i-marshal";
 declare class MetaObject implements IObject, IMarshal {
     
     /**
-     * 객체의 고유 식별자 속성입니다.
+     * 객체의 고유 식별자를 저장하는 내부 속성입니다.
      * 
      * @example
      * var obj = MetaObject();
@@ -16,7 +16,7 @@ declare class MetaObject implements IObject, IMarshal {
     readonly _guid: string;
 
     /**
-     * 객체의 생성 함수를 참조합니다.
+     * 객체의 생성자 함수를 참조하는 내부 속성입니다.
      * 
      * @example
      * var obj = new MetaObject();
@@ -26,8 +26,8 @@ declare class MetaObject implements IObject, IMarshal {
     readonly _type: Function;
 
     /**
-     * 네임스페이스를 나타냅니다.  
-     * `_type.NS`: `_NS`의 정적(static) 정의가 없으면 부모의 네임스페이스를 기본값으로 사용합니다.
+     * 객체 네임스페이스를 나타냅니다.  
+     * `_type.NS`가 정적으로 정의되지 않은 경우, 부모의 네임스페이스를 기본값으로 사용합니다.
      */
     readonly _ns: string;
 
@@ -38,15 +38,15 @@ declare class MetaObject implements IObject, IMarshal {
 
     /**
      * 현재 객체와 지정된 객체가 동일한지 비교합니다.  
-     *  `_guid` 속성을 제외하고 객체가 동일한지 비교합니다.  
+     * 단, `_guid` 속성은 비교에서 제외됩니다.  
      * 
      * @param target - 비교할 대상
-     * @returns 비교 결과
+     * @returns 두 객체가 동일하면 `true`, 그렇지 않으면 `false`
      */
     equal(target: object): boolean;
 
     /**
-     * 현재 객체의 생성자와 프로토타입 체인의 모든 생성자를 배열로 반환합니다.  
+     * 현재 객체의 생성자 및 프로토타입 체인의 모든 생성자를 배열로 반환합니다. 
      * 
      * @returns 생성자 함수의 배열 (가장 먼저 정의된 생성자부터 순차적으로 포함)
      * 
@@ -59,10 +59,10 @@ declare class MetaObject implements IObject, IMarshal {
 
     /**
      * 객체가 특정 클래스의 인스턴스인지 확인합니다.  
-     * 정의된 인터페이스 타입을 함께 검사할 수 있습니다. (_UNION 포함)  
+     * 정의된 인터페이스 타입(`_UNION` 포함)도 함께 검사할 수 있습니다.  
      * 
      * @param target - 클래스 생성자 함수 또는 클래스 이름(문자열)
-     * @returns 지정된 클래스의 인스턴스 여부
+     * @returns 지정된 클래스의 인스턴스 여부  (`true` 또는 `false`)
      * 
      * @example
      * var obj = new MetaObject();

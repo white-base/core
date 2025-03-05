@@ -47,7 +47,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
      * 
      * @param elem - 추가할 요소
      * @param desc - 요소에 대한 프로퍼티 기술자 객체
-     * @returns 추가된 인덱스
+     * @returns 추가된 요소의 위치
      */
     add(elem: T, desc?: PropertyDescriptor): number;
 
@@ -63,16 +63,16 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
      * @param index - 추가할 위치
      * @param elem - 추가할 요소
      * @param desc - 요소에 대한 프로퍼티 기술자 객체
-     * @returns 성공 여부
+     * @returns 추가 성공 여부
      */
     insertAt(index: number, elem: T, desc?: PropertyDescriptor): boolean;
 
     /**
      * 모든 요소에 제공된 함수를 실행한 결과를 새로운 배열로 반환합니다.
      * 
-     * @param callbackfn - 조회할 콜백 함수, (elem: T, index: number, list: T[]) => U
+     * @param callbackfn - 변환할 콜백 함수, (elem: T, index: number, list: T[]) => U
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
-     * @returns 변환된 요소로 이루어진 새로운 배열
+     * @returns  변환된 요소의 배열
      */
     map<U>(callbackfn: (elem: T, index: number, list: T[]) => U, thisArg?: any): U[];
 
@@ -88,7 +88,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 모든 요소에 제공된 리듀서(reducer) 함수를 실행하여 누적된 결과를 반환합니다.
      * 
-     * @param callbackfn - 콜백 함수, (acc: U, elem: T, index: number, list: T[]) => U
+     * @param callbackfn - 리듀스할 콜백 함수, (acc: U, elem: T, index: number, list: T[]) => U
      * @param initialValue - 초기값
      * @returns 누적된 최종 결과값
      */
@@ -97,7 +97,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 제공된 함수의 조건과 일치하는 첫 번째 요소를 반환합니다.
      * 
-     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param callbackfn - 검색할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      * @returns 조건을 만족하는 첫 번째 요소, 찾지 못한 경우 `undefined`
      */
@@ -106,7 +106,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 모든 요소에 대해 제공된 함수를 실행합니다.
      * 
-     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => void
+     * @param callbackfn - 실행할 콜백 함수, (elem: T, index: number, list: T[]) => void
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      */
     forEach(callbackfn: (elem: T, index: number, list: T[]) => void, thisArg?: any): void;
@@ -114,7 +114,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 최소한 하나의 요소가 제공된 함수의 조건과 일치하는지 확인합니다.
      * 
-     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param callbackfn - 검사할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      * @returns 하나 이상의 요소가 조건을 만족하면 `true`, 그렇지 않으면 `false`
      */
@@ -123,7 +123,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 모든 요소가 제공된 함수의 조건을 만족하는지 확인합니다.
      * 
-     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param callbackfn - 검사할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      * @returns 모든 요소가 조건을 만족하면 `true`, 그렇지 않으면 `false`
      */
@@ -132,7 +132,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 제공된 함수의 조건과 일치하는 첫 번째 요소의 인덱스를 반환합니다.
      * 
-     * @param callbackfn - 콜백 함수, (elem: T, index: number, list: T[]) => boolean
+     * @param callbackfn - 검사할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
      * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
      * @returns  조건을 만족하는 첫 번째 요소의 인덱스, 찾지 못한 경우 `-1`
      */

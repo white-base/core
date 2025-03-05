@@ -6,11 +6,11 @@ import ICollection from "./i-collection";
 declare interface IArrayCollection<T> extends ICollection<T> {
 
     /**
-     * 요소를 지정위치에 추가합니다.
+     * 요소를 지정한 위치에 추가합니다.
      * 
      * @param index - 추가할 위치
      * @param elem - 추가할 요소
-     * @returns 추가 여부
+     * @returns 요소 추가 성공 여부
      */
     insertAt(index: number, elem: T): boolean;
 }

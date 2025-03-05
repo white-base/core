@@ -1,5 +1,5 @@
 /**
- * 유틸리티 함수를 제공합니다.
+ * 유틸리티 모듈입니다.
  */
 declare namespace Util {
 
@@ -29,7 +29,7 @@ declare namespace Util {
     function deepCopy(source: object): object;
 
     /**
-     * 지정된 생성자가 부모 생성자를 상속하도록 설정합니다.
+     * 지정된 생성자가 부모 생성자를 상속받도록 설정합니다. 
      * 
      * @param ctor - 생성자 함수 또는 객체
      * @param superCtor - 부모 생성자 함수 또는 객체
@@ -37,11 +37,10 @@ declare namespace Util {
     function inherits(ctor: Function, superCtor: Function): void;
 
     /**
-     * 객체가 지정된 인터페이스를 구현하는지 검사합니다.  
-     * `ctor`로 생성된 `obj` 객체가 `interfaces`에서 제공된 인터페이스를 구현하는지 확인합니다.  
-     * 
-     * `ctor._KIND`가 `'Interface'`인 경우 `allowType()`을 사용하여 검사합니다.  
-     * 그렇지 않은 경우 `matchType()`을 사용하여 검사합니다.  
+     * 객체가 지정된 인터페이스를 구현하는지 확인합니다.  
+     * `ctor`로 생성된 `obj` 객체가 `interfaces`에서 제공하는 인터페이스를 구현하는지 확인합니다.  
+     * `ctor._KIND`가 `'Interface'`인 경우 `allowType()`을 사용하여 확인합니다.  
+     * 그 외의 경우 `matchType()`을 사용하여 확인합니다.  
      * 
      * @param ctor - 검사할 생성자
      * @param obj - 검사 대상 객체

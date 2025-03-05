@@ -4,17 +4,17 @@
 declare class EventEmitter {
 
     /**
-     * 이벤트를 저장하는 내부 객체입니다.
+     * 등록된 이벤트를 저장하는 내부 객체입니다.  
      */
     $storage: object;
 
     /**
-     * 전체 이벤트명 반환합니다.
+     * 등록된 이벤트명을 저장하는 배열입니다. 
      */
     _list: string[];
 
     /**
-     * 콘솔 로그 출력 여부를 결정합니다.
+     * 등록된 이벤트명을 저장하는 배열입니다. 
      */
     isLog: boolean;
 
@@ -91,9 +91,9 @@ declare class EventEmitter {
     removeListener(event: string, listener: (...args: any[]) => void): void;
 
     /**
-     * 전체 이벤트 또는 지정한 이벤트에 등록된 이벤트명과 리스너를 모두 제거합니다.
+     * 모든 이벤트 또는 특정 이벤트에 등록된 리스너를 모두 제거합니다.
      * 
-     * @param event - 이벤트명
+     * @param event -  제거할 이벤트명 (생략 시 모든 이벤트 제거)
      * 
      *  @example
      * function onQux(data) {
@@ -114,10 +114,10 @@ declare class EventEmitter {
     removeAllListeners(event?: string): void;
 
     /**
-     * 이벤트명으로 등록된 리스너(함수)를 실행합니다.
+     * 등록된 이벤트의 리스너(함수)를 실행합니다. 
      * 
      * @param event - 이벤트명
-     * @returns true: 리스너가 호출 성공, false: 실패, undefined: 리스너 없음
+     * @returns `true` 리스너 실행 성공, `false` 실행 실패, `undefined` 리스너 없음
      * 
      * @example
      * function onFoo(data) {

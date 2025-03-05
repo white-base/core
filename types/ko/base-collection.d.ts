@@ -4,8 +4,8 @@ import IList from "./i-list";
 import MetaObject from "./meta-object";
 
 /**
- * 기본 컬렉션 클래스입니다.  
- * 모든 컬렉션의 최상위 클래스 역할을 합니다.  
+ * `BaseCollection` 클래스는 `MetaObject`을 상속하며 `ICollection`, `IList` 인터페이스를 구현합니다.  
+ * 이 클래스는 모든 컬렉션의 최상위 클래스 역할을 합니다.  
  * 
  * @example
  * class MyCollection extends BaseCollection {
@@ -81,8 +81,8 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     /**
      * 컬렉션에 요소를 추가하기 전에 호출되는 이벤트 핸들러입니다.
      * 
-     * @param elem 추가할 요소의 인덱스
-     * @param index 추가할 요소
+     * @param elem 추가할 요소
+     * @param index 추가할 요소의 인덱스
      * @param collection 현재 컬렉션 객체
      * @returns `false`를 반환하면 변경이 중단되고, 반환값이 없거나 `true`이면 변경이 계속 진행됩니다.
      */
@@ -92,7 +92,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소가 추가된 후 호출되는 이벤트 핸들러입니다.
      * 
      * @param elem 추가된 요소
-     * @param index 추가된 인덱스
+     * @param index 추가된 요소의 인덱스
      * @param collection 현재 컬렉션 객체
      */
     onAdded: (elem: T, index: number, collection: object) => void;
@@ -101,7 +101,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소를 제거하기 전에 호출되는 이벤트 핸들러입니다.
      * 
      * @param elem 제거될 요소
-     * @param index 제거될 인덱스
+     * @param index 제거될 요소의 인덱스
      * @param collection 현재 컬렉션 객체
      * @returns `false`를 반환하면 변경이 중단되고, 반환값이 없거나 `true`이면 변경이 계속 진행됩니다.
      */
@@ -111,7 +111,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소가 제거된 후 호출되는 이벤트 핸들러입니다.
      * 
      * @param elem 제거된 요소
-     * @param index 제거된 인덱스
+     * @param index 제거된 요소의 인덱스
      * @param collection 현재 컬렉션 객체
      */
     onRemoved: (elem: T, index: number, collection: object) => void;
@@ -164,7 +164,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소를 추가하기 전에 실행되는 내부 메서드입니다.
      * 
      * @param elem 추가될 요소
-     * @param index 요소가 추가될 인덱스
+     * @param index 요소가 추가될 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
     _onAdd(elem: T, index: number): boolean | undefined;
@@ -173,7 +173,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소가 추가된 후 실행되는 내부 메서드입니다.
      * 
      * @param elem 추가된 요소
-     * @param index 요소가 추가된 인덱스
+     * @param index 요소가 추가된 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
     _onAdded(elem: T, index: number): boolean | undefined;
@@ -182,7 +182,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소를 제거하기 전에 실행되는 내부 메서드입니다.
      * 
      * @param elem 제거될 요소
-     * @param index 요소가 제거될 인덱스
+     * @param index 요소가 제거될 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
     _onRemove(elem: T, index: number): boolean | undefined;
@@ -191,7 +191,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소가 제거된 후 실행되는 내부 메서드입니다.
      * 
      * @param elem 제거된 요소
-     * @param index 요소가 제거된 인덱스
+     * @param index 요소가 제거된 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
     _onRemoved(elem: T, index: number): boolean | undefined;
@@ -215,7 +215,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 
      * @param nextValue 변경될 새로운 값
      * @param prevValue 기존 값
-     * @param index 변경될 요소의 인덱스
+     * @param index 변경될 요소의 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
     _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
@@ -225,7 +225,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 
      * @param nextValue 변경된 새로운 값
      * @param prevValue 기존 값
-     * @param index 변경된 요소의 인덱스
+     * @param index 변경된 요소의 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
     _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
@@ -233,8 +233,8 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     /**
      * 특정 인덱스의 속성 디스크립터를 설정하는 내부 메서드입니다.
      * 
-     * @param index 속성을 지정할 인덱스
-     * @param isEnumerable 속성이 열거 가능(enumerable)한지 여부
+     * @param index 속성을 지정할 위치
+     * @param isEnumerable 속성이 열거 가능한지 여부
      */
     _getPropDescriptor(index: number, isEnumerable: boolean): void;
 
@@ -269,7 +269,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소를 컬렉션에서 제거합니다.
      * 
      * @param elem - 제거할 요소
-     * @returns 제거한 요소의 인덱스. 요소가 존재하지 않으면 -1
+     * @returns 제거한 요소의 인덱스. 요소가 존재하지 않으면 -1 반환
      */
     remove(elem: T): number;
 
@@ -277,7 +277,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 지정된 위치의 요소를 제거합니다.
      * 
      * @param index - 제거할 위치
-     * @returns 처리 결과
+     * @returns 요소 제거 성공 여부
      */
     removeAt(index: number): boolean;
 
@@ -285,7 +285,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 특정 요소가 컬렉션에 존재하는지 확인합니다.
      * 
      * @param elem - 확인할 요소
-     * @returns 존재 여부
+     * @returns 요소 존재 여부
      */
     contains(elem: T): boolean;
 
@@ -293,7 +293,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 요소의 인덱스를 반환합니다.
      * 
      * @param elem - 검색할 요소
-     * @returns 요소의 인덱스 (없으면 -1)
+     * @returns 요소의 인덱스, 요소가 없으면 -1 반환
      */
     indexOf(elem: T): number;
 

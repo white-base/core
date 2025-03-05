@@ -3,7 +3,7 @@ import MetaObject from "./meta-object";
 import { RefObject, NsObject, SetObject } from "./T";
 
 /**
- * `MetaRegistry` 클래스는 메타 객체의 등록과 관리를 담당하는 클래스입니다.
+ * `MetaRegistry`는 메타 객체의 등록과 관리를 담당하는 클래스입니다.
  */
 declare class MetaRegistry {
     
@@ -13,7 +13,7 @@ declare class MetaRegistry {
     static _list: any[];
 
     /**
-     * 현재 등록된 메타 객체의 총 갯수입니다.
+     * 현재 등록된 메타 객체의 총 개수입니다. 
      */
     static get count(): number;
 
@@ -41,7 +41,7 @@ declare class MetaRegistry {
      * 등록소에서 메타 객체를 해제합니다.
      * 
      * @param metaOrGuid - 메타 객체 또는 GUID 문자열
-     * @returns 성공 여부
+     * @returns 제거 성공 여부 (`true` 또는 `false`)
      */
     static release(metaOrGuid: MetaObject | string): boolean;
 
@@ -49,7 +49,7 @@ declare class MetaRegistry {
      * 등록소에 메타 객체가 있는지 여부를 확인합니다.
      * 
      * @param metaOrGuid - GUID 타입의 객체 또는 GUID 문자열
-     * @returns 존재 여부
+     * @returns 존재 여부 (`true` 또는 `false`)
      */
     static has(metaOrGuid: MetaObject | object | string): boolean;
 
@@ -57,31 +57,32 @@ declare class MetaRegistry {
      * 등록소에서 메타 객체를 찾습니다.
      * 
      * @param metaOrGuid - GUID 타입의 객체 또는 GUID 문자열
-     * @returns 찾은 메타 객체 또는 `undefined`를 반환
+     * @returns 찾은 메타 객체, 찾지 못한 경우 `undefined`
      */
     static find(metaOrGuid: MetaObject | object | string): MetaObject | undefined;
 
     /**
-     * 매타 객체 여부를 확인합니다.
+     * 메타 객체 여부를 확인합니다.
      * 
      * @param target - 대상 객체
-     * @returns 존재 여부
+     * @returns 메타 객체 여부 (`true` 또는 `false`)
      */
     static isMetaObject(target: unknown): boolean;
 
     /**
-     * GUID 객체에 대한 메타 객체를 생성합니다.
+     * GUID 객체의 메타 객체를 생성합니다. 
      * 
      * @param guidObj - GUID 타입의 객체
      * @param guidRootObj - 초기 GUID 리터럴 객체 
+     * @returns 생성된 메타 객체
      */
     static createMetaObject(guidObj: object, guidRootObj?: object): MetaObject;
 
     /**
-     * GUID 객체에 대한 참조 객체를 생성합니다.
+     * GUID 객체의 참조 객체를 생성합니다. 
      * 
      * @param metaObj - 메타 객체
-     * @returns 생성된 참조 객체를 반환합니다. { $ref: 'guid값' }
+     * @returns 생성된 참조 객체 (`{ $ref: 'guid값' }`)
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -95,7 +96,7 @@ declare class MetaRegistry {
      * 함수를 네임스페이스에 등록하고 참조 객체를 생성합니다.
      * 
      * @param target - 함수 또는 생성자
-     * @returns 생성된 네임스페이스 참조 객체 (`NsObject`)를 반환합니다. `{ $ns: 'Meta.MetaElement' }`
+     * @returns 생성된 네임스페이스 참조 객체 (`{ $ns: 'Meta.MetaElement' }`)
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -111,7 +112,7 @@ declare class MetaRegistry {
      * 
      * @param guidObj - GUID 타입의 객체
      * @param metaObj - 메타 객체
-     * @returns 설정된 객체를 반환합니다.
+     * @returns 설정된 객체
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -126,10 +127,10 @@ declare class MetaRegistry {
      * 1. 객체의 GUID 값 중복 여부 확인  
      * 2. 객체의 '$ref' 값 존재 여부 확인  
      * 3. 객체의 '$ns' 값 존재 여부 확인  
-     * 4. 객체의 '_key'와 '_elem' 갯수 검사  
+     * 4. 객체의 '_key'와 '_elem' 개수 검사  
      * 
      * @param guidObj - 검사할 GUID 객체
-     * @returns 검사 결과를 반환합니다.
+     * @returns 검사 결과 (`true` 또는 `false`)
      */
     static validObject(guidObj: object): boolean;
 
@@ -137,7 +138,7 @@ declare class MetaRegistry {
      * 대상 객체가 GUID 객체인지 여부를 확인합니다.
      * 
      * @param target - 확인할 대상 객체
-     * @returns GUID 객체 여부를 반환합니다.
+     * @returns GUID 객체 여부 (`true` 또는 `false`)
      */
     static isGuidObject(target: object): boolean;
 
@@ -146,7 +147,7 @@ declare class MetaRegistry {
      * 
      * @param guidObj - 확인할 GUID 객체 또는 GUID 문자열
      * @param guidRootObj - 조회 대상의 GUID 리터럴 객체 
-     * @returns 포함 여부를 반환
+     * @returns 포함 여부 (`true` 또는 `false`)
      */
     static hasGuidObject(guidObj: object | string, guidRootObj: object | object[]): boolean;
 
@@ -155,7 +156,7 @@ declare class MetaRegistry {
      * 참조 타입은 `$ref`와 `$ns`입니다.  
      * 
      * @param guidObj - 확인할 GUID 객체
-     * @returns 포함 여부를 반환
+     * @returns 포함 여부 (`true` 또는 `false`)
      */
     static hasRefer(guidObj: object): boolean;
 
@@ -169,8 +170,8 @@ declare class MetaRegistry {
     static findSetObject(guidObj: object | string, guidRootObj: object): MetaObject;
 
     /**
-     * GUID 객체의 참조 요소 값을 실제 객체 참조로 변환합니다.
-     * 변환 대상: `$ns`는 `[Object Object]`로 변환됩니다.
+     * GUID 객체의 참조 요소 값을 실제 객체 참조로 변환합니다.  
+     * 변환 대상: `$ns`는 `[Object Object]`로 변환됩니다.  
      * 
      * @param guidObj - 변환할 GUID 객체
      * @returns 변환된 메타 객체
@@ -179,7 +180,7 @@ declare class MetaRegistry {
 
     /**
      * 지정된 네임스페이스에 생성자 또는 객체를 등록합니다.  
-     * 중복 검사를 수행한 후 등록하며, 기본 제공 함수(Array, String, Number 등)는 내부에 저장하지 않습니다.
+     * 중복 검사를 수행한 후 등록하며, 기본 제공 함수(Array, String, Number 등)는 저장하지 않습니다. 
      * 
      * @param target - 등록할 대상(클래스 생성자 또는 객체)
      * @param namespace - 네임스페이스 이름 (점 `.`으로 구분)
@@ -188,15 +189,15 @@ declare class MetaRegistry {
     static registerClass(target: Function | object, namespace: string, classOrFuncName?: string): void;
 
     /**
-     * 네임스페이스(ns)에서 등록된 항목을 해제합니다.
+     * 네임스페이스에서 등록된 항목을 해제합니다.
      * 
      * @param nsPath - 네임스페이스 전체 경로 (`string`)
-     * @returns 삭제 성공 여부
+     * @returns 삭제 성공 여부 (`true` 또는 `false`)
      */
     static releaseClass(nsPath: string): boolean;
 
     /**
-     * 네임스페이스(ns)에서 지정된 생성자 또는 객체를 찾아 전체 경로를 반환합니다.
+     * 네임스페이스에서 지정된 생성자 또는 객체를 찾아 전체 경로를 반환합니다.
      * 
      * @param target - 생성자 또는 객체
      * @returns 네임스페이스 전체 경로, 찾지 못한 경우 `undefined`
@@ -204,7 +205,7 @@ declare class MetaRegistry {
     static findClass(target: Function): string | undefined;
 
     /**
-     * 네임스페이스(ns)에서 지정된 전체 경로에 해당하는 생성자 또는 객체를 반환합니다.
+     * 네임스페이스에서 지정된 전체 경로에 해당하는 생성자 또는 객체를 반환합니다.
      * 
      * @param nsPath - 네임스페이스 전체 경로
      * @returns 해당하는 객체 또는 생성자, 찾지 못한 경우 `undefined`
