@@ -6,30 +6,6 @@ import MetaObject from "./meta-object";
 /**
  * `BaseCollection` 클래스는 `MetaObject`을 상속하며 `ICollection`, `IList` 인터페이스를 구현합니다.  
  * 이 클래스는 모든 컬렉션의 최상위 클래스 역할을 합니다.  
- * 
- * @example
- * class MyCollection extends BaseCollection {
- *     constructor(owner: object) {
- *         super(owner);
- *     }
- * 
- *     add(element: any) {
- *         // 요소 추가 로직
- *     }
- * 
- *     clear() {
- *         // 컬렉션 초기화 로직
- *     }
- * 
- *     _remove(pos: number): boolean {
- *         // 요소 삭제 로직
- *         return true;
- *     }
- * }
- * 
- * const myCollection = new MyCollection(someOwner);
- * myCollection.add(someElement);
- * console.log(myCollection.count);
  */
 declare abstract class BaseCollection<T> extends MetaObject implements ICollection<T>, IList<T> {
 

@@ -16,7 +16,7 @@
       },
       "default": {
         "require": "./dist/node/logic-core.cjs",
-        "default": "./index. js"
+        "default": "./index.js"
       }
     }
   },
@@ -83,5 +83,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "os-locale": "^6.0.2"
   }
 }

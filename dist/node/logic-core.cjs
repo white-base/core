@@ -1,7 +1,7 @@
 /*! logic Core v1.0.5 Copyright (c) 2025 logic and contributors */
 'use strict';
 
-/**** message-code.js | _L.messageCode.core ****/
+/**** message-code.js | messageCode ****/
 
 //==============================================================
 // 1. import module
@@ -286,7 +286,7 @@ const messageCode = {
         EL03300: '',
         // private function, proterty
         EL03310: '',
-        EL03311: 'NamespaceManager.isOverlap can only be of type \'boolean\. type is Overlap = $1',
+        EL03311: 'NamespaceManager.allowOverlap can only be of type \'boolean\. type is Overlap = $1',
         EL03312: '_getArray(ns); ns is not a valid Namespace Name Rule. ns = $1',
         EL03313: '_getArray(ns); ns type is \'string\', \'array<string>\' type. typeofns = $1',
         EL03314: '_getArray(ns); ns[$1] is not of type \'string\'. typeofns[$1] = $2',
@@ -299,7 +299,7 @@ const messageCode = {
         // add, del 
         EL03330: '',
         EL03331: 'add(fullName,lem); [$1] is not a valid name rule',
-        EL03332: 'add(fullName,lem);lem already registered. Allow duplication [this.isOverlap = \'true\'',
+        EL03332: 'add(fullName,lem);lem already registered. Allow duplication [this.allowOverlap = \'true\'',
         EL03333: 'add(fullName, element); element registration failed in namespace',
         EL03334: 'del(fullName); Failed to delete element in Namespace',
         // getPath, output, load
@@ -346,7 +346,7 @@ const messageCode = {
         EL04228: 'add(name, value, desc); name = \'$1\' is duplicated with an existing name',
         EL04229: 'add(name, value, desc); addition failed. name = \'$1\', value = \'$2\'',
         EL0422A: 'indexToKey(idx); idx is not of type \'number\. typeof idx = $1',
-        EL0422B: 'exist(key); key is not of type \'string\' (length > 0) type of key = $1',
+        EL0422B: 'exists(key); key is not of type \'string\' (length > 0) type of key = $1',
         //
         EL04300: '',
         // collection-transaction.js
@@ -630,7 +630,7 @@ const messageCode = {
         EL03300: '',
         // private function, proterty
         EL03310: '',
-        EL03311: 'NamespaceManager.isOverlap 은  \'boolean\' 타입만 가능합니다. typeof isOverlap = $1',
+        EL03311: 'NamespaceManager.allowOverlap 은  \'boolean\' 타입만 가능합니다. typeof allowOverlap = $1',
         EL03312: '_getArray(ns); ns 는 유효한 네임스페이스 이름 규칙이 아닙니다. ns = $1',
         EL03313: '_getArray(ns); ns 타입은 \'string\', \'array<string>\' 타입만 가능합니다. typeof ns = $1',
         EL03314: '_getArray(ns); ns[$1] 는 \'string\' 타입이 아닙니다. typeof ns[$1] = $2',
@@ -643,7 +643,7 @@ const messageCode = {
         // add, del 
         EL03330: '',
         EL03331: 'add(fullName, elem); [$1] 는 유효한 이름 규칙이 아닙니다.',
-        EL03332: 'add(fullName, elem); elem 이 이미 등록되었습니다. 중복허용 [this.isOverlap = \'true\']',
+        EL03332: 'add(fullName, elem); elem 이 이미 등록되었습니다. 중복허용 [this.allowOverlap = \'true\']',
         EL03333: 'add(fullName, elem); 네임스페이스에 요소 등록이 실패하였습니다.',
         EL03334: 'del(fullName); 네임스페이스에 요소 삭제가 실패하였습니다.',
         // getPath, output, load
@@ -690,7 +690,7 @@ const messageCode = {
         EL04228: 'add(name, value, desc); name = \'$1\' 이 기존 이름과 중복이 발생했습니다.',
         EL04229: 'add(name, value, desc); 추가가 실패하였습니다. name = \'$1\', value = \'$2\'',
         EL0422A: 'indexToKey(idx); idx 이 \'number\' 타입이 아닙니다. typeof idx = $1',
-        EL0422B: 'exist(key); key 이 \'string\' 타입이 아닙니다.(length > 0) typeof key = $1',
+        EL0422B: 'exists(key); key 이 \'string\' 타입이 아닙니다.(length > 0) typeof key = $1',
         //
         EL04300: '',
         // collection-transaction.js
@@ -706,7 +706,7 @@ const messageCode = {
     }
 };
 
-/**** message.js | _L.Common.Message ****/
+/**** message.js | Message ****/
 
 //==============================================================
 // 2. module dependency check
@@ -715,7 +715,6 @@ const messageCode = {
 /**
  * @class Message
  * @description 메시지 코드 관리 클래스 (static)
- * @namespace _L.Common.Message
  */
 var Message = (function () {
     /**
@@ -758,9 +757,9 @@ var Message = (function () {
     
     /**
      * 메시지 코드 스토리지
-     * @member {string} _L.Common.Message#$storage
+     * @member {string} Message#$storage
      */
-    Object.defineProperty(Message, "$storage", {
+    Object.defineProperty(Message, '$storage', {
         get: function() { 
             // if (!$storage) {
             //     var objs = [];
@@ -782,9 +781,9 @@ var Message = (function () {
 
     /**
      * 메세지 언어 
-     * @member {string} _L.Common.Message#lang
+     * @member {string} Message#lang
      */
-    Object.defineProperty(Message, "lang", {
+    Object.defineProperty(Message, 'lang', {
         get: function() { return lang; },
         set: function(val) { 
             if (!Message.$storage[val]) throw new Error('The ['+ val +'] language does not exist.');
@@ -796,7 +795,7 @@ var Message = (function () {
 
     /**
      * 긴 메세지 여부
-     * @member {string} _L.Common.Message#isLong
+     * @member {string} Message#isLong
      */
     // Object.defineProperty(Message, "isLong", {
     //     get: function() { return isLong; },
@@ -851,9 +850,9 @@ var Message = (function () {
                 var num = Number(result[i].replace('$', ''));
                 if (num > max) max = num;
             }
-            for (var i = 1; i <= max; i++) {
-                var val = arr[i - 1];
-                msg = msg.replace(new RegExp('\\$'+ i, 'g'), val);
+            for (var j = 1; j <= max; j++) {
+                var val = arr[j - 1];
+                msg = msg.replace(new RegExp('\\$'+ j, 'g'), val);
             }
             return msg;
         }
@@ -903,7 +902,7 @@ var Message = (function () {
 
 Message.$storage = messageCode;
 
-/**** extend-error.js | _L.Common.ExtendError ****/
+/**** extend-error.js | ExtendError ****/
 
 
 //==============================================================Á
@@ -913,28 +912,15 @@ Message.$storage = messageCode;
 var OLD_ENV$2 = globalThis.OLD_ENV ? globalThis.OLD_ENV : false;    // 커버리지 테스트 역활
 
 const ExtendError = (function () {
-    /**
-     * @overload
-     * @param {string} p_msg 사용자 메세지 내용
-     * @param {ExtendError | object} p_prop  상위 Error 객체
-     * @returns {Error}
-     */
 
     /**
-     * @overload
-     * @param {Regexp} p_msg 메세지 코드
-     * @param {ExtendError | object} p_prop  메세지 코드 전달 파라메터
-     * @param {array<string>} p_codeVal  메세지 코드 전달 파라메터
-     * @returns {Error}
-     */
-
-    /**
-     * 확장오류를 생성합니다.  
+     * 확장오류를 생성합니다...
      * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
-     * @constructs _L.Common.ExtendError
+     * @constructs ExtendError
      * @param {string | RegExp} p_msg  메세지코드 또는 메세지
-     * @param {ExtendError | object} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
+     * @param {ExtendError | object | null} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
      * @param {Array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
+     * @kor 메세지코드 또는 메세지를 입력하여 확장 오류를 생성합니다.
      * @example
      * new ExtendError({code:'', ctx: []})
      * new ExtendError(/E0011/, [''])
@@ -970,21 +956,19 @@ const ExtendError = (function () {
         
         /**
          * 이전에 발생한 message 큐
-         * @member {array<string>} _L.Common.ExtendError#queue
+         * @member {string[]} ExtendError#queue
          */
         // if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
         // else _instance.queue = [];
         _instance.queue = _queue;
+        _instance.queue.push(_msg);
 
         /**
-         * 속성타입 오류 메세지
-         * @member {object} _L.Common.ExtendError#prop
+         * 속성 타입 오류 메시지입니다.
+         * @member {object} ExtendError#prop
          */
         if (_prop) _instance.prop = _prop;
         else _instance.prop = {};
-
-        _instance.queue.push(_msg);
-
 
         if (Error.captureStackTrace && !OLD_ENV$2) {
             Error.captureStackTrace(_instance, ExtendError);
@@ -1008,7 +992,7 @@ const ExtendError = (function () {
             var queue_cnt = queue.length;
             for (var i = queue_cnt; i > 0; i--) {
                 var mark = '';
-                for (var ii = i; ii <= queue_cnt; ii++) { mark += '#'; }
+                for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
                 msg += '' + mark + ' '+ queue[i - 1] + '\n';
             }
             return msg;
@@ -1043,7 +1027,7 @@ const ExtendError = (function () {
 
 }());
 
-/**** util-type.js _L.Common.Type.- ****/
+/**** util-type.js Type ****/
 //==============================================================
 // 1. import module
 
@@ -1199,7 +1183,7 @@ function _parseFunc(funBody) {
     var regFunc1 = /(?:function\s)?\(([\[\]{:}\s\w,]*)\)\s*(?:=>)?\s*{(?:\s*return\s+|\s*)?([\[\]{:}\s\w,]*);?\s*}/;
     var regFunc2 = /\(?([\[\]{:}\s\w,]*)\)?\s*(?:=>)\s*{?(?:\s*return\s+|\s*)?([\[\]\s\w,]*);?\s*}?/;
     
-    var arrFunc, arrParam;
+    var arrFunc;
     var result = { params: [], return: undefined };
     var arrParam = [];
     var arrRetrun;
@@ -1306,7 +1290,6 @@ function _hasKindArray(name) {
 
 /**
  * 전체 프로퍼티를 조회합니다.
- * @memberof _L.Common.Type
  * @param {object} obj  Object를 제외한 프로퍼티 객체 리턴
  * @param {boolean?} hasObj Object를 포함 여부
  * @returns {array<string>}  
@@ -1326,7 +1309,6 @@ function getAllProperties(obj, hasObj) {
 
 /**
  * 객체를 비교합니다. (proto 제외)
- * @memberof _L.Common.Type
  * @param {any} obj1 
  * @param {any} obj2 
  * @returns {boolean}
@@ -1368,7 +1350,6 @@ function getAllProperties(obj, hasObj) {
 //         return false;
 //     }
 // }
-
 function deepEqual(obj1, obj2) {
     // 두 객체가 동일한 참조를 가지면 true를 반환
     if (obj1 === obj2) return true;
@@ -1401,8 +1382,8 @@ function deepEqual(obj1, obj2) {
 
     if (keys1.length !== keys2.length) return false;
 
-    for (var i = 0; i < keys1.length; i++) {
-        var key = keys1[i];
+    for (var j = 0; j < keys1.length; j++) {
+        var key = keys1[j];
         if (keys2.indexOf(key) === -1 || !deepEqual(obj1[key], obj2[key])) return false;
     }
 
@@ -1413,7 +1394,6 @@ Type.deepEqual = deepEqual;
 /**
  * 함수 타입을 가져옵니다. (_UNION 포함)  
  * ctor 자신부터 리턴 배열에 push
- * @memberof _L.Common.Type
  * @param {function} ctor 생성자
  * @param {boolean} [hasUnion= true] _UNION 포함 여부
  * @returns {array<function>} 
@@ -1441,9 +1421,9 @@ function getTypes(ctor, hasUnion) {
         }
     }
 
-    for (var i = 0; i < arr.length; i++) {
-        var idx = tempArr.indexOf(arr[i]);
-        if (idx < 0) tempArr.push(arr[i]);
+    for (var j = 0; j < arr.length; j++) {
+        var idx = tempArr.indexOf(arr[j]);
+        if (idx < 0) tempArr.push(arr[j]);
     }
     return tempArr;
 
@@ -1458,7 +1438,6 @@ Type.getTypes = getTypes;
 
 /**
  * 함수 타입의 prototype(상속) 타입 여부를 검사합니다.
- * @memberof _L.Common.Type
  * @param {function} ctor 생성자
  * @param {function | string} target 검사 대상
  * @returns {boolean}
@@ -1482,7 +1461,6 @@ Type.isProtoChain = isProtoChain;
 
 /**
  * 함수 타입의 prototype(상속) 또는 _UNION 타입 여부를 검사합니다.
- * @memberof _L.Common.Type
  * @param {function} ctor 생성자
  * @param {function | string} target 검사 대상
  * @returns {boolean}
@@ -1506,7 +1484,6 @@ Type.hasType = hasType;
 
 /**
  * 확장타입 객체를 얻습니다. (하위 타입 포함)  
- * @memberof _L.Common.Type
  * @param {*} target 
  * @returns {object}
  * @example
@@ -1545,8 +1522,8 @@ function typeObject(target) {
         }
     }
     if (obj['$type'] === 'function') {
-        for(var i = 0; i < obj['params'].length; i++) {
-            obj['params'][i] = typeObject(typeObj['params'][i]);
+        for(var j = 0; j < obj['params'].length; j++) {
+            obj['params'][j] = typeObject(typeObj['params'][j]);
         }
         if (typeObj['return']) obj['return'] = typeObject(typeObj['return']);
     }
@@ -1559,12 +1536,12 @@ function typeObject(target) {
     }
     if (obj['$type'] === 'union') {
         obj['_prop'] = {};
-        var temp = typeObj['ref'] || typeObj['_prop'];
-        var list = getAllProperties(temp);
-        for (var i = 0; i < list.length; i++) {
-            var key = list[i];
+        var temp2 = typeObj['ref'] || typeObj['_prop'];
+        var list = getAllProperties(temp2);
+        for (var k = 0; k < list.length; k++) {
+            var key = list[k];
             if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
-            obj['_prop'][key] = typeObject(temp[key]);
+            obj['_prop'][key] = typeObject(temp2[key]);
         }
     }
     return obj;
@@ -1572,7 +1549,6 @@ function typeObject(target) {
 
 /**
  * 확장타입명을 얻습니다.
- * @memberof _L.Common.Type
  * @param {*} target 
  * @returns {string}
  */
@@ -1582,7 +1558,6 @@ function typeOf(target) {
 
 /**
  * 확장타입을 얻는다.
- * @memberof _L.Common.Type
  * @param {any} target 대상타입
  * @returns {object} 
  * @example
@@ -1705,7 +1680,7 @@ function extendType(target) {
                 var funcType  = target['_TYPE'] ? target['_TYPE'] : _parseFunc(target.toString());
                 obj['params'] = funcType['params'];
                 obj['return'] = funcType['return'];
-            } catch (err) {
+            } catch (_err) {
                 obj['params'] = [];
             }
         }
@@ -1846,16 +1821,16 @@ function _execAllow(extType, tarType, opt, pathName) {
         }
 
         // element check
-        for (var i = 0; i < tType['list'].length; i++) {
+        for (var k = 0; k < tType['list'].length; k++) {
             var success = false;
-            for (var ii = 0; ii < eType['list'].length; ii++) {
+            for (var j = 0; j < eType['list'].length; j++) {
                 try {
                     if (success) break;
-                    if (extendType(tType['list'][i])['$type'] === 'choice' && extendType(eType['list'][ii])['$type'] !== 'choice' ) {
+                    if (extendType(tType['list'][k])['$type'] === 'choice' && extendType(eType['list'][j])['$type'] !== 'choice' ) {
                         var oriChoice = { $type: 'choice', kind: '_OPT_', list: eType['list'] };
-                        _execAllow(oriChoice, tType['list'][i], opt, pathName);
+                        _execAllow(oriChoice, tType['list'][k], opt, pathName);
                     } else {
-                        _execAllow(eType['list'][ii], tType['list'][i], opt, pathName);
+                        _execAllow(eType['list'][j], tType['list'][k], opt, pathName);
                     }
                     success = true;
                 } catch (error) {
@@ -1920,11 +1895,11 @@ function _execAllow(extType, tarType, opt, pathName) {
             if (eType['$type'] !== tType['$type'] || eType['kind'] !== tType['kind']) {
                 throw new ExtendError(/EL01228/, prop, []);
             }
-            for (var ii = 0; ii < eType['list'].length; ii++) {
-                if (!_isLiteral(eType['list'][ii])) throw new ExtendError(/EL01229/, prop, [ii, extendType(eType['list'][ii])]);
+            for (var i = 0; i < eType['list'].length; i++) {
+                if (!_isLiteral(eType['list'][i])) throw new ExtendError(/EL01229/, prop, [i, extendType(eType['list'][i])]);
             }
-            for (var ii = 0; ii < tType['list'].length; ii++) {
-                if (!_isLiteral(tType['list'][ii])) throw new ExtendError(/EL0122A/, prop, [ii, extendType(tType['list'][ii])]);
+            for (var j = 0; j < tType['list'].length; j++) {
+                if (!_isLiteral(tType['list'][j])) throw new ExtendError(/EL0122A/, prop, [j, extendType(tType['list'][j])]);
             }
 
         // _DEF_ (default)
@@ -1942,29 +1917,31 @@ function _execAllow(extType, tarType, opt, pathName) {
 
         // element check
         var arrTarget = (tType['kind']) ? tType['list'] : [tarType];
-        for (var i = 0; i < arrTarget.length; i++) {
+        for (var m = 0; m < arrTarget.length; m++) {
             var success = false;
-            for (var ii = 0; ii < eType['list'].length; ii++) {
+            for (var n = 0; n < eType['list'].length; n++) {
                 try {
                     if (success) continue;
-                    _execAllow(eType['list'][ii], arrTarget[i], opt, pathName);
+                    _execAllow(eType['list'][n], arrTarget[m], opt, pathName);
                     success = true;
                 } catch (error) {
                     continue;
                 }
             }
-            if (!success) throw new ExtendError(/EL0122F/, prop, [i, eType, extendType(arrTarget[i])['$type']]);
+            if (!success) throw new ExtendError(/EL0122F/, prop, [m, eType, extendType(arrTarget[m])['$type']]);
         }
     }
     
     function $classAllow() {
+        var oriObj;
+        var tarObj;
         if (tType['$type'] === 'class') {         // # class to class
             if (isProtoChain(tType['ref'], eType['ref'])) return;   // 1.proto check
             if (opt === 1) {
                 try {
                     // 생성비교
-                    var oriObj = new eType['ref']();
-                    var tarObj = new tType['ref']();
+                    oriObj = new eType['ref']();
+                    tarObj = new tType['ref']();
                     return _execAllow(oriObj, tarObj, opt, pathName);
                 } catch (error) {
                     throw new ExtendError(/EL01231/, error, []);
@@ -1976,7 +1953,7 @@ function _execAllow(extType, tarType, opt, pathName) {
             if (opt === 1) {
                 try {
                     // 생성비교
-                    var oriObj = new eType['ref']();
+                    oriObj = new eType['ref']();
                     return _execAllow(oriObj, tType['ref'], opt, pathName);
                 } catch (error) {
                     throw new ExtendError(/EL01233/, error, []);
@@ -2045,9 +2022,9 @@ function _execAllow(extType, tarType, opt, pathName) {
  * 타입을 검사하여 메세지를 리턴
  * @param {any} extType 검사할 타입 , extType 
  * @param {any} target 검사대상
- * @param {number} opt 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
- * @param {string?} pathName '' 공백시 성공
- * @returns {throw?}
+ * @param {number} [opt] 허용옵션 : 0 = 기본, 1 = 타입생성 비교 
+ * @param {string} [pathName] '' 공백시 성공
+ * @throws {ExtendError}
  */
 function _execMatch(extType, target, opt, pathName) {
     var eType = extendType(extType);
@@ -2153,12 +2130,12 @@ function _execMatch(extType, target, opt, pathName) {
         
 
         // element check
-        for (var i = 0; i < target.length; i++) {
-            var tar = target[i];
+        for (var k = 0; k < target.length; k++) {
+            var tar = target[k];
             var success = false;
-            for (var ii = 0; ii < eType['list'].length; ii++) {
+            for (var j = 0; j < eType['list'].length; j++) {
                 try {
-                    var elem = eType['list'][ii];
+                    var elem = eType['list'][j];
                     if (_isLiteral(elem)) {
                         if (_equalLiternal(elem, tar)) {
                             success = true;
@@ -2205,8 +2182,8 @@ function _execMatch(extType, target, opt, pathName) {
 
         // _EUN_ (enumeration)
         } else if (eType['kind'] === '_EUM_') {
-            for (var ii = 0; ii < eType['list'].length; ii++) {
-                if (!_isLiteral(eType['list'][ii])) throw new ExtendError(/EL01124/, prop, [ii, typeOf(eType['list'][ii])]);
+            for (var i = 0; i < eType['list'].length; i++) {
+                if (!_isLiteral(eType['list'][i])) throw new ExtendError(/EL01124/, prop, [i, typeOf(eType['list'][i])]);
             }
 
         // _DEF_ (default)
@@ -2268,9 +2245,9 @@ function _execMatch(extType, target, opt, pathName) {
         }
 
         // element check
-        for (var ii = 0; ii < eType['list'].length; ii++) {
+        for (var j = 0; j < eType['list'].length; j++) {
             try {
-                var elem = eType['list'][ii];
+                var elem = eType['list'][j];
                 if (_isLiteral(elem)) {
                     if (_equalLiternal(elem, target)) return;
                 } else {
@@ -2367,7 +2344,6 @@ function _execMatch(extType, target, opt, pathName) {
 }
 /**
  * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} tarType 검사 대상 타입
  * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -2383,7 +2359,6 @@ function allowType(extType, tarType, opt) {
 
 /**
  * 확장타입이 대상과 매치되는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상
  * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
@@ -2399,15 +2374,14 @@ function matchType(extType, target, opt) {
 
 /**
  * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상 타입
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+ * @param {number} opt 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
  * @returns {boolean} 검사 통과 여부
  */
-function isAllowType(extType, tarType, opt) {
+function isAllowType(extType, target, opt) {
     try {
-        _execAllow(extType, tarType, opt);
+        _execAllow(extType, target, opt);
     } catch (error) {
         return false;
     }
@@ -2416,10 +2390,9 @@ function isAllowType(extType, tarType, opt) {
 
 /**
  * 확장타입이 대상과 매치되는지 검사합니다.
- * @memberof _L.Common.Type
  * @param {any} extType 확장 타입
  * @param {any} target 검사 대상
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
+ * @param {number} [opt] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
  * @returns {boolean} 검사 통과 여부
  */
 function isMatchType(extType, target, opt) {
@@ -2431,7 +2404,7 @@ function isMatchType(extType, target, opt) {
     }
 }Type.isMatchType = isMatchType;
 
-/**** util.js | _L.Common.Util.- ****/
+/**** util.js | Util ****/
 //==============================================================
 // 1. import module
 
@@ -2483,7 +2456,6 @@ if (!Array.isArray || OLD_ENV) {
 /**
  * 배열의 깊이를 가져옵니다.  
  * REVIEW: 필요성 검토 필요!
- * @memberof _L.Common.Util
  * @param {array} p_elem 
  * @param {number} p_depts 
  * @returns {number} 
@@ -2503,7 +2475,6 @@ Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
 
 /**
  * guid 값을 생성합니다. (36자)
- * @memberof _L.Common.Util
  * @returns {string} 예> 'b806a5b5-75f7-a1ba-3736-17f56fb5d65a'
  */
 Util.createGuid = function createGuid() {
@@ -2516,7 +2487,6 @@ Util.createGuid = function createGuid() {
 
 /**
  * 객체를 깊은 복사를합니다. (proto제외)
- * @memberof _L.Common.Util
  * @param {object} p_target 대상 객체
  * @returns {object}
  */
@@ -2548,7 +2518,6 @@ Util.deepCopy = function deepCopy(p_target) {
 /**
  * superCtor 을 상속합니다.
  * @function
- * @memberof _L.Common.Util
  * @param {function | object} ctor 생성자 또는 생성 객체
  * @param {function | object} superCtor 상속 받을 부모 생성자 또는 객체
  */
@@ -2584,15 +2553,14 @@ Util.inherits = (function () {
 
 /**
  * ctor 로 생성한 obj 객체의 args<funtion>의 구현 여부를 검사합니다.
- * 종류(ctor._KIND)가 'inteface'이면 allowType(), 아니면 matchType()로 검사한다.
+ * 종류(ctor._KIND)가 'Interface' 타입이면 allowType(), 아니면 matchType()로 검사한다.
  * @name implements
  * @function
- * @memberof _L.Common.Util
  * @param {function} p_ctor 검사 대상 생성자
  * @param {object} p_obj 검사 대상 인스턴스 객체
  * @param {function?} args 인터페이스들, ctor._UNION 정적 속성으로 설정 가능
  */
-Util.implements = function(p_ctor, p_obj, args) {
+Util.implements = function(p_ctor, p_obj) {
     var _interface = [];
     var addCnt = 0;
 
@@ -2620,19 +2588,19 @@ Util.implements = function(p_ctor, p_obj, args) {
         } else throw new ExtendError(/EL01403/, null, [i - 2, typeof arguments[i]]);
     } 
 
-    for (var i = 0; i < p_ctor['_UNION'].length; i++) {
-        if (p_obj._interface.indexOf(p_ctor['_UNION'][i]) < 0) {    // 인터페이스 중복 검사 후 등록
-            p_obj._interface.push(p_ctor['_UNION'][i]);
+    for (var j = 0; j < p_ctor['_UNION'].length; j++) {
+        if (p_obj._interface.indexOf(p_ctor['_UNION'][j]) < 0) {    // 인터페이스 중복 검사 후 등록
+            p_obj._interface.push(p_ctor['_UNION'][j]);
             addCnt++;
         }
     }
 
     try {
         var beginIdx = p_obj._interface.length - addCnt;
-        for (var i = beginIdx; i < p_obj._interface.length; i++) {
+        for (var k = beginIdx; k < p_obj._interface.length; k++) {
             if (p_ctor['_KIND'] === 'interface') {  // 인터페이스 타입과 분리
-                Type.allowType(p_obj._interface[i], p_obj, 1);
-            } else Type.matchType(p_obj._interface[i], p_obj, 1);
+                Type.allowType(p_obj._interface[k], p_obj, 1);
+            } else Type.matchType(p_obj._interface[k], p_obj, 1);
         }
     } catch (error) { 
         throw new ExtendError(/EL01404/, error, [$typeName(p_obj), $typeName(p_obj._interface[i]), p_ctor['_KIND'] || 'class']);
@@ -2654,8 +2622,8 @@ Util.implements = function(p_ctor, p_obj, args) {
                 if (this._interface[i] === target) return true;  
             }
         } else if (typeof target === 'string') {
-            for (var i = 0; i < this._interface.length; i++) {
-                if (this._interface[i].name === target) return true;  
+            for (var j = 0; j < this._interface.length; j++) {
+                if (this._interface[j].name === target) return true;  
             }
         } else throw new ExtendError(/EL01405/, null, [typeof target]);
         return false;
@@ -2673,7 +2641,7 @@ Util.implements = function(p_ctor, p_obj, args) {
     }
 };
 
-/**** trans-queue.js | _L.Common.EventEmitter ****/
+/**** trans-queue.js | EventEmitter ****/
 //==============================================================
 // 1. import module
 
@@ -2687,7 +2655,7 @@ if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 var EventEmitter = (function () {
     /**
      * 이벤트 발행 클래스
-     * @constructs _L.Common.EventEmitter
+     * @constructs EventEmitter
      * @class 이벤트 발행 클래스
      */
     function EventEmitter() {
@@ -2698,7 +2666,7 @@ var EventEmitter = (function () {
         /**
          * 리스너 객체 스토리지
          * @private
-         * @member {object}  _L.Common.EventEmitter#$subscribers  
+         * @member {object}  EventEmitter#$subscribers  
          */
         Object.defineProperty(this, '$storage',
         {
@@ -2714,7 +2682,7 @@ var EventEmitter = (function () {
         /**
          * 전체 이벤트명
          * @protected
-         * @member {object}  _L.Common.EventEmitter#_list  
+         * @member {object}  EventEmitter#_list  
          */
         Object.defineProperty(this, '_list',
             {
@@ -2727,7 +2695,7 @@ var EventEmitter = (function () {
 
         /**
          * log 출력 여부
-         * @member {boolean}  _L.Common.EventEmitter#isLog  
+         * @member {boolean}  EventEmitter#isLog  
          */
         Object.defineProperty(this, 'isLog', 
         {
@@ -2741,7 +2709,7 @@ var EventEmitter = (function () {
     EventEmitter._NS = 'Common';    // namespace
 
     // local function
-    function _isString(obj) {    // 공백아닌 문자 여부
+    function _isString(obj) {    // 공백 아닌 문자 여부
         if (typeof obj === 'string' && obj.length > 0) return true;
         return false;
     }
@@ -2827,8 +2795,8 @@ var EventEmitter = (function () {
      */
     EventEmitter.prototype.emit = function(p_event) {
         var args = [].slice.call(arguments, 1);
-        var listeners;
-        var isListener = false;
+        var listeners = [];
+        // var isListener = false;
         var isReturn;
 
         if (!_isString(p_event)) throw new ExtendError(/EL01509/, null, [typeof p_event]);
@@ -2837,22 +2805,19 @@ var EventEmitter = (function () {
             listeners = this.$storage[p_event].slice();
             for (var i = 0; i < listeners.length; i++) {
                 isReturn = listeners[i].apply(this, args);
-                if (isReturn === false) return;
+                if (isReturn === false) return false;
             }
-            if (listeners.length > 0) isListener = true;
         }
+        if (this.isLog) console.log('['+p_event+'] 이벤트가 밸생하였습니다.');
 
-        if (this.isLog) {
-            console.log('['+p_event+'] 이벤트가 밸생하였습니다.');
-        }
-        return isListener;
+        return listeners.length > 0 ? true : undefined;
     };
 
     return EventEmitter;
     
 }());
 
-/**** i-object.js | _L.Interface.IObject ****/
+/**** i-object.js | IObject ****/
 //==============================================================
 // 1. import module    
 
@@ -2865,7 +2830,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IObject  = (function () {
     /**
      * 객체 인터페이스 입니다. (최상위)
-     * @constructs _L.Interface.IObject 
+     * @constructs IObject 
      * @interface
      */
     function IObject() {
@@ -2876,7 +2841,7 @@ var IObject  = (function () {
 
     /**
      * 객체 타입들을 얻습니다.
-     * @returns {array<any>}
+     * @returns {Function[]}
      * @abstract
      */
     IObject.prototype.getTypes  = function() {
@@ -2906,7 +2871,7 @@ var IObject  = (function () {
     
 }());
 
-/**** i-marshal.js | _L.Interface.IMarshal ****/
+/**** i-marshal.js | IMarshal ****/
 //==============================================================
 // 1. import module
 
@@ -2919,20 +2884,19 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IMarshal  = (function () {
     /**
      * 객체 통제 인터페이스 입니다.
-     * @constructs _L.Interface.IMarshal
      * @interface
      */
     function IMarshal() {
 
         /**
          * 객체의 고유 식별자
-         * @member {string} _L.Interface.IMarshal#_guid
+         * @member {string} IMarshal#_guid
          */
         this._guid = String;
 
         /**
          * 객체의 타입
-         * @member {string} _L.Interface.IMarshal#_type REVIEW:
+         * @member {string} IMarshal#_type REVIEW:
          */
         this._type = [['_req_', Function, {$type: 'class'} ]];
     }
@@ -2960,7 +2924,7 @@ var IMarshal  = (function () {
     
 }());
 
-/**** i-colleciton.js | _L.Interface.ICollection ****/
+/**** i-collection.js | ICollection ****/
 //==============================================================
 // 1. import module
 
@@ -2974,7 +2938,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var ICollection  = (function () {
     /**
      * 컬렉션 인터페이스 입니다.
-     * @constructs _L.Interface.ICollection
+     * @constructs ICollection
      * @interface
      */
     function ICollection() {
@@ -3021,7 +2985,7 @@ var ICollection  = (function () {
     
 }());
 
-/**** i-colleciton-property.js | _L.Interface.IPropertyCollection ****/
+/**** i-collection-property.js | IPropertyCollection ****/
 //==============================================================
 // 1. import module
 
@@ -3036,9 +3000,9 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 var IPropertyCollection  = (function (_super) {
     /**
      * 프로퍼티 컬렉션 인터페이스 입니다.
-     * @constructs _L.Interface.IPropertyCollection
+     * @constructs IPropertyCollection
      * @interface
-     * @extends  _L.Interface.ICollection
+     * @extends  ICollection
      */
     function IPropertyCollection() {
         _super.call(this);
@@ -3061,7 +3025,7 @@ var IPropertyCollection  = (function (_super) {
     
 }(ICollection));
 
-/**** i-element.js | _L.Interface.IElement ****/
+/**** i-element.js | IElement ****/
 //==============================================================
 // 1. import module
 
@@ -3074,13 +3038,13 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IElement  = (function () {
     /**
      * 요소(독립) 인터페이스 입니다.
-     * @constructs _L.Interface.IElement
+     * @constructs IElement
      * @interface
      */
     function IElement() {
         /**
          * 요소명
-         * @member {string} _L.Interface.IElement#_name
+         * @member {string} IElement#_name
          */
         this._name = String;
     }
@@ -3090,7 +3054,7 @@ var IElement  = (function () {
 
     /**
      * 요소를 복제합니다.
-     * @returns {any}
+     * @returns {object}
      * @abstract
      */
     IElement.prototype.clone  = function() {
@@ -3101,7 +3065,7 @@ var IElement  = (function () {
     
 }());
 
-/**** i-list.js | _L.Interface.IList ****/
+/**** i-list.js | IList ****/
 //==============================================================
 // 1. import module
 
@@ -3111,26 +3075,23 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 
 //==============================================================
 // 3. module implementation   
-
-
-/** @type {Function} */
 var IList  = (function () {
     /**
      * 목록 인터페이스 입니다.
-     * @constructs _L.Interface.IList
+     * @constructs IList
      * @interface
      */
     function IList() {
 
         /**
-         * 목록
-         * @member {array} _L.Interface.IList#_list
+         * 목록 데이터입니다.
+         * @member {array} IList#_list
          */
         this._list = Array;
         
         /**
-         * 목록 갯수
-         * @member {number} _L.Interface.IList#count
+         * 목록 갯수입니다.
+         * @member {number} IList#count
          */
         this.count = Number;
     }
@@ -3142,7 +3103,7 @@ var IList  = (function () {
     
 }());
 
-/**** i-control-list.js | _L.Interface.IListControl ****/
+/**** i-control-list.js | IListControl ****/
 //==============================================================
 // 1. import module
 
@@ -3155,7 +3116,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var IListControl  = (function () {
     /**
      * 목록 제어 인터페이스 입니다.
-     * @constructs _L.Interface.IListControl
+     * @constructs IListControl
      * @interface
      */
     function IListControl() {
@@ -3202,7 +3163,7 @@ var IListControl  = (function () {
     
 }());
 
-/**** i-serialize.js | _L.Interface.ISerialize ****/
+/**** i-serialize.js | ISerialize ****/
 //==============================================================
 // 1. import module
 
@@ -3215,7 +3176,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 var ISerialize  = (function () {
     /**
      * 직렬화 인터페이스 입니다.
-     * @constructs _L.Interface.ISerialize
+     * @constructs ISerialize
      * @interface
      */
     function ISerialize() {
@@ -3226,7 +3187,7 @@ var ISerialize  = (function () {
 
     /**
      * 내보내기(출력)를 합니다.
-     * @returns {any}
+     * @returns {string}
      * @abstract
      */
     ISerialize.prototype.output  = function() {
@@ -3237,7 +3198,7 @@ var ISerialize  = (function () {
      * 가져오기(로드) 합니다.
      * @abstract
      */
-    ISerialize.prototype.load  = function(String) {
+    ISerialize.prototype.load  = function() {
         throw new ExtendError(/EL02192/, null, ['ISerialize']);
     };
 
@@ -3245,7 +3206,7 @@ var ISerialize  = (function () {
     
 }());
 
-/**** i-colleciton-array.js | _L.Interface.IArrayCollection ****/
+/**** i-collection-array.js | IArrayCollection ****/
 //==============================================================
 // 1. import module
 
@@ -3260,9 +3221,7 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 var IArrayCollection  = (function (_super) {
     /**
      * 배열 컬렉션 인터페이스 입니다.
-     * @constructs _L.Interface.IArrayCollection
-     * @interface
-     * @extends  _L.Interface.ICollection
+     * @extends ICollection
      */
     function IArrayCollection() {
         _super.call(this);
@@ -3284,7 +3243,7 @@ var IArrayCollection  = (function (_super) {
     
 }(ICollection));
 
-/**** namespace-manager.js | _L.Meta.NamespaceManager ****/
+/**** namespace-manager.js | NamespaceManager ****/
 //==============================================================
 // 1. import module
 
@@ -3302,18 +3261,18 @@ if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serializ
 var NamespaceManager = (function () {
     /**
      * 네임스페이스 관리자를 생성합니다.
-     * @constructs _L.Meta.NamespaceManager
+     * @constructs NamespaceManager
      */
     function NamespaceManager() {
 
         var $storage = this.$createNsRefer();
         var _elemTypes  = []; 
-        var isOverlap = false;
+        var allowOverlap = false;
         
         
         /**
          * 내부 변수 접근
-         * @member {string} _L.Meta.NamespaceManager#$storage
+         * @member {string} NamespaceManager#$storage
          * @readonly
          * @private
          */
@@ -3327,7 +3286,7 @@ var NamespaceManager = (function () {
 
         // /**
         //  * 네임스페이스 저장소
-        //  * @member {array} _L.Meta.NamespaceManager#$storage 
+        //  * @member {array} NamespaceManager#$storage 
         //  * @private
         //  * @readonly
         //  */
@@ -3340,7 +3299,7 @@ var NamespaceManager = (function () {
 
         /** 
          * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용
-         * @member {array<any>}  _L.Meta.NamespaceManager#_elemTypes  
+         * @member {array<any>}  NamespaceManager#_elemTypes  
          * @protected
          */
         Object.defineProperty(this, '_elemTypes', 
@@ -3358,7 +3317,7 @@ var NamespaceManager = (function () {
 
         /**
          * 네임스페이스 요소 목록
-         * @member {array<string>}  _L.Meta.NamespaceManager#_list
+         * @member {array<string>}  NamespaceManager#_list
          * @readonly
          */
         Object.defineProperty(this, '_list', 
@@ -3389,7 +3348,7 @@ var NamespaceManager = (function () {
 
         /**
          * 네임스페이스 요소 갯수
-         * @member {number} _L.Meta.NamespaceManager#count 
+         * @member {number} NamespaceManager#count 
          * @readonly
          */
         Object.defineProperty(this, 'count', 
@@ -3403,14 +3362,14 @@ var NamespaceManager = (function () {
 
         /**
          * 중복 요소 등록 허용 여부, 기본값 = false (중복금지)
-         * @member {boolean} _L.Meta.NamespaceManager#isOverlap
+         * @member {boolean} NamespaceManager#allowOverlap
          */
-        Object.defineProperty(this, 'isOverlap',
+        Object.defineProperty(this, 'allowOverlap',
         {
-            get: function() { return isOverlap; },
+            get: function() { return allowOverlap; },
             set: function(val) { 
                 if (typeof val !== 'boolean') throw new ExtendError(/EL03311/, null, [typeof val]);
-                isOverlap = val;
+                allowOverlap = val;
             },
             configurable: false,
             enumerable: true
@@ -3518,7 +3477,7 @@ var NamespaceManager = (function () {
             if (this._$KEYWORD.indexOf(sections[0]) > -1) sections = sections.slice(1); // 최상위 에약어 제거
         
             for (var i = 0; i < sections.length; i+=1) {
-                var sName = sections[i];
+                // var sName = sections[i];
                 if (typeof parent[sections[i]] === 'undefined') {
                     parent[sections[i]] = this.$createNsRefer();
                 }
@@ -3555,7 +3514,7 @@ var NamespaceManager = (function () {
 
     /**
      * 네임스페이스에 경로 객체를 얻습니다.
-     * @param {string | array<sting>} p_ns 네임스페이스 이름
+     * @param {string | sting[]} p_ns 네임스페이스 이름
      * @returns {object} 경로에 대한 객체
      */
     NamespaceManager.prototype.path = function(p_ns) {
@@ -3600,7 +3559,7 @@ var NamespaceManager = (function () {
 
             if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);  // []로 감싸서 choice 타입으로 변환됨
             if (!_validName(key)) throw new ExtendError(/EL03331/, null, [key]);
-            if (!this.isOverlap && this.getPath(p_elem)) {
+            if (!this.allowOverlap && this.getPath(p_elem)) {
                 throw new ExtendError(/EL03332/, null, []);
             }
             
@@ -3680,7 +3639,7 @@ var NamespaceManager = (function () {
             }
             
         } catch (error) {
-            return;                
+            return;              
         }
     };
     
@@ -3786,7 +3745,7 @@ var NamespaceManager = (function () {
     return NamespaceManager;
 }());
 
-/**** meta-registry.js | _L.Meta.MetaRegistry ****/
+/**** meta-registry.js | MetaRegistry ****/
 //==============================================================
 // 1. import module
 
@@ -3801,7 +3760,7 @@ if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager',
 var MetaRegistry = (function () {
     /**
      * 메타 객체 등록소입니다. (static)
-     * @constructs _L.Meta.MetaRegistry
+     * @constructs MetaRegistry
      * @static
      */
     function MetaRegistry() { 
@@ -3815,10 +3774,10 @@ var MetaRegistry = (function () {
 
     /**
      * 메타 객체 목록 (참조값)
-     * @member {any[]} _L.Meta.MetaRegistry#_list
+     * @member {any[]} MetaRegistry#_list
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, "_list", 
+    Object.defineProperty(MetaRegistry, '_list', 
     {
         get: function() { 
             var arr = [];
@@ -3831,10 +3790,10 @@ var MetaRegistry = (function () {
 
     /**
      * 메타 객체 전체 갯수
-     * @member {number} _L.Meta.MetaRegistry#count
+     * @member {number} MetaRegistry#count
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, "count", 
+    Object.defineProperty(MetaRegistry, 'count', 
     {
         get: function() { return _list.length; },
         configurable: false,
@@ -3843,10 +3802,10 @@ var MetaRegistry = (function () {
 
     /**
      * 메타 객체의 네임스페이스
-     * @member {NamespaceManager} _L.Meta.MetaRegistry#namespace
+     * @member {NamespaceManager} MetaRegistry#namespace
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, "namespace", 
+    Object.defineProperty(MetaRegistry, 'namespace', 
     {
         get: function() { return namespace; },
         configurable: false,
@@ -3906,6 +3865,7 @@ var MetaRegistry = (function () {
         var _ns;
         var key;
         var type;
+        // var fullName;
 
         if (!this.isMetaObject(p_meta)) throw new ExtendError(/EL03211/, null, [p_meta._type, p_meta._guid]);
         if (this.has(p_meta)) throw new ExtendError(/EL03212/, null, [p_meta._guid]);
@@ -3913,7 +3873,7 @@ var MetaRegistry = (function () {
         _ns         = p_meta['_ns'] || '';
         type        = p_meta['_type'];
         key         = type.name;
-        p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
+        // fullName    = p_meta['_ns'] && p_meta['_ns'].length > 0 ?  _ns +'.'+key : key;
 
         _list.push(p_meta);  // 객체 등록
         this.registerClass(type, _ns, key); // 클래스 등록
@@ -4142,8 +4102,8 @@ var MetaRegistry = (function () {
         }
         function $validUniqueGuid() {    // guid 유일한 값인지 검사
             for (var i = 0; i < arrObj.length; i++) {
-                for (var ii = 0; ii < arrObj.length; ii++) {
-                    if (arrObj[i]['_guid'] === arrObj[ii]['_guid'] && i !== ii) return false; // 중복
+                for (var j = 0; j < arrObj.length; j++) {
+                    if (arrObj[i]['_guid'] === arrObj[j]['_guid'] && i !== j) return false; // 중복
                 }
             }
             return true;
@@ -4180,8 +4140,8 @@ var MetaRegistry = (function () {
             var origin = arrOrigin[i];
             var arrObj = _getGuidList(origin);
             if (!_isObject(origin)) throw new ExtendError(/EL03253/, null, [i, typeof guid]);
-            for (var ii = 0; ii < arrObj.length; ii++) {
-                if (arrObj[ii]._guid === guid) return true;
+            for (var j = 0; j < arrObj.length; j++) {
+                if (arrObj[j]._guid === guid) return true;
             }
         }
         return false;
@@ -4389,7 +4349,7 @@ var MetaRegistry = (function () {
     return MetaRegistry;
 }());
 
-/**** meta-object.js | _L.Meta.MetaObject ****/
+/**** meta-object.js | MetaObject ****/
 //==============================================================
 // 1. import module
 
@@ -4407,9 +4367,9 @@ if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-r
 var MetaObject  = (function () {
     /**
      * 메타 최상위 객체를 생성합니다.
-     * @constructs _L.Meta.MetaObject
-     * @implements {_L.Interface.IObject}
-     * @implements {_L.Interface.IMarshal}
+     * @constructs MetaObject
+     * @implements {IObject}
+     * @implements {IMarshal}
      */
     function MetaObject() {
 
@@ -4419,7 +4379,7 @@ var MetaObject  = (function () {
         /**
          * 현재 객체의 고유식별자(guid)
          * @readonly
-         * @member {string} _L.Meta.MetaObject#_guid 
+         * @member {string} MetaObject#_guid 
          * @example
          * var obj = MetaObject();
          * console.log(obj._guid);      // '5337877c-49d6-9add-f35a-7bd31d510d4f' unique key code
@@ -4438,7 +4398,7 @@ var MetaObject  = (function () {
         /**
          * 현재 객체의 생성자
          * @readonly
-         * @member {function} _L.Meta.MetaObject#_type 
+         * @member {function} MetaObject#_type 
          * @example
          * var obj = new MetaObject();
          * obj._type === MetaObject;        // true
@@ -4562,7 +4522,7 @@ var MetaObject  = (function () {
 
     /**
      * 현재 객체의 target 인스턴스 여부를 검사합니다 .(_UNION 포함)
-     * @param {function | string} p_target 함수명 또는 생성자
+     * @param {Function | string} p_target 함수명 또는 생성자
      * @returns {boolean}
      * @example
      * var obj = new MetaObject();
@@ -4599,8 +4559,8 @@ var MetaObject  = (function () {
                 if (fun === types[i]) return true;
             }
             
-            for (var i = 0; i < unionTypes.length; i++) {
-                if (fun ===  unionTypes[i]) return true;
+            for (var k = 0; k < unionTypes.length; k++) {
+                if (fun ===  unionTypes[k]) return true;
             }
             return false;
         }
@@ -4609,8 +4569,8 @@ var MetaObject  = (function () {
             for (var i = 0; i < types.length; i++) {
                 if (funName === types[i].name) return true;
             }
-            for (var i = 0; i < unionTypes.length; i++) {
-                if (funName === unionTypes[i].name) return true;
+            for (var k = 0; k < unionTypes.length; k++) {
+                if (funName === unionTypes[k].name) return true;
             }
             return false;
         }
@@ -4631,9 +4591,10 @@ var MetaObject  = (function () {
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
-    MetaObject.prototype.getObject = function(p_vOpt, p_owned) {
+    MetaObject.prototype.getObject = function(p_vOpt) {
         var vOpt = p_vOpt || 0;
         var obj = {};
+        // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
         if (vOpt < 2 && vOpt > -1) obj['_guid'] = this._guid;
         obj['_type'] = this._type._NS ? this._type._NS +'.'+ this._type.name : this._type.name;
@@ -4673,7 +4634,7 @@ var MetaObject  = (function () {
 
 }());
 
-/**** meta-element.js | _L.Meta.MetaElement ****/
+/**** meta-element.js | MetaElement ****/
 //==============================================================
 // 1. import module
 
@@ -4691,9 +4652,9 @@ var MetaElement  = (function (_super) {
     /**
      * 메타 요소 객체를 생성합니다.  
      * (독립체 사용 단위)
-     * @constructs _L.Meta.MetaElement
-     * @extends _L.Meta.MetaObject
-     * @implements {_L.Interface.IElement}
+     * @constructs MetaElement
+     * @extends MetaObject
+     * @implements {IElement}
      * @param {string} p_name 
      */
     function MetaElement(p_name) {
@@ -4703,7 +4664,7 @@ var MetaElement  = (function (_super) {
 
         // /**
         //  * 내부 변수 접근
-        //  * @member {string} _L.Meta.MetaElement#$name
+        //  * @member {string} MetaElement#$name
         //  * @readonly
         //  * @private
         //  */
@@ -4722,7 +4683,7 @@ var MetaElement  = (function (_super) {
         /**
          * 현재 객체의 이름
          * @readonly
-         * @member {string} _L.Meta.MetaElement#_name
+         * @member {string} MetaElement#_name
          */
         Object.defineProperty(this, '_name',
         {
@@ -4760,6 +4721,8 @@ var MetaElement  = (function (_super) {
      */
     MetaElement.prototype.getObject = function(p_vOpt, p_owned) {
         var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
+        // var vOpt = p_vOpt || 0;
+        // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
 
         obj['name'] = this._name;
         return obj;
@@ -4776,6 +4739,7 @@ var MetaElement  = (function (_super) {
      */
     MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
+        // var origin = p_origin ? p_origin : p_oGuid;
         this._name = p_oGuid['name'];
         // this.__SET$_name(p_oGuid['name'], this);
     };
@@ -4799,7 +4763,7 @@ var MetaElement  = (function (_super) {
 
 }(MetaObject));
 
-/**** base-collection.js | _L.Collection.BaseCollection ****/
+/**** base-collection.js | BaseCollection ****/
 //==============================================================
 // 1. import module
 
@@ -4820,10 +4784,10 @@ var BaseCollection  = (function (_super) {
     /**
     * 기본 컬렉션을 생성합니다.
     * @abstract
-    * @extends _L.Meta.MetaObject
-    * @constructs _L.Collection.BaseCollection
-    * @implements {_L.Interface.ICollection}
-    * @implements {_L.Interface.IList}
+    * @extends MetaObject
+    * @constructs BaseCollection
+    * @implements {ICollection}
+    * @implements {IList}
     * @param {object} [p_owner] 소유객체
     */
     function BaseCollection(p_owner) { 
@@ -4842,7 +4806,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 이벤트 객체입니다.
          * @private
-         * @member {EventEmitter} _L.Collection.BaseCollection#$event  
+         * @member {EventEmitter} BaseCollection#$event  
          */
         Object.defineProperty(this, '$event', 
         {
@@ -4854,7 +4818,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소들입니다.
          * @private
-         * @member {string} _L.Meta.Entity.BaseColumn#$elements
+         * @member {string} BaseCollection#$elements
          */
         Object.defineProperty(this, '$elements',
         {
@@ -4867,7 +4831,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소의 기술자들 (getter, setter)입니다.
          * @private
-         * @member {string} _L.Meta.Entity.BaseColumn#$descriptors
+         * @member {string} BaseCollection#$descriptors
          */
         Object.defineProperty(this, '$descriptors',
         {
@@ -4880,7 +4844,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 컬렉션 예약어입니다.
          * @private
-         * @member {array<string>}  _L.Collection.BaseCollection#$KEYWORD
+         * @member {array<string>}  BaseCollection#$KEYWORD
          */
         Object.defineProperty(this, '$KEYWORD', 
         {
@@ -4893,7 +4857,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 컬렉션 소유자입니다.
          * @protected 
-         * @member {object} _L.Collection.BaseCollection#_owner  
+         * @member {object} BaseCollection#_owner  
          */
         Object.defineProperty(this, '_owner', 
         {   
@@ -4906,7 +4870,7 @@ var BaseCollection  = (function (_super) {
         /** 
          * 컬렉션 요소의 타입 제약조건입니다.
          * @protected 
-         * @member {array<any>}  _L.Collection.BaseCollection#_elemTypes  
+         * @member {array<any>}  BaseCollection#_elemTypes  
          */
         Object.defineProperty(this, '_elemTypes', 
         {
@@ -4931,7 +4895,7 @@ var BaseCollection  = (function (_super) {
          * 컬렉션 요소의 목록입니다.
          * @protected 
          * @readonly
-         * @member {array}  _L.Collection.BaseCollection#_list  
+         * @member {Array}  BaseCollection#_list  
          */
         Object.defineProperty(this, '_list', 
         {
@@ -4947,7 +4911,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소의 갯수입니다.
          * @readonly
-         * @member {number} _L.Collection.BaseCollection#count 
+         * @member {number} BaseCollection#count 
          */
         Object.defineProperty(this, 'count', 
         {
@@ -4959,7 +4923,7 @@ var BaseCollection  = (function (_super) {
         /**
          * 컬렉션 요소의 갯수입니다.
          * @readonly
-         * @member {number} _L.Collection.BaseCollection#length 
+         * @member {number} BaseCollection#length 
          */
         Object.defineProperty(this, 'length', 
         {
@@ -4971,7 +4935,7 @@ var BaseCollection  = (function (_super) {
 
         /**
          * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
-         * @event _L.Collection.BaseCollection#onAdd
+         * @event BaseCollection#onAdd
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -4986,7 +4950,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 추가한 후에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onAdded
+         * @event BaseCollection#onAdded
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -5001,7 +4965,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 삭제하기 전에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onRemove
+         * @event BaseCollection#onRemove
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -5016,7 +4980,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 삭제한 후에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onRemoved
+         * @event BaseCollection#onRemoved
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -5031,7 +4995,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          *컬렉션을 초기화하기 전에 발생하는 이벤트입니다.
-            * @event _L.Collection.BaseCollection#onClear
+            * @event BaseCollection#onClear
             * @param {function}    p_callback
             * @param {this}        p_callback.p_this 현재 컬렉션
             */
@@ -5044,7 +5008,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션을 초기화한 후에 발생하는 이벤트입니다.
-         * @event _L.Collection.BaseCollection#onCleared
+         * @event BaseCollection#onCleared
          * @param {function}    p_callback
          * @param {this}        p_callback.p_this 현재 컬렉션
          */
@@ -5057,7 +5021,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 변경하기 전에 발생하는 이벤트 입니다.
-         * @event _L.Collection.BaseCollection#onChanging 
+         * @event BaseCollection#onChanging 
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -5072,7 +5036,7 @@ var BaseCollection  = (function (_super) {
 
         /** 
          * 컬렉션 요소를 변경한 후에 발생하는 이벤트 입니다.
-         * @event _L.Collection.BaseCollection#onChanged 
+         * @event BaseCollection#onChanged 
          * @param {function}    p_callback
          * @param {number}      p_callback.p_idx 삭제하는 index
          * @param {any}         p_callback.p_elem 삭제하는 value
@@ -5108,7 +5072,7 @@ var BaseCollection  = (function (_super) {
      * onAdd 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onAdd
+     * @listens BaseCollection#onAdd
      */
     BaseCollection.prototype._onAdd = function(p_elem, p_idx) {
         return this.$event.emit('add', p_elem, p_idx, this); 
@@ -5121,7 +5085,7 @@ var BaseCollection  = (function (_super) {
      * onAdded 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onAdded
+     * @listens BaseCollection#onAdded
      */
     BaseCollection.prototype._onAdded = function(p_elem, p_idx) {
         return this.$event.emit('added', p_elem, p_idx, this); 
@@ -5134,7 +5098,7 @@ var BaseCollection  = (function (_super) {
      * onRemove 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onRemove
+     * @listens BaseCollection#onRemove
      */
     BaseCollection.prototype._onRemove = function(p_elem, p_idx) {
         return this.$event.emit('remove', p_elem, p_idx, this);
@@ -5147,7 +5111,7 @@ var BaseCollection  = (function (_super) {
      * onRemoved 이벤트를 발생시킵니다.
      * @param {any} p_elem 요소
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onRemoved
+     * @listens BaseCollection#onRemoved
      */
     BaseCollection.prototype._onRemoved = function(p_elem, p_idx) {
         return this.$event.emit('removed', p_elem, p_idx, this);
@@ -5158,7 +5122,7 @@ var BaseCollection  = (function (_super) {
 
     /** 
      * onClear 이벤트를 발생시킵니다.
-     * @listens _L.Collection.BaseCollection#onClear
+     * @listens BaseCollection#onClear
      */
     BaseCollection.prototype._onClear = function() {
         return this.$event.emit('clear', this); 
@@ -5169,7 +5133,7 @@ var BaseCollection  = (function (_super) {
 
     /** 
      * onCheared 이벤트를 발생시킵니다.
-     * @listens _L.Collection.BaseCollection#onCleared
+     * @listens BaseCollection#onCleared
      */
     BaseCollection.prototype._onCleared = function() {
         return this.$event.emit('cleared', this); 
@@ -5183,7 +5147,7 @@ var BaseCollection  = (function (_super) {
      * @param {any} p_nVal 변경값
      * @param {any} p_oVal 기존값
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onChanging
+     * @listens BaseCollection#onChanging
      */
     BaseCollection.prototype._onChanging = function(p_nVal, p_oVal, p_idx) {
         return this.$event.emit('changing', p_nVal, p_oVal, p_idx, this);
@@ -5197,7 +5161,7 @@ var BaseCollection  = (function (_super) {
      * @param {any} p_nVal 변경값
      * @param {any} p_oVal 기존값
      * @param {number} p_idx 인덱스 번호
-     * @listens _L.Collection.BaseCollection#onChanged
+     * @listens BaseCollection#onChanged
      */        
     BaseCollection.prototype._onChanged = function(p_nVal, p_oVal, p_idx) {
         return this.$event.emit('changed', p_nVal, p_oVal, p_idx, this);
@@ -5256,6 +5220,7 @@ var BaseCollection  = (function (_super) {
     BaseCollection.prototype.getObject = function(p_vOpt, p_owned) {
         var obj = _super.prototype.getObject.call(this, p_vOpt, p_owned);
         var vOpt = p_vOpt || 0;
+        // var owned = p_owned ? [].concat(p_owned, obj) : [].concat(obj);
         var _elems = [];
         
         if (!Type.deepEqual(this.$event['$storage'], {})) {
@@ -5334,7 +5299,7 @@ var BaseCollection  = (function (_super) {
         elem = this.$elements[p_pos];
         if (this.$elements.length > p_pos) {
             // this._onRemove(p_pos, elem);
-            if (typeof this._onRemove(elem, p_pos) === 'undefined') return false;
+            if (this._onRemove(elem, p_pos) === false) return false;
 
             if (!this._remove(p_pos)) return false;
             this._onRemoved(elem, p_pos);
@@ -5396,7 +5361,7 @@ var BaseCollection  = (function (_super) {
     
 }(MetaObject));
 
-/**** collection-array.js | _L.Collection.ArrayCollection ****/
+/**** collection-array.js | ArrayCollection ****/
 //==============================================================
 // 1. import module
 
@@ -5415,9 +5380,9 @@ if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'ba
 var ArrayCollection  = (function (_super) {
     /**
      * 배열 컬렉션을 생성합니다.
-     * @constructs _L.Collection.ArrayCollection
-     * @implements {_L.Interface.IArrayCollection}
-     * @extends _L.Collection.BaseCollection
+     * @constructs ArrayCollection
+     * @implements {IArrayCollection}
+     * @extends BaseCollection
      * @param {object} [p_owner] 소유 객체
      */
     function ArrayCollection(p_owner) {
@@ -5490,8 +5455,8 @@ var ArrayCollection  = (function (_super) {
             }
         }
         obj['_elem'] = [];
-        for (var i = 0; i < this.$elements.length; i++) {
-            var elem = this.$elements[i];
+        for (var j = 0; j < this.$elements.length; j++) {
+            var elem = this.$elements[j];
             if (elem instanceof MetaObject) {
                 if (MetaRegistry.hasGuidObject(elem, owned)) {
                     obj['_elem'].push(MetaRegistry.createReferObject(elem));
@@ -5519,12 +5484,12 @@ var ArrayCollection  = (function (_super) {
                 this.$descriptors.push(p_oGuid['_desc'][i]);
             }
         }
-        for(var i = 0; i < p_oGuid['_elem'].length; i++) {
-            Object.defineProperty(this, [i], this._getPropDescriptor(i));
+        for(var j = 0; j < p_oGuid['_elem'].length; j++) {
+            Object.defineProperty(this, [j], this._getPropDescriptor(j));
         }
 
-        for(var i = 0; i < p_oGuid['_elem'].length; i++) {
-            var elem = p_oGuid['_elem'][i];
+        for(var k = 0; k < p_oGuid['_elem'].length; k++) {
+            var elem = p_oGuid['_elem'][k];
             if (MetaRegistry.isGuidObject(elem)) {
                 var obj = MetaRegistry.createMetaObject(elem, origin);
                 obj.setObject(elem, origin);
@@ -5532,7 +5497,7 @@ var ArrayCollection  = (function (_super) {
                 
             } else if (elem['$ref']) {
                 var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                if (!meta) throw new ExtendError(/EL04211/, null, [i, elem['$ref']]);
+                if (!meta) throw new ExtendError(/EL04211/, null, [k, elem['$ref']]);
                 this.$elements.push(meta);  
             
             } else this.$elements.push(elem);
@@ -5563,7 +5528,7 @@ var ArrayCollection  = (function (_super) {
      */
     ArrayCollection.prototype.clear = function() {
         // this._onClear();    // event
-        if (typeof this._onClear() === 'undefined') return -1;
+        if (this._onClear() === false) return -1;
 
         for (var i = 0; i < this.count; i++) delete this[i];
         this.$elements = [];
@@ -5597,7 +5562,7 @@ var ArrayCollection  = (function (_super) {
                 Message.warn('WS011', ['writable = false', 'element']);
             }
 
-            if (typeof this._onAdd(p_elem, p_pos) === 'undefined') return false;
+            if (this._onAdd(p_elem, p_pos) === false) return false;
 
             // data process
             this.$elements.splice(p_pos, 0, p_elem);            
@@ -5783,7 +5748,7 @@ var ArrayCollection  = (function (_super) {
 
 }(BaseCollection));
 
-/**** collection-property.js | _L.Collection.PropertyCollection ****/
+/**** collection-property.js | PropertyCollection ****/
 //==============================================================
 // 1. import module
 
@@ -5802,9 +5767,9 @@ if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'ba
 var PropertyCollection  = (function (_super) {
     /**
      * 프로퍼티 컬렉션을 생성합니다.
-     * @constructs _L.Collection.PropertyCollection
-     * @implements {_L.Interface.IPropertyCollection}
-     * @extends _L.Collection.BaseCollection
+     * @constructs PropertyCollection
+     * @implements {IPropertyCollection}
+     * @extends BaseCollection
      * @param {object} p_owner 소유 객체
      */
     function PropertyCollection(p_owner) {
@@ -5814,7 +5779,7 @@ var PropertyCollection  = (function (_super) {
 
         /**
          * 내부 변수 접근
-         * @member {string} _L.Collection.PropertyCollection#$keys
+         * @member {string} PropertyCollection#$keys
          * @readonly
          * @private
          */
@@ -5829,7 +5794,7 @@ var PropertyCollection  = (function (_super) {
         // /** 
         //  * 컬렉션 요소의 키값들
         //  * @readonly
-        //  * @member {array<string>} _L.Collection.PropertyCollection#_keys 
+        //  * @member {array<string>} PropertyCollection#_keys 
         //  */
         // Object.defineProperty(this, '_keys',
         // {
@@ -5843,7 +5808,7 @@ var PropertyCollection  = (function (_super) {
         // });
 
         // 예약어 등록 
-        this.$KEYWORD = ['$keys', 'indexOf', 'exist', 'indexToKey'];
+        this.$KEYWORD = ['$keys', 'indexOf', 'exists', 'indexToKey'];
 
         Util.implements(PropertyCollection, this);      // strip:
     }
@@ -5921,8 +5886,8 @@ var PropertyCollection  = (function (_super) {
             }
         }
         obj['_elem'] = [];
-        for (var i = 0; i < this.count; i++) {
-            var elem = this.$elements[i];
+        for (var j = 0; j < this.count; j++) {
+            var elem = this.$elements[j];
             if (elem instanceof MetaObject) {
                 if (MetaRegistry.hasGuidObject(elem, owned)) {
                     obj['_elem'].push(MetaRegistry.createReferObject(elem));
@@ -5930,8 +5895,8 @@ var PropertyCollection  = (function (_super) {
             } else obj['_elem'].push(elem);
         }
         obj['_key'] = [];
-        for (var i = 0; i < this.$keys.length; i++) {
-            var key = this.$keys[i];
+        for (var k = 0; k < this.$keys.length; k++) {
+            var key = this.$keys[k];
             obj['_key'].push(key);
         }
         return obj;                        
@@ -5960,15 +5925,15 @@ var PropertyCollection  = (function (_super) {
         }
 
         this.$keys = [];
-        for(var i = 0; i < p_oGuid['_key'].length; i++) {
-            var key = p_oGuid['_key'][i];
+        for(var j = 0; j < p_oGuid['_key'].length; j++) {
+            var key = p_oGuid['_key'][j];
             this.$keys.push(key);
-            Object.defineProperty(this, [i], this._getPropDescriptor(i, false));
-            Object.defineProperty(this, key, this._getPropDescriptor(i));
+            Object.defineProperty(this, [j], this._getPropDescriptor(j, false));
+            Object.defineProperty(this, key, this._getPropDescriptor(j));
         }
 
-        for(var i = 0; i < p_oGuid['_elem'].length; i++) {
-            var elem = p_oGuid['_elem'][i];
+        for(var k = 0; k < p_oGuid['_elem'].length; k++) {
+            var elem = p_oGuid['_elem'][k];
             if (MetaRegistry.isGuidObject(elem)) {
                 var obj = MetaRegistry.createMetaObject(elem, origin);
                 obj.setObject(elem, origin);
@@ -5976,7 +5941,7 @@ var PropertyCollection  = (function (_super) {
             
             } else if (elem['$ref']) {
                 var meta = MetaRegistry.findSetObject(elem['$ref'], origin);
-                if (!meta) throw new ExtendError(/EL04223/, null, [i, elem['$ref']]);
+                if (!meta) throw new ExtendError(/EL04223/, null, [k, elem['$ref']]);
                 this.$elements.push(meta);
                 
             } else this.$elements.push(elem);
@@ -6020,7 +5985,7 @@ var PropertyCollection  = (function (_super) {
             if (!_isString(p_key)) throw new ExtendError(/EL04225/, null, [p_key]);
             if(!regex.test(p_key)) throw new ExtendError(/EL04226/, null, [p_key, regex.source]);
             if (this.$KEYWORD.indexOf(p_key) > -1) throw new ExtendError(/EL04227/, null, [p_key]);
-            if (this.exist(p_key)) throw new ExtendError(/EL04228/, null, [p_key]);
+            if (this.exists(p_key)) throw new ExtendError(/EL04228/, null, [p_key]);
             if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);
             // if (this._elemTypes.length > 0) Util.matchType(types, p_elem);
             if (_isObject(p_desc) && p_desc.configurable === false) {
@@ -6031,7 +5996,7 @@ var PropertyCollection  = (function (_super) {
             }
 
             // this._onAdd(index, p_elem);
-            if (typeof this._onAdd(p_elem, index) === 'undefined') return -1;
+            if (this._onAdd(p_elem, index) === false) return -1;
 
             // data process
             this.$elements.push(p_elem);
@@ -6064,7 +6029,7 @@ var PropertyCollection  = (function (_super) {
      */
     PropertyCollection.prototype.clear = function() {
         // this._onClear();
-        if (typeof this._onClear() === 'undefined') return -1;
+        if (this._onClear() === false) return -1;
         
         for (var i = 0; i < this.count; i++) {
             var propName = this.indexToKey(i);
@@ -6112,11 +6077,11 @@ var PropertyCollection  = (function (_super) {
      * @param {string} p_key 키
      * @returns {boolean}
      */
-    PropertyCollection.prototype.exist = function(p_key) {
+    PropertyCollection.prototype.exists = function(p_key) {
         if (!_isString(p_key)) throw new ExtendError(/EL0422B/, null, [typeof p_key]);
         return Object.prototype.hasOwnProperty.call(this, p_key);
     };
-    Object.defineProperty(PropertyCollection.prototype, 'exist', {
+    Object.defineProperty(PropertyCollection.prototype, 'exists', {
         enumerable: false
     });
 
