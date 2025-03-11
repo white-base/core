@@ -1,5 +1,5 @@
 {
-"ES010": "Other errors",
+    "ES010": "Other errors",
     "ES011": "Failed to get module ['$1']",
     "ES012": "Failed to get function ['$1'()",
     "ES013": "[$1] failed to process [$2]",
@@ -275,5 +275,5 @@
     "EL04322": "collection is not an instance of [ArrayCollection]",
     "EL04323": "rollback(); '$1' is an unprocessable cmd",
     "WS011": "[$1] Destination [$2] cannot be deleted",
-    "_END_": ""
+    "EN": "END"
 }

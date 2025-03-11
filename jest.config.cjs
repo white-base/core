@@ -20,4 +20,22 @@ module.exports = {
         },
       },
     */
+    projects: [
+      {
+          displayName: "CJS",
+          testEnvironment: "node",
+          testMatch: ["**/test/message.cjs.test.js"],
+      },
+      {
+          displayName: "ESM",
+          testEnvironment: "node",
+          testMatch: ["**/test/message.esm.test.js"],
+          transform: {},
+      },
+      {
+          displayName: "Browser (JSDOM)",
+          testEnvironment: "jsdom",
+          testMatch: ["**/test/*.browser.test.js"],
+      },
+    ],
 };

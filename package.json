@@ -70,7 +70,7 @@
     "gulp-strip-comments": "^2.6.0",
     "gulp-strip-line": "^0.0.1",
     "jest": "^29.5.0",
-    "jest-environment-jsdom": "^29.5.0",
+    "jest-environment-jsdom": "^29.7.0",
     "jsdoc": "^4.0.2",
     "jsdom": "^22.0.0",
     "path": "^0.12.7",
