@@ -1,6 +1,6 @@
 //==============================================================
 // gobal defined
-import Message from '../src/message2';
+import Message from '../src/message22.cjs';
 import {jest} from '@jest/globals';
 
 //==============================================================

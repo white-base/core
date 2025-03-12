@@ -1,12 +1,12 @@
 module.exports = {
     //collectCoverageFrom: ['**/*.[jt]s?(x)', '!**/*.stories.[jt]s?(x)'],
-    transform: {
-      "^.+\\.js$": "babel-jest",
-      "^.+\\.mjs$": "babel-jest"
-    },
-    moduleNameMapper: {
-      "^(\\.{1,2}/.*)\\.js$": "$1",
-    },
+    // transform: {
+    //   "^.+\\.js$": "babel-jest",
+    //   "^.+\\.mjs$": "babel-jest"
+    // },
+    // moduleNameMapper: {
+    //   "^(\\.{1,2}/.*)\\.js$": "$1",
+    // },
     collectCoverageFrom: ['src/*.js', '!src/_*.js'],
     testMatch: ['<rootDir>/test/*.js', '<rootDir>/test/*.cjs', '!<rootDir>/test/**/_*.js'],
     //testSequencer: './custom-sequencer.js',
@@ -24,18 +24,22 @@ module.exports = {
       {
           displayName: "CJS",
           testEnvironment: "node",
-          testMatch: ["**/test/message.cjs.test.js"],
+          testMatch: ["**/test/*.test.cjs", "**/test/*.cjs.test.js"],
       },
       {
           displayName: "ESM",
           testEnvironment: "node",
-          testMatch: ["**/test/message.esm.test.js"],
-          transform: {},
+          testMatch: ["**/test/*.test.js"],
+          transform: {
+            "^.+\\.js$": "babel-jest",
+            "^.+\\.mjs$": "babel-jest"
+          },
+          // extensionsToTreatAsEsm: [".js", ".mjs"],
       },
       {
           displayName: "Browser (JSDOM)",
           testEnvironment: "jsdom",
-          testMatch: ["**/test/*.browser.test.js"],
+          testMatch: ["**/test/*.dom.test.js", "**/test/*.browser.test.js"],
       },
     ],
 };

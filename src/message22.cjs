@@ -1,14 +1,15 @@
 /**** message.js | Message ****/
-import  defaultCode  from './locales/default.json' with { type: "json" };
-import  {osLocale}  from 'os-locale';
+// import  defaultCode  from './locales/default.json' with { type: "json" };
+const defaultCode  = require('./locales/default.json');
+// import  {osLocale}  from 'os-locale';
 
 // var localesPath = __dirname + '/locales';
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+// import { dirname } from 'path';
+// import { fileURLToPath } from 'url';
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 // const localesPath = __dirname + './locales';
-const localesPath = './locales';    // 상대 경로
+const localePath = './locales';    // 상대 경로
 
 /**
  * autoDetect = true
@@ -30,25 +31,25 @@ const localesPath = './locales';    // 상대 경로
  * @param {Array} indexedValues 배열 형태의 치환 값 (`$1, $2`)
  * @returns {string} 변환된 문자열
  */
-function replacePlaceholders(template, values) {
-    let namedValues = {}, indexedValues = [];
+// function replacePlaceholders(template, values) {
+//     let namedValues = {}, indexedValues = [];
 
-    if (Array.isArray(values)) indexedValues = values;
-    else if (typeof values === 'object') namedValues = values;
+//     if (Array.isArray(values)) indexedValues = values;
+//     else if (typeof values === 'object') namedValues = values;
 
-    // `${변수명}` 치환
-    template = template.replace(/\$\{(\w+)\}/g, function(match, key) {
-        return namedValues.hasOwnProperty(key) ? namedValues[key] : match;
-    });
+//     // `${변수명}` 치환
+//     template = template.replace(/\$\{(\w+)\}/g, function(match, key) {
+//         return namedValues.hasOwnProperty(key) ? namedValues[key] : match;
+//     });
 
-    // `$1, $2` 치환
-    template = template.replace(/\$(\d+)/g, function(match, index) {
-        var i = parseInt(index, 10) - 1;
-        return indexedValues[i] !== undefined ? indexedValues[i] : match;
-    });
+//     // `$1, $2` 치환
+//     template = template.replace(/\$(\d+)/g, function(match, index) {
+//         var i = parseInt(index, 10) - 1;
+//         return indexedValues[i] !== undefined ? indexedValues[i] : match;
+//     });
 
-    return template;
-}
+//     return template;
+// }
 
 // 테스트
 // console.log(replacePlaceholders(
@@ -118,24 +119,25 @@ var Message = (function () {
     }
 
     async function loadJSON(filePath) {
-        const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
+        const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
         let isESM = false;
         
-        try {
-            isESM = typeof import.meta !== 'undefined';
-        } catch (error) {
-            isESM = false;
-        }
+        // try {
+        //     isESM = typeof import.meta !== 'undefined';
+        // } catch (error) {
+        //     isESM = false;
+        // }
 
         if (isNode) {
-            if (isESM) {
-                // ESM (import assertions 사용)
-                return (await import(filePath, { with: { type: 'json' } })).default;
-            } else {
+            // if (isESM) {
+            //     // ESM (import assertions 사용)
+            //     return (await import(filePath, { with: { type: 'json' } })).default;
+            // } else {
                 // CJS (require 사용)
-                const fs = require('fs');
-                return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-            }
+                // const fs = require('fs');
+                // return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+                return require(filePath);
+            // }
         } else {
             // 브라우저 환경 (fetch 사용)
             const response = await fetch(filePath);
@@ -143,16 +145,33 @@ var Message = (function () {
         }
     }
 
-    async function _detectLanguage() {
-        var lang = defaultLang;
-        var locale = await osLocale();
-
-        if (autoDetect) {
-            lang = locale.split('-')[0];
-            Message.changeLanguage(lang);
+    function _getLocale() {
+        if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+            // 브라우저 환경
+            return navigator.language || Intl.DateTimeFormat().resolvedOptions().locale;
+        } else if (typeof process !== "undefined") {
+            // Node.js 환경
+            const rawLocale = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE;
+            if (rawLocale) {
+                return rawLocale.split(/[_.]/)[0].replace("_", "-");
+            }
+            return Intl.DateTimeFormat().resolvedOptions().locale || "en-US";
         }
-        return lang;
-    };
+        return "en-US"; // 기본값
+    }
+
+    // async function _detectLanguage() {
+    //     var lang = defaultLang;
+    //     var locale = await osLocale();
+
+    //     if (autoDetect) {
+    //         lang = locale.split('-')[0];
+    //         Message.changeLanguage(lang);
+    //     }
+    //     return lang;
+    // };
+
+
 
     // var define
     var $storage = { 
@@ -161,7 +180,8 @@ var Message = (function () {
     };
     var autoDetect = true;
     var defaultLang = 'default';
-    var currentLang = _detectLanguage();
+    var currentLang = defaultLang;
+    // var currentLang = _detectLanguage();
 
     // (async () => {
     //     currentLang = _detectLanguage();
@@ -240,7 +260,8 @@ var Message = (function () {
     };
     
     Message._getMessageByCode = function(p_code) {
-        return $storage.lang[currentLang]?.[p_code] || $storage.lang[defaultLang]?.[p_code];
+        var value = $storage.lang[currentLang]?.[p_code] || $storage.lang[defaultLang]?.[p_code];
+        return typeof value === 'number' ? String(value) : value;
     };
     
     Message.importMessage = function(p_msg, p_path) {
@@ -275,11 +296,21 @@ var Message = (function () {
         return result;
     };
 
+    Message.init = async function() {
+        var locale;
+        if (autoDetect) {
+            locale = _getLocale();
+            lang = locale.split('-')[0];
+            await Message.changeLanguage(lang);
+            // Message.currentLang = locale;
+        }
+    };
+
     return Message;
 }());
 
-
-Message.importMessage(defaultCode, localesPath);
+Message.importMessage(defaultCode, localePath);
+Message.init();
 
 
 // 테스트
@@ -314,7 +345,8 @@ Message.importMessage(defaultCode, localesPath);
 // console.log('ww');
 //==============================================================
 // 4. module export
-export default Message;
-export { Message };
+exports.Message = Message;
+// export default Message;
+// export { Message };
 
 
