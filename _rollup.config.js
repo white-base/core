@@ -7,7 +7,6 @@ import autoExternal from 'rollup-plugin-auto-external';
 import bundleSize from 'rollup-plugin-bundle-size';
 import aliasPlugin from '@rollup/plugin-alias';
 import path from 'path';
-import copy from 'rollup-plugin-copy';
 
 const lib = require("./package.json");
 const outputFileName = 'logic-core';
@@ -67,12 +66,10 @@ export default async () => {
     // browser ESM bundle for CDN
     ...buildConfig({
       input: namedInput,
-      minifiedVersion: false,
       output: {
-        file: `dist/${outputFileName}.js`,
+        file: `dist/esm/${outputFileName}.js`,
         format: "esm",
         preferConst: true,
-        // sourcemap: true,
         exports: "named",
         banner
       }
@@ -97,115 +94,43 @@ export default async () => {
     ...buildConfig({
       input: defaultInput,
       es5: true,
-      minifiedVersion: false,
       output: {
-        file: `dist/${outputFileName}.umd.js`,
+        file: `dist/${outputFileName}.js`,
         name,
         format: "umd",
-        // sourcemap: true,
         exports: "named",
         banner
       }
     }),
 
     // Browser CJS bundle
-    // ...buildConfig({
-    //   input: defaultInput,
-    //   es5: false,
-    //   minifiedVersion: false,
-    //   output: {
-    //     file: `dist/browser/${outputFileName}.cjs`,
-    //     name,
-    //     format: "cjs",
-    //     exports: "named",
-    //     banner
-    //   }
-    // }),
+    ...buildConfig({
+      input: defaultInput,
+      es5: false,
+      minifiedVersion: false,
+      output: {
+        file: `dist/browser/${outputFileName}.cjs`,
+        name,
+        format: "cjs",
+        exports: "named",
+        banner
+      }
+    }),
 
     // Node.js commonjs bundle
     {
       input: defaultInput,
-      output: [
-        {
-          file: `dist/${outputFileName}.cjs`,
-          format: "cjs",
-          // sourcemap: true,
-          preferConst: true,
-          exports: "named",
-          banner
-        },
-        // {
-        //   file: `dist/${outputFileName}.min.cjs`,
-        //   format: "cjs",
-        //   preferConst: true,
-        //   exports: "named",
-        //   plugins: [terser()], // 압축된 파일
-        // }
-      ],
+      output: {
+        file: `dist/node/${outputFileName}.cjs`,
+        format: "cjs",
+        preferConst: true,
+        exports: "named",
+        banner
+      },
       plugins: [
         autoExternal(),
         resolve(),
-        commonjs(),
-        copy({
-          targets: [
-            { src: 'src/locales/**/*', dest: 'dist/locales' }
-          ]
-        })
-      ]
-    },
-    // test 1
-    {
-      input: 'src/message2.js',
-      output: [
-        {
-          file: `dist/message2.cjs`,
-          format: "cjs",
-          // sourcemap: true,
-          preferConst: true,
-          exports: "named",
-          banner
-        }
-      ],
-      plugins: [
-        autoExternal(),
-        resolve(),
-        commonjs(),
-        json()
-      ]
-    },
-    // test 2
-    {
-      input: 'src/message3.js',
-      output: [
-        {
-          file: `dist/message3.cjs`,
-          format: "cjs",
-          preferConst: true,
-          exports: "named",
-          banner: "'use strict';", // CommonJS 모듈에서는 strict mode 추가
-        }
-      ],
-      plugins: [
-        autoExternal(),
-        resolve(),
-        json({
-          namedExports: true, // JSON을 ES6 모듈처럼 변환
-          preferConst: true
-        }),
-        commonjs(),
-        babel({
-          babelHelpers: 'bundled',
-          presets: [
-            ["@babel/preset-env", {
-              "targets": {
-                "ie": "11"  // IE 11 및 ES5 지원
-              },
-              "useBuiltIns": "entry",
-              "corejs": 3
-            }]
-          ],
-          exclude: 'node_modules/**'
-        }),
+        commonjs()
       ]
     }
   ]

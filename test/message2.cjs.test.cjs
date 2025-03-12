@@ -1,6 +1,6 @@
 // import { jest } from "@jest/globals";
 // const {Message} = require("../src/message2.js");
-const {Message} = require("../src/message22.cjs");
+const {Message} = require("../dist/message2.cjs");
 
 describe("CJS 환경 테스트", () => {
     afterEach(() => {

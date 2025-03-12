@@ -1,5 +1,6 @@
 import { jest } from "@jest/globals";
-import  koCode  from '../src/locales/ko.json' with { type: "json" };
+// import  koCode  from '../src/locales/ko.json' with { type: "json" };
+import  koCode  from '../src/locales/ko.json'
 
 describe("브라우저 환경 테스트", () => {
     beforeEach(() => {
@@ -15,7 +16,7 @@ describe("브라우저 환경 테스트", () => {
     });
 
     test("브라우저 환경에서 JSON 로드", async () => {
-        const { default: Message } = await import("../src/message22.cjs");
+        const { Message } = await import("../dist/message2.cjs");
         await Message.changeLanguage("ko");
 
         expect(Message.currentLang).toBe('ko');

@@ -11,12 +11,12 @@
         "default": "./types/ko/index.d.ts"
       },
       "browser": {
-        "require": "./dist/browser/logic-core.cjs",
+        "require": "./dist/logic-core.umd.js",
         "default": "./index.js"
       },
       "default": {
-        "require": "./dist/node/logic-core.cjs",
-        "default": "./index.js"
+        "require": "./dist/logic-core.cjs",
+        "default": "./dist/logic-core.js"
       }
     }
   },
@@ -77,6 +77,7 @@
     "rollup": "^4.34.8",
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-bundle-size": "^1.0.3",
+    "rollup-plugin-copy": "^3.5.0",
     "stringify-parse": "^1.0.6",
     "telejson": "^7.2.0",
     "typedoc": "^0.25.12"

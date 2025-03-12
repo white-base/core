@@ -1,8 +1,9 @@
 /**** message.js | Message ****/
 // import  defaultCode  from './locales/default.json' with { type: "json" };
+import  defaultCode  from './locales/default.json'
 // import  {osLocale}  from 'os-locale';
 
-const defaultCode = require('./locales/default.json');
+// const defaultCode = require('./locales/default.json');
 // import  {osLocale}  from 'os-locale';
 
 // const osLocale = require('os-locale');
@@ -27,33 +28,6 @@ const localesPath = './locales';    // 상대 경로
  * changeLanguage('fr') : 언어 변경를 변경하면, 브라우저, 노드
  * get() : 메세지 가져오기
  */
-
-/**
- * 문자열 내의 `${변수명}` 및 `$1, $2` 형식의 플레이스홀더를 치환하는 함수
- * @param {string} template 치환할 문자열
- * @param {Object} namedValues 객체 형태의 치환 값 (`${변수명}`)
- * @param {Array} indexedValues 배열 형태의 치환 값 (`$1, $2`)
- * @returns {string} 변환된 문자열
- */
-function replacePlaceholders(template, values) {
-    let namedValues = {}, indexedValues = [];
-
-    if (Array.isArray(values)) indexedValues = values;
-    else if (typeof values === 'object') namedValues = values;
-
-    // `${변수명}` 치환
-    template = template.replace(/\$\{(\w+)\}/g, function(match, key) {
-        return namedValues.hasOwnProperty(key) ? namedValues[key] : match;
-    });
-
-    // `$1, $2` 치환
-    template = template.replace(/\$(\d+)/g, function(match, index) {
-        var i = parseInt(index, 10) - 1;
-        return indexedValues[i] !== undefined ? indexedValues[i] : match;
-    });
-
-    return template;
-}
 
 // 테스트
 // console.log(replacePlaceholders(
@@ -124,7 +98,11 @@ var Message = (function () {
 
     async function loadJSON(filePath) {
         const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
-        // let isESM = false;
+        let isESM = false;
+        
+        if (typeof require === 'undefined') {
+            isESM = true; // require가 없으면 ESM으로 판단
+        }
         
         // try {
         //     isESM = typeof import.meta !== 'undefined';
@@ -133,16 +111,15 @@ var Message = (function () {
         // }
 
         if (isNode) {
-            // if (isESM) {
-            //     // ESM (import assertions 사용)
-            //     return (await import(filePath, { with: { type: 'json' } })).default;
-            // } else {
+            if (isESM) {
+                // ESM (import assertions 사용)
+                return (await import(filePath, { with: { type: 'json' } })).default;
+            } else {
                 // CJS (require 사용)
                 // const fs = require('fs');
                 // return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-                const fs = require(filePath);
-                return fs;
-            // }
+                return require(filePath);
+            }
         } else {
             // 브라우저 환경 (fetch 사용)
             const response = await fetch(filePath);
@@ -150,17 +127,49 @@ var Message = (function () {
         }
     }
 
-    async function _detectLanguage() {
-        var lang = defaultLang;
-        // var locale = await osLocale();
-        var locale = 'ko_KR';
-
-        if (autoDetect) {
-            lang = locale.split('-')[0];
-            Message.changeLanguage(lang);
+    function _getLocale() {
+        let locale = "";
+    
+        if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+            // 브라우저 환경
+            const lang = navigator.languages?.[0] || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale;
+            locale = lang.split(/[_-]/)[0]; // "ko-KR" -> "ko"
+        } else if (typeof process !== "undefined") {
+            // Node.js 환경
+            const rawLocale = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE;
+            if (rawLocale) {
+                locale = rawLocale.split(/[:_.]/)[0].replace("_", "-"); // "ko_KR.UTF-8" -> "ko"
+            }
         }
-        return lang;
-    };
+        return locale || 'en';
+    }
+
+    // function _getLocale() {
+    //     if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+    //         // 브라우저 환경
+    //         return navigator.language || Intl.DateTimeFormat().resolvedOptions().locale;
+    //     } else if (typeof process !== "undefined") {
+    //         // Node.js 환경
+    //         const rawLocale = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE;
+    //         if (rawLocale) {
+    //             return rawLocale.split(/[_.]/)[0].replace("_", "-");
+    //         }
+    //         return Intl.DateTimeFormat().resolvedOptions().locale || "en-US";
+    //     }
+    //     return "en-US"; // 기본값
+    // }
+
+    // async function _detectLanguage() {
+    //     var lang = defaultLang;
+    //     var locale = await osLocale();
+    //     // var locale = 'ko_KR';
+
+    //     if (autoDetect) {
+    //         lang = locale.split('-')[0];
+    //         Message.changeLanguage(lang);
+    //     }
+    //     return lang;
+    // };
 
     // var define
     var $storage = { 
@@ -285,12 +294,22 @@ var Message = (function () {
         return result;
     };
 
-    Message.currentLang = _detectLanguage();
+    Message.init = async function() {
+        var locale;
+        if (autoDetect) {
+            locale = _getLocale();
+            // lang = locale.split('-')[0];
+            await Message.changeLanguage(locale);
+            // Message.currentLang = locale;
+        }
+    };
+
+    // Message.currentLang = _detectLanguage();
     
     return Message;
 }());
 
-
+// Message.init();
 
 Message.importMessage(defaultCode, localesPath);
 
@@ -327,5 +346,7 @@ Message.importMessage(defaultCode, localesPath);
 // console.log('ww');
 //==============================================================
 // 4. module export
-exports.Message = Message;
-exports = Message;
+// exports.Message = Message;
+// exports = Message;
+export default Message;
+export { Message };
