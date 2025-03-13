@@ -37,7 +37,7 @@ module.exports = {
           // extensionsToTreatAsEsm: [".js", ".mjs"],
       },
       {
-          displayName: "Browser (JSDOM)",
+          displayName: "Browser",
           testEnvironment: "jsdom",
           testMatch: ["**/test/*.dom.test.js", "**/test/*.browser.test.js"],
       },

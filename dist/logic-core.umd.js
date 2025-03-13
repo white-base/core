@@ -1153,6 +1153,70 @@
       if (result !== null) return result[0].toUpperCase();
     }
 
+    // 배열 구조 분해 할당을 해제 
+    function restoreArrowFunction(transformedCode) {
+      // 1. 화살표 함수의 매개변수와 본문 전체를 추출
+      var regex = /\((.*?)\)\s*=>\s*\{([\s\S]*)\}/;
+      var match = transformedCode.match(regex);
+
+      // 특별히 `_ref => { ... }` 형태도 대응할 수 있도록 추가 처리
+      //  -> _ref => { let [String] = _ref; return Number; }
+      //  -> 실제로는 ( _ref ) => { ... } 형태로 통일
+      if (!match) {
+        // 혹시 _ref => { ... } 형태라면, 강제로 괄호를 넣어 재시도
+        var altRegex = /^(.*?)\s*=>\s*\{([\s\S]*)\}/;
+        var altMatch = transformedCode.match(altRegex);
+        if (!altMatch) {
+          throw new Error("Invalid arrow function format.");
+        }
+        // altMatch[1] = "_ref"
+        // altMatch[2] = "let [String] = _ref; return Number;"
+        var altParams = altMatch[1].trim();
+        var altBody = altMatch[2].trim();
+
+        // 화살표 함수 형태 통일:  ( _ref ) => { ... }
+        return restoreArrowFunction("(".concat(altParams, ") => {").concat(altBody, "}"));
+      }
+
+      // 2. 매개변수와 함수 본문 부분 분리
+      var params = match[1].trim(); // 함수의 매개변수 부분
+      var body = match[2].trim(); // 함수 본문
+
+      // 3. 구조 분해 할당 패턴 (객체/배열 모두 대응) - 여러 줄(줄바꿈)도 허용
+      //    예: let { aa: String } = _ref5;  또는 let [[{ bb: Number }]] = _ref6;
+      var paramAssignments = body.match(/let\s+(\{[\s\S]*?\}|\[[\s\S]*?\])\s*=\s*(\w+);/g) || [];
+
+      // 4. 찾아낸 구조 분해 할당들을 순회하며 매개변수( _ref5, _ref6 등 )를 원래 형태로 치환
+      paramAssignments.forEach(function (assign) {
+        // - parts[1]: { aa: String } 또는 [String] 등 (줄바꿈 포함 가능)
+        // - parts[2]: _ref5, _ref6 등
+        var parts = assign.match(/let\s+(\{[\s\S]*?\}|\[[\s\S]*?\])\s*=\s*(\w+);/);
+        if (parts) {
+          var extractedParam = parts[1].trim(); // 원래 구조
+          var originalParam = parts[2].trim(); // 변환된 변수명 (_ref5 등)
+
+          // 매개변수 목록에 있던 _ref5 등을 { aa: String } 등으로 치환
+          var re = new RegExp("\\b".concat(originalParam, "\\b"), 'g');
+          params = params.replace(re, extractedParam);
+        }
+      });
+
+      // 5. return 문이 있다면 반환값을 추출
+      //    예: return Number; -> "Number"
+      var returnStatementMatch = body.match(/return\s+(.*?);/);
+      var returnType = returnStatementMatch ? returnStatementMatch[1].trim() : "";
+
+      // 6. 최종 복원 – return 문이 있다면 { return ... } 형태로, 없으면 { } 로
+      if (returnType) {
+        // 불필요한 공백 없애기 위해 파라메터 부분도 스페이스 정리
+        params = params.replace(/\s+/g, '');
+        return "(".concat(params, ")=>{return ").concat(returnType, "}");
+      } else {
+        params = params.replace(/\s+/g, '');
+        return "(".concat(params, ")=>{}");
+      }
+    }
+
     /**
      * 함수 규칙   
      * - (params 내부에는 '()' 입력 금지)  
@@ -1172,6 +1236,9 @@
       };
       var arrParam = [];
       var arrRetrun;
+
+      // 배열 구조 분해 할당을 해제 
+      if (/\blet\b/.test(funBody)) funBody = restoreArrowFunction(funBody);
       funBody = $skipComment(funBody);
       try {
         if (syntax1.test(funBody)) arrFunc = regFunc1.exec(funBody);else if (syntax2.test(funBody)) arrFunc = regFunc2.exec(funBody);else throw new ExtendError(/EL01301/, null, [funBody]);

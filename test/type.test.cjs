@@ -8,8 +8,10 @@
 // import {isAllowType, allowType} from '../src/type';
 // import {isMatchType, matchType} from '../src/type';
 
-import Type from '../src/type';
-import {jest} from '@jest/globals';
+// import Type from '../src/type';
+const {Type} = require('logic-core')
+
+// import {jest} from '@jest/globals';
 
 const deepEqual = Type.deepEqual;
 const isProtoChain = Type.isProtoChain;
@@ -28,7 +30,7 @@ const T = true;
 // test
 describe("[target: util-type.js.js]", () => {
     beforeEach(() => {
-        jest.resetModules();
+        // jest.resetModules();
         globalThis.OLD_ENV = false;
     });
     describe('deepEqual(obj1, obj2) ', () => {
@@ -5914,8 +5916,6 @@ describe("[target: util-type.js.js]", () => {
 
             var tar21 = { aa: (String, [[RegExp, Number, Boolean]])=>Boolean}
             var tar22 = { aa: (String, [[RegExp]])=>String}
-            var tar23 = { aa: ([String], [[RegExp]])=>String}
-            var tar24 = { aa: ()=>[String]}
             
             var tar31 = { aa: { bb: 'str', cc: 20 } }
 
