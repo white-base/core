@@ -1,4 +1,4 @@
-'use strict';
+/*! logic Core v1.0.5 Copyright (c) 2025 logic and contributors */
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -965,10 +965,10 @@ function loadJSON(_x) {
   return _loadJSON.apply(this, arguments);
 }
 function _loadJSON() {
-  _loadJSON = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(filePath) {
+  _loadJSON = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(filePath) {
     var isNode, isESM, response;
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) switch (_context2.prev = _context2.next) {
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
           isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
           isESM = false;
@@ -982,38 +982,54 @@ function _loadJSON() {
           //     isESM = false;
           // }
           if (!isNode) {
-            _context2.next = 13;
+            _context3.next = 13;
             break;
           }
           if (!isESM) {
-            _context2.next = 10;
+            _context3.next = 10;
             break;
           }
-          _context2.next = 7;
+          _context3.next = 7;
           return import(filePath, { assert: { type: 'json' } });
         case 7:
-          return _context2.abrupt("return", _context2.sent.default);
+          return _context3.abrupt("return", _context3.sent.default);
         case 10:
-          return _context2.abrupt("return", require(filePath));
+          return _context3.abrupt("return", require(filePath));
         case 11:
-          _context2.next = 19;
+          _context3.next = 19;
           break;
         case 13:
-          _context2.next = 15;
+          _context3.next = 15;
           return fetch(filePath);
         case 15:
-          response = _context2.sent;
-          _context2.next = 18;
+          response = _context3.sent;
+          _context3.next = 18;
           return response.json();
         case 18:
-          return _context2.abrupt("return", _context2.sent);
+          return _context3.abrupt("return", _context3.sent);
         case 19:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
-    }, _callee2);
+    }, _callee3);
   }));
   return _loadJSON.apply(this, arguments);
+}
+function _getLocale() {
+  var locale = "";
+  if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+    var _navigator$languages;
+    // 브라우저 환경
+    var lang = ((_navigator$languages = navigator.languages) === null || _navigator$languages === void 0 ? void 0 : _navigator$languages[0]) || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale;
+    locale = lang.split(/[_-]/)[0]; // "ko-KR" -> "ko"
+  } else if (typeof process !== "undefined") {
+    // Node.js 환경
+    var rawLocale = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE;
+    if (rawLocale) {
+      locale = rawLocale.split(/[:_.]/)[0].replace("_", "-"); // "ko_KR.UTF-8" -> "ko"
+    }
+  }
+  return locale || 'en';
 }
 var Message = /*#__PURE__*/function () {
   function Message() {
@@ -1096,6 +1112,33 @@ var Message = /*#__PURE__*/function () {
       result = Message._replacePlaceholders(msg, p_values);
       return result;
     }
+  }, {
+    key: "init",
+    value: function () {
+      var _init = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var locale;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              if (!autoDetect) {
+                _context2.next = 4;
+                break;
+              }
+              locale = _getLocale();
+              // lang = locale.split('-')[0];
+              _context2.next = 4;
+              return Message.changeLanguage(locale);
+            case 4:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }));
+      function init() {
+        return _init.apply(this, arguments);
+      }
+      return init;
+    }()
   }]);
 }();
 _defineProperty(Message, "_NS", 'Common');

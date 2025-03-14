@@ -1,8 +1,6 @@
 /**** message.js | Message ****/
-// import  defaultCode  from './locales/default.json' with { type: "json" };
 import  defaultCode  from './locales/default.json'
 const localesPath = './locales';    // 상대 경로
-
 
 //==============================================================
 // 2. module dependency check
@@ -143,10 +141,19 @@ class Message {
         result = Message._replacePlaceholders(msg, p_values);
         return result;
     };
+
+    static async init () {
+        var locale;
+        if (autoDetect) {
+            locale = _getLocale();
+            // lang = locale.split('-')[0];
+            await Message.changeLanguage(locale);
+            // Message.currentLang = locale;
+        }
+    }
 }
 
 Message.importMessage(defaultCode, localesPath);
-
 
 //==============================================================
 // 4. module export

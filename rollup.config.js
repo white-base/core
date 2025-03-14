@@ -158,9 +158,18 @@ export default async () => {
       input: 'src/message2.js',
       output: [
         {
-          file: `dist/message2.cjs`,
+          file: `dist/message2.js`,
           format: "cjs",
           // sourcemap: true,
+          preferConst: true,
+          exports: "named",
+          banner
+        },
+        {
+          file: `dist/message2.umd.js`,
+          format: "umd",
+          // sourcemap: true,
+          name: "MyLibrary", 
           preferConst: true,
           exports: "named",
           banner
@@ -178,11 +187,11 @@ export default async () => {
       input: 'src/message3.js',
       output: [
         {
-          file: `dist/message3.cjs`,
+          file: `dist/message3.js`,
           format: "cjs",
           preferConst: true,
           exports: "named",
-          banner: "'use strict';", // CommonJS 모듈에서는 strict mode 추가
+          banner
         }
       ],
       plugins: [

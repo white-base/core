@@ -1,62 +1,6 @@
 /**** message.js | Message ****/
-// import  defaultCode  from './locales/default.json' with { type: "json" };
 import  defaultCode  from './locales/default.json'
-// import  {osLocale}  from 'os-locale';
-
-// const defaultCode = require('./locales/default.json');
-// import  {osLocale}  from 'os-locale';
-
-// const osLocale = require('os-locale');
-
-// var localesPath = __dirname + '/locales';
-
-// import { dirname } from 'path';
-// import { fileURLToPath } from 'url';
-// const __dirname = dirname(fileURLToPath(import.meta.url));
-// const localesPath = __dirname + './locales';
 const localesPath = './locales';    // 상대 경로
-
-/**
- * autoDetect = true
- * defaultLang = 'en'
- * currentLang = 'ko'
- * _detectLanguage() : 언어자동 감지 후 로딩, 언어 변경에서 호출, 언어 감시는 외부 모듈을 사용하고
- * _importMessage(lang) : 언어 가져와서 $storage[lang]에 설정하기
- * _replacePlaceholders() : 프레이스 홀더 문자열 교체
- * _getMessageByCode(code, lang) : 코드에 대한 메세지 문자열 가져오기, 지정 언어가 없으면 기본 문자열 가져오기
- * init() : 초기화, 기본 언어 가져오기, 생성자에서 호출
- * changeLanguage('fr') : 언어 변경를 변경하면, 브라우저, 노드
- * get() : 메세지 가져오기
- */
-
-// 테스트
-// console.log(replacePlaceholders(
-//     "Hello ${name}, you have $1 new messages.", 
-//     // { name: "Alice" }, 
-//     [5]
-// ));
-// // 출력: "Hello Alice, you have 5 new messages."
-
-// console.log(replacePlaceholders(
-//     "Error: ${error} occurred at $1", 
-//     { error: "404 Not Found" }, 
-//     ["index.html"]
-// ));
-// // 출력: "Error: 404 Not Found occurred at index.html"
-
-// console.log(replacePlaceholders(
-//     "Total cost: ${price} USD, Discount: $1%", 
-//     { price: 100 }, 
-//     [10]
-// ));
-// 출력: "Total cost: 100 USD, Discount: 10%"
-
-
-/**
- * - rollup 을 사용하기 때문에 es 모듈 방식으로 작성
- * - 언어감지는 "os-locale" 을 사용
- * - fetch() 을 사용해서 가져오게
- */
 
 //==============================================================
 // 2. module dependency check
@@ -304,8 +248,6 @@ var Message = (function () {
         }
     };
 
-    // Message.currentLang = _detectLanguage();
-    
     return Message;
 }());
 
@@ -313,37 +255,6 @@ var Message = (function () {
 
 Message.importMessage(defaultCode, localesPath);
 
-
-// 테스트
-// console.log(Message._replacePlaceholders(
-//     "Hello ${name}, you have $1 new messages.", 
-//     // { name: "Alice" }, 
-//     [5]
-// ));
-// // 출력: "Hello Alice, you have 5 new messages."
-
-// console.log(Message._replacePlaceholders(
-//     "Error: ${error} occurred at $1", 
-//     { error: "404 Not Found" }, 
-//     ["index.html"]
-// ));
-// // 출력: "Error: 404 Not Found occurred at index.html"
-
-// console.log(Message._replacePlaceholders(
-//     "Total cost: ${price} USD, Discount: $1%", 
-//     { price: 100 }, 
-//     [10]
-// ));
-// 출력: "Total cost: 100 USD, Discount: 10%"
-
-// Message.changeLanguage('ko');
-
-// console.log(Message.get('EL03231'));
-// console.log(Message.get('EL03232'));
-
-
-// console.log(Message.$storage);
-// console.log('ww');
 //==============================================================
 // 4. module export
 // exports.Message = Message;

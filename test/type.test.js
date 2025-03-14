@@ -3,12 +3,8 @@
  */
 //==============================================================
 // gobal defined
-// import {getAllProperties, deepEqual, isProtoChain, getTypes} from '../src/type';
-// import {extendType, typeObject, typeOf} from '../src/type';
-// import {isAllowType, allowType} from '../src/type';
-// import {isMatchType, matchType} from '../src/type';
 
-import Type from '../src/type';
+import {Type} from '../src/type';
 import {jest} from '@jest/globals';
 
 const deepEqual = Type.deepEqual;
