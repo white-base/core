@@ -25,19 +25,19 @@ module.exports = {
     */
     // transform: {}, // ✅ Jest가 .js 파일을 변환하지 않도록 설정
     // testEnvironment: "node",
-    moduleNameMapper: {
-      "^(.*)\\.js$": "$1.cjs" // .js 파일을 .cjs로 변환하여 CommonJS 환경에서 실행
-    },
+    // moduleNameMapper: {
+    //   "^(.*)\\.js$": "$1.cjs" // .js 파일을 .cjs로 변환하여 CommonJS 환경에서 실행
+    // },
       projects: [
         {
-          displayName: "CJS",
+          displayName: "CommonJS",
           testEnvironment: "node",
-          testMatch: ["**/test/*.test.cjs"],
+          testMatch: ["**/test/*.cjs.test.js"],
         },
         {
-          displayName: "ESM",
+          displayName: "ES Module",
           testEnvironment: "node",
-          testMatch: ["**/test/*.test.mjs", "**/test/*.esm.test.js"],
+          testMatch: ["**/test/*.test.mjs"],
           transform: {
             "^.+\\.js$": "babel-jest",
             "^.+\\.mjs$": "babel-jest"
@@ -46,9 +46,11 @@ module.exports = {
         {
           displayName: "Browser",
           testEnvironment: "jsdom",
-          transform: {},
-          // testEnvironment: "jest-environment-jsdom",
-          testMatch: ["**/test/*.dom.test.js", "**/test/*.browser.test.*"],
+          // transform: {
+          //   "^.+\\.js$": "babel-jest",
+          //   "^.+\\.mjs$": "babel-jest"
+          // },
+          testMatch: ["**/test/*.dom.test.js", "**/test/*.browser.test.js"],
         },
       ],
 };

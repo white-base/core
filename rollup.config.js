@@ -158,7 +158,7 @@ export default async () => {
       input: 'src/message2.js',
       output: [
         {
-          file: `dist/message2.js`,
+          file: `dist/message2.cjs`,
           format: "cjs",
           // sourcemap: true,
           preferConst: true,
@@ -187,7 +187,7 @@ export default async () => {
       input: 'src/message3.js',
       output: [
         {
-          file: `dist/message3.js`,
+          file: `dist/message3.cjs`,
           format: "cjs",
           preferConst: true,
           exports: "named",

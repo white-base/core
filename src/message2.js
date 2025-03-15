@@ -44,10 +44,14 @@ var Message = (function () {
         const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
         let isESM = false;
         
-        if (typeof require === 'undefined') {
+        // if (typeof require === 'undefined') {
+        //     isESM = true; // require가 없으면 ESM으로 판단
+        // }
+        
+        if (typeof require === 'undefined' && typeof module !== 'undefined' && module.exports) {
             isESM = true; // require가 없으면 ESM으로 판단
         }
-        
+
         // try {
         //     isESM = typeof import.meta !== 'undefined';
         // } catch (error) {

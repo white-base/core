@@ -17,16 +17,23 @@
 // import { createRequire } from "module";
 // const require = createRequire(import.meta.url); // ✅ CommonJS `require()` 생성
 
-const {Message} = require("../dist/message2.umd.js"); 
-const koCode = require("../dist/locales/ko.json"); 
+// const {Message} = require("../dist/message2.umd.js");
+
+const {Message} = require("../src/message2.js");
+
+// const {Message} = require("../dist/message2.umd.js");
+const koCode = require("../dist/locales/ko.json");
 
 // const Message  = require('../dist/message2.cjs');
+
+// import Message from '../src/message2.js';
+// import {jest} from '@jest/globals';
+// import koCode from '../dist/locales/ko.json'
 
 // const {Message} = require("../dist/message2.umd.js");
 // import { Message } from "../dist/message2.umd.js";
 
 // const Message = MyLibrary.Message;
-
 
 
 describe("브라우저 환경 테스트", () => {
