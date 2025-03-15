@@ -19,9 +19,9 @@
 
 // const {Message} = require("../dist/message2.umd.js");
 
-const {Message} = require("../src/message2.js");
+// const {Message} = require("../src/message2.js");
 
-// const {Message} = require("../dist/message2.umd.js");
+const {Message} = require("../dist/message2.umd.js");
 const koCode = require("../dist/locales/ko.json");
 
 // const Message  = require('../dist/message2.cjs');

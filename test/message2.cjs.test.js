@@ -3,6 +3,8 @@
 // const {Message} = require("../src/message2.js");
 const {Message} = require("../dist/message2.cjs");
 
+// const {Message} = require("../src/message2.js");
+
 describe("CJS 환경 테스트", () => {
     afterEach(() => {
         jest.restoreAllMocks();
