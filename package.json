@@ -12,7 +12,7 @@
       },
       "browser": {
         "require": "./dist/logic-core.umd.js",
-        "default": "./index.js"
+        "default": "./dist/logic-core.js"
       },
       "default": {
         "require": "./dist/logic-core.cjs",
@@ -22,13 +22,9 @@
   },
   "types": "./types/ko/index.d.ts",
   "files": [
-    "src/",
     "dist/",
     "types/",
-    "package.json",
-    "README.md",
-    "index.js",
-    "gulpfile.js"
+    "index.js"
   ],
   "scripts": {
     "test": "node node_modules/.bin/jest",

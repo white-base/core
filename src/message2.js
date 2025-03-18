@@ -42,60 +42,20 @@ var Message = (function () {
 
     async function loadJSON(filePath) {
         const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
-        let isESM = false;
-
-        if (typeof require === 'undefined') isESM = true;
-
+        const isESM = (isNode && typeof require === 'undefined');
 
         if (isNode) {
-            // ESM (import assertions 사용)
-            // return (await import(filePath, { assert: { type: 'json' } })).default;
-
-
             if (isESM) {
                 return (await import(filePath, { with: { type: 'json' } })).default;
             } else {
                 return require(filePath);
             }
-
-
-            // } else {
-            //     // CJS (require 사용)
-            //     // const fs = require('fs');
-            //     // return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-            //     return require(filePath);
-            // }
         } else {
             // 브라우저 환경 (fetch 사용)
             const response = await fetch(filePath);
             return await response.json();
         }
-        
-        // let isESM = true;
-        
-        // if (typeof module !== 'undefined' && module.exports) {
-        //     isESM = false;
-        // }
 
-        // if (isNode) {
-        //     if (isESM) {
-        //         // ESM (import assertions 사용)
-        //         try {
-        //             return (await import(filePath, { with: { type: 'json' } })).default;
-        //         } catch (error) {
-        //             return require(filePath);
-        //         }
-        //     } else {
-        //         // CJS (require 사용)
-        //         // const fs = require('fs');
-        //         // return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-        //         return require(filePath);
-        //     }
-        // } else {
-        //     // 브라우저 환경 (fetch 사용)
-        //     const response = await fetch(filePath);
-        //     return await response.json();
-        // }
     }
 
     function _getLocale() {
