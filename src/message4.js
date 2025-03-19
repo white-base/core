@@ -14,7 +14,7 @@ const localesPath = './locales';    // 상대 경로
 function _isObject(obj) {
     return obj && typeof obj === 'object' && !Array.isArray(obj);
 }
-function deepMerge(target, source) {
+function _deepMerge(target, source) {
     for (var key in source) {
         if (source.hasOwnProperty(key)) {
             var targetValue = target[key];
@@ -23,7 +23,7 @@ function deepMerge(target, source) {
                 if (!_isObject(targetValue)) {
                     target[key] = {};
                 }
-                target[key] = deepMerge(target[key], sourceValue);
+                target[key] = _deepMerge(target[key], sourceValue);
             } else {
                 target[key] = sourceValue;
             }
@@ -32,28 +32,14 @@ function deepMerge(target, source) {
     return target;
 }
 
-async function loadJSON(filePath) {
+async function _loadJSON(filePath) {
     const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
-    let isESM = false;
-    
-    if (typeof require === 'undefined') {
-        isESM = true; // require가 없으면 ESM으로 판단
-    }
-    
-    // try {
-    //     isESM = typeof import.meta !== 'undefined';
-    // } catch (error) {
-    //     isESM = false;
-    // }
+    const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
 
     if (isNode) {
         if (isESM) {
-            // ESM (import assertions 사용)
             return (await import(filePath, { with: { type: 'json' } })).default;
         } else {
-            // CJS (require 사용)
-            // const fs = require('fs');
-            // return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
             return require(filePath);
         }
     } else {
@@ -89,7 +75,7 @@ class Message {
     };
     static autoDetect = true;
     static defaultLang = 'default';
-    static autoDetect = defaultLang;
+    static currentLang = this.defaultLang;
 
     static _replacePlaceholders (p_template, p_values) {
         let namedValues = {}, indexedValues = [];
@@ -112,23 +98,30 @@ class Message {
 
     static _getMessageByCode (p_msg, p_path) {
         if (_isObject(p_msg)) {
-            deepMerge($storage.lang.default, p_msg);
-            $storage.path.push(p_path);
+            _deepMerge(this.$storage.lang.default, p_msg);
+            this.$storage.path.push(p_path);
         }
     };
 
-    static async changeLanguage (p_lang) {
-        for (var i = 0; i < $storage.path.length; i++) {
-            var localPath = $storage.path[i];
-            var msg = await loadJSON(`${localPath}/${p_lang}.json`);
+    static async importMessage (p_msg, p_path) {
+        if (_isObject(p_msg)) {
+            _deepMerge(this.$storage.lang.default, p_msg);
+            this.$storage.path.push(p_path);
+        }
+    }
 
-            $storage.lang[p_lang] = $storage.lang[p_lang] || {};
+    static async changeLanguage (p_lang) {
+        for (var i = 0; i < this.$storage.path.length; i++) {
+            var localPath = this.$storage.path[i];
+            var msg = await _loadJSON(`${localPath}/${p_lang}.json`);
+
+            this.$storage.lang[p_lang] = this.$storage.lang[p_lang] || {};
             // if (typeof $storage.lang[p_lang] === 'undefined') $storage.lang[p_lang] = {};
 
-            if (typeof msg === 'object') deepMerge($storage.lang[p_lang], msg);
+            if (typeof msg === 'object') _deepMerge(this.$storage.lang[p_lang], msg);
             else console.warn(`Path '${localPath}/${p_lang}' does not have a file.`);
         }
-        currentLang = p_lang;
+        this.currentLang = p_lang;
     }
 
     static get (p_code, p_values) {
@@ -136,7 +129,7 @@ class Message {
         var result;
 
         if (typeof msg === 'undefined') {
-            return `There is no message for code '${p_code}'.`
+            return `There is no message for code. '${p_code}'.`
         }
         result = Message._replacePlaceholders(msg, p_values);
         return result;
@@ -144,8 +137,9 @@ class Message {
 
     static async init () {
         var locale;
-        if (autoDetect) {
+        if (this.autoDetect) {
             locale = _getLocale();
+            if (locale === 'en') locale = 'default';
             // lang = locale.split('-')[0];
             await Message.changeLanguage(locale);
             // Message.currentLang = locale;

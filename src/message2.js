@@ -22,7 +22,7 @@ var Message = (function () {
     function _isObject(obj) {
         return obj && typeof obj === 'object' && !Array.isArray(obj);
     }
-    function deepMerge(target, source) {
+    function _deepMerge(target, source) {
         for (var key in source) {
             if (source.hasOwnProperty(key)) {
                 var targetValue = target[key];
@@ -31,7 +31,7 @@ var Message = (function () {
                     if (!_isObject(targetValue)) {
                         target[key] = {};
                     }
-                    target[key] = deepMerge(target[key], sourceValue);
+                    target[key] = _deepMerge(target[key], sourceValue);
                 } else {
                     target[key] = sourceValue;
                 }
@@ -40,9 +40,9 @@ var Message = (function () {
         return target;
     }
 
-    async function loadJSON(filePath) {
+    async function _loadJSON(filePath) {
         const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
-        const isESM = (isNode && typeof require === 'undefined');
+        const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
 
         if (isNode) {
             if (isESM) {
@@ -55,7 +55,6 @@ var Message = (function () {
             const response = await fetch(filePath);
             return await response.json();
         }
-
     }
 
     function _getLocale() {
@@ -139,6 +138,10 @@ var Message = (function () {
         get: function() { 
             return autoDetect;
         },
+        set: function(val) { 
+            autoDetect = val;
+            // await Message.init();
+        },
         configurable: false,
         enumerable: true,
     });
@@ -195,7 +198,7 @@ var Message = (function () {
     
     Message.importMessage = function(p_msg, p_path) {
         if (_isObject(p_msg)) {
-            deepMerge($storage.lang.default, p_msg);
+            _deepMerge($storage.lang.default, p_msg);
             $storage.path.push(p_path);
         }
     };
@@ -203,15 +206,15 @@ var Message = (function () {
     Message.changeLanguage = async function(p_lang) {
         for (var i = 0; i < $storage.path.length; i++) {
             var localPath = $storage.path[i];
-            var msg = await loadJSON(`${localPath}/${p_lang}.json`);
+            var msg = await _loadJSON(`${localPath}/${p_lang}.json`);
 
             $storage.lang[p_lang] = $storage.lang[p_lang] || {};
             // if (typeof $storage.lang[p_lang] === 'undefined') $storage.lang[p_lang] = {};
 
-            if (typeof msg === 'object') deepMerge($storage.lang[p_lang], msg);
+            if (typeof msg === 'object') _deepMerge($storage.lang[p_lang], msg);
             else console.warn(`Path '${localPath}/${p_lang}' does not have a file.`);
         }
-        currentLang = p_lang;
+        Message.currentLang = p_lang;
     };
 
     Message.get = function(p_code, p_values) {
@@ -219,16 +222,29 @@ var Message = (function () {
         var result;
 
         if (typeof msg === 'undefined') {
-            return `There is no message for code '${p_code}'.`
+            return `There is no message for code. '${p_code}'`
         }
         result = Message._replacePlaceholders(msg, p_values);
-        return result;
+        return $intro(p_code) + result;
+
+        // inner funciton
+        function $intro(code) {
+            var intro = '';
+            var firstChar = code.substring(0, 1);
+            
+            if (firstChar === 'E') intro = 'Error';
+            else if (firstChar === 'W') intro = 'Warn';
+            return intro + ' ['+ code +'] ';
+        }
     };
 
     Message.init = async function() {
         var locale;
+
+        currentLang = defaultLang;
         if (autoDetect) {
             locale = _getLocale();
+            if (locale === 'en') locale = 'default';
             // lang = locale.split('-')[0];
             await Message.changeLanguage(locale);
             // Message.currentLang = locale;

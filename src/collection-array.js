@@ -201,10 +201,12 @@ var ArrayCollection  = (function (_super) {
             if (p_pos < 0) throw new ExtendError(/EL04214/, null, [p_pos]);
             if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);
             if (_isObject(p_desc) && p_desc.configurable === false) {
-                Message.warn('WS011', ['configurable = false', 'element']); 
+                console.warn(Message.get('WS011', ['configurable = false', 'element']));
+                // Message.warn('WS011', ['configurable = false', 'element']); 
             }
             if (_isObject(p_desc) && p_desc.writable === false ) {
-                Message.warn('WS011', ['writable = false', 'element']);
+                console.warn(Message.get('WS011', ['writable = false', 'element']));
+                // Message.warn('WS011', ['writable = false', 'element']);
             }
 
             if (this._onAdd(p_elem, p_pos) === false) return false;

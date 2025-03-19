@@ -1,6 +1,6 @@
 /// <reference path="./types/ko/index.d.ts" />
 
-import messageCode from "./src/message-code";
+// import messageCode from "./src/message-code";
 import Message from "./src/message";
 import ExtendError from "./src/extend-error";
 import Type from "./src/type";
@@ -24,7 +24,7 @@ import ArrayCollection from "./src/collection-array";
 import PropertyCollection from "./src/collection-property";
 
 export {
-    messageCode,
+    // messageCode,
     Message,
     ExtendError,
     Type,

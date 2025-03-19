@@ -247,10 +247,12 @@ var PropertyCollection  = (function (_super) {
             if (this._elemTypes.length > 0) Type.matchType([this._elemTypes], p_elem);
             // if (this._elemTypes.length > 0) Util.matchType(types, p_elem);
             if (_isObject(p_desc) && p_desc.configurable === false) {
-                    Message.warn('WS011', ['configurable = true', 'element']);
+                console.warn(Message.get('WS011', ['configurable = true', 'element']));
+                // Message.warn('WS011', ['configurable = true', 'element']);
             }
             if (_isObject(p_desc) && p_desc.writable === false ) {
-                Message.warn('WS011', ['writable = true', 'element']);
+                console.warn(Message.get('WS011', ['writable = true', 'element']));
+                // Message.warn('WS011', ['writable = true', 'element']);
             }
 
             // this._onAdd(index, p_elem);

@@ -146,6 +146,7 @@ export default async () => {
         autoExternal(),
         resolve(),
         commonjs(),
+        json(),
         copy({
           targets: [
             { src: 'src/locales/**/*', dest: 'dist/locales' }
@@ -153,70 +154,70 @@ export default async () => {
         })
       ]
     },
-    // test 1
-    {
-      input: 'src/message2.js',
-      output: [
-        {
-          file: `dist/message2.cjs`,
-          format: "cjs",
-          // sourcemap: true,
-          preferConst: true,
-          exports: "named",
-          banner
-        },
-        {
-          file: `dist/message2.umd.js`,
-          format: "umd",
-          // sourcemap: true,
-          name: "MyLibrary", 
-          preferConst: true,
-          exports: "named",
-          banner
-        }
-      ],
-      plugins: [
-        autoExternal(),
-        resolve(),
-        commonjs(),
-        json()
-      ]
-    },
-    // test 2
-    {
-      input: 'src/message3.js',
-      output: [
-        {
-          file: `dist/message3.cjs`,
-          format: "cjs",
-          preferConst: true,
-          exports: "named",
-          banner
-        }
-      ],
-      plugins: [
-        autoExternal(),
-        resolve(),
-        json({
-          namedExports: true, // JSON을 ES6 모듈처럼 변환
-          preferConst: true
-        }),
-        commonjs(),
-        babel({
-          babelHelpers: 'bundled',
-          presets: [
-            ["@babel/preset-env", {
-              "targets": {
-                "ie": "11"  // IE 11 및 ES5 지원
-              },
-              "useBuiltIns": "entry",
-              "corejs": 3
-            }]
-          ],
-          exclude: 'node_modules/**'
-        }),
-      ]
-    }
+    // // test 1
+    // {
+    //   input: 'src/message2.js',
+    //   output: [
+    //     {
+    //       file: `dist/message2.cjs`,
+    //       format: "cjs",
+    //       // sourcemap: true,
+    //       preferConst: true,
+    //       exports: "named",
+    //       banner
+    //     },
+    //     {
+    //       file: `dist/message2.umd.js`,
+    //       format: "umd",
+    //       // sourcemap: true,
+    //       name: "MyLibrary", 
+    //       preferConst: true,
+    //       exports: "named",
+    //       banner
+    //     }
+    //   ],
+    //   plugins: [
+    //     autoExternal(),
+    //     resolve(),
+    //     commonjs(),
+    //     json()
+    //   ]
+    // },
+    // // test 2
+    // {
+    //   input: 'src/message3.js',
+    //   output: [
+    //     {
+    //       file: `dist/message3.cjs`,
+    //       format: "cjs",
+    //       preferConst: true,
+    //       exports: "named",
+    //       banner
+    //     }
+    //   ],
+    //   plugins: [
+    //     autoExternal(),
+    //     resolve(),
+    //     json({
+    //       namedExports: true, // JSON을 ES6 모듈처럼 변환
+    //       preferConst: true
+    //     }),
+    //     commonjs(),
+    //     babel({
+    //       babelHelpers: 'bundled',
+    //       presets: [
+    //         ["@babel/preset-env", {
+    //           "targets": {
+    //             "ie": "11"  // IE 11 및 ES5 지원
+    //           },
+    //           "useBuiltIns": "entry",
+    //           "corejs": 3
+    //         }]
+    //       ],
+    //       exclude: 'node_modules/**'
+    //     }),
+    //   ]
+    // }
   ]
 };
 // export default {

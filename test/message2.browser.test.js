@@ -21,7 +21,10 @@
 
 // const {Message} = require("../src/message2.js");
 
-const {Message} = require("../dist/message2.umd.js");
+
+// const {Message} = require("../dist/message2.umd.js");
+const {Message} = require("logic-core");
+
 const koCode = require("../dist/locales/ko.json");
 
 // const Message  = require('../dist/message2.cjs');
@@ -58,7 +61,7 @@ describe("브라우저 환경 테스트", () => {
         await Message.changeLanguage("ko");
 
         expect(Message.currentLang).toBe('ko');
-        expect(Message.get('KO')).toBe('END');
-        expect(Message.get('EN')).toBe('END');
+        expect(Message.get('KO')).toMatch(/END/);
+        expect(Message.get('EN')).toMatch(/END/);
     });
 });

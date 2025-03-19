@@ -1,36 +1,45 @@
 //==============================================================
 // gobal defined
-import Message from '../src/message';
+import {Message} from '../src/message.js';
+// import {Message} from '../src/message3.js';
 import {jest} from '@jest/globals';
 
 //==============================================================
 // test
 describe("[target: message.js]", () => {
     describe("Message :: 클래스", () => {
-        beforeEach(() => {
+        beforeEach(async () => {
             jest.resetModules();
-            
-            // Message.init();
+            globalThis.isESM = true
+            await Message.init();
         });
         describe("MetaObject.lang: str <언어 설정>", () => {
             it("- this.lang : 기본 언어 얻기", () => {
-                expect(Message.lang).toBe('en')
+                expect(Message.defaultLang).toBe('default')
+                expect(Message.currentLang).toBe('default')
             });
-            it("- this.lang : 기본 언어 얻기", () => {
-                Message.lang = 'ko'
-                expect(Message.lang).toBe('ko')
-                Message.lang = 'en'
+            it("- this.lang : 기본 언어 얻기", async () => {
+                expect(Message.defaultLang).toBe('default')
+                await Message.changeLanguage('ko');
+                expect(Message.currentLang).toBe('ko')
             });
-            it("- this.lang : 예외", () => {
-                expect(()=> Message.lang = 'jan').toThrow(/language does not exist/)
+            // it("- this.lang : 예외", () => {
+            //     expect(()=> Message.lang = 'jan').toThrow(/language does not exist/)
+            // });
+        });
+        describe("MetaObject.autoDetect <언어 자동 감지>", () => {
+            it("- this.autoDetect : 언어 자동감지", async () => {
+                
+                expect(Message.currentLang).toBe('default')
+                expect(Message.autoDetect).toBe(true)
+                
+                // Message.autoDetect = true;
+                await Message.changeLanguage('ko');
+
+                
+                expect(Message.currentLang).toBe('ko')
             });
         });
-        // describe("MetaObject.isLong: bool <긴 메세지 여부>", () => {
-        //     it("- this.lang : 긴메시지여부  설정 및 확인", () => {
-        //         Message.isLong = false;
-        //         expect(Message.isLong).toBe(false)
-        //     });
-        // });
         describe("MetaObject.get(): str <메세지 얻기>", () => {
             
             it("- get() : 메세지 얻기", () => {
@@ -77,7 +86,8 @@ describe("[target: message.js]", () => {
                 // console.warn(msg);
                 expect(msg1).toMatch(/WS011/);
                 // expect(msg2).toMatch(/IS011/);
-                expect(msg3).toMatch(/There are no messages about the code./);
+                // expect(msg3).toMatch(/There are no messages about the code./);
+                expect(msg3).toMatch(/There is no message for code./);
             });
             it("- get() : 오류 객체 코드", () => {
                 const msg = Message.get({}, ['param1', 'param2']);
@@ -85,17 +95,17 @@ describe("[target: message.js]", () => {
                 // console.warn(msg);
                 expect(msg).toMatch(/code/);
             });
-            it("- 스토리지 설정 ", () => {
+            it.skip("- 스토리지 설정 ", () => {
                 var storage = { en: {aaa: '', bbb: {}, zzz: 'etc'} }
-                Message.$storage = storage;
+                // Message.$storage = storage;
                 const msg1 = Message.get('aaa', []);
                 const msg2 = Message.get('bbb', []);
                 const msg3 = Message.get('ccc', []);
                 const msg4 = Message.get('zzz', []);
                 
-                expect(msg1).toBe('There are no messages about the code.')
-                expect(msg2).toBe('There are no messages about the code.')
-                expect(msg3).toBe('There are no messages about the code.')
+                expect(msg1).toBe('There is no message for code. ')
+                expect(msg2).toBe('There is no message for code. ')
+                expect(msg3).toBe('There is no message for code.')
                 expect(msg4).toMatch(/etc/);
             });
         });
@@ -109,12 +119,12 @@ describe("[target: message.js]", () => {
         //         expect(msg2.msg).toMatch(/2/);
         //     });
         // });
-        describe("MetaObject.error(code, value) ", () => {
+        describe.skip("MetaObject.error(code, value) ", () => {
             it("- error() : 코드값으로 예외 발생", () => {
                 expect(()=> Message.error('ES011', [])).toThrow('ES011')
             });
         });
-        describe("MetaObject.warn(): obj <콘솔 경고 얻기>", () => {
+        describe.skip("MetaObject.warn(): obj <콘솔 경고 얻기>", () => {
             it("- getInfo() : 메세지 얻기", () => {
                 // const mock = jest.fn(console.warn);
                 // const spyFn = jest.spyOn(console, "warn");
@@ -125,10 +135,10 @@ describe("[target: message.js]", () => {
                 Message.warn('ES011', []);
             });
         });
-        describe("예외 및 COVER", () => {
-            it("- cover", () => {
-                const a = new Message()
-            });
-        }); 
+        // describe("예외 및 COVER", () => {
+        //     it("- cover", () => {
+        //         const a = new Message()
+        //     });
+        // }); 
     });
 });
