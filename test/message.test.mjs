@@ -1,46 +1,88 @@
 //==============================================================
 // gobal defined
 import {Message} from '../src/message.js';
+// import {Message} from '../src/message2.js';
 // import {Message} from '../src/message3.js';
 import {jest} from '@jest/globals';
 
+const T = true;
 //==============================================================
 // test
 describe("[target: message.js]", () => {
     describe("Message :: 클래스", () => {
-        beforeEach(async () => {
+        beforeEach(() => {
             jest.resetModules();
             globalThis.isESM = true
-            await Message.init();
-        });
-        describe("MetaObject.lang: str <언어 설정>", () => {
-            it("- this.lang : 기본 언어 얻기", () => {
-                expect(Message.defaultLang).toBe('default')
-                expect(Message.currentLang).toBe('default')
-            });
-            it("- this.lang : 기본 언어 얻기", async () => {
-                expect(Message.defaultLang).toBe('default')
-                await Message.changeLanguage('ko');
-                expect(Message.currentLang).toBe('ko')
-            });
-            // it("- this.lang : 예외", () => {
-            //     expect(()=> Message.lang = 'jan').toThrow(/language does not exist/)
-            // });
-        });
-        describe("MetaObject.autoDetect <언어 자동 감지>", () => {
-            it("- this.autoDetect : 언어 자동감지", async () => {
-                
-                expect(Message.currentLang).toBe('default')
-                expect(Message.autoDetect).toBe(true)
-                
-                // Message.autoDetect = true;
-                await Message.changeLanguage('ko');
+            process.env.LANG = 'ko_KR.UTF-8';
 
-                
-                expect(Message.currentLang).toBe('ko')
+        });
+        describe("Message.$storage : 메세지 저장소", () => {
+            it("- $storage : 기본 언어 얻기", () => {
+                expect(typeof Message.$storage).toBe('object')
+                expect(typeof Message.$storage.lang).toBe('object')
+                expect(typeof Message.$storage.lang.default).toBe('object')
+                expect(Message.$storage.path.length > 0).toBe(T)
             });
         });
-        describe("MetaObject.get(): str <메세지 얻기>", () => {
+        describe("Message.autoDetect : 언어자동 감지", () => {
+            it("- 활성화", async () => {
+                Message.autoDetect = true;
+                await Message.init();
+
+                expect(Message.defaultLang).toBe('default')
+                expect(Message.currentLang).toBe('ko')
+                // console.warn(Message.currentLang)
+            });
+            it("- 비활성화", async () => {
+                Message.autoDetect = false;
+                await Message.init();
+                
+                expect(Message.defaultLang).toBe('default')
+                expect(Message.currentLang).toBe('default')
+            });
+        });
+        describe("Message.getMessageByCode() : 메시지 반환", () => {
+            it("- 오류 코드 메세지 : ES010",() => {
+                const code = 'ES010'
+                const value = 'Other errors'
+
+                expect(Message.getMessageByCode(code)).toBe(value)
+            });
+            it("- 없는 메세지",() => {
+                const code = 'EEEEE'
+                const value = 'Other errors'
+
+                expect(Message.getMessageByCode(code)).toBe(undefined)
+            });
+        });
+        describe("Message.importMessage() : 저장소에 메세지 추가", () => {
+            it("- 추가",() => {
+                Message.importMessage({EEEEE: 'NamespaceManager'}, './test')
+
+                expect(Message.$storage.path.includes('./test')).toBe(T)
+                expect(Message.$storage.path.length > 1).toBe(T)
+                expect(Message.getMessageByCode('EEEEE')).toBe('NamespaceManager')
+            });
+            it("- 경로 없이 추가",() => {
+                Message.importMessage({EEEEE: 'NamespaceManager'})
+
+                expect(Message.$storage.path.length > 0).toBe(T)
+                expect(Message.getMessageByCode('EEEEE')).toBe('NamespaceManager')
+            });
+        });
+        describe("Message.changeLanguage() : 언어 변경", () => {
+            it("- 확장 추가",() => {
+                Message.changeLanguage('ko')
+                expect(Message.getMessageByCode('KO')).toBe('OK')
+            });
+            it("- 없는 언어 추가",() => {
+                Message.importMessage({EEEEE: 'NamespaceManager'})
+
+                expect(Message.$storage.path.length > 0).toBe(T)
+                expect(Message.getMessageByCode('EEEEE')).toBe('NamespaceManager')
+            });
+        });
+        describe("Message.get(): str <메세지 얻기>", () => {
             
             it("- get() : 메세지 얻기", () => {
                 const msg = Message.get('ES011', ['NamespaceManager', 'namespace-manager']);
@@ -119,12 +161,12 @@ describe("[target: message.js]", () => {
         //         expect(msg2.msg).toMatch(/2/);
         //     });
         // });
-        describe.skip("MetaObject.error(code, value) ", () => {
+        describe.skip("Message.error(code, value) ", () => {
             it("- error() : 코드값으로 예외 발생", () => {
                 expect(()=> Message.error('ES011', [])).toThrow('ES011')
             });
         });
-        describe.skip("MetaObject.warn(): obj <콘솔 경고 얻기>", () => {
+        describe.skip("Message.warn(): obj <콘솔 경고 얻기>", () => {
             it("- getInfo() : 메세지 얻기", () => {
                 // const mock = jest.fn(console.warn);
                 // const spyFn = jest.spyOn(console, "warn");

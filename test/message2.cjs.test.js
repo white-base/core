@@ -19,8 +19,8 @@ describe("CJS 환경 테스트", () => {
         await Message.changeLanguage("ko");
 
         expect(Message.currentLang).toBe('ko');
-        expect(Message.get('KO')).toMatch(/END/);
-        expect(Message.get('EN')).toMatch(/END/);
+        expect(Message.get('KO')).toMatch(/OK/);
+        expect(Message.get('EN')).toMatch(/OK/);
     });
     // it("- this.autoDetect : 언어 자동감지", async () => {
                 

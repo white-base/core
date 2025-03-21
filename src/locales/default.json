@@ -275,5 +275,5 @@
     "EL04322": "collection is not an instance of [ArrayCollection]",
     "EL04323": "rollback(); '$1' is an unprocessable cmd",
     "WS011": "[$1] Destination [$2] cannot be deleted",
-    "EN": "END"
+    "EN": "OK"
 }

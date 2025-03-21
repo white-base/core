@@ -25,8 +25,8 @@ describe("[target: message.js]", () => {
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ko')
                 
-                expect(Message.get('EN')).toMatch(/END/)
-                expect(Message.get('KO')).toMatch(/END/)
+                expect(Message.get('EN')).toMatch(/OK/)
+                expect(Message.get('KO')).toMatch(/OK/)
                 expect(Message.get('ETC')).toBe("There is no message for code. 'ETC'")
             });
         });

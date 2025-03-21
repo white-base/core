@@ -22,6 +22,10 @@ var Message = (function () {
     function _isObject(obj) {
         return obj && typeof obj === 'object' && !Array.isArray(obj);
     }
+    function _isString(obj) {    // 공백아닌 문자 여부
+        if (typeof obj === 'string' && obj.length > 0) return true;
+        return false;
+    }
     function _deepMerge(target, source) {
         for (var key in source) {
             if (source.hasOwnProperty(key)) {
@@ -73,6 +77,25 @@ var Message = (function () {
         }
         return locale || 'en';
     }
+
+    function _replacePlaceholders (p_template, p_values) {
+        let namedValues = {}, indexedValues = [];
+        
+        if (Array.isArray(p_values)) indexedValues = p_values;
+        else if (typeof p_values === 'object') namedValues = p_values;
+
+        // `${변수명}` 치환
+        p_template = p_template.replace(/\$\{(\w+)\}/g, function(match, key) {
+            return namedValues.hasOwnProperty(key) ? namedValues[key] : match;
+        });
+        // `$1, $2` 치환
+        p_template = p_template.replace(/\$(\d+)/g, function(match, index) {
+            var i = parseInt(index, 10) - 1;
+            return indexedValues[i] !== undefined ? indexedValues[i] : match;
+        });
+
+        return p_template;
+    };
 
     // function _getLocale() {
     //     if (typeof window !== "undefined" && typeof navigator !== "undefined") {
@@ -172,26 +195,9 @@ var Message = (function () {
     // Message._defaultMessage = function(p_lang) {
     // };
     
-    Message._replacePlaceholders = function(p_template, p_values) {
-        let namedValues = {}, indexedValues = [];
-        
-        if (Array.isArray(p_values)) indexedValues = p_values;
-        else if (typeof p_values === 'object') namedValues = p_values;
 
-        // `${변수명}` 치환
-        p_template = p_template.replace(/\$\{(\w+)\}/g, function(match, key) {
-            return namedValues.hasOwnProperty(key) ? namedValues[key] : match;
-        });
-        // `$1, $2` 치환
-        p_template = p_template.replace(/\$(\d+)/g, function(match, index) {
-            var i = parseInt(index, 10) - 1;
-            return indexedValues[i] !== undefined ? indexedValues[i] : match;
-        });
-
-        return p_template;
-    };
     
-    Message._getMessageByCode = function(p_code) {
+    Message.getMessageByCode = function(p_code) {
         var value = $storage.lang[currentLang]?.[p_code] || $storage.lang[defaultLang]?.[p_code];
         return typeof value === 'number' ? String(value) : value;
     };
@@ -218,13 +224,13 @@ var Message = (function () {
     };
 
     Message.get = function(p_code, p_values) {
-        var msg = Message._getMessageByCode(p_code);
+        var msg = Message.getMessageByCode(p_code);
         var result;
 
         if (typeof msg === 'undefined') {
             return `There is no message for code. '${p_code}'`
         }
-        result = Message._replacePlaceholders(msg, p_values);
+        result = _replacePlaceholders(msg, p_values);
         return $intro(p_code) + result;
 
         // inner funciton
