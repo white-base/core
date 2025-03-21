@@ -43,7 +43,7 @@ declare class Message {
      * @param messages 메세지 객체
      * @param locales 메세지 파일 경로
      */
-    static importMessage(messages: Record<string, any>, locales: string): Promise<void>;
+    static importMessage(messages: Record<string, any>, locales: string): void;
 
     /**
      * 언어를 변경합니다.  

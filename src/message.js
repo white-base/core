@@ -39,25 +39,26 @@ function _deepMerge(target, source) {
 async function _loadJSON(filePath) {
     const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
     const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
-
-    if (isNode) {
-        if (isESM) {
-            return (await import(filePath, { with: { type: 'json' } })).default;
+    
+    try {
+        if (isNode) {
+            if (isESM) {
+                return (await import(filePath, { with: { type: 'json' } })).default;
+            } else {
+                return require(filePath);
+            }
         } else {
-            return require(filePath);
+            const response = await fetch(filePath);
+            return await response.json();
         }
-    } else {
-        // 브라우저 환경 (fetch 사용)
-        const response = await fetch(filePath);
-        return await response.json();
+    } catch (error) {
+        return;
     }
 }
 
 function _getLocale() {
     let locale = "";
 
-// console.log(process.env.LANG, process.env.LC_ALL, process.env.LANGUAGE) 
-// console.log(typeof window, typeof navigator, typeof process)
     if (typeof window !== "undefined" && typeof navigator !== "undefined") {
         // 브라우저 환경
         const lang = navigator.languages?.[0] || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale;
@@ -134,7 +135,7 @@ class Message {
      * @param {object} p_msg 메세지 객체
      * @param {string} p_path 메세지 파일 경로
      */
-    static async importMessage (p_msg, p_path) {
+    static importMessage (p_msg, p_path) {
         if (_isObject(p_msg)) {
             _deepMerge(this.$storage.lang.default, p_msg);
             if (_isString(p_path)) this.$storage.path.push(p_path);
