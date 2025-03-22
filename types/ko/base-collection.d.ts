@@ -55,6 +55,12 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     get length(): number;
 
     /**
+     * 'BaseCollection' 클래스의 생성자입니다.  
+     * @param owner 소유한 객체
+     */
+    constructor(owner?: any);
+
+    /**
      * 컬렉션에 요소를 추가하기 전에 호출되는 이벤트 핸들러입니다.
      * 
      * @param elem 추가할 요소

@@ -26,13 +26,15 @@ if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-objec
 // 3. module implementation
 var BaseCollection  = (function (_super) {
     /**
-    * 기본 컬렉션을 생성합니다.
+    * The creator that creates the collection.  
+    * This is an abstract class, and you must create an instance through inheritance.  
+    * 
     * @abstract
     * @extends MetaObject
     * @constructs BaseCollection
     * @implements {ICollection}
     * @implements {IList}
-    * @param {object} [p_owner] 소유객체
+    * @param {object} [p_owner] Objects that own this collection
     */
     function BaseCollection(p_owner) { 
         _super.call(this);
@@ -48,7 +50,8 @@ var BaseCollection  = (function (_super) {
         var _elemTypes  = [];
 
         /** 
-         * 이벤트 객체입니다.
+         * Object that handles events. Used to register and generate various events in the collection.
+         * 
          * @private
          * @member {EventEmitter} BaseCollection#$event  
          */
@@ -60,7 +63,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소들입니다.
+         * An arrangement that stores elements of a collection.
+         * 
          * @private
          * @member {string} BaseCollection#$elements
          */
@@ -73,7 +77,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 기술자들 (getter, setter)입니다.
+         * A descriptor array that defines the getter and setter methods for each collection element.  
+         * 
          * @private
          * @member {string} BaseCollection#$descriptors
          */
@@ -86,7 +91,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 예약어입니다.
+         * List of strings used as reserved words in the collection.  
+         * 
          * @private
          * @member {array<string>}  BaseCollection#$KEYWORD
          */
@@ -99,7 +105,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 소유자입니다.
+         * Owned object of the collection.  
+         * 
          * @protected 
          * @member {object} BaseCollection#_owner  
          */
@@ -112,7 +119,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소의 타입 제약조건입니다.
+         * Defines the type constraints for the collection element.  
+         * 
          * @protected 
          * @member {array<any>}  BaseCollection#_elemTypes  
          */
@@ -136,7 +144,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 목록입니다.
+         * An array that stores a list of elements in a collection.  
+         * 
          * @protected 
          * @readonly
          * @member {Array}  BaseCollection#_list  
@@ -153,7 +162,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 갯수입니다.
+         * Returns the number of elements in the collection.  
+         * 
          * @readonly
          * @member {number} BaseCollection#count 
          */
@@ -165,7 +175,7 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 갯수입니다.
+         * Returns the number of elements in the collection.  
          * @readonly
          * @member {number} BaseCollection#length 
          */
@@ -178,12 +188,13 @@ var BaseCollection  = (function (_super) {
 
 
         /**
-         * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
+         * Event handler called before adding an element to a collection.  
+         * 
          * @event BaseCollection#onAdd
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Elements to add
+         * @param {number}      p_callback.p_idx Index of the element to be added
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onAdd', 
         {
@@ -193,12 +204,13 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 추가한 후에 발생하는 이벤트입니다.
+         * Event handler that is called after an element is added.  
+         * 
          * @event BaseCollection#onAdded
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Added elements
+         * @param {number}      p_callback.p_idx Index of added element
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onAdded', 
         {
@@ -208,12 +220,13 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 삭제하기 전에 발생하는 이벤트입니다.
+         * Event handler called before removing an element.  
+         * 
          * @event BaseCollection#onRemove
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Elements to be removed
+         * @param {number}      p_callback.p_idx Index of the element to be removed
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onRemove', 
         {
@@ -223,12 +236,13 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 삭제한 후에 발생하는 이벤트입니다.
+         * Event handler that is called after the element is removed.  
+         * 
          * @event BaseCollection#onRemoved
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Removed elements
+         * @param {number}      p_callback.p_idx Index of removed element
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onRemoved', 
         {
@@ -238,11 +252,12 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         *컬렉션을 초기화하기 전에 발생하는 이벤트입니다.
-            * @event BaseCollection#onClear
-            * @param {function}    p_callback
-            * @param {this}        p_callback.p_this 현재 컬렉션
-            */
+        * Event handler called before deleting all elements.  
+        * 
+        * @event BaseCollection#onClear
+        * @param {function}    p_callback
+        * @param {this}        p_callback.p_this Current collection objects
+        */
         Object.defineProperty(this, 'onClear', 
         {
             set: function(fun) { this.$event.on('clear', fun); },
@@ -251,10 +266,11 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션을 초기화한 후에 발생하는 이벤트입니다.
+         * Event handler that is called after all elements are deleted.  
+         * 
          * @event BaseCollection#onCleared
          * @param {function}    p_callback
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onCleared', 
         {
@@ -264,12 +280,14 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 변경하기 전에 발생하는 이벤트 입니다.
+         * Event handler called before the element changes.  
+         * 
          * @event BaseCollection#onChanging 
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {number}      p_callback.p_nextValue New value to be changed
+         * @param {any}         p_callback.prevValue Existing value
+         * @param {any}         p_callback.index Index of the element to be changed
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onChanging', 
         {
@@ -279,12 +297,14 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 변경한 후에 발생하는 이벤트 입니다.
+         * Event handler that is called after an element changes.  
+         * 
          * @event BaseCollection#onChanged 
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_nextValue New value changed
+         * @param {any}         p_callback.p_prevValue Existing value
+         * @param {number}      p_callback.p_index Index of changed element
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onChanged', 
         {
@@ -313,9 +333,10 @@ var BaseCollection  = (function (_super) {
     BaseCollection._KIND = 'abstract';
     
     /**
-     * onAdd 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs before adding an element.  
+     * 
+     * @param {any} p_elem .Elements to be added
+     * @param {number} p_idx Where the element will be added
      * @listens BaseCollection#onAdd
      */
     BaseCollection.prototype._onAdd = function(p_elem, p_idx) {
@@ -326,9 +347,9 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * onAdded 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs after an element is added.  
+     * @param {any} p_elem Added elements
+     * @param {number} p_idx Location where the element was added
      * @listens BaseCollection#onAdded
      */
     BaseCollection.prototype._onAdded = function(p_elem, p_idx) {
@@ -339,9 +360,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * onRemove 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs before removing an element.  
+     * 
+     * @param {any} p_elem Elements to be removed
+     * @param {number} p_idx Where the element will be removed
      * @listens BaseCollection#onRemove
      */
     BaseCollection.prototype._onRemove = function(p_elem, p_idx) {
@@ -352,9 +374,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * onRemoved 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs after the element is removed.  
+     * 
+     * @param {any} p_elem Removed elements
+     * @param {number} p_idx Where the element was removed
      * @listens BaseCollection#onRemoved
      */
     BaseCollection.prototype._onRemoved = function(p_elem, p_idx) {
@@ -365,7 +388,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onClear 이벤트를 발생시킵니다.
+     * Internal method that runs before deleting all elements.
+     * 
      * @listens BaseCollection#onClear
      */
     BaseCollection.prototype._onClear = function() {
@@ -376,7 +400,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onCheared 이벤트를 발생시킵니다.
+     * Internal method that runs after all elements are deleted.  
+     * 
      * @listens BaseCollection#onCleared
      */
     BaseCollection.prototype._onCleared = function() {
@@ -387,10 +412,11 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onChanging 이벤트를 발생시킵니다.
-     * @param {any} p_nVal 변경값
-     * @param {any} p_oVal 기존값
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs before the element changes.
+     * 
+     * @param {any} p_nVal New value to be changed
+     * @param {any} p_oVal Existing value
+     * @param {number} p_idx Location of the element to be changed
      * @listens BaseCollection#onChanging
      */
     BaseCollection.prototype._onChanging = function(p_nVal, p_oVal, p_idx) {
@@ -401,10 +427,11 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onChanged 이벤트를 발생시킵니다.
-     * @param {any} p_nVal 변경값
-     * @param {any} p_oVal 기존값
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs after the element changes.  
+     * 
+     * @param {any} p_nVal New value changed
+     * @param {any} p_oVal Existing value
+     * @param {number} p_idx Location of changed element
      * @listens BaseCollection#onChanged
      */        
     BaseCollection.prototype._onChanged = function(p_nVal, p_oVal, p_idx) {
@@ -415,9 +442,11 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 컬렉션에 요소를 추가할 때 설정되는 기본 기술자입니다.
+     * Internal method to set the attribute descriptor for a particular index.  
+     * 
      * @protected
-     * @param {number} p_idx 인덱스 번호
+     * @param {number} p_idx Where to specify properties
+     * @param {boolean} p_enum whether the property is enumerable
      */
     BaseCollection.prototype._getPropDescriptor = function(p_idx, p_enum) {
         if (typeof p_enum !== 'boolean') p_enum = true;
@@ -439,7 +468,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * 컬렉션의 요소를 삭제합니다. (내부 사용)
+     * Internal method to remove elements from the collection.  
+     * 
      * @abstract 
      */
     BaseCollection.prototype._remove  = function() {
@@ -450,14 +480,14 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 컬렉션 객체를 직렬화(guid 타입) 객체로 반환합니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode  
+     * mode=0 : reference structure(_guid:Yes, $ref:Yes)  
+     * mode=1 : Redundant structure(_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure(_guid:No,  $ref:No)   
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object
+     * @returns {object}  Guid type object literal
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -486,10 +516,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 컬렉션 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.
+     * 
+     * @param {object} p_oGuid Object literal of type of GUID to set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     BaseCollection.prototype.setObject = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -515,9 +545,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 컬렉션에 요소를 삭제합니다.
-     * @param {any} p_elem 요소
-     * @returns {number} 삭제한 인덱스 번호
+     * Remove the element from the collection.  
+     * 
+     * @param {any} p_elem Elements to be removed
+     * @returns {number} Index of removed element. If element does not exist, return -1
      */
     BaseCollection.prototype.remove = function(p_elem) {
         var idx = this.$elements.indexOf(p_elem);
@@ -530,9 +561,10 @@ var BaseCollection  = (function (_super) {
     });
     
     /**
-     * 컬렉션에서 지정된 위치의 요소를 삭제합니다.
-     * @param {number} p_pos 인덱스 번호
-     * @returns {boolean} 처리 결과  
+     * Remove the element in the specified location.
+     * 
+     * @param {number} p_pos Where to remove
+     * @returns {boolean} Element Removal Successful
      */
     BaseCollection.prototype.removeAt = function(p_pos) {
         var elem;
@@ -556,9 +588,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 요소가 컬렉션에 존재하는지 확인합니다.
-     * @param {any} p_elem 요소
-     * @returns {boolean}
+     * Verify that a particular element exists in the collection.  
+     * 
+     * @param {any} p_elem Factors to check
+     * @returns {boolean} Element Existence
      */
     BaseCollection.prototype.contains = function(p_elem) {
         return this.$elements.indexOf(p_elem) > -1;
@@ -568,9 +601,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     *  컬렉션에서 요소를 조회합니다.
-     * @param {any} p_elem 요소
-     * @returns {number} 0 보다 작으면 존재하지 않음
+     * Returns the index of an element.  
+     * 
+     * @param {any} p_elem Elements to search for
+     * @returns {number} Index of element, return -1 if element is missing
      */
     BaseCollection.prototype.indexOf = function(p_elem) {
         return this.$elements.indexOf(p_elem);
@@ -580,7 +614,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * 컬렉션에 요소를 추가합니다.
+     * Adds an element to the collection.
+     * 
      * @abstract 
      */
     BaseCollection.prototype.add  = function() {
@@ -591,7 +626,8 @@ var BaseCollection  = (function (_super) {
     });
     
     /**
-     * 컬렉션을 초기화 합니다.
+     * Initialize the collection.  
+     * 
      * @abstract 
      */
     BaseCollection.prototype.clear  = function() {

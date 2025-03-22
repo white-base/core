@@ -5,7 +5,7 @@ const localesPath = './locales';    // 상대 경로
 //==============================================================
 // 2. module dependency check
 //==============================================================
-// 3. module implementation       
+// 3. module implementation
 /**
  * @class Message
  * @description 메시지 코드 관리 클래스 (static)
@@ -41,12 +41,10 @@ async function _loadJSON(filePath) {
     const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
     
     try {
-        if (isNode) {
-            if (isESM) {
-                return (await import(filePath, { with: { type: 'json' } })).default;
-            } else {
-                return require(filePath);
-            }
+        if (isESM) {
+            return (await import(filePath, { with: { type: 'json' } })).default;
+        } else if (isNode) {
+            return require(filePath);
         } else {
             const response = await fetch(filePath);
             return await response.json();

@@ -653,7 +653,7 @@
   var EL04322 = "collection is not an instance of [ArrayCollection]";
   var EL04323 = "rollback(); '$1' is an unprocessable cmd";
   var WS011 = "[$1] Destination [$2] cannot be deleted";
-  var EN = "END";
+  var EN = "OK";
   var defaultCode = {
   	ES010: ES010,
   	ES011: ES011,
@@ -949,6 +949,11 @@
   function _isObject$2(obj) {
     return obj && _typeof(obj) === 'object' && !Array.isArray(obj);
   }
+  function _isString(obj) {
+    // 공백아닌 문자 여부
+    if (typeof obj === 'string' && obj.length > 0) return true;
+    return false;
+  }
   function _deepMerge(target, source) {
     for (var key in source) {
       if (source.hasOwnProperty(key)) {
@@ -970,44 +975,49 @@
     return _loadJSON2.apply(this, arguments);
   }
   function _loadJSON2() {
-    _loadJSON2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(filePath) {
+    _loadJSON2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(filePath) {
       var isNode, isESM, response;
-      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
             isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
             isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true); // REVIEW: test hack
-            if (!isNode) {
-              _context4.next = 12;
-              break;
-            }
+            _context3.prev = 2;
             if (!isESM) {
-              _context4.next = 9;
+              _context3.next = 9;
               break;
             }
-            _context4.next = 6;
+            _context3.next = 6;
             return import(filePath);
           case 6:
-            return _context4.abrupt("return", _context4.sent["default"]);
+            return _context3.abrupt("return", _context3.sent["default"]);
           case 9:
-            return _context4.abrupt("return", require(filePath));
-          case 10:
-            _context4.next = 18;
-            break;
-          case 12:
-            _context4.next = 14;
+            if (!isNode) {
+              _context3.next = 13;
+              break;
+            }
+            return _context3.abrupt("return", require(filePath));
+          case 13:
+            _context3.next = 15;
             return fetch(filePath);
-          case 14:
-            response = _context4.sent;
-            _context4.next = 17;
+          case 15:
+            response = _context3.sent;
+            _context3.next = 18;
             return response.json();
-          case 17:
-            return _context4.abrupt("return", _context4.sent);
           case 18:
+            return _context3.abrupt("return", _context3.sent);
+          case 19:
+            _context3.next = 24;
+            break;
+          case 21:
+            _context3.prev = 21;
+            _context3.t0 = _context3["catch"](2);
+            return _context3.abrupt("return");
+          case 24:
           case "end":
-            return _context4.stop();
+            return _context3.stop();
         }
-      }, _callee4);
+      }, _callee3, null, [[2, 21]]);
     }));
     return _loadJSON2.apply(this, arguments);
   }
@@ -1027,106 +1037,114 @@
     }
     return locale || 'en';
   }
+  function _replacePlaceholders(p_template, p_values) {
+    var namedValues = {},
+      indexedValues = [];
+    if (Array.isArray(p_values)) indexedValues = p_values;else if (_typeof(p_values) === 'object') namedValues = p_values;
+
+    // `${변수명}` 치환
+    p_template = p_template.replace(/\$\{(\w+)\}/g, function (match, key) {
+      return namedValues.hasOwnProperty(key) ? namedValues[key] : match;
+    });
+    // `$1, $2` 치환
+    p_template = p_template.replace(/\$(\d+)/g, function (match, index) {
+      var i = parseInt(index, 10) - 1;
+      return indexedValues[i] !== undefined ? indexedValues[i] : match;
+    });
+    return p_template;
+  }
   var Message = /*#__PURE__*/function () {
     function Message() {
       _classCallCheck(this, Message);
     }
     return _createClass(Message, null, [{
-      key: "_replacePlaceholders",
-      value: function _replacePlaceholders(p_template, p_values) {
-        var namedValues = {},
-          indexedValues = [];
-        if (Array.isArray(p_values)) indexedValues = p_values;else if (_typeof(p_values) === 'object') namedValues = p_values;
-
-        // `${변수명}` 치환
-        p_template = p_template.replace(/\$\{(\w+)\}/g, function (match, key) {
-          return namedValues.hasOwnProperty(key) ? namedValues[key] : match;
-        });
-        // `$1, $2` 치환
-        p_template = p_template.replace(/\$(\d+)/g, function (match, index) {
-          var i = parseInt(index, 10) - 1;
-          return indexedValues[i] !== undefined ? indexedValues[i] : match;
-        });
-        return p_template;
-      }
-    }, {
-      key: "_getMessageByCode",
-      value: function _getMessageByCode(p_code) {
+      key: "getMessageByCode",
+      value:
+      /**
+       * 메시지 코드에 해당하는 메시지를 반환합니다.
+       * @param {string} p_code 메시지 코드
+       * @returns {string} 메시지 문자열
+       */
+      function getMessageByCode(p_code) {
         var _this$$storage$lang$t, _this$$storage$lang$t2;
         var value = ((_this$$storage$lang$t = this.$storage.lang[this.currentLang]) === null || _this$$storage$lang$t === void 0 ? void 0 : _this$$storage$lang$t[p_code]) || ((_this$$storage$lang$t2 = this.$storage.lang[this.defaultLang]) === null || _this$$storage$lang$t2 === void 0 ? void 0 : _this$$storage$lang$t2[p_code]);
         return typeof value === 'number' ? String(value) : value;
       }
     }, {
       key: "importMessage",
-      value: function () {
-        var _importMessage = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(p_msg, p_path) {
-          return _regeneratorRuntime().wrap(function _callee$(_context) {
-            while (1) switch (_context.prev = _context.next) {
-              case 0:
-                if (_isObject$2(p_msg)) {
-                  _deepMerge(this.$storage.lang["default"], p_msg);
-                  this.$storage.path.push(p_path);
-                }
-              case 1:
-              case "end":
-                return _context.stop();
-            }
-          }, _callee, this);
-        }));
-        function importMessage(_x2, _x3) {
-          return _importMessage.apply(this, arguments);
+      value:
+      /**
+       * 메시지 코드를 저장소에 추가합니다.
+       * @param {object} p_msg 메세지 객체
+       * @param {string} p_path 메세지 파일 경로
+       */
+      function importMessage(p_msg, p_path) {
+        if (_isObject$2(p_msg)) {
+          _deepMerge(this.$storage.lang["default"], p_msg);
+          if (_isString(p_path)) this.$storage.path.push(p_path);
         }
-        return importMessage;
-      }()
+      }
     }, {
       key: "changeLanguage",
-      value: function () {
-        var _changeLanguage = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(p_lang) {
+      value: (
+      /**
+       * 언어를 변경합니다.
+       * @param {string} p_lang 언어 코드
+       */
+      function () {
+        var _changeLanguage = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(p_lang) {
           var i, localPath, msg;
-          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-            while (1) switch (_context2.prev = _context2.next) {
+          return _regeneratorRuntime().wrap(function _callee$(_context) {
+            while (1) switch (_context.prev = _context.next) {
               case 0:
                 i = 0;
               case 1:
                 if (!(i < this.$storage.path.length)) {
-                  _context2.next = 11;
+                  _context.next = 11;
                   break;
                 }
                 localPath = this.$storage.path[i];
-                _context2.next = 5;
+                _context.next = 5;
                 return _loadJSON("".concat(localPath, "/").concat(p_lang, ".json"));
               case 5:
-                msg = _context2.sent;
+                msg = _context.sent;
                 this.$storage.lang[p_lang] = this.$storage.lang[p_lang] || {};
                 // if (typeof $storage.lang[p_lang] === 'undefined') $storage.lang[p_lang] = {};
 
                 if (_typeof(msg) === 'object') _deepMerge(this.$storage.lang[p_lang], msg);else console.warn("Path '".concat(localPath, "/").concat(p_lang, "' does not have a file."));
               case 8:
                 i++;
-                _context2.next = 1;
+                _context.next = 1;
                 break;
               case 11:
                 this.currentLang = p_lang;
               case 12:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
-          }, _callee2, this);
+          }, _callee, this);
         }));
-        function changeLanguage(_x4) {
+        function changeLanguage(_x2) {
           return _changeLanguage.apply(this, arguments);
         }
         return changeLanguage;
       }()
+      /**
+       * 메시지 코드에 메세지를 반환합니다.
+       * @param {string} p_code 메시지 코드
+       * @param {object | string[]} p_values 메시지에서 치환할 값
+       * @returns {string} 메시지
+       */
+      )
     }, {
       key: "get",
       value: function get(p_code, p_values) {
-        var msg = Message._getMessageByCode(p_code);
+        var msg = Message.getMessageByCode(p_code);
         var result;
         if (typeof msg === 'undefined') {
           return "There is no message for code. '".concat(p_code, "'");
         }
-        result = Message._replacePlaceholders(msg, p_values);
+        result = _replacePlaceholders(msg, p_values);
         return $intro(p_code) + result;
 
         // inner funciton
@@ -1139,44 +1157,63 @@
       }
     }, {
       key: "init",
-      value: function () {
-        var _init = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      value: (
+      /**
+       * currentLang 를 defaultLang 로 초기화합니다.  
+       * 언어 자동 감지가 설정되어 있으면 자동으로 언어를 변경합니다.  
+       * 
+       * @returns {Promise<void>}
+       */
+      function () {
+        var _init = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
           var locale;
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-            while (1) switch (_context3.prev = _context3.next) {
+          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+            while (1) switch (_context2.prev = _context2.next) {
               case 0:
+                this.currentLang = this.defaultLang;
                 if (!this.autoDetect) {
-                  _context3.next = 5;
+                  _context2.next = 6;
                   break;
                 }
                 locale = _getLocale();
                 if (locale === 'en') locale = 'default';
-                // lang = locale.split('-')[0];
-                _context3.next = 5;
+                _context2.next = 6;
                 return Message.changeLanguage(locale);
-              case 5:
+              case 6:
               case "end":
-                return _context3.stop();
+                return _context2.stop();
             }
-          }, _callee3, this);
+          }, _callee2, this);
         }));
         function init() {
           return _init.apply(this, arguments);
         }
         return init;
-      }()
+      }())
     }]);
   }();
   _Message = Message;
   _defineProperty(Message, "_NS", 'Common');
+  /**
+   * 메시지 코드를 저장하는 내부 저장소입니다. 
+   */
   _defineProperty(Message, "$storage", {
     lang: {
       "default": {}
     },
     path: []
   });
+  /**
+   * 언어 자동 감지 여부를 설정합니다. 기본값은 true입니다.
+   */
   _defineProperty(Message, "autoDetect", true);
+  /**
+   * 기본 언어를 설정합니다. 기본값은 'default'입니다.
+   */
   _defineProperty(Message, "defaultLang", 'default');
+  /**
+   * 현재 언어를 설정합니다. 기본값은 'default'입니다.
+   */
   _defineProperty(Message, "currentLang", _Message.defaultLang);
   Message.importMessage(defaultCode, localesPath);
 

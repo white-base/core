@@ -75,7 +75,7 @@ describe("[target: message.js]", () => {
             });
         });
         describe("Message.changeLanguage() : 언어 변경", () => {
-            it("- 확장 추가", async () => {
+            it("- 언어 변경", async () => {
                 const {Message} = await import('../src/message');
                 await Message.changeLanguage('ko')
 

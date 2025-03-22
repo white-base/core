@@ -16,26 +16,20 @@ describe("[target: message.js]", () => {
         beforeEach(() => {
             jest.restoreAllMocks();
             jest.resetModules();
-            // Message.init();
         });
 
         it("CJS 방식으로 JSON 로드", async () => {
-            // const { default: Message } = await import("../src/message2.js");
-            // const Message = require("../src/message2.js");
             const {Message} = require("../src/message.js");
+
+            expect(Message.defaultLang).toBe('default')
+            expect(Message.currentLang).toBe('default')
+
             await Message.changeLanguage("ko");
 
+            expect(Message.defaultLang).toBe('default')
             expect(Message.currentLang).toBe('ko');
             expect(Message.get('KO')).toMatch(/OK/);
             expect(Message.get('EN')).toMatch(/OK/);
         });
-        // it("- this.autoDetect : 언어 자동감지", async () => {
-                    
-        //     expect(Message.currentLang).toBe('default')
-            
-        //     Message.autoDetect = true;
-            
-        //     expect(Message.currentLang).toBe('ko')
-        // });
     });
 });

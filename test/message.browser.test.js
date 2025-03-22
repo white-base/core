@@ -16,25 +16,30 @@ describe("[target: message.js]", () => {
             process.env.LANG = 'ko_KR.UTF-8';
             jest.restoreAllMocks();
         });
-        it("- changeLanguage() : 언어변경", async () => {
-            const {Message} = require("../src/message.js");
-            // const { Message } = await import("../dist/message2.umd");
-            // const { default: Message } = await import("../dist/message2.umd");
-            // const { default: Message } = await import("../dist/message2.umd");
-            // const Message = await import("../dist/message2.umd");
-            // console.log(MessageModule.default);
-            expect(Message.defaultLang).toBe('default')
-            expect(Message.currentLang).toBe('default')
+        describe("Message.changeLanguage() : 언어 변경", () => {
+            it("- 언어 변경", async () => {
+                const {Message} = require("../src/message.js");
+    
+                expect(Message.defaultLang).toBe('default')
+                expect(Message.currentLang).toBe('default')
+    
+                await Message.changeLanguage("ko");
+    
+                expect(Message.defaultLang).toBe('default')
+                expect(Message.currentLang).toBe('ko')
+                expect(Message.get('KO')).toMatch(/OK/);
+                expect(Message.get('EN')).toMatch(/OK/);
+            });
+        });
+        describe("Message.autoDetect : 언어자동 감지", () => {
+            it("- 활성화", async () => {
+                const {Message} = require("../src/message.js");
+                Message.autoDetect = true;
+                await Message.init();
 
-            // await Message.init();
-
-            await Message.changeLanguage("ko");
-
-            expect(Message.defaultLang).toBe('default')
-            expect(Message.currentLang).toBe('ko')
-
-            expect(Message.get('KO')).toMatch(/END/);
-            expect(Message.get('EN')).toMatch(/OK/);
+                expect(Message.defaultLang).toBe('default')
+                expect(Message.currentLang).toBe('default')
+            });
         });
     });
 });
