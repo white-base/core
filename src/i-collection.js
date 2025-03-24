@@ -13,7 +13,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation
 var ICollection  = (function () {
     /**
-     * 컬렉션 인터페이스 입니다.
+     * This is the collection interface.
      * @constructs ICollection
      * @interface
      */
@@ -24,7 +24,8 @@ var ICollection  = (function () {
     ICollection._NS = 'Interface';    // namespace
 
     /**
-     * 컬렉션에 요소를 추가합니다.
+     * Add an element to the collection.  
+     * 
      * @abstract
      */
     ICollection.prototype.add  = function() {
@@ -32,7 +33,8 @@ var ICollection  = (function () {
     };
 
     /**
-     * 컬렉션에서 요소를 제거합니다.
+     * Remove an element from the collection.  
+     * 
      * @abstract
      */
     ICollection.prototype.remove  = function() {
@@ -40,8 +42,9 @@ var ICollection  = (function () {
     };
 
     /**
-     * 요소가 컬렉션에 존재하는지 확인합니다.
-     * @returns {boolean}
+     * Verify that an element exists in the collection.  
+     * 
+     * @returns {boolean} If the element exists, it is 'true', otherwise it is 'false'
      * @abstract
      */
     ICollection.prototype.contains  = function() {
@@ -49,8 +52,9 @@ var ICollection  = (function () {
     };
 
     /**
-     * 컬렉션에서 요소을 조회합니다.
-     * @returns {number}
+     * Returns the index of an element in the collection.  
+     * 
+     * @returns {number}  index of element, '-1' without element
      * @abstract
      */
     ICollection.prototype.indexOf  = function() {

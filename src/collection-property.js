@@ -24,11 +24,12 @@ if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'ba
 // 3. module implementation   
 var PropertyCollection  = (function (_super) {
     /**
-     * 프로퍼티 컬렉션을 생성합니다.
+     * Creates an instance of the class 'PropertyCollection'.  
+     * 
      * @constructs PropertyCollection
      * @implements {IPropertyCollection}
      * @extends BaseCollection
-     * @param {object} p_owner 소유 객체
+     * @param {object} p_owner Objects that own this collection
      */
     function PropertyCollection(p_owner) {
         _super.call(this, p_owner); 
@@ -36,7 +37,8 @@ var PropertyCollection  = (function (_super) {
         var $keys = [];
 
         /**
-         * 내부 변수 접근
+         * Returns all key values in the collection to an array.
+         * 
          * @member {string} PropertyCollection#$keys
          * @readonly
          * @private
@@ -88,10 +90,11 @@ var PropertyCollection  = (function (_super) {
     }
 
     /**
-     * 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)
+     * Internal method to remove the specified element from the collection.  
+     * 
      * @protected
-     * @param {number} p_pos 인덱스 위치
-     * @returns {boolean} 
+     * @param {number} p_pos Location of the element to be removed
+     * @returns {boolean} Removal successful
      */
     PropertyCollection.prototype._remove = function(p_pos) {
         var count = this.count - 1;
@@ -121,14 +124,14 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object
+     * @returns {object}  Guid type object literal
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -164,10 +167,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 프로퍼티 컬렉션 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.  
+     * 
+     * @param {object} p_oGuid Object literal of the type of GUID to be set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     PropertyCollection.prototype.setObject  = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -226,11 +229,12 @@ var PropertyCollection  = (function (_super) {
     // };
     
     /**
-     * 프로퍼티 컬렉션에 요소를 추가합니다.
-     * @param {string} p_key 키
-     * @param {any} [p_elem] 요소
-     * @param {object} [p_desc] 기술자
-     * @returns {number} index 번호
+     * Adds an element to the collection.  
+     * 
+     * @param {string} p_key Key of the element
+     * @param {any} [p_elem] Elements to add
+     * @param {object} [p_desc] Property descriptor object for element
+     * @returns {number} Location of the added element
      */
     PropertyCollection.prototype.add = function(p_key, p_elem, p_desc) {
         try {
@@ -283,9 +287,8 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로러티 컬렉션을 초기화 합니다.
-     * - 대상 : _element = [], _descriptors = [], _keys = []  
-     * - 이벤트는 초기화 되지 않습니다.
+     * Initialize the collection.  
+     * Empty $elements, $descripts, and $keys at initialization.  
      */
     PropertyCollection.prototype.clear = function() {
         // this._onClear();
@@ -307,9 +310,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션키의 인덱스 값을 조회합니다.
-     * @param {string} p_key 키
-     * @returns {number} 없을시 -1
+     * Query the index based on the key.  
+     * 
+     * @param {string} p_key Key to view
+     * @returns {number} Index corresponding to key, return '-1' if not present
      */
     PropertyCollection.prototype.keyToIndex = function(p_key) {
         if (!_isString(p_key))  throw new ExtendError(/EL04224/, null, [typeof p_key]);
@@ -320,9 +324,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션의 인덱스에 대한 키값을 조회합니다.
-     * @param {number} p_idx 인덱스 값
-     * @returns {string}
+     * Query the key based on the index value.  
+     * 
+     * @param {number} p_idx Index to view
+     * @returns {string} Key values for that index
      */
     PropertyCollection.prototype.indexToKey = function(p_idx) {
         if (typeof p_idx !== 'number') throw new ExtendError(/EL0422A/, null, [typeof p_idx]);
@@ -333,9 +338,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션의 키 존재하는지 확인합니다.
-     * @param {string} p_key 키
-     * @returns {boolean}
+     * Verify that the specified key exists in the collection.  
+     * 
+     * @param {string} p_key Key value to check
+     * @returns {boolean} If the key exists, it is 'true', otherwise it is 'false'
      */
     PropertyCollection.prototype.exists = function(p_key) {
         if (!_isString(p_key)) throw new ExtendError(/EL0422B/, null, [typeof p_key]);
@@ -347,10 +353,11 @@ var PropertyCollection  = (function (_super) {
 
 
     /**
-     * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {Array}
+     * Returns the result of executing the function provided to all elements to the new array.  
+     * 
+     * @param {Function} callback Callback function to convert, (elem: T, index: number, key: string, list: T[]) => U
+     * @param {any} thisArg Objects to use as this inside the callback function
+     * @returns  {Array} New arrangement of transformed elements
      */
     PropertyCollection.prototype.map  = function(callback, thisArg) {
         var newArr = [];
@@ -368,10 +375,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {Array}
+     * Returns a new array containing only elements that satisfy the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to filter, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Objects to use as this inside the callback function
+     * @returns  {Array} Array of filtered elements
      */
     PropertyCollection.prototype.filter = function (callback, thisArg) {
         let newArr = [];
@@ -391,10 +399,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
-     * @param {Function} callback 콜백함수 (accumulator, currentValue, index, array) => any
-     * @param {any} initialValue 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용합니다.
-     * @returns  {any}
+     * Returns the accumulated results by executing the reducer function provided to all elements.  
+     * 
+     * @param {Function} callback callback function to be reduced, (acc: U, element: T, index: number, key: string, list: T[]) => U
+     * @param {any} initialValue Initial value
+     * @returns  {any} Array of filtered elements
      */
     PropertyCollection.prototype.reduce = function(callback, initialValue) {
         var acc = initialValue;
@@ -412,10 +421,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {any}
+     * Returns the first element that matches the conditions of the provided function.
+     * 
+     * @param {Function} callback Callback function to be searched, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     PropertyCollection.prototype.find = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
@@ -432,9 +442,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => void
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+     * Run the function provided for all elements.  
+     * 
+     * @param {Function} callback callback function to be executed, (elem: T, index: number, key: string, list: T[]) => void
+     * @param {any} thisArg Object to use as this inside the callback function
      */
     PropertyCollection.prototype.forEach = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
@@ -449,10 +460,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {boolean}
+     * Verify that at least one element matches the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {boolean}  'true' if more than one element satisfies the condition, or 'false' if not
      */
     PropertyCollection.prototype.some = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
@@ -468,10 +480,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {boolean}
+     * Verify that all elements satisfy the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {boolean} 'true' if all elements meet the conditions, 'false' otherwise
      */
     PropertyCollection.prototype.every = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
@@ -487,10 +500,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => number
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {any}
+     * Returns the index of the first element that matches the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     PropertyCollection.prototype.findIndex = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);

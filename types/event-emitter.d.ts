@@ -1,112 +1,112 @@
 /**
- * `EventEmitter` 클래스는 이벤트 리스너를 관리하고 이벤트를 발행하는 기능을 제공합니다.
+ * The 'EventEmitter' class provides the ability to manage event listeners and issue events.  
  */
 declare class EventEmitter {
 
     /**
-     * 등록된 이벤트를 저장하는 내부 객체입니다.  
+     * Internal object that stores registered events.  
      */
     $storage: object;
 
     /**
-     * 등록된 이벤트명을 저장하는 배열입니다. 
+     * Array that stores registered event names.  
      */
     _list: string[];
 
     /**
-     * 등록된 이벤트명을 저장하는 배열입니다. 
+     * Array that stores registered event names.  
      */
     isLog: boolean;
 
     /**
-     * `EventEmitter` 클래스의 인스턴스를 생성합니다.
+     * Creates an instance of the class 'EventEmitter'.  
      */
     constructor();
 
     /**
-     * 이벤트에 대한 리스너(함수)를 추가합니다.
+     * Adds a listener (function) for the event.  
      * 
-     * @param event - 이벤트 명
-     * @param listener - 리스너 함수
+     * @param event Event Name
+     * @param listener Listener function
      * 
      * @example
      * var emitter = new EventEmitter();
      * 
      * function onFoo(data) {
-     *     console.log('foo 이벤트:', data);
+     *     console.log('foo Event:', data);
      * }
      * 
      * emitter.on('foo', onFoo);
-     * emitter.emit('foo', { key: 'value' });  // "foo 이벤트: { key: 'value' }"
+     * emitter.emit('foo', { key: 'value' });  // "foo Event: { key: 'value' }"
      */
     on(event: string, listener: (...args: any[]) => void): void;
     
     /**
-     * `on()` 메서드의 별칭입니다.
+     * Alias for method 'on().
      * 
      * @alias on
      */
     addListener(event: string, listener: (...args: any[]) => void): void;
 
     /**
-     * 이벤트에 대한 일회성 함수를 추가합니다.
+     * Adds a one-time function for the event.  
      * 
-     * @param event - 이벤트 명
-     * @param listener - 리스너 함수
+     * @param event Event Name
+     * @param listener Listener function
      * 
      * @example
      * emitter.once('bar', function(data) {
-     *     console.log('bar 이벤트:', data);
+     *     console.log('bar Event:', data);
      * });
      * 
-     * emitter.emit('bar', { key: 'value' });  // "bar 이벤트: { key: 'value' }"
-     * emitter.emit('bar', { key: 'value' });  // 아무 일도 일어나지 않음
+     * emitter.emit('bar', { key: 'value' });  // "bar Event: { key: 'value' }"
+     * emitter.emit('bar', { key: 'value' });  // Nothing happens
      */
     once(event: string, listener: (...args: any[]) => void): void;
 
     /**
-     * 지정한 이벤트 의 리스너(함수)를 제거합니다.
+     * Removes the listener (function) of the specified event.  
      * 
-     * @param event - 이벤트 명
-     * @param listener - 리스너 함수
+     * @param event Event Name
+     * @param listener Listener function
      * 
      * @example
      * function onQux(data) {
-     *     console.log('qux 이벤트:', data);
+     *     console.log('qux Event:', data);
      * }
      * 
      * emitter.on('qux', onQux);
-     * emitter.emit('qux', { key: 'value' });  // "qux 이벤트: { key: 'value' }"
+     * emitter.emit('qux', { key: 'value' });  // "qux Event: { key: 'value' }"
      * 
      * emitter.off('qux', onQux);
-     * emitter.emit('qux', { key: 'value' });  // 아무 일도 일어나지 않음
+     * emitter.emit('qux', { key: 'value' });  // Nothing happens
      */
     off(event: string, listener: (...args: any[]) => void): void;
     
     /**
-     * `off()` 메서드의 별칭입니다.
+     * Alias of method 'off()'.  
      * 
      * @alias off
      */
     removeListener(event: string, listener: (...args: any[]) => void): void;
 
     /**
-     * 모든 이벤트 또는 특정 이벤트에 등록된 리스너를 모두 제거합니다.
+     * Remove all events or all listeners registered for a particular event.  
      * 
-     * @param event -  제거할 이벤트명 (생략 시 모든 이벤트 제거)
+     * @param event Name of the event to be removed (Remove all events if omitted)
      * 
      *  @example
      * function onQux(data) {
-     *     console.log('qux 이벤트:', data);
+     *     console.log('qux Event:', data);
      * }
      * 
      * function anotherOnQux(data) {
-     *     console.log('another qux 이벤트:', data);
+     *     console.log('another qux Event:', data);
      * }
      * 
      * emitter.on('qux', onQux);
      * emitter.on('qux', anotherOnQux);
-     * emitter.emit('qux', { key: 'value' });  // "qux 이벤트: { key: 'value' }", "another qux 이벤트: { key: 'value' }"
+     * emitter.emit('qux', { key: 'value' });  // "qux Event: { key: 'value' }", "another qux Event: { key: 'value' }"
      * 
      * emitter.removeAllListeners('qux');
      * emitter.emit('qux', { key: 'value' });  // 아무 일도 일어나지 않음
@@ -114,18 +114,18 @@ declare class EventEmitter {
     removeAllListeners(event?: string): void;
 
     /**
-     * 등록된 이벤트의 리스너(함수)를 실행합니다. 
+     * Runs the listener (function) of the registered event.  
      * 
-     * @param event - 이벤트명
-     * @returns `true` 리스너 실행 성공, `false` 실행 실패, `undefined` 리스너 없음
+     * @param event Event Name
+     * @returns  'true' listener execution successful, 'false' execution failed, 'undefined' listener no
      * 
      * @example
      * function onFoo(data) {
-     *     console.log('foo 이벤트:', data);
+     *     console.log('foo Event:', data);
      * }
      * 
      * emitter.on('foo', onFoo);
-     * emitter.emit('foo', { key: 'value' });  // "foo 이벤트: { key: 'value' }"
+     * emitter.emit('foo', { key: 'value' });  // "foo Event: { key: 'value' }"
      */
     emit(event: string, ...args: any[]): boolean | undefined;
 }

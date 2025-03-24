@@ -16,7 +16,8 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 // 3. module implementation   
 var IArrayCollection  = (function (_super) {
     /**
-     * 배열 컬렉션 인터페이스 입니다.
+     * Array collection interface.  
+     * 
      * @extends ICollection
      */
     function IArrayCollection() {
@@ -28,7 +29,8 @@ var IArrayCollection  = (function (_super) {
     IArrayCollection._NS = 'Interface';    // namespace
 
     /**
-     * 요소를 지정위치에 추가합니다.
+     * Adds an element to the specified location.  
+     * 
      * @abstract
      */
     IArrayCollection.prototype.insertAt  = function() {

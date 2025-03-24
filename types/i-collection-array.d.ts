@@ -1,16 +1,16 @@
 import ICollection from "./i-collection";
 
 /**
- * 배열 컬렉션 인터페이스입니다.
+ * Array collection interface.
  */
 declare interface IArrayCollection<T> extends ICollection<T> {
 
     /**
-     * 요소를 지정한 위치에 추가합니다.
+     * Adds an element to the specified location.  
      * 
-     * @param index - 추가할 위치
-     * @param elem - 추가할 요소
-     * @returns 요소 추가 성공 여부
+     * @param index Where to add
+     * @param elem Elements to add
+     * @returns Has the element been added successfully
      */
     insertAt(index: number, elem: T): boolean;
 }

@@ -2,12 +2,12 @@ import IObject from "./i-object";
 import IMarshal from "./i-marshal";
 
 /**
- * MetaObject 클래스는 IObject 및 IMarshal 인터페이스를 구현하여 메타 데이터를 처리하는 최상위 객체입니다.
+ * The MetaObject class is a top-level object that processes metadata by implementing IOobject and IMarshal interfaces.  
  */
 declare class MetaObject implements IObject, IMarshal {
     
     /**
-     * 객체의 고유 식별자를 저장하는 내부 속성입니다.
+     * Internal property that stores the unique identifier of the object.  
      * 
      * @example
      * var obj = MetaObject();
@@ -16,7 +16,7 @@ declare class MetaObject implements IObject, IMarshal {
     readonly _guid: string;
 
     /**
-     * 객체의 생성자 함수를 참조하는 내부 속성입니다.
+     * Internal property that refers to the generator function of the object.  
      * 
      * @example
      * var obj = new MetaObject();
@@ -26,29 +26,29 @@ declare class MetaObject implements IObject, IMarshal {
     readonly _type: Function;
 
     /**
-     * 객체 네임스페이스를 나타냅니다.  
-     * `_type.NS`가 정적으로 정의되지 않은 경우, 부모의 네임스페이스를 기본값으로 사용합니다.
+     * Indicates the object name space.  
+     * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
      */
     readonly _ns: string;
 
     /**
-     * MetaObject 클래스의 인스턴스를 생성합니다.
+     * Creates an instance of the MetaObject class.  
      */
     constructor();
 
     /**
-     * 현재 객체와 지정된 객체가 동일한지 비교합니다.  
-     * 단, `_guid` 속성은 비교에서 제외됩니다.  
+     * Compare the current object with the specified object.  
+     * However, the '_guid' property is excluded from the comparison.  
      * 
-     * @param target - 비교할 대상
-     * @returns 두 객체가 동일하면 `true`, 그렇지 않으면 `false`
+     * @param target To compare
+     * @returns If two objects are the same, 'true', or 'false'
      */
     equal(target: object): boolean;
 
     /**
-     * 현재 객체의 생성자 및 프로토타입 체인의 모든 생성자를 배열로 반환합니다. 
+     * Returns the creators of the current object and all the creators of the prototype chain to the array.  
      * 
-     * @returns 생성자 함수의 배열 (가장 먼저 정의된 생성자부터 순차적으로 포함)
+     * @returns Array of generator functions (includes first defined constructors sequentially)
      * 
      * @example
      * const obj = new MetaObject();
@@ -58,11 +58,11 @@ declare class MetaObject implements IObject, IMarshal {
     getTypes(): Function[];
 
     /**
-     * 객체가 특정 클래스의 인스턴스인지 확인합니다.  
-     * 정의된 인터페이스 타입(`_UNION` 포함)도 함께 검사할 수 있습니다.  
+     * Verify that the object is an instance of a particular class.  
+     * You can also examine the defined interface type (including '_UNION').  
      * 
-     * @param target - 클래스 생성자 함수 또는 클래스 이름(문자열)
-     * @returns 지정된 클래스의 인스턴스 여부  (`true` 또는 `false`)
+     * @param target Class constructor function or class name (string)
+     * @returns Whether there is an instance of the specified class ('true' or 'false')
      * 
      * @example
      * var obj = new MetaObject();
@@ -91,22 +91,22 @@ declare class MetaObject implements IObject, IMarshal {
     instanceOf(target: Function | string): boolean;
 
     /**
-     * 객체를 GUID 타입의 객체 리터럴로 반환합니다.
+     * Returns the object as an object literal of type GUID.  
      * 
-     * @param mode - 가져오기 모드  
-     * mode=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * mode=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * mode=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param context - 현재 객체를 포함(소유)하는 상위 객체
-     * @returns GUID 타입의 객체 리터럴
+     * @param mode Import mode  
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param context Parent object that contains (owns) the current object
+     * @returns Guid type object literal
      */
     getObject(mode?: number, context?: object | object[]): object;
 
     /**
-     * GUID 타입의 객체 리터럴을 인스턴스 객체로 변환하여 설정합니다.
+     * Set up a GUID type object literal by converting it to an instance object.  
      * 
-     * @param guidObj - 설정할 GUID 타입의 객체 리터럴
-     * @param guidRootObj - 변환 과정에서 참조되는 초기 GUID 리터럴 객체  
+     * @param guidObj object literal of type of GUID to set
+     * @param guidRootObj Initial GUID literal object referenced during conversion
      */
     setObject(guidObj: object, guidRootObj?: object): void;
 }

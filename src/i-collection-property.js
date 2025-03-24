@@ -16,7 +16,8 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 // 3. module implementation   
 var IPropertyCollection  = (function (_super) {
     /**
-     * 프로퍼티 컬렉션 인터페이스 입니다.
+     * This is the property collection interface.  
+     * 
      * @constructs IPropertyCollection
      * @interface
      * @extends  ICollection
@@ -30,8 +31,9 @@ var IPropertyCollection  = (function (_super) {
     IPropertyCollection._NS = 'Interface';    // namespace
 
     /**
-     * 프로퍼티 키가 존재하는지 확인합니다.
-     * @returns {boolean}
+     * Returns the property key for the specified index.  
+     * 
+     * @returns {boolean} Property key for that index
      * @abstract
      */
     IPropertyCollection.prototype.indexToKey  = function() {

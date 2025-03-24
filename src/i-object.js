@@ -12,7 +12,8 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IObject  = (function () {
     /**
-     * 객체 인터페이스 입니다. (최상위)
+     * Object interface.  
+     * 
      * @constructs IObject 
      * @interface
      */
@@ -23,8 +24,9 @@ var IObject  = (function () {
     IObject._KIND = 'interface';
 
     /**
-     * 객체 타입들을 얻습니다.
-     * @returns {Function[]}
+     * Returns a list of types of objects.  
+     * 
+     * @returns {Function[]} Arrangement of types of objects
      * @abstract
      */
     IObject.prototype.getTypes  = function() {
@@ -32,8 +34,9 @@ var IObject  = (function () {
     };
     
     /**
-     * 객체의 인스턴스 여부를 확인합니다.
-     * @returns {boolean}
+     * Verify that the object is an instance of a particular class or interface.  
+     * 
+     * @returns {boolean} Instance or 'true' if it's an instance or 'false' if it's not
      * @abstract
      */
     IObject.prototype.instanceOf  = function() {
@@ -41,15 +44,15 @@ var IObject  = (function () {
     };
 
     /**
-     * 객체와 비교합니다.
-     * @returns {boolean}
+     * Compare that the object is the same as the given object.  
+     * 
+     * @returns {boolean} If two objects are the same, 'true', or 'false'
      * @abstract
      */
     IObject.prototype.equal  = function() {
         throw new ExtendError(/EL02113/, null, ['IObject']);
     };
     
-
     return IObject;
     
 }());

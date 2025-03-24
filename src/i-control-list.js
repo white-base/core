@@ -12,7 +12,8 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IListControl  = (function () {
     /**
-     * 목록 제어 인터페이스 입니다.
+     * List control interface.  
+     * 
      * @constructs IListControl
      * @interface
      */
@@ -23,7 +24,8 @@ var IListControl  = (function () {
     IListControl._KIND = 'interface';
     
     /**
-     * 목록에 대상을 추가합니다.
+     * Add an element to the list.  
+     * 
      * @abstract
      */
     IListControl.prototype.add = function() {
@@ -31,7 +33,8 @@ var IListControl  = (function () {
     };
 
     /**
-     * 목록에서 대상을 삭제합니다.
+     * Remove an element from the list.  
+     * 
      * @abstract
      */
     IListControl.prototype.del  = function() {
@@ -39,8 +42,9 @@ var IListControl  = (function () {
     };
 
     /**
-     * 목록에 대상의 존재 여부를 확인합니다.
-     * @returns {boolean}
+     * Verify that an element exists in the list.  
+     * 
+     * @returns {boolean} If the element exists, it is 'true', otherwise it is 'false'
      * @abstract
      */
     IListControl.prototype.has  = function() {
@@ -48,8 +52,8 @@ var IListControl  = (function () {
     };
 
     /**
-     * 목록에서 대상을 찾습니다.
-     * @returns {any}
+     * Search for elements in the list.  
+     * 
      * @abstract
      */
     IListControl.prototype.find  = function() {

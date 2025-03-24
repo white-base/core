@@ -2,46 +2,46 @@ import IElement from "./i-element";
 import MetaObject from "./meta-object";
 
 /**
- * MetaElement 클래스는 MetaObject를 상속하며, IElement 인터페이스를 구현합니다.
+ * The MetaElement class inherits the MetaObject and implements the IElement interface.  
  */
 declare class MetaElement extends MetaObject implements IElement {
 
     /**
-     * 요소의 이름을 저장하는 내부 속성입니다. 
+     * Internal property that stores the name of the element.  
      */
     _name: string;
 
     /**
-     * MetaElement 클래스의 인스턴스를 생성합니다.
+     * Creates an instance of the MetaElement class.  
      * 
-     * @param name - 요소의 이름
+     * @param name Name of the element
      */
     constructor(name: string);
 
     /**
-     * 객체를 GUID 타입의 객체 리터럴로 반환합니다.
+     * Returns the object as an object literal of type GUID.  
      * 
-     * @param mode - 가져오기 모드  
-     * mode=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * mode=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * mode=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param context - 현재 객체를 포함(소유)하는 상위 객체
-     * @returns GUID 타입의 객체 리터럴
+     * @param mode Import mode  
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param context Parent object that contains (owns) the current object  
+     * @returns Guid type object literal
      */
     getObject(mode?: number, context?: object | object[]): object;
 
     /**
-     * GUID 타입의 객체 리터럴을 인스턴스 객체로 변환하여 설정합니다.
+     * Set up a GUID type object literal by converting it to an instance object.  
      * 
-     * @param guidObj - 설정할 GUID 타입의 객체 리터럴
-     * @param guidRootObj - 변환 과정에서 참조되는 초기 GUID 리터럴 객체  
+     * @param guidObj object literal of the type of GUID to be set
+     * @param guidRootObj Initial GUID literal object referenced during conversion
      */
     setObject(guidObj: object, guidRootObj?: object): void;
 
     /**
-     * 현재 객체의 복제본을 생성합니다.  
+     * Creates a replica of the current object.  
      * 
-     * @returns 복제된 객체
+     * @returns Replicated Objects
      */
     clone(): this;
 }

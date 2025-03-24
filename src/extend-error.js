@@ -8,23 +8,77 @@ import Message from './message.js';
 // 2. module dependency check
 //==============================================================
 // 3. module implementation   
-var OLD_ENV = globalThis.OLD_ENV ? globalThis.OLD_ENV : false;    // 커버리지 테스트 역활
 
-const ExtendError = (function () {
+// inner function 
+function _buildMessageProp(obj) {
+    var msg = '';
+    for (var prop in obj) {
+        if (typeof obj[prop] === 'string') msg += prop + ' : '+ obj[prop] + '\n';
+        else continue;
+    }
+    return msg;
+}
+function _buildMsgQueue(queue) {
+    var msg = '';
+    var queue_cnt = queue.length;
+    for (var i = queue_cnt; i > 0; i--) {
+        var mark = '';
+        for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
+        msg += '' + mark + ' '+ queue[i - 1] + '\n';
+    }
+    return msg;
+}
+
+class ExtendError extends Error {
+
+    static _NS = 'Common';      // namespace
 
     /**
-     * 확장오류를 생성합니다...
-     * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
-     * @constructs ExtendError
-     * @param {string | RegExp} p_msg  메세지코드 또는 메세지
-     * @param {ExtendError | object | null} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
-     * @param {Array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
-     * @kor 메세지코드 또는 메세지를 입력하여 확장 오류를 생성합니다.
-     * @example
-     * new ExtendError({code:'', ctx: []})
-     * new ExtendError(/E0011/, [''])
+     * Save previously generated messages.  
+     * 
+     * @member {string[]} ExtendError#queue
      */
-    function ExtendError(p_msg, p_prop, p_codeVal) {
+    queue = [];
+
+    /**
+     * Error message related to property type.  
+     * 
+     * @member {object} ExtendError#prop
+     */
+    prop = {};
+
+    /**
+     * Use user messages to create an ExtendError instance.  
+     *
+     * @param {string} msg Error message string
+     * @param {ExtendError | object | null} causeOrProp Error message by existing ExtendError, Error object or property
+     *
+     * @example
+     * throw new ExtendError("Custom error message");
+     * throw new ExtendError("Custom error message", error);
+     * throw new ExtendError("Custom error message", { style: "required" });
+     */
+
+    /**
+     * Create an instance of 'ExtendError' using the message code and substitution value.  
+     *
+     * @param {RegExp} msgPattern Code value of regular expression type
+     * @param {ExtendError | object | null} causeOrProp Error message by existing ExtendError, Error object or property
+     * @param {string[]} placeholders Array of strings containing substitution values such as '$1' and '$2' in the
+     *
+     * @example
+     * // For messages that do not have a substitution value
+     * throw new ExtendError(/EL01504/);
+     * throw new ExtendError(/EL01504/, error);
+     * throw new ExtendError(/EL01504/, { style: "required" });
+     * // For messages with substitution values
+     * throw new ExtendError(/EL01504/, undefined, ['value1', 'value2']);
+     * throw new ExtendError(/EL01504/, error, ['value1', 'value2']););
+     * throw new ExtendError(/EL01504/, { style: "required" }, ['value1', 'value2']);
+     */
+    constructor(p_msg, p_prop, p_codeVal) {
+        super()
+        
         var _build = '';
         var _prop;
         var _queue = [];    
@@ -47,84 +101,25 @@ const ExtendError = (function () {
         
         _build = _msg + '\n';
         
-        if (_prop) _build += $buildMessageProp(_prop);
-        if (_queue.length > 0) _build += $buildMsgQueue(_queue);
+        if (_prop) _build += _buildMessageProp(_prop);
+        if (_queue.length > 0) _build += _buildMsgQueue(_queue);
 
-        // var _instance = _super.call(this, _build);
-        var _instance = new Error(_build);
-        
-        /**
-         * 이전에 발생한 message 큐
-         * @member {string[]} ExtendError#queue
-         */
-        // if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
-        // else _instance.queue = [];
-        _instance.queue = _queue;
-        _instance.queue.push(_msg);
-
-        /**
-         * 속성 타입 오류 메시지입니다.
-         * @member {object} ExtendError#prop
-         */
-        if (_prop) _instance.prop = _prop;
-        else _instance.prop = {};
-
-        if (Error.captureStackTrace && !OLD_ENV) {
-            Error.captureStackTrace(_instance, ExtendError);
-        }
-
-        Object.setPrototypeOf(_instance, Object.getPrototypeOf(this));
-    
-        return _instance;
-
-        // inner function 
-        function $buildMessageProp(obj) {
-            var msg = '';
-            for (var prop in obj) {
-                if (typeof obj[prop] === 'string') msg += prop + ' : '+ obj[prop] + '\n';
-                else continue;
-            }
-            return msg;
-        }
-        function $buildMsgQueue(queue) {
-            var msg = '';
-            var queue_cnt = queue.length;
-            for (var i = queue_cnt; i > 0; i--) {
-                var mark = '';
-                for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
-                msg += '' + mark + ' '+ queue[i - 1] + '\n';
-            }
-            return msg;
-        }
+        this.message = _build;
+        this.queue = _queue;
+        this.queue.push(_msg);
     }
 
-    ExtendError._NS = 'Common';    // namespace
-    
-    ExtendError.prototype = Object.create(Error.prototype, {
-        constructor: {
-            value: Error,
-            enumerable: false,
-            writable: true,
-            configurable: true,
-        },
-    });
-    
-    ExtendError.prototype.toString = function() {
+    /**
+     * Converts error messages into strings.  
+     * 
+     * @return error message string
+     */
+    toString() {
         return 'ExtendError : ' + this.message;
-    };
-        
-    // REVIEW: 이부분이 제거 해도 문제 없는게 맞느지 검토해야함
-    // if (Object.setPrototypeOf) {
-    //     Object.setPrototypeOf(ExtendError, Error);
-    // } else {
-    //     ExtendError.__proto__ = Error;
-    // }
-    // Util.inherits(ExtendError, _super);
+    }
+}
 
-    
-    return ExtendError;
 
-}());
 
 //==============================================================
 // 4. module export

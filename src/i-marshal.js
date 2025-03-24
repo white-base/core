@@ -12,19 +12,22 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IMarshal  = (function () {
     /**
-     * 객체 통제 인터페이스 입니다.
+     * Object control interface.  
+     * 
      * @interface
      */
     function IMarshal() {
 
         /**
-         * 객체의 고유 식별자
+         * Internal property that stores the unique identifier of the object.  
+         * 
          * @member {string} IMarshal#_guid
          */
         this._guid = String;
 
         /**
-         * 객체의 타입
+         * Internal property that stores the creator type of the object.  
+         * 
          * @member {string} IMarshal#_type REVIEW:
          */
         this._type = [['_req_', Function, {$type: 'class'} ]];
@@ -34,7 +37,8 @@ var IMarshal  = (function () {
     IMarshal._KIND = 'interface';
     
     /**
-     * 대상의 직렬화 객체를 얻습니다.
+     * Returns the object literal.  
+     * 
      * @abstract
      */
     IMarshal.prototype.getObject = function() {
@@ -42,7 +46,8 @@ var IMarshal  = (function () {
     };
 
     /**
-     * 직렬화 객체를 설정합니다.
+     * Set the object literal by converting it to an instance.  
+     * 
      * @abstract
      */
     IMarshal.prototype.setObject  = function() {

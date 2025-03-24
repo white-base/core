@@ -22,7 +22,8 @@ if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-r
 // 3. module implementation   
 var MetaObject  = (function () {
     /**
-     * 메타 최상위 객체를 생성합니다.
+     * Creates an instance of the MetaObject class.  
+     * 
      * @constructs MetaObject
      * @implements {IObject}
      * @implements {IMarshal}
@@ -33,7 +34,8 @@ var MetaObject  = (function () {
         var _ns;
         
         /**
-         * 현재 객체의 고유식별자(guid)
+         * Internal property that stores the unique identifier of the object.  
+         * 
          * @readonly
          * @member {string} MetaObject#_guid 
          * @example
@@ -52,7 +54,8 @@ var MetaObject  = (function () {
         });
 
         /**
-         * 현재 객체의 생성자
+         * Internal property that refers to the generator function of the object.  
+         * 
          * @readonly
          * @member {function} MetaObject#_type 
          * @example
@@ -70,6 +73,10 @@ var MetaObject  = (function () {
             enumerable: false
         });
 
+        /**
+         * Indicates the object name space.  
+         * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
+         */
         Object.defineProperty(this, '_ns', 
         {
             get: function() { 
@@ -119,10 +126,11 @@ var MetaObject  = (function () {
     }
 
     /**
-     * 현재 객체와 target 객체를 비교합니다.  
-     * (참조 주소의 비교(===)가 아니고, 속성과 값을 비교,  _guid 값은 비교 제외)  
-     * @param {object} p_target 대상 객체
-     * @returns {boolean}
+     * Compare the current object with the specified object.  
+     * However, the '_guid' property is excluded from the comparison.  
+     * 
+     * @param {object} p_target To compare
+     * @returns {boolean} If two objects are the same, 'true', or 'false'
      * @example
      * var meta1 = new MetaObject();
      * var meta2 = new MetaObject();
@@ -142,8 +150,9 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 현재 객체의 생성자와 상위(proto) 생성자를 목록으로 가져옵니다.  
-     * @returns {array<function>}
+     * Returns the creators of the current object and all the creators of the prototype chain to the array.  
+     * 
+     * @returns {array<function>} Array of generator functions (includes first defined constructors sequentially)
      * @example
      * var obj = new MetaObject();
      * var arr = obj.getTypes();
@@ -177,9 +186,11 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 현재 객체의 target 인스턴스 여부를 검사합니다 .(_UNION 포함)
-     * @param {Function | string} p_target 함수명 또는 생성자
-     * @returns {boolean}
+     * Verify that the object is an instance of a particular class.  
+     * You can also examine the defined interface type (including '_UNION').  
+     * 
+     * @param {Function | string} p_target Class constructor function or class name (string)
+     * @returns {boolean} Whether there is an instance of the specified class ('true' or 'false')
      * @example
      * var obj = new MetaObject();
      * obj.instanceOf('MetaObject');    // true
@@ -236,14 +247,14 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 현재 객체를 직렬화(guid 타입) 객체로 얻습니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode  
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object
+     * @returns {object} Guid type object literal
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -261,10 +272,10 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.  
+     * 
+     * @param {object} p_oGuid object literal of type of GUID to set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     MetaObject.prototype.setObject  = function(p_oGuid, p_origin) {
         var origin = p_origin ? p_origin : p_oGuid;

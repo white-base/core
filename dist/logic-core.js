@@ -562,7 +562,7 @@ const localesPath = './locales';    // 상대 경로
 //==============================================================
 // 2. module dependency check
 //==============================================================
-// 3. module implementation       
+// 3. module implementation
 /**
  * @class Message
  * @description 메시지 코드 관리 클래스 (static)
@@ -606,16 +606,6 @@ async function _loadJSON(filePath) {
             const response = await fetch(filePath);
             return await response.json();
         }
-        // if (isNode) {
-        //     if (isESM) {
-        //         return (await import(filePath, { with: { type: 'json' } })).default;
-        //     } else {
-        //         return require(filePath);
-        //     }
-        // } else {
-        //     const response = await fetch(filePath);
-        //     return await response.json();
-        // }
     } catch (error) {
         return;
     }
@@ -778,23 +768,77 @@ Message.importMessage(defaultCode, localesPath);
 // 2. module dependency check
 //==============================================================
 // 3. module implementation   
-var OLD_ENV$2 = globalThis.OLD_ENV ? globalThis.OLD_ENV : false;    // 커버리지 테스트 역활
 
-const ExtendError = (function () {
+// inner function 
+function _buildMessageProp(obj) {
+    var msg = '';
+    for (var prop in obj) {
+        if (typeof obj[prop] === 'string') msg += prop + ' : '+ obj[prop] + '\n';
+        else continue;
+    }
+    return msg;
+}
+function _buildMsgQueue(queue) {
+    var msg = '';
+    var queue_cnt = queue.length;
+    for (var i = queue_cnt; i > 0; i--) {
+        var mark = '';
+        for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
+        msg += '' + mark + ' '+ queue[i - 1] + '\n';
+    }
+    return msg;
+}
+
+class ExtendError extends Error {
+
+    static _NS = 'Common';      // namespace
 
     /**
-     * 확장오류를 생성합니다...
-     * (ES5 하위 호환성 지원을 위해서 자체 상속방식으로 처리함)
-     * @constructs ExtendError
-     * @param {string | RegExp} p_msg  메세지코드 또는 메세지
-     * @param {ExtendError | object | null} p_prop  이전 ExtendError 객체 또는 속성타입 오류메세지
-     * @param {Array<string>} p_codeVal  메세지코드값의 $1, $2 변환 값
-     * @kor 메세지코드 또는 메세지를 입력하여 확장 오류를 생성합니다.
-     * @example
-     * new ExtendError({code:'', ctx: []})
-     * new ExtendError(/E0011/, [''])
+     * Save previously generated messages.  
+     * 
+     * @member {string[]} ExtendError#queue
      */
-    function ExtendError(p_msg, p_prop, p_codeVal) {
+    queue = [];
+
+    /**
+     * Error message related to property type.  
+     * 
+     * @member {object} ExtendError#prop
+     */
+    prop = {};
+
+    /**
+     * Use user messages to create an ExtendError instance.  
+     *
+     * @param {string} msg Error message string
+     * @param {ExtendError | object | null} causeOrProp Error message by existing ExtendError, Error object or property
+     *
+     * @example
+     * throw new ExtendError("Custom error message");
+     * throw new ExtendError("Custom error message", error);
+     * throw new ExtendError("Custom error message", { style: "required" });
+     */
+
+    /**
+     * Create an instance of 'ExtendError' using the message code and substitution value.  
+     *
+     * @param {RegExp} msgPattern Code value of regular expression type
+     * @param {ExtendError | object | null} causeOrProp Error message by existing ExtendError, Error object or property
+     * @param {string[]} placeholders Array of strings containing substitution values such as '$1' and '$2' in the
+     *
+     * @example
+     * // For messages that do not have a substitution value
+     * throw new ExtendError(/EL01504/);
+     * throw new ExtendError(/EL01504/, error);
+     * throw new ExtendError(/EL01504/, { style: "required" });
+     * // For messages with substitution values
+     * throw new ExtendError(/EL01504/, undefined, ['value1', 'value2']);
+     * throw new ExtendError(/EL01504/, error, ['value1', 'value2']););
+     * throw new ExtendError(/EL01504/, { style: "required" }, ['value1', 'value2']);
+     */
+    constructor(p_msg, p_prop, p_codeVal) {
+        super();
+        
         var _build = '';
         var _prop;
         var _queue = [];    
@@ -817,84 +861,23 @@ const ExtendError = (function () {
         
         _build = _msg + '\n';
         
-        if (_prop) _build += $buildMessageProp(_prop);
-        if (_queue.length > 0) _build += $buildMsgQueue(_queue);
+        if (_prop) _build += _buildMessageProp(_prop);
+        if (_queue.length > 0) _build += _buildMsgQueue(_queue);
 
-        // var _instance = _super.call(this, _build);
-        var _instance = new Error(_build);
-        
-        /**
-         * 이전에 발생한 message 큐
-         * @member {string[]} ExtendError#queue
-         */
-        // if (_queue) _instance.queue = _queue;   // 참조 개념 복사 변경 검토 REVIEW:
-        // else _instance.queue = [];
-        _instance.queue = _queue;
-        _instance.queue.push(_msg);
-
-        /**
-         * 속성 타입 오류 메시지입니다.
-         * @member {object} ExtendError#prop
-         */
-        if (_prop) _instance.prop = _prop;
-        else _instance.prop = {};
-
-        if (Error.captureStackTrace && !OLD_ENV$2) {
-            Error.captureStackTrace(_instance, ExtendError);
-        }
-
-        Object.setPrototypeOf(_instance, Object.getPrototypeOf(this));
-    
-        return _instance;
-
-        // inner function 
-        function $buildMessageProp(obj) {
-            var msg = '';
-            for (var prop in obj) {
-                if (typeof obj[prop] === 'string') msg += prop + ' : '+ obj[prop] + '\n';
-                else continue;
-            }
-            return msg;
-        }
-        function $buildMsgQueue(queue) {
-            var msg = '';
-            var queue_cnt = queue.length;
-            for (var i = queue_cnt; i > 0; i--) {
-                var mark = '';
-                for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
-                msg += '' + mark + ' '+ queue[i - 1] + '\n';
-            }
-            return msg;
-        }
+        this.message = _build;
+        this.queue = _queue;
+        this.queue.push(_msg);
     }
 
-    ExtendError._NS = 'Common';    // namespace
-    
-    ExtendError.prototype = Object.create(Error.prototype, {
-        constructor: {
-            value: Error,
-            enumerable: false,
-            writable: true,
-            configurable: true,
-        },
-    });
-    
-    ExtendError.prototype.toString = function() {
+    /**
+     * Converts error messages into strings.  
+     * 
+     * @return error message string
+     */
+    toString() {
         return 'ExtendError : ' + this.message;
-    };
-        
-    // REVIEW: 이부분이 제거 해도 문제 없는게 맞느지 검토해야함
-    // if (Object.setPrototypeOf) {
-    //     Object.setPrototypeOf(ExtendError, Error);
-    // } else {
-    //     ExtendError.__proto__ = Error;
-    // }
-    // Util.inherits(ExtendError, _super);
-
-    
-    return ExtendError;
-
-}());
+    }
+}
 
 /**** util-type.js Type ****/
 //==============================================================
@@ -2591,9 +2574,8 @@ if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 // 3. module implementation  
 var EventEmitter = (function () {
     /**
-     * 이벤트 발행 클래스
+     * Creates an instance of the class 'EventEmitter'.
      * @constructs EventEmitter
-     * @class 이벤트 발행 클래스
      */
     function EventEmitter() {
         
@@ -2601,7 +2583,8 @@ var EventEmitter = (function () {
         var isLog = false;
 
         /**
-         * 리스너 객체 스토리지
+         * Internal object that stores registered events.  
+         * 
          * @private
          * @member {object}  EventEmitter#$subscribers  
          */
@@ -2617,7 +2600,8 @@ var EventEmitter = (function () {
         });
 
         /**
-         * 전체 이벤트명
+         * Array that stores registered event names.  
+         * 
          * @protected
          * @member {object}  EventEmitter#_list  
          */
@@ -2631,7 +2615,8 @@ var EventEmitter = (function () {
             });
 
         /**
-         * log 출력 여부
+         * Array that stores registered event names.
+         * 
          * @member {boolean}  EventEmitter#isLog  
          */
         Object.defineProperty(this, 'isLog', 
@@ -2656,9 +2641,10 @@ var EventEmitter = (function () {
     }
 
     /**
-     * 이벤트에 대한 리스너(함수)를 추가합니다. 
-     * @param {string} p_event 이벤트 명
-     * @param {function} p_listener 리스너 함수
+     * Adds a listener (function) for the event.  
+     * 
+     * @param {string} p_event Event Name
+     * @param {function} p_listener Listener function
      */
     EventEmitter.prototype.on = function(p_event, p_listener) {
         if (!_isString(p_event)) throw new ExtendError(/EL01503/, null, [typeof p_event]);
@@ -2673,12 +2659,14 @@ var EventEmitter = (function () {
         // this.$storage[p_event].push(p_listener);
 
     };
-    EventEmitter.prototype.addListener = EventEmitter.prototype.on; // 별칭
+    /** Alias for method 'on(). */
+    EventEmitter.prototype.addListener = EventEmitter.prototype.on;
     
     /**
-     * 이벤트에 대한 일회성 함수를 추가합니다. 
-     * @param {string} p_event 이벤트 명
-     * @param {function} p_listener 리스너 함수
+     * Adds a one-time function for the event.  
+     * 
+     * @param {string} p_event Event Name
+     * @param {function} p_listener Listener function
      */
     EventEmitter.prototype.once = function(p_event, p_listener) {
         var self = this;
@@ -2694,9 +2682,10 @@ var EventEmitter = (function () {
     };
 
     /**
-     * 지정한 이벤트 의 리스너(함수)를 제거합니다. (이벤트명은 유지)
-     * @param {string} p_event 이벤트 명
-     * @param {function} p_listener 리스너 함수
+     * Removes the listener (function) of the specified event.  
+     * 
+     * @param {string} p_event Event Name
+     * @param {function} p_listener Listener function
      */
     EventEmitter.prototype.off = function(p_event, p_listener) {
         if (!_isString(p_event)) throw new ExtendError(/EL01507/, null, [typeof p_event]);
@@ -2709,11 +2698,12 @@ var EventEmitter = (function () {
             }
         }
     };
+    /** Alias of method 'off()'. */
     EventEmitter.prototype.removeListener = EventEmitter.prototype.off; // 별칭
 
     /**
-     * 전체 이벤트 또는 지정한 이벤트에 등록된 이벤트명과 리스너를 모두 제거합니다.
-     * @param {string} [p_event] 이벤트명
+     * Remove all events or all listeners registered for a particular event.  
+     * @param {string} [p_event] Name of the event to be removed (Remove all events if omitted)
      */
     EventEmitter.prototype.removeAllListeners = function(p_event) {
         if (!p_event) {
@@ -2725,10 +2715,10 @@ var EventEmitter = (function () {
     };
 
     /**
-     * 이벤트명으로 등록된 리스너(함수)를 실행합니다.
-     * @param {string} p_event 이벤트명
-     * @returns {boolean | undefined} 리스너가 실행되었는지 여부 
-     * true: 실행 함, false: 실행 안함, undefined: 처리 실패 
+     * Runs the listener (function) of the registered event.  
+     * 
+     * @param {string} p_event Event Name
+     * @returns {boolean | undefined}  'true' listener execution successful, 'false' execution failed, 'undefined' listener no
      */
     EventEmitter.prototype.emit = function(p_event) {
         var args = [].slice.call(arguments, 1);
@@ -2766,7 +2756,8 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IObject  = (function () {
     /**
-     * 객체 인터페이스 입니다. (최상위)
+     * Object interface.  
+     * 
      * @constructs IObject 
      * @interface
      */
@@ -2777,8 +2768,9 @@ var IObject  = (function () {
     IObject._KIND = 'interface';
 
     /**
-     * 객체 타입들을 얻습니다.
-     * @returns {Function[]}
+     * Returns a list of types of objects.  
+     * 
+     * @returns {Function[]} Arrangement of types of objects
      * @abstract
      */
     IObject.prototype.getTypes  = function() {
@@ -2786,8 +2778,9 @@ var IObject  = (function () {
     };
     
     /**
-     * 객체의 인스턴스 여부를 확인합니다.
-     * @returns {boolean}
+     * Verify that the object is an instance of a particular class or interface.  
+     * 
+     * @returns {boolean} Instance or 'true' if it's an instance or 'false' if it's not
      * @abstract
      */
     IObject.prototype.instanceOf  = function() {
@@ -2795,15 +2788,15 @@ var IObject  = (function () {
     };
 
     /**
-     * 객체와 비교합니다.
-     * @returns {boolean}
+     * Compare that the object is the same as the given object.  
+     * 
+     * @returns {boolean} If two objects are the same, 'true', or 'false'
      * @abstract
      */
     IObject.prototype.equal  = function() {
         throw new ExtendError(/EL02113/, null, ['IObject']);
     };
     
-
     return IObject;
     
 }());
@@ -2820,19 +2813,22 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IMarshal  = (function () {
     /**
-     * 객체 통제 인터페이스 입니다.
+     * Object control interface.  
+     * 
      * @interface
      */
     function IMarshal() {
 
         /**
-         * 객체의 고유 식별자
+         * Internal property that stores the unique identifier of the object.  
+         * 
          * @member {string} IMarshal#_guid
          */
         this._guid = String;
 
         /**
-         * 객체의 타입
+         * Internal property that stores the creator type of the object.  
+         * 
          * @member {string} IMarshal#_type REVIEW:
          */
         this._type = [['_req_', Function, {$type: 'class'} ]];
@@ -2842,7 +2838,8 @@ var IMarshal  = (function () {
     IMarshal._KIND = 'interface';
     
     /**
-     * 대상의 직렬화 객체를 얻습니다.
+     * Returns the object literal.  
+     * 
      * @abstract
      */
     IMarshal.prototype.getObject = function() {
@@ -2850,7 +2847,8 @@ var IMarshal  = (function () {
     };
 
     /**
-     * 직렬화 객체를 설정합니다.
+     * Set the object literal by converting it to an instance.  
+     * 
      * @abstract
      */
     IMarshal.prototype.setObject  = function() {
@@ -2874,7 +2872,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation
 var ICollection  = (function () {
     /**
-     * 컬렉션 인터페이스 입니다.
+     * This is the collection interface.
      * @constructs ICollection
      * @interface
      */
@@ -2885,7 +2883,8 @@ var ICollection  = (function () {
     ICollection._NS = 'Interface';    // namespace
 
     /**
-     * 컬렉션에 요소를 추가합니다.
+     * Add an element to the collection.  
+     * 
      * @abstract
      */
     ICollection.prototype.add  = function() {
@@ -2893,7 +2892,8 @@ var ICollection  = (function () {
     };
 
     /**
-     * 컬렉션에서 요소를 제거합니다.
+     * Remove an element from the collection.  
+     * 
      * @abstract
      */
     ICollection.prototype.remove  = function() {
@@ -2901,8 +2901,9 @@ var ICollection  = (function () {
     };
 
     /**
-     * 요소가 컬렉션에 존재하는지 확인합니다.
-     * @returns {boolean}
+     * Verify that an element exists in the collection.  
+     * 
+     * @returns {boolean} If the element exists, it is 'true', otherwise it is 'false'
      * @abstract
      */
     ICollection.prototype.contains  = function() {
@@ -2910,8 +2911,9 @@ var ICollection  = (function () {
     };
 
     /**
-     * 컬렉션에서 요소을 조회합니다.
-     * @returns {number}
+     * Returns the index of an element in the collection.  
+     * 
+     * @returns {number}  index of element, '-1' without element
      * @abstract
      */
     ICollection.prototype.indexOf  = function() {
@@ -2936,7 +2938,8 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 // 3. module implementation   
 var IPropertyCollection  = (function (_super) {
     /**
-     * 프로퍼티 컬렉션 인터페이스 입니다.
+     * This is the property collection interface.  
+     * 
      * @constructs IPropertyCollection
      * @interface
      * @extends  ICollection
@@ -2950,8 +2953,9 @@ var IPropertyCollection  = (function (_super) {
     IPropertyCollection._NS = 'Interface';    // namespace
 
     /**
-     * 프로퍼티 키가 존재하는지 확인합니다.
-     * @returns {boolean}
+     * Returns the property key for the specified index.  
+     * 
+     * @returns {boolean} Property key for that index
      * @abstract
      */
     IPropertyCollection.prototype.indexToKey  = function() {
@@ -2974,13 +2978,14 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IElement  = (function () {
     /**
-     * 요소(독립) 인터페이스 입니다.
+     * Element (independent) interface.  
      * @constructs IElement
      * @interface
      */
     function IElement() {
         /**
-         * 요소명
+         * Internal property that stores the name of the element.  
+         * 
          * @member {string} IElement#_name
          */
         this._name = String;
@@ -2990,8 +2995,9 @@ var IElement  = (function () {
     IElement._KIND = 'interface';
 
     /**
-     * 요소를 복제합니다.
-     * @returns {object}
+     * Creates a copy of the current element.  
+     * 
+     * @returns {object} Replicated Elements
      * @abstract
      */
     IElement.prototype.clone  = function() {
@@ -3014,20 +3020,23 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IList  = (function () {
     /**
-     * 목록 인터페이스 입니다.
+     * List interface.  
+     * 
      * @constructs IList
      * @interface
      */
     function IList() {
 
         /**
-         * 목록 데이터입니다.
+         * An internal array that stores the data in the list.  
+         * 
          * @member {array} IList#_list
          */
         this._list = Array;
         
         /**
-         * 목록 갯수입니다.
+         * Returns the number of lists.  
+         * 
          * @member {number} IList#count
          */
         this.count = Number;
@@ -3052,7 +3061,8 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IListControl  = (function () {
     /**
-     * 목록 제어 인터페이스 입니다.
+     * List control interface.  
+     * 
      * @constructs IListControl
      * @interface
      */
@@ -3063,7 +3073,8 @@ var IListControl  = (function () {
     IListControl._KIND = 'interface';
     
     /**
-     * 목록에 대상을 추가합니다.
+     * Add an element to the list.  
+     * 
      * @abstract
      */
     IListControl.prototype.add = function() {
@@ -3071,7 +3082,8 @@ var IListControl  = (function () {
     };
 
     /**
-     * 목록에서 대상을 삭제합니다.
+     * Remove an element from the list.  
+     * 
      * @abstract
      */
     IListControl.prototype.del  = function() {
@@ -3079,8 +3091,9 @@ var IListControl  = (function () {
     };
 
     /**
-     * 목록에 대상의 존재 여부를 확인합니다.
-     * @returns {boolean}
+     * Verify that an element exists in the list.  
+     * 
+     * @returns {boolean} If the element exists, it is 'true', otherwise it is 'false'
      * @abstract
      */
     IListControl.prototype.has  = function() {
@@ -3088,8 +3101,8 @@ var IListControl  = (function () {
     };
 
     /**
-     * 목록에서 대상을 찾습니다.
-     * @returns {any}
+     * Search for elements in the list.  
+     * 
      * @abstract
      */
     IListControl.prototype.find  = function() {
@@ -3112,7 +3125,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var ISerialize  = (function () {
     /**
-     * 직렬화 인터페이스 입니다.
+     * Interface for serialization and deserialization.  
      * @constructs ISerialize
      * @interface
      */
@@ -3123,8 +3136,9 @@ var ISerialize  = (function () {
     ISerialize._KIND = 'interface';
 
     /**
-     * 내보내기(출력)를 합니다.
-     * @returns {string}
+     * Serialize objects, convert them into strings (such as JSON), and export them.  
+     * 
+     * @returns {string} Serialized String
      * @abstract
      */
     ISerialize.prototype.output  = function() {
@@ -3132,7 +3146,8 @@ var ISerialize  = (function () {
     };
 
     /**
-     * 가져오기(로드) 합니다.
+     * Restore objects by loading serialized data.  
+     * 
      * @abstract
      */
     ISerialize.prototype.load  = function() {
@@ -3157,7 +3172,8 @@ if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collec
 // 3. module implementation   
 var IArrayCollection  = (function (_super) {
     /**
-     * 배열 컬렉션 인터페이스 입니다.
+     * Array collection interface.  
+     * 
      * @extends ICollection
      */
     function IArrayCollection() {
@@ -3169,7 +3185,8 @@ var IArrayCollection  = (function (_super) {
     IArrayCollection._NS = 'Interface';    // namespace
 
     /**
-     * 요소를 지정위치에 추가합니다.
+     * Adds an element to the specified location.  
+     * 
      * @abstract
      */
     IArrayCollection.prototype.insertAt  = function() {
@@ -4719,13 +4736,15 @@ if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-objec
 // 3. module implementation
 var BaseCollection  = (function (_super) {
     /**
-    * 기본 컬렉션을 생성합니다.
+    * The creator that creates the collection.  
+    * This is an abstract class, and you must create an instance through inheritance.  
+    * 
     * @abstract
     * @extends MetaObject
     * @constructs BaseCollection
     * @implements {ICollection}
     * @implements {IList}
-    * @param {object} [p_owner] 소유객체
+    * @param {object} [p_owner] Objects that own this collection
     */
     function BaseCollection(p_owner) { 
         _super.call(this);
@@ -4741,7 +4760,8 @@ var BaseCollection  = (function (_super) {
         var _elemTypes  = [];
 
         /** 
-         * 이벤트 객체입니다.
+         * Object that handles events. Used to register and generate various events in the collection.
+         * 
          * @private
          * @member {EventEmitter} BaseCollection#$event  
          */
@@ -4753,7 +4773,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소들입니다.
+         * An arrangement that stores elements of a collection.
+         * 
          * @private
          * @member {string} BaseCollection#$elements
          */
@@ -4766,7 +4787,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 기술자들 (getter, setter)입니다.
+         * A descriptor array that defines the getter and setter methods for each collection element.  
+         * 
          * @private
          * @member {string} BaseCollection#$descriptors
          */
@@ -4779,7 +4801,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 예약어입니다.
+         * List of strings used as reserved words in the collection.  
+         * 
          * @private
          * @member {array<string>}  BaseCollection#$KEYWORD
          */
@@ -4792,7 +4815,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 소유자입니다.
+         * Owned object of the collection.  
+         * 
          * @protected 
          * @member {object} BaseCollection#_owner  
          */
@@ -4805,7 +4829,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소의 타입 제약조건입니다.
+         * Defines the type constraints for the collection element.  
+         * 
          * @protected 
          * @member {array<any>}  BaseCollection#_elemTypes  
          */
@@ -4829,7 +4854,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 목록입니다.
+         * An array that stores a list of elements in a collection.  
+         * 
          * @protected 
          * @readonly
          * @member {Array}  BaseCollection#_list  
@@ -4846,7 +4872,8 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 갯수입니다.
+         * Returns the number of elements in the collection.  
+         * 
          * @readonly
          * @member {number} BaseCollection#count 
          */
@@ -4858,7 +4885,7 @@ var BaseCollection  = (function (_super) {
         });
 
         /**
-         * 컬렉션 요소의 갯수입니다.
+         * Returns the number of elements in the collection.  
          * @readonly
          * @member {number} BaseCollection#length 
          */
@@ -4871,12 +4898,13 @@ var BaseCollection  = (function (_super) {
 
 
         /**
-         * 컬렉션 요소를 추가 전에 발생하는 이벤트 입니다.
+         * Event handler called before adding an element to a collection.  
+         * 
          * @event BaseCollection#onAdd
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Elements to add
+         * @param {number}      p_callback.p_idx Index of the element to be added
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onAdd', 
         {
@@ -4886,12 +4914,13 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 추가한 후에 발생하는 이벤트입니다.
+         * Event handler that is called after an element is added.  
+         * 
          * @event BaseCollection#onAdded
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Added elements
+         * @param {number}      p_callback.p_idx Index of added element
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onAdded', 
         {
@@ -4901,12 +4930,13 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 삭제하기 전에 발생하는 이벤트입니다.
+         * Event handler called before removing an element.  
+         * 
          * @event BaseCollection#onRemove
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Elements to be removed
+         * @param {number}      p_callback.p_idx Index of the element to be removed
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onRemove', 
         {
@@ -4916,12 +4946,13 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 삭제한 후에 발생하는 이벤트입니다.
+         * Event handler that is called after the element is removed.  
+         * 
          * @event BaseCollection#onRemoved
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_elem Removed elements
+         * @param {number}      p_callback.p_idx Index of removed element
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onRemoved', 
         {
@@ -4931,11 +4962,12 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         *컬렉션을 초기화하기 전에 발생하는 이벤트입니다.
-            * @event BaseCollection#onClear
-            * @param {function}    p_callback
-            * @param {this}        p_callback.p_this 현재 컬렉션
-            */
+        * Event handler called before deleting all elements.  
+        * 
+        * @event BaseCollection#onClear
+        * @param {function}    p_callback
+        * @param {this}        p_callback.p_this Current collection objects
+        */
         Object.defineProperty(this, 'onClear', 
         {
             set: function(fun) { this.$event.on('clear', fun); },
@@ -4944,10 +4976,11 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션을 초기화한 후에 발생하는 이벤트입니다.
+         * Event handler that is called after all elements are deleted.  
+         * 
          * @event BaseCollection#onCleared
          * @param {function}    p_callback
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onCleared', 
         {
@@ -4957,12 +4990,14 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 변경하기 전에 발생하는 이벤트 입니다.
+         * Event handler called before the element changes.  
+         * 
          * @event BaseCollection#onChanging 
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {number}      p_callback.p_nextValue New value to be changed
+         * @param {any}         p_callback.prevValue Existing value
+         * @param {any}         p_callback.index Index of the element to be changed
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onChanging', 
         {
@@ -4972,12 +5007,14 @@ var BaseCollection  = (function (_super) {
         });
 
         /** 
-         * 컬렉션 요소를 변경한 후에 발생하는 이벤트 입니다.
+         * Event handler that is called after an element changes.  
+         * 
          * @event BaseCollection#onChanged 
          * @param {function}    p_callback
-         * @param {number}      p_callback.p_idx 삭제하는 index
-         * @param {any}         p_callback.p_elem 삭제하는 value
-         * @param {this}        p_callback.p_this 현재 컬렉션
+         * @param {any}         p_callback.p_nextValue New value changed
+         * @param {any}         p_callback.p_prevValue Existing value
+         * @param {number}      p_callback.p_index Index of changed element
+         * @param {this}        p_callback.p_this Current collection objects
          */
         Object.defineProperty(this, 'onChanged', 
         {
@@ -5006,9 +5043,10 @@ var BaseCollection  = (function (_super) {
     BaseCollection._KIND = 'abstract';
     
     /**
-     * onAdd 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs before adding an element.  
+     * 
+     * @param {any} p_elem .Elements to be added
+     * @param {number} p_idx Where the element will be added
      * @listens BaseCollection#onAdd
      */
     BaseCollection.prototype._onAdd = function(p_elem, p_idx) {
@@ -5019,9 +5057,9 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * onAdded 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs after an element is added.  
+     * @param {any} p_elem Added elements
+     * @param {number} p_idx Location where the element was added
      * @listens BaseCollection#onAdded
      */
     BaseCollection.prototype._onAdded = function(p_elem, p_idx) {
@@ -5032,9 +5070,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * onRemove 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs before removing an element.  
+     * 
+     * @param {any} p_elem Elements to be removed
+     * @param {number} p_idx Where the element will be removed
      * @listens BaseCollection#onRemove
      */
     BaseCollection.prototype._onRemove = function(p_elem, p_idx) {
@@ -5045,9 +5084,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * onRemoved 이벤트를 발생시킵니다.
-     * @param {any} p_elem 요소
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs after the element is removed.  
+     * 
+     * @param {any} p_elem Removed elements
+     * @param {number} p_idx Where the element was removed
      * @listens BaseCollection#onRemoved
      */
     BaseCollection.prototype._onRemoved = function(p_elem, p_idx) {
@@ -5058,7 +5098,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onClear 이벤트를 발생시킵니다.
+     * Internal method that runs before deleting all elements.
+     * 
      * @listens BaseCollection#onClear
      */
     BaseCollection.prototype._onClear = function() {
@@ -5069,7 +5110,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onCheared 이벤트를 발생시킵니다.
+     * Internal method that runs after all elements are deleted.  
+     * 
      * @listens BaseCollection#onCleared
      */
     BaseCollection.prototype._onCleared = function() {
@@ -5080,10 +5122,11 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onChanging 이벤트를 발생시킵니다.
-     * @param {any} p_nVal 변경값
-     * @param {any} p_oVal 기존값
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs before the element changes.
+     * 
+     * @param {any} p_nVal New value to be changed
+     * @param {any} p_oVal Existing value
+     * @param {number} p_idx Location of the element to be changed
      * @listens BaseCollection#onChanging
      */
     BaseCollection.prototype._onChanging = function(p_nVal, p_oVal, p_idx) {
@@ -5094,10 +5137,11 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * onChanged 이벤트를 발생시킵니다.
-     * @param {any} p_nVal 변경값
-     * @param {any} p_oVal 기존값
-     * @param {number} p_idx 인덱스 번호
+     * Internal method that runs after the element changes.  
+     * 
+     * @param {any} p_nVal New value changed
+     * @param {any} p_oVal Existing value
+     * @param {number} p_idx Location of changed element
      * @listens BaseCollection#onChanged
      */        
     BaseCollection.prototype._onChanged = function(p_nVal, p_oVal, p_idx) {
@@ -5108,9 +5152,11 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 컬렉션에 요소를 추가할 때 설정되는 기본 기술자입니다.
+     * Internal method to set the attribute descriptor for a particular index.  
+     * 
      * @protected
-     * @param {number} p_idx 인덱스 번호
+     * @param {number} p_idx Where to specify properties
+     * @param {boolean} p_enum whether the property is enumerable
      */
     BaseCollection.prototype._getPropDescriptor = function(p_idx, p_enum) {
         if (typeof p_enum !== 'boolean') p_enum = true;
@@ -5132,7 +5178,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * 컬렉션의 요소를 삭제합니다. (내부 사용)
+     * Internal method to remove elements from the collection.  
+     * 
      * @abstract 
      */
     BaseCollection.prototype._remove  = function() {
@@ -5143,14 +5190,14 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 컬렉션 객체를 직렬화(guid 타입) 객체로 반환합니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode  
+     * mode=0 : reference structure(_guid:Yes, $ref:Yes)  
+     * mode=1 : Redundant structure(_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure(_guid:No,  $ref:No)   
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object
+     * @returns {object}  Guid type object literal
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -5179,10 +5226,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 컬렉션 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.
+     * 
+     * @param {object} p_oGuid Object literal of type of GUID to set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     BaseCollection.prototype.setObject = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -5208,9 +5255,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 컬렉션에 요소를 삭제합니다.
-     * @param {any} p_elem 요소
-     * @returns {number} 삭제한 인덱스 번호
+     * Remove the element from the collection.  
+     * 
+     * @param {any} p_elem Elements to be removed
+     * @returns {number} Index of removed element. If element does not exist, return -1
      */
     BaseCollection.prototype.remove = function(p_elem) {
         var idx = this.$elements.indexOf(p_elem);
@@ -5223,9 +5271,10 @@ var BaseCollection  = (function (_super) {
     });
     
     /**
-     * 컬렉션에서 지정된 위치의 요소를 삭제합니다.
-     * @param {number} p_pos 인덱스 번호
-     * @returns {boolean} 처리 결과  
+     * Remove the element in the specified location.
+     * 
+     * @param {number} p_pos Where to remove
+     * @returns {boolean} Element Removal Successful
      */
     BaseCollection.prototype.removeAt = function(p_pos) {
         var elem;
@@ -5249,9 +5298,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     * 요소가 컬렉션에 존재하는지 확인합니다.
-     * @param {any} p_elem 요소
-     * @returns {boolean}
+     * Verify that a particular element exists in the collection.  
+     * 
+     * @param {any} p_elem Factors to check
+     * @returns {boolean} Element Existence
      */
     BaseCollection.prototype.contains = function(p_elem) {
         return this.$elements.indexOf(p_elem) > -1;
@@ -5261,9 +5311,10 @@ var BaseCollection  = (function (_super) {
     });
 
     /**
-     *  컬렉션에서 요소를 조회합니다.
-     * @param {any} p_elem 요소
-     * @returns {number} 0 보다 작으면 존재하지 않음
+     * Returns the index of an element.  
+     * 
+     * @param {any} p_elem Elements to search for
+     * @returns {number} Index of element, return -1 if element is missing
      */
     BaseCollection.prototype.indexOf = function(p_elem) {
         return this.$elements.indexOf(p_elem);
@@ -5273,7 +5324,8 @@ var BaseCollection  = (function (_super) {
     });
 
     /** 
-     * 컬렉션에 요소를 추가합니다.
+     * Adds an element to the collection.
+     * 
      * @abstract 
      */
     BaseCollection.prototype.add  = function() {
@@ -5284,7 +5336,8 @@ var BaseCollection  = (function (_super) {
     });
     
     /**
-     * 컬렉션을 초기화 합니다.
+     * Initialize the collection.  
+     * 
      * @abstract 
      */
     BaseCollection.prototype.clear  = function() {
@@ -5316,11 +5369,12 @@ if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'ba
 // 3. module implementation
 var ArrayCollection  = (function (_super) {
     /**
-     * 배열 컬렉션을 생성합니다.
+     * Creates an instance of an ArrayCollection class.  
+     * 
      * @constructs ArrayCollection
      * @implements {IArrayCollection}
      * @extends BaseCollection
-     * @param {object} [p_owner] 소유 객체
+     * @param {object} [p_owner] Objects that own this collection
      */
     function ArrayCollection(p_owner) {
         _super.call(this, p_owner);
@@ -5342,10 +5396,11 @@ var ArrayCollection  = (function (_super) {
     }
     
     /**
-     * 배열 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)
+     * Internal method to remove the specified element from the collection.  
+     * 
      * @protected
-     * @param {number} p_pos 인덱스 위치
-     * @returns {boolean}
+     * @param {number} p_pos Index of the element to be removed
+     * @returns {boolean} Success or failure
      */
     ArrayCollection.prototype._remove = function(p_pos) {
         var count = this.count - 1;   // [idx] 포인트 이동
@@ -5369,14 +5424,14 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 배열 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode  
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object
+     * @returns {object}  Guid type object literal 
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -5407,10 +5462,10 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 배열 컬렉션 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.   
+     * 
+     * @param {object} p_oGuid object literal of the type of GUID to be set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     ArrayCollection.prototype.setObject  = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -5445,10 +5500,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 배열 컬렉션에 요소를 추가합니다.
-     * @param {any} p_elem 요소
-     * @param {object} [p_desc] 프로퍼티 기술자 객체
-     * @returns {number} 추가한 인덱스
+     * Adds an element to the collection.  
+     * 
+     * @param {any} p_elem Elements to add
+     * @param {object} [p_desc] Property descriptor object for element
+     * @returns {number} Location of the added element
      */
     ArrayCollection.prototype.add = function(p_elem, p_desc) {
         var pos = this.count;
@@ -5460,8 +5516,8 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 배열 컬렉션을 초기화 합니다.
-     * 대상 : _element =[], _descriptors = []  
+     * Initialize the collection.  
+     * Empty the $elements and $descriptors arrays upon initialization.  
      */
     ArrayCollection.prototype.clear = function() {
         // this._onClear();    // event
@@ -5478,11 +5534,12 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 배열 컬렉션의 지정위치에 요소를 추가합니다.
-     * @param {number} p_pos 인덱스 위치
-     * @param {any} p_elem 요소
-     * @param {object} [p_desc] 프로퍼티 기술자 객체
-     * @returns {boolean} 
+     * Adds an element to the specified location.  
+     * 
+     * @param {number} p_pos Where to add
+     * @param {any} p_elem Elements to add
+     * @param {object} [p_desc] Property descriptor object for element
+     * @returns {boolean} Additional success
      */
     ArrayCollection.prototype.insertAt = function(p_pos, p_elem, p_desc) {
         try {
@@ -5530,10 +5587,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {Array}
+     * Returns the result of executing the function provided to all elements to the new array.  
+     * 
+     * @param {Function} callback callback function to convert, (elem: T, index: number, list: T[]) => U
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {Array} Array of converted elements
      */
     ArrayCollection.prototype.map  = function(callback, thisArg) {
         var newArr = [];
@@ -5550,10 +5608,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {Array}
+     * Returns a new array containing only elements that satisfy the conditions of the provided function.  
+     * 
+     * @param {Function} callback callback function to filter, (elem: T, index: number, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {Array} Array of filtered elements
      */
     ArrayCollection.prototype.filter = function (callback, thisArg) {
         let newArr = [];
@@ -5572,10 +5631,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
-     * @param {Function} callback 콜백함수 (accumulator, currentValue, index, array) => any
-     * @param {any} initialValue 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용합니다.
-     * @returns  {any}
+     * Returns the accumulated results by executing the reducer function provided to all elements.  
+     * 
+     * @param {Function} callback callback function to be reduced, (acc: U, element: T, index: number, list: T[]) => U
+     * @param {any} initialValue Initial value
+     * @returns  {any} Accumulated final result value
      */
     ArrayCollection.prototype.reduce = function(callback, initialValue) {
         var acc = initialValue;
@@ -5592,10 +5652,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {any}
+     * Returns the first element that matches the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be searched, (elem: T, index: number, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     ArrayCollection.prototype.find = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
@@ -5611,9 +5672,10 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => void
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+     * Run the function provided for all elements.  
+     * 
+     * @param {Function} callback Callback function to run, (elem: T, index: number, list: T[]) => void
+     * @param {any} thisArg Object to use as this inside the callback function
      */
     ArrayCollection.prototype.forEach = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
@@ -5627,10 +5689,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {boolean}
+     * Verify that at least one element matches the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {boolean} 'true' if more than one element satisfies the condition, or 'false' if not
      */
     ArrayCollection.prototype.some = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
@@ -5645,10 +5708,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {boolean}
+     * Verify that all elements satisfy the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {boolean}  'true' if all elements meet the conditions, 'false' otherwise
      */
     ArrayCollection.prototype.every = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
@@ -5663,10 +5727,11 @@ var ArrayCollection  = (function (_super) {
     });
 
     /**
-     * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => number
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {any}
+     * Returns the index of the first element that matches the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     ArrayCollection.prototype.findIndex = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
@@ -5705,11 +5770,12 @@ if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'ba
 // 3. module implementation   
 var PropertyCollection  = (function (_super) {
     /**
-     * 프로퍼티 컬렉션을 생성합니다.
+     * Creates an instance of the class 'PropertyCollection'.  
+     * 
      * @constructs PropertyCollection
      * @implements {IPropertyCollection}
      * @extends BaseCollection
-     * @param {object} p_owner 소유 객체
+     * @param {object} p_owner Objects that own this collection
      */
     function PropertyCollection(p_owner) {
         _super.call(this, p_owner); 
@@ -5717,7 +5783,8 @@ var PropertyCollection  = (function (_super) {
         var $keys = [];
 
         /**
-         * 내부 변수 접근
+         * Returns all key values in the collection to an array.
+         * 
          * @member {string} PropertyCollection#$keys
          * @readonly
          * @private
@@ -5769,10 +5836,11 @@ var PropertyCollection  = (function (_super) {
     }
 
     /**
-     * 컬렉션의 요소를 삭제합니다.(템플릿메소드패턴)
+     * Internal method to remove the specified element from the collection.  
+     * 
      * @protected
-     * @param {number} p_pos 인덱스 위치
-     * @returns {boolean} 
+     * @param {number} p_pos Location of the element to be removed
+     * @returns {boolean} Removal successful
      */
     PropertyCollection.prototype._remove = function(p_pos) {
         var count = this.count - 1;
@@ -5802,14 +5870,14 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션 객체를 직렬화(guid 타입) 객체로 얻습니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object
+     * @returns {object}  Guid type object literal
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -5845,10 +5913,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 프로퍼티 컬렉션 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.  
+     * 
+     * @param {object} p_oGuid Object literal of the type of GUID to be set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     PropertyCollection.prototype.setObject  = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -5907,11 +5975,12 @@ var PropertyCollection  = (function (_super) {
     // };
     
     /**
-     * 프로퍼티 컬렉션에 요소를 추가합니다.
-     * @param {string} p_key 키
-     * @param {any} [p_elem] 요소
-     * @param {object} [p_desc] 기술자
-     * @returns {number} index 번호
+     * Adds an element to the collection.  
+     * 
+     * @param {string} p_key Key of the element
+     * @param {any} [p_elem] Elements to add
+     * @param {object} [p_desc] Property descriptor object for element
+     * @returns {number} Location of the added element
      */
     PropertyCollection.prototype.add = function(p_key, p_elem, p_desc) {
         try {
@@ -5964,9 +6033,8 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로러티 컬렉션을 초기화 합니다.
-     * - 대상 : _element = [], _descriptors = [], _keys = []  
-     * - 이벤트는 초기화 되지 않습니다.
+     * Initialize the collection.  
+     * Empty $elements, $descripts, and $keys at initialization.  
      */
     PropertyCollection.prototype.clear = function() {
         // this._onClear();
@@ -5988,9 +6056,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션키의 인덱스 값을 조회합니다.
-     * @param {string} p_key 키
-     * @returns {number} 없을시 -1
+     * Query the index based on the key.  
+     * 
+     * @param {string} p_key Key to view
+     * @returns {number} Index corresponding to key, return '-1' if not present
      */
     PropertyCollection.prototype.keyToIndex = function(p_key) {
         if (!_isString(p_key))  throw new ExtendError(/EL04224/, null, [typeof p_key]);
@@ -6001,9 +6070,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션의 인덱스에 대한 키값을 조회합니다.
-     * @param {number} p_idx 인덱스 값
-     * @returns {string}
+     * Query the key based on the index value.  
+     * 
+     * @param {number} p_idx Index to view
+     * @returns {string} Key values for that index
      */
     PropertyCollection.prototype.indexToKey = function(p_idx) {
         if (typeof p_idx !== 'number') throw new ExtendError(/EL0422A/, null, [typeof p_idx]);
@@ -6014,9 +6084,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 프로퍼티 컬렉션의 키 존재하는지 확인합니다.
-     * @param {string} p_key 키
-     * @returns {boolean}
+     * Verify that the specified key exists in the collection.  
+     * 
+     * @param {string} p_key Key value to check
+     * @returns {boolean} If the key exists, it is 'true', otherwise it is 'false'
      */
     PropertyCollection.prototype.exists = function(p_key) {
         if (!_isString(p_key)) throw new ExtendError(/EL0422B/, null, [typeof p_key]);
@@ -6028,10 +6099,11 @@ var PropertyCollection  = (function (_super) {
 
 
     /**
-     * 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {Array}
+     * Returns the result of executing the function provided to all elements to the new array.  
+     * 
+     * @param {Function} callback Callback function to convert, (elem: T, index: number, key: string, list: T[]) => U
+     * @param {any} thisArg Objects to use as this inside the callback function
+     * @returns  {Array} New arrangement of transformed elements
      */
     PropertyCollection.prototype.map  = function(callback, thisArg) {
         var newArr = [];
@@ -6049,10 +6121,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 제공된 함수에 의해 구현된 테스트를 통과한 요소로만 필터링 합니다
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any[]
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {Array}
+     * Returns a new array containing only elements that satisfy the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to filter, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Objects to use as this inside the callback function
+     * @returns  {Array} Array of filtered elements
      */
     PropertyCollection.prototype.filter = function (callback, thisArg) {
         let newArr = [];
@@ -6072,10 +6145,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 각 요소에 대해 주어진 리듀서 (reducer) 함수를 실행하고, 하나의 결과값을 반환합니다.
-     * @param {Function} callback 콜백함수 (accumulator, currentValue, index, array) => any
-     * @param {any} initialValue 초기값을 제공하지 않으면 배열의 첫 번째 요소를 사용합니다.
-     * @returns  {any}
+     * Returns the accumulated results by executing the reducer function provided to all elements.  
+     * 
+     * @param {Function} callback callback function to be reduced, (acc: U, element: T, index: number, key: string, list: T[]) => U
+     * @param {any} initialValue Initial value
+     * @returns  {any} Array of filtered elements
      */
     PropertyCollection.prototype.reduce = function(callback, initialValue) {
         var acc = initialValue;
@@ -6093,10 +6167,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 제공된 테스트 함수를 만족하는 첫 번째 요소를 반환합니다
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => any
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {any}
+     * Returns the first element that matches the conditions of the provided function.
+     * 
+     * @param {Function} callback Callback function to be searched, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     PropertyCollection.prototype.find = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
@@ -6113,9 +6188,10 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 각 요소에 대해 제공된 함수를 한 번씩 실행합니다.
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => void
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
+     * Run the function provided for all elements.  
+     * 
+     * @param {Function} callback callback function to be executed, (elem: T, index: number, key: string, list: T[]) => void
+     * @param {any} thisArg Object to use as this inside the callback function
      */
     PropertyCollection.prototype.forEach = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
@@ -6130,10 +6206,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 어떤 요소라도 주어진 판별 함수를 적어도 하나라도 통과하는지 테스트합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {boolean}
+     * Verify that at least one element matches the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {boolean}  'true' if more than one element satisfies the condition, or 'false' if not
      */
     PropertyCollection.prototype.some = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
@@ -6149,10 +6226,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 모든 요소가 제공된 함수로 구현된 테스트를 통과하는지 테스트합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => boolean
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {boolean}
+     * Verify that all elements satisfy the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {boolean} 'true' if all elements meet the conditions, 'false' otherwise
      */
     PropertyCollection.prototype.every = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
@@ -6168,10 +6246,11 @@ var PropertyCollection  = (function (_super) {
     });
 
     /**
-     * 주어진 판별 함수를 만족하는 배열의 첫 번째 요소에 대한 인덱스를 반환합니다. 
-     * @param {Function} callback 콜백함수 (currentValue, index, array) => number
-     * @param {any} thisArg 콜백함수에서 this 로 사용됩니다.
-     * @returns  {any}
+     * Returns the index of the first element that matches the conditions of the provided function.  
+     * 
+     * @param {Function} callback Callback function to be examined, (elem: T, index: number, key: string, list: T[]) => boolean
+     * @param {any} thisArg Object to use as this inside the callback function
+     * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     PropertyCollection.prototype.findIndex = function(callback, thisArg) {
         if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);

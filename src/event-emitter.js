@@ -14,9 +14,8 @@ if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 // 3. module implementation  
 var EventEmitter = (function () {
     /**
-     * 이벤트 발행 클래스
+     * Creates an instance of the class 'EventEmitter'.
      * @constructs EventEmitter
-     * @class 이벤트 발행 클래스
      */
     function EventEmitter() {
         
@@ -24,7 +23,8 @@ var EventEmitter = (function () {
         var isLog = false;
 
         /**
-         * 리스너 객체 스토리지
+         * Internal object that stores registered events.  
+         * 
          * @private
          * @member {object}  EventEmitter#$subscribers  
          */
@@ -40,7 +40,8 @@ var EventEmitter = (function () {
         });
 
         /**
-         * 전체 이벤트명
+         * Array that stores registered event names.  
+         * 
          * @protected
          * @member {object}  EventEmitter#_list  
          */
@@ -54,7 +55,8 @@ var EventEmitter = (function () {
             });
 
         /**
-         * log 출력 여부
+         * Array that stores registered event names.
+         * 
          * @member {boolean}  EventEmitter#isLog  
          */
         Object.defineProperty(this, 'isLog', 
@@ -79,9 +81,10 @@ var EventEmitter = (function () {
     }
 
     /**
-     * 이벤트에 대한 리스너(함수)를 추가합니다. 
-     * @param {string} p_event 이벤트 명
-     * @param {function} p_listener 리스너 함수
+     * Adds a listener (function) for the event.  
+     * 
+     * @param {string} p_event Event Name
+     * @param {function} p_listener Listener function
      */
     EventEmitter.prototype.on = function(p_event, p_listener) {
         if (!_isString(p_event)) throw new ExtendError(/EL01503/, null, [typeof p_event]);
@@ -96,12 +99,14 @@ var EventEmitter = (function () {
         // this.$storage[p_event].push(p_listener);
 
     };
-    EventEmitter.prototype.addListener = EventEmitter.prototype.on; // 별칭
+    /** Alias for method 'on(). */
+    EventEmitter.prototype.addListener = EventEmitter.prototype.on;
     
     /**
-     * 이벤트에 대한 일회성 함수를 추가합니다. 
-     * @param {string} p_event 이벤트 명
-     * @param {function} p_listener 리스너 함수
+     * Adds a one-time function for the event.  
+     * 
+     * @param {string} p_event Event Name
+     * @param {function} p_listener Listener function
      */
     EventEmitter.prototype.once = function(p_event, p_listener) {
         var self = this;
@@ -117,9 +122,10 @@ var EventEmitter = (function () {
     };
 
     /**
-     * 지정한 이벤트 의 리스너(함수)를 제거합니다. (이벤트명은 유지)
-     * @param {string} p_event 이벤트 명
-     * @param {function} p_listener 리스너 함수
+     * Removes the listener (function) of the specified event.  
+     * 
+     * @param {string} p_event Event Name
+     * @param {function} p_listener Listener function
      */
     EventEmitter.prototype.off = function(p_event, p_listener) {
         if (!_isString(p_event)) throw new ExtendError(/EL01507/, null, [typeof p_event]);
@@ -132,11 +138,12 @@ var EventEmitter = (function () {
             }
         }
     };
+    /** Alias of method 'off()'. */
     EventEmitter.prototype.removeListener = EventEmitter.prototype.off; // 별칭
 
     /**
-     * 전체 이벤트 또는 지정한 이벤트에 등록된 이벤트명과 리스너를 모두 제거합니다.
-     * @param {string} [p_event] 이벤트명
+     * Remove all events or all listeners registered for a particular event.  
+     * @param {string} [p_event] Name of the event to be removed (Remove all events if omitted)
      */
     EventEmitter.prototype.removeAllListeners = function(p_event) {
         if (!p_event) {
@@ -148,10 +155,10 @@ var EventEmitter = (function () {
     };
 
     /**
-     * 이벤트명으로 등록된 리스너(함수)를 실행합니다.
-     * @param {string} p_event 이벤트명
-     * @returns {boolean | undefined} 리스너가 실행되었는지 여부 
-     * true: 실행 함, false: 실행 안함, undefined: 처리 실패 
+     * Runs the listener (function) of the registered event.  
+     * 
+     * @param {string} p_event Event Name
+     * @returns {boolean | undefined}  'true' listener execution successful, 'false' execution failed, 'undefined' listener no
      */
     EventEmitter.prototype.emit = function(p_event) {
         var args = [].slice.call(arguments, 1);

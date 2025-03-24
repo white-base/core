@@ -1,29 +1,29 @@
 /**
- * 목록 제어 인터페이스입니다.
+ * List control interface.  
  */
 declare interface IListControl {
     
     /**
-     * 목록에 요소를 추가합니다.
+     * Add an element to the list.  
      */
     add(...args: any[]): void;
 
     /**
-     * 목록에서 요소를 제거합니다. 
+     * Remove an element from the list.  
      */
     del(...args: any[]): void;
 
     /**
-     * 목록에서 요소가 존재하는지 확인합니다.
+     * Verify that an element exists in the list.  
      * 
-     * @returns 요소가 존재하면 `true`, 그렇지 않으면 `false`
+     * @returns If the element exists, it is 'true', otherwise it is 'false'
      */
     has(...args: any[]): boolean;
 
     /**
-     * 목록에서 요소를 검색합니다.
+     * Search for elements in the list.
      * 
-     * @returns 요소가 존재하면 `true`, 그렇지 않으면 `false`
+     * @returns The first element that satisfies the condition, 'undefined' if not found
      */
     find(...args: any[]): any | undefined;
 }

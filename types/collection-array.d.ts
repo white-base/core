@@ -2,139 +2,139 @@ import IArrayCollection from "./i-collection-array";
 import BaseCollection from "./base-collection";
 
 /**
- * `ArrayCollection` 클래스는 `BaseCollection`을 상속받으며 `IArrayCollection` 인터페이스를 구현합니다.  
- * 이 클래스는 배열 형태의 컬렉션을 관리하고, 배열 관련 작업을 위한 다양한 메서드를 제공합니다.
+ * The 'Array Collection' class inherits the 'Base Collection' and implements the 'Array Collection' interface.  
+ * This class manages collections in the form of arrays and provides a variety of methods for array-related tasks.  
  */
 declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayCollection<T> {
     
     /**
-     * ArrayCollection 클래스의 인스턴스를 생성합니다.
+     * Creates an instance of an ArrayCollection class.
      * 
-     * @param owner - 이 컬렉션을 소유하는 객체
+     * @param owner Objects that own this collection
      */
     constructor(owner?: object);
 
     /**
-     * 컬렉션에서 지정된 요소를 제거하는 내부 메서드입니다.
+     * Internal method to remove the specified element from the collection.  
      * 
-     * @param index - 제거할 요소의 인덱스
-     * @returns 성공 여부
+     * @param index Index of the element to be removed
+     * @returns Success or failure
      */
     _remove(index: number): boolean;
 
     /**
-     * 객체를 GUID 타입의 객체 리터럴로 반환합니다.
+     * Returns the object as an object literal of type GUID.  
      * 
-     * @param mode - 가져오기 모드  
-     * mode=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * mode=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * mode=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param context - 현재 객체를 포함(소유)하는 상위 객체
-     * @returns GUID 타입의 객체 리터럴
+     * @param mode Import mode  
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param context - Parent object that contains (owns) the current object
+     * @returns Guid type object literal
      */
     getObject(mode?: number, context?: object | object[]): object;
 
     /**
-     * GUID 타입의 객체 리터럴을 인스턴스 객체로 변환하여 설정합니다.
+     * Set up a GUID type object literal by converting it to an instance object.  
      * 
-     * @param guidObj - 설정할 GUID 타입의 객체 리터럴
-     * @param guidRootObj - 변환 과정에서 참조되는 초기 GUID 리터럴 객체  
+     * @param guidObj object literal of the type of GUID to be set
+     * @param guidRootObj Initial GUID literal object referenced during conversion
      */
     setObject(guidObj: object, guidRootObj?: object): void;
 
     /**
-     * 요소를 컬렉션에 추가합니다.
+     * Adds an element to the collection.  
      * 
-     * @param elem - 추가할 요소
-     * @param desc - 요소에 대한 프로퍼티 기술자 객체
-     * @returns 추가된 요소의 위치
+     * @param elem Elements to add
+     * @param desc Property descriptor object for element
+     * @returns Location of the added element
      */
     add(elem: T, desc?: PropertyDescriptor): number;
 
     /**
-     * 컬렉션을 초기화합니다.  
-     * 초기화 시 $elements와 $descriptors 배열을 비웁니다.  
+     * Initialize the collection.  
+     * Empty the $elements and $descriptors arrays upon initialization.  
      */
     clear(): void;
 
     /**
-     * 지정한 위치에 요소를 추가합니다.
+     * Adds an element to the specified location.  
      * 
-     * @param index - 추가할 위치
-     * @param elem - 추가할 요소
-     * @param desc - 요소에 대한 프로퍼티 기술자 객체
-     * @returns 추가 성공 여부
+     * @param index Where to add
+     * @param elem Elements to add
+     * @param desc Property descriptor object for element
+     * @returns Additional success
      */
     insertAt(index: number, elem: T, desc?: PropertyDescriptor): boolean;
 
     /**
-     * 모든 요소에 제공된 함수를 실행한 결과를 새로운 배열로 반환합니다.
+     * Returns the result of executing the function provided to all elements to the new array.  
      * 
-     * @param callbackfn - 변환할 콜백 함수, (elem: T, index: number, list: T[]) => U
-     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
-     * @returns  변환된 요소의 배열
+     * @param callbackfn callback function to convert, (elem: T, index: number, list: T[]) => U
+     * @param thisArg Object to use as this inside the callback function
+     * @returns Array of converted elements
      */
     map<U>(callbackfn: (elem: T, index: number, list: T[]) => U, thisArg?: any): U[];
 
     /**
-     * 제공된 함수의 조건을 만족하는 요소만 포함하는 새로운 배열을 반환합니다.
+     * Returns a new array containing only elements that satisfy the conditions of the provided function.  
      * 
-     * @param callbackfn - 필터링할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
-     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체 
-     * @returns 필터링된 요소의 배열
+     * @param callbackfn callback function to filter, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg Object to use as this inside the callback function
+     * @returns Array of filtered elements
      */
     filter(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): T[];
 
     /**
-     * 모든 요소에 제공된 리듀서(reducer) 함수를 실행하여 누적된 결과를 반환합니다.
+     * Returns the accumulated results by executing the reducer function provided to all elements.  
      * 
-     * @param callbackfn - 리듀스할 콜백 함수, (acc: U, elem: T, index: number, list: T[]) => U
-     * @param initialValue - 초기값
-     * @returns 누적된 최종 결과값
+     * @param callbackfn callback function to be reduced, (acc: U, element: T, index: number, list: T[]) => U
+     * @param initialValue Initial value
+     * @returns Accumulated final result value
      */
     reduce<U>(callbackfn: (acc: U, elem: T, index: number, list: T[]) => U, initialValue: U): U;
 
     /**
-     * 제공된 함수의 조건과 일치하는 첫 번째 요소를 반환합니다.
+     * Returns the first element that matches the conditions of the provided function.  
      * 
-     * @param callbackfn - 검색할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
-     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
-     * @returns 조건을 만족하는 첫 번째 요소, 찾지 못한 경우 `undefined`
+     * @param callbackfn Callback function to be searched, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg Object to use as this inside the callback function
+     * @returns The first element that satisfies the condition, 'undefined' if not found
      */
     find(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): T | undefined;
 
     /**
-     * 모든 요소에 대해 제공된 함수를 실행합니다.
+     * Run the function provided for all elements.  
      * 
-     * @param callbackfn - 실행할 콜백 함수, (elem: T, index: number, list: T[]) => void
-     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
+     * @param callbackfn Callback function to run, (elem: T, index: number, list: T[]) => void
+     * @param thisArg Object to use as this inside the callback function
      */
     forEach(callbackfn: (elem: T, index: number, list: T[]) => void, thisArg?: any): void;
 
     /**
-     * 최소한 하나의 요소가 제공된 함수의 조건과 일치하는지 확인합니다.
+     * Verify that at least one element matches the conditions of the provided function.  
      * 
-     * @param callbackfn - 검사할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
-     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
-     * @returns 하나 이상의 요소가 조건을 만족하면 `true`, 그렇지 않으면 `false`
+     * @param callbackfn Callback function to be examined, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg Object to use as this inside the callback function
+     * @returns 'true' if more than one element satisfies the condition, or 'false' if not
      */
     some(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): boolean;
 
     /**
-     * 모든 요소가 제공된 함수의 조건을 만족하는지 확인합니다.
+     * Verify that all elements satisfy the conditions of the provided function.  
      * 
-     * @param callbackfn - 검사할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
-     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
-     * @returns 모든 요소가 조건을 만족하면 `true`, 그렇지 않으면 `false`
+     * @param callbackfn Callback function to be examined, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg Object to use as this inside the callback function
+     * @returns  'true' if all elements meet the conditions, 'false' otherwise
      */
     every(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): boolean;
 
     /**
-     * 제공된 함수의 조건과 일치하는 첫 번째 요소의 인덱스를 반환합니다.
+     * Returns the index of the first element that matches the conditions of the provided function.  
      * 
-     * @param callbackfn - 검사할 콜백 함수, (elem: T, index: number, list: T[]) => boolean
-     * @param thisArg - 콜백 함수 내부에서 this로 사용할 객체
-     * @returns  조건을 만족하는 첫 번째 요소의 인덱스, 찾지 못한 경우 `-1`
+     * @param callbackfn Callback function to be examined, (elem: T, index: number, list: T[]) => boolean
+     * @param thisArg Object to use as this inside the callback function
+     * @returns Index of the first element that satisfies the condition, if not found '-1'
      */
     findIndex(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): number;
 }

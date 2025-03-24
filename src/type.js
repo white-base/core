@@ -12,7 +12,11 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation 
 var _global = globalThis;
 var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
-var Type = {};  // namespace
+
+/**
+ * This is a type module.
+ */
+var Type = {};
 
 /**
  * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부
@@ -332,10 +336,11 @@ function _hasKindArray(name) {
 }
 
 /**
- * 전체 프로퍼티를 조회합니다.
- * @param {object} obj  Object를 제외한 프로퍼티 객체 리턴
- * @param {boolean?} hasObj Object를 포함 여부
- * @returns {array<string>}  
+ * Query all properties of the object.
+ * 
+ * @param {object} obj  Object to look up properties (except Object)
+ * @param {boolean?} hasObj Whether to include properties of 'Object'
+ * @returns {array<string>} Property Name Arrangement
  */
 function getAllProperties(obj, hasObj) {
     var allProps = [], cur = obj;
@@ -352,48 +357,12 @@ function getAllProperties(obj, hasObj) {
 Type.getAllProperties = getAllProperties;
 
 /**
- * 객체를 비교합니다. (proto 제외)
- * @param {any} obj1 
- * @param {any} obj2 
- * @returns {boolean}
+ * Compare the two objects to see if they are the same (except Prototype)  
+ * 
+ * @param {any} obj1 Source object
+ * @param {any} obj2 Object to compare
+ * @returns {boolean} Whether the two objects are the same ('true' or 'false')
  */
-// function deepEqual(obj1, obj2) {
-//     if (obj1 === obj2) return true;
-//     if (typeof obj1 !== typeof obj2) return false;
-//     if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
-//     if (typeof obj1 === 'function' && !$equalFunction(obj1, obj2)) return false;
-
-//     if (Array.isArray(obj1)) {
-//         if (obj1.length !== obj2.length) return false;
-//         for (var i = 0; i < obj1.length; i++) {
-//             var val1 = obj1[i];
-//             var val2 = obj2[i];
-//             if (!deepEqual(val1, val2)) return false;
-//         }
-//     } else {
-//         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
-//         for (var key in obj1) {
-//             if (Object.prototype.hasOwnProperty.call(obj1, key)) {
-//                 var val1 = obj1[key];
-//                 var val2 = obj2[key];
-//                 if (!deepEqual(val1, val2)) return false;
-//             }
-//         }
-//     }
-//     return true;
-//     // inner function
-//     function $equalFunction(fun1, fun2) {
-//         // if (typeof fun1 !== 'function') return false;
-//         // if (typeof fun2 !== 'function') return false;
-//         if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
-//         return false;
-//     }
-//     function $_isPrimitiveType(obj) {
-//         if (typeof obj === 'string' || typeof obj === 'number' 
-//             || typeof obj === 'boolean' || typeof obj === 'undefined' || typeof obj === 'bigint') return true;
-//         return false;
-//     }
-// }
 function deepEqual(obj1, obj2) {
     // 두 객체가 동일한 참조를 가지면 true를 반환
     if (obj1 === obj2) return true;
@@ -435,12 +404,52 @@ function deepEqual(obj1, obj2) {
 }
 Type.deepEqual = deepEqual;
 
+// function deepEqual(obj1, obj2) {
+//     if (obj1 === obj2) return true;
+//     if (typeof obj1 !== typeof obj2) return false;
+//     if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
+//     if (typeof obj1 === 'function' && !$equalFunction(obj1, obj2)) return false;
+
+//     if (Array.isArray(obj1)) {
+//         if (obj1.length !== obj2.length) return false;
+//         for (var i = 0; i < obj1.length; i++) {
+//             var val1 = obj1[i];
+//             var val2 = obj2[i];
+//             if (!deepEqual(val1, val2)) return false;
+//         }
+//     } else {
+//         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+//         for (var key in obj1) {
+//             if (Object.prototype.hasOwnProperty.call(obj1, key)) {
+//                 var val1 = obj1[key];
+//                 var val2 = obj2[key];
+//                 if (!deepEqual(val1, val2)) return false;
+//             }
+//         }
+//     }
+//     return true;
+//     // inner function
+//     function $equalFunction(fun1, fun2) {
+//         // if (typeof fun1 !== 'function') return false;
+//         // if (typeof fun2 !== 'function') return false;
+//         if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
+//         return false;
+//     }
+//     function $_isPrimitiveType(obj) {
+//         if (typeof obj === 'string' || typeof obj === 'number' 
+//             || typeof obj === 'boolean' || typeof obj === 'undefined' || typeof obj === 'bigint') return true;
+//         return false;
+//     }
+// }
+
+
 /**
- * 함수 타입을 가져옵니다. (_UNION 포함)  
- * ctor 자신부터 리턴 배열에 push
- * @param {function} ctor 생성자
- * @param {boolean} [hasUnion= true] _UNION 포함 여부
- * @returns {array<function>} 
+ * Gets the type of the given function (generator). (Can include '_UNION')  
+ * The returned arrays are included in order from the specified function.  
+ * 
+ * @param {function} ctor Generator function or class
+ * @param {boolean} [hasUnion= true] whether '_UNION' is included (default: 'true')
+ * @returns {array<function>} Array function type
  */
 function getTypes(ctor, hasUnion) {
     var arr = [];
@@ -481,10 +490,11 @@ function getTypes(ctor, hasUnion) {
 Type.getTypes = getTypes;
 
 /**
- * 함수 타입의 prototype(상속) 타입 여부를 검사합니다.
- * @param {function} ctor 생성자
- * @param {function | string} target 검사 대상
- * @returns {boolean}
+ * Verify that the prototype (inheritance) chain of the function type contains the specified target.  
+ * 
+ * @param {function} ctor Generator function or class
+ * @param {function | string} target To be examined (generator function or class name)
+ * @returns {boolean} whether to be included in the prototype chain ('true' or 'false')
  */
 function isProtoChain(ctor, target) {
     var arr;
@@ -504,10 +514,11 @@ function isProtoChain(ctor, target) {
 Type.isProtoChain = isProtoChain;
 
 /**
- * 함수 타입의 prototype(상속) 또는 _UNION 타입 여부를 검사합니다.
- * @param {function} ctor 생성자
- * @param {function | string} target 검사 대상
- * @returns {boolean}
+ * Verify that the given function type is included in the prototype (inheritance) chain or is of type '_UNION'.  
+ * 
+ * @param {function} ctor Generator function or class
+ * @param {function | string} target To be examined (generator function or class name)
+ * @returns {boolean} Prototype chain or type '_UNION' ('true' or 'false')
  */
 function hasType(ctor, target) {
     var arr;
@@ -527,9 +538,11 @@ function hasType(ctor, target) {
 Type.hasType = hasType;
 
 /**
- * 확장타입 객체를 얻습니다. (하위 타입 포함)  
- * @param {*} target 
- * @returns {object}
+ * Returns extension information of the target type in JSON format.  
+ * Analyze the internal properties of the object to transform all properties into the format 'typeObject()'.  
+ * 
+ * @param {*} target Target type
+ * @returns {object} converted extension type object
  * @example
  * var obj = {
  *      $ype: '',
@@ -593,9 +606,10 @@ function typeObject(target) {
 Type.typeObject = typeObject;
 
 /**
- * 확장타입명을 얻습니다.
- * @param {*} target 
- * @returns {string}
+ * Returns the extension type name of the target object.  
+ * 
+ * @param {*} target Target object
+ * @returns {string} extended type name
  */
 function typeOf(target) {
     return extendType(target)['$type'];
@@ -603,9 +617,10 @@ function typeOf(target) {
 Type.typeOf = typeOf;
 
 /**
- * 확장타입을 얻는다.
- * @param {any} target 대상타입
- * @returns {object} 
+ * Returns the extension type of the target object.  
+ * 
+ * @param {any} target Target object
+ * @returns {object} extended type object
  * @example
  * var singleType = ['undefined', 'null', 'number', 'string', 'boolean', 'regexp', 'object', 'symbol'];
  * var unionType = ['array', 'choice', 'function', 'class', 'union'];
@@ -1394,11 +1409,12 @@ function _execMatch(extType, target, opt, pathName) {
 };
 
 /**
- * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} tarType 검사 대상 타입
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {throw?} 실패시 예외
+ * Verify that the extension type allows the target type.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} tarType What type to check
+ * @param {number} [opt=0] Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {throw?} Exception occurs if extension type does not allow target type
  */
 function allowType(extType, tarType, opt) {
     try {
@@ -1410,11 +1426,12 @@ function allowType(extType, tarType, opt) {
 Type.allowType = allowType;
 
 /**
- * 확장타입이 대상과 매치되는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} target 검사 대상
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {throw?} 실패시 예외
+ * Verify that the extension type matches the target.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} target For inspection
+ * @param {number} [opt=0] Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {throw?} Exception occurs when failing
  */
 function matchType(extType, target, opt) {
     try {
@@ -1426,11 +1443,12 @@ function matchType(extType, target, opt) {
 Type.matchType = matchType;
 
 /**
- * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} target 검사 대상 타입
- * @param {number} opt 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {boolean} 검사 통과 여부
+ * Determine whether the extension type allows the target type.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} target Type to be examined
+ * @param {number} opt Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {boolean} whether to allow ('true' or 'false')
  */
 function isAllowType(extType, target, opt) {
     try {
@@ -1443,11 +1461,12 @@ function isAllowType(extType, target, opt) {
 Type.isAllowType = isAllowType;
 
 /**
- * 확장타입이 대상과 매치되는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} target 검사 대상
- * @param {number} [opt] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {boolean} 검사 통과 여부
+ * Verify that the extension type matches the target.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} target Type to be examined
+ * @param {number} [opt] Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {boolean} Match or not ('true' or 'false')
  */
 function isMatchType(extType, target, opt) {
     try {

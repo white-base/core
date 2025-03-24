@@ -1,35 +1,36 @@
 /**
- * 컬렉션 인터페이스입니다.
+ * This is the collection interface.
  */
 declare interface ICollection<T> {
     
     /**
-     * 컬렉션에 요소를 추가합니다.
-     * @returns 추가한 요소의 인덱스
+     * Add an element to the collection.  
+     * 
+     * @returns Index of added elements
      */
     add(...args: any[]): number;
 
     /**
-     * 컬렉션에서 요소를 제거합니다.
+     * Remove an element from the collection.  
      * 
-     * @param elem - 제거할 요소
-     * @returns 제거한 요소의 인덱스, 요소가 존재하지 않으면 `-1`
+     * @param elem Elements to be removed
+     * @returns Index of removed element, '-1' if element does not exist
      */
     remove(elem: T): number;
 
     /**
-     * 컬렉션에서 요소가 존재하는지 확인합니다.
+     * Verify that an element exists in the collection.  
      * 
-     * @param elem - 확인할 요소
-     * @returns 요소가 존재하면 `true`, 그렇지 않으면 `false`
+     * @param elem Factors to check
+     * @returns If the element exists, it is 'true', otherwise it is 'false'
      */
     contains(elem: T): boolean;
 
     /**
-     * 컬렉션에서 요소의 인덱스를 반환합니다.
+     * Returns the index of an element in the collection.  
      * 
-     * @param elem - 조회할 요소
-     * @returns 요소의 인덱스, 요소가 없으면 `-1`
+     * @param elem Elements to view
+     * @returns index of element, '-1' without element
      */
     indexOf(elem: T): number;
 }

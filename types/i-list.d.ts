@@ -1,15 +1,15 @@
 /**
- * 목록 인터페이스입니다.
+ * List interface.  
  */
 declare interface IList<T> {
     
     /**
-     * 목록의 데이터를 저장하는 내부 배열입니다.
+     * An internal array that stores the data in the list.  
      */
     _list: T[];
 
     /**
-     * 목록의 개수를 반환합니다. 
+     * Returns the number of lists.
      */
     count: number;
 }

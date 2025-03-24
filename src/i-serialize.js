@@ -12,7 +12,7 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var ISerialize  = (function () {
     /**
-     * 직렬화 인터페이스 입니다.
+     * Interface for serialization and deserialization.  
      * @constructs ISerialize
      * @interface
      */
@@ -23,8 +23,9 @@ var ISerialize  = (function () {
     ISerialize._KIND = 'interface';
 
     /**
-     * 내보내기(출력)를 합니다.
-     * @returns {string}
+     * Serialize objects, convert them into strings (such as JSON), and export them.  
+     * 
+     * @returns {string} Serialized String
      * @abstract
      */
     ISerialize.prototype.output  = function() {
@@ -32,7 +33,8 @@ var ISerialize  = (function () {
     };
 
     /**
-     * 가져오기(로드) 합니다.
+     * Restore objects by loading serialized data.  
+     * 
      * @abstract
      */
     ISerialize.prototype.load  = function() {

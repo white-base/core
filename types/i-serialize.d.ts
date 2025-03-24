@@ -1,17 +1,17 @@
 /**
- * 직렬화(Serialization) 및 역직렬화(Deserialization)를 위한 인터페이스입니다.
+ * Interface for serialization and deserialization.  
  */
 declare interface ISerialize {
     
     /**
-     * 객체를 직렬화하여 문자열(JSON 등)로 변환하고 내보냅니다.
+     * Serialize objects, convert them into strings (such as JSON), and export them.  
      * 
-     * @returns 직렬화된 문자열
+     * @returns Serialized String
      */
     output(...args: any[]): string;
 
     /**
-     * 직렬화된 데이터를 로드하여 객체를 복원합니다. 
+     * Restore objects by loading serialized data.  
      */
     load(...args: any[]): void;
 }

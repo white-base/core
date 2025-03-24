@@ -6,10 +6,7 @@ const localesPath = './locales';    // 상대 경로
 // 2. module dependency check
 //==============================================================
 // 3. module implementation
-/**
- * @class Message
- * @description 메시지 코드 관리 클래스 (static)
- */
+
 // inner function
 function _isObject(obj) {
     return obj && typeof obj === 'object' && !Array.isArray(obj);
@@ -90,12 +87,18 @@ function _replacePlaceholders (p_template, p_values) {
     return p_template;
 };
 
+/**
+ * 'Message' is a class that manages messages and codes.  
+ */
 class Message {
 
+    /**
+     * Namespace path. ('Common')
+     */
     static _NS = 'Common';
     
     /**
-     * 메시지 코드를 저장하는 내부 저장소입니다. 
+     * Internal repository that stores message code.  
      */
     static $storage = {
         lang: { default: {} },
@@ -103,25 +106,26 @@ class Message {
     };
     
     /**
-     * 언어 자동 감지 여부를 설정합니다. 기본값은 true입니다.
+     * Sets whether automatic language detection is enabled. Default is true.  
      */
     static autoDetect = true;
     
     /**
-     * 기본 언어를 설정합니다. 기본값은 'default'입니다.
+     * Set the default language. Default is 'default'.  
      */
     static defaultLang = 'default';
     
     /**
-     * 현재 언어를 설정합니다. 기본값은 'default'입니다.
+     * Sets the current language. Default is 'default'.  
      */
     static currentLang = this.defaultLang;
 
     
     /**
-     * 메시지 코드에 해당하는 메시지를 반환합니다.
-     * @param {string} p_code 메시지 코드
-     * @returns {string} 메시지 문자열
+     * Returns a message that corresponds to the message code.  
+     * 
+     * @param {string} p_code Message code
+     * @returns {string} Message String
      */
     static getMessageByCode (p_code) {
         var value = this.$storage.lang[this.currentLang]?.[p_code] || this.$storage.lang[this.defaultLang]?.[p_code];
@@ -129,9 +133,10 @@ class Message {
     };
 
     /**
-     * 메시지 코드를 저장소에 추가합니다.
-     * @param {object} p_msg 메세지 객체
-     * @param {string} p_path 메세지 파일 경로
+     * Add the message code to the storage.  
+     * 
+     * @param {object} p_msg Message Object
+     * @param {string} p_path Message file path
      */
     static importMessage (p_msg, p_path) {
         if (_isObject(p_msg)) {
@@ -141,8 +146,9 @@ class Message {
     };
 
     /**
-     * 언어를 변경합니다.
-     * @param {string} p_lang 언어 코드
+     * Change the language.  
+     * 
+     * @param {string} p_lang language code
      */
     static async changeLanguage (p_lang) {
         for (var i = 0; i < this.$storage.path.length; i++) {
@@ -159,9 +165,10 @@ class Message {
     }
 
     /**
-     * 메시지 코드에 메세지를 반환합니다.
-     * @param {string} p_code 메시지 코드
-     * @param {object | string[]} p_values 메시지에서 치환할 값
+     * Returns a string corresponding to the given message code.  
+     * 
+     * @param {string} p_code Message code
+     * @param {object | string[]} p_values Value to replace in message
      * @returns {string} 메시지
      */
     static get (p_code, p_values) {
@@ -186,8 +193,8 @@ class Message {
     };
 
     /**
-     * currentLang 를 defaultLang 로 초기화합니다.  
-     * 언어 자동 감지가 설정되어 있으면 자동으로 언어를 변경합니다.  
+     * Initialize currentLang to defaultLang.  
+     * Automatically change the language when language auto-detection is enabled.  
      * 
      * @returns {Promise<void>}
      */

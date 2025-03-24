@@ -22,7 +22,8 @@ if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serializ
 // 3. module implementation   
 var NamespaceManager = (function () {
     /**
-     * 네임스페이스 관리자를 생성합니다.
+     * Create a Namespace Manager.  
+     * 
      * @constructs NamespaceManager
      */
     function NamespaceManager() {
@@ -33,7 +34,8 @@ var NamespaceManager = (function () {
         
         
         /**
-         * 내부 변수 접근
+         * Namespace repository  
+         * 
          * @member {string} NamespaceManager#$storage
          * @readonly
          * @private
@@ -46,21 +48,10 @@ var NamespaceManager = (function () {
             enumerable: false,
         });
 
-        // /**
-        //  * 네임스페이스 저장소
-        //  * @member {array} NamespaceManager#$storage 
-        //  * @private
-        //  * @readonly
-        //  */
-        // Object.defineProperty(this, '$storage',
-        // {
-        //     get: function() { return $storage; },
-        //     configurable: false,
-        //     enumerable: false
-        // });
-
         /** 
-         * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용
+         * Namespace element type list.  
+         * Allow all types if empty.  
+         * 
          * @member {array<any>}  NamespaceManager#_elemTypes  
          * @protected
          */
@@ -78,7 +69,8 @@ var NamespaceManager = (function () {
         });
 
         /**
-         * 네임스페이스 요소 목록
+         * Namespace element list.  
+         * 
          * @member {array<string>}  NamespaceManager#_list
          * @readonly
          */
@@ -109,7 +101,8 @@ var NamespaceManager = (function () {
         });
 
         /**
-         * 네임스페이스 요소 갯수
+         * Total number of Namespace elements.  
+         * 
          * @member {number} NamespaceManager#count 
          * @readonly
          */
@@ -123,7 +116,9 @@ var NamespaceManager = (function () {
         });
 
         /**
-         * 중복 요소 등록 허용 여부, 기본값 = false (중복금지)
+         * Set whether to allow duplicate element registration.  
+         * Default is 'false' and does not allow duplication.  
+         * 
          * @member {boolean} NamespaceManager#allowOverlap
          */
         Object.defineProperty(this, 'allowOverlap',
@@ -184,8 +179,9 @@ var NamespaceManager = (function () {
     }
     
     /**
-     * 네임스페이스 저장소 초기화 객체를 생성합니다.
-     * @returns {object} {_type: 'ns'}
+     * Creates a storage initialization object.  
+     * 
+     * @returns {object} initialized namespace type object { _type: 'ns'}
      * @private
      */
     NamespaceManager.prototype.$createNsRefer = function() {
@@ -193,9 +189,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스 경로객체를 얻습니다.
-     * @param {string | object} p_elem 얻을 요소
-     * @returns {object} {ns: '..', key: '..'}
+     * Returns the Namespace path object.  
+     * 
+     * @param {string | object} p_elem Factors to obtain the path
+     * @returns {object} Namespace path object {ns: '...', key: '...'}
      * @protected
      */
     NamespaceManager.prototype._getPathObject = function(p_elem) {
@@ -219,15 +216,16 @@ var NamespaceManager = (function () {
     };
     
     /**
-     * 네임스페이스를 초기화 합니다.
+     * Initialize the namespace.  
      */
     NamespaceManager.prototype.init = function() {
         this.$storage = this.$createNsRefer();
     };
 
     /**
-     * 네임스페이스에 경로를 추가합니다.
-     * @param {string | array<string>} p_ns 네임스페이스 이름
+     * Add a path to the Namespace.  
+     * 
+     * @param {string | array<string>} p_ns Namespace name, path in the form of a string or array separated by a dot ('.')
      */
     NamespaceManager.prototype.addNamespace = function(p_ns) {
         var parent = this.$storage;
@@ -252,8 +250,9 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스에 경로를 삭제합니다.
-     * @param {string | array<string>} p_ns 네임스페이스 이름
+     * Delete the path in the Namespace.  
+     * 
+     * @param {string | array<string>} p_ns Namespace name, path in the form of a string or array separated by a dot ('.')
      */
     NamespaceManager.prototype.delNamespace = function(p_ns) {
         var parent = this.$storage;
@@ -275,9 +274,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스에 경로 객체를 얻습니다.
-     * @param {string | sting[]} p_ns 네임스페이스 이름
-     * @returns {object} 경로에 대한 객체
+     * Returns the path object of the namespace.  
+     * 
+     * @param {string | sting[]} p_ns Namespace name, path in the form of a string or array separated by a dot ('.')
+     * @returns {object} path object
      */
     NamespaceManager.prototype.path = function(p_ns) {
         var parent = this.$storage;
@@ -302,9 +302,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스의 경로에 요소를 추가합니다.
-     * @param {string} p_fullName 네임스페이스 전체 경로명
-     * @param {any} p_elem 요소
+     * Adds an element to the specified namespace path.  
+     * 
+     * @param {string} p_fullName Full path to the Namespace
+     * @param {any} p_elem Functions, classes, or objects to be added
      */
     NamespaceManager.prototype.add = function(p_fullName, p_elem) {
         var parent = this.$storage;
@@ -343,9 +344,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스의 경로에 요소를 삭제합니다.
-     * @param {string} p_fullname 네임스페이스 전체 경로명
-     * @returns {boolean}
+     * Deletes an element from the specified namespace path.  
+     * 
+     * @param {string} p_fullname Full path to the Namespace
+     * @returns {boolean} Successful deletion ('true' or 'false')
      */
     NamespaceManager.prototype.del = function(p_fullName) {
         var parent = this.$storage;
@@ -371,9 +373,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스에 요소가 있는지 확인합니다.
-     * @param {string | any} p_elem 경로 | 객체
-     * @returns {boolean}
+     * Verify that the specified element exists in the Namespace.  
+     * 
+     * @param {string | any} p_elem Function, class, or object to check
+     * @returns {boolean} Existence ('true' or 'false')
      */
     NamespaceManager.prototype.has = function(p_elem) {
         if (_isString(p_elem) && this.find(p_elem)) return true;
@@ -382,9 +385,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스의 경로에 요소를 찾아서 돌려줍니다.
-     * @param {string | array<string>} p_fullName 네임스페이스 전체 경로명
-     * @returns {(object | function)?}
+     * Retrieves elements from the specified namespace path.  
+     * 
+     * @param {string | array<string>} p_fullName Full path to the Namespace
+     * @returns {(object | function)?} Found elements
      */
     NamespaceManager.prototype.find = function(p_fullName) {
         var parent = this.$storage;
@@ -406,10 +410,10 @@ var NamespaceManager = (function () {
     };
     
     /**
-     * 네임스페이스에 요소로 경로를 얻습니다.  
-     * (중복시 첫번째 요소 return)
-     * @param {any} p_elem 얻을 객체
-     * @returns {string?}
+     * Returns the path of the specified element in the Namespace.  
+     * (Route of the first element in case of redundancy)  
+     * @param {any} p_elem Elements to find (function or object)
+     * @returns {string?} The path of the element, 'undefined' if not found
      */
     NamespaceManager.prototype.getPath = function(p_elem) {
         var namespace = this.$storage;
@@ -442,11 +446,12 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스 저장소를 문자열로 내보냅니다.  
-     * 함수를 JSON 으로 출력하기 위해서 별도의 stringify 지정해야합니다.!
-     * @param {function?} p_stringify JSON stringify
-     * @param {string?} p_space 공백
-     * @returns {string} 직렬화한 문자열
+     * Serialize the namespace repository and convert it into a string.  
+     * To convert the function to JSON, you must specify a separate 'stringify' function.  
+     * 
+     * @param {function?} p_stringify JSON Stringify function (optional)
+     * @param {string?} p_space Setting the blank to apply at the output
+     * @returns {string} serialized string
      */
     NamespaceManager.prototype.output = function(p_stringify, p_space) {
         var arr = [];
@@ -479,9 +484,9 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 문자열을 파싱해서 네임스페이스 저장소로 가져옵니다.  
-     * @param {string} p_str 직렬화한 문자열
-     * @param {function?} p_parse JSON 파서
+     * Parsing serialized strings and fetching them to the Namespace repository.  
+     * @param {string} p_str serialized string
+     * @param {function?} p_parse  JSON parser function
      */
     NamespaceManager.prototype.load = function(p_str, p_parse) {
         var arr = [];

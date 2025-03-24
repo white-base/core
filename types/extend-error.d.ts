@@ -1,24 +1,24 @@
 /**
- * `ExtendError` 클래스는 `Error`을 상속받았습니다.
- * `ExtendError` 클래스는 확장된 오류 정보를 제공하는 사용자 정의 오류 클래스입니다.
+ * The class 'ExtendError' inherited 'Error'.  
+ * The 'ExtendError' class is a custom error class that provides extended error information.  
  */
 declare class ExtendError extends Error {
     
     /**
-     * 이전에 발생한 메시지를 저장합니다.  
+     * Save previously generated messages.  
      */
     queue: string[];
 
     /**
-     * 속성 타입과 관련된 오류 메시지입니다.  
+     * Error message related to property type.  
      */
     prop: Record<string, string>;
 
     /**
-     * 사용자 메시지를 사용하여 ExtendError 인스턴스를 생성합니다.  
+     * Use user messages to create an ExtendError instance.  
      *
-     * @param msg - 오류 메시지 문자열
-     * @param causeOrProp - 기존 ExtendError, Error 객체 또는 속성별 오류 메시지
+     * @param msg Error message string
+     * @param causeOrProp Error message by existing ExtendError, Error object or property
      *
      * @example
      * throw new ExtendError("Custom error message");
@@ -28,18 +28,18 @@ declare class ExtendError extends Error {
     constructor(msg: string, causeOrProp?: Error | ExtendError | Record<string, string>);
 
     /**
-     * 메시지 코드와 치환값을 사용하여 `ExtendError` 인스턴스를 생성합니다.  
+     * Create an instance of 'ExtendError' using the message code and substitution value.  
      *
-     * @param msgPattern - 정규식 타입의 코드값
-     * @param causeOrProp - 기존 ExtendError, Error 객체 또는 속성별 오류 메시지
-     * @param placeholders - 메시지 코드 내 `$1`, `$2` 등의 치환값을 담은 문자열 배열
+     * @param msgPattern Code value of regular expression type
+     * @param causeOrProp Error message by existing ExtendError, Error object or property
+     * @param placeholders Array of strings containing substitution values such as '$1' and '$2' in the
      *
      * @example
-     * // 치환값이 없는 메세지의 경우
+     * // For messages that do not have a substitution value
      * throw new ExtendError(/EL01504/);
      * throw new ExtendError(/EL01504/, error);
      * throw new ExtendError(/EL01504/, { style: "required" });
-     * // 치환값이 있는 메세지의 경우
+     * // For messages with substitution values
      * throw new ExtendError(/EL01504/, undefined, ['value1', 'value2']);
      * throw new ExtendError(/EL01504/, error, ['value1', 'value2']););
      * throw new ExtendError(/EL01504/, { style: "required" }, ['value1', 'value2']);
@@ -48,9 +48,9 @@ declare class ExtendError extends Error {
     
     
     /**
-     * 오류 메시지를 문자열로 변환합니다.  
+     * Converts error messages into strings.  
      * 
-     * @return 오류 메시지 문자열
+     * @return error message string
      */
     toString(): string;
 }

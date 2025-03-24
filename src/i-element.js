@@ -12,13 +12,14 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IElement  = (function () {
     /**
-     * 요소(독립) 인터페이스 입니다.
+     * Element (independent) interface.  
      * @constructs IElement
      * @interface
      */
     function IElement() {
         /**
-         * 요소명
+         * Internal property that stores the name of the element.  
+         * 
          * @member {string} IElement#_name
          */
         this._name = String;
@@ -28,8 +29,9 @@ var IElement  = (function () {
     IElement._KIND = 'interface';
 
     /**
-     * 요소를 복제합니다.
-     * @returns {object}
+     * Creates a copy of the current element.  
+     * 
+     * @returns {object} Replicated Elements
      * @abstract
      */
     IElement.prototype.clone  = function() {

@@ -1,28 +1,28 @@
 /**
- * 객체 인터페이스 입니다.
+ * Object interface.  
  */
 declare interface IObject {
     
     /**
-     * 객체의 타입 목록을 반환합니다.  
+     * Returns a list of types of objects.  
      * 
-     * @returns 객체의 타입 배열
+     * @returns Arrangement of types of objects
      */
     getTypes(): Function[];
 
     /**
-     * 객체가 특정 클래스 또는 인터페이스의 인스턴스인지 확인합니다.
+     * Verify that the object is an instance of a particular class or interface.  
      * 
-     * @param target 생성자명 문자열 또는 생성자
-     * @returns 인스턴스 여부, 인스턴스이면 `true`, 그렇지 않으면 `false`
+     * @param target Generator name string or constructor
+     * @returns Instance or 'true' if it's an instance or 'false' if it's not
      */
     instanceOf(target: Function | string): boolean;
 
     /**
-     * 객체가 주어진 대상과 동일한지 비교합니다.
+     * Compare that the object is the same as the given object.  
      * 
-     * @param target - 비교할 대상
-     * @returns 두 객체가 동일하면 `true`, 그렇지 않으면 `false`
+     * @param target To compare
+     * @returns If two objects are the same, 'true', or 'false'
      */
     equal(target: any): boolean;
 }

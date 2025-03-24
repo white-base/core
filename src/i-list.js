@@ -12,20 +12,23 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation   
 var IList  = (function () {
     /**
-     * 목록 인터페이스 입니다.
+     * List interface.  
+     * 
      * @constructs IList
      * @interface
      */
     function IList() {
 
         /**
-         * 목록 데이터입니다.
+         * An internal array that stores the data in the list.  
+         * 
          * @member {array} IList#_list
          */
         this._list = Array;
         
         /**
-         * 목록 갯수입니다.
+         * Returns the number of lists.  
+         * 
          * @member {number} IList#count
          */
         this.count = Number;

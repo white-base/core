@@ -15,7 +15,11 @@ if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
 var _global = globalThis;
 
 var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
-var Util = {};  // namespace
+
+/**
+ * This is a utility module.
+ */
+var Util = {};
 
 
 // local function
@@ -51,11 +55,12 @@ if (!Array.isArray || OLD_ENV) {
 // };
 
 /**
- * 배열의 깊이를 가져옵니다.  
+ * Returns the nested depth of the array.  
  * REVIEW: 필요성 검토 필요!
- * @param {array} p_elem 
- * @param {number} p_depts 
- * @returns {number} 
+ * 
+ * @param {array} p_elem Array elements
+ * @param {number} p_depts Current depth (default: 0)
+ * @returns {number} Maximum nested depth of array
  */
 Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
     var MAX     = 10;
@@ -71,8 +76,9 @@ Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
 };
 
 /**
- * guid 값을 생성합니다. (36자)
- * @returns {string} 예> 'b806a5b5-75f7-a1ba-3736-17f56fb5d65a'
+ * Creates a 36-digit GUID.  
+ * 
+ * @returns {string} GUID string generated
  */
 Util.createGuid = function createGuid() {
     function _p8(s) {  
@@ -83,9 +89,10 @@ Util.createGuid = function createGuid() {
 };
 
 /**
- * 객체를 깊은 복사를합니다. (proto제외)
- * @param {object} p_target 대상 객체
- * @returns {object}
+ * Deep copy of the object (except prototype)  
+ * 
+ * @param {object} p_target Destination object to copy
+ * @returns {object} copied object
  */
 Util.deepCopy = function deepCopy(p_target) {
     var nobj;
@@ -113,10 +120,11 @@ Util.deepCopy = function deepCopy(p_target) {
 }    
 
 /**
- * superCtor 을 상속합니다.
+ * Sets the specified creator to inherit the parent creator.   
+ * 
  * @function
- * @param {function | object} ctor 생성자 또는 생성 객체
- * @param {function | object} superCtor 상속 받을 부모 생성자 또는 객체
+ * @param {function | object} ctor generator function or object
+ * @param {function | object} superCtor Parent generator function or object
  */
 Util.inherits = (function () {
     if (typeof Object.create === 'function' && !OLD_ENV) {
@@ -149,13 +157,16 @@ Util.inherits = (function () {
 }());
 
 /**
- * ctor 로 생성한 obj 객체의 args<funtion>의 구현 여부를 검사합니다.
- * 종류(ctor._KIND)가 'Interface' 타입이면 allowType(), 아니면 matchType()로 검사한다.
+ * Verify that the object implements the specified interface.  
+ * Verify that the 'obj' object created with 'ctor' implements the interface provided by 'interfaces'.  
+ * If 'ctor._KIND' is 'Interface', use 'allowType()' to confirm.  
+ * Otherwise, use 'matchType()' to confirm.  
+ * 
  * @name implements
  * @function
- * @param {function} p_ctor 검사 대상 생성자
- * @param {object} p_obj 검사 대상 인스턴스 객체
- * @param {function?} args 인터페이스들, ctor._UNION 정적 속성으로 설정 가능
+ * @param {function} p_ctor Generator to be examined
+ * @param {object} p_obj object to be examined
+ * @param {function?} args List of interfaces to check
  */
 Util.implements = function(p_ctor, p_obj) {
     var _interface = [];

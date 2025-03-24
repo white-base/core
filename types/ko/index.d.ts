@@ -1,4 +1,4 @@
-import messageCode from "./message-code";
+// import messageCode from "./message-code";
 import Message from "./message";
 import ExtendError from "./extend-error";
 import Type from "./type";
@@ -22,7 +22,7 @@ import ArrayCollection from "./collection-array";
 import PropertyCollection from "./collection-property";
 
 export {
-    messageCode,
+    // messageCode,
     Message,
     ExtendError,
     Type,

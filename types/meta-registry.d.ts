@@ -3,86 +3,86 @@ import MetaObject from "./meta-object";
 import { RefObject, NsObject, SetObject } from "./T";
 
 /**
- * `MetaRegistry`는 메타 객체의 등록과 관리를 담당하는 클래스입니다.
+ * 'MetaRegistry' is a class responsible for registering and managing meta objects.  
  */
 declare class MetaRegistry {
     
     /**
-     * 메타 객체 목록입니다.
+     * List of meta objects.  
      */
     static _list: any[];
 
     /**
-     * 현재 등록된 메타 객체의 총 개수입니다. 
+     * Total number of currently registered meta objects.  
      */
     static get count(): number;
 
     /**
-     * 메타 객체의 네임스페이스 관리자입니다.
+     * Namespace manager for meta objects.  
      */
     static get namespace(): NamespaceManager;
 
     /**
-     * 등록된 메타 객체 및 네임스페이스를 초기화합니다.
+     * Initializes registered meta objects and namespaces.  
      */
     static init(): void;
 
     /**
-     * 메타 객체를 등록하고, 생성자를 네임스페이스에 등록합니다.  
-     * 기존에 객체가 등록되어 있으면 예외가 발생합니다.  
-     * 네임스페이스에 생성자가 없을 경우 등록합니다.  
+     * Register the meta object and register the creator in the namespace.  
+     * An exception occurs if an object is already registered.  
+     * Register if there is no creator in the Namespace.  
      * 
-     * @param metaObj - 등록할 메타 객체
-     * @throws  객체가 이미 등록된 경우 예외가 발생합니다.
+     * @param metaObj Meta object to register
+     * @throws An exception occurs if the object is already registered.
      */
     static register(metaObj: MetaObject): void;
 
     /**
-     * 등록소에서 메타 객체를 해제합니다.
+     * Undoes the meta object in the registry.  
      * 
-     * @param metaOrGuid - 메타 객체 또는 GUID 문자열
-     * @returns 제거 성공 여부 (`true` 또는 `false`)
+     * @param metaOrGuid Meta object or GUID string
+     * @returns successful removal ('true' or 'false')
      */
     static release(metaOrGuid: MetaObject | string): boolean;
 
     /**
-     * 등록소에 메타 객체가 있는지 여부를 확인합니다.
+     * Check if the registry has a meta object.  
      * 
-     * @param metaOrGuid - GUID 타입의 객체 또는 GUID 문자열
-     * @returns 존재 여부 (`true` 또는 `false`)
+     * @param metaOrGuid Object of type GUID or GUID string
+     * @returns Existence ('true' or 'false')
      */
     static has(metaOrGuid: MetaObject | object | string): boolean;
 
     /**
-     * 등록소에서 메타 객체를 찾습니다.
+     * Locate the meta object in the registry.  
      * 
-     * @param metaOrGuid - GUID 타입의 객체 또는 GUID 문자열
-     * @returns 찾은 메타 객체, 찾지 못한 경우 `undefined`
+     * @param metaOrGuid Object of type GUID or GUID string
+     * @returns meta object found, 'undefined' if not found
      */
     static find(metaOrGuid: MetaObject | object | string): MetaObject | undefined;
 
     /**
-     * 메타 객체 여부를 확인합니다.
+     * Checks for meta objects.  
      * 
-     * @param target - 대상 객체
-     * @returns 메타 객체 여부 (`true` 또는 `false`)
+     * @param target Target object
+     * @returns Whether it is a meta object ('true' or 'false')
      */
     static isMetaObject(target: unknown): boolean;
 
     /**
-     * GUID 객체의 메타 객체를 생성합니다. 
+     * Creates a meta object of a GUID object.  
      * 
-     * @param guidObj - GUID 타입의 객체
-     * @param guidRootObj - 초기 GUID 리터럴 객체 
+     * @param guidObj GUID type object
+     * @param guidRootObj Initial GUID literal object
      * @returns 생성된 메타 객체
      */
     static createMetaObject(guidObj: object, guidRootObj?: object): MetaObject;
 
     /**
-     * GUID 객체의 참조 객체를 생성합니다. 
+     * Creates a reference object for a GUID object.  
      * 
-     * @param metaObj - 메타 객체
-     * @returns 생성된 참조 객체 (`{ $ref: 'guid값' }`)
+     * @param metaObj Meta object
+     * @returns created reference object ('{$ref: 'guid value'}')
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -93,10 +93,10 @@ declare class MetaRegistry {
     static createReferObject(metaObj: MetaObject): RefObject;
 
     /**
-     * 함수를 네임스페이스에 등록하고 참조 객체를 생성합니다.
+     * Register the function in the Namespace and create a reference object.  
      * 
-     * @param target - 함수 또는 생성자
-     * @returns 생성된 네임스페이스 참조 객체 (`{ $ns: 'Meta.MetaElement' }`)
+     * @param target Function or constructor
+     * @returns created namespace reference object ('{$ns: 'Meta.MetaElement'}')
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -107,12 +107,12 @@ declare class MetaRegistry {
     static createNsReferObject(target: Function): NsObject;
 
     /**
-     * GUID 객체에 메타 객체의 GUID를 설정합니다.  
+     * Set the GUID of the meta object in the GUID object.  
      * guidObj.$set = meta._guid  
      * 
-     * @param guidObj - GUID 타입의 객체
-     * @param metaObj - 메타 객체
-     * @returns 설정된 객체
+     * @param guidObj GUID type object
+     * @param metaObj Meta object
+     * @returns set object
      * 
      * @example
      * var meta = new MetaElement('m1');
@@ -123,101 +123,101 @@ declare class MetaRegistry {
     static setMetaObject(guidObj: object, metaObj: MetaObject): MetaObject;
 
     /**
-     * GUID 객체의 유효성 검사를 합니다.  
-     * 1. 객체의 GUID 값 중복 여부 확인  
-     * 2. 객체의 '$ref' 값 존재 여부 확인  
-     * 3. 객체의 '$ns' 값 존재 여부 확인  
-     * 4. 객체의 '_key'와 '_elem' 개수 검사  
+     * Validates the GUID object.  
+     * 1. Check if the object has duplicate GUID values  
+     * 2. Determine if an object has a '$ref' value  
+     * 3. Determine if an object has a '$ns' value  
+     * 4. Check the number of '_key' and '_elem' of objects  
      * 
-     * @param guidObj - 검사할 GUID 객체
-     * @returns 검사 결과 (`true` 또는 `false`)
+     * @param guidObj GUID object to be inspected
+     * @returns Inspection result ('true' or 'false')
      */
     static validObject(guidObj: object): boolean;
 
     /**
-     * 대상 객체가 GUID 객체인지 여부를 확인합니다.
+     * Verify that the target object is a GUID object.  
      * 
-     * @param target - 확인할 대상 객체
-     * @returns GUID 객체 여부 (`true` 또는 `false`)
+     * @param target Object to be checked 
+     * @returns Guid object(`true` or `false`)
      */
     static isGuidObject(target: object): boolean;
 
     /**
-     * 원본 객체에 GUID 객체가 포함되어 있는지 확인합니다.  
+     * Verify that the source object contains a GUID object.  
      * 
-     * @param guidObj - 확인할 GUID 객체 또는 GUID 문자열
-     * @param guidRootObj - 조회 대상의 GUID 리터럴 객체 
-     * @returns 포함 여부 (`true` 또는 `false`)
+     * @param guidObj GUID object or GUID string to check
+     * @param guidRootObj GUID literal object of query
+     * @returnswhether to include ('true' or 'false')
      */
     static hasGuidObject(guidObj: object | string, guidRootObj: object | object[]): boolean;
 
     /**
-     * GUID 객체에 참조 타입 요소가 포함되어 있는지 확인합니다.  
-     * 참조 타입은 `$ref`와 `$ns`입니다.  
+     * Verify that the GUID object contains a reference type element.  
+     * Reference types are '$ref' and '$ns'.  
      * 
-     * @param guidObj - 확인할 GUID 객체
-     * @returns 포함 여부 (`true` 또는 `false`)
+     * @param guidObj GUID object to check
+     * @returns whether to include ('true' or 'false')
      */
     static hasRefer(guidObj: object): boolean;
 
     /**
-     * 저장소에서 설정된 GUID 객체를 검색합니다.  
+     * Retrieves the set GUID object from the repository.  
      * 
-     * @param guidObj - 조회할 GUID 객체 또는 GUID 문자열
-     * @param guidRootObj - 조회 대상이 포함된 GUID 리터럴 객체  
-     * @returns 조회된 메타 객체
+     * @param guidObj GUID object or GUID string to look up
+     * @param guidRootObj GUID literal object with query target
+     * @returns meta-objects viewed
      */
     static findSetObject(guidObj: object | string, guidRootObj: object): MetaObject;
 
     /**
-     * GUID 객체의 참조 요소 값을 실제 객체 참조로 변환합니다.  
-     * 변환 대상: `$ns`는 `[Object Object]`로 변환됩니다.  
+     * Converts the reference element value of a GUID object to a real object reference.  
+     * To be converted: '$ns' is converted to '[Object Object]'.  
      * 
-     * @param guidObj - 변환할 GUID 객체
-     * @returns 변환된 메타 객체
+     * @param guidObj GUID object to convert
+     * @returns converted meta object
      */
     static transformRefer(guidObj: object): object;
 
     /**
-     * 지정된 네임스페이스에 생성자 또는 객체를 등록합니다.  
-     * 중복 검사를 수행한 후 등록하며, 기본 제공 함수(Array, String, Number 등)는 저장하지 않습니다. 
+     * Register the creator or object in the specified namespace.  
+     * It registers after performing duplicate checks, and does not store built-in functions (Array, String, Number, etc.).  
      * 
-     * @param target - 등록할 대상(클래스 생성자 또는 객체)
-     * @param namespace - 네임스페이스 이름 (점 `.`으로 구분)
-     * @param classOrFuncName - 대상 이름 (클래스명 또는 함수명), 지정하지 않으면 네임스페이스의 마지막 이름이 적용됩니다.  
+     * @param target To be registered (class creator or object)
+     * @param namespace Namespace name (separated by a dot '.')
+     * @param classOrFuncName Destination name (class name or function name), otherwise the last name of the namespace applies.
      */
     static registerClass(target: Function | object, namespace: string, classOrFuncName?: string): void;
 
     /**
-     * 네임스페이스에서 등록된 항목을 해제합니다.
+     * Undoes the registered item in the Namespace.  
      * 
-     * @param nsPath - 네임스페이스 전체 경로 (`string`)
-     * @returns 삭제 성공 여부 (`true` 또는 `false`)
+     * @param nsPath full path to the namespace ('string')
+     * @returns Successful deletion ('true' or 'false')
      */
     static releaseClass(nsPath: string): boolean;
 
     /**
-     * 네임스페이스에서 지정된 생성자 또는 객체를 찾아 전체 경로를 반환합니다.
+     * Finds the specified constructor or object in the Namespace and returns the entire path.  
      * 
-     * @param target - 생성자 또는 객체
-     * @returns 네임스페이스 전체 경로, 찾지 못한 경우 `undefined`
+     * @param target Creator or object
+     * @returns Namespace Full path, 'undefined' if not found
      */
     static findClass(target: Function): string | undefined;
 
     /**
-     * 네임스페이스에서 지정된 전체 경로에 해당하는 생성자 또는 객체를 반환합니다.
+     * Returns a generator or object corresponding to the entire path specified in the Namespace.  
      * 
-     * @param nsPath - 네임스페이스 전체 경로
-     * @returns 해당하는 객체 또는 생성자, 찾지 못한 경우 `undefined`
+     * @param nsPath Full path to the Namespace
+     * @returns corresponding object or creator, 'undefined' if not found
      */
     static getClass(nsPath: string): object | undefined;
 
     /**
-     * 직렬화된 JSON 문자열을 파싱하여 `MetaObject`로 변환합니다.
+     * Pars the serialized JSON string to convert it to 'MetaObject'.  
      * 
-     * @param str - 직렬화된 JSON 문자열
-     * @param jsonParser - JSON 파서 함수 (기본값은 `JSON.parse`)
-     * @returns 변환된 메타 객체
+     * @param str serialized JSON string
+     * @param jsonParser JSON parser function (default is 'JSON.parse')
+     * @returns converted meta object
      */
     static loadMetaObject(str: string, jsonParser?: Function): MetaObject;
 }
