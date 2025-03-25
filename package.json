@@ -7,6 +7,20 @@
   "exports": {
     ".": {
       "types": {
+        "require": "./types/index.d.ts",
+        "default": "./types/index.d.ts"
+      },
+      "browser": {
+        "require": "./dist/logic-core.umd.js",
+        "default": "./dist/logic-core.js"
+      },
+      "default": {
+        "require": "./dist/logic-core.cjs",
+        "default": "./dist/logic-core.js"
+      }
+    },
+    "./ko": {
+      "types": {
         "require": "./types/ko/index.d.ts",
         "default": "./types/ko/index.d.ts"
       },
@@ -20,7 +34,7 @@
       }
     }
   },
-  "types": "./types/ko/index.d.ts",
+  "types": "./types/index.d.ts",
   "files": [
     "dist/",
     "types/",
