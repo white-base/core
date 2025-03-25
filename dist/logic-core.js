@@ -563,10 +563,7 @@ const localesPath = './locales';    // 상대 경로
 // 2. module dependency check
 //==============================================================
 // 3. module implementation
-/**
- * @class Message
- * @description 메시지 코드 관리 클래스 (static)
- */
+
 // inner function
 function _isObject$2(obj) {
     return obj && typeof obj === 'object' && !Array.isArray(obj);
@@ -646,12 +643,18 @@ function _replacePlaceholders (p_template, p_values) {
 
     return p_template;
 }
+/**
+ * 'Message' is a class that manages messages and codes.  
+ */
 class Message {
 
+    /**
+     * Namespace path. ('Common')
+     */
     static _NS = 'Common';
     
     /**
-     * 메시지 코드를 저장하는 내부 저장소입니다. 
+     * Internal repository that stores message code.  
      */
     static $storage = {
         lang: { default: {} },
@@ -659,25 +662,26 @@ class Message {
     };
     
     /**
-     * 언어 자동 감지 여부를 설정합니다. 기본값은 true입니다.
+     * Sets whether automatic language detection is enabled. Default is true.  
      */
     static autoDetect = true;
     
     /**
-     * 기본 언어를 설정합니다. 기본값은 'default'입니다.
+     * Set the default language. Default is 'default'.  
      */
     static defaultLang = 'default';
     
     /**
-     * 현재 언어를 설정합니다. 기본값은 'default'입니다.
+     * Sets the current language. Default is 'default'.  
      */
     static currentLang = this.defaultLang;
 
     
     /**
-     * 메시지 코드에 해당하는 메시지를 반환합니다.
-     * @param {string} p_code 메시지 코드
-     * @returns {string} 메시지 문자열
+     * Returns a message that corresponds to the message code.  
+     * 
+     * @param {string} p_code Message code
+     * @returns {string} Message String
      */
     static getMessageByCode (p_code) {
         var value = this.$storage.lang[this.currentLang]?.[p_code] || this.$storage.lang[this.defaultLang]?.[p_code];
@@ -685,9 +689,10 @@ class Message {
     };
 
     /**
-     * 메시지 코드를 저장소에 추가합니다.
-     * @param {object} p_msg 메세지 객체
-     * @param {string} p_path 메세지 파일 경로
+     * Add the message code to the storage.  
+     * 
+     * @param {object} p_msg Message Object
+     * @param {string} p_path Message file path
      */
     static importMessage (p_msg, p_path) {
         if (_isObject$2(p_msg)) {
@@ -697,8 +702,9 @@ class Message {
     };
 
     /**
-     * 언어를 변경합니다.
-     * @param {string} p_lang 언어 코드
+     * Change the language.  
+     * 
+     * @param {string} p_lang language code
      */
     static async changeLanguage (p_lang) {
         for (var i = 0; i < this.$storage.path.length; i++) {
@@ -715,9 +721,10 @@ class Message {
     }
 
     /**
-     * 메시지 코드에 메세지를 반환합니다.
-     * @param {string} p_code 메시지 코드
-     * @param {object | string[]} p_values 메시지에서 치환할 값
+     * Returns a string corresponding to the given message code.  
+     * 
+     * @param {string} p_code Message code
+     * @param {object | string[]} p_values Value to replace in message
      * @returns {string} 메시지
      */
     static get (p_code, p_values) {
@@ -742,8 +749,8 @@ class Message {
     };
 
     /**
-     * currentLang 를 defaultLang 로 초기화합니다.  
-     * 언어 자동 감지가 설정되어 있으면 자동으로 언어를 변경합니다.  
+     * Initialize currentLang to defaultLang.  
+     * Automatically change the language when language auto-detection is enabled.  
      * 
      * @returns {Promise<void>}
      */
@@ -891,7 +898,11 @@ if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-e
 // 3. module implementation 
 var _global$1 = globalThis;
 var OLD_ENV$1 = _global$1.OLD_ENV ? _global$1.OLD_ENV : false;    // 커버리지 테스트 역활
-var Type = {};  // namespace
+
+/**
+ * This is a type module.
+ */
+var Type = {};
 
 /**
  * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부
@@ -1209,10 +1220,11 @@ function _hasKindArray(name) {
 }
 
 /**
- * 전체 프로퍼티를 조회합니다.
- * @param {object} obj  Object를 제외한 프로퍼티 객체 리턴
- * @param {boolean?} hasObj Object를 포함 여부
- * @returns {array<string>}  
+ * Query all properties of the object.
+ * 
+ * @param {object} obj  Object to look up properties (except Object)
+ * @param {boolean?} hasObj Whether to include properties of 'Object'
+ * @returns {array<string>} Property Name Arrangement
  */
 function getAllProperties(obj, hasObj) {
     var allProps = [], cur = obj;
@@ -1228,48 +1240,12 @@ function getAllProperties(obj, hasObj) {
 }Type.getAllProperties = getAllProperties;
 
 /**
- * 객체를 비교합니다. (proto 제외)
- * @param {any} obj1 
- * @param {any} obj2 
- * @returns {boolean}
+ * Compare the two objects to see if they are the same (except Prototype)  
+ * 
+ * @param {any} obj1 Source object
+ * @param {any} obj2 Object to compare
+ * @returns {boolean} Whether the two objects are the same ('true' or 'false')
  */
-// function deepEqual(obj1, obj2) {
-//     if (obj1 === obj2) return true;
-//     if (typeof obj1 !== typeof obj2) return false;
-//     if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
-//     if (typeof obj1 === 'function' && !$equalFunction(obj1, obj2)) return false;
-
-//     if (Array.isArray(obj1)) {
-//         if (obj1.length !== obj2.length) return false;
-//         for (var i = 0; i < obj1.length; i++) {
-//             var val1 = obj1[i];
-//             var val2 = obj2[i];
-//             if (!deepEqual(val1, val2)) return false;
-//         }
-//     } else {
-//         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
-//         for (var key in obj1) {
-//             if (Object.prototype.hasOwnProperty.call(obj1, key)) {
-//                 var val1 = obj1[key];
-//                 var val2 = obj2[key];
-//                 if (!deepEqual(val1, val2)) return false;
-//             }
-//         }
-//     }
-//     return true;
-//     // inner function
-//     function $equalFunction(fun1, fun2) {
-//         // if (typeof fun1 !== 'function') return false;
-//         // if (typeof fun2 !== 'function') return false;
-//         if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
-//         return false;
-//     }
-//     function $_isPrimitiveType(obj) {
-//         if (typeof obj === 'string' || typeof obj === 'number' 
-//             || typeof obj === 'boolean' || typeof obj === 'undefined' || typeof obj === 'bigint') return true;
-//         return false;
-//     }
-// }
 function deepEqual(obj1, obj2) {
     // 두 객체가 동일한 참조를 가지면 true를 반환
     if (obj1 === obj2) return true;
@@ -1311,12 +1287,52 @@ function deepEqual(obj1, obj2) {
 }
 Type.deepEqual = deepEqual;
 
+// function deepEqual(obj1, obj2) {
+//     if (obj1 === obj2) return true;
+//     if (typeof obj1 !== typeof obj2) return false;
+//     if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
+//     if (typeof obj1 === 'function' && !$equalFunction(obj1, obj2)) return false;
+
+//     if (Array.isArray(obj1)) {
+//         if (obj1.length !== obj2.length) return false;
+//         for (var i = 0; i < obj1.length; i++) {
+//             var val1 = obj1[i];
+//             var val2 = obj2[i];
+//             if (!deepEqual(val1, val2)) return false;
+//         }
+//     } else {
+//         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+//         for (var key in obj1) {
+//             if (Object.prototype.hasOwnProperty.call(obj1, key)) {
+//                 var val1 = obj1[key];
+//                 var val2 = obj2[key];
+//                 if (!deepEqual(val1, val2)) return false;
+//             }
+//         }
+//     }
+//     return true;
+//     // inner function
+//     function $equalFunction(fun1, fun2) {
+//         // if (typeof fun1 !== 'function') return false;
+//         // if (typeof fun2 !== 'function') return false;
+//         if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
+//         return false;
+//     }
+//     function $_isPrimitiveType(obj) {
+//         if (typeof obj === 'string' || typeof obj === 'number' 
+//             || typeof obj === 'boolean' || typeof obj === 'undefined' || typeof obj === 'bigint') return true;
+//         return false;
+//     }
+// }
+
+
 /**
- * 함수 타입을 가져옵니다. (_UNION 포함)  
- * ctor 자신부터 리턴 배열에 push
- * @param {function} ctor 생성자
- * @param {boolean} [hasUnion= true] _UNION 포함 여부
- * @returns {array<function>} 
+ * Gets the type of the given function (generator). (Can include '_UNION')  
+ * The returned arrays are included in order from the specified function.  
+ * 
+ * @param {function} ctor Generator function or class
+ * @param {boolean} [hasUnion= true] whether '_UNION' is included (default: 'true')
+ * @returns {array<function>} Array function type
  */
 function getTypes(ctor, hasUnion) {
     var arr = [];
@@ -1357,10 +1373,11 @@ function getTypes(ctor, hasUnion) {
 Type.getTypes = getTypes;
 
 /**
- * 함수 타입의 prototype(상속) 타입 여부를 검사합니다.
- * @param {function} ctor 생성자
- * @param {function | string} target 검사 대상
- * @returns {boolean}
+ * Verify that the prototype (inheritance) chain of the function type contains the specified target.  
+ * 
+ * @param {function} ctor Generator function or class
+ * @param {function | string} target To be examined (generator function or class name)
+ * @returns {boolean} whether to be included in the prototype chain ('true' or 'false')
  */
 function isProtoChain(ctor, target) {
     var arr;
@@ -1380,10 +1397,11 @@ function isProtoChain(ctor, target) {
 Type.isProtoChain = isProtoChain;
 
 /**
- * 함수 타입의 prototype(상속) 또는 _UNION 타입 여부를 검사합니다.
- * @param {function} ctor 생성자
- * @param {function | string} target 검사 대상
- * @returns {boolean}
+ * Verify that the given function type is included in the prototype (inheritance) chain or is of type '_UNION'.  
+ * 
+ * @param {function} ctor Generator function or class
+ * @param {function | string} target To be examined (generator function or class name)
+ * @returns {boolean} Prototype chain or type '_UNION' ('true' or 'false')
  */
 function hasType(ctor, target) {
     var arr;
@@ -1403,9 +1421,11 @@ function hasType(ctor, target) {
 Type.hasType = hasType;
 
 /**
- * 확장타입 객체를 얻습니다. (하위 타입 포함)  
- * @param {*} target 
- * @returns {object}
+ * Returns extension information of the target type in JSON format.  
+ * Analyze the internal properties of the object to transform all properties into the format 'typeObject()'.  
+ * 
+ * @param {*} target Target type
+ * @returns {object} converted extension type object
  * @example
  * var obj = {
  *      $ype: '',
@@ -1468,18 +1488,20 @@ function typeObject(target) {
 }Type.typeObject = typeObject;
 
 /**
- * 확장타입명을 얻습니다.
- * @param {*} target 
- * @returns {string}
+ * Returns the extension type name of the target object.  
+ * 
+ * @param {*} target Target object
+ * @returns {string} extended type name
  */
 function typeOf(target) {
     return extendType(target)['$type'];
 }Type.typeOf = typeOf;
 
 /**
- * 확장타입을 얻는다.
- * @param {any} target 대상타입
- * @returns {object} 
+ * Returns the extension type of the target object.  
+ * 
+ * @param {any} target Target object
+ * @returns {object} extended type object
  * @example
  * var singleType = ['undefined', 'null', 'number', 'string', 'boolean', 'regexp', 'object', 'symbol'];
  * var unionType = ['array', 'choice', 'function', 'class', 'union'];
@@ -2263,11 +2285,12 @@ function _execMatch(extType, target, opt, pathName) {
     }
 }
 /**
- * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} tarType 검사 대상 타입
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {throw?} 실패시 예외
+ * Verify that the extension type allows the target type.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} tarType What type to check
+ * @param {number} [opt=0] Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {throw?} Exception occurs if extension type does not allow target type
  */
 function allowType(extType, tarType, opt) {
     try {
@@ -2278,11 +2301,12 @@ function allowType(extType, tarType, opt) {
 }Type.allowType = allowType;
 
 /**
- * 확장타입이 대상과 매치되는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} target 검사 대상
- * @param {number} [opt=0] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {throw?} 실패시 예외
+ * Verify that the extension type matches the target.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} target For inspection
+ * @param {number} [opt=0] Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {throw?} Exception occurs when failing
  */
 function matchType(extType, target, opt) {
     try {
@@ -2293,11 +2317,12 @@ function matchType(extType, target, opt) {
 }Type.matchType = matchType;
 
 /**
- * 확장타입이 대상타입을 허용하는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} target 검사 대상 타입
- * @param {number} opt 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {boolean} 검사 통과 여부
+ * Determine whether the extension type allows the target type.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} target Type to be examined
+ * @param {number} opt Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {boolean} whether to allow ('true' or 'false')
  */
 function isAllowType(extType, target, opt) {
     try {
@@ -2309,11 +2334,12 @@ function isAllowType(extType, target, opt) {
 }Type.isAllowType = isAllowType;
 
 /**
- * 확장타입이 대상과 매치되는지 검사합니다.
- * @param {any} extType 확장 타입
- * @param {any} target 검사 대상
- * @param {number} [opt] 허용옵션 : 0 = 기존 유지, 1 = class 타입 생성
- * @returns {boolean} 검사 통과 여부
+ * Verify that the extension type matches the target.  
+ * 
+ * @param {any} extType Extension Type
+ * @param {any} target Type to be examined
+ * @param {number} [opt] Allow option (0 = Keep existing, 1 = Create class type)
+ * @returns {boolean} Match or not ('true' or 'false')
  */
 function isMatchType(extType, target, opt) {
     try {
@@ -2338,7 +2364,11 @@ if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
 var _global = globalThis;
 
 var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
-var Util = {};  // namespace
+
+/**
+ * This is a utility module.
+ */
+var Util = {};
 
 
 // local function
@@ -2374,11 +2404,12 @@ if (!Array.isArray || OLD_ENV) {
 // };
 
 /**
- * 배열의 깊이를 가져옵니다.  
+ * Returns the nested depth of the array.  
  * REVIEW: 필요성 검토 필요!
- * @param {array} p_elem 
- * @param {number} p_depts 
- * @returns {number} 
+ * 
+ * @param {array} p_elem Array elements
+ * @param {number} p_depts Current depth (default: 0)
+ * @returns {number} Maximum nested depth of array
  */
 Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
     var MAX     = 10;
@@ -2394,8 +2425,9 @@ Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
 };
 
 /**
- * guid 값을 생성합니다. (36자)
- * @returns {string} 예> 'b806a5b5-75f7-a1ba-3736-17f56fb5d65a'
+ * Creates a 36-digit GUID.  
+ * 
+ * @returns {string} GUID string generated
  */
 Util.createGuid = function createGuid() {
     function _p8(s) {  
@@ -2406,9 +2438,10 @@ Util.createGuid = function createGuid() {
 };
 
 /**
- * 객체를 깊은 복사를합니다. (proto제외)
- * @param {object} p_target 대상 객체
- * @returns {object}
+ * Deep copy of the object (except prototype)  
+ * 
+ * @param {object} p_target Destination object to copy
+ * @returns {object} copied object
  */
 Util.deepCopy = function deepCopy(p_target) {
     var nobj;
@@ -2436,10 +2469,11 @@ Util.deepCopy = function deepCopy(p_target) {
 };    
 
 /**
- * superCtor 을 상속합니다.
+ * Sets the specified creator to inherit the parent creator.   
+ * 
  * @function
- * @param {function | object} ctor 생성자 또는 생성 객체
- * @param {function | object} superCtor 상속 받을 부모 생성자 또는 객체
+ * @param {function | object} ctor generator function or object
+ * @param {function | object} superCtor Parent generator function or object
  */
 Util.inherits = (function () {
     if (typeof Object.create === 'function' && !OLD_ENV) {
@@ -2472,13 +2506,16 @@ Util.inherits = (function () {
 }());
 
 /**
- * ctor 로 생성한 obj 객체의 args<funtion>의 구현 여부를 검사합니다.
- * 종류(ctor._KIND)가 'Interface' 타입이면 allowType(), 아니면 matchType()로 검사한다.
+ * Verify that the object implements the specified interface.  
+ * Verify that the 'obj' object created with 'ctor' implements the interface provided by 'interfaces'.  
+ * If 'ctor._KIND' is 'Interface', use 'allowType()' to confirm.  
+ * Otherwise, use 'matchType()' to confirm.  
+ * 
  * @name implements
  * @function
- * @param {function} p_ctor 검사 대상 생성자
- * @param {object} p_obj 검사 대상 인스턴스 객체
- * @param {function?} args 인터페이스들, ctor._UNION 정적 속성으로 설정 가능
+ * @param {function} p_ctor Generator to be examined
+ * @param {object} p_obj object to be examined
+ * @param {function?} args List of interfaces to check
  */
 Util.implements = function(p_ctor, p_obj) {
     var _interface = [];
@@ -3214,7 +3251,8 @@ if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serializ
 // 3. module implementation   
 var NamespaceManager = (function () {
     /**
-     * 네임스페이스 관리자를 생성합니다.
+     * Create a Namespace Manager.  
+     * 
      * @constructs NamespaceManager
      */
     function NamespaceManager() {
@@ -3225,7 +3263,8 @@ var NamespaceManager = (function () {
         
         
         /**
-         * 내부 변수 접근
+         * Namespace repository  
+         * 
          * @member {string} NamespaceManager#$storage
          * @readonly
          * @private
@@ -3238,21 +3277,10 @@ var NamespaceManager = (function () {
             enumerable: false,
         });
 
-        // /**
-        //  * 네임스페이스 저장소
-        //  * @member {array} NamespaceManager#$storage 
-        //  * @private
-        //  * @readonly
-        //  */
-        // Object.defineProperty(this, '$storage',
-        // {
-        //     get: function() { return $storage; },
-        //     configurable: false,
-        //     enumerable: false
-        // });
-
         /** 
-         * 네임스페이스 요소 타입, elemTypes.length == 0 전체허용
+         * Namespace element type list.  
+         * Allow all types if empty.  
+         * 
          * @member {array<any>}  NamespaceManager#_elemTypes  
          * @protected
          */
@@ -3270,7 +3298,8 @@ var NamespaceManager = (function () {
         });
 
         /**
-         * 네임스페이스 요소 목록
+         * Namespace element list.  
+         * 
          * @member {array<string>}  NamespaceManager#_list
          * @readonly
          */
@@ -3301,7 +3330,8 @@ var NamespaceManager = (function () {
         });
 
         /**
-         * 네임스페이스 요소 갯수
+         * Total number of Namespace elements.  
+         * 
          * @member {number} NamespaceManager#count 
          * @readonly
          */
@@ -3315,7 +3345,9 @@ var NamespaceManager = (function () {
         });
 
         /**
-         * 중복 요소 등록 허용 여부, 기본값 = false (중복금지)
+         * Set whether to allow duplicate element registration.  
+         * Default is 'false' and does not allow duplication.  
+         * 
          * @member {boolean} NamespaceManager#allowOverlap
          */
         Object.defineProperty(this, 'allowOverlap',
@@ -3376,8 +3408,9 @@ var NamespaceManager = (function () {
     }
     
     /**
-     * 네임스페이스 저장소 초기화 객체를 생성합니다.
-     * @returns {object} {_type: 'ns'}
+     * Creates a storage initialization object.  
+     * 
+     * @returns {object} initialized namespace type object { _type: 'ns'}
      * @private
      */
     NamespaceManager.prototype.$createNsRefer = function() {
@@ -3385,9 +3418,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스 경로객체를 얻습니다.
-     * @param {string | object} p_elem 얻을 요소
-     * @returns {object} {ns: '..', key: '..'}
+     * Returns the Namespace path object.  
+     * 
+     * @param {string | object} p_elem Factors to obtain the path
+     * @returns {object} Namespace path object {ns: '...', key: '...'}
      * @protected
      */
     NamespaceManager.prototype._getPathObject = function(p_elem) {
@@ -3411,15 +3445,16 @@ var NamespaceManager = (function () {
     };
     
     /**
-     * 네임스페이스를 초기화 합니다.
+     * Initialize the namespace.  
      */
     NamespaceManager.prototype.init = function() {
         this.$storage = this.$createNsRefer();
     };
 
     /**
-     * 네임스페이스에 경로를 추가합니다.
-     * @param {string | array<string>} p_ns 네임스페이스 이름
+     * Add a path to the Namespace.  
+     * 
+     * @param {string | array<string>} p_ns Namespace name, path in the form of a string or array separated by a dot ('.')
      */
     NamespaceManager.prototype.addNamespace = function(p_ns) {
         var parent = this.$storage;
@@ -3444,8 +3479,9 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스에 경로를 삭제합니다.
-     * @param {string | array<string>} p_ns 네임스페이스 이름
+     * Delete the path in the Namespace.  
+     * 
+     * @param {string | array<string>} p_ns Namespace name, path in the form of a string or array separated by a dot ('.')
      */
     NamespaceManager.prototype.delNamespace = function(p_ns) {
         var parent = this.$storage;
@@ -3467,9 +3503,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스에 경로 객체를 얻습니다.
-     * @param {string | sting[]} p_ns 네임스페이스 이름
-     * @returns {object} 경로에 대한 객체
+     * Returns the path object of the namespace.  
+     * 
+     * @param {string | sting[]} p_ns Namespace name, path in the form of a string or array separated by a dot ('.')
+     * @returns {object} path object
      */
     NamespaceManager.prototype.path = function(p_ns) {
         var parent = this.$storage;
@@ -3494,9 +3531,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스의 경로에 요소를 추가합니다.
-     * @param {string} p_fullName 네임스페이스 전체 경로명
-     * @param {any} p_elem 요소
+     * Adds an element to the specified namespace path.  
+     * 
+     * @param {string} p_fullName Full path to the Namespace
+     * @param {any} p_elem Functions, classes, or objects to be added
      */
     NamespaceManager.prototype.add = function(p_fullName, p_elem) {
         var parent = this.$storage;
@@ -3535,9 +3573,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스의 경로에 요소를 삭제합니다.
-     * @param {string} p_fullname 네임스페이스 전체 경로명
-     * @returns {boolean}
+     * Deletes an element from the specified namespace path.  
+     * 
+     * @param {string} p_fullname Full path to the Namespace
+     * @returns {boolean} Successful deletion ('true' or 'false')
      */
     NamespaceManager.prototype.del = function(p_fullName) {
         var parent = this.$storage;
@@ -3563,9 +3602,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스에 요소가 있는지 확인합니다.
-     * @param {string | any} p_elem 경로 | 객체
-     * @returns {boolean}
+     * Verify that the specified element exists in the Namespace.  
+     * 
+     * @param {string | any} p_elem Function, class, or object to check
+     * @returns {boolean} Existence ('true' or 'false')
      */
     NamespaceManager.prototype.has = function(p_elem) {
         if (_isString(p_elem) && this.find(p_elem)) return true;
@@ -3574,9 +3614,10 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스의 경로에 요소를 찾아서 돌려줍니다.
-     * @param {string | array<string>} p_fullName 네임스페이스 전체 경로명
-     * @returns {(object | function)?}
+     * Retrieves elements from the specified namespace path.  
+     * 
+     * @param {string | array<string>} p_fullName Full path to the Namespace
+     * @returns {(object | function)?} Found elements
      */
     NamespaceManager.prototype.find = function(p_fullName) {
         var parent = this.$storage;
@@ -3598,10 +3639,10 @@ var NamespaceManager = (function () {
     };
     
     /**
-     * 네임스페이스에 요소로 경로를 얻습니다.  
-     * (중복시 첫번째 요소 return)
-     * @param {any} p_elem 얻을 객체
-     * @returns {string?}
+     * Returns the path of the specified element in the Namespace.  
+     * (Route of the first element in case of redundancy)  
+     * @param {any} p_elem Elements to find (function or object)
+     * @returns {string?} The path of the element, 'undefined' if not found
      */
     NamespaceManager.prototype.getPath = function(p_elem) {
         var namespace = this.$storage;
@@ -3634,11 +3675,12 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 네임스페이스 저장소를 문자열로 내보냅니다.  
-     * 함수를 JSON 으로 출력하기 위해서 별도의 stringify 지정해야합니다.!
-     * @param {function?} p_stringify JSON stringify
-     * @param {string?} p_space 공백
-     * @returns {string} 직렬화한 문자열
+     * Serialize the namespace repository and convert it into a string.  
+     * To convert the function to JSON, you must specify a separate 'stringify' function.  
+     * 
+     * @param {function?} p_stringify JSON Stringify function (optional)
+     * @param {string?} p_space Setting the blank to apply at the output
+     * @returns {string} serialized string
      */
     NamespaceManager.prototype.output = function(p_stringify, p_space) {
         var arr = [];
@@ -3671,9 +3713,9 @@ var NamespaceManager = (function () {
     };
 
     /**
-     * 문자열을 파싱해서 네임스페이스 저장소로 가져옵니다.  
-     * @param {string} p_str 직렬화한 문자열
-     * @param {function?} p_parse JSON 파서
+     * Parsing serialized strings and fetching them to the Namespace repository.  
+     * @param {string} p_str serialized string
+     * @param {function?} p_parse  JSON parser function
      */
     NamespaceManager.prototype.load = function(p_str, p_parse) {
         var arr = [];
@@ -3713,7 +3755,8 @@ if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager',
 // 3. module implementation       
 var MetaRegistry = (function () {
     /**
-     * 메타 객체 등록소입니다. (static)
+     * 'MetaRegistry' is a class responsible for registering and managing meta objects.  
+     * 
      * @constructs MetaRegistry
      * @static
      */
@@ -3727,7 +3770,8 @@ var MetaRegistry = (function () {
     var namespace = new NamespaceManager();
 
     /**
-     * 메타 객체 목록 (참조값)
+     * List of meta objects.  
+     * 
      * @member {any[]} MetaRegistry#_list
      * @readonly
      */
@@ -3743,7 +3787,8 @@ var MetaRegistry = (function () {
     });
 
     /**
-     * 메타 객체 전체 갯수
+     * Total number of currently registered meta objects.  
+     * 
      * @member {number} MetaRegistry#count
      * @readonly
      */
@@ -3755,7 +3800,8 @@ var MetaRegistry = (function () {
     });        
 
     /**
-     * 메타 객체의 네임스페이스
+     * Namespace manager for meta objects.  
+     * 
      * @member {NamespaceManager} MetaRegistry#namespace
      * @readonly
      */
@@ -3802,7 +3848,7 @@ var MetaRegistry = (function () {
         return arr;
     }
     /**
-     * 등록된 메타 객체 및 네임스페이스를 초기화 합니다.
+     * Initializes registered meta objects and namespaces.  
      */
     MetaRegistry.init = function() {
         _list.length = 0;
@@ -3810,10 +3856,11 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * 메타 객체를 등록하고, 생성자를 네임스페이스에 등록합니다.  
-     * - 기존에 객체가 등록되어 있으면 예외가 발생합니다.  
-     * - 네임스페이스에 생성자가 없을 경우 등록합니다.
-     * @param {MetaObject} p_meta 메타 객체
+     * Register the meta object and register the creator in the namespace.  
+     * An exception occurs if an object is already registered.   
+     * Register if there is no creator in the Namespace.  
+     * 
+     * @param {MetaObject} p_meta Meta object to register
      */
     MetaRegistry.register = function(p_meta) {
         var _ns;
@@ -3834,9 +3881,10 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * 등록소에서 메타 객체를 해제합니다. 
-     * @param {MetaObject | string} p_meta 메타 객체 또는 guid
-     * @returns {boolean} 성공 여부
+     * Undoes the meta object in the registry.  
+     * 
+     * @param {MetaObject | string} p_meta Meta object or GUID string
+     * @returns {boolean} successful removal ('true' or 'false')
      */
     MetaRegistry.release = function(p_meta) {
         var guid;
@@ -3858,9 +3906,10 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * 등록소에 메타 객체 여부를 확인합니다.
-     * @param {object | string} p_oGuid  guid 타입의 객체 또는 guid
-     * @returns {boolean} 존재 여부
+     * Check if the registry has a meta object.  
+     * 
+     * @param {object | string} p_oGuid  Object of type GUID or GUID string
+     * @returns {boolean} Existence ('true' or 'false')
      */
     MetaRegistry.has = function(p_oGuid) {
         var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
@@ -3874,9 +3923,10 @@ var MetaRegistry = (function () {
     };
     
     /**
-     * 등록소에서 메타 객체를 찾습니다.
-     * @param {object | string} p_oGuid guid 타입의 객체 또는 guid
-     * @returns {MetaObject?}
+     * Locate the meta object in the registry.  
+     * 
+     * @param {object | string} p_oGuid Object of type GUID or GUID string
+     * @returns {MetaObject?} meta object found, 'undefined' if not found
      */
     MetaRegistry.find = function(p_oGuid) {
         var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
@@ -3889,9 +3939,10 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * 매타 객체 여부를 확인합니다.  
-     * @param {object} p_target 대상 객체
-     * @returns {boolean}
+     * Checks for meta objects.  
+     * 
+     * @param {object} p_target Target object
+     * @returns {boolean} Whether it is a meta object ('true' or 'false')
      */
     MetaRegistry.isMetaObject = function(p_target) {
         if (!_isObject(p_target)) return false;
@@ -3900,10 +3951,11 @@ var MetaRegistry = (function () {
     };
     
     /**
-     * guid 객체에 대한 메타 객체를 생성합니다.
-     * @param {object} p_oGuid guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체
-     * @returns {MetaObject}
+     * Creates a meta object of a GUID object.  
+     * 
+     * @param {object} p_oGuid GUID type object
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object
+     * @returns {MetaObject} created meta object
      */
     MetaRegistry.createMetaObject = function(p_oGuid, p_origin) {
         var origin = p_origin ? p_origin : p_oGuid;
@@ -3938,9 +3990,10 @@ var MetaRegistry = (function () {
     };
     
     /**
-     * guid 객체에 대한 guid 참조를 생성합니다.  
-     * @param {MetaObject} p_meta 메타 객체
-     * @returns {object} { $ref: 'guid값' }
+     * Creates a reference object for a GUID object.  
+     * 
+     * @param {MetaObject} p_meta Meta object
+     * @returns {object} created reference object ('{$ref: 'guid value'}')
      * @example
      * var meta = new MetaElement('m1');
      * obj.onwer = MetaRegistry.createReferObject(meta);
@@ -3953,10 +4006,10 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * target을 네임스페이스에 등록하고, 참조를 생성합니다.
+     * Register the function in the Namespace and create a reference object.  
      * 
-     * @param {function} p_target 함수 또는 생성자
-     * @returns {object} { $ns: string }
+     * @param {function} p_target Function or constructor
+     * @returns {object} created namespace reference object ('{$ns: 'Meta.MetaElement'}')
      * @example
      * var meta = new MetaElement('m1');
      * obj.onwer = MetaRegistry.createReferObject(meta);
@@ -3978,11 +4031,12 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * guid 객체에 메타 객체의 guid 를 설정합니다.  
-     * - oGuid.$set = meta._guid
-     * @param {object} p_oGuid guid 타입의 객체
-     * @param {MetaObject} p_meta 
-     * @returns {object} oGuid.$set에 설정한 guid값
+     * Set the GUID of the meta object in the GUID object.  
+     * - oGuid.$set = meta._guid  
+     * 
+     * @param {object} p_oGuid GUID type object
+     * @param {MetaObject} p_meta Meta object
+     * @returns {object} set object
      * @example
      * var meta = new MetaElement('m1');    // meta.guid = '5337877c-49d6-9add-f35a-7bd31d510d4f'
      * var obj = { name: 'm2' };
@@ -3999,13 +4053,14 @@ var MetaRegistry = (function () {
     };
         
     /**
-     * guid 객체의 유효성 검사를 합니다.  
-     * 1. 객체의 guid 값의 중복 여부 확인합니다.  
-     * 2. 객체의 '$ref'을 값으로 가지는 guid 객체의 존재 여부를 확인합니다.  
-     * 3. 객체의 '$ns'을 값으로 하는 네임스페이스의 존재 여부를 확인합니다.  
-     * 4. 객체의 '_key'와 '_elem' 의 갯수가 같은지 검사합니다.  
-     * @param {object} p_oGuid 검사할 guid 객체
-     * @returns {boolean} 성공 여부
+     * Validates the GUID object.  
+     * 1. Check if the object has duplicate GUID values  
+     * 2. Determine if an object has a '$ref' value  
+     * 3. Determine if an object has a '$ns' value  
+     * 4. Check the number of '_key' and '_elem' of objects   
+     * 
+     * @param {object} p_oGuid GUID object to be inspected
+     * @returns {boolean} Inspection result ('true' or 'false')
      */
     MetaRegistry.validObject = function(p_oGuid) {
         var _this = this;
@@ -4065,9 +4120,9 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * guid 객체 여부를 확인합니다.
-     * @param {object} p_target 확인 대상
-     * @returns {boolean} 
+     * Verify that the target object is a GUID object.  
+     * @param {object} p_target Object to be checked
+     * @returns {boolean} Guid object(`true` or `false`)
      */
     MetaRegistry.isGuidObject = function(p_target) {
         if (!_isObject(p_target)) return false;
@@ -4076,10 +4131,11 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * origin 객체에 guid 객체의 포함 여부를 확인합니다.
-     * @param {string| object} p_oGuid 확인 대상
-     * @param {object | array<object>} p_origin  원본 객체
-     * @returns {boolean}
+     * Verify that the source object contains a GUID object.  
+     * 
+     * @param {string| object} p_oGuid GUID object or GUID string to check
+     * @param {object | array<object>} p_origin  GUID literal object of query
+     * @returns {boolean} whether to include ('true' or 'false')
      */
     MetaRegistry.hasGuidObject = function(p_oGuid, p_origin) {
         var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
@@ -4102,10 +4158,11 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * guid 객체에 참조타입 요소가 포함되어 있는지 확인힙니다.  
-     * - 참조타입 : $ref: '', $ns:''
-     * @param {object} p_oGuid 확인 대상
-     * @returns {boolean}
+     * Verify that the GUID object contains a reference type element.  
+     * Reference types are '$ref' and '$ns'.  
+     * 
+     * @param {object} p_oGuid GUID object to check
+     * @returns {boolean} whether to include ('true' or 'false')
      */
     MetaRegistry.hasRefer = function(p_oGuid) {
         if (!_isObject(p_oGuid)) throw new ExtendError(/EL03254/, null, [typeof p_oGuid]);
@@ -4131,12 +4188,11 @@ var MetaRegistry = (function () {
     };     
 
     /**
-     * origin 객체에 설정된 guid 객체를 찾습니다.  
-     * 1. guid 객체 내부에서 guid 값의 요소 조회 ?  
-     * 2. 조회한 요소의 $set 값을 사용하여  메타객체 저장소헤 대상 객체 조회 ?   
-     * @param {string | object} p_oGuid 조회 대상 guid 값 또는  guid 객체
-     * @param {object} p_origin 원본 객체
-     * @returns {MetaObject}
+     * Retrieves the set GUID object from the repository.  
+     * 
+     * @param {string | object} p_oGuid GUID object or GUID string to look up
+     * @param {object} p_origin GUID literal object with query target
+     * @returns {MetaObject} meta-objects viewed
      */
     MetaRegistry.findSetObject = function(p_oGuid, p_origin) {
         var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
@@ -4176,10 +4232,10 @@ var MetaRegistry = (function () {
         
 
     /**
-     * guid 객체의 참조요소값을 객체 참조로 변환합니다.  
-     * 변환대상 : $ns => [object object]
-     * @param {object} p_oGuid 변환할 guid 객체
-     * @returns {object} 참조 변환한 oGuid 객체
+     * Converts the reference element value of a GUID object to a real object reference.  
+     * To be converted: '$ns' is converted to '[Object Object]'.  
+     * @param {object} p_oGuid GUID object to convert
+     * @returns {object} converted meta object
      */
     MetaRegistry.transformRefer = function(p_oGuid) {
         var _this = this;
@@ -4215,12 +4271,12 @@ var MetaRegistry = (function () {
     };
     
     /**
-     * 네임스페이스(ns)에 생성자 또는 객체를 등록합니다.  
-     * - 중복 검사 후 등록  
-     * - 기본제공 함수는 내부 저장하지 않음  
-     * @param {function | object} p_target 대상
-     * @param {string} p_ns fullname 또는 네임스페이스 
-     * @param {string} p_key 대상 이름
+     * Register the creator or object in the specified namespace.  
+     * It registers after performing duplicate checks, and does not store built-in functions (Array, String, Number, etc.).  
+     * 
+     * @param {function | object} p_target To be registered (class creator or object)
+     * @param {string} p_ns Namespace name (separated by a dot '.')
+     * @param {string} p_key Destination name (class name or function name), otherwise the last name of the namespace applies.
      */
     MetaRegistry.registerClass = function(p_target, p_ns, p_key) {
         var fullName;
@@ -4239,9 +4295,10 @@ var MetaRegistry = (function () {
     };
     
     /**
-     * 네임스페이스(ns)에 생성자 또는 객체를 해제합니다.
-     * @param {string} p_fullName 네임스페이스 전체 이름
-     * @returns {boolean} 삭제 성공 여부
+     * Undoes the registered item in the Namespace.  
+     * 
+     * @param {string} p_fullName full path to the namespace ('string')
+     * @returns {boolean} Successful deletion ('true' or 'false')
      */
     MetaRegistry.releaseClass = function(p_fullName) {
         if (!_isString(p_fullName)) throw new ExtendError(/EL03234/, null, [typeof p_fullName]);
@@ -4251,9 +4308,10 @@ var MetaRegistry = (function () {
     };
     
     /**
-     * 네임스페이스(ns)에서 생성자 또는 객체를 찾아서 전체 경로를 돌려줍니다.
-     * @param {function} p_target 생성자 또는 객체 
-     * @returns {string?} 네임스페이스 전체 이름
+     * Finds the specified constructor or object in the Namespace and returns the entire path.  
+     * 
+     * @param {function} p_target Creator or object
+     * @returns {string?} Namespace Full path, 'undefined' if not found
      */
     MetaRegistry.findClass = function(p_target) {
         var fullName;
@@ -4266,9 +4324,10 @@ var MetaRegistry = (function () {
     };
     
     /**
-     * 네임스페이스(ns)에서 전체이름에 대한 생성자 또는 객체를 얻습니다.
-     * @param {string} p_fullName 전체경로
-     * @returns {(object | function)?} 객체 또는 생성자
+     * Returns a generator or object corresponding to the entire path specified in the Namespace.  
+     * 
+     * @param {string} p_fullName Full path to the Namespace
+     * @returns {(object | function)?} corresponding object or creator, 'undefined' if not found
      */
     MetaRegistry.getClass = function(p_fullName) {
         if (!_isString(p_fullName)) throw new ExtendError(/EL03236/, null, [typeof p_fullName]);
@@ -4278,11 +4337,11 @@ var MetaRegistry = (function () {
     };
 
     /**
-     * 직렬화한 guid 문자열을 파싱하여 MetaObject 로 불러옵니다.  
+     * Pars the serialized JSON string to convert it to 'MetaObject'.  
      * REVIEW: 필요성 재검토 필요  
-     * @param {string} p_str guid 객체를 직렬화한 문자열
-     * @param {function?} p_parse JSON 파서
-     * @returns {MetaObject} 불러온 MetaObject
+     * @param {string} p_str serialized JSON string
+     * @param {function?} p_parse JSON parser function (default is 'JSON.parse')
+     * @returns {MetaObject} converted meta object
      */
     MetaRegistry.loadMetaObject = function(p_str, p_parse) {
         var obj = p_str;
@@ -4320,7 +4379,8 @@ if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-r
 // 3. module implementation   
 var MetaObject  = (function () {
     /**
-     * 메타 최상위 객체를 생성합니다.
+     * Creates an instance of the MetaObject class.  
+     * 
      * @constructs MetaObject
      * @implements {IObject}
      * @implements {IMarshal}
@@ -4331,7 +4391,8 @@ var MetaObject  = (function () {
         var _ns;
         
         /**
-         * 현재 객체의 고유식별자(guid)
+         * Internal property that stores the unique identifier of the object.  
+         * 
          * @readonly
          * @member {string} MetaObject#_guid 
          * @example
@@ -4350,7 +4411,8 @@ var MetaObject  = (function () {
         });
 
         /**
-         * 현재 객체의 생성자
+         * Internal property that refers to the generator function of the object.  
+         * 
          * @readonly
          * @member {function} MetaObject#_type 
          * @example
@@ -4368,6 +4430,10 @@ var MetaObject  = (function () {
             enumerable: false
         });
 
+        /**
+         * Indicates the object name space.  
+         * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
+         */
         Object.defineProperty(this, '_ns', 
         {
             get: function() { 
@@ -4417,10 +4483,11 @@ var MetaObject  = (function () {
     }
 
     /**
-     * 현재 객체와 target 객체를 비교합니다.  
-     * (참조 주소의 비교(===)가 아니고, 속성과 값을 비교,  _guid 값은 비교 제외)  
-     * @param {object} p_target 대상 객체
-     * @returns {boolean}
+     * Compare the current object with the specified object.  
+     * However, the '_guid' property is excluded from the comparison.  
+     * 
+     * @param {object} p_target To compare
+     * @returns {boolean} If two objects are the same, 'true', or 'false'
      * @example
      * var meta1 = new MetaObject();
      * var meta2 = new MetaObject();
@@ -4440,8 +4507,9 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 현재 객체의 생성자와 상위(proto) 생성자를 목록으로 가져옵니다.  
-     * @returns {array<function>}
+     * Returns the creators of the current object and all the creators of the prototype chain to the array.  
+     * 
+     * @returns {array<function>} Array of generator functions (includes first defined constructors sequentially)
      * @example
      * var obj = new MetaObject();
      * var arr = obj.getTypes();
@@ -4475,9 +4543,11 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 현재 객체의 target 인스턴스 여부를 검사합니다 .(_UNION 포함)
-     * @param {Function | string} p_target 함수명 또는 생성자
-     * @returns {boolean}
+     * Verify that the object is an instance of a particular class.  
+     * You can also examine the defined interface type (including '_UNION').  
+     * 
+     * @param {Function | string} p_target Class constructor function or class name (string)
+     * @returns {boolean} Whether there is an instance of the specified class ('true' or 'false')
      * @example
      * var obj = new MetaObject();
      * obj.instanceOf('MetaObject');    // true
@@ -4534,14 +4604,14 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 현재 객체를 직렬화(guid 타입) 객체로 얻습니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode  
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object
+     * @returns {object} Guid type object literal
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -4559,10 +4629,10 @@ var MetaObject  = (function () {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.  
+     * 
+     * @param {object} p_oGuid object literal of type of GUID to set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     MetaObject.prototype.setObject  = function(p_oGuid, p_origin) {
         var origin = p_origin ? p_origin : p_oGuid;
@@ -4604,38 +4674,21 @@ if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-objec
 var MetaElement  = (function (_super) {
 
     /**
-     * 메타 요소 객체를 생성합니다.  
-     * (독립체 사용 단위)
+     * Creates an instance of the MetaElement class.  
+     * 
      * @constructs MetaElement
      * @extends MetaObject
      * @implements {IElement}
-     * @param {string} p_name 
+     * @param {string} p_name Name of the element
      */
     function MetaElement(p_name) {
         _super.call(this);
         
         var _name;
 
-        // /**
-        //  * 내부 변수 접근
-        //  * @member {string} MetaElement#$name
-        //  * @readonly
-        //  * @private
-        //  */
-        // Object.defineProperty(this, '$name',
-        // {
-        //     get: function() { return _name; },
-        //     set: function(nVal) { 
-        //         if (typeof nVal !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
-        //         if (nVal.length === 0) throw new ExtendError(/EL03122/, null, []);
-        //         _name = nVal;
-        //     },
-        //     configurable: false,
-        //     enumerable: false,
-        // });
-
         /**
-         * 현재 객체의 이름
+         * Internal property that stores the name of the element.  
+         * 
          * @readonly
          * @member {string} MetaElement#_name
          */
@@ -4662,14 +4715,14 @@ var MetaElement  = (function (_super) {
     MetaElement._PARAMS = ['name'];     // creator parameter
     
     /**
-     * 현재 객체를 직렬화(guid 타입) 객체로 얻습니다.  
-     * (순환참조는 $ref 값으로 대체된다.)  
-     * @param {number} [p_vOpt=0] 가져오기 옵션
-     * - opt=0 : 참조 구조(_guid:Yes, $ref:Yes)  
-     * - opt=1 : 중복 구조(_guid:Yes, $ref:Yes)  
-     * - opt=2 : 비침조 구조(_guid:No,  $ref:No)   
-     * @param {object | array<object>} [p_owned={}] 현재 객체를 소유하는 상위 객체들
-     * @returns {object}  guid 타입 객체
+     * Returns the object as an object literal of type GUID.  
+     * 
+     * @param {number} [p_vOpt=0] Import mode  
+     * mode=0 : reference structure (_guid:Yes, $ref:Yes)  
+     * mode=1: Redundant structure (_guid:Yes, $ref:Yes)  
+     * mode=2 : non-coordinated structure (_guid: No, $ref: No)  
+     * @param {object | array<object>} [p_owned={}] Parent object that contains (owns) the current object  
+     * @returns {object}  Guid type object literal
      * @example
      * a.getObject(2) == b.getObject(2)   
      */
@@ -4686,10 +4739,10 @@ var MetaElement  = (function (_super) {
     });
 
     /**
-     * 직렬화(guid 타입) 객체를 현재 객체에 설정합니다.  
-     * (객체는 초기화 된다.)
-     * @param {object} p_oGuid 직렬화 할 guid 타입의 객체
-     * @param {object} [p_origin=p_oGuid] 현재 객체를 설정하는 원본 객체  
+     * Set up a GUID type object literal by converting it to an instance object.  
+     * 
+     * @param {object} p_oGuid object literal of the type of GUID to be set
+     * @param {object} [p_origin=p_oGuid] Initial GUID literal object referenced during conversion
      */
     MetaElement.prototype.setObject  = function(p_oGuid, p_origin) {
         _super.prototype.setObject.call(this, p_oGuid, p_origin);
@@ -4702,8 +4755,9 @@ var MetaElement  = (function (_super) {
     });
 
     /**
-     * 현제 객체를 복제합니다.
-     * @returns {MetaElement}
+     * Creates a replica of the current object.  
+     * 
+     * @returns {MetaElement} Replicated Objects
      */
     MetaElement.prototype.clone  = function() {
         var clone = new MetaElement(this._name);

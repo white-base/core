@@ -11,7 +11,6 @@ describe("[target: message.js]", () => {
             jest.resetModules();
             globalThis.isESM = true
             process.env.LANG = 'ko_KR.UTF-8';
-
         });
         describe("Message.$storage : 메세지 저장소", () => {
             it("- $storage : 기본 언어 얻기", async () => {

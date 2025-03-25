@@ -1,6 +1,6 @@
 //==============================================================
 // gobal defined
-import loadNamespace from '../src/load-namespace';
+import loadNamespace from '../src/utils/load-namespace';
 import MetaRegistry from '../src/meta-registry';
 import {jest} from '@jest/globals';
 

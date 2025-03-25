@@ -1,11 +1,11 @@
 //==============================================================
 // gobal defined
-import Util from '../src/util.js';
+// import Util from '../src/util.js';
 import MetaRegistry from '../src/meta-registry';
 import MetaObject from '../src/meta-object';
 import MetaElement from '../src/meta-element';
 import PropertyCollection from '../src/collection-property';
-import loadNamespace from '../src/load-namespace';
+import loadNamespace from '../src/utils/load-namespace';
 import ArrayCollection from '../src/collection-array.js';
 import { replacer, reviver, stringify, parse } from 'telejson';
 

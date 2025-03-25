@@ -1,23 +1,23 @@
 /**** load-namespace.js loadNamespace ****/
 //==============================================================
 // 1. import module
-import Message from './message.js';
-import ExtendError from './extend-error.js';
-import Type from './type';
-import Util from './util.js';
-import MetaRegistry from './meta-registry.js';
-import NamespaceManager from './namespace-manager.js';
-import ArrayCollection from './collection-array.js';
-import BaseCollection from './base-collection.js';
-import PropertyCollection from './collection-property.js';
-import IArrayCollection from './i-collection-array.js';
-import IPropertyCollection from './i-collection-property';
-import ICollection from './i-collection.js';
-import IMarshal from './i-marshal.js';
-import IObject from './i-object.js';
-import MetaElement from './meta-element.js';
-import MetaObject from './meta-object.js';
-import EventEmitter from './event-emitter.js';
+import Message from '../message.js';
+import ExtendError from '../extend-error.js';
+import Type from '../type';
+import Util from '../util.js';
+import MetaRegistry from '../meta-registry.js';
+import NamespaceManager from '../namespace-manager.js';
+import ArrayCollection from '../collection-array.js';
+import BaseCollection from '../base-collection.js';
+import PropertyCollection from '../collection-property.js';
+import IArrayCollection from '../i-collection-array.js';
+import IPropertyCollection from '../i-collection-property';
+import ICollection from '../i-collection.js';
+import IMarshal from '../i-marshal.js';
+import IObject from '../i-object.js';
+import MetaElement from '../meta-element.js';
+import MetaObject from '../meta-object.js';
+import EventEmitter from '../event-emitter.js';
 
 //==============================================================
 // 2. module dependency check
