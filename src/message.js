@@ -108,7 +108,7 @@ class Message {
     /**
      * Sets whether automatic language detection is enabled. Default is true.  
      */
-    static autoDetect = true;
+    // static autoDetect = true;
     
     /**
      * Set the default language. Default is 'default'.  
@@ -138,11 +138,17 @@ class Message {
      * @param {object} p_msg Message Object
      * @param {string} p_path Message file path
      */
-    static importMessage (p_msg, p_path) {
+    static async importMessage (p_msg, p_path) {
+        let locale;
+
         if (_isObject(p_msg)) {
             _deepMerge(this.$storage.lang.default, p_msg);
             if (_isString(p_path)) this.$storage.path.push(p_path);
         }
+        
+        locale = _getLocale();
+        if (locale === 'en') locale = 'default';
+        await Message.changeLanguage(locale);
     };
 
     /**
@@ -151,6 +157,7 @@ class Message {
      * @param {string} p_lang language code
      */
     static async changeLanguage (p_lang) {
+        this.currentLang = p_lang;
         for (var i = 0; i < this.$storage.path.length; i++) {
             var localPath = this.$storage.path[i];
             var msg = await _loadJSON(`${localPath}/${p_lang}.json`);
@@ -161,7 +168,6 @@ class Message {
             if (typeof msg === 'object') _deepMerge(this.$storage.lang[p_lang], msg);
             else console.warn(`Path '${localPath}/${p_lang}' does not have a file.`);
         }
-        this.currentLang = p_lang;
     }
 
     /**
@@ -199,18 +205,22 @@ class Message {
      * @returns {Promise<void>}
      */
     static async init () {
-        var locale;
+        let locale;
 
         this.currentLang = this.defaultLang;
-        if (this.autoDetect) {
-            locale = _getLocale();
-            if (locale === 'en') locale = 'default';
-            await Message.changeLanguage(locale);
-        }
+        // if (this.autoDetect) {
+        //     locale = _getLocale();
+        //     if (locale === 'en') locale = 'default';
+        //     await Message.changeLanguage(locale);
+        // }
     }
 }
 
-Message.importMessage(defaultCode, localesPath);
+(async () => {
+    await Message.importMessage(defaultCode, localesPath);
+})();
+
+// Message.importMessage(defaultCode, localesPath);
 
 //==============================================================
 // 4. module export

@@ -16,7 +16,7 @@ declare class Message {
     /**
      * Sets whether automatic language detection is enabled. Default is true.  
      */
-    static autoDetect: boolean;
+    // static autoDetect: boolean;
 
     /**
      * Set the default language. Default is 'default'.  

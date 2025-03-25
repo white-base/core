@@ -17,7 +17,7 @@ declare class Message {
     /**
      * 메시지 언어를 설정합니다.  
      */
-    static autoDetect: boolean;
+    // static autoDetect: boolean;
 
     /**
      * 기본 언어를 설정합니다. 기본값은 'default'입니다.
