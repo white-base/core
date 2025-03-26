@@ -10,6 +10,11 @@ import MetaObject from "./meta-object";
 declare abstract class BaseCollection<T> extends MetaObject implements ICollection<T>, IList<T> {
 
     /**
+     * 컬렉션에서 예약어로 사용되는 문자열 목록입니다.
+     */
+    readonly $KEYWORD: string[];
+
+    /**
      * 이벤트를 처리하는 객체입니다. 컬렉션의 다양한 이벤트를 등록하고 발생시킬 때 사용됩니다.
      */
     $event: EventEmitter;
@@ -23,11 +28,6 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 각 컬렉션 요소의 getter 및 setter 메서드를 정의하는 디스크립터 배열입니다. 
      */
     $descriptors: object[];
-
-    /**
-     * 컬렉션에서 예약어로 사용되는 문자열 목록입니다.
-     */
-    readonly $KEYWORD: string[];
 
     /**
      * 컬렉션의 소유 객체입니다.

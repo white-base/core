@@ -10,6 +10,11 @@ import MetaObject from "./meta-object";
 declare abstract class BaseCollection<T> extends MetaObject implements ICollection<T>, IList<T> {
 
     /**
+    * List of strings used as reserved words in the collection.
+    */
+    readonly $KEYWORD: string[];
+
+    /**
     * Object that handles events. Used to register and generate various events in the collection.
     */
     $event: EventEmitter;
@@ -23,11 +28,6 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     * A descriptor array that defines the getter and setter methods for each collection element.
     */    
     $descriptors: object[];
-
-    /**
-    * List of strings used as reserved words in the collection.
-    */
-    readonly $KEYWORD: string[];
 
     /**
     * Owned object of the collection.

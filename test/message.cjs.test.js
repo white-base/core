@@ -16,6 +16,7 @@ describe("[target: message.js]", () => {
         beforeEach(() => {
             jest.restoreAllMocks();
             jest.resetModules();
+            process.env.LANG = 'en_US.UTF-8';
         });
 
         it("CJS 방식으로 JSON 로드", async () => {

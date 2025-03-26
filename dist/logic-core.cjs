@@ -611,17 +611,17 @@ async function _loadJSON(filePath) {
 }
 
 function _getLocale() {
-    let locale = "";
+    let locale = '';
 
-    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
         // 브라우저 환경
         const lang = navigator.languages?.[0] || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale;
         locale = lang.split(/[_-]/)[0]; // "ko-KR" -> "ko"
-    } else if (typeof process !== "undefined") {
+    } else if (typeof process !== 'undefined') {
         // Node.js 환경
         const rawLocale = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE;
         if (rawLocale) {
-            locale = rawLocale.split(/[:_.]/)[0].replace("_", "-"); // "ko_KR.UTF-8" -> "ko"
+            locale = rawLocale.split(/[:_.]/)[0].replace('_', '-'); // "ko_KR.UTF-8" -> "ko"
         }
     }
     return locale || 'en';
@@ -666,7 +666,7 @@ class Message {
     /**
      * Sets whether automatic language detection is enabled. Default is true.  
      */
-    static autoDetect = true;
+    // static autoDetect = true;
     
     /**
      * Set the default language. Default is 'default'.  
@@ -696,11 +696,17 @@ class Message {
      * @param {object} p_msg Message Object
      * @param {string} p_path Message file path
      */
-    static importMessage (p_msg, p_path) {
+    static async importMessage (p_msg, p_path) {
+        let locale;
+
         if (_isObject$2(p_msg)) {
             _deepMerge(this.$storage.lang.default, p_msg);
             if (_isString(p_path)) this.$storage.path.push(p_path);
         }
+
+        locale = _getLocale();
+        if (locale === 'en') locale = 'default';
+        await Message.changeLanguage(locale);
     };
 
     /**
@@ -709,6 +715,7 @@ class Message {
      * @param {string} p_lang language code
      */
     static async changeLanguage (p_lang) {
+        this.currentLang = p_lang;
         for (var i = 0; i < this.$storage.path.length; i++) {
             var localPath = this.$storage.path[i];
             var msg = await _loadJSON(`${localPath}/${p_lang}.json`);
@@ -719,7 +726,6 @@ class Message {
             if (typeof msg === 'object') _deepMerge(this.$storage.lang[p_lang], msg);
             else console.warn(`Path '${localPath}/${p_lang}' does not have a file.`);
         }
-        this.currentLang = p_lang;
     }
 
     /**
@@ -751,24 +757,22 @@ class Message {
     };
 
     /**
-     * Initialize currentLang to defaultLang.  
-     * Automatically change the language when language auto-detection is enabled.  
-     * 
-     * @returns {Promise<void>}
+     * Initialize the language.  
      */
-    static async init () {
-        var locale;
-
+    static async resetLang () {
+        // let locale;
         this.currentLang = this.defaultLang;
-        if (this.autoDetect) {
-            locale = _getLocale();
-            if (locale === 'en') locale = 'default';
-            await Message.changeLanguage(locale);
-        }
+        // if (this.autoDetect) {
+        //     locale = _getLocale();
+        //     if (locale === 'en') locale = 'default';
+        //     await Message.changeLanguage(locale);
+        // }
     }
 }
 
-Message.importMessage(defaultCode, localesPath);
+(async () => {
+    await Message.importMessage(defaultCode, localesPath);
+})();
 
 /**** extend-error.js | ExtendError ****/
 
@@ -1049,7 +1053,7 @@ function restoreArrowFunction(transformedCode) {
       const altRegex = /^(.*?)\s*=>\s*\{([\s\S]*)\}/;
       const altMatch = transformedCode.match(altRegex);
       if (!altMatch) {
-        throw new Error("Invalid arrow function format.");
+        throw new Error('Invalid arrow function format.');
       }
       // altMatch[1] = "_ref"
       // altMatch[2] = "let [String] = _ref; return Number;"
@@ -1086,7 +1090,7 @@ function restoreArrowFunction(transformedCode) {
     // 5. return 문이 있다면 반환값을 추출
     //    예: return Number; -> "Number"
     const returnStatementMatch = body.match(/return\s+(.*?);/);
-    let returnType = returnStatementMatch ? returnStatementMatch[1].trim() : "";
+    let returnType = returnStatementMatch ? returnStatementMatch[1].trim() : '';
   
     // 6. 최종 복원 – return 문이 있다면 { return ... } 형태로, 없으면 { } 로
     if (returnType) {
@@ -1098,7 +1102,6 @@ function restoreArrowFunction(transformedCode) {
       return `(${params})=>{}`;
     }
 }
-
 
 /**
  * 함수 규칙   
@@ -4806,14 +4809,28 @@ var BaseCollection  = (function (_super) {
         _super.call(this);
         
         // private variable
+        var $KEYWORD = [];
         var $event = new EventEmitter();
         var $elements = [];
         var $descriptors = [];
-        var $KEYWORD = [];
         
         // protected variable
         var _owner ;
         var _elemTypes  = [];
+
+        /** 
+         * List of strings used as reserved words in the collection.  
+         * 
+         * @private
+         * @member {array<string>}  BaseCollection#$KEYWORD
+         */
+        Object.defineProperty(this, '$KEYWORD', 
+        {
+            get: function() { return $KEYWORD; },
+            set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },  // REVIEW: 예약어 중복
+            configurable: false,
+            enumerable: false,
+        });
 
         /** 
          * Object that handles events. Used to register and generate various events in the collection.
@@ -4856,19 +4873,7 @@ var BaseCollection  = (function (_super) {
             enumerable: false,
         });
 
-        /** 
-         * List of strings used as reserved words in the collection.  
-         * 
-         * @private
-         * @member {array<string>}  BaseCollection#$KEYWORD
-         */
-        Object.defineProperty(this, '$KEYWORD', 
-        {
-            get: function() { return $KEYWORD; },
-            set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },  // REVIEW: 예약어 중복
-            configurable: false,
-            enumerable: false,
-        });
+
 
         /** 
          * Owned object of the collection.  

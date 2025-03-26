@@ -61,10 +61,9 @@ declare class Message {
     static get(code: string, placeholders?: string[]): string;
 
     /**
-     * Initialize currentLang to defaultLang.  
-     * Automatically change the language when language auto-detection is enabled.  
+     * Initialize the language.  
      */
-    static init(): Promise<void>;
+    static resetLang(): void;    
 }
 
 export default Message;

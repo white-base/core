@@ -14,6 +14,10 @@ export default [
           es5: true,     // 기존 `env.es5`
           es6: true,     // 기존 `env.es6`
           console: true, // console 사용 허용
+          process: 'readonly',
+          require: 'readonly',
+          fetch: 'readonly',
+          navigator: 'readonly',
         },
       },
       rules: {

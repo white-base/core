@@ -40,14 +40,28 @@ var BaseCollection  = (function (_super) {
         _super.call(this);
         
         // private variable
+        var $KEYWORD = [];
         var $event = new EventEmitter();
         var $elements = [];
         var $descriptors = [];
-        var $KEYWORD = [];
         
         // protected variable
         var _owner ;
         var _elemTypes  = [];
+
+        /** 
+         * List of strings used as reserved words in the collection.  
+         * 
+         * @private
+         * @member {array<string>}  BaseCollection#$KEYWORD
+         */
+        Object.defineProperty(this, '$KEYWORD', 
+        {
+            get: function() { return $KEYWORD; },
+            set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },  // REVIEW: 예약어 중복
+            configurable: false,
+            enumerable: false,
+        });
 
         /** 
          * Object that handles events. Used to register and generate various events in the collection.
@@ -90,19 +104,7 @@ var BaseCollection  = (function (_super) {
             enumerable: false,
         });
 
-        /** 
-         * List of strings used as reserved words in the collection.  
-         * 
-         * @private
-         * @member {array<string>}  BaseCollection#$KEYWORD
-         */
-        Object.defineProperty(this, '$KEYWORD', 
-        {
-            get: function() { return $KEYWORD; },
-            set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },  // REVIEW: 예약어 중복
-            configurable: false,
-            enumerable: false,
-        });
+
 
         /** 
          * Owned object of the collection.  

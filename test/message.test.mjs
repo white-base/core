@@ -22,22 +22,26 @@ describe("[target: message.js]", () => {
                 expect(Message.$storage.path.length > 0).toBe(T)
             });
         });
-        describe.skip("Message.autoDetect : 언어자동 감지", () => {
-            it("- 활성화", async () => {
+        describe("Message : 언어자동 감지", () => {
+            it("- 자동 감지", async () => {
                 const {Message} = await import('../src/message');
-                // Message.autoDetect = true;
-                // await Message.init();
 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ko')
             });
-            it("- 비활성화", async () => {
+            it("- 영어 환경", async () => {
+                process.env.LANG = 'en_US.UTF-8';
                 const {Message} = await import('../src/message');
-                Message.autoDetect = false;
-                await Message.init();
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('default')
+            });
+            it("- 일어 환경", async () => {
+                process.env.LANG = 'ja_JP.UTF-8';
+                const {Message} = await import('../src/message');
+                
+                expect(Message.defaultLang).toBe('default')
+                expect(Message.currentLang).toBe('ja')
             });
         });
         describe("Message.getMessageByCode() : 메시지 반환", () => {
@@ -114,14 +118,14 @@ describe("[target: message.js]", () => {
                 expect(msg2).toBe(" [TEST] aa=${aa}, bb=${bb}, [0]=10, [1]=20")
             });
         });
-        describe("Message.init() : 초기화", () => {
+        describe("Message.init() : 언어 초기화", () => {
             it("- 확인", async () => {
                 const {Message} = await import('../src/message');
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ko')
 
-                await Message.init();
+                await Message.resetLang();
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('default')
             });

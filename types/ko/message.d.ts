@@ -61,10 +61,15 @@ declare class Message {
     static get(code: string, placeholders?: string[]): string;
 
     /**
-     * currentLang 를 defaultLang 로 초기화합니다.  
-     * 언어 자동 감지가 설정되어 있으면 자동으로 언어를 변경합니다.  
+     * 언어를 초기화합니다.  
      */
-    static init(): Promise<void>;
+    static resetLang(): void;
+
+    // /**
+    //  * currentLang 를 defaultLang 로 초기화합니다.  
+    //  * 언어 자동 감지가 설정되어 있으면 자동으로 언어를 변경합니다.  
+    //  */
+    // static init(): Promise<void>;
 }
 
 export default Message;

@@ -52,17 +52,17 @@ async function _loadJSON(filePath) {
 }
 
 function _getLocale() {
-    let locale = "";
+    let locale = '';
 
-    if (typeof window !== "undefined" && typeof navigator !== "undefined") {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
         // 브라우저 환경
         const lang = navigator.languages?.[0] || navigator.language || Intl.DateTimeFormat().resolvedOptions().locale;
         locale = lang.split(/[_-]/)[0]; // "ko-KR" -> "ko"
-    } else if (typeof process !== "undefined") {
+    } else if (typeof process !== 'undefined') {
         // Node.js 환경
         const rawLocale = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE;
         if (rawLocale) {
-            locale = rawLocale.split(/[:_.]/)[0].replace("_", "-"); // "ko_KR.UTF-8" -> "ko"
+            locale = rawLocale.split(/[:_.]/)[0].replace('_', '-'); // "ko_KR.UTF-8" -> "ko"
         }
     }
     return locale || 'en';
@@ -145,7 +145,7 @@ class Message {
             _deepMerge(this.$storage.lang.default, p_msg);
             if (_isString(p_path)) this.$storage.path.push(p_path);
         }
-        
+
         locale = _getLocale();
         if (locale === 'en') locale = 'default';
         await Message.changeLanguage(locale);
@@ -199,14 +199,10 @@ class Message {
     };
 
     /**
-     * Initialize currentLang to defaultLang.  
-     * Automatically change the language when language auto-detection is enabled.  
-     * 
-     * @returns {Promise<void>}
+     * Initialize the language.  
      */
-    static async init () {
-        let locale;
-
+    static async resetLang () {
+        // let locale;
         this.currentLang = this.defaultLang;
         // if (this.autoDetect) {
         //     locale = _getLocale();
