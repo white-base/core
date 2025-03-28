@@ -1170,10 +1170,17 @@
                   if (_isString(p_path)) this.$storage.path.push(p_path);
                 }
                 locale = _getLocale();
-                if (locale === 'en') locale = 'default';
-                _context.next = 5;
+                if (!(locale === 'en')) {
+                  _context.next = 6;
+                  break;
+                }
+                locale = 'default';
+                _context.next = 8;
+                break;
+              case 6:
+                _context.next = 8;
                 return Message.changeLanguage(locale);
-              case 5:
+              case 8:
               case "end":
                 return _context.stop();
             }

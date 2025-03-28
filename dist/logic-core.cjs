@@ -706,7 +706,7 @@ class Message {
 
         locale = _getLocale();
         if (locale === 'en') locale = 'default';
-        await Message.changeLanguage(locale);
+        else await Message.changeLanguage(locale);
     };
 
     /**
