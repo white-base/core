@@ -11,12 +11,12 @@ import MetaRegistry from './meta-registry.js';
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IObject) throw new Error(Message.get('ES011', ['IObject', 'i-object']));
-if (!IMarshal) throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
-if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IObject) throw new Error(Message.get('ES011', ['IObject', 'i-object']));
+// if (!IMarshal) throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
+// if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
 
 //==============================================================
 // 3. module implementation   

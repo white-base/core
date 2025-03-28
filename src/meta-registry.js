@@ -8,9 +8,9 @@ import NamespaceManager from './namespace-manager.js';
 
 //==============================================================Á
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
 
 //==============================================================
 // 3. module implementation       

@@ -159,6 +159,7 @@ class Message {
      */
     static async changeLanguage (p_lang) {
         this.currentLang = p_lang;
+        if (p_lang === 'default') return;
         for (var i = 0; i < this.$storage.path.length; i++) {
             var localPath = this.$storage.path[i];
             var msg = await _loadJSON(`${localPath}/${p_lang}.json`);

@@ -11,7 +11,7 @@
 
 //==============================================================
 // test
-describe("[target: message.js]", () => {
+describe("[target: logic-core]", () => {
     describe("CJS 환경 테스트", () => {
         beforeEach(() => {
             jest.restoreAllMocks();
@@ -20,7 +20,8 @@ describe("[target: message.js]", () => {
         });
 
         it("CJS 방식으로 JSON 로드", async () => {
-            const {Message} = require("../src/message.js");
+            // const {Message} = require("../src/message.js");
+            const {Message} = require("logic-core");
 
             expect(Message.defaultLang).toBe('default')
             expect(Message.currentLang).toBe('default')
@@ -36,8 +37,8 @@ describe("[target: message.js]", () => {
         it("Type 한글 오류 확인", async () => {
             process.env.LANG = 'ko_US.UTF-8';
             
-            const {Message} = require("../src/message.js");
-            const {Type} = require("../src/type.js");
+            const {Message} = require("logic-core");
+            const {Type} = require("logic-core");
             
             expect(Message.currentLang).toBe('default');
 

@@ -9,6 +9,7 @@ describe("[target: message.js]", () => {
     describe("Message :: 클래스", () => {
         beforeEach(async () => {
             jest.resetModules();
+            jest.restoreAllMocks();
             globalThis.isESM = true
         });
         describe("Message.$storage : 메세지 저장소", () => {
@@ -41,12 +42,15 @@ describe("[target: message.js]", () => {
                 expect(Message.currentLang).toBe('default')
             });
             it("- 일어 환경", async () => {
+                const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+
                 process.env.LANG = 'ja_JP.UTF-8';
                 const {Message} = await import('../src/message');
                 await Message.autoDetect()
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ja')
+                expect(warnSpy.mock.calls[0][0]).toBe("Path './locales/ja' does not have a file.")
             });
         });
         describe("Message.getMessageByCode() : 메시지 반환", () => {

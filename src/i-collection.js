@@ -6,7 +6,7 @@ import ExtendError from './extend-error.js';
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 // if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
 
 //==============================================================

@@ -11,12 +11,12 @@ import ISerialize from './i-serialize.js';
 
 //==============================================================Á
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
-if (!IListControl) throw new Error(Message.get('ES011', ['IListControl', 'i-control-list']));
-if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
+// if (!IListControl) throw new Error(Message.get('ES011', ['IListControl', 'i-control-list']));
+// if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
 
 //==============================================================
 // 3. module implementation   

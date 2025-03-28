@@ -7,8 +7,8 @@ import Message from './message.js';
 
 //==============================================================Á
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 
 //==============================================================
 // 3. module implementation  

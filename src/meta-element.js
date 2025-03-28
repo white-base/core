@@ -9,10 +9,10 @@ import MetaObject from './meta-object.js';
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IElement) throw new Error(Message.get('ES011', ['IElement', 'i-element']));
-if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IElement) throw new Error(Message.get('ES011', ['IElement', 'i-element']));
+// if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
 //==============================================================
 // 3. module implementation   
