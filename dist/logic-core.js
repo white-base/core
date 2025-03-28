@@ -909,7 +909,8 @@ var OLD_ENV$1 = _global$1.OLD_ENV ? _global$1.OLD_ENV : false;    // 커버리�
 var Type = {};
 
 /**
- * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부
+ * object 와 new 생성한 사용자 함수를 제외한 객쳐 여부  
+ * 
  * @param {*} obj 
  * @returns {boolean}
  */
@@ -922,7 +923,8 @@ function _isPrimitiveObj(obj) { // REVIEW: 정리 필요, 의미적으로 명료
 }
 
 /**
- * 최상위 object 이거나 사용자 함수에서 생성한 객체 여부
+ * 최상위 object 이거나 사용자 함수에서 생성한 객체 여부  
+ * 
  * @param {*} obj 
  * @returns {boolean}
  */
@@ -934,7 +936,8 @@ function _isObject$1(obj)  {  // REVIEW: 정리 필요, 의미적으로 명료�
 }
 
 /**
- * 공백객체 인지 확인
+ * 공백객체 인지 확인  
+ * 
  * @param {*} obj 검사대상
  * @returns {boolean}
  */
@@ -944,7 +947,8 @@ function _isEmptyObj(obj)  {
 }
 
 /**
- * 공백이 아닌 객체 (prototype 및 속성 있는것)
+ * 공백이 아닌 객체 (prototype 및 속성 있는것)  
+ * 
  * @param {*} obj 대상 
  * @returns {boolean}
  */
@@ -954,7 +958,8 @@ function _isFillObj(obj)  {
 }
 
 /**
- * 내장함수 유무
+ * 내장함수 유무  
+ * 
  * @param {*} obj 
  * @returns {boolean}
  */
@@ -968,7 +973,8 @@ function _isBuiltFunction(obj) {
 }
 
 /**
- * 첫문자 대문자 여부
+ * 첫문자 대문자 여부  
+ * 
  * @param {string} strValue 
  * @returns {boolean}
  */
@@ -980,7 +986,8 @@ function _isUpper(strValue) {
 
 /**
  * 리터럴 여부  
- * number, string, boolean, bigint, RexExp instance
+ * number, string, boolean, bigint, RexExp instance  
+ * 
  * @param {*} obj 
  * @returns {boolean}
  */
@@ -994,7 +1001,8 @@ function _isLiteral(obj) {
 
 /**
  * 리터럴값 비교  
- * number, string, boolean, bigint, RexExp instance
+ * number, string, boolean, bigint, RexExp instance  
+ * 
  * @param {*} obj1 
  * @param {*} obj2 
  * @returns {boolean}
@@ -1015,7 +1023,8 @@ var _creator = function(type) {
 };
 
 /**
- * 타임명 얻기
+ * 타임명 얻기  
+ * 
  * @param {*} obj 
  * @returns {string}
  */
@@ -1024,7 +1033,8 @@ function _typeName(obj) {
 }
 
 /**
- * kind 코드, 대문자로 얻기 '_any_'...
+ * kind 코드, 대문자로 얻기 '_any_'...  
+ * 
  * @param {*} val 
  * @returns {string}
  */
@@ -1105,6 +1115,7 @@ function restoreArrowFunction(transformedCode) {
  * 함수 규칙   
  * - (params 내부에는 '()' 입력 금지)  
  * - 참조형 타입 금지 : new Function() 시점에 자동 해석됨  
+ * 
  * @param {*} funBody 
  * @returns {object}
  */
@@ -1156,7 +1167,8 @@ function _parseFunc(funBody) {
 }
 
 /**
- * 타입 여부
+ * 타입 여부  
+ * 
  * @param {string} name 
  * @returns {boolean}
  */
@@ -1175,7 +1187,8 @@ function _hasType(name) {
 }
 
 /**
- * 타입 여부
+ * 타입 여부  
+ * 
  * @param {string} name 
  * @returns {boolean}
  */
@@ -1189,7 +1202,8 @@ function _isLeafType(name) {
 }
 
 /**
- * choice type kind 여부
+ * choice type kind 여부  
+ * 
  * @param {string} name 
  * @returns {boolean}
  */
@@ -1206,7 +1220,8 @@ function _hasKindChoice(name) {
 }
 
 /**
- * choice type kind 여부
+ * choice type kind 여부  
+ * 
  * @param {string} name 
  * @returns {boolean}
  */

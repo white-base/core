@@ -28,29 +28,29 @@ module.exports = {
     // moduleNameMapper: {
     //   "^(.*)\\.js$": "$1.cjs" // .js 파일을 .cjs로 변환하여 CommonJS 환경에서 실행
     // },
-      projects: [
-        {
-          displayName: "CommonJS",
-          testEnvironment: "node",
-          testMatch: ["**/test/*.cjs.test.js"],
+    projects: [
+      {
+        displayName: "CommonJS",
+        testEnvironment: "node",
+        testMatch: ["**/test/*.cjs.test.js"],
+      },
+      {
+        displayName: "ES Module",
+        testEnvironment: "node",
+        testMatch: ["**/test/*.test.mjs"],
+        transform: {
+          "^.+\\.js$": "babel-jest",
+          "^.+\\.mjs$": "babel-jest"
         },
-        {
-          displayName: "ES Module",
-          testEnvironment: "node",
-          testMatch: ["**/test/*.test.mjs"],
-          transform: {
-            "^.+\\.js$": "babel-jest",
-            "^.+\\.mjs$": "babel-jest"
-          },
-        },
-        {
-          displayName: "Browser",
-          testEnvironment: "jsdom",
-          // transform: {
-          //   "^.+\\.js$": "babel-jest",
-          //   "^.+\\.mjs$": "babel-jest"
-          // },
-          testMatch: ["**/test/*.dom.test.js", "**/test/*.browser.test.js"],
-        },
-      ],
+      },
+      {
+        displayName: "Browser",
+        testEnvironment: "jsdom",
+        // transform: {
+        //   "^.+\\.js$": "babel-jest",
+        //   "^.+\\.mjs$": "babel-jest"
+        // },
+        testMatch: ["**/test/*.dom.test.js", "**/test/*.browser.test.js"],
+      },
+    ],
 };
