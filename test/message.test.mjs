@@ -21,11 +21,11 @@ describe("[target: message.js]", () => {
                 expect(Message.$storage.path.length > 0).toBe(T)
             });
         });
-        describe("Message.init() : 언어자동 설정", () => {
+        describe("Message.autoDetect() : 언어자동 설정", () => {
             it("- 한글", async () => {
             process.env.LANG = 'ko_KR.UTF-8';
                 const {Message} = await import('../src/message');
-                await Message.init()
+                await Message.autoDetect()
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ko')
@@ -35,7 +35,7 @@ describe("[target: message.js]", () => {
             it("- 영어 환경", async () => {
                 process.env.LANG = 'en_US.UTF-8';
                 const {Message} = await import('../src/message');
-                await Message.init()
+                await Message.autoDetect()
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('default')
@@ -43,7 +43,7 @@ describe("[target: message.js]", () => {
             it("- 일어 환경", async () => {
                 process.env.LANG = 'ja_JP.UTF-8';
                 const {Message} = await import('../src/message');
-                await Message.init()
+                await Message.autoDetect()
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ja')

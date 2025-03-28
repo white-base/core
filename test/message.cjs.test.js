@@ -41,7 +41,7 @@ describe("[target: message.js]", () => {
             
             expect(Message.currentLang).toBe('default');
 
-            await Message.init()
+            await Message.autoDetect()
             expect(Message.currentLang).toBe('ko');
             expect(() => Type.allowType([[String, Number]], {})).toThrow('타입')
         });

@@ -68,7 +68,7 @@ declare class Message {
     /**
      * Set the current language by automatically detecting the language.  
      */
-    static init(): Promise<void>;
+    static autoDetect(): Promise<void>;
 }
 
 export default Message;

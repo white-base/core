@@ -1263,9 +1263,9 @@
        * Set the current language by automatically detecting the language.  
        */
     }, {
-      key: "init",
+      key: "autoDetect",
       value: (function () {
-        var _init = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var _autoDetect = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
           var locale;
           return _regeneratorRuntime().wrap(function _callee2$(_context2) {
             while (1) switch (_context2.prev = _context2.next) {
@@ -1280,10 +1280,10 @@
             }
           }, _callee2);
         }));
-        function init() {
-          return _init.apply(this, arguments);
+        function autoDetect() {
+          return _autoDetect.apply(this, arguments);
         }
-        return init;
+        return autoDetect;
       }())
     }]);
   }(); // console.log('Before import');

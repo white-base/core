@@ -771,7 +771,7 @@ class Message {
     /**
      * Set the current language by automatically detecting the language.  
      */
-    static async init () {
+    static async autoDetect () {
         let locale = _getLocale();
 
         if (locale === 'en') locale = 'default';
