@@ -10,7 +10,6 @@ describe("[target: message.js]", () => {
         beforeEach(async () => {
             jest.resetModules();
             globalThis.isESM = true
-            process.env.LANG = 'ko_KR.UTF-8';
         });
         describe("Message.$storage : 메세지 저장소", () => {
             it("- $storage : 기본 언어 얻기", async () => {
@@ -22,16 +21,21 @@ describe("[target: message.js]", () => {
                 expect(Message.$storage.path.length > 0).toBe(T)
             });
         });
-        describe("Message : 언어자동 감지", () => {
-            it("- 자동 감지", async () => {
+        describe("Message.init() : 언어자동 설정", () => {
+            it("- 한글", async () => {
+            process.env.LANG = 'ko_KR.UTF-8';
                 const {Message} = await import('../src/message');
-
+                await Message.init()
+                
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ko')
+                expect(Message.get('KO')).toMatch(/OK/);
+                expect(Message.get('EN')).toMatch(/OK/);
             });
             it("- 영어 환경", async () => {
                 process.env.LANG = 'en_US.UTF-8';
                 const {Message} = await import('../src/message');
+                await Message.init()
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('default')
@@ -39,6 +43,7 @@ describe("[target: message.js]", () => {
             it("- 일어 환경", async () => {
                 process.env.LANG = 'ja_JP.UTF-8';
                 const {Message} = await import('../src/message');
+                await Message.init()
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('ja')
@@ -118,17 +123,17 @@ describe("[target: message.js]", () => {
                 expect(msg2).toBe(" [TEST] aa=${aa}, bb=${bb}, [0]=10, [1]=20")
             });
         });
-        describe("Message.init() : 언어 초기화", () => {
-            it("- 확인", async () => {
-                const {Message} = await import('../src/message');
+        // describe("Message.init() : 언어 ", () => {
+        //     it("- 확인", async () => {
+        //         const {Message} = await import('../src/message');
                 
-                expect(Message.defaultLang).toBe('default')
-                expect(Message.currentLang).toBe('ko')
+        //         expect(Message.defaultLang).toBe('default')
+        //         expect(Message.currentLang).toBe('ko')
 
-                await Message.resetLang();
-                expect(Message.defaultLang).toBe('default')
-                expect(Message.currentLang).toBe('default')
-            });
-        });
+        //         await Message.resetLang();
+        //         expect(Message.defaultLang).toBe('default')
+        //         expect(Message.currentLang).toBe('default')
+        //     });
+        // });
     });
 });

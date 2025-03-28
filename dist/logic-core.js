@@ -604,6 +604,7 @@ async function _loadJSON(filePath) {
             return await response.json();
         }
     } catch (error) {
+        // console.log(`Error loading JSON file: ${filePath}`, error);
         return;
     }
 }
@@ -694,17 +695,17 @@ class Message {
      * @param {object} p_msg Message Object
      * @param {string} p_path Message file path
      */
-    static async importMessage (p_msg, p_path) {
-        let locale;
+    static importMessage (p_msg, p_path) {
+        // let locale;
 
         if (_isObject$2(p_msg)) {
             _deepMerge(this.$storage.lang.default, p_msg);
             if (_isString(p_path)) this.$storage.path.push(p_path);
         }
 
-        locale = _getLocale();
-        if (locale === 'en') locale = 'default';
-        else await Message.changeLanguage(locale);
+        // locale = _getLocale();
+        // if (locale === 'en') locale = 'default';
+        // else await Message.changeLanguage(locale);
     };
 
     /**
@@ -757,7 +758,7 @@ class Message {
     /**
      * Initialize the language.  
      */
-    static async resetLang () {
+    static resetLang () {
         // let locale;
         this.currentLang = this.defaultLang;
         // if (this.autoDetect) {
@@ -766,11 +767,36 @@ class Message {
         //     await Message.changeLanguage(locale);
         // }
     }
-}
 
-(async () => {
-    await Message.importMessage(defaultCode, localesPath);
-})();
+    /**
+     * Set the current language by automatically detecting the language.  
+     */
+    static async init () {
+        let locale = _getLocale();
+
+        if (locale === 'en') locale = 'default';
+        await Message.changeLanguage(locale);
+    }
+}
+// console.log('Before import');
+// (async () => {
+//     await Message.importMessage(defaultCode, localesPath);
+// })();
+
+// async function main() {
+//     await (async () => {
+//     await Message.importMessage(defaultCode, localesPath);
+//     // await Messagde.importMessage(...);
+//     })(); // ← IIFE가 반환하는 promise를 여기서 await
+    
+//     console.log('importMessage가 끝난 후 실행됨');
+// }
+//  main();
+
+
+// await Message.importMessage(defaultCode, localesPath);
+// console.log('After import');
+Message.importMessage(defaultCode, localesPath);
 
 /**** extend-error.js | ExtendError ****/
 

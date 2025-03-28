@@ -32,5 +32,18 @@ describe("[target: message.js]", () => {
             expect(Message.get('KO')).toMatch(/OK/);
             expect(Message.get('EN')).toMatch(/OK/);
         });
+
+        it("Type 한글 오류 확인", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            
+            const {Message} = require("../src/message.js");
+            const {Type} = require("../src/type.js");
+            
+            expect(Message.currentLang).toBe('default');
+
+            await Message.init()
+            expect(Message.currentLang).toBe('ko');
+            expect(() => Type.allowType([[String, Number]], {})).toThrow('타입')
+        });
     });
 });

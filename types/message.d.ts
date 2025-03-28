@@ -64,6 +64,11 @@ declare class Message {
      * Initialize the language.  
      */
     static resetLang(): void;    
+
+    /**
+     * Set the current language by automatically detecting the language.  
+     */
+    static init(): Promise<void>;
 }
 
 export default Message;

@@ -65,11 +65,10 @@ declare class Message {
      */
     static resetLang(): void;
 
-    // /**
-    //  * currentLang 를 defaultLang 로 초기화합니다.  
-    //  * 언어 자동 감지가 설정되어 있으면 자동으로 언어를 변경합니다.  
-    //  */
-    // static init(): Promise<void>;
+    /**
+     * 언어 자동 감지하여 현재 언어를 설정합니다.  
+     */
+    static init(): Promise<void>;
 }
 
 export default Message;

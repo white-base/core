@@ -1050,49 +1050,49 @@
     return _loadJSON2.apply(this, arguments);
   }
   function _loadJSON2() {
-    _loadJSON2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(filePath) {
+    _loadJSON2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(filePath) {
       var isNode, isESM, response;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) switch (_context3.prev = _context3.next) {
           case 0:
             isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
             isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true); // REVIEW: test hack
-            _context5.prev = 2;
+            _context3.prev = 2;
             if (!isESM) {
-              _context5.next = 9;
+              _context3.next = 9;
               break;
             }
-            _context5.next = 6;
+            _context3.next = 6;
             return import(filePath);
           case 6:
-            return _context5.abrupt("return", _context5.sent["default"]);
+            return _context3.abrupt("return", _context3.sent["default"]);
           case 9:
             if (!isNode) {
-              _context5.next = 13;
+              _context3.next = 13;
               break;
             }
-            return _context5.abrupt("return", require(filePath));
+            return _context3.abrupt("return", require(filePath));
           case 13:
-            _context5.next = 15;
+            _context3.next = 15;
             return fetch(filePath);
           case 15:
-            response = _context5.sent;
-            _context5.next = 18;
+            response = _context3.sent;
+            _context3.next = 18;
             return response.json();
           case 18:
-            return _context5.abrupt("return", _context5.sent);
+            return _context3.abrupt("return", _context3.sent);
           case 19:
-            _context5.next = 24;
+            _context3.next = 24;
             break;
           case 21:
-            _context5.prev = 21;
-            _context5.t0 = _context5["catch"](2);
-            return _context5.abrupt("return");
+            _context3.prev = 21;
+            _context3.t0 = _context3["catch"](2);
+            return _context3.abrupt("return");
           case 24:
           case "end":
-            return _context5.stop();
+            return _context3.stop();
         }
-      }, _callee5, null, [[2, 21]]);
+      }, _callee3, null, [[2, 21]]);
     }));
     return _loadJSON2.apply(this, arguments);
   }
@@ -1152,45 +1152,25 @@
       }
     }, {
       key: "importMessage",
-      value: (
+      value:
       /**
        * Add the message code to the storage.  
        * 
        * @param {object} p_msg Message Object
        * @param {string} p_path Message file path
        */
-      function () {
-        var _importMessage = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(p_msg, p_path) {
-          var locale;
-          return _regeneratorRuntime().wrap(function _callee$(_context) {
-            while (1) switch (_context.prev = _context.next) {
-              case 0:
-                if (_isObject$2(p_msg)) {
-                  _deepMerge(this.$storage.lang["default"], p_msg);
-                  if (_isString(p_path)) this.$storage.path.push(p_path);
-                }
-                locale = _getLocale();
-                if (!(locale === 'en')) {
-                  _context.next = 6;
-                  break;
-                }
-                locale = 'default';
-                _context.next = 8;
-                break;
-              case 6:
-                _context.next = 8;
-                return Message.changeLanguage(locale);
-              case 8:
-              case "end":
-                return _context.stop();
-            }
-          }, _callee, this);
-        }));
-        function importMessage(_x2, _x3) {
-          return _importMessage.apply(this, arguments);
+      function importMessage(p_msg, p_path) {
+        // let locale;
+
+        if (_isObject$2(p_msg)) {
+          _deepMerge(this.$storage.lang["default"], p_msg);
+          if (_isString(p_path)) this.$storage.path.push(p_path);
         }
-        return importMessage;
-      }())
+
+        // locale = _getLocale();
+        // if (locale === 'en') locale = 'default';
+        // else await Message.changeLanguage(locale);
+      }
     }, {
       key: "changeLanguage",
       value: (
@@ -1200,38 +1180,38 @@
        * @param {string} p_lang language code
        */
       function () {
-        var _changeLanguage = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(p_lang) {
+        var _changeLanguage = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(p_lang) {
           var i, localPath, msg;
-          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-            while (1) switch (_context2.prev = _context2.next) {
+          return _regeneratorRuntime().wrap(function _callee$(_context) {
+            while (1) switch (_context.prev = _context.next) {
               case 0:
                 this.currentLang = p_lang;
                 i = 0;
               case 2:
                 if (!(i < this.$storage.path.length)) {
-                  _context2.next = 12;
+                  _context.next = 12;
                   break;
                 }
                 localPath = this.$storage.path[i];
-                _context2.next = 6;
+                _context.next = 6;
                 return _loadJSON("".concat(localPath, "/").concat(p_lang, ".json"));
               case 6:
-                msg = _context2.sent;
+                msg = _context.sent;
                 this.$storage.lang[p_lang] = this.$storage.lang[p_lang] || {};
                 // if (typeof $storage.lang[p_lang] === 'undefined') $storage.lang[p_lang] = {};
 
                 if (_typeof(msg) === 'object') _deepMerge(this.$storage.lang[p_lang], msg);else console.warn("Path '".concat(localPath, "/").concat(p_lang, "' does not have a file."));
               case 9:
                 i++;
-                _context2.next = 2;
+                _context.next = 2;
                 break;
               case 12:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
-          }, _callee2, this);
+          }, _callee, this);
         }));
-        function changeLanguage(_x4) {
+        function changeLanguage(_x2) {
           return _changeLanguage.apply(this, arguments);
         }
         return changeLanguage;
@@ -1265,35 +1245,61 @@
       }
     }, {
       key: "resetLang",
-      value: (
+      value:
       /**
        * Initialize the language.  
        */
-      function () {
-        var _resetLang = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-            while (1) switch (_context3.prev = _context3.next) {
+      function resetLang() {
+        // let locale;
+        this.currentLang = this.defaultLang;
+        // if (this.autoDetect) {
+        //     locale = _getLocale();
+        //     if (locale === 'en') locale = 'default';
+        //     await Message.changeLanguage(locale);
+        // }
+      }
+
+      /**
+       * Set the current language by automatically detecting the language.  
+       */
+    }, {
+      key: "init",
+      value: (function () {
+        var _init = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+          var locale;
+          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+            while (1) switch (_context2.prev = _context2.next) {
               case 0:
-                // let locale;
-                this.currentLang = this.defaultLang;
-                // if (this.autoDetect) {
-                //     locale = _getLocale();
-                //     if (locale === 'en') locale = 'default';
-                //     await Message.changeLanguage(locale);
-                // }
-              case 1:
+                locale = _getLocale();
+                if (locale === 'en') locale = 'default';
+                _context2.next = 4;
+                return Message.changeLanguage(locale);
+              case 4:
               case "end":
-                return _context3.stop();
+                return _context2.stop();
             }
-          }, _callee3, this);
+          }, _callee2);
         }));
-        function resetLang() {
-          return _resetLang.apply(this, arguments);
+        function init() {
+          return _init.apply(this, arguments);
         }
-        return resetLang;
+        return init;
       }())
     }]);
-  }();
+  }(); // console.log('Before import');
+  // (async () => {
+  //     await Message.importMessage(defaultCode, localesPath);
+  // })();
+  // async function main() {
+  //     await (async () => {
+  //     await Message.importMessage(defaultCode, localesPath);
+  //     // await Messagde.importMessage(...);
+  //     })(); // ← IIFE가 반환하는 promise를 여기서 await
+  //     console.log('importMessage가 끝난 후 실행됨');
+  // }
+  //  main();
+  // await Message.importMessage(defaultCode, localesPath);
+  // console.log('After import');
   _Message = Message;
   /**
    * Namespace path. ('Common')
@@ -1320,18 +1326,7 @@
    * Sets the current language. Default is 'default'.  
    */
   _defineProperty(Message, "currentLang", _Message.defaultLang);
-  _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) switch (_context4.prev = _context4.next) {
-        case 0:
-          _context4.next = 2;
-          return Message.importMessage(defaultCode, localesPath);
-        case 2:
-        case "end":
-          return _context4.stop();
-      }
-    }, _callee4);
-  }))();
+  Message.importMessage(defaultCode, localesPath);
 
   //==============================================================Á
   // 2. module dependency check
