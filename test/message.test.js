@@ -52,9 +52,24 @@ describe("[target: message.js]", () => {
                 expect(Message.currentLang).toBe('ja')
                 expect(warnSpy.mock.calls[0][0]).toBe("Path './locales/ja' does not have a file.")
             });
+            it("Type 한글 오류 확인", async () => {
+                process.env.LANG = 'ko_US.UTF-8';
+                
+                const {Message, Type} = await import('logic-core');
+                // const {Message, Type} = await import('../dist/logic-core.js');
+                
+                expect(Message.currentLang).toBe('default');
+    
+                await Message.autoDetect()
+                
+                expect(Message.currentLang).toBe('ko');
+                expect(Message.get('KO')).toMatch(/OK/);
+                expect(Message.get('EN')).toMatch(/OK/);
+                expect(() => Type.allowType([[String, Number]], {})).toThrow('타입')
+            });
         });
         describe("Message.getMessageByCode() : 메시지 반환", () => {
-            it("- 오류 코드 메세지 : ES010",async () => {
+            it("- 오류 코드 메세지 : ES010", async () => {
                 const {Message} = await import('../src/message');
                 const code = 'ES010'
                 const value = 'Other errors'

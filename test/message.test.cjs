@@ -21,7 +21,10 @@ describe("[target: logic-core]", () => {
 
         it("CJS 방식으로 JSON 로드", async () => {
             // const {Message} = require("../src/message.js");
-            const {Message} = require("logic-core");
+            // const {Message} = require("logic-core");
+            
+            // const {Message} = await import("../src/message.js");
+            const {Message} = require("../src/message.js");
 
             expect(Message.defaultLang).toBe('default')
             expect(Message.currentLang).toBe('default')
@@ -43,6 +46,7 @@ describe("[target: logic-core]", () => {
             expect(Message.currentLang).toBe('default');
 
             await Message.autoDetect()
+            
             expect(Message.currentLang).toBe('ko');
             expect(() => Type.allowType([[String, Number]], {})).toThrow('타입')
         });

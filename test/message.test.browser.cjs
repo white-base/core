@@ -37,9 +37,11 @@ describe("[target: message.js]", () => {
                 // await import("logic-core");
                 // await import("../dist/logic-core.umd.js");
                 // require("../dist/logic-core.umd.js");
-                const _L = require("../dist/logic-core.umd.js");
                 
-                const {Message} = _L;
+                const {Message} = require("../dist/logic-core.umd.js");
+                
+                // const _L = require("../dist/logic-core.umd.js");
+                // const {Message} = _L;
                 
                 expect(Message.defaultLang).toBe('default')
                 expect(Message.currentLang).toBe('default')
