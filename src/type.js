@@ -360,7 +360,7 @@ function getAllProperties(obj, hasObj) {
         }
     } while (cur = Object.getPrototypeOf(cur))
     return allProps;
-};
+}
 Type.getAllProperties = getAllProperties;
 
 /**
@@ -609,7 +609,7 @@ function typeObject(target) {
         }
     }
     return obj;
-};
+}
 Type.typeObject = typeObject;
 
 /**
@@ -620,7 +620,7 @@ Type.typeObject = typeObject;
  */
 function typeOf(target) {
     return extendType(target)['$type'];
-};
+}
 Type.typeOf = typeOf;
 
 /**
@@ -1085,7 +1085,7 @@ function _execAllow(extType, tarType, opt, pathName) {
             }
         }
     }
-};
+}
 
 /**
  * 타입을 검사하여 메세지를 리턴
@@ -1413,7 +1413,7 @@ function _execMatch(extType, target, opt, pathName) {
             }
         }
     }
-};
+}
 
 /**
  * Verify that the extension type allows the target type.  
@@ -1429,7 +1429,7 @@ function allowType(extType, tarType, opt) {
     } catch (error) {
         throw new ExtendError(/EL0130A/, error);
     }
-};    
+}
 Type.allowType = allowType;
 
 /**
@@ -1446,7 +1446,7 @@ function matchType(extType, target, opt) {
     } catch (error) {
         throw new ExtendError(/EL0130B/, error);
     }
-};
+}
 Type.matchType = matchType;
 
 /**
@@ -1464,7 +1464,7 @@ function isAllowType(extType, target, opt) {
         return false;
     }
     return true;
-};  
+}
 Type.isAllowType = isAllowType;
 
 /**
@@ -1482,7 +1482,7 @@ function isMatchType(extType, target, opt) {
     } catch (error) {
         return false;
     }
-};
+}
 Type.isMatchType = isMatchType;
 
 export default Type;
