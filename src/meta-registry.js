@@ -1,13 +1,10 @@
 /**** meta-registry.js | MetaRegistry ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Util from './util.js';
 import NamespaceManager from './namespace-manager.js';
-
-//==============================================================
-// module implementation       
+       
 var MetaRegistry = (function () {
     /**
      * 'MetaRegistry' is a class responsible for registering and managing meta objects.  
@@ -619,7 +616,5 @@ var MetaRegistry = (function () {
     return MetaRegistry;
 }());
 
-//==============================================================
-// module export
 export default MetaRegistry;
 export { MetaRegistry };
