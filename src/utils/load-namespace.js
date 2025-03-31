@@ -1,6 +1,6 @@
 /**** load-namespace.js loadNamespace ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from '../message.js';
 import ExtendError from '../extend-error.js';
 import Type from '../type';
@@ -20,10 +20,7 @@ import MetaObject from '../meta-object.js';
 import EventEmitter from '../event-emitter.js';
 
 //==============================================================
-// 2. module dependency check
-
-//==============================================================
-// 3. module implementation
+// module implementation
 var loadNamespace = function() {
     MetaRegistry.registerClass(Message, Message._NS, Message.name);
     MetaRegistry.registerClass(ExtendError, ExtendError._NS, ExtendError.name);
@@ -45,6 +42,6 @@ var loadNamespace = function() {
 };
 
 //==============================================================
-// 4. module export
+// module export
 export default loadNamespace;
 export { loadNamespace };
