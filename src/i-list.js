@@ -1,11 +1,8 @@
 /**** i-list.js | IList ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';  
-
-//==============================================================
-// module implementation   
+   
 var IList  = (function () {
     /**
      * List interface.  
@@ -37,7 +34,5 @@ var IList  = (function () {
     
 }());
 
-//==============================================================
-// module export
 export default IList;
 export { IList };
