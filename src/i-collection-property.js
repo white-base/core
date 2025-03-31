@@ -1,13 +1,10 @@
 /**** i-collection-property.js | IPropertyCollection ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Util from './util.js';
 import ICollection from './i-collection.js';
-
-//==============================================================
-// module implementation   
+   
 var IPropertyCollection  = (function (_super) {
     /**
      * This is the property collection interface.  
@@ -38,7 +35,5 @@ var IPropertyCollection  = (function (_super) {
     
 }(ICollection));
 
-//==============================================================
-// module export
 export default IPropertyCollection;
 export { IPropertyCollection };
