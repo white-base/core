@@ -1,6 +1,6 @@
 /**** collection-property.js | PropertyCollection ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from './message.js';
 import ExtendError from './extend-error.js';
 import Type from './type.js';
@@ -11,17 +11,7 @@ import MetaObject from './meta-object.js';
 import BaseCollection from './base-collection.js';
 
 //==============================================================
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-// if (!IPropertyCollection) throw new Error(Message.get('ES011', ['IPropertyCollection', 'i-collection-property']));
-// if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-// if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-// if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
-
-//==============================================================
-// 3. module implementation   
+// module implementation   
 var PropertyCollection  = (function (_super) {
     /**
      * Creates an instance of the class 'PropertyCollection'.  
@@ -526,6 +516,6 @@ var PropertyCollection  = (function (_super) {
 }(BaseCollection));
 
 //==============================================================
-// 4. module export
+// module export
 export default PropertyCollection;
 export { PropertyCollection };
