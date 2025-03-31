@@ -1,6 +1,5 @@
 /**** base-collection.js | BaseCollection ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';
 import Util from './util.js';
@@ -11,8 +10,6 @@ import IList from './i-list.js';
 import MetaRegistry from './meta-registry.js';
 import MetaObject from './meta-object.js';
 
-//==============================================================
-// module implementation
 var BaseCollection  = (function (_super) {
     /**
     * The creator that creates the collection.  
@@ -632,7 +629,5 @@ var BaseCollection  = (function (_super) {
     
 }(MetaObject));
 
-//==============================================================
-// module export
 export default BaseCollection;
 export { BaseCollection };
