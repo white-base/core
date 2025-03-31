@@ -1,11 +1,8 @@
 /**** util-type.js Type ****/
 //==============================================================
-// import module
 import Message from './message.js';
 import ExtendError from './extend-error.js';
-
-//==============================================================
-// module implementation 
+ 
 var _global = globalThis;
 var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
 
@@ -1488,7 +1485,5 @@ function isMatchType(extType, target, opt) {
 };
 Type.isMatchType = isMatchType;
 
-//==============================================================
-// module export
 export default Type;
 export { Type };
