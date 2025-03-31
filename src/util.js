@@ -1,17 +1,12 @@
 /**** util.js | Util ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from './message.js';
 import ExtendError from './extend-error.js';
 import Type from './type.js';
 
 //==============================================================
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-
-//==============================================================
-// 3. module implementation   
+// module implementation   
 var _global = globalThis;
 
 var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활
@@ -250,6 +245,6 @@ Util.implements = function(p_ctor, p_obj) {
 };
 
 //==============================================================
-// 4. module export
+// module export
 export default Util;
 export { Util};
