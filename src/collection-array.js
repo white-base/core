@@ -1,6 +1,5 @@
 /**** collection-array.js | ArrayCollection ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Util from './util.js';
@@ -10,8 +9,6 @@ import MetaRegistry from './meta-registry.js';
 import MetaObject from './meta-object.js';
 import {BaseCollection} from './base-collection.js';
 
-//==============================================================
-// module implementation
 var ArrayCollection  = (function (_super) {
     /**
      * Creates an instance of an ArrayCollection class.  
@@ -397,7 +394,5 @@ var ArrayCollection  = (function (_super) {
 
 }(BaseCollection));
 
-//==============================================================
-// module export
 export default ArrayCollection;
 export {ArrayCollection};
