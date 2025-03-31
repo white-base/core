@@ -1,11 +1,8 @@
 /**** i-serialize.js | ISerialize ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';  
-
-//==============================================================
-// module implementation   
+   
 var ISerialize  = (function () {
     /**
      * Interface for serialization and deserialization.  
@@ -41,7 +38,5 @@ var ISerialize  = (function () {
     
 }());
 
-//==============================================================
-// module export
 export default ISerialize;
 export { ISerialize };
