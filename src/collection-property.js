@@ -1,6 +1,5 @@
 /**** collection-property.js | PropertyCollection ****/
 //==============================================================
-// import module
 import Message from './message.js';
 import ExtendError from './extend-error.js';
 import Type from './type.js';
@@ -10,8 +9,6 @@ import MetaRegistry from './meta-registry.js';
 import MetaObject from './meta-object.js';
 import BaseCollection from './base-collection.js';
 
-//==============================================================
-// module implementation   
 var PropertyCollection  = (function (_super) {
     /**
      * Creates an instance of the class 'PropertyCollection'.  
@@ -515,7 +512,5 @@ var PropertyCollection  = (function (_super) {
 
 }(BaseCollection));
 
-//==============================================================
-// module export
 export default PropertyCollection;
 export { PropertyCollection };
