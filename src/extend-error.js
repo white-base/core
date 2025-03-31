@@ -1,11 +1,6 @@
 /**** extend-error.js | ExtendError ****/
-
 //==============================================================
-// import module
 import Message from './message.js';
-
-//==============================================================
-// module implementation   
 
 // inner function 
 function _buildMessageProp(obj) {
@@ -117,9 +112,5 @@ class ExtendError extends Error {
     }
 }
 
-
-
-//==============================================================
-// module export
 export default ExtendError;
 export { ExtendError };
