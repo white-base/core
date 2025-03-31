@@ -242,4 +242,4 @@ Util.implements = function(p_ctor, p_obj) {
 };
 
 export default Util;
-export { Util};
+export { Util };
