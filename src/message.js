@@ -1,11 +1,11 @@
 /**** message.js | Message ****/
+//==============================================================
+// import module
 import  defaultCode  from './locales/default.json'
 const localesPath = './locales';    // 상대 경로
 
 //==============================================================
-// 2. module dependency check
-//==============================================================
-// 3. module implementation
+// module implementation
 
 // inner function
 function _isObject(obj) {
@@ -244,6 +244,6 @@ class Message {
 Message.importMessage(defaultCode, localesPath);
 
 //==============================================================
-// 4. module export
+// module export
 export default Message;
 export { Message };
