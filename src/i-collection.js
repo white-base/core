@@ -1,11 +1,8 @@
 /**** i-collection.js | ICollection ****/
 //==============================================================
-// import module
 import Message from './message.js';
 import ExtendError from './extend-error.js';
 
-//==============================================================
-// module implementation
 var ICollection  = (function () {
     /**
      * This is the collection interface.
@@ -60,7 +57,5 @@ var ICollection  = (function () {
     
 }());
 
-//==============================================================
-// module export
 export default ICollection;
 export { ICollection };
