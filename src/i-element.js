@@ -1,15 +1,11 @@
 /**** i-element.js | IElement ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';  
 
 //==============================================================
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-//==============================================================
-// 3. module implementation   
+// module implementation   
 var IElement  = (function () {
     /**
      * Element (independent) interface.  
@@ -43,6 +39,6 @@ var IElement  = (function () {
 }());
 
 //==============================================================
-// 4. module export
+// module export
 export default IElement;
 export { IElement };
