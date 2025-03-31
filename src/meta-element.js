@@ -1,6 +1,6 @@
 /**** meta-element.js | MetaElement ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Util from './util.js';
@@ -8,14 +8,7 @@ import IElement from './i-element.js';
 import MetaObject from './meta-object.js';
 
 //==============================================================
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-// if (!IElement) throw new Error(Message.get('ES011', ['IElement', 'i-element']));
-// if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-
-//==============================================================
-// 3. module implementation   
+// module implementation   
 var MetaElement  = (function (_super) {
 
     /**
@@ -117,6 +110,6 @@ var MetaElement  = (function (_super) {
 }(MetaObject));
 
 //==============================================================
-// 4. module export
+// module export
 export default MetaElement;
 export { MetaElement };
