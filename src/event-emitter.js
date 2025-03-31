@@ -1,17 +1,12 @@
 /**** trans-queue.js | EventEmitter ****/
 //==============================================================
-// 1. import module
+// import module
 import ExtendError from './extend-error.js';
 import Util from './util.js';
 import Message from './message.js';
 
-//==============================================================Á
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-
 //==============================================================
-// 3. module implementation  
+// module implementation  
 var EventEmitter = (function () {
     /**
      * Creates an instance of the class 'EventEmitter'.
@@ -185,6 +180,6 @@ var EventEmitter = (function () {
 }());
 
 //==============================================================
-// 4. module export
+// module export
 export default EventEmitter;
 export { EventEmitter };
