@@ -48,8 +48,8 @@ export default {
         displayName: "Browser",
         testEnvironment: "jsdom",
         // transform: {
-        //   "^.+\\.js$": "babel-jest",
-        //   "^.+\\.mjs$": "babel-jest"
+          // "^.+\\.js$": "babel-jest",
+          // "^.+\\.mjs$": "babel-jest"
         // },
         testMatch: ["**/test/*.test.browser.cjs"],
       },

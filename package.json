@@ -41,7 +41,7 @@
     "index.js"
   ],
   "scripts": {
-    "test": "node node_modules/.bin/jest",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest",
     
     "test:c": "jest --coverage",
     "test:u": "jest --updateSnapshot",

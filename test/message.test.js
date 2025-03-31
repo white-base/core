@@ -1,5 +1,6 @@
 //==============================================================
 // gobal defined
+// import { Message } from 'logic-core/ko';
 import {jest} from '@jest/globals';
 const T = true;
 
@@ -55,7 +56,7 @@ describe("[target: message.js]", () => {
             it("Type 한글 오류 확인", async () => {
                 process.env.LANG = 'ko_US.UTF-8';
                 
-                const {Message, Type} = await import('logic-core');
+                const {Message, Type} = await import('logic-core/ko');
                 // const {Message, Type} = await import('../dist/logic-core.js');
                 
                 expect(Message.currentLang).toBe('default');

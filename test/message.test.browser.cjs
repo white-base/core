@@ -36,9 +36,20 @@ describe("[target: message.js]", () => {
                 // const {Message} = logicCore
                 // await import("logic-core");
                 // await import("../dist/logic-core.umd.js");
+                // const Message = await import("../dist/logic-core.umd.js");
+                
+                // const {Message} = require("logic-core");
+                // require("logic-core");
+                const {Message} = await import("logic-core");
+                // const {Message} = await import("../dist/logic-core.umd.js");
+                
+                // await import("../dist/logic-core.umd.js");
+                // const {Message} = _L;
+
+
                 // require("../dist/logic-core.umd.js");
                 
-                const {Message} = require("../dist/logic-core.umd.js");
+                // const {Message} = require("../dist/logic-core.umd.js");
                 
                 // const _L = require("../dist/logic-core.umd.js");
                 // const {Message} = _L;
@@ -68,7 +79,8 @@ describe("[target: message.js]", () => {
                     get: () => ['ko-KR', 'ko'],
                 });
 
-                const _L = require("../dist/logic-core.umd.js");
+                // const _L = require("../dist/logic-core.umd.js");
+                await import("../dist/logic-core.umd.js");
                 const {Message} = _L;
                 // const {Message} = require("../src/message.js");
 
