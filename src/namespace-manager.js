@@ -1,6 +1,5 @@
 /**** namespace-manager.js | NamespaceManager ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Type from './type.js';
@@ -8,9 +7,7 @@ import Util from './util.js';
 import IList from './i-list.js';
 import IListControl from './i-control-list.js';
 import ISerialize from './i-serialize.js';
-
-//==============================================================
-// module implementation   
+   
 var NamespaceManager = (function () {
     /**
      * Create a Namespace Manager.  
@@ -503,7 +500,5 @@ var NamespaceManager = (function () {
     return NamespaceManager;
 }());
 
-//==============================================================
-// module export
 export default NamespaceManager;
 export { NamespaceManager };
