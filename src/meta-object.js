@@ -1,6 +1,5 @@
 /**** meta-object.js | MetaObject ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Type from './type.js';
@@ -8,9 +7,7 @@ import Util from './util.js';
 import IObject from './i-object.js';
 import IMarshal from './i-marshal.js';
 import MetaRegistry from './meta-registry.js';
-
-//==============================================================
-// module implementation   
+   
 var MetaObject  = (function () {
     /**
      * Creates an instance of the MetaObject class.  
@@ -292,7 +289,5 @@ var MetaObject  = (function () {
 
 }());
 
-//==============================================================
-// module export
 export default MetaObject;
 export { MetaObject };
