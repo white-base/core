@@ -1,11 +1,8 @@
 /**** i-marshal.js | IMarshal ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
-
-//==============================================================
-// module implementation   
+   
 var IMarshal  = (function () {
     /**
      * Object control interface.  
@@ -54,7 +51,5 @@ var IMarshal  = (function () {
     
 }());
 
-//==============================================================
-// module export
 export default IMarshal;
 export { IMarshal };
