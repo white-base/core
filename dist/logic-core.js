@@ -1015,11 +1015,6 @@
   var _Message;
   var localesPath = './locales'; // 상대 경로
 
-  //==============================================================
-  // 2. module dependency check
-  //==============================================================
-  // 3. module implementation
-
   // inner function
   function _isObject$2(obj) {
     return obj && _typeof(obj) === 'object' && !Array.isArray(obj);
@@ -1334,11 +1329,6 @@
   _defineProperty(Message, "currentLang", _Message.defaultLang);
   Message.importMessage(defaultCode, localesPath);
 
-  //==============================================================Á
-  // 2. module dependency check
-  //==============================================================
-  // 3. module implementation   
-
   // inner function 
   function _buildMessageProp(obj) {
     var msg = '';
@@ -1444,16 +1434,9 @@
         return 'ExtendError : ' + this.message;
       }
     }]);
-  }(/*#__PURE__*/_wrapNativeSuper(Error)); //==============================================================
-  // 4. module export
+  }(/*#__PURE__*/_wrapNativeSuper(Error));
   _defineProperty(ExtendError, "_NS", 'Common');
 
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-  //==============================================================
-  // 3. module implementation 
   var _global$1 = globalThis;
   var OLD_ENV$1 = _global$1.OLD_ENV ? _global$1.OLD_ENV : false; // 커버리지 테스트 역활
 
@@ -2869,13 +2852,6 @@
   }
   Type.isMatchType = isMatchType;
 
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-
-  //==============================================================
-  // 3. module implementation   
   var _global = globalThis;
   var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false; // 커버리지 테스트 역활
 
@@ -3104,13 +3080,6 @@
     }
   };
 
-  //==============================================================Á
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-
-  //==============================================================
-  // 3. module implementation  
   var EventEmitter = function () {
     /**
      * Creates an instance of the class 'EventEmitter'.
@@ -3276,15 +3245,7 @@
   }();
 
   /**** i-object.js | IObject ****/
-  //==============================================================
-  // 1. import module    
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-  //==============================================================
-  // 3. module implementation   
+  //==============================================================    
   var IObject = function () {
     /**
      * Object interface.  
@@ -3330,14 +3291,6 @@
 
   /**** i-marshal.js | IMarshal ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-  //==============================================================
-  // 3. module implementation   
   var IMarshal = function () {
     /**
      * Object control interface.  
@@ -3386,15 +3339,6 @@
 
   /**** i-collection.js | ICollection ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-
-  //==============================================================
-  // 3. module implementation
   var ICollection = function () {
     /**
      * This is the collection interface.
@@ -3447,16 +3391,6 @@
 
   /**** i-collection-property.js | IPropertyCollection ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
-
-  //==============================================================
-  // 3. module implementation   
   var IPropertyCollection = function (_super) {
     /**
      * This is the property collection interface.  
@@ -3486,14 +3420,6 @@
 
   /**** i-element.js | IElement ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-  //==============================================================
-  // 3. module implementation   
   var IElement = function () {
     /**
      * Element (independent) interface.  
@@ -3525,14 +3451,6 @@
 
   /**** i-list.js | IList ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-  //==============================================================
-  // 3. module implementation   
   var IList = function () {
     /**
      * List interface.  
@@ -3562,14 +3480,6 @@
 
   /**** i-control-list.js | IListControl ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-  //==============================================================
-  // 3. module implementation   
   var IListControl = function () {
     /**
      * List control interface.  
@@ -3622,14 +3532,6 @@
 
   /**** i-serialize.js | ISerialize ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-
-  //==============================================================
-  // 3. module implementation   
   var ISerialize = function () {
     /**
      * Interface for serialization and deserialization.  
@@ -3663,16 +3565,6 @@
 
   /**** i-collection-array.js | IArrayCollection ****/
   //==============================================================
-  // 1. import module
-
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
-
-  //==============================================================
-  // 3. module implementation   
   var IArrayCollection = function (_super) {
     /**
      * Array collection interface.  
@@ -3697,17 +3589,6 @@
     return IArrayCollection;
   }(ICollection);
 
-  //==============================================================Á
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
-  // if (!IListControl) throw new Error(Message.get('ES011', ['IListControl', 'i-control-list']));
-  // if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
-
-  //==============================================================
-  // 3. module implementation   
   var NamespaceManager = function () {
     /**
      * Create a Namespace Manager.  
@@ -4166,14 +4047,6 @@
     return NamespaceManager;
   }();
 
-  //==============================================================Á
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
-
-  //==============================================================
-  // 3. module implementation       
   var MetaRegistry = function () {
     /**
      * 'MetaRegistry' is a class responsible for registering and managing meta objects.  
@@ -4750,17 +4623,6 @@
     return MetaRegistry;
   }();
 
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!IObject) throw new Error(Message.get('ES011', ['IObject', 'i-object']));
-  // if (!IMarshal) throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
-  // if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-
-  //==============================================================
-  // 3. module implementation   
   var MetaObject = function () {
     /**
      * Creates an instance of the MetaObject class.  
@@ -5033,15 +4895,6 @@
     return MetaObject;
   }();
 
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!IElement) throw new Error(Message.get('ES011', ['IElement', 'i-element']));
-  // if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-
-  //==============================================================
-  // 3. module implementation   
   var MetaElement = function (_super) {
     /**
      * Creates an instance of the MetaElement class.  
@@ -5136,19 +4989,6 @@
     return MetaElement;
   }(MetaObject);
 
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!EventEmitter) throw new Error(Message.get('ES011', ['EventEmitter', 'event-emitter']));
-  // if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
-  // if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
-  // if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-  // if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-
-  //==============================================================
-  // 3. module implementation
   var BaseCollection = function (_super) {
     /**
     * The creator that creates the collection.  
@@ -5779,18 +5619,6 @@
     return BaseCollection;
   }(MetaObject);
 
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!IArrayCollection) throw new Error(Message.get('ES011', ['IArrayCollection', 'i-collection-array']));
-  // if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-  // if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-  // if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
-
-  //==============================================================
-  // 3. module implementation
   var ArrayCollection = function (_super) {
     /**
      * Creates an instance of an ArrayCollection class.  
@@ -6149,18 +5977,6 @@
     return ArrayCollection;
   }(BaseCollection);
 
-  //==============================================================
-  // 2. module dependency check
-  // if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-  // if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-  // if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-  // if (!IPropertyCollection) throw new Error(Message.get('ES011', ['IPropertyCollection', 'i-collection-property']));
-  // if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-  // if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-  // if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
-
-  //==============================================================
-  // 3. module implementation   
   var PropertyCollection = function (_super) {
     /**
      * Creates an instance of the class 'PropertyCollection'.  
