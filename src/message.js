@@ -34,7 +34,7 @@ function _deepMerge(target, source) {
 }
 
 async function _loadJSON(filePath) {
-    const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
+    const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && globalThis.isDOM !== true;
     const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
     
     try {

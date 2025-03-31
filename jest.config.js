@@ -37,7 +37,7 @@ export default {
       {
         displayName: "ES Module",
         testEnvironment: "node",
-        testMatch: ["**/test/*.test.js", "**/test/*.test.mjs"],
+        testMatch: ["**/test/*.test.js"],
         // transform: {},
         // transform: {
         //   "^.+\\.js$": "babel-jest",
@@ -47,11 +47,13 @@ export default {
       {
         displayName: "Browser",
         testEnvironment: "jsdom",
+        // transform: {},
+        
         // transform: {
           // "^.+\\.js$": "babel-jest",
           // "^.+\\.mjs$": "babel-jest"
         // },
-        testMatch: ["**/test/*.test.browser.cjs"],
+        testMatch: ["**/test/*.test.browser.js", "**/test/*.test.browser.cjs"],
       },
     ],
 };

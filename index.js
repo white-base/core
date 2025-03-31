@@ -1,27 +1,27 @@
 /// <reference path="./types/ko/index.d.ts" />
 
 // import messageCode from "./src/message-code";
-import Message from "./src/message";
-import ExtendError from "./src/extend-error";
-import Type from "./src/type";
-import Util from "./src/util";
-import EventEmitter from "./src/event-emitter";
-import IObject from "./src/i-object";
-import IMarshal from "./src/i-marshal";
-import ICollection from "./src/i-collection";
-import IPropertyCollection from "./src/i-collection-property";
-import IElement from "./src/i-element";
-import IList from "./src/i-list";
-import IListControl from "./src/i-control-list";
-import ISerialize from "./src/i-serialize";
-import IArrayCollection from "./src/i-collection-array";
-import NamespaceManager from "./src/namespace-manager";
-import MetaRegistry from "./src/meta-registry";
-import MetaObject from "./src/meta-object";
-import MetaElement from "./src/meta-element";
-import {BaseCollection} from "./src/base-collection";
-import ArrayCollection from "./src/collection-array";
-import PropertyCollection from "./src/collection-property";
+import Message from "./src/message.js";
+import ExtendError from "./src/extend-error.js";
+import Type from "./src/type.js";
+import Util from "./src/util.js";
+import EventEmitter from "./src/event-emitter.js";
+import IObject from "./src/i-object.js";
+import IMarshal from "./src/i-marshal.js";
+import ICollection from "./src/i-collection.js";
+import IPropertyCollection from "./src/i-collection-property.js";
+import IElement from "./src/i-element.js";
+import IList from "./src/i-list.js";
+import IListControl from "./src/i-control-list.js";
+import ISerialize from "./src/i-serialize.js";
+import IArrayCollection from "./src/i-collection-array.js";
+import NamespaceManager from "./src/namespace-manager.js";
+import MetaRegistry from "./src/meta-registry.js";
+import MetaObject from "./src/meta-object.js";
+import MetaElement from "./src/meta-element.js";
+import {BaseCollection} from "./src/base-collection.js";
+import ArrayCollection from "./src/collection-array.js";
+import PropertyCollection from "./src/collection-property.js";
 
 export {
     // messageCode,

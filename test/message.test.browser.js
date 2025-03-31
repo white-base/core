@@ -1,10 +1,10 @@
 //==============================================================
 // gobal defined
 // const {Message} = require("../src/message.js");
-const koCode = require("../dist/locales/ko.json");
+// const koCode = require("../dist/locales/ko.json");
 
-// import koCode from "../dist/locales/ko.json";
-// import {jest} from '@jest/globals';
+import koCode from "../dist/locales/ko.json";
+import {jest} from '@jest/globals';
 // import {Message} from 'logic-core';
 // import aaa from '../dist/logic-core.umd.js';
 // import {Message} from '../dist/logic-core.umd';
@@ -29,7 +29,7 @@ describe("[target: message.js]", () => {
         });
         describe("Message.changeLanguage() : 언어 변경", () => {
             it("- 언어 변경", async () => {
-                const {Message} = require("logic-core/ko");
+                // const {Message} = require("logic-core/ko");
                 // const logicCore = require("logic-core");
                 // require("logic-core");
     
@@ -41,7 +41,7 @@ describe("[target: message.js]", () => {
                 
                 // const {Message} = require("logic-core");
                 // require("logic-core");
-                // const {Message} = await import("logic-core");
+                const {Message} = await import("logic-core");
                 // const {Message} = await import("../dist/logic-core.umd.js");
                 
                 // await import("../dist/logic-core.umd.js");
@@ -68,8 +68,6 @@ describe("[target: message.js]", () => {
         });
         describe("Message.autoDetect() : 언어자동 감지", () => {
             it("- 활성화", async () => {
-                // const {Message} = require("logic-core");
-
                 // globalThis.navigator.languages = ['ko-KR', 'ko'];
 
                 // globalThis.navigator = {
@@ -86,8 +84,8 @@ describe("[target: message.js]", () => {
                 // await import("../dist/logic-core.umd.js");
                 // const {Message} = _L;
                 // const {Message} = require("../src/message.js");
+                const {Message} = await import("../dist/logic-core.node.cjs");
 
-                const {Message} = require("../dist/logic-core.browser.cjs");
 
                 await Message.autoDetect();
 

@@ -11,12 +11,12 @@
         "default": "./types/index.d.ts"
       },
       "browser": {
-        "require": "./dist/logic-core.umd.js",
-        "default": "./dist/logic-core.js"
+        "require": "./dist/logic-core.browser.cjs",
+        "default": "./index.js"
       },
       "default": {
-        "require": "./dist/logic-core.cjs",
-        "default": "./dist/logic-core.js"
+        "require": "./dist/logic-core.node.cjs",
+        "default": "./index.js"
       }
     },
     "./ko": {
@@ -25,12 +25,12 @@
         "default": "./types/ko/index.d.ts"
       },
       "browser": {
-        "require": "./dist/logic-core.umd.js",
-        "default": "./dist/logic-core.js"
+        "require": "./dist/logic-core.browser.cjs",
+        "default": "./index.js"
       },
       "default": {
-        "require": "./dist/logic-core.cjs",
-        "default": "./dist/logic-core.js"
+        "require": "./dist/logic-core.node.cjs",
+        "default": "./index.js"
       }
     }
   },
@@ -42,11 +42,10 @@
   ],
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
-    
     "test:c": "jest --coverage",
     "test:u": "jest --updateSnapshot",
     "test:v": "jest --verbose",
-    "http": "npx http-server",
+    "http": "npx serve",
     "docs:en": "typedoc --readme none --out docs/en types/index.d.ts types/T.d.ts",
     "docs:ko": "typedoc --readme none --out docs/ko types/ko/index.d.ts types/ko/T.d.ts",
     "build": "rollup -c --bundleConfigAsCjs",
@@ -72,6 +71,7 @@
     "babel-jest": "^29.7.0",
     "docdash": "github:white-base/docdash",
     "eslint": "^9.21.0",
+    "fs": "^0.0.1-security",
     "gulp": "^5.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^3.1.0",
@@ -90,7 +90,9 @@
     "rollup-plugin-copy": "^3.5.0",
     "stringify-parse": "^1.0.6",
     "telejson": "^7.2.0",
-    "typedoc": "^0.25.12"
+    "typedoc": "^0.25.12",
+    "url": "^0.11.4",
+    "util": "^0.12.5"
   },
   "publishConfig": {
     "access": "public"

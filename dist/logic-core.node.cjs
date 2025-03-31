@@ -593,7 +593,7 @@ function _deepMerge(target, source) {
 }
 
 async function _loadJSON(filePath) {
-    const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && typeof navigator === 'undefined';
+    const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && globalThis.isDOM !== true;
     const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
     
     try {
@@ -717,6 +717,7 @@ class Message {
      */
     static async changeLanguage (p_lang) {
         this.currentLang = p_lang;
+        if (p_lang === 'default') return;
         for (var i = 0; i < this.$storage.path.length; i++) {
             var localPath = this.$storage.path[i];
             var msg = await _loadJSON(`${localPath}/${p_lang}.json`);
@@ -924,7 +925,7 @@ class ExtendError extends Error {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 
 //==============================================================
 // 3. module implementation 
@@ -2402,8 +2403,8 @@ function isMatchType(extType, target, opt) {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
 
 //==============================================================
 // 3. module implementation   
@@ -2650,8 +2651,8 @@ Util.implements = function(p_ctor, p_obj) {
 
 //==============================================================Á
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
 
 //==============================================================
 // 3. module implementation  
@@ -2833,7 +2834,7 @@ var EventEmitter = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 
 //==============================================================
 // 3. module implementation   
@@ -2890,7 +2891,7 @@ var IObject  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 
 //==============================================================
 // 3. module implementation   
@@ -2948,7 +2949,7 @@ var IMarshal  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 // if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
 
 //==============================================================
@@ -3013,9 +3014,9 @@ var ICollection  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
 
 //==============================================================
 // 3. module implementation   
@@ -3055,7 +3056,7 @@ var IPropertyCollection  = (function (_super) {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 
 //==============================================================
 // 3. module implementation   
@@ -3097,7 +3098,7 @@ var IElement  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 
 //==============================================================
 // 3. module implementation   
@@ -3138,7 +3139,7 @@ var IList  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 
 //==============================================================
 // 3. module implementation   
@@ -3202,7 +3203,7 @@ var IListControl  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
 
 //==============================================================
 // 3. module implementation   
@@ -3247,9 +3248,9 @@ var ISerialize  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
 
 //==============================================================
 // 3. module implementation   
@@ -3286,12 +3287,12 @@ var IArrayCollection  = (function (_super) {
 
 //==============================================================Á
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
-if (!IListControl) throw new Error(Message.get('ES011', ['IListControl', 'i-control-list']));
-if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
+// if (!IListControl) throw new Error(Message.get('ES011', ['IListControl', 'i-control-list']));
+// if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
 
 //==============================================================
 // 3. module implementation   
@@ -3793,9 +3794,9 @@ var NamespaceManager = (function () {
 
 //==============================================================Á
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!NamespaceManager) throw new Error(Message.get('ES011', ['NamespaceManager', 'namespace-manager']));
 
 //==============================================================
 // 3. module implementation       
@@ -4414,12 +4415,12 @@ var MetaRegistry = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IObject) throw new Error(Message.get('ES011', ['IObject', 'i-object']));
-if (!IMarshal) throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
-if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IObject) throw new Error(Message.get('ES011', ['IObject', 'i-object']));
+// if (!IMarshal) throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
+// if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
 
 //==============================================================
 // 3. module implementation   
@@ -4710,10 +4711,10 @@ var MetaObject  = (function () {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IElement) throw new Error(Message.get('ES011', ['IElement', 'i-element']));
-if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IElement) throw new Error(Message.get('ES011', ['IElement', 'i-element']));
+// if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
 //==============================================================
 // 3. module implementation   
@@ -4823,14 +4824,14 @@ var MetaElement  = (function (_super) {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!EventEmitter) throw new Error(Message.get('ES011', ['EventEmitter', 'event-emitter']));
-if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
-if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
-if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!EventEmitter) throw new Error(Message.get('ES011', ['EventEmitter', 'event-emitter']));
+// if (!ICollection) throw new Error(Message.get('ES011', ['ICollection', 'i-collection']));
+// if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
+// if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+// if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
 
 //==============================================================
 // 3. module implementation
@@ -5459,13 +5460,13 @@ var BaseCollection  = (function (_super) {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IArrayCollection) throw new Error(Message.get('ES011', ['IArrayCollection', 'i-collection-array']));
-if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IArrayCollection) throw new Error(Message.get('ES011', ['IArrayCollection', 'i-collection-array']));
+// if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+// if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+// if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
 
 //==============================================================
 // 3. module implementation
@@ -5860,13 +5861,13 @@ var ArrayCollection  = (function (_super) {
 
 //==============================================================
 // 2. module dependency check
-if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-if (!IPropertyCollection) throw new Error(Message.get('ES011', ['IPropertyCollection', 'i-collection-property']));
-if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
-if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
+// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
+// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
+// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
+// if (!IPropertyCollection) throw new Error(Message.get('ES011', ['IPropertyCollection', 'i-collection-property']));
+// if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
+// if (!MetaObject) throw new Error(Message.get('ES011', ['MetaObject', 'meta-object']));
+// if (!BaseCollection) throw new Error(Message.get('ES011', ['BaseCollection', 'base-collection']));
 
 //==============================================================
 // 3. module implementation   
@@ -6394,3 +6395,4 @@ exports.NamespaceManager = NamespaceManager;
 exports.PropertyCollection = PropertyCollection;
 exports.Type = Type;
 exports.Util = Util;
+//# sourceMappingURL=logic-core.node.cjs.map

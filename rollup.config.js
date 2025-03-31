@@ -64,45 +64,29 @@ export default async () => {
   const banner = `/*! logic Core v${lib.version} Copyright (c) ${year} ${lib.author} and contributors */`;
 
   return [
-    // browser ESM bundle for CDN
-    ...buildConfig({
-      input: namedInput,
-      minifiedVersion: false,
-      output: {
-        file: `dist/${outputFileName}.js`,
-        format: "esm",
-        preferConst: true,
-        // sourcemap: true,
-        exports: "named",
-        banner
-      }
-    }),
-    // browser ESM bundle for CDN with fetch adapter only
-    // Downsizing from 12.97 kB (gzip) to 12.23 kB (gzip)
-/*    ...buildConfig({
-      input: namedInput,
-      output: {
-        file: `dist/esm/${outputFileName}-fetch.js`,
-        format: "esm",
-        preferConst: true,
-        exports: "named",
-        banner
-      },
-      alias: [
-        { find: './xhr.js', replacement: '../helpers/null.js' }
-      ]
-    }),*/
-
     // Browser UMD bundle for CDN
     ...buildConfig({
       input: defaultInput,
       es5: true,
-      minifiedVersion: false,
+      minifiedVersion: true,
       output: {
-        file: `dist/${outputFileName}.umd.js`,
+        file: `dist/${outputFileName}.js`,
         name,
         format: "umd",
-        // sourcemap: true,
+        sourcemap: true,
+        exports: "named",
+        banner
+      }
+    }),
+    // browser ESM bundle for CDN
+    ...buildConfig({
+      input: namedInput,
+      minifiedVersion: true,
+      output: {
+        file: `dist/${outputFileName}.esm.js`,
+        format: "esm",
+        // preferConst: true,
+        sourcemap: true,
         exports: "named",
         banner
       }
@@ -122,15 +106,30 @@ export default async () => {
     //   }
     // }),
 
+    // Browser CJS bundle
+    ...buildConfig({
+      input: defaultInput,
+      es5: false,
+      minifiedVersion: false,
+      output: {
+        file: `dist/${outputFileName}.browser.cjs`,
+        name,
+        sourcemap: true,
+        format: "cjs",
+        exports: "named",
+        banner
+      }
+    }),
+
     // Node.js commonjs bundle
     {
       input: defaultInput,
       output: [
         {
-          file: `dist/${outputFileName}.cjs`,
+          file: `dist/${outputFileName}.node.cjs`,
           format: "cjs",
-          // sourcemap: true,
-          preferConst: true,
+          sourcemap: true,
+          // preferConst: true,
           exports: "named",
           banner
         },
@@ -154,6 +153,7 @@ export default async () => {
         })
       ]
     },
+    
     // // test 1
     // {
     //   input: 'src/message2.js',
