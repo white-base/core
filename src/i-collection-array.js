@@ -1,13 +1,10 @@
 /**** i-collection-array.js | IArrayCollection ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';   
 import Util from './util.js'; 
 import ICollection from './i-collection.js';
-
-//==============================================================
-// module implementation   
+   
 var IArrayCollection  = (function (_super) {
     /**
      * Array collection interface.  
@@ -35,7 +32,5 @@ var IArrayCollection  = (function (_super) {
     
 }(ICollection));
 
-//==============================================================
-// module export
 export default IArrayCollection;
 export { IArrayCollection };
