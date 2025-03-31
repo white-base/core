@@ -1,16 +1,11 @@
 /**** i-collection.js | ICollection ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from './message.js';
 import ExtendError from './extend-error.js';
 
 //==============================================================
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-// if (typeof Util === 'undefined') throw new Error(Message.get('ES011', ['Util', 'util']));
-
-//==============================================================
-// 3. module implementation
+// module implementation
 var ICollection  = (function () {
     /**
      * This is the collection interface.
@@ -66,6 +61,6 @@ var ICollection  = (function () {
 }());
 
 //==============================================================
-// 4. module export
+// module export
 export default ICollection;
 export { ICollection };
