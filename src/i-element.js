@@ -1,11 +1,8 @@
 /**** i-element.js | IElement ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';  
-
-//==============================================================
-// module implementation   
+   
 var IElement  = (function () {
     /**
      * Element (independent) interface.  
@@ -38,7 +35,5 @@ var IElement  = (function () {
     
 }());
 
-//==============================================================
-// module export
 export default IElement;
 export { IElement };
