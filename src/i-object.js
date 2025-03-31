@@ -1,11 +1,8 @@
 /**** i-object.js | IObject ****/
-//==============================================================
-// import module    
+//==============================================================    
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
-
-//==============================================================
-// module implementation   
+   
 var IObject  = (function () {
     /**
      * Object interface.  
@@ -53,7 +50,5 @@ var IObject  = (function () {
     
 }());
 
-//==============================================================
-// module export
 export default IObject;
 export { IObject };
