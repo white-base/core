@@ -1,6 +1,6 @@
 /**** namespace-manager.js | NamespaceManager ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Type from './type.js';
@@ -9,17 +9,8 @@ import IList from './i-list.js';
 import IListControl from './i-control-list.js';
 import ISerialize from './i-serialize.js';
 
-//==============================================================Á
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-// if (!IList) throw new Error(Message.get('ES011', ['IList', 'i-list']));
-// if (!IListControl) throw new Error(Message.get('ES011', ['IListControl', 'i-control-list']));
-// if (!ISerialize) throw new Error(Message.get('ES011', ['ISerialize', 'i-serialize']));
-
 //==============================================================
-// 3. module implementation   
+// module implementation   
 var NamespaceManager = (function () {
     /**
      * Create a Namespace Manager.  
@@ -513,6 +504,6 @@ var NamespaceManager = (function () {
 }());
 
 //==============================================================
-// 4. module export
+// module export
 export default NamespaceManager;
 export { NamespaceManager };
