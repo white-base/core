@@ -1,11 +1,8 @@
 /**** i-control-list.js | IListControl ****/
 //==============================================================
-// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';  
-
-//==============================================================
-// module implementation   
+   
 var IListControl  = (function () {
     /**
      * List control interface.  
@@ -60,7 +57,5 @@ var IListControl  = (function () {
     
 }());
 
-//==============================================================
-// module export
 export default IListControl;
 export { IListControl };
