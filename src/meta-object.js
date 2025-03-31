@@ -1,6 +1,6 @@
 /**** meta-object.js | MetaObject ****/
 //==============================================================
-// 1. import module
+// import module
 import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Type from './type.js';
@@ -10,16 +10,7 @@ import IMarshal from './i-marshal.js';
 import MetaRegistry from './meta-registry.js';
 
 //==============================================================
-// 2. module dependency check
-// if (!ExtendError) throw new Error(Message.get('ES011', ['ExtendError', 'extend-error']));
-// if (!Type) throw new Error(Message.get('ES011', ['Type', 'type']));
-// if (!Util) throw new Error(Message.get('ES011', ['Util', 'util']));
-// if (!IObject) throw new Error(Message.get('ES011', ['IObject', 'i-object']));
-// if (!IMarshal) throw new Error(Message.get('ES011', ['IMarshal', 'i-marshal']));
-// if (!MetaRegistry) throw new Error(Message.get('ES011', ['MetaRegistry', 'meta-registry']));
-
-//==============================================================
-// 3. module implementation   
+// module implementation   
 var MetaObject  = (function () {
     /**
      * Creates an instance of the MetaObject class.  
@@ -302,6 +293,6 @@ var MetaObject  = (function () {
 }());
 
 //==============================================================
-// 4. module export
+// module export
 export default MetaObject;
 export { MetaObject };
