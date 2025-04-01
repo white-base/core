@@ -14,6 +14,7 @@ const outputFileName = 'logic-core';
 const name = "_L";
 const namedInput = './index.js';
 const defaultInput = './index.js';
+const srcMap = false;
 
 const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...config}) => {
   const {file} = config.output;
@@ -73,7 +74,7 @@ export default async () => {
         file: `dist/${outputFileName}.js`,
         name,
         format: "umd",
-        sourcemap: true,
+        sourcemap: srcMap,
         exports: "named",
         banner
       }
@@ -86,7 +87,7 @@ export default async () => {
         file: `dist/${outputFileName}.esm.js`,
         format: "esm",
         // preferConst: true,
-        sourcemap: true,
+        sourcemap: srcMap,
         exports: "named",
         banner
       }
@@ -114,7 +115,7 @@ export default async () => {
       output: {
         file: `dist/${outputFileName}.browser.cjs`,
         name,
-        sourcemap: true,
+        sourcemap: srcMap,
         format: "cjs",
         exports: "named",
         banner
@@ -128,7 +129,7 @@ export default async () => {
         {
           file: `dist/${outputFileName}.node.cjs`,
           format: "cjs",
-          sourcemap: true,
+          sourcemap: srcMap,
           // preferConst: true,
           exports: "named",
           banner
@@ -142,7 +143,7 @@ export default async () => {
         // }
       ],
       plugins: [
-        autoExternal(),
+        // autoExternal(),
         resolve(),
         commonjs(),
         json(),

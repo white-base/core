@@ -1,6 +1,8 @@
 /**** message.js | Message ****/
 //==============================================================
 import  defaultCode  from './locales/default.json'
+// import {osLocale} from 'os-locale';
+
 const localesPath = './locales';    // 상대 경로
 
 // inner function
@@ -213,7 +215,9 @@ class Message {
      * Set the current language by automatically detecting the language.  
      */
     static async autoDetect () {
-        let locale = _getLocale();
+        let locale = _getLocale();  // internal function
+        // let locale = await osLocale(); // external function
+        // locale = locale.split(/[_-]/)[0];
 
         if (locale === 'en') locale = 'default';
         await Message.changeLanguage(locale);

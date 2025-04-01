@@ -1013,6 +1013,8 @@
   };
 
   var _Message;
+  // import {osLocale} from 'os-locale';
+
   var localesPath = './locales'; // 상대 경로
 
   // inner function
@@ -1271,7 +1273,9 @@
           return _regeneratorRuntime().wrap(function _callee2$(_context2) {
             while (1) switch (_context2.prev = _context2.next) {
               case 0:
-                locale = _getLocale();
+                locale = _getLocale(); // internal function
+                // let locale = await osLocale(); // external function
+                // locale = locale.split(/[_-]/)[0];
                 if (locale === 'en') locale = 'default';
                 _context2.next = 4;
                 return Message.changeLanguage(locale);
@@ -6479,4 +6483,3 @@
   exports.Util = Util;
 
 }));
-//# sourceMappingURL=logic-core.js.map

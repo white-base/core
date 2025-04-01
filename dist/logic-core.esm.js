@@ -558,6 +558,8 @@ var defaultCode = {
 
 /**** message.js | Message ****/
 //==============================================================
+// import {osLocale} from 'os-locale';
+
 const localesPath = './locales';    // 상대 경로
 
 // inner function
@@ -769,7 +771,9 @@ class Message {
      * Set the current language by automatically detecting the language.  
      */
     static async autoDetect () {
-        let locale = _getLocale();
+        let locale = _getLocale();  // internal function
+        // let locale = await osLocale(); // external function
+        // locale = locale.split(/[_-]/)[0];
 
         if (locale === 'en') locale = 'default';
         await Message.changeLanguage(locale);
@@ -6199,4 +6203,3 @@ var PropertyCollection  = (function (_super) {
 }(BaseCollection));
 
 export { ArrayCollection, BaseCollection, EventEmitter, ExtendError, IArrayCollection, ICollection, IElement, IList, IListControl, IMarshal, IObject, IPropertyCollection, ISerialize, Message, MetaElement, MetaObject, MetaRegistry, NamespaceManager, PropertyCollection, Type, Util };
-//# sourceMappingURL=logic-core.esm.js.map

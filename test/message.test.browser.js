@@ -84,7 +84,7 @@ describe("[target: message.js]", () => {
                 // await import("../dist/logic-core.umd.js");
                 // const {Message} = _L;
                 // const {Message} = require("../src/message.js");
-                const {Message} = await import("../dist/logic-core.node.cjs");
+                const {Message} = await import("../index.js");
 
 
                 await Message.autoDetect();
