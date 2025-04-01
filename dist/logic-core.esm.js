@@ -1,4 +1,4 @@
-/*! logic Core v1.0.5 Copyright (c) 2025 logic and contributors */
+/*! Logic Core v1.0.5 Copyright (c) 2025 logic and contributors */
 var ES010 = "Other errors";
 var ES011 = "Failed to get module ['$1']";
 var ES012 = "Failed to get function ['$1'()";
@@ -1266,7 +1266,8 @@ function getAllProperties(obj, hasObj) {
         }
     } while (cur = Object.getPrototypeOf(cur))
     return allProps;
-}Type.getAllProperties = getAllProperties;
+}
+Type.getAllProperties = getAllProperties;
 
 /**
  * Compare the two objects to see if they are the same (except Prototype)  
@@ -1514,7 +1515,8 @@ function typeObject(target) {
         }
     }
     return obj;
-}Type.typeObject = typeObject;
+}
+Type.typeObject = typeObject;
 
 /**
  * Returns the extension type name of the target object.  
@@ -1524,7 +1526,8 @@ function typeObject(target) {
  */
 function typeOf(target) {
     return extendType(target)['$type'];
-}Type.typeOf = typeOf;
+}
+Type.typeOf = typeOf;
 
 /**
  * Returns the extension type of the target object.  
@@ -1989,6 +1992,7 @@ function _execAllow(extType, tarType, opt, pathName) {
         }
     }
 }
+
 /**
  * 타입을 검사하여 메세지를 리턴
  * @param {any} extType 검사할 타입 , extType 
@@ -2313,6 +2317,7 @@ function _execMatch(extType, target, opt, pathName) {
         }
     }
 }
+
 /**
  * Verify that the extension type allows the target type.  
  * 
@@ -2327,7 +2332,8 @@ function allowType(extType, tarType, opt) {
     } catch (error) {
         throw new ExtendError(/EL0130A/, error);
     }
-}Type.allowType = allowType;
+}
+Type.allowType = allowType;
 
 /**
  * Verify that the extension type matches the target.  
@@ -2343,7 +2349,8 @@ function matchType(extType, target, opt) {
     } catch (error) {
         throw new ExtendError(/EL0130B/, error);
     }
-}Type.matchType = matchType;
+}
+Type.matchType = matchType;
 
 /**
  * Determine whether the extension type allows the target type.  
@@ -2360,7 +2367,8 @@ function isAllowType(extType, target, opt) {
         return false;
     }
     return true;
-}Type.isAllowType = isAllowType;
+}
+Type.isAllowType = isAllowType;
 
 /**
  * Verify that the extension type matches the target.  
@@ -2377,7 +2385,8 @@ function isMatchType(extType, target, opt) {
     } catch (error) {
         return false;
     }
-}Type.isMatchType = isMatchType;
+}
+Type.isMatchType = isMatchType;
 
 /**** util.js | Util ****/
 //==============================================================

@@ -61,7 +61,7 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
 
 export default async () => {
   const year = new Date().getFullYear();
-  const banner = `/*! logic Core v${lib.version} Copyright (c) ${year} ${lib.author} and contributors */`;
+  const banner = `/*! Logic Core v${lib.version} Copyright (c) ${year} ${lib.author} and contributors */`;
 
   return [
     // Browser UMD bundle for CDN

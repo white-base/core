@@ -1,4 +1,4 @@
-/*! logic Core v1.0.5 Copyright (c) 2025 logic and contributors */
+/*! Logic Core v1.0.5 Copyright (c) 2025 logic and contributors */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
