@@ -1,6 +1,6 @@
 /**** i-collection-property.js | IPropertyCollection ****/
 //==============================================================
-import Message from './message.js';    
+// import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Util from './util.js';
 import ICollection from './i-collection.js';

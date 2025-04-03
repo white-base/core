@@ -1,6 +1,5 @@
 /// <reference path="./types/ko/index.d.ts" />
 
-// import messageCode from "./src/message-code";
 import Message from "./src/message.js";
 import ExtendError from "./src/extend-error.js";
 import Type from "./src/type.js";

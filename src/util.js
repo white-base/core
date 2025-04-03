@@ -1,6 +1,6 @@
 /**** util.js | Util ****/
 //==============================================================
-import Message from './message.js';
+// import Message from './message.js';
 import ExtendError from './extend-error.js';
 import Type from './type.js';
    
@@ -16,7 +16,7 @@ var Util = {};
 
 // local function
 function _isObject(obj) {
-    return obj != null && typeof obj === 'object';
+    return obj !== null && typeof obj === 'object';
 }
 
 // polyfill
@@ -109,7 +109,7 @@ Util.deepCopy = function deepCopy(p_target) {
         }
     }
     return nobj;
-}    
+};
 
 /**
  * Sets the specified creator to inherit the parent creator.   
@@ -144,7 +144,7 @@ Util.inherits = (function () {
                 ctor.prototype = new TempCtor();
                 ctor.prototype.constructor = ctor;
             }
-        }
+        };
     }
 }());
 
@@ -207,8 +207,7 @@ Util.implements = function(p_ctor, p_obj) {
     }
 
     if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
-        Object.defineProperty(p_obj, 'isImplementOf',
-        {
+        Object.defineProperty(p_obj, 'isImplementOf', {
             value: $isImplementOf,
             configurable: false,
             enumerable: false

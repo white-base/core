@@ -1,6 +1,6 @@
 /**** i-marshal.js | IMarshal ****/
 //==============================================================
-import Message from './message.js';    
+// import Message from './message.js';    
 import ExtendError from './extend-error.js';    
    
 var IMarshal  = (function () {
@@ -23,7 +23,7 @@ var IMarshal  = (function () {
          * 
          * @member {string} IMarshal#_type REVIEW:
          */
-        this._type = [['_req_', Function, {$type: 'class'} ]];
+        this._type = [['_req_', Function, { $type: 'class' } ]];
     }
 
     IMarshal._NS = 'Interface';    // namespace

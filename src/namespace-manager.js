@@ -1,12 +1,12 @@
 /**** namespace-manager.js | NamespaceManager ****/
 //==============================================================
-import Message from './message.js';    
+// import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Type from './type.js';
 import Util from './util.js';
 import IList from './i-list.js';
 import IListControl from './i-control-list.js';
-import ISerialize from './i-serialize.js';
+// import ISerialize from './i-serialize.js';
    
 var NamespaceManager = (function () {
     /**
@@ -28,8 +28,7 @@ var NamespaceManager = (function () {
          * @readonly
          * @private
          */
-        Object.defineProperty(this, '$storage',
-        {
+        Object.defineProperty(this, '$storage', {
             get: function() { return $storage; },
             set: function(nVal) { $storage = nVal; },
             configurable: false,
@@ -43,8 +42,7 @@ var NamespaceManager = (function () {
          * @member {array<any>}  NamespaceManager#_elemTypes  
          * @protected
          */
-        Object.defineProperty(this, '_elemTypes', 
-        {
+        Object.defineProperty(this, '_elemTypes', {
             get: function() {
                 return _elemTypes;
             },
@@ -62,8 +60,7 @@ var NamespaceManager = (function () {
          * @member {array<string>}  NamespaceManager#_list
          * @readonly
          */
-        Object.defineProperty(this, '_list', 
-        {
+        Object.defineProperty(this, '_list', {
             get: function() {
                 var storage = this.$storage;
                 var arr = [];
@@ -94,8 +91,7 @@ var NamespaceManager = (function () {
          * @member {number} NamespaceManager#count 
          * @readonly
          */
-        Object.defineProperty(this, 'count', 
-        {
+        Object.defineProperty(this, 'count', {
             get: function() {
                 return this._list.length;
             },
@@ -109,8 +105,7 @@ var NamespaceManager = (function () {
          * 
          * @member {boolean} NamespaceManager#allowOverlap
          */
-        Object.defineProperty(this, 'allowOverlap',
-        {
+        Object.defineProperty(this, 'allowOverlap', {
             get: function() { return allowOverlap; },
             set: function(val) { 
                 if (typeof val !== 'boolean') throw new ExtendError(/EL03311/, null, [typeof val]);
@@ -140,12 +135,12 @@ var NamespaceManager = (function () {
 
     function _validNamespace(nsName) {  // 네임스페이스 이름 검사
         var regex = /^[_a-zA-Z]([.]?[_0-9a-zA-Z])*$/;
-        return regex.test(nsName)
+        return regex.test(nsName);
     }
 
     function _validName(sName) {   // 이름 검사
         var regex = /^[_a-zA-Z]([_0-9a-zA-Z])*$/;
-        return regex.test(sName)
+        return regex.test(sName);
     }
 
     function _getArray(ns) {  // 네임스페이스 문자열 배열로 얻기
@@ -193,7 +188,7 @@ var NamespaceManager = (function () {
         if (_isString(p_elem)) fullName = p_elem;
         else fullName = this.getPath(p_elem);
         
-        if (typeof fullName !== 'string') return;
+        if (typeof fullName !== 'string') return undefined;
 
         arr = fullName.split('.');
         key = arr.pop();
@@ -281,8 +276,9 @@ var NamespaceManager = (function () {
                 if (parent[sName] && parent[sName]['_type'] === 'ns') {
                     if (i === sections.length - 1) return parent[sName];    
                     parent = parent[sName];
-                } else return;
+                } else return undefined;
             }
+            return undefined;
             
         } catch (error) {
             throw new ExtendError(/EL03323/, error, []);
@@ -353,6 +349,7 @@ var NamespaceManager = (function () {
                     } else parent = parent[sName];
                 } else return false;
             }
+            return false;
             
         } catch (error) {
             throw new ExtendError(/EL03334/, error, []);
@@ -389,11 +386,12 @@ var NamespaceManager = (function () {
                 if (parent[sName]) {
                     if (i === sections.length - 1) return parent[sName];
                     else parent = parent[sName];
-                } else return;
+                } else return undefined;
             }
+            return undefined;
             
         } catch (error) {
-            return;              
+            return undefined;              
         }
     };
     
@@ -411,7 +409,7 @@ var NamespaceManager = (function () {
 
         if ($findElement(namespace)) {
             return stack.join('.');
-        } else return;
+        } else return undefined;
 
         // inner function
         function $findElement(target) { 
@@ -445,7 +443,7 @@ var NamespaceManager = (function () {
         var arr = [];
         var obj;
         var str;
-        var temp = {list: arr};
+        var temp = { list: arr };
 
         try {
             for (var i = 0; i < this._list.length; i++) {
@@ -461,7 +459,7 @@ var NamespaceManager = (function () {
                 arr.push(obj);
             }
 
-            if (typeof p_stringify === 'function') str = p_stringify(temp, {space: p_space} );
+            if (typeof p_stringify === 'function') str = p_stringify(temp, { space: p_space } );
             else str = JSON.stringify(temp, null, p_space);
             return str;
             

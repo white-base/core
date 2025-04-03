@@ -14,7 +14,7 @@ const outputFileName = 'logic-core';
 const name = "_L";
 const namedInput = './index.js';
 const defaultInput = './index.js';
-const srcMap = false;
+const srcMap = true;
 
 const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...config}) => {
   const {file} = config.output;
@@ -92,21 +92,6 @@ export default async () => {
         banner
       }
     }),
-
-    // Browser CJS bundle
-    // ...buildConfig({
-    //   input: defaultInput,
-    //   es5: false,
-    //   minifiedVersion: false,
-    //   output: {
-    //     file: `dist/browser/${outputFileName}.cjs`,
-    //     name,
-    //     format: "cjs",
-    //     exports: "named",
-    //     banner
-    //   }
-    // }),
-
     // Browser CJS bundle
     ...buildConfig({
       input: defaultInput,
@@ -121,7 +106,6 @@ export default async () => {
         banner
       }
     }),
-
     // Node.js commonjs bundle
     {
       input: defaultInput,
@@ -134,13 +118,6 @@ export default async () => {
           exports: "named",
           banner
         },
-        // {
-        //   file: `dist/${outputFileName}.min.cjs`,
-        //   format: "cjs",
-        //   preferConst: true,
-        //   exports: "named",
-        //   plugins: [terser()], // 압축된 파일
-        // }
       ],
       plugins: [
         // autoExternal(),
@@ -154,78 +131,5 @@ export default async () => {
         })
       ]
     },
-    
-    // // test 1
-    // {
-    //   input: 'src/message2.js',
-    //   output: [
-    //     {
-    //       file: `dist/message2.cjs`,
-    //       format: "cjs",
-    //       // sourcemap: true,
-    //       preferConst: true,
-    //       exports: "named",
-    //       banner
-    //     },
-    //     {
-    //       file: `dist/message2.umd.js`,
-    //       format: "umd",
-    //       // sourcemap: true,
-    //       name: "MyLibrary", 
-    //       preferConst: true,
-    //       exports: "named",
-    //       banner
-    //     }
-    //   ],
-    //   plugins: [
-    //     autoExternal(),
-    //     resolve(),
-    //     commonjs(),
-    //     json()
-    //   ]
-    // },
-    // // test 2
-    // {
-    //   input: 'src/message3.js',
-    //   output: [
-    //     {
-    //       file: `dist/message3.cjs`,
-    //       format: "cjs",
-    //       preferConst: true,
-    //       exports: "named",
-    //       banner
-    //     }
-    //   ],
-    //   plugins: [
-    //     autoExternal(),
-    //     resolve(),
-    //     json({
-    //       namedExports: true, // JSON을 ES6 모듈처럼 변환
-    //       preferConst: true
-    //     }),
-    //     commonjs(),
-    //     babel({
-    //       babelHelpers: 'bundled',
-    //       presets: [
-    //         ["@babel/preset-env", {
-    //           "targets": {
-    //             "ie": "11"  // IE 11 및 ES5 지원
-    //           },
-    //           "useBuiltIns": "entry",
-    //           "corejs": 3
-    //         }]
-    //       ],
-    //       exclude: 'node_modules/**'
-    //     }),
-    //   ]
-    // }
   ]
 };
-// export default {
-//     input: ['index.esm.js'],      // 번들링 시작 파일 (엔트리 포인트)
-//     output: [
-//         { file: 'dist/bundle.esm.js', format: 'esm' },
-//         { file: 'dist/bundle.cjs.js', format: 'cjs' },
-//         { file: 'dist/bundle.umd.js', format: 'umd', name: '_L'}
-//       ],
-//   };

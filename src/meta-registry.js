@@ -1,6 +1,6 @@
 /**** meta-registry.js | MetaRegistry ****/
 //==============================================================
-import Message from './message.js';    
+// import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Util from './util.js';
 import NamespaceManager from './namespace-manager.js';
@@ -27,8 +27,7 @@ var MetaRegistry = (function () {
      * @member {any[]} MetaRegistry#_list
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, '_list', 
-    {
+    Object.defineProperty(MetaRegistry, '_list', {
         get: function() { 
             var arr = [];
             for (var i = 0; i < _list.length; i++) arr.push(_list[i]);
@@ -44,8 +43,7 @@ var MetaRegistry = (function () {
      * @member {number} MetaRegistry#count
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, 'count', 
-    {
+    Object.defineProperty(MetaRegistry, 'count', {
         get: function() { return _list.length; },
         configurable: false,
         enumerable: true,
@@ -57,8 +55,7 @@ var MetaRegistry = (function () {
      * @member {NamespaceManager} MetaRegistry#namespace
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, 'namespace', 
-    {
+    Object.defineProperty(MetaRegistry, 'namespace', {
         get: function() { return namespace; },
         configurable: false,
         enumerable: true,
@@ -185,11 +182,12 @@ var MetaRegistry = (function () {
     MetaRegistry.find = function(p_oGuid) {
         var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
         
-        if (!_isString(guid)) return;
+        if (!_isString(guid)) return undefined;
         
         for(var i = 0; i < _list.length; i++) {
             if (_list[i]['_guid'] === guid) return _list[i];
         }
+        return undefined;
     };
 
     /**
@@ -331,6 +329,7 @@ var MetaRegistry = (function () {
             for(var i = 0; i < arr.length; i++) {
                 if (arr[i]['_guid'] === guid) return arr[i];
             }
+            return undefined;
         }
         function $validReference(oGuid) { // 참조 검사
             if (oGuid['$ref'] && !$findGuid(oGuid['$ref'], arrObj)) return false;
@@ -339,7 +338,7 @@ var MetaRegistry = (function () {
     
             if (Array.isArray(oGuid)){
                 for(var i = 0; i < oGuid.length; i++) {
-                    if (_isObject(oGuid[i]) && !$validReference(oGuid[i])) return false
+                    if (_isObject(oGuid[i]) && !$validReference(oGuid[i])) return false;
                 }
             } else {
                 for(var prop in oGuid) {
@@ -434,7 +433,7 @@ var MetaRegistry = (function () {
                 if (oGuid['$ref'] && _isString(oGuid['$ref'])) return true;
                 if (oGuid['$ns'] && _isString(oGuid['$ns'])) return true;
                 for(var prop in oGuid) {
-                    if (_isObject(oGuid[prop]) && $hasRefer(oGuid[prop])) return true
+                    if (_isObject(oGuid[prop]) && $hasRefer(oGuid[prop])) return true;
                 }
             }
             return false;

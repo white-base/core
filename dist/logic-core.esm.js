@@ -6203,3 +6203,4 @@ var PropertyCollection  = (function (_super) {
 }(BaseCollection));
 
 export { ArrayCollection, BaseCollection, EventEmitter, ExtendError, IArrayCollection, ICollection, IElement, IList, IListControl, IMarshal, IObject, IPropertyCollection, ISerialize, Message, MetaElement, MetaObject, MetaRegistry, NamespaceManager, PropertyCollection, Type, Util };
+//# sourceMappingURL=logic-core.esm.js.map

@@ -1,6 +1,6 @@
 /**** message.js | Message ****/
 //==============================================================
-import  defaultCode  from './locales/default.json'
+import  defaultCode  from './locales/default.json';
 // import {osLocale} from 'os-locale';
 
 const localesPath = './locales';    // 상대 경로
@@ -32,7 +32,7 @@ function _deepMerge(target, source) {
 }
 
 async function _loadJSON(filePath) {
-    const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && globalThis.isDOM !== true;
+    const isNode = typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null && globalThis.isDOM !== true;
     const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
     
     try {
@@ -46,7 +46,7 @@ async function _loadJSON(filePath) {
         }
     } catch (error) {
         // console.log(`Error loading JSON file: ${filePath}`, error);
-        return;
+        return undefined;
     }
 }
 
@@ -182,7 +182,7 @@ class Message {
         var result;
 
         if (typeof msg === 'undefined') {
-            return `There is no message for code. '${p_code}'`
+            return `There is no message for code. '${p_code}'`;
         }
         result = _replacePlaceholders(msg, p_values);
         return $intro(p_code) + result;

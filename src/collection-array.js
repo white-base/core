@@ -7,7 +7,7 @@ import Type from './type.js';
 import IArrayCollection from './i-collection-array.js';
 import MetaRegistry from './meta-registry.js';
 import MetaObject from './meta-object.js';
-import {BaseCollection} from './base-collection.js';
+import { BaseCollection } from './base-collection.js';
 
 var ArrayCollection  = (function (_super) {
     /**
@@ -160,16 +160,24 @@ var ArrayCollection  = (function (_super) {
     /**
      * Initialize the collection.  
      * Empty the $elements and $descriptors arrays upon initialization.  
+     * 
+     * @returns {boolean} Additional success
      */
     ArrayCollection.prototype.clear = function() {
-        // this._onClear();    // event
-        if (this._onClear() === false) return -1;
+        try {
+            if (this._onClear() === false) return false;
 
-        for (var i = 0; i < this.count; i++) delete this[i];
-        this.$elements = [];
-        this.$descriptors = [];
-        
-        this._onCleared();    // event
+            for (var i = 0; i < this.count; i++) delete this[i];
+            this.$elements = [];
+            this.$descriptors = [];
+            
+            this._onCleared();    // event
+            return true;
+
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     };
     Object.defineProperty(ArrayCollection.prototype, 'clear', {
         enumerable: false
@@ -238,7 +246,7 @@ var ArrayCollection  = (function (_super) {
     ArrayCollection.prototype.map  = function(callback, thisArg) {
         var newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
     
         for (var i = 0; i < this.length; i++) {
             newArr[i] = callback.call(thisArg || this, this[i], i, this._list);
@@ -259,7 +267,7 @@ var ArrayCollection  = (function (_super) {
     ArrayCollection.prototype.filter = function (callback, thisArg) {
         let newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
 
         for (let i = 0; i < this.length; i++) {
             if (callback.call(thisArg || this, this[i], i, this._list)) {
@@ -282,13 +290,13 @@ var ArrayCollection  = (function (_super) {
     ArrayCollection.prototype.reduce = function(callback, initialValue) {
         var acc = initialValue;
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
 
         for(let i=0; i < this.length; i++) {
             acc = acc ? callback(acc, this[i], i, this._list) : this[i];
         }
         return acc;
-    }
+    };
     Object.defineProperty(ArrayCollection.prototype, 'reduce', {
         enumerable: false
     });
@@ -301,13 +309,14 @@ var ArrayCollection  = (function (_super) {
      * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     ArrayCollection.prototype.find = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             if ( callback.call(thisArg || this, this[i], i, this._list) ) {
-            return this[i];
+                return this[i];
             }
         }
+        return undefined;
     };
     Object.defineProperty(ArrayCollection.prototype, 'find', {
         enumerable: false
@@ -320,7 +329,7 @@ var ArrayCollection  = (function (_super) {
      * @param {any} thisArg Object to use as this inside the callback function
      */
     ArrayCollection.prototype.forEach = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
         
         for (var i = 0; i <this.length; i++) {
             callback.call(thisArg || this, this[i], i, this._list);
@@ -338,7 +347,7 @@ var ArrayCollection  = (function (_super) {
      * @returns  {boolean} 'true' if more than one element satisfies the condition, or 'false' if not
      */
     ArrayCollection.prototype.some = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
         
         for(var i=0; i < this.length; i++){
             if (callback.call(thisArg || this, this[i], i, this._list)) return true;
@@ -357,12 +366,12 @@ var ArrayCollection  = (function (_super) {
      * @returns  {boolean}  'true' if all elements meet the conditions, 'false' otherwise
      */
     ArrayCollection.prototype.every = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
         
-        for(var i=0; i < this.length; i++){
+        for(var i=0; i < this.length; i++) {
             if (!callback.call(thisArg || this, this[i], i, this._list)) return false;
-            }
-            return true;
+        }
+        return true;
     };
     Object.defineProperty(ArrayCollection.prototype, 'every', {
         enumerable: false
@@ -376,11 +385,11 @@ var ArrayCollection  = (function (_super) {
      * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     ArrayCollection.prototype.findIndex = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             if ( callback.call(thisArg || this, this[i], i, this._list) ) {
-            return i;
+                return i;
             }
         }
         return -1;
@@ -395,4 +404,4 @@ var ArrayCollection  = (function (_super) {
 }(BaseCollection));
 
 export default ArrayCollection;
-export {ArrayCollection};
+export { ArrayCollection };

@@ -70,7 +70,7 @@ class ExtendError extends Error {
      * throw new ExtendError(/EL01504/, { style: "required" }, ['value1', 'value2']);
      */
     constructor(p_msg, p_prop, p_codeVal) {
-        super()
+        super();
         
         var _build = '';
         var _prop;

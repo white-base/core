@@ -54,8 +54,10 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * Initialize the collection.  
      * Empty the $elements and $descriptors arrays upon initialization.  
+     * 
+     * @returns Additional success
      */
-    clear(): void;
+    clear(): boolean;
 
     /**
      * Adds an element to the specified location.  

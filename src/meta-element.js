@@ -1,6 +1,6 @@
 /**** meta-element.js | MetaElement ****/
 //==============================================================
-import Message from './message.js';    
+// import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Util from './util.js';
 import IElement from './i-element.js';
@@ -27,8 +27,7 @@ var MetaElement  = (function (_super) {
          * @readonly
          * @member {string} MetaElement#_name
          */
-        Object.defineProperty(this, '_name',
-        {
+        Object.defineProperty(this, '_name', {
             get: function() { return _name; },
             set: function(nVal) {
                 if (typeof nVal !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);

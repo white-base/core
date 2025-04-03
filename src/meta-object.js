@@ -1,6 +1,6 @@
 /**** meta-object.js | MetaObject ****/
 //==============================================================
-import Message from './message.js';    
+// import Message from './message.js';    
 import ExtendError from './extend-error.js';    
 import Type from './type.js';
 import Util from './util.js';
@@ -30,8 +30,7 @@ var MetaObject  = (function () {
          * var obj = MetaObject();
          * console.log(obj._guid);      // '5337877c-49d6-9add-f35a-7bd31d510d4f' unique key code
          */
-        Object.defineProperty(this, '_guid', 
-        {
+        Object.defineProperty(this, '_guid', {
             get: function() { 
                 if (!_guid) _guid = Util.createGuid();
                 return _guid;
@@ -51,8 +50,7 @@ var MetaObject  = (function () {
          * obj._type === MetaObject;        // true
          * console.log(typeof obj._type);   // 'function'
          */
-        Object.defineProperty(this, '_type', 
-        {
+        Object.defineProperty(this, '_type', {
             get: function() { 
                 var proto = this.__proto__ || Object.getPrototypeOf(this);
                 return proto.constructor;
@@ -65,8 +63,7 @@ var MetaObject  = (function () {
          * Indicates the object name space.  
          * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
          */
-        Object.defineProperty(this, '_ns', 
-        {
+        Object.defineProperty(this, '_ns', {
             get: function() { 
                 return _ns;
             },

@@ -60,6 +60,8 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     /**
      * 컬렉션을 초기화합니다.  
      * 초기화 시 $elements, $descriptors, $keys 를 비웁니다.  
+     * 
+     * @returns 추가 성공 여부
      */
     clear(): void;
 

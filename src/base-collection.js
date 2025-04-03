@@ -1,6 +1,6 @@
 /**** base-collection.js | BaseCollection ****/
 //==============================================================
-import Message from './message.js';    
+// import Message from './message.js';    
 import ExtendError from './extend-error.js';
 import Util from './util.js';
 import Type from './type.js';
@@ -41,8 +41,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {array<string>}  BaseCollection#$KEYWORD
          */
-        Object.defineProperty(this, '$KEYWORD', 
-        {
+        Object.defineProperty(this, '$KEYWORD', {
             get: function() { return $KEYWORD; },
             set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },  // REVIEW: 예약어 중복
             configurable: false,
@@ -55,8 +54,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {EventEmitter} BaseCollection#$event  
          */
-        Object.defineProperty(this, '$event', 
-        {
+        Object.defineProperty(this, '$event', {
             get: function() { return $event; },
             configurable: false,
             enumerable: false,
@@ -68,8 +66,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {string} BaseCollection#$elements
          */
-        Object.defineProperty(this, '$elements',
-        {
+        Object.defineProperty(this, '$elements', {
             get: function() { return $elements; },
             set: function(nVal) { $elements = nVal; },
             configurable: false,
@@ -82,8 +79,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {string} BaseCollection#$descriptors
          */
-        Object.defineProperty(this, '$descriptors',
-        {
+        Object.defineProperty(this, '$descriptors', {
             get: function() { return $descriptors; },
             set: function(nVal) { $descriptors = nVal; },
             configurable: false,
@@ -98,8 +94,7 @@ var BaseCollection  = (function (_super) {
          * @protected 
          * @member {object} BaseCollection#_owner  
          */
-        Object.defineProperty(this, '_owner', 
-        {   
+        Object.defineProperty(this, '_owner', {   
             get: function() { return _owner; },
             set: function(val) { _owner = val; },
             configurable: false,
@@ -112,8 +107,7 @@ var BaseCollection  = (function (_super) {
          * @protected 
          * @member {array<any>}  BaseCollection#_elemTypes  
          */
-        Object.defineProperty(this, '_elemTypes', 
-        {
+        Object.defineProperty(this, '_elemTypes', {
             get: function() { return _elemTypes; },
             set: function(val) {
                 var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
@@ -121,8 +115,10 @@ var BaseCollection  = (function (_super) {
                 var arr1 = arrType.length > 0 && typeof arrType[0] === 'string' ? arrType[0] : '';
                 
                 // var result;
-                if (arrType.length > 0  && reg.exec(arr1) === null) arrType = ['_req_'].concat(arrType);
-                    
+                if (arrType.length > 0  && reg.exec(arr1) === null) {
+                    arrType = ['_req_'].concat(arrType);
+                }
+                   
                 // result = reg.exec(val);
                 // if (result !== null) return result[0].toUpperCase();
                 _elemTypes = arrType;
@@ -138,8 +134,7 @@ var BaseCollection  = (function (_super) {
          * @readonly
          * @member {Array}  BaseCollection#_list  
          */
-        Object.defineProperty(this, '_list', 
-        {
+        Object.defineProperty(this, '_list', {
             get: function() {
                 var arr = [];
                 for (var i = 0; i < $elements.length; i++) arr.push(this.$elements[i]);
@@ -155,8 +150,7 @@ var BaseCollection  = (function (_super) {
          * @readonly
          * @member {number} BaseCollection#count 
          */
-        Object.defineProperty(this, 'count', 
-        {
+        Object.defineProperty(this, 'count', {
             get: function() { return this.$elements.length; },
             enumerable: false,
             configurable: false
@@ -167,8 +161,7 @@ var BaseCollection  = (function (_super) {
          * @readonly
          * @member {number} BaseCollection#length 
          */
-        Object.defineProperty(this, 'length', 
-        {
+        Object.defineProperty(this, 'length', {
             get: function() { return this.$elements.length; },
             enumerable: false,
             configurable: false
@@ -184,8 +177,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of the element to be added
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onAdd', 
-        {
+        Object.defineProperty(this, 'onAdd', {
             set: function(fun) { this.$event.on('add', fun); },
             configurable: false,
             enumerable: false,
@@ -200,8 +192,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of added element
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onAdded', 
-        {
+        Object.defineProperty(this, 'onAdded', {
             set: function(fun) { this.$event.on('added', fun); },
             configurable: false,
             enumerable: false,
@@ -216,8 +207,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of the element to be removed
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onRemove', 
-        {
+        Object.defineProperty(this, 'onRemove', {
             set: function(fun) { this.$event.on('remove', fun); },
             configurable: false,
             enumerable: false,
@@ -232,8 +222,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of removed element
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onRemoved', 
-        {
+        Object.defineProperty(this, 'onRemoved', {
             set: function(fun) { this.$event.on('removed', fun); },
             configurable: false,
             enumerable: false,
@@ -246,8 +235,7 @@ var BaseCollection  = (function (_super) {
         * @param {function}    p_callback
         * @param {this}        p_callback.p_this Current collection objects
         */
-        Object.defineProperty(this, 'onClear', 
-        {
+        Object.defineProperty(this, 'onClear', {
             set: function(fun) { this.$event.on('clear', fun); },
             configurable: false,
             enumerable: false,
@@ -260,8 +248,7 @@ var BaseCollection  = (function (_super) {
          * @param {function}    p_callback
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onCleared', 
-        {
+        Object.defineProperty(this, 'onCleared', {
             set: function(fun) { this.$event.on('cleared', fun); },
             configurable: false,
             enumerable: false,
@@ -277,8 +264,7 @@ var BaseCollection  = (function (_super) {
          * @param {any}         p_callback.index Index of the element to be changed
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onChanging', 
-        {
+        Object.defineProperty(this, 'onChanging', {
             set: function(fun) { this.$event.on('changing', fun); },
             configurable: false,
             enumerable: false,
@@ -294,8 +280,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_index Index of changed element
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onChanged', 
-        {
+        Object.defineProperty(this, 'onChanged', {
             set: function(fun) { this.$event.on('changed', fun); },
             configurable: false,
             enumerable: false,

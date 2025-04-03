@@ -1,6 +1,6 @@
 /**** util-type.js Type ****/
 //==============================================================
-import Message from './message.js';
+// import Message from './message.js';
 import ExtendError from './extend-error.js';
  
 var _global = globalThis;
@@ -86,7 +86,7 @@ function _isUpper(strValue) {
     var firstStr = strValue.charAt(0);
     if (firstStr === '') return false;
     if(firstStr === firstStr.toUpperCase()) return true;
-    else false;
+    return false;
 }
 
 /**
@@ -102,6 +102,7 @@ function _isLiteral(obj) {
     if (typeof obj  === 'boolean') return true;
     if (typeof obj  === 'bigint') return true;
     if (obj instanceof RegExp) return true;
+    return false;
 }
 
 /**
@@ -125,7 +126,7 @@ function _equalLiternal(obj1, obj2) {
  */
 var _creator = function(type) {
     return new type;
-}
+};
 
 /**
  * 타임명 얻기  
@@ -147,9 +148,10 @@ function _getKeyCode(val) {
     var reg = /^_[a-zA-Z]+_/;
     var result;
 
-    if (typeof val !== 'string') return;
+    if (typeof val !== 'string') return '';
     result = reg.exec(val);
     if (result !== null) return result[0].toUpperCase();
+    return '';
 }
 
 // 배열 구조 분해 할당을 해제 
@@ -162,19 +164,19 @@ function restoreArrowFunction(transformedCode) {
     //  -> _ref => { let [String] = _ref; return Number; }
     //  -> 실제로는 ( _ref ) => { ... } 형태로 통일
     if (!match) {
-      // 혹시 _ref => { ... } 형태라면, 강제로 괄호를 넣어 재시도
-      const altRegex = /^(.*?)\s*=>\s*\{([\s\S]*)\}/;
-      const altMatch = transformedCode.match(altRegex);
-      if (!altMatch) {
-        throw new Error('Invalid arrow function format.');
-      }
-      // altMatch[1] = "_ref"
-      // altMatch[2] = "let [String] = _ref; return Number;"
-      let altParams = altMatch[1].trim();
-      let altBody = altMatch[2].trim();
-  
-      // 화살표 함수 형태 통일:  ( _ref ) => { ... }
-      return restoreArrowFunction(`(${altParams}) => {${altBody}}`);
+        // 혹시 _ref => { ... } 형태라면, 강제로 괄호를 넣어 재시도
+        const altRegex = /^(.*?)\s*=>\s*\{([\s\S]*)\}/;
+        const altMatch = transformedCode.match(altRegex);
+        if (!altMatch) {
+            throw new Error('Invalid arrow function format.');
+        }
+        // altMatch[1] = "_ref"
+        // altMatch[2] = "let [String] = _ref; return Number;"
+        let altParams = altMatch[1].trim();
+        let altBody = altMatch[2].trim();
+    
+        // 화살표 함수 형태 통일:  ( _ref ) => { ... }
+        return restoreArrowFunction(`(${altParams}) => {${altBody}}`);
     }
   
     // 2. 매개변수와 함수 본문 부분 분리
@@ -187,17 +189,17 @@ function restoreArrowFunction(transformedCode) {
   
     // 4. 찾아낸 구조 분해 할당들을 순회하며 매개변수( _ref5, _ref6 등 )를 원래 형태로 치환
     paramAssignments.forEach(assign => {
-      // - parts[1]: { aa: String } 또는 [String] 등 (줄바꿈 포함 가능)
-      // - parts[2]: _ref5, _ref6 등
-      const parts = assign.match(/let\s+(\{[\s\S]*?\}|\[[\s\S]*?\])\s*=\s*(\w+);/);
-      if (parts) {
-        const extractedParam = parts[1].trim(); // 원래 구조
-        const originalParam = parts[2].trim();  // 변환된 변수명 (_ref5 등)
-  
-        // 매개변수 목록에 있던 _ref5 등을 { aa: String } 등으로 치환
-        const re = new RegExp(`\\b${originalParam}\\b`, 'g');
-        params = params.replace(re, extractedParam);
-      }
+        // - parts[1]: { aa: String } 또는 [String] 등 (줄바꿈 포함 가능)
+        // - parts[2]: _ref5, _ref6 등
+        const parts = assign.match(/let\s+(\{[\s\S]*?\}|\[[\s\S]*?\])\s*=\s*(\w+);/);
+        if (parts) {
+            const extractedParam = parts[1].trim(); // 원래 구조
+            const originalParam = parts[2].trim();  // 변환된 변수명 (_ref5 등)
+    
+            // 매개변수 목록에 있던 _ref5 등을 { aa: String } 등으로 치환
+            const re = new RegExp(`\\b${originalParam}\\b`, 'g');
+            params = params.replace(re, extractedParam);
+        }
     });
   
     // 5. return 문이 있다면 반환값을 추출
@@ -207,12 +209,12 @@ function restoreArrowFunction(transformedCode) {
   
     // 6. 최종 복원 – return 문이 있다면 { return ... } 형태로, 없으면 { } 로
     if (returnType) {
-      // 불필요한 공백 없애기 위해 파라메터 부분도 스페이스 정리
-      params = params.replace(/\s+/g, '');
-      return `(${params})=>{return ${returnType}}`;
+        // 불필요한 공백 없애기 위해 파라메터 부분도 스페이스 정리
+        params = params.replace(/\s+/g, '');
+        return `(${params})=>{return ${returnType}}`;
     } else {
-      params = params.replace(/\s+/g, '');
-      return `(${params})=>{}`;
+        params = params.replace(/\s+/g, '');
+        return `(${params})=>{}`;
     }
 }
 
@@ -250,7 +252,7 @@ function _parseFunc(funBody) {
         arrParam = (new Function('return ['+ arrFunc[1] +']'))();
         result['params'] = arrParam;
         
-        if (arrFunc[2] !== '') arrRetrun = (new Function('return '+ arrFunc[2]))()
+        if (arrFunc[2] !== '') arrRetrun = (new Function('return '+ arrFunc[2]))();
         result['return'] = arrRetrun;
 
     } catch (error) {
@@ -262,8 +264,8 @@ function _parseFunc(funBody) {
     // inner function
     function $skipComment(body) {    // 주석 제거 comment
         var rBody = body;
-        var bloackComment = /\/\*[^](.*?)\*\//g
-        var lineComment = /\/\/[^](.*?)(\n|$)/g
+        var bloackComment = /\/\*[^](.*?)\*\//g;
+        var lineComment = /\/\/[^](.*?)(\n|$)/g;
 
         rBody = rBody.replace(bloackComment, '');
         rBody = rBody.replace(lineComment, '');
@@ -358,7 +360,7 @@ function getAllProperties(obj, hasObj) {
             var prop = props[i];
             if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop))) allProps.push(prop);
         }
-    } while (cur = Object.getPrototypeOf(cur))
+    } while (cur = Object.getPrototypeOf(cur));
     return allProps;
 }
 Type.getAllProperties = getAllProperties;
@@ -604,7 +606,7 @@ function typeObject(target) {
         var list = getAllProperties(temp2);
         for (var k = 0; k < list.length; k++) {
             var key = list[k];
-            if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+            if (key === '_interface' || key === 'isImplementOf' ) continue;             // 예약어
             obj['_prop'][key] = typeObject(temp2[key]);
         }
     }
@@ -660,7 +662,7 @@ function extendType(target) {
             }
         }
         return temp;
-    }
+    };
     // special type
     if (typeof target === 'object'  && target !== null && target['$type']) {
         obj['$type'] = target['$type'];
@@ -872,7 +874,7 @@ function _execAllow(extType, tarType, opt, pathName) {
             return;
         
         // _REQ_ (require)
-        } else if (eType['kind'] == '_REQ_') {
+        } else if (eType['kind'] === '_REQ_') {
             if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' || tType['kind'] === '_OPT_') {
                 throw new ExtendError(/EL01216/, prop, [eType['$type'], sTar]);
             }
@@ -1004,7 +1006,7 @@ function _execAllow(extType, tarType, opt, pathName) {
         var oriObj;
         var tarObj;
         if (tType['$type'] === 'class') {         // # class to class
-            if (isProtoChain(tType['ref'], eType['ref'])) return;   // 1.proto check
+            if (isProtoChain(tType['ref'], eType['ref'])) return undefined;   // 1.proto check
             if (opt === 1) {
                 try {
                     // 생성비교
@@ -1176,7 +1178,7 @@ function _execMatch(extType, target, opt, pathName) {
                     if (!_equalLiternal(_elem, _tar)) throw new ExtendError(/EL01114/, prop, [i, _elem, _tar]);
                 } else {
                     try {
-                        _execMatch(_elem, _tar, opt, pathName)
+                        _execMatch(_elem, _tar, opt, pathName);
                     } catch (error) {
                         throw new ExtendError(/EL01115/, error, [i, typeOf(_elem)]);
                     }
@@ -1228,21 +1230,21 @@ function _execMatch(extType, target, opt, pathName) {
     function $choiceMatch() {
         // _ALL_ (all)
         if (eType['kind'] === '_ALL_') {
-            return;
+            return undefined;
 
         // _ANY_ (any)
         } else if (eType['kind'] === '_ANY_') {
-            if (typeof target !== 'undefined') return;
+            if (typeof target !== 'undefined') return undefined;
             throw new ExtendError(/EL01121/, prop, []);
 
         // _NON_ (none)
         } else if (eType['kind'] === '_NON_') {
-            if (typeof target === 'undefined') return;
+            if (typeof target === 'undefined') return undefined;
             throw new ExtendError(/EL01122/, []);
             
         // _ERR_ (error)
         } else if (eType['kind'] === '_ERR_') {
-            if (target instanceof Error) return;
+            if (target instanceof Error) return undefined;
             throw new ExtendError(/EL01123/, []);
 
         // _REQ_ (require)
@@ -1250,7 +1252,7 @@ function _execMatch(extType, target, opt, pathName) {
 
         // _OPT_ (option)
         } else if (eType['kind'] === '_OPT_') {
-            if (typeof target === 'undefined') return;
+            if (typeof target === 'undefined') return undefined;
 
         // _EUN_ (enumeration)
         } else if (eType['kind'] === '_EUM_') {
@@ -1263,11 +1265,10 @@ function _execMatch(extType, target, opt, pathName) {
             if (!_isLiteral(eType['list'][0])) throw new ExtendError(/EL01125/, prop, [typeOf(eType['list'][0])]);
             if (typeof target === 'undefined') {
                 target = eType['list'][0];
-                return;
+                return undefined;
             }
-        
-        // _IDX_ (index)
-        // } else if (eType['kind'] === '_IDX_') {
+            // _IDX_ (index)
+            // } else if (eType['kind'] === '_IDX_') {
             /**
              * POINT:
              * - 검사
@@ -1321,7 +1322,7 @@ function _execMatch(extType, target, opt, pathName) {
             try {
                 var elem = eType['list'][j];
                 if (_isLiteral(elem)) {
-                    if (_equalLiternal(elem, target)) return;
+                    if (_equalLiternal(elem, target)) return undefined;
                 } else {
                     return _execMatch(elem, target, opt, pathName);
                 }
@@ -1334,10 +1335,10 @@ function _execMatch(extType, target, opt, pathName) {
 
     function $classMatch() {
         if (tType['$type'] === 'class') {         // # class to class
-            if (typeof eType['ref'] === 'undefined') return;  // 전역 클래스 타입
-            if (isProtoChain(tType['ref'], eType['ref'])) return;
+            if (typeof eType['ref'] === 'undefined') return undefined;  // 전역 클래스 타입
+            if (isProtoChain(tType['ref'], eType['ref'])) return undefined;
         } else if (typeof target === 'object') {    // # class to typeof 'object'
-            if (target instanceof extType) return;     
+            if (target instanceof extType) return undefined;     
             if (!_isBuiltFunction(extType) && target !== null && opt === 1) {
                 try {
                     var subPath = pathName === 'extType' ? '<instance>' : pathName + '<instance>';
@@ -1361,10 +1362,10 @@ function _execMatch(extType, target, opt, pathName) {
             var key = list[i];
             var listDefType = extendType(extType[key]);
             // REVIEW: for 위쪽으로 이동 검토!
-            if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+            if (key === '_interface' || key === 'isImplementOf') continue;             // 예약어
             // REVIEW: 재귀로 구현 체크
-            if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
-            target[key] = listDefType['default'];
+            // default 설정
+            if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined') target[key] = listDefType['default'];
             // POINT:
             // if (target !== null && !(key in target)) throw new ExtendError(/EL01142/, prop, [key, typeOf(extType[key])]);    
             try {

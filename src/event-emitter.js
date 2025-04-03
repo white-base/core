@@ -1,8 +1,8 @@
 /**** trans-queue.js | EventEmitter ****/
 //==============================================================
 import ExtendError from './extend-error.js';
-import Util from './util.js';
-import Message from './message.js';
+// import Util from './util.js';
+// import Message from './message.js';
   
 var EventEmitter = (function () {
     /**
@@ -20,8 +20,7 @@ var EventEmitter = (function () {
          * @private
          * @member {object}  EventEmitter#$subscribers  
          */
-        Object.defineProperty(this, '$storage',
-        {
+        Object.defineProperty(this, '$storage', {
             get: function() { return $storage; },
             set: function(nVal) { 
                 if (!_isObject(nVal)) throw new ExtendError(/EL01501/, null, [this.constructor.name, nVal]);
@@ -37,22 +36,20 @@ var EventEmitter = (function () {
          * @protected
          * @member {object}  EventEmitter#_list  
          */
-        Object.defineProperty(this, '_list',
-            {
-                get: function() { 
-                    return Object.keys(this.$storage);
-                },
-                configurable: false,
-                enumerable: false
-            });
+        Object.defineProperty(this, '_list', {
+            get: function() { 
+                return Object.keys(this.$storage);
+            },
+            configurable: false,
+            enumerable: false
+        });
 
         /**
          * Array that stores registered event names.
          * 
          * @member {boolean}  EventEmitter#isLog  
          */
-        Object.defineProperty(this, 'isLog', 
-        {
+        Object.defineProperty(this, 'isLog', {
             get: function() { return isLog; },
             set: function(nVal) {
                 if (typeof nVal !== 'boolean') throw new ExtendError(/EL01502/, null, [this.constructor.name, nVal]);

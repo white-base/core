@@ -54,8 +54,10 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
     /**
      * 컬렉션을 초기화합니다.  
      * 초기화 시 $elements와 $descriptors 배열을 비웁니다.  
+     * 
+     * @returns 추가 성공 여부
      */
-    clear(): void;
+    clear(): boolean;
 
     /**
      * 지정한 위치에 요소를 추가합니다.

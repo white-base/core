@@ -60,8 +60,10 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
     /**
      * Initialize the collection.  
      * Empty $elements, $descripts, and $keys at initialization.  
+     * 
+     * @returns Additional success
      */
-    clear(): void;
+    clear(): boolean;
 
     /**
      * Query the index based on the key.  

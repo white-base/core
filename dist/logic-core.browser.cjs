@@ -6225,3 +6225,4 @@ exports.NamespaceManager = NamespaceManager;
 exports.PropertyCollection = PropertyCollection;
 exports.Type = Type;
 exports.Util = Util;
+//# sourceMappingURL=logic-core.browser.cjs.map

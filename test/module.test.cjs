@@ -1,69 +1,57 @@
-// import { EventEmitter } from "../dist/node/logic-core.cjs";
-// import { EventEmitter } from "../dist/esm/logic-core";
-// import { EventEmitter } from "../index.js";
-// import { EventEmitter } from 'logic-core';
-// const {EventEmitter, Util, PropertyCollection } = require('logic-core');
+//==============================================================
+// gobal defined
+const fs = require('fs');
+const path = require('path');
 
-// test("빌드된 ESM 모듈 테스트", () => {
-//   var a = new EventEmitter();
-//   var b = new PropertyCollection();
-
-//   expect(typeof EventEmitter === 'function').toBe(true);
-//   expect(typeof Util === 'object').toBe(true);
-// });
-
-
-
+//==============================================================
 /**
- * 'dist/logic-core.node.cjs'
  * 'logic-core'
+ * 'dist/logic-core.node.cjs'
+ * 'dist/logic-core.js' : umd
  */
 describe("cjs", () => {
     beforeEach(() => {
         jest.resetModules();
         jest.restoreAllMocks();
-        // globalThis.isESM = true
-        
     });
     describe("logic-core 모듈", () => {
-      it("- 기본", async () => {
-          const { PropertyCollection } = require('logic-core');
-          const { ArrayCollection } = require('logic-core');
-          const p = new PropertyCollection();
-          const a = new ArrayCollection();
-          
-          expect(typeof PropertyCollection === 'function').toBe(true);
-          expect(typeof ArrayCollection === 'function').toBe(true);
-      });
-  });
-  describe("dist/logic-core.esm.js 모듈", () => {
-      it("- 기본", async () => {
-          const { PropertyCollection } = require('../dist/logic-core.node.cjs');
-          const { ArrayCollection } = require('../dist/logic-core.node.cjs');
-          const p = new PropertyCollection();
-          const a = new ArrayCollection();
-          
-          expect(typeof PropertyCollection === 'function').toBe(true);
-          expect(typeof ArrayCollection === 'function').toBe(true);
-      });
-  });
-    describe.skip("dist/logic-core.js 모듈", () => {
-      it("- 기본", async () => {
-        // const { PropertyCollection } = await import('../dist/logic-core.js');
-        
+        it("- 기본", async () => {
+            const { PropertyCollection, ArrayCollection } = require('logic-core');
+            const p = new PropertyCollection();
+            const a = new ArrayCollection();
+            
+            expect(typeof PropertyCollection === 'function').toBe(true);
+            expect(typeof ArrayCollection === 'function').toBe(true);
+        });
+    });
+    describe("dist/logic-core.node.cjs 모듈", () => {
+        it("- 기본", async () => {
+            const { PropertyCollection, ArrayCollection } = require('../dist/logic-core.node.cjs');
+            const p = new PropertyCollection();
+            const a = new ArrayCollection();
+            
+            expect(typeof PropertyCollection === 'function').toBe(true);
+            expect(typeof ArrayCollection === 'function').toBe(true);
+        });
+    });
+    describe("dist/logic-core.js umd", () => {
+        it("- script 실행", () => {
+            const umdCode = fs.readFileSync(path.resolve(__dirname, '../dist/logic-core.js'), 'utf8');
+            const script = new Function('global', umdCode + '; return global._L;');
+            globalThis._L = script(global);
+            const { PropertyCollection, ArrayCollection } = _L;
+            const p = new PropertyCollection();
+            const a = new ArrayCollection();
+            
+            expect(typeof PropertyCollection === 'function').toBe(true);
+            expect(typeof ArrayCollection === 'function').toBe(true);
+        });
+        it("- require", async () => {
+            await import('../dist/logic-core.js');
+            const { PropertyCollection, ArrayCollection } = globalThis._L;
 
-        // await import('../dist/logic-core.js');
-        
-        // const { PropertyCollection } = require('../dist/logic-core.js');
-          // const { ArrayCollection } = require('../dist/logic-core.js');
-          
-          
-          const p = new PropertyCollection();
-          const a = new ArrayCollection();
-          
-          expect(typeof PropertyCollection === 'function').toBe(true);
-          expect(typeof ArrayCollection === 'function').toBe(true);
-      });
-  });
-    
+            expect(typeof PropertyCollection === 'function').toBe(true);
+            expect(typeof ArrayCollection === 'function').toBe(true);
+        });
+    });
 });

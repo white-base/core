@@ -30,8 +30,7 @@ var PropertyCollection  = (function (_super) {
          * @readonly
          * @private
          */
-        Object.defineProperty(this, '$keys',
-        {
+        Object.defineProperty(this, '$keys', {
             get: function() { return $keys; },
             set: function(nVal) { $keys = nVal; },
             configurable: false,
@@ -276,21 +275,30 @@ var PropertyCollection  = (function (_super) {
     /**
      * Initialize the collection.  
      * Empty $elements, $descripts, and $keys at initialization.  
+     * 
+     * @returns {boolean} Additional success
      */
     PropertyCollection.prototype.clear = function() {
-        // this._onClear();
-        if (this._onClear() === false) return -1;
-        
-        for (var i = 0; i < this.count; i++) {
-            var propName = this.indexToKey(i);
-            delete this[i];
-            delete this[propName];
+        try {
+            
+            if (this._onClear() === false) return false;
+            
+            for (var i = 0; i < this.count; i++) {
+                var propName = this.indexToKey(i);
+                delete this[i];
+                delete this[propName];
+            }
+            this.$elements = [];
+            this.$descriptors = [];
+            this.$keys = [];
+            
+            this._onCleared();
+            return true;
+
+        } catch (error) {
+            console.error(error);
+            return false;
         }
-        this.$elements = [];
-        this.$descriptors = [];
-        this.$keys = [];
-        
-        this._onCleared();
     };
     Object.defineProperty(PropertyCollection.prototype, 'clear', {
         enumerable: false
@@ -338,7 +346,6 @@ var PropertyCollection  = (function (_super) {
         enumerable: false
     });
 
-
     /**
      * Returns the result of executing the function provided to all elements to the new array.  
      * 
@@ -349,7 +356,7 @@ var PropertyCollection  = (function (_super) {
     PropertyCollection.prototype.map  = function(callback, thisArg) {
         var newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
     
         for (var i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
@@ -371,7 +378,7 @@ var PropertyCollection  = (function (_super) {
     PropertyCollection.prototype.filter = function (callback, thisArg) {
         let newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
 
         for (let i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
@@ -395,14 +402,14 @@ var PropertyCollection  = (function (_super) {
     PropertyCollection.prototype.reduce = function(callback, initialValue) {
         var acc = initialValue;
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
 
         for(let i=0; i < this.length; i++) {
             var key = this.indexToKey(i);
             acc = acc ? callback(acc, this[i], i, key, this._list) : this[i];
         }
         return acc;
-    }
+    };
     Object.defineProperty(PropertyCollection.prototype, 'reduce', {
         enumerable: false
     });
@@ -415,14 +422,15 @@ var PropertyCollection  = (function (_super) {
      * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     PropertyCollection.prototype.find = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
             if ( callback.call(thisArg || this, this[i], i, key, this._list) ) {
-            return this[i];
+                return this[i];
             }
         }
+        return undefined;
     };
     Object.defineProperty(PropertyCollection.prototype, 'find', {
         enumerable: false
@@ -435,7 +443,7 @@ var PropertyCollection  = (function (_super) {
      * @param {any} thisArg Object to use as this inside the callback function
      */
     PropertyCollection.prototype.forEach = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
         
         for (var i = 0; i <this.length; i++) {
             var key = this.indexToKey(i);
@@ -454,7 +462,7 @@ var PropertyCollection  = (function (_super) {
      * @returns  {boolean}  'true' if more than one element satisfies the condition, or 'false' if not
      */
     PropertyCollection.prototype.some = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
         
         for(var i=0; i < this.length; i++){
             var key = this.indexToKey(i);
@@ -474,13 +482,13 @@ var PropertyCollection  = (function (_super) {
      * @returns  {boolean} 'true' if all elements meet the conditions, 'false' otherwise
      */
     PropertyCollection.prototype.every = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
         
         for(var i=0; i < this.length; i++){
             var key = this.indexToKey(i);
             if (!callback.call(thisArg || this, this[i], i, key, this._list)) return false;
-            }
-            return true;
+        }
+        return true;
     };
     Object.defineProperty(PropertyCollection.prototype, 'every', {
         enumerable: false
@@ -494,12 +502,12 @@ var PropertyCollection  = (function (_super) {
      * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     PropertyCollection.prototype.findIndex = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
             if ( callback.call(thisArg || this, this[i], i, key, this._list) ) {
-            return i;
+                return i;
             }
         }
         return -1;

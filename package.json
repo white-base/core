@@ -42,9 +42,9 @@
   ],
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
-    "test:c": "jest --coverage",
-    "test:u": "jest --updateSnapshot",
-    "test:v": "jest --verbose",
+    "test:c": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
+    "test:u": "node --experimental-vm-modules node_modules/.bin/jest --updateSnapshot",
+    "test:v": "node --experimental-vm-modules node_modules/.bin/jest --verbose",
     "http": "npx serve",
     "docs:en": "typedoc --readme none --out docs/en types/index.d.ts types/T.d.ts",
     "docs:ko": "typedoc --readme none --out docs/ko types/ko/index.d.ts types/ko/T.d.ts",
