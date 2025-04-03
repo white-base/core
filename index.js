@@ -1,4 +1,4 @@
-/// <reference path="./types/ko/index.d.ts" />
+/// <reference path="./types/index.d.ts" />
 
 import Message from "./src/message.js";
 import ExtendError from "./src/extend-error.js";
