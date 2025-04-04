@@ -1052,7 +1052,7 @@
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
-            isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && globalThis.isDOM !== true;
+            isNode = typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null && globalThis.isDOM !== true;
             isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true); // REVIEW: test hack
             _context3.prev = 2;
             if (!isESM) {
@@ -1084,7 +1084,7 @@
           case 21:
             _context3.prev = 21;
             _context3.t0 = _context3["catch"](2);
-            return _context3.abrupt("return");
+            return _context3.abrupt("return", undefined);
           case 24:
           case "end":
             return _context3.stop();
@@ -1520,6 +1520,7 @@
     var firstStr = strValue.charAt(0);
     if (firstStr === '') return false;
     if (firstStr === firstStr.toUpperCase()) return true;
+    return false;
   }
 
   /**
@@ -1535,6 +1536,7 @@
     if (typeof obj === 'boolean') return true;
     if (typeof obj === 'bigint') return true;
     if (obj instanceof RegExp) return true;
+    return false;
   }
 
   /**
@@ -1579,9 +1581,10 @@
   function _getKeyCode(val) {
     var reg = /^_[a-zA-Z]+_/;
     var result;
-    if (typeof val !== 'string') return;
+    if (typeof val !== 'string') return '';
     result = reg.exec(val);
     if (result !== null) return result[0].toUpperCase();
+    return '';
   }
 
   // 배열 구조 분해 할당을 해제 
@@ -2008,7 +2011,7 @@
       var list = getAllProperties(temp2);
       for (var k = 0; k < list.length; k++) {
         var key = list[k];
-        if ('_interface' === key || 'isImplementOf' === key) continue; // 예약어
+        if (key === '_interface' || key === 'isImplementOf') continue; // 예약어
         obj['_prop'][key] = typeObject(temp2[key]);
       }
     }
@@ -2271,7 +2274,7 @@
         return;
 
         // _REQ_ (require)
-      } else if (eType['kind'] == '_REQ_') {
+      } else if (eType['kind'] === '_REQ_') {
         if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' || tType['kind'] === '_OPT_') {
           throw new ExtendError(/EL01216/, prop, [eType['$type'], sTar]);
         }
@@ -2404,7 +2407,7 @@
       var tarObj;
       if (tType['$type'] === 'class') {
         // # class to class
-        if (isProtoChain(tType['ref'], eType['ref'])) return; // 1.proto check
+        if (isProtoChain(tType['ref'], eType['ref'])) return undefined; // 1.proto check
         if (opt === 1) {
           try {
             // 생성비교
@@ -2607,26 +2610,26 @@
     function $choiceMatch() {
       // _ALL_ (all)
       if (eType['kind'] === '_ALL_') {
-        return;
+        return undefined;
 
         // _ANY_ (any)
       } else if (eType['kind'] === '_ANY_') {
-        if (typeof target !== 'undefined') return;
+        if (typeof target !== 'undefined') return undefined;
         throw new ExtendError(/EL01121/, prop, []);
 
         // _NON_ (none)
       } else if (eType['kind'] === '_NON_') {
-        if (typeof target === 'undefined') return;
+        if (typeof target === 'undefined') return undefined;
         throw new ExtendError(/EL01122/, []);
 
         // _ERR_ (error)
       } else if (eType['kind'] === '_ERR_') {
-        if (target instanceof Error) return;
+        if (target instanceof Error) return undefined;
         throw new ExtendError(/EL01123/, []);
 
         // _REQ_ (require)
       } else if (eType['kind'] === '_REQ_') ; else if (eType['kind'] === '_OPT_') {
-        if (typeof target === 'undefined') return;
+        if (typeof target === 'undefined') return undefined;
 
         // _EUN_ (enumeration)
       } else if (eType['kind'] === '_EUM_') {
@@ -2639,9 +2642,8 @@
         if (!_isLiteral(eType['list'][0])) throw new ExtendError(/EL01125/, prop, [typeOf(eType['list'][0])]);
         if (typeof target === 'undefined') {
           target = eType['list'][0];
-          return;
+          return undefined;
         }
-
         // _IDX_ (index)
         // } else if (eType['kind'] === '_IDX_') {
         /**
@@ -2697,7 +2699,7 @@
         try {
           var elem = eType['list'][j];
           if (_isLiteral(elem)) {
-            if (_equalLiternal(elem, target)) return;
+            if (_equalLiternal(elem, target)) return undefined;
           } else {
             return _execMatch(elem, target, opt, pathName);
           }
@@ -2710,11 +2712,11 @@
     function $classMatch() {
       if (tType['$type'] === 'class') {
         // # class to class
-        if (typeof eType['ref'] === 'undefined') return; // 전역 클래스 타입
-        if (isProtoChain(tType['ref'], eType['ref'])) return;
+        if (typeof eType['ref'] === 'undefined') return undefined; // 전역 클래스 타입
+        if (isProtoChain(tType['ref'], eType['ref'])) return undefined;
       } else if (_typeof(target) === 'object') {
         // # class to typeof 'object'
-        if (target instanceof extType) return;
+        if (target instanceof extType) return undefined;
         if (!_isBuiltFunction(extType) && target !== null && opt === 1) {
           try {
             var subPath = pathName === 'extType' ? '<instance>' : pathName + '<instance>';
@@ -2735,11 +2737,10 @@
         var key = list[i];
         var listDefType = extendType(extType[key]);
         // REVIEW: for 위쪽으로 이동 검토!
-        if ('_interface' === key || 'isImplementOf' === key) continue; // 예약어
+        if (key === '_interface' || key === 'isImplementOf') continue; // 예약어
         // REVIEW: 재귀로 구현 체크
-        if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined')
-          // default 설정
-          target[key] = listDefType['default'];
+        // default 설정
+        if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined') target[key] = listDefType['default'];
         // POINT:
         // if (target !== null && !(key in target)) throw new ExtendError(/EL01142/, prop, [key, typeOf(extType[key])]);    
         try {
@@ -2866,7 +2867,7 @@
 
   // local function
   function _isObject(obj) {
-    return obj != null && _typeof(obj) === 'object';
+    return obj !== null && _typeof(obj) === 'object';
   }
 
   // polyfill
@@ -3084,6 +3085,9 @@
     }
   };
 
+  // import Util from './util.js';
+  // import Message from './message.js';
+
   var EventEmitter = function () {
     /**
      * Creates an instance of the class 'EventEmitter'.
@@ -3250,6 +3254,7 @@
 
   /**** i-object.js | IObject ****/
   //==============================================================    
+  // import Message from './message.js';    
   var IObject = function () {
     /**
      * Object interface.  
@@ -3295,6 +3300,7 @@
 
   /**** i-marshal.js | IMarshal ****/
   //==============================================================
+  // import Message from './message.js';    
   var IMarshal = function () {
     /**
      * Object control interface.  
@@ -3343,6 +3349,7 @@
 
   /**** i-collection.js | ICollection ****/
   //==============================================================
+  // import Message from './message.js';
   var ICollection = function () {
     /**
      * This is the collection interface.
@@ -3395,6 +3402,7 @@
 
   /**** i-collection-property.js | IPropertyCollection ****/
   //==============================================================
+  // import Message from './message.js';    
   var IPropertyCollection = function (_super) {
     /**
      * This is the property collection interface.  
@@ -3424,6 +3432,7 @@
 
   /**** i-element.js | IElement ****/
   //==============================================================
+  // import Message from './message.js';    
   var IElement = function () {
     /**
      * Element (independent) interface.  
@@ -3455,6 +3464,9 @@
 
   /**** i-list.js | IList ****/
   //==============================================================
+  // import Message from './message.js';    
+  // import ExtendError from './extend-error.js';  
+
   var IList = function () {
     /**
      * List interface.  
@@ -3484,6 +3496,7 @@
 
   /**** i-control-list.js | IListControl ****/
   //==============================================================
+  // import Message from './message.js';    
   var IListControl = function () {
     /**
      * List control interface.  
@@ -3536,6 +3549,7 @@
 
   /**** i-serialize.js | ISerialize ****/
   //==============================================================
+  // import Message from './message.js';    
   var ISerialize = function () {
     /**
      * Interface for serialization and deserialization.  
@@ -3569,6 +3583,7 @@
 
   /**** i-collection-array.js | IArrayCollection ****/
   //==============================================================
+  // import Message from './message.js';    
   var IArrayCollection = function (_super) {
     /**
      * Array collection interface.  
@@ -3592,6 +3607,8 @@
     };
     return IArrayCollection;
   }(ICollection);
+
+  // import ISerialize from './i-serialize.js';
 
   var NamespaceManager = function () {
     /**
@@ -3776,7 +3793,7 @@
       var nsPath;
       var obj = {};
       if (_isString(p_elem)) fullName = p_elem;else fullName = this.getPath(p_elem);
-      if (typeof fullName !== 'string') return;
+      if (typeof fullName !== 'string') return undefined;
       arr = fullName.split('.');
       key = arr.pop();
       nsPath = arr.join('.');
@@ -3854,8 +3871,9 @@
           if (parent[sName] && parent[sName]['_type'] === 'ns') {
             if (i === sections.length - 1) return parent[sName];
             parent = parent[sName];
-          } else return;
+          } else return undefined;
         }
+        return undefined;
       } catch (error) {
         throw new ExtendError(/EL03323/, error, []);
       }
@@ -3919,6 +3937,7 @@
             } else parent = parent[sName];
           } else return false;
         }
+        return false;
       } catch (error) {
         throw new ExtendError(/EL03334/, error, []);
       }
@@ -3950,10 +3969,11 @@
           var sName = sections[i];
           if (parent[sName]) {
             if (i === sections.length - 1) return parent[sName];else parent = parent[sName];
-          } else return;
+          } else return undefined;
         }
+        return undefined;
       } catch (error) {
-        return;
+        return undefined;
       }
     };
 
@@ -3969,7 +3989,7 @@
       if (!p_elem) throw new ExtendError(/EL03341/, null, [_typeof(p_elem)]);
       if ($findElement(namespace)) {
         return stack.join('.');
-      } else return;
+      } else return undefined;
 
       // inner function
       function $findElement(target) {
@@ -4218,10 +4238,11 @@
      */
     MetaRegistry.find = function (p_oGuid) {
       var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
-      if (!_isString(guid)) return;
+      if (!_isString(guid)) return undefined;
       for (var i = 0; i < _list.length; i++) {
         if (_list[i]['_guid'] === guid) return _list[i];
       }
+      return undefined;
     };
 
     /**
@@ -4360,6 +4381,7 @@
         for (var i = 0; i < arr.length; i++) {
           if (arr[i]['_guid'] === guid) return arr[i];
         }
+        return undefined;
       }
       function $validReference(oGuid) {
         // 참조 검사
@@ -5117,7 +5139,9 @@
           var arr1 = arrType.length > 0 && typeof arrType[0] === 'string' ? arrType[0] : '';
 
           // var result;
-          if (arrType.length > 0 && reg.exec(arr1) === null) arrType = ['_req_'].concat(arrType);
+          if (arrType.length > 0 && reg.exec(arr1) === null) {
+            arrType = ['_req_'].concat(arrType);
+          }
 
           // result = reg.exec(val);
           // if (result !== null) return result[0].toUpperCase();
@@ -5767,14 +5791,21 @@
     /**
      * Initialize the collection.  
      * Empty the $elements and $descriptors arrays upon initialization.  
+     * 
+     * @returns {boolean} Additional success
      */
     ArrayCollection.prototype.clear = function () {
-      // this._onClear();    // event
-      if (this._onClear() === false) return -1;
-      for (var i = 0; i < this.count; i++) delete this[i];
-      this.$elements = [];
-      this.$descriptors = [];
-      this._onCleared(); // event
+      try {
+        if (this._onClear() === false) return false;
+        for (var i = 0; i < this.count; i++) delete this[i];
+        this.$elements = [];
+        this.$descriptors = [];
+        this._onCleared(); // event
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
     };
     Object.defineProperty(ArrayCollection.prototype, 'clear', {
       enumerable: false
@@ -5838,7 +5869,7 @@
      */
     ArrayCollection.prototype.map = function (callback, thisArg) {
       var newArr = [];
-      if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04116/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         newArr[i] = callback.call(thisArg || this, this[i], i, this._list);
       }
@@ -5857,7 +5888,7 @@
      */
     ArrayCollection.prototype.filter = function (callback, thisArg) {
       var newArr = [];
-      if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04117/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         if (callback.call(thisArg || this, this[i], i, this._list)) {
           newArr.push(this[i]);
@@ -5878,7 +5909,7 @@
      */
     ArrayCollection.prototype.reduce = function (callback, initialValue) {
       var acc = initialValue;
-      if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04118/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         acc = acc ? callback(acc, this[i], i, this._list) : this[i];
       }
@@ -5896,12 +5927,13 @@
      * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     ArrayCollection.prototype.find = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04119/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         if (callback.call(thisArg || this, this[i], i, this._list)) {
           return this[i];
         }
       }
+      return undefined;
     };
     Object.defineProperty(ArrayCollection.prototype, 'find', {
       enumerable: false
@@ -5914,7 +5946,7 @@
      * @param {any} thisArg Object to use as this inside the callback function
      */
     ArrayCollection.prototype.forEach = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041110/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         callback.call(thisArg || this, this[i], i, this._list);
       }
@@ -5931,7 +5963,7 @@
      * @returns  {boolean} 'true' if more than one element satisfies the condition, or 'false' if not
      */
     ArrayCollection.prototype.some = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041111/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         if (callback.call(thisArg || this, this[i], i, this._list)) return true;
       }
@@ -5949,7 +5981,7 @@
      * @returns  {boolean}  'true' if all elements meet the conditions, 'false' otherwise
      */
     ArrayCollection.prototype.every = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041112/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         if (!callback.call(thisArg || this, this[i], i, this._list)) return false;
       }
@@ -5967,7 +5999,7 @@
      * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     ArrayCollection.prototype.findIndex = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041113/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         if (callback.call(thisArg || this, this[i], i, this._list)) {
           return i;
@@ -6240,19 +6272,26 @@
     /**
      * Initialize the collection.  
      * Empty $elements, $descripts, and $keys at initialization.  
+     * 
+     * @returns {boolean} Additional success
      */
     PropertyCollection.prototype.clear = function () {
-      // this._onClear();
-      if (this._onClear() === false) return -1;
-      for (var i = 0; i < this.count; i++) {
-        var propName = this.indexToKey(i);
-        delete this[i];
-        delete this[propName];
+      try {
+        if (this._onClear() === false) return false;
+        for (var i = 0; i < this.count; i++) {
+          var propName = this.indexToKey(i);
+          delete this[i];
+          delete this[propName];
+        }
+        this.$elements = [];
+        this.$descriptors = [];
+        this.$keys = [];
+        this._onCleared();
+        return true;
+      } catch (error) {
+        console.error(error);
+        return false;
       }
-      this.$elements = [];
-      this.$descriptors = [];
-      this.$keys = [];
-      this._onCleared();
     };
     Object.defineProperty(PropertyCollection.prototype, 'clear', {
       enumerable: false
@@ -6309,7 +6348,7 @@
      */
     PropertyCollection.prototype.map = function (callback, thisArg) {
       var newArr = [];
-      if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04116/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         newArr[i] = callback.call(thisArg || this, this[i], i, key, this._list);
@@ -6329,7 +6368,7 @@
      */
     PropertyCollection.prototype.filter = function (callback, thisArg) {
       var newArr = [];
-      if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04117/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         if (callback.call(thisArg || this, this[i], i, key, this._list)) {
@@ -6351,7 +6390,7 @@
      */
     PropertyCollection.prototype.reduce = function (callback, initialValue) {
       var acc = initialValue;
-      if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04118/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         acc = acc ? callback(acc, this[i], i, key, this._list) : this[i];
@@ -6370,13 +6409,14 @@
      * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     PropertyCollection.prototype.find = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL04119/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         if (callback.call(thisArg || this, this[i], i, key, this._list)) {
           return this[i];
         }
       }
+      return undefined;
     };
     Object.defineProperty(PropertyCollection.prototype, 'find', {
       enumerable: false
@@ -6389,7 +6429,7 @@
      * @param {any} thisArg Object to use as this inside the callback function
      */
     PropertyCollection.prototype.forEach = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041110/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         callback.call(thisArg || this, this[i], i, key, this._list);
@@ -6407,7 +6447,7 @@
      * @returns  {boolean}  'true' if more than one element satisfies the condition, or 'false' if not
      */
     PropertyCollection.prototype.some = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041111/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         if (callback.call(thisArg || this, this[i], i, key, this._list)) return true;
@@ -6426,7 +6466,7 @@
      * @returns  {boolean} 'true' if all elements meet the conditions, 'false' otherwise
      */
     PropertyCollection.prototype.every = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041112/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         if (!callback.call(thisArg || this, this[i], i, key, this._list)) return false;
@@ -6445,7 +6485,7 @@
      * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     PropertyCollection.prototype.findIndex = function (callback, thisArg) {
-      if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [_typeof(callback)]);
+      if (typeof callback !== 'function') throw new ExtendError(/EL041113/, null, [_typeof(callback)]);
       for (var i = 0; i < this.length; i++) {
         var key = this.indexToKey(i);
         if (callback.call(thisArg || this, this[i], i, key, this._list)) {

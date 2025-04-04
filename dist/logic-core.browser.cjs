@@ -591,7 +591,7 @@ function _deepMerge(target, source) {
 }
 
 async function _loadJSON(filePath) {
-    const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null && globalThis.isDOM !== true;
+    const isNode = typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null && globalThis.isDOM !== true;
     const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
     
     try {
@@ -605,7 +605,7 @@ async function _loadJSON(filePath) {
         }
     } catch (error) {
         // console.log(`Error loading JSON file: ${filePath}`, error);
-        return;
+        return undefined;
     }
 }
 
@@ -740,7 +740,7 @@ class Message {
         var result;
 
         if (typeof msg === 'undefined') {
-            return `There is no message for code. '${p_code}'`
+            return `There is no message for code. '${p_code}'`;
         }
         result = _replacePlaceholders(msg, p_values);
         return $intro(p_code) + result;
@@ -916,6 +916,7 @@ class ExtendError extends Error {
 
 /**** util-type.js Type ****/
 //==============================================================
+// import Message from './message.js';
  
 var _global$1 = globalThis;
 var OLD_ENV$1 = _global$1.OLD_ENV ? _global$1.OLD_ENV : false;    // 커버리지 테스트 역활
@@ -999,6 +1000,7 @@ function _isUpper(strValue) {
     var firstStr = strValue.charAt(0);
     if (firstStr === '') return false;
     if(firstStr === firstStr.toUpperCase()) return true;
+    return false;
 }
 
 /**
@@ -1014,6 +1016,7 @@ function _isLiteral(obj) {
     if (typeof obj  === 'boolean') return true;
     if (typeof obj  === 'bigint') return true;
     if (obj instanceof RegExp) return true;
+    return false;
 }
 
 /**
@@ -1059,9 +1062,10 @@ function _getKeyCode(val) {
     var reg = /^_[a-zA-Z]+_/;
     var result;
 
-    if (typeof val !== 'string') return;
+    if (typeof val !== 'string') return '';
     result = reg.exec(val);
     if (result !== null) return result[0].toUpperCase();
+    return '';
 }
 
 // 배열 구조 분해 할당을 해제 
@@ -1074,19 +1078,19 @@ function restoreArrowFunction(transformedCode) {
     //  -> _ref => { let [String] = _ref; return Number; }
     //  -> 실제로는 ( _ref ) => { ... } 형태로 통일
     if (!match) {
-      // 혹시 _ref => { ... } 형태라면, 강제로 괄호를 넣어 재시도
-      const altRegex = /^(.*?)\s*=>\s*\{([\s\S]*)\}/;
-      const altMatch = transformedCode.match(altRegex);
-      if (!altMatch) {
-        throw new Error('Invalid arrow function format.');
-      }
-      // altMatch[1] = "_ref"
-      // altMatch[2] = "let [String] = _ref; return Number;"
-      let altParams = altMatch[1].trim();
-      let altBody = altMatch[2].trim();
-  
-      // 화살표 함수 형태 통일:  ( _ref ) => { ... }
-      return restoreArrowFunction(`(${altParams}) => {${altBody}}`);
+        // 혹시 _ref => { ... } 형태라면, 강제로 괄호를 넣어 재시도
+        const altRegex = /^(.*?)\s*=>\s*\{([\s\S]*)\}/;
+        const altMatch = transformedCode.match(altRegex);
+        if (!altMatch) {
+            throw new Error('Invalid arrow function format.');
+        }
+        // altMatch[1] = "_ref"
+        // altMatch[2] = "let [String] = _ref; return Number;"
+        let altParams = altMatch[1].trim();
+        let altBody = altMatch[2].trim();
+    
+        // 화살표 함수 형태 통일:  ( _ref ) => { ... }
+        return restoreArrowFunction(`(${altParams}) => {${altBody}}`);
     }
   
     // 2. 매개변수와 함수 본문 부분 분리
@@ -1099,17 +1103,17 @@ function restoreArrowFunction(transformedCode) {
   
     // 4. 찾아낸 구조 분해 할당들을 순회하며 매개변수( _ref5, _ref6 등 )를 원래 형태로 치환
     paramAssignments.forEach(assign => {
-      // - parts[1]: { aa: String } 또는 [String] 등 (줄바꿈 포함 가능)
-      // - parts[2]: _ref5, _ref6 등
-      const parts = assign.match(/let\s+(\{[\s\S]*?\}|\[[\s\S]*?\])\s*=\s*(\w+);/);
-      if (parts) {
-        const extractedParam = parts[1].trim(); // 원래 구조
-        const originalParam = parts[2].trim();  // 변환된 변수명 (_ref5 등)
-  
-        // 매개변수 목록에 있던 _ref5 등을 { aa: String } 등으로 치환
-        const re = new RegExp(`\\b${originalParam}\\b`, 'g');
-        params = params.replace(re, extractedParam);
-      }
+        // - parts[1]: { aa: String } 또는 [String] 등 (줄바꿈 포함 가능)
+        // - parts[2]: _ref5, _ref6 등
+        const parts = assign.match(/let\s+(\{[\s\S]*?\}|\[[\s\S]*?\])\s*=\s*(\w+);/);
+        if (parts) {
+            const extractedParam = parts[1].trim(); // 원래 구조
+            const originalParam = parts[2].trim();  // 변환된 변수명 (_ref5 등)
+    
+            // 매개변수 목록에 있던 _ref5 등을 { aa: String } 등으로 치환
+            const re = new RegExp(`\\b${originalParam}\\b`, 'g');
+            params = params.replace(re, extractedParam);
+        }
     });
   
     // 5. return 문이 있다면 반환값을 추출
@@ -1119,12 +1123,12 @@ function restoreArrowFunction(transformedCode) {
   
     // 6. 최종 복원 – return 문이 있다면 { return ... } 형태로, 없으면 { } 로
     if (returnType) {
-      // 불필요한 공백 없애기 위해 파라메터 부분도 스페이스 정리
-      params = params.replace(/\s+/g, '');
-      return `(${params})=>{return ${returnType}}`;
+        // 불필요한 공백 없애기 위해 파라메터 부분도 스페이스 정리
+        params = params.replace(/\s+/g, '');
+        return `(${params})=>{return ${returnType}}`;
     } else {
-      params = params.replace(/\s+/g, '');
-      return `(${params})=>{}`;
+        params = params.replace(/\s+/g, '');
+        return `(${params})=>{}`;
     }
 }
 
@@ -1270,7 +1274,7 @@ function getAllProperties(obj, hasObj) {
             var prop = props[i];
             if (allProps.indexOf(prop) === -1 && (is || !Object.prototype.hasOwnProperty(prop))) allProps.push(prop);
         }
-    } while (cur = Object.getPrototypeOf(cur))
+    } while (cur = Object.getPrototypeOf(cur));
     return allProps;
 }
 Type.getAllProperties = getAllProperties;
@@ -1516,7 +1520,7 @@ function typeObject(target) {
         var list = getAllProperties(temp2);
         for (var k = 0; k < list.length; k++) {
             var key = list[k];
-            if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+            if (key === '_interface' || key === 'isImplementOf' ) continue;             // 예약어
             obj['_prop'][key] = typeObject(temp2[key]);
         }
     }
@@ -1784,7 +1788,7 @@ function _execAllow(extType, tarType, opt, pathName) {
             return;
         
         // _REQ_ (require)
-        } else if (eType['kind'] == '_REQ_') {
+        } else if (eType['kind'] === '_REQ_') {
             if (tType['kind'] === '_ALL_' || tType['kind'] === '_ANY_' || tType['kind'] === '_OPT_') {
                 throw new ExtendError(/EL01216/, prop, [eType['$type'], sTar]);
             }
@@ -1916,7 +1920,7 @@ function _execAllow(extType, tarType, opt, pathName) {
         var oriObj;
         var tarObj;
         if (tType['$type'] === 'class') {         // # class to class
-            if (isProtoChain(tType['ref'], eType['ref'])) return;   // 1.proto check
+            if (isProtoChain(tType['ref'], eType['ref'])) return undefined;   // 1.proto check
             if (opt === 1) {
                 try {
                     // 생성비교
@@ -2140,26 +2144,26 @@ function _execMatch(extType, target, opt, pathName) {
     function $choiceMatch() {
         // _ALL_ (all)
         if (eType['kind'] === '_ALL_') {
-            return;
+            return undefined;
 
         // _ANY_ (any)
         } else if (eType['kind'] === '_ANY_') {
-            if (typeof target !== 'undefined') return;
+            if (typeof target !== 'undefined') return undefined;
             throw new ExtendError(/EL01121/, prop, []);
 
         // _NON_ (none)
         } else if (eType['kind'] === '_NON_') {
-            if (typeof target === 'undefined') return;
+            if (typeof target === 'undefined') return undefined;
             throw new ExtendError(/EL01122/, []);
             
         // _ERR_ (error)
         } else if (eType['kind'] === '_ERR_') {
-            if (target instanceof Error) return;
+            if (target instanceof Error) return undefined;
             throw new ExtendError(/EL01123/, []);
 
         // _REQ_ (require)
         } else if (eType['kind'] === '_REQ_') ; else if (eType['kind'] === '_OPT_') {
-            if (typeof target === 'undefined') return;
+            if (typeof target === 'undefined') return undefined;
 
         // _EUN_ (enumeration)
         } else if (eType['kind'] === '_EUM_') {
@@ -2172,11 +2176,10 @@ function _execMatch(extType, target, opt, pathName) {
             if (!_isLiteral(eType['list'][0])) throw new ExtendError(/EL01125/, prop, [typeOf(eType['list'][0])]);
             if (typeof target === 'undefined') {
                 target = eType['list'][0];
-                return;
+                return undefined;
             }
-        
-        // _IDX_ (index)
-        // } else if (eType['kind'] === '_IDX_') {
+            // _IDX_ (index)
+            // } else if (eType['kind'] === '_IDX_') {
             /**
              * POINT:
              * - 검사
@@ -2230,7 +2233,7 @@ function _execMatch(extType, target, opt, pathName) {
             try {
                 var elem = eType['list'][j];
                 if (_isLiteral(elem)) {
-                    if (_equalLiternal(elem, target)) return;
+                    if (_equalLiternal(elem, target)) return undefined;
                 } else {
                     return _execMatch(elem, target, opt, pathName);
                 }
@@ -2243,10 +2246,10 @@ function _execMatch(extType, target, opt, pathName) {
 
     function $classMatch() {
         if (tType['$type'] === 'class') {         // # class to class
-            if (typeof eType['ref'] === 'undefined') return;  // 전역 클래스 타입
-            if (isProtoChain(tType['ref'], eType['ref'])) return;
+            if (typeof eType['ref'] === 'undefined') return undefined;  // 전역 클래스 타입
+            if (isProtoChain(tType['ref'], eType['ref'])) return undefined;
         } else if (typeof target === 'object') {    // # class to typeof 'object'
-            if (target instanceof extType) return;     
+            if (target instanceof extType) return undefined;     
             if (!_isBuiltFunction(extType) && target !== null && opt === 1) {
                 try {
                     var subPath = pathName === 'extType' ? '<instance>' : pathName + '<instance>';
@@ -2270,10 +2273,10 @@ function _execMatch(extType, target, opt, pathName) {
             var key = list[i];
             var listDefType = extendType(extType[key]);
             // REVIEW: for 위쪽으로 이동 검토!
-            if ('_interface' === key || 'isImplementOf' === key ) continue;             // 예약어
+            if (key === '_interface' || key === 'isImplementOf') continue;             // 예약어
             // REVIEW: 재귀로 구현 체크
-            if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined')      // default 설정
-            target[key] = listDefType['default'];
+            // default 설정
+            if (typeof listDefType['default'] !== 'undefined' && listDefType['default'] !== null && typeof target[key] === 'undefined') target[key] = listDefType['default'];
             // POINT:
             // if (target !== null && !(key in target)) throw new ExtendError(/EL01142/, prop, [key, typeOf(extType[key])]);    
             try {
@@ -2396,6 +2399,7 @@ Type.isMatchType = isMatchType;
 
 /**** util.js | Util ****/
 //==============================================================
+// import Message from './message.js';
    
 var _global = globalThis;
 
@@ -2409,7 +2413,7 @@ var Util = {};
 
 // local function
 function _isObject(obj) {
-    return obj != null && typeof obj === 'object';
+    return obj !== null && typeof obj === 'object';
 }
 
 // polyfill
@@ -2502,7 +2506,7 @@ Util.deepCopy = function deepCopy(p_target) {
         }
     }
     return nobj;
-};    
+};
 
 /**
  * Sets the specified creator to inherit the parent creator.   
@@ -2537,7 +2541,7 @@ Util.inherits = (function () {
                 ctor.prototype = new TempCtor();
                 ctor.prototype.constructor = ctor;
             }
-        }
+        };
     }
 }());
 
@@ -2600,8 +2604,7 @@ Util.implements = function(p_ctor, p_obj) {
     }
 
     if (typeof p_obj.isImplementOf === 'undefined') {   // 내부 메소드 설정
-        Object.defineProperty(p_obj, 'isImplementOf',
-        {
+        Object.defineProperty(p_obj, 'isImplementOf', {
             value: $isImplementOf,
             configurable: false,
             enumerable: false
@@ -2636,6 +2639,8 @@ Util.implements = function(p_ctor, p_obj) {
 
 /**** trans-queue.js | EventEmitter ****/
 //==============================================================
+// import Util from './util.js';
+// import Message from './message.js';
   
 var EventEmitter = (function () {
     /**
@@ -2653,8 +2658,7 @@ var EventEmitter = (function () {
          * @private
          * @member {object}  EventEmitter#$subscribers  
          */
-        Object.defineProperty(this, '$storage',
-        {
+        Object.defineProperty(this, '$storage', {
             get: function() { return $storage; },
             set: function(nVal) { 
                 if (!_isObject(nVal)) throw new ExtendError(/EL01501/, null, [this.constructor.name, nVal]);
@@ -2670,22 +2674,20 @@ var EventEmitter = (function () {
          * @protected
          * @member {object}  EventEmitter#_list  
          */
-        Object.defineProperty(this, '_list',
-            {
-                get: function() { 
-                    return Object.keys(this.$storage);
-                },
-                configurable: false,
-                enumerable: false
-            });
+        Object.defineProperty(this, '_list', {
+            get: function() { 
+                return Object.keys(this.$storage);
+            },
+            configurable: false,
+            enumerable: false
+        });
 
         /**
          * Array that stores registered event names.
          * 
          * @member {boolean}  EventEmitter#isLog  
          */
-        Object.defineProperty(this, 'isLog', 
-        {
+        Object.defineProperty(this, 'isLog', {
             get: function() { return isLog; },
             set: function(nVal) {
                 if (typeof nVal !== 'boolean') throw new ExtendError(/EL01502/, null, [this.constructor.name, nVal]);
@@ -2811,6 +2813,7 @@ var EventEmitter = (function () {
 
 /**** i-object.js | IObject ****/
 //==============================================================    
+// import Message from './message.js';    
    
 var IObject  = (function () {
     /**
@@ -2861,6 +2864,7 @@ var IObject  = (function () {
 
 /**** i-marshal.js | IMarshal ****/
 //==============================================================
+// import Message from './message.js';    
    
 var IMarshal  = (function () {
     /**
@@ -2882,7 +2886,7 @@ var IMarshal  = (function () {
          * 
          * @member {string} IMarshal#_type REVIEW:
          */
-        this._type = [['_req_', Function, {$type: 'class'} ]];
+        this._type = [['_req_', Function, { $type: 'class' } ]];
     }
 
     IMarshal._NS = 'Interface';    // namespace
@@ -2912,6 +2916,7 @@ var IMarshal  = (function () {
 
 /**** i-collection.js | ICollection ****/
 //==============================================================
+// import Message from './message.js';
 
 var ICollection  = (function () {
     /**
@@ -2969,6 +2974,7 @@ var ICollection  = (function () {
 
 /**** i-collection-property.js | IPropertyCollection ****/
 //==============================================================
+// import Message from './message.js';    
    
 var IPropertyCollection  = (function (_super) {
     /**
@@ -3002,6 +3008,7 @@ var IPropertyCollection  = (function (_super) {
 
 /**** i-element.js | IElement ****/
 //==============================================================
+// import Message from './message.js';    
    
 var IElement  = (function () {
     /**
@@ -3037,6 +3044,8 @@ var IElement  = (function () {
 
 /**** i-list.js | IList ****/
 //==============================================================
+// import Message from './message.js';    
+// import ExtendError from './extend-error.js';  
    
 var IList  = (function () {
     /**
@@ -3071,6 +3080,7 @@ var IList  = (function () {
 
 /**** i-control-list.js | IListControl ****/
 //==============================================================
+// import Message from './message.js';    
    
 var IListControl  = (function () {
     /**
@@ -3128,6 +3138,7 @@ var IListControl  = (function () {
 
 /**** i-serialize.js | ISerialize ****/
 //==============================================================
+// import Message from './message.js';    
    
 var ISerialize  = (function () {
     /**
@@ -3166,6 +3177,7 @@ var ISerialize  = (function () {
 
 /**** i-collection-array.js | IArrayCollection ****/
 //==============================================================
+// import Message from './message.js';    
    
 var IArrayCollection  = (function (_super) {
     /**
@@ -3196,6 +3208,8 @@ var IArrayCollection  = (function (_super) {
 
 /**** namespace-manager.js | NamespaceManager ****/
 //==============================================================
+// import Message from './message.js';    
+// import ISerialize from './i-serialize.js';
    
 var NamespaceManager = (function () {
     /**
@@ -3217,8 +3231,7 @@ var NamespaceManager = (function () {
          * @readonly
          * @private
          */
-        Object.defineProperty(this, '$storage',
-        {
+        Object.defineProperty(this, '$storage', {
             get: function() { return $storage; },
             set: function(nVal) { $storage = nVal; },
             configurable: false,
@@ -3232,8 +3245,7 @@ var NamespaceManager = (function () {
          * @member {array<any>}  NamespaceManager#_elemTypes  
          * @protected
          */
-        Object.defineProperty(this, '_elemTypes', 
-        {
+        Object.defineProperty(this, '_elemTypes', {
             get: function() {
                 return _elemTypes;
             },
@@ -3251,8 +3263,7 @@ var NamespaceManager = (function () {
          * @member {array<string>}  NamespaceManager#_list
          * @readonly
          */
-        Object.defineProperty(this, '_list', 
-        {
+        Object.defineProperty(this, '_list', {
             get: function() {
                 var storage = this.$storage;
                 var arr = [];
@@ -3283,8 +3294,7 @@ var NamespaceManager = (function () {
          * @member {number} NamespaceManager#count 
          * @readonly
          */
-        Object.defineProperty(this, 'count', 
-        {
+        Object.defineProperty(this, 'count', {
             get: function() {
                 return this._list.length;
             },
@@ -3298,8 +3308,7 @@ var NamespaceManager = (function () {
          * 
          * @member {boolean} NamespaceManager#allowOverlap
          */
-        Object.defineProperty(this, 'allowOverlap',
-        {
+        Object.defineProperty(this, 'allowOverlap', {
             get: function() { return allowOverlap; },
             set: function(val) { 
                 if (typeof val !== 'boolean') throw new ExtendError(/EL03311/, null, [typeof val]);
@@ -3329,12 +3338,12 @@ var NamespaceManager = (function () {
 
     function _validNamespace(nsName) {  // 네임스페이스 이름 검사
         var regex = /^[_a-zA-Z]([.]?[_0-9a-zA-Z])*$/;
-        return regex.test(nsName)
+        return regex.test(nsName);
     }
 
     function _validName(sName) {   // 이름 검사
         var regex = /^[_a-zA-Z]([_0-9a-zA-Z])*$/;
-        return regex.test(sName)
+        return regex.test(sName);
     }
 
     function _getArray(ns) {  // 네임스페이스 문자열 배열로 얻기
@@ -3382,7 +3391,7 @@ var NamespaceManager = (function () {
         if (_isString(p_elem)) fullName = p_elem;
         else fullName = this.getPath(p_elem);
         
-        if (typeof fullName !== 'string') return;
+        if (typeof fullName !== 'string') return undefined;
 
         arr = fullName.split('.');
         key = arr.pop();
@@ -3470,8 +3479,9 @@ var NamespaceManager = (function () {
                 if (parent[sName] && parent[sName]['_type'] === 'ns') {
                     if (i === sections.length - 1) return parent[sName];    
                     parent = parent[sName];
-                } else return;
+                } else return undefined;
             }
+            return undefined;
             
         } catch (error) {
             throw new ExtendError(/EL03323/, error, []);
@@ -3542,6 +3552,7 @@ var NamespaceManager = (function () {
                     } else parent = parent[sName];
                 } else return false;
             }
+            return false;
             
         } catch (error) {
             throw new ExtendError(/EL03334/, error, []);
@@ -3578,11 +3589,12 @@ var NamespaceManager = (function () {
                 if (parent[sName]) {
                     if (i === sections.length - 1) return parent[sName];
                     else parent = parent[sName];
-                } else return;
+                } else return undefined;
             }
+            return undefined;
             
         } catch (error) {
-            return;              
+            return undefined;              
         }
     };
     
@@ -3600,7 +3612,7 @@ var NamespaceManager = (function () {
 
         if ($findElement(namespace)) {
             return stack.join('.');
-        } else return;
+        } else return undefined;
 
         // inner function
         function $findElement(target) { 
@@ -3634,7 +3646,7 @@ var NamespaceManager = (function () {
         var arr = [];
         var obj;
         var str;
-        var temp = {list: arr};
+        var temp = { list: arr };
 
         try {
             for (var i = 0; i < this._list.length; i++) {
@@ -3650,7 +3662,7 @@ var NamespaceManager = (function () {
                 arr.push(obj);
             }
 
-            if (typeof p_stringify === 'function') str = p_stringify(temp, {space: p_space} );
+            if (typeof p_stringify === 'function') str = p_stringify(temp, { space: p_space } );
             else str = JSON.stringify(temp, null, p_space);
             return str;
             
@@ -3691,6 +3703,7 @@ var NamespaceManager = (function () {
 
 /**** meta-registry.js | MetaRegistry ****/
 //==============================================================
+// import Message from './message.js';    
        
 var MetaRegistry = (function () {
     /**
@@ -3714,8 +3727,7 @@ var MetaRegistry = (function () {
      * @member {any[]} MetaRegistry#_list
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, '_list', 
-    {
+    Object.defineProperty(MetaRegistry, '_list', {
         get: function() { 
             var arr = [];
             for (var i = 0; i < _list.length; i++) arr.push(_list[i]);
@@ -3731,8 +3743,7 @@ var MetaRegistry = (function () {
      * @member {number} MetaRegistry#count
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, 'count', 
-    {
+    Object.defineProperty(MetaRegistry, 'count', {
         get: function() { return _list.length; },
         configurable: false,
         enumerable: true,
@@ -3744,8 +3755,7 @@ var MetaRegistry = (function () {
      * @member {NamespaceManager} MetaRegistry#namespace
      * @readonly
      */
-    Object.defineProperty(MetaRegistry, 'namespace', 
-    {
+    Object.defineProperty(MetaRegistry, 'namespace', {
         get: function() { return namespace; },
         configurable: false,
         enumerable: true,
@@ -3870,11 +3880,12 @@ var MetaRegistry = (function () {
     MetaRegistry.find = function(p_oGuid) {
         var guid = _isObject(p_oGuid) ? p_oGuid['_guid'] : p_oGuid;
         
-        if (!_isString(guid)) return;
+        if (!_isString(guid)) return undefined;
         
         for(var i = 0; i < _list.length; i++) {
             if (_list[i]['_guid'] === guid) return _list[i];
         }
+        return undefined;
     };
 
     /**
@@ -4016,6 +4027,7 @@ var MetaRegistry = (function () {
             for(var i = 0; i < arr.length; i++) {
                 if (arr[i]['_guid'] === guid) return arr[i];
             }
+            return undefined;
         }
         function $validReference(oGuid) { // 참조 검사
             if (oGuid['$ref'] && !$findGuid(oGuid['$ref'], arrObj)) return false;
@@ -4024,7 +4036,7 @@ var MetaRegistry = (function () {
     
             if (Array.isArray(oGuid)){
                 for(var i = 0; i < oGuid.length; i++) {
-                    if (_isObject(oGuid[i]) && !$validReference(oGuid[i])) return false
+                    if (_isObject(oGuid[i]) && !$validReference(oGuid[i])) return false;
                 }
             } else {
                 for(var prop in oGuid) {
@@ -4119,7 +4131,7 @@ var MetaRegistry = (function () {
                 if (oGuid['$ref'] && _isString(oGuid['$ref'])) return true;
                 if (oGuid['$ns'] && _isString(oGuid['$ns'])) return true;
                 for(var prop in oGuid) {
-                    if (_isObject(oGuid[prop]) && $hasRefer(oGuid[prop])) return true
+                    if (_isObject(oGuid[prop]) && $hasRefer(oGuid[prop])) return true;
                 }
             }
             return false;
@@ -4303,6 +4315,7 @@ var MetaRegistry = (function () {
 
 /**** meta-object.js | MetaObject ****/
 //==============================================================
+// import Message from './message.js';    
    
 var MetaObject  = (function () {
     /**
@@ -4326,8 +4339,7 @@ var MetaObject  = (function () {
          * var obj = MetaObject();
          * console.log(obj._guid);      // '5337877c-49d6-9add-f35a-7bd31d510d4f' unique key code
          */
-        Object.defineProperty(this, '_guid', 
-        {
+        Object.defineProperty(this, '_guid', {
             get: function() { 
                 if (!_guid) _guid = Util.createGuid();
                 return _guid;
@@ -4347,8 +4359,7 @@ var MetaObject  = (function () {
          * obj._type === MetaObject;        // true
          * console.log(typeof obj._type);   // 'function'
          */
-        Object.defineProperty(this, '_type', 
-        {
+        Object.defineProperty(this, '_type', {
             get: function() { 
                 var proto = this.__proto__ || Object.getPrototypeOf(this);
                 return proto.constructor;
@@ -4361,8 +4372,7 @@ var MetaObject  = (function () {
          * Indicates the object name space.  
          * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
          */
-        Object.defineProperty(this, '_ns', 
-        {
+        Object.defineProperty(this, '_ns', {
             get: function() { 
                 return _ns;
             },
@@ -4587,6 +4597,7 @@ var MetaObject  = (function () {
 
 /**** meta-element.js | MetaElement ****/
 //==============================================================
+// import Message from './message.js';    
    
 var MetaElement  = (function (_super) {
 
@@ -4609,8 +4620,7 @@ var MetaElement  = (function (_super) {
          * @readonly
          * @member {string} MetaElement#_name
          */
-        Object.defineProperty(this, '_name',
-        {
+        Object.defineProperty(this, '_name', {
             get: function() { return _name; },
             set: function(nVal) {
                 if (typeof nVal !== 'string') throw new ExtendError(/EL03121/, null, [typeof val]);
@@ -4690,6 +4700,7 @@ var MetaElement  = (function (_super) {
 
 /**** base-collection.js | BaseCollection ****/
 //==============================================================
+// import Message from './message.js';    
 
 var BaseCollection  = (function (_super) {
     /**
@@ -4722,8 +4733,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {array<string>}  BaseCollection#$KEYWORD
          */
-        Object.defineProperty(this, '$KEYWORD', 
-        {
+        Object.defineProperty(this, '$KEYWORD', {
             get: function() { return $KEYWORD; },
             set: function(newVal) { $KEYWORD = $KEYWORD.concat(newVal); },  // REVIEW: 예약어 중복
             configurable: false,
@@ -4736,8 +4746,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {EventEmitter} BaseCollection#$event  
          */
-        Object.defineProperty(this, '$event', 
-        {
+        Object.defineProperty(this, '$event', {
             get: function() { return $event; },
             configurable: false,
             enumerable: false,
@@ -4749,8 +4758,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {string} BaseCollection#$elements
          */
-        Object.defineProperty(this, '$elements',
-        {
+        Object.defineProperty(this, '$elements', {
             get: function() { return $elements; },
             set: function(nVal) { $elements = nVal; },
             configurable: false,
@@ -4763,8 +4771,7 @@ var BaseCollection  = (function (_super) {
          * @private
          * @member {string} BaseCollection#$descriptors
          */
-        Object.defineProperty(this, '$descriptors',
-        {
+        Object.defineProperty(this, '$descriptors', {
             get: function() { return $descriptors; },
             set: function(nVal) { $descriptors = nVal; },
             configurable: false,
@@ -4779,8 +4786,7 @@ var BaseCollection  = (function (_super) {
          * @protected 
          * @member {object} BaseCollection#_owner  
          */
-        Object.defineProperty(this, '_owner', 
-        {   
+        Object.defineProperty(this, '_owner', {   
             get: function() { return _owner; },
             set: function(val) { _owner = val; },
             configurable: false,
@@ -4793,8 +4799,7 @@ var BaseCollection  = (function (_super) {
          * @protected 
          * @member {array<any>}  BaseCollection#_elemTypes  
          */
-        Object.defineProperty(this, '_elemTypes', 
-        {
+        Object.defineProperty(this, '_elemTypes', {
             get: function() { return _elemTypes; },
             set: function(val) {
                 var arrType = Array.isArray(val) ? val : Array.prototype.slice.call(arguments, 0);
@@ -4802,8 +4807,10 @@ var BaseCollection  = (function (_super) {
                 var arr1 = arrType.length > 0 && typeof arrType[0] === 'string' ? arrType[0] : '';
                 
                 // var result;
-                if (arrType.length > 0  && reg.exec(arr1) === null) arrType = ['_req_'].concat(arrType);
-                    
+                if (arrType.length > 0  && reg.exec(arr1) === null) {
+                    arrType = ['_req_'].concat(arrType);
+                }
+                   
                 // result = reg.exec(val);
                 // if (result !== null) return result[0].toUpperCase();
                 _elemTypes = arrType;
@@ -4819,8 +4826,7 @@ var BaseCollection  = (function (_super) {
          * @readonly
          * @member {Array}  BaseCollection#_list  
          */
-        Object.defineProperty(this, '_list', 
-        {
+        Object.defineProperty(this, '_list', {
             get: function() {
                 var arr = [];
                 for (var i = 0; i < $elements.length; i++) arr.push(this.$elements[i]);
@@ -4836,8 +4842,7 @@ var BaseCollection  = (function (_super) {
          * @readonly
          * @member {number} BaseCollection#count 
          */
-        Object.defineProperty(this, 'count', 
-        {
+        Object.defineProperty(this, 'count', {
             get: function() { return this.$elements.length; },
             enumerable: false,
             configurable: false
@@ -4848,8 +4853,7 @@ var BaseCollection  = (function (_super) {
          * @readonly
          * @member {number} BaseCollection#length 
          */
-        Object.defineProperty(this, 'length', 
-        {
+        Object.defineProperty(this, 'length', {
             get: function() { return this.$elements.length; },
             enumerable: false,
             configurable: false
@@ -4865,8 +4869,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of the element to be added
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onAdd', 
-        {
+        Object.defineProperty(this, 'onAdd', {
             set: function(fun) { this.$event.on('add', fun); },
             configurable: false,
             enumerable: false,
@@ -4881,8 +4884,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of added element
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onAdded', 
-        {
+        Object.defineProperty(this, 'onAdded', {
             set: function(fun) { this.$event.on('added', fun); },
             configurable: false,
             enumerable: false,
@@ -4897,8 +4899,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of the element to be removed
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onRemove', 
-        {
+        Object.defineProperty(this, 'onRemove', {
             set: function(fun) { this.$event.on('remove', fun); },
             configurable: false,
             enumerable: false,
@@ -4913,8 +4914,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_idx Index of removed element
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onRemoved', 
-        {
+        Object.defineProperty(this, 'onRemoved', {
             set: function(fun) { this.$event.on('removed', fun); },
             configurable: false,
             enumerable: false,
@@ -4927,8 +4927,7 @@ var BaseCollection  = (function (_super) {
         * @param {function}    p_callback
         * @param {this}        p_callback.p_this Current collection objects
         */
-        Object.defineProperty(this, 'onClear', 
-        {
+        Object.defineProperty(this, 'onClear', {
             set: function(fun) { this.$event.on('clear', fun); },
             configurable: false,
             enumerable: false,
@@ -4941,8 +4940,7 @@ var BaseCollection  = (function (_super) {
          * @param {function}    p_callback
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onCleared', 
-        {
+        Object.defineProperty(this, 'onCleared', {
             set: function(fun) { this.$event.on('cleared', fun); },
             configurable: false,
             enumerable: false,
@@ -4958,8 +4956,7 @@ var BaseCollection  = (function (_super) {
          * @param {any}         p_callback.index Index of the element to be changed
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onChanging', 
-        {
+        Object.defineProperty(this, 'onChanging', {
             set: function(fun) { this.$event.on('changing', fun); },
             configurable: false,
             enumerable: false,
@@ -4975,8 +4972,7 @@ var BaseCollection  = (function (_super) {
          * @param {number}      p_callback.p_index Index of changed element
          * @param {this}        p_callback.p_this Current collection objects
          */
-        Object.defineProperty(this, 'onChanged', 
-        {
+        Object.defineProperty(this, 'onChanged', {
             set: function(fun) { this.$event.on('changed', fun); },
             configurable: false,
             enumerable: false,
@@ -5464,16 +5460,24 @@ var ArrayCollection  = (function (_super) {
     /**
      * Initialize the collection.  
      * Empty the $elements and $descriptors arrays upon initialization.  
+     * 
+     * @returns {boolean} Additional success
      */
     ArrayCollection.prototype.clear = function() {
-        // this._onClear();    // event
-        if (this._onClear() === false) return -1;
+        try {
+            if (this._onClear() === false) return false;
 
-        for (var i = 0; i < this.count; i++) delete this[i];
-        this.$elements = [];
-        this.$descriptors = [];
-        
-        this._onCleared();    // event
+            for (var i = 0; i < this.count; i++) delete this[i];
+            this.$elements = [];
+            this.$descriptors = [];
+            
+            this._onCleared();    // event
+            return true;
+
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
     };
     Object.defineProperty(ArrayCollection.prototype, 'clear', {
         enumerable: false
@@ -5542,7 +5546,7 @@ var ArrayCollection  = (function (_super) {
     ArrayCollection.prototype.map  = function(callback, thisArg) {
         var newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
     
         for (var i = 0; i < this.length; i++) {
             newArr[i] = callback.call(thisArg || this, this[i], i, this._list);
@@ -5563,7 +5567,7 @@ var ArrayCollection  = (function (_super) {
     ArrayCollection.prototype.filter = function (callback, thisArg) {
         let newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
 
         for (let i = 0; i < this.length; i++) {
             if (callback.call(thisArg || this, this[i], i, this._list)) {
@@ -5586,7 +5590,7 @@ var ArrayCollection  = (function (_super) {
     ArrayCollection.prototype.reduce = function(callback, initialValue) {
         var acc = initialValue;
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
 
         for(let i=0; i < this.length; i++) {
             acc = acc ? callback(acc, this[i], i, this._list) : this[i];
@@ -5605,13 +5609,14 @@ var ArrayCollection  = (function (_super) {
      * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     ArrayCollection.prototype.find = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             if ( callback.call(thisArg || this, this[i], i, this._list) ) {
-            return this[i];
+                return this[i];
             }
         }
+        return undefined;
     };
     Object.defineProperty(ArrayCollection.prototype, 'find', {
         enumerable: false
@@ -5624,7 +5629,7 @@ var ArrayCollection  = (function (_super) {
      * @param {any} thisArg Object to use as this inside the callback function
      */
     ArrayCollection.prototype.forEach = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
         
         for (var i = 0; i <this.length; i++) {
             callback.call(thisArg || this, this[i], i, this._list);
@@ -5642,7 +5647,7 @@ var ArrayCollection  = (function (_super) {
      * @returns  {boolean} 'true' if more than one element satisfies the condition, or 'false' if not
      */
     ArrayCollection.prototype.some = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
         
         for(var i=0; i < this.length; i++){
             if (callback.call(thisArg || this, this[i], i, this._list)) return true;
@@ -5661,12 +5666,12 @@ var ArrayCollection  = (function (_super) {
      * @returns  {boolean}  'true' if all elements meet the conditions, 'false' otherwise
      */
     ArrayCollection.prototype.every = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
         
-        for(var i=0; i < this.length; i++){
+        for(var i=0; i < this.length; i++) {
             if (!callback.call(thisArg || this, this[i], i, this._list)) return false;
-            }
-            return true;
+        }
+        return true;
     };
     Object.defineProperty(ArrayCollection.prototype, 'every', {
         enumerable: false
@@ -5680,11 +5685,11 @@ var ArrayCollection  = (function (_super) {
      * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     ArrayCollection.prototype.findIndex = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             if ( callback.call(thisArg || this, this[i], i, this._list) ) {
-            return i;
+                return i;
             }
         }
         return -1;
@@ -5722,8 +5727,7 @@ var PropertyCollection  = (function (_super) {
          * @readonly
          * @private
          */
-        Object.defineProperty(this, '$keys',
-        {
+        Object.defineProperty(this, '$keys', {
             get: function() { return $keys; },
             set: function(nVal) { $keys = nVal; },
             configurable: false,
@@ -5968,21 +5972,30 @@ var PropertyCollection  = (function (_super) {
     /**
      * Initialize the collection.  
      * Empty $elements, $descripts, and $keys at initialization.  
+     * 
+     * @returns {boolean} Additional success
      */
     PropertyCollection.prototype.clear = function() {
-        // this._onClear();
-        if (this._onClear() === false) return -1;
-        
-        for (var i = 0; i < this.count; i++) {
-            var propName = this.indexToKey(i);
-            delete this[i];
-            delete this[propName];
+        try {
+            
+            if (this._onClear() === false) return false;
+            
+            for (var i = 0; i < this.count; i++) {
+                var propName = this.indexToKey(i);
+                delete this[i];
+                delete this[propName];
+            }
+            this.$elements = [];
+            this.$descriptors = [];
+            this.$keys = [];
+            
+            this._onCleared();
+            return true;
+
+        } catch (error) {
+            console.error(error);
+            return false;
         }
-        this.$elements = [];
-        this.$descriptors = [];
-        this.$keys = [];
-        
-        this._onCleared();
     };
     Object.defineProperty(PropertyCollection.prototype, 'clear', {
         enumerable: false
@@ -6030,7 +6043,6 @@ var PropertyCollection  = (function (_super) {
         enumerable: false
     });
 
-
     /**
      * Returns the result of executing the function provided to all elements to the new array.  
      * 
@@ -6041,7 +6053,7 @@ var PropertyCollection  = (function (_super) {
     PropertyCollection.prototype.map  = function(callback, thisArg) {
         var newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04116/, null, [typeof callback]);
     
         for (var i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
@@ -6063,7 +6075,7 @@ var PropertyCollection  = (function (_super) {
     PropertyCollection.prototype.filter = function (callback, thisArg) {
         let newArr = [];
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04117/, null, [typeof callback]);
 
         for (let i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
@@ -6087,7 +6099,7 @@ var PropertyCollection  = (function (_super) {
     PropertyCollection.prototype.reduce = function(callback, initialValue) {
         var acc = initialValue;
 
-        if (typeof callback != 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04118/, null, [typeof callback]);
 
         for(let i=0; i < this.length; i++) {
             var key = this.indexToKey(i);
@@ -6107,14 +6119,15 @@ var PropertyCollection  = (function (_super) {
      * @returns  {any} The first element that satisfies the condition, 'undefined' if not found
      */
     PropertyCollection.prototype.find = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL04119/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
             if ( callback.call(thisArg || this, this[i], i, key, this._list) ) {
-            return this[i];
+                return this[i];
             }
         }
+        return undefined;
     };
     Object.defineProperty(PropertyCollection.prototype, 'find', {
         enumerable: false
@@ -6127,7 +6140,7 @@ var PropertyCollection  = (function (_super) {
      * @param {any} thisArg Object to use as this inside the callback function
      */
     PropertyCollection.prototype.forEach = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041110/, null, [typeof callback]);
         
         for (var i = 0; i <this.length; i++) {
             var key = this.indexToKey(i);
@@ -6146,7 +6159,7 @@ var PropertyCollection  = (function (_super) {
      * @returns  {boolean}  'true' if more than one element satisfies the condition, or 'false' if not
      */
     PropertyCollection.prototype.some = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041111/, null, [typeof callback]);
         
         for(var i=0; i < this.length; i++){
             var key = this.indexToKey(i);
@@ -6166,13 +6179,13 @@ var PropertyCollection  = (function (_super) {
      * @returns  {boolean} 'true' if all elements meet the conditions, 'false' otherwise
      */
     PropertyCollection.prototype.every = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041112/, null, [typeof callback]);
         
         for(var i=0; i < this.length; i++){
             var key = this.indexToKey(i);
             if (!callback.call(thisArg || this, this[i], i, key, this._list)) return false;
-            }
-            return true;
+        }
+        return true;
     };
     Object.defineProperty(PropertyCollection.prototype, 'every', {
         enumerable: false
@@ -6186,12 +6199,12 @@ var PropertyCollection  = (function (_super) {
      * @returns  {any} Index of the first element that satisfies the condition, if not found '-1'
      */
     PropertyCollection.prototype.findIndex = function(callback, thisArg) {
-        if (typeof callback != 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
+        if (typeof callback !== 'function') throw new ExtendError(/EL041113/, null, [typeof callback]);
         
         for (var i = 0; i < this.length; i++) {
             var key = this.indexToKey(i);
             if ( callback.call(thisArg || this, this[i], i, key, this._list) ) {
-            return i;
+                return i;
             }
         }
         return -1;
