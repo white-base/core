@@ -38,6 +38,7 @@
   "files": [
     "dist/",
     "types/",
+    "src/",
     "index.js"
   ],
   "scripts": {
