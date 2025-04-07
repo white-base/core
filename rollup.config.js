@@ -6,10 +6,9 @@ import { babel } from '@rollup/plugin-babel';
 import autoExternal from 'rollup-plugin-auto-external';
 import bundleSize from 'rollup-plugin-bundle-size';
 import aliasPlugin from '@rollup/plugin-alias';
-// import del from 'rollup-plugin-delete'; // ← dist 삭제용 플러그인 추가
+import { cleandir } from 'rollup-plugin-cleandir';
 import path from 'path';
 import copy from 'rollup-plugin-copy';
-import fs from 'fs';
 
 const lib = require("./package.json");
 const outputFileName = 'logic-core';
@@ -17,20 +16,7 @@ const name = "_L";
 const namedInput = './index.js';
 const defaultInput = './index.js';
 const srcMap = true;
-
-
-// function deleteDistPlugin() {
-//   return {
-//     name: 'delete-dist',
-//     buildStart() {
-//       const targetDir = path.resolve(__dirname, 'dist');
-//       if (fs.existsSync(targetDir)) {
-//         fs.rmSync(targetDir, { recursive: true, force: true });
-//         console.log('🧹 dist 폴더 삭제 완료');
-//       }
-//     }
-//   };
-// }
+const OUT_DIR = './dist';
 
 const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...config}) => {
   const {file} = config.output;
@@ -81,12 +67,42 @@ export default async () => {
   const banner = `/*! Logic Core v${lib.version} Copyright (c) ${year} ${lib.author} and contributors */`;
 
   return [
+    // Node.js commonjs bundle
+    {
+      input: defaultInput,
+      output: [
+        {
+          file: `dist/${outputFileName}.node.cjs`,
+          format: "cjs",
+          sourcemap: srcMap,
+          // preferConst: true,
+          exports: "named",
+          banner
+        },
+      ],
+      plugins: [
+        // autoExternal(),
+        resolve(),
+        commonjs(),
+        json(),
+        cleandir(OUT_DIR)
+        // copy({
+        //   targets: [
+        //     { src: 'src/locales/**/*', dest: 'dist/locales' }
+        //   ]
+        // })
+      ]
+    },
       // dist 폴더 삭제 (빌드 전 처리)
     // {
     //   input: 'dummy', // 실제 사용되지 않는 더미 입력
     //   plugins: [
     //     del({ targets: 'dist/*' }) // dist 폴더 내 파일 삭제
     //   ]
+    // },
+    // {
+    //   input: 'dummy',
+    //   plugins: [cleandir(OUT_DIR)], // 'dist/' 디렉토리 정리
     // },
     // Browser UMD bundle for CDN
     ...buildConfig({
@@ -129,30 +145,6 @@ export default async () => {
         banner
       }
     }),
-    // Node.js commonjs bundle
-    {
-      input: defaultInput,
-      output: [
-        {
-          file: `dist/${outputFileName}.node.cjs`,
-          format: "cjs",
-          sourcemap: srcMap,
-          // preferConst: true,
-          exports: "named",
-          banner
-        },
-      ],
-      plugins: [
-        // autoExternal(),
-        resolve(),
-        commonjs(),
-        json(),
-        copy({
-          targets: [
-            { src: 'src/locales/**/*', dest: 'dist/locales' }
-          ]
-        })
-      ]
-    },
+    
   ]
 };

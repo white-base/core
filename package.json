@@ -52,7 +52,8 @@
     "build": "rollup -c --bundleConfigAsCjs",
     "check:ts": "tsc --noEmit",
     "check:js": "eslint src/ --ext .js",
-    "check:all": "npm run check:ts && npm run check:js"
+    "check:all": "npm run check:ts && npm run check:js",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -80,8 +81,8 @@
     "rollup": "^4.34.8",
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-bundle-size": "^1.0.3",
+    "rollup-plugin-cleandir": "^3.0.0",
     "rollup-plugin-copy": "^3.5.0",
-    "rollup-plugin-delete": "^3.0.1",
     "stringify-parse": "^1.0.6",
     "telejson": "^7.2.0",
     "typedoc": "^0.25.12"
