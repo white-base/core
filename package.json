@@ -53,7 +53,8 @@
     "check:ts": "tsc --noEmit",
     "check:js": "eslint src/ --ext .js",
     "check:all": "npm run check:ts && npm run check:js",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "update": "npm update && npm run build"
   },
   "repository": {
     "type": "git",
