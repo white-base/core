@@ -1,7 +1,7 @@
 {
   "name": "logic-core",
   "version": "1.0.5",
-  "description": "white framework core",
+  "description": "logic framework core",
   "type": "module",
   "main": "index.js",
   "exports": {
@@ -70,16 +70,8 @@
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "babel-jest": "^29.7.0",
-    "docdash": "github:white-base/docdash",
     "eslint": "^9.21.0",
     "fs": "^0.0.1-security",
-    "gulp": "^5.0.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-minify": "^3.1.0",
-    "gulp-remove-empty-lines": "^0.1.0",
-    "gulp-string-replace": "^1.1.2",
-    "gulp-strip-comments": "^2.6.0",
-    "gulp-strip-line": "^0.0.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jsdoc": "^4.0.2",
@@ -91,14 +83,9 @@
     "rollup-plugin-copy": "^3.5.0",
     "stringify-parse": "^1.0.6",
     "telejson": "^7.2.0",
-    "typedoc": "^0.25.12",
-    "url": "^0.11.4",
-    "util": "^0.12.5"
+    "typedoc": "^0.25.12"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "os-locale": "^6.0.2"
   }
 }

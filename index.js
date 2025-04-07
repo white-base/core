@@ -23,7 +23,6 @@ import ArrayCollection from './src/collection-array.js';
 import PropertyCollection from './src/collection-property.js';
 
 export {
-    // messageCode,
     Message,
     ExtendError,
     Type,
