@@ -82,15 +82,15 @@ export default async () => {
       ],
       plugins: [
         // autoExternal(),
+        cleandir(OUT_DIR),
         resolve(),
         commonjs(),
         json(),
-        cleandir(OUT_DIR)
-        // copy({
-        //   targets: [
-        //     { src: 'src/locales/**/*', dest: 'dist/locales' }
-        //   ]
-        // })
+        copy({
+          targets: [
+            { src: 'src/locales/**/*', dest: 'dist/locales' }
+          ]
+        })
       ]
     },
       // dist 폴더 삭제 (빌드 전 처리)
