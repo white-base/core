@@ -1,7 +1,7 @@
-import type EventEmitter from "./event-emitter.d.ts";
-import type ICollection from "./i-collection.d.ts";
-import type IList from "./i-list.d.ts";
-import type MetaObject from "./meta-object.d.ts";
+import type EventEmitter    from "./event-emitter.d.ts";
+import type ICollection     from "./i-collection.d.ts";
+import type IList           from "./i-list.d.ts";
+import type MetaObject      from "./meta-object.d.ts";
 
 /**
 * The 'BaseCollection' class inherits the 'MetaObject' and implements the 'ICcollection' and 'IList' interfaces.

@@ -1,8 +1,7 @@
 /**** util.js | Util ****/
 //==============================================================
-// import Message from './message.js';
-import ExtendError from './extend-error.js';
-import Type from './type.js';
+import ExtendError      from './extend-error.js';
+import Type             from './type.js';
    
 var _global = globalThis;
 

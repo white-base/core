@@ -1,7 +1,6 @@
 /**** i-serialize.js | ISerialize ****/
 //==============================================================
-// import Message from './message.js';    
-import ExtendError from './extend-error.js';  
+import ExtendError      from './extend-error.js';  
    
 var ISerialize  = (function () {
     /**

@@ -1,12 +1,10 @@
 /**** namespace-manager.js | NamespaceManager ****/
 //==============================================================
-// import Message from './message.js';    
-import ExtendError from './extend-error.js';    
-import Type from './type.js';
-import Util from './util.js';
-import IList from './i-list.js';
-import IListControl from './i-control-list.js';
-// import ISerialize from './i-serialize.js';
+import ExtendError      from './extend-error.js';    
+import Type             from './type.js';
+import Util             from './util.js';
+import IList            from './i-list.js';
+import IListControl     from './i-control-list.js';
    
 var NamespaceManager = (function () {
     /**

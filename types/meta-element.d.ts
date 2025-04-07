@@ -1,5 +1,5 @@
-import type IElement from "./i-element.d.ts";
-import type MetaObject from "./meta-object.d.ts";
+import type IElement        from "./i-element.d.ts";
+import type MetaObject      from "./meta-object.d.ts";
 
 /**
  * The MetaElement class inherits the MetaObject and implements the IElement interface.  

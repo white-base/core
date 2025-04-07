@@ -1,5 +1,5 @@
-import type IArrayCollection from "./i-collection-array.d.ts";
-import type BaseCollection from "./base-collection.d.ts";
+import type IArrayCollection    from "./i-collection-array.d.ts";
+import type BaseCollection      from "./base-collection.d.ts";
 
 /**
  * The 'Array Collection' class inherits the 'Base Collection' and implements the 'Array Collection' interface.  

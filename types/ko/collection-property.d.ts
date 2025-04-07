@@ -1,5 +1,5 @@
-import type IPropertyCollection from "./i-collection-property.d.ts";
-import type BaseCollection from "./base-collection.d.ts";
+import type IPropertyCollection     from "./i-collection-property.d.ts";
+import type BaseCollection          from "./base-collection.d.ts";
 
 /**
  * `PropertyCollection` 클래스는 `BaseCollection`을 상속하며 `IPropertyCollection` 인터페이스를 구현합니다.  

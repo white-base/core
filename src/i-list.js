@@ -1,7 +1,5 @@
 /**** i-list.js | IList ****/
 //==============================================================
-// import Message from './message.js';    
-// import ExtendError from './extend-error.js';  
    
 var IList  = (function () {
     /**

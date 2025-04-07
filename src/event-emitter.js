@@ -1,8 +1,6 @@
 /**** trans-queue.js | EventEmitter ****/
 //==============================================================
-import ExtendError from './extend-error.js';
-// import Util from './util.js';
-// import Message from './message.js';
+import ExtendError          from './extend-error.js';
   
 var EventEmitter = (function () {
     /**

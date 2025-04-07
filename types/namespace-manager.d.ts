@@ -1,6 +1,6 @@
-import type IList from "./i-list.d.ts";
-import type IListControl from "./i-control-list.d.ts";
-import type ISerialize from "./i-serialize.d.ts";
+import type IList               from "./i-list.d.ts";
+import type IListControl        from "./i-control-list.d.ts";
+import type ISerialize          from "./i-serialize.d.ts";
 import type { NsTypeObject, PathObject } from './T.d.ts';
 
 /**

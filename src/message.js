@@ -1,7 +1,6 @@
 /**** message.js | Message ****/
 //==============================================================
-import  defaultCode  from './locales/default.json';
-// import {osLocale} from 'os-locale';
+import  defaultCode     from './locales/default.json';
 
 const localesPath = './locales';    // 상대 경로
 

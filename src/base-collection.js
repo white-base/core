@@ -1,14 +1,14 @@
 /**** base-collection.js | BaseCollection ****/
 //==============================================================
 // import Message from './message.js';    
-import ExtendError from './extend-error.js';
-import Util from './util.js';
-import Type from './type.js';
-import EventEmitter from './event-emitter.js';
-import ICollection from './i-collection.js';
-import IList from './i-list.js';
-import MetaRegistry from './meta-registry.js';
-import MetaObject from './meta-object.js';
+import ExtendError          from './extend-error.js';
+import Util                 from './util.js';
+import Type                 from './type.js';
+import EventEmitter         from './event-emitter.js';
+import ICollection          from './i-collection.js';
+import IList                from './i-list.js';
+import MetaRegistry         from './meta-registry.js';
+import MetaObject           from './meta-object.js';
 
 var BaseCollection  = (function (_super) {
     /**

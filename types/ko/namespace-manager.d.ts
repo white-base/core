@@ -1,13 +1,12 @@
-import type IList from "./i-list.d.ts";
-import type IListControl from "./i-control-list.d.ts";
-import type ISerialize from "./i-serialize.d.ts";
+import type IList               from "./i-list.d.ts";
+import type IListControl        from "./i-control-list.d.ts";
+import type ISerialize          from "./i-serialize.d.ts";
 import type { NsTypeObject, PathObject } from './T.d.ts';
 
 /**
  * `NamespaceManager`는 네임스페이스를 관리하는 클래스입니다.
  */
 declare class NamespaceManager implements IList<string>, IListControl, ISerialize {
-
 
     /**
      * 네임스페이스 저장소입니다.

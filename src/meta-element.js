@@ -1,10 +1,9 @@
 /**** meta-element.js | MetaElement ****/
 //==============================================================
-// import Message from './message.js';    
-import ExtendError from './extend-error.js';    
-import Util from './util.js';
-import IElement from './i-element.js';
-import MetaObject from './meta-object.js';
+import ExtendError      from './extend-error.js';    
+import Util             from './util.js';
+import IElement         from './i-element.js';
+import MetaObject       from './meta-object.js';
    
 var MetaElement  = (function (_super) {
 

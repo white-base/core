@@ -1,13 +1,13 @@
 /**** collection-property.js | PropertyCollection ****/
 //==============================================================
-import Message from './message.js';
-import ExtendError from './extend-error.js';
-import Type from './type.js';
-import Util from './util.js';
-import IPropertyCollection from './i-collection-property.js';
-import MetaRegistry from './meta-registry.js';
-import MetaObject from './meta-object.js';
-import BaseCollection from './base-collection.js';
+import Message              from './message.js';
+import ExtendError          from './extend-error.js';
+import Type                 from './type.js';
+import Util                 from './util.js';
+import IPropertyCollection  from './i-collection-property.js';
+import MetaRegistry         from './meta-registry.js';
+import MetaObject           from './meta-object.js';
+import BaseCollection       from './base-collection.js';
 
 var PropertyCollection  = (function (_super) {
     /**

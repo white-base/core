@@ -1,5 +1,5 @@
-import type IObject from "./i-object.d.ts";
-import type IMarshal from "./i-marshal.d.ts";
+import type IObject         from "./i-object.d.ts";
+import type IMarshal        from "./i-marshal.d.ts";
 
 /**
  * The MetaObject class is a top-level object that processes metadata by implementing IOobject and IMarshal interfaces.  

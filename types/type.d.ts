@@ -1,4 +1,4 @@
-import type { ExtType } from "./T.d.ts";
+import type { ExtType }     from "./T.d.ts";
 
 /**
  * This is a type module.

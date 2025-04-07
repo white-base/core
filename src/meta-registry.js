@@ -1,9 +1,9 @@
 /**** meta-registry.js | MetaRegistry ****/
 //==============================================================
 // import Message from './message.js';    
-import ExtendError from './extend-error.js';    
-import Util from './util.js';
-import NamespaceManager from './namespace-manager.js';
+import ExtendError          from './extend-error.js';    
+import Util                 from './util.js';
+import NamespaceManager     from './namespace-manager.js';
        
 var MetaRegistry = (function () {
     /**

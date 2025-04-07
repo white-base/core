@@ -1,12 +1,11 @@
 /**** meta-object.js | MetaObject ****/
 //==============================================================
-// import Message from './message.js';    
-import ExtendError from './extend-error.js';    
-import Type from './type.js';
-import Util from './util.js';
-import IObject from './i-object.js';
-import IMarshal from './i-marshal.js';
-import MetaRegistry from './meta-registry.js';
+import ExtendError      from './extend-error.js';    
+import Type             from './type.js';
+import Util             from './util.js';
+import IObject          from './i-object.js';
+import IMarshal         from './i-marshal.js';
+import MetaRegistry     from './meta-registry.js';
    
 var MetaObject  = (function () {
     /**

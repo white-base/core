@@ -1,7 +1,6 @@
 /**** i-element.js | IElement ****/
 //==============================================================
-// import Message from './message.js';    
-import ExtendError from './extend-error.js';  
+import ExtendError      from './extend-error.js';  
    
 var IElement  = (function () {
     /**

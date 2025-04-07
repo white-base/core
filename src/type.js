@@ -1,7 +1,6 @@
 /**** util-type.js Type ****/
 //==============================================================
-// import Message from './message.js';
-import ExtendError from './extend-error.js';
+import ExtendError      from './extend-error.js';
  
 var _global = globalThis;
 var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테스트 역활

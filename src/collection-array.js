@@ -1,13 +1,13 @@
 /**** collection-array.js | ArrayCollection ****/
 //==============================================================
-import Message from './message.js';    
-import ExtendError from './extend-error.js';    
-import Util from './util.js';
-import Type from './type.js';
-import IArrayCollection from './i-collection-array.js';
-import MetaRegistry from './meta-registry.js';
-import MetaObject from './meta-object.js';
-import { BaseCollection } from './base-collection.js';
+import Message              from './message.js';    
+import ExtendError          from './extend-error.js';    
+import Util                 from './util.js';
+import Type                 from './type.js';
+import IArrayCollection     from './i-collection-array.js';
+import MetaRegistry         from './meta-registry.js';
+import MetaObject           from './meta-object.js';
+import { BaseCollection }   from './base-collection.js';
 
 var ArrayCollection  = (function (_super) {
     /**

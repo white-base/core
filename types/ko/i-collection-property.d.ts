@@ -1,4 +1,4 @@
-import type ICollection from "./i-collection.d.ts";
+import type ICollection     from "./i-collection.d.ts";
 
 /**
  * 프로퍼티 컬렉션 인터페이스입니다.

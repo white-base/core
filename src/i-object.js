@@ -1,7 +1,6 @@
 /**** i-object.js | IObject ****/
 //==============================================================    
-// import Message from './message.js';    
-import ExtendError from './extend-error.js';    
+import ExtendError      from './extend-error.js';    
    
 var IObject  = (function () {
     /**

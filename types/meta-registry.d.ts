@@ -1,6 +1,6 @@
-import type NamespaceManager from "./namespace-manager.d.ts";
-import type MetaObject from "./meta-object.d.ts";
-import type { RefObject, NsObject, SetObject } from "./T.d.ts";
+import type NamespaceManager        from "./namespace-manager.d.ts";
+import type MetaObject              from "./meta-object.d.ts";
+import type { RefObject, NsObject } from "./T.d.ts";
 
 /**
  * 'MetaRegistry' is a class responsible for registering and managing meta objects.  

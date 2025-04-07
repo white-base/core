@@ -1,47 +1,21 @@
-// import messageCode from "./message-code.d.ts.d.ts";
-export type { Message } from "./message.d.ts";
-export type { ExtendError } from "./extend-error.d.ts";
-export type { Type } from "./type.d.ts";
-export type { Util } from "./util.d.ts";
-export type { EventEmitter } from "./event-emitter.d.ts";
-export type { IObject } from "./i-object.d.ts";
-export type { IMarshal } from "./i-marshal.d.ts";
-export type { ICollection } from "./i-collection.d.ts";
+export type { Message }             from "./message.d.ts";
+export type { ExtendError }         from "./extend-error.d.ts";
+export type { Type }                from "./type.d.ts";
+export type { Util }                from "./util.d.ts";
+export type { EventEmitter }        from "./event-emitter.d.ts";
+export type { IObject }             from "./i-object.d.ts";
+export type { IMarshal }            from "./i-marshal.d.ts";
+export type { ICollection }         from "./i-collection.d.ts";
 export type { IPropertyCollection } from "./i-collection-property.d.ts";
-export type { IElement } from "./i-element.d.ts";
-export type { IList } from "./i-list.d.ts";
-export type { IListControl } from "./i-control-list.d.ts";
-export type { ISerialize } from "./i-serialize.d.ts";
-export type { IArrayCollection } from "./i-collection-array.d.ts";
-export type { NamespaceManager } from "./namespace-manager.d.ts";
-export type { MetaRegistry } from "./meta-registry.d.ts";
-export type { MetaObject } from "./meta-object.d.ts";
-export type { MetaElement } from "./meta-element.d.ts";
-export type { BaseCollection } from "./base-collection.d.ts";
-export type { ArrayCollection } from "./collection-array.d.ts";
-export type { PropertyCollection } from "./collection-property.d.ts";
-
-// export {
-//     // messageCode,
-//     Message,
-//     ExtendError,
-//     Type,
-//     Util,
-//     EventEmitter,
-//     IObject,
-//     IMarshal,
-//     ICollection,
-//     IPropertyCollection,
-//     IElement,
-//     IList,
-//     IListControl,
-//     ISerialize,
-//     IArrayCollection,
-//     NamespaceManager,
-//     MetaRegistry,
-//     MetaObject,
-//     MetaElement,
-//     BaseCollection,
-//     ArrayCollection,
-//     PropertyCollection
-// };
+export type { IElement }            from "./i-element.d.ts";
+export type { IList }               from "./i-list.d.ts";
+export type { IListControl }        from "./i-control-list.d.ts";
+export type { ISerialize }          from "./i-serialize.d.ts";
+export type { IArrayCollection }    from "./i-collection-array.d.ts";
+export type { NamespaceManager }    from "./namespace-manager.d.ts";
+export type { MetaRegistry }        from "./meta-registry.d.ts";
+export type { MetaObject }          from "./meta-object.d.ts";
+export type { MetaElement }         from "./meta-element.d.ts";
+export type { BaseCollection }      from "./base-collection.d.ts";
+export type { ArrayCollection }     from "./collection-array.d.ts";
+export type { PropertyCollection }  from "./collection-property.d.ts";
