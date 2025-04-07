@@ -1,7 +1,7 @@
-import IList from "./i-list";
-import IListControl from "./i-control-list";
-import ISerialize from "./i-serialize";
-import { NsTypeObject, PathObject } from './T';
+import type IList from "./i-list.d.ts";
+import type IListControl from "./i-control-list.d.ts";
+import type ISerialize from "./i-serialize.d.ts";
+import type { NsTypeObject, PathObject } from './T.d.ts';
 
 /**
  * 'NamespaceManager' is a class that manages the namespace.

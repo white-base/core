@@ -1,4 +1,4 @@
-import { ExtType } from "./T";
+import type { ExtType } from "./T.d.ts";
 
 /**
  * 타입 모듈입니다.

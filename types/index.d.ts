@@ -1,25 +1,25 @@
-// import messageCode from "./message-code";
-import Message from "./message";
-import ExtendError from "./extend-error";
-import Type from "./type";
-import Util from "./util";
-import EventEmitter from "./event-emitter";
-import IObject from "./i-object";
-import IMarshal from "./i-marshal";
-import ICollection from "./i-collection";
-import IPropertyCollection from "./i-collection-property";
-import IElement from "./i-element";
-import IList from "./i-list";
-import IListControl from "./i-control-list";
-import ISerialize from "./i-serialize";
-import IArrayCollection from "./i-collection-array";
-import NamespaceManager from "./namespace-manager";
-import MetaRegistry from "./meta-registry";
-import MetaObject from "./meta-object";
-import MetaElement from "./meta-element";
-import { BaseCollection } from "./base-collection";
-import ArrayCollection from "./collection-array";
-import PropertyCollection from "./collection-property";
+// import messageCode from "./message-code.d.ts.d.ts";
+import type Message from "./message.d.ts";
+import type ExtendError from "./extend-error.d.ts";
+import type Type from "./type.d.ts";
+import type Util from "./util.d.ts";
+import type EventEmitter from "./event-emitter.d.ts";
+import type IObject from "./i-object.d.ts";
+import type IMarshal from "./i-marshal.d.ts";
+import type ICollection from "./i-collection.d.ts";
+import type IPropertyCollection from "./i-collection-property.d.ts";
+import type IElement from "./i-element.d.ts";
+import type IList from "./i-list.d.ts";
+import type IListControl from "./i-control-list.d.ts";
+import type ISerialize from "./i-serialize.d.ts";
+import type IArrayCollection from "./i-collection-array.d.ts";
+import type NamespaceManager from "./namespace-manager.d.ts";
+import type MetaRegistry from "./meta-registry.d.ts";
+import type MetaObject from "./meta-object.d.ts";
+import type MetaElement from "./meta-element.d.ts";
+import type BaseCollection from "./base-collection.d.ts";
+import type ArrayCollection from "./collection-array.d.ts";
+import type PropertyCollection from "./collection-property.d.ts";
 
 export {
     // messageCode,

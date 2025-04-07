@@ -1,5 +1,5 @@
-import IObject from "./i-object";
-import IMarshal from "./i-marshal";
+import type IObject from "./i-object.d.ts";
+import type IMarshal from "./i-marshal.d.ts";
 
 /**
  * MetaObject 클래스는 IObject 및 IMarshal 인터페이스를 구현하여 메타 데이터를 처리하는 최상위 객체입니다.

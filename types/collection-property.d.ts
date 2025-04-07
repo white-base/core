@@ -1,5 +1,5 @@
-import IPropertyCollection from "./i-collection-property";
-import BaseCollection from "./base-collection";
+import type IPropertyCollection from "./i-collection-property.d.ts";
+import type BaseCollection from "./base-collection.d.ts";
 
 /**
  * The 'Property Collection' class inherits the 'Base Collection' and implements the 'IProperty Collection' interface.  

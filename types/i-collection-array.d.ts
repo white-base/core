@@ -1,4 +1,4 @@
-import ICollection from "./i-collection";
+import type ICollection from "./i-collection.d.ts";
 
 /**
  * Array collection interface.

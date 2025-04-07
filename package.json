@@ -4,6 +4,7 @@
   "description": "logic framework core",
   "type": "module",
   "main": "index.js",
+  "types": "./types/index.d.ts",
   "exports": {
     ".": {
       "types": {
@@ -34,7 +35,6 @@
       }
     }
   },
-  "types": "./types/index.d.ts",
   "files": [
     "dist/",
     "types/",

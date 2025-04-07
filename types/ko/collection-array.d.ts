@@ -1,5 +1,5 @@
-import IArrayCollection from "./i-collection-array";
-import BaseCollection from "./base-collection";
+import type IArrayCollection from "./i-collection-array.d.ts";
+import type BaseCollection from "./base-collection.d.ts";
 
 /**
  * `ArrayCollection` 클래스는 `BaseCollection`을 상속받으며 `IArrayCollection` 인터페이스를 구현합니다.  

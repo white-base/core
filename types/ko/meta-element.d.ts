@@ -1,5 +1,5 @@
-import IElement from "./i-element";
-import MetaObject from "./meta-object";
+import type IElement from "./i-element.d.ts";
+import type MetaObject from "./meta-object.d.ts";
 
 /**
  * MetaElement 클래스는 MetaObject를 상속하며, IElement 인터페이스를 구현합니다.

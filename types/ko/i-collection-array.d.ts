@@ -1,4 +1,4 @@
-import ICollection from "./i-collection";
+import type ICollection from "./i-collection.d.ts";
 
 /**
  * 배열 컬렉션 인터페이스입니다.
