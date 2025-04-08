@@ -38,7 +38,7 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
         entries: alias || []
       }),
       json(),
-      resolve({browser}),
+      resolve({ browser }),
       commonjs(),
 
       minified && terser(),
@@ -48,7 +48,8 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
         presets: ['@babel/preset-env']
       })] : []),
       ...(config.plugins || []),
-    ]
+    ],
+    // external: ['path', 'url']
   });
 
   const configs = [
@@ -90,8 +91,10 @@ export default async () => {
           targets: [
             { src: 'src/locales/**/*', dest: 'dist/locales' }
           ]
-        })
-      ]
+        }),
+        // resolve({ preferBuiltins: true }),
+      ],
+      // external: ['path', 'url']
     },
       // dist 폴더 삭제 (빌드 전 처리)
     // {

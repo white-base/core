@@ -85,9 +85,9 @@ describe("[target: message.js]", () => {
         });
     });
     describe("Message.importMessage() : 저장소에 메세지 추가", () => {
-        it("- 추가", async() => {
+        it("- 추가", async () => {
             const {Message} = await import('../src/message');
-            Message.importMessage({EEEEE: 'NamespaceManager'}, './test')
+            await Message.importMessage({EEEEE: 'NamespaceManager'}, './test')
 
             expect(Message.$storage.path[1].indexOf('/test') > -1).toBe(T)
             expect(Message.$storage.path.length > 1).toBe(T)
@@ -95,7 +95,7 @@ describe("[target: message.js]", () => {
         });
         it("- 경로 없이 추가", async () => {
             const {Message} = await import('../src/message');
-            Message.importMessage({EEEEE: 'NamespaceManager'})
+            await Message.importMessage({EEEEE: 'NamespaceManager'})
 
             expect(Message.$storage.path.length > 0).toBe(T)
             expect(Message.getMessageByCode('EEEEE')).toBe('NamespaceManager')

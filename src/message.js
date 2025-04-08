@@ -1,8 +1,8 @@
 /**** message.js | Message ****/
 //==============================================================
 import  defaultCode         from './locales/default.json';
-import { fileURLToPath }    from 'url';
-import { dirname, resolve } from 'path';
+// import { fileURLToPath }    from 'url';
+// import { dirname, resolve } from 'path';
 
 const localesPath = './locales';    // 상대 경로
 
@@ -37,7 +37,7 @@ async function _loadJSON(filePath) {
     const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
     
     try {
-        if (isESM) {
+        if (isESM) {    
             return (await import(filePath, { with: { type: 'json' } })).default;
         } else if (isNode) {
             return require(filePath);
@@ -132,6 +132,8 @@ class Message {
         return typeof value === 'number' ? String(value) : value;
     };
 
+    
+
     /**
      * Add the message code to the storage.  
      * 
@@ -145,15 +147,17 @@ class Message {
         if (_isObject(p_msg)) {
             _deepMerge(this.$storage.lang.default, p_msg);
             if (_isString(p_path)) {
-                if (isNode && isESM) {  // REVIEW: esm module & node
-                    const __filename = fileURLToPath(import.meta.url);
-                    const __dirname = dirname(__filename);
-                    p_path = resolve(__dirname, p_path);
-                }
+                // if (isNode && isESM) {  // REVIEW: esm module & node
+                //     const { fileURLToPath } = await import('url');
+                //     const { dirname, resolve } = await import('path');
+
+                //     const __filename = fileURLToPath(import.meta.url);
+                //     const __dirname = dirname(__filename);
+                //     p_path = resolve(__dirname, p_path);
+                // }
                 if (this.$storage.path.indexOf(p_path) < 0) this.$storage.path.push(p_path);
             }
         }
-
         // locale = _getLocale();
         // if (locale === 'en') locale = 'default';
         // else await Message.changeLanguage(locale);
@@ -248,9 +252,19 @@ class Message {
 //  main();
 
 
-// await Message.importMessage(defaultCode, localesPath);
-// console.log('After import');
 Message.importMessage(defaultCode, localesPath);
+// console.log('After import');
+
+// (async () => {
+//     await Message.importMessage(defaultCode, localesPath);
+// })();
+// async function main() {
+//     await Message.importMessage(defaultCode, localesPath);
+//     console.log('importMessage 완료 후 실행');
+// }
+// main();
+
+// await Message.importMessage(defaultCode, localesPath);
 
 export default Message;
 export { Message };
