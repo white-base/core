@@ -86,7 +86,8 @@
     "rollup-plugin-copy": "^3.5.0",
     "stringify-parse": "^1.0.6",
     "telejson": "^7.2.0",
-    "typedoc": "^0.25.12"
+    "typedoc": "^0.25.12",
+    "url": "^0.11.4"
   },
   "publishConfig": {
     "access": "public"

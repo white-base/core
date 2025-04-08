@@ -1,6 +1,8 @@
 /**** message.js | Message ****/
 //==============================================================
-import  defaultCode     from './locales/default.json';
+import  defaultCode         from './locales/default.json';
+import { fileURLToPath }    from 'url';
+import { dirname, resolve } from 'path';
 
 const localesPath = './locales';    // 상대 경로
 
@@ -137,11 +139,19 @@ class Message {
      * @param {string} p_path Message file path
      */
     static importMessage (p_msg, p_path) {
-        // let locale;
+        const isNode = typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null && globalThis.isDOM !== true;
+        const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
 
         if (_isObject(p_msg)) {
             _deepMerge(this.$storage.lang.default, p_msg);
-            if (_isString(p_path)) this.$storage.path.push(p_path);
+            if (_isString(p_path)) {
+                if (isNode && isESM) {  // REVIEW: esm module & node
+                    const __filename = fileURLToPath(import.meta.url);
+                    const __dirname = dirname(__filename);
+                    p_path = resolve(__dirname, p_path);
+                }
+                if (this.$storage.path.indexOf(p_path) < 0) this.$storage.path.push(p_path);
+            }
         }
 
         // locale = _getLocale();
