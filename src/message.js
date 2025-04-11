@@ -141,9 +141,6 @@ class Message {
      * @param {string} p_path Message file path
      */
     static importMessage (p_msg, p_path) {
-        const isNode = typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null && globalThis.isDOM !== true;
-        const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
-
         if (_isObject(p_msg)) {
             _deepMerge(this.$storage.lang.default, p_msg);
             if (_isString(p_path)) {

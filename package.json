@@ -47,6 +47,7 @@
     "test:u": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --updateSnapshot",
     "test:v": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --verbose",
     "serve": "npx serve",
+    "docs": "npm run docs:en && npm run docs:ko",
     "docs:en": "typedoc --readme none --out docs/en types/index.d.ts types/T.d.ts",
     "docs:ko": "typedoc --readme none --out docs/ko types/ko/index.d.ts types/ko/T.d.ts",
     "check": "npm run check:ts && npm run check:js",

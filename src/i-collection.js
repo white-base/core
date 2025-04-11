@@ -2,59 +2,57 @@
 //==============================================================
 import ExtendError      from './extend-error.js';
 
-var ICollection  = (function () {
-    /**
-     * This is the collection interface.
-     * @constructs ICollection
-     * @interface
-     */
-    function ICollection() {
+/**
+ * This is the collection interface.
+ * 
+ * @interface
+ */
+class ICollection {
+
+    static _KIND = 'interface';
+    static _NS = 'Interface';  // namespace
+
+    constructor() {
     }
 
-    ICollection._KIND = 'interface';
-    ICollection._NS = 'Interface';    // namespace
-
     /**
-     * Add an element to the collection.  
+     * Add an element to the collection.
      * 
      * @abstract
      */
-    ICollection.prototype.add  = function() {
+    add() {
         throw new ExtendError(/EL02161/, null, ['ICollection']);
-    };
+    }
 
     /**
-     * Remove an element from the collection.  
+     * Remove an element from the collection.
      * 
      * @abstract
      */
-    ICollection.prototype.remove  = function() {
+    remove() {
         throw new ExtendError(/EL02162/, null, ['ICollection']);
-    };
+    }
 
     /**
-     * Verify that an element exists in the collection.  
+     * Verify that an element exists in the collection.
      * 
      * @returns {boolean} If the element exists, it is 'true', otherwise it is 'false'
      * @abstract
      */
-    ICollection.prototype.contains  = function() {
+    contains() {
         throw new ExtendError(/EL02163/, null, ['ICollection']);
-    };
+    }
 
     /**
-     * Returns the index of an element in the collection.  
+     * Returns the index of an element in the collection.
      * 
-     * @returns {number}  index of element, '-1' without element
+     * @returns {number} index of element, '-1' without element
      * @abstract
      */
-    ICollection.prototype.indexOf  = function() {
+    indexOf() {
         throw new ExtendError(/EL02164/, null, ['ICollection']);
-    };
-
-    return ICollection;
-    
-}());
+    }
+}
 
 export default ICollection;
 export { ICollection };

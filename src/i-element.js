@@ -1,38 +1,40 @@
 /**** i-element.js | IElement ****/
 //==============================================================
 import ExtendError      from './extend-error.js';  
-   
-var IElement  = (function () {
+
+/**
+ * Element (independent) interface.
+ * 
+ * @interface
+ */
+class IElement {
+
+    static _NS = 'Interface';    // namespace
+    static _KIND = 'interface';
+
     /**
-     * Element (independent) interface.  
      * @constructs IElement
-     * @interface
      */
-    function IElement() {
-        /**
-         * Internal property that stores the name of the element.  
-         * 
-         * @member {string} IElement#_name
-         */
-        this._name = String;
+    constructor() {
     }
 
-    IElement._NS = 'Interface';    // namespace
-    IElement._KIND = 'interface';
+    /**
+     * Internal property that stores the name of the element.
+     * 
+     * @member {string}
+     */
+    _name = String;
 
     /**
-     * Creates a copy of the current element.  
+     * Creates a copy of the current element.
      * 
      * @returns {object} Replicated Elements
      * @abstract
      */
-    IElement.prototype.clone  = function() {
+    clone() {
         throw new ExtendError(/EL02131/, null, ['IElement']);
-    };
-
-    return IElement;
-    
-}());
+    }
+}
 
 export default IElement;
 export { IElement };

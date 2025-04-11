@@ -2,53 +2,54 @@
 //==============================================================
 import ExtendError      from './extend-error.js';    
    
-var IMarshal  = (function () {
+/**
+ * Object control interface.
+ * 
+ * @interface
+ */
+class IMarshal {
+    
+    static _NS = 'Interface';    // namespace
+    static _KIND = 'interface';
+
     /**
-     * Object control interface.  
-     * 
-     * @interface
+     * @constructs IMarshal
      */
-    function IMarshal() {
-
-        /**
-         * Internal property that stores the unique identifier of the object.  
-         * 
-         * @member {string} IMarshal#_guid
-         */
-        this._guid = String;
-
-        /**
-         * Internal property that stores the creator type of the object.  
-         * 
-         * @member {string} IMarshal#_type REVIEW:
-         */
-        this._type = [['_req_', Function, { $type: 'class' } ]];
+    constructor() {
     }
 
-    IMarshal._NS = 'Interface';    // namespace
-    IMarshal._KIND = 'interface';
-    
     /**
-     * Returns the object literal.  
+     * Internal property that stores the unique identifier of the object.
+     * 
+     * @member {string}
+     */
+    _guid = String;
+
+    /**
+     * Internal property that stores the creator type of the object.
+     * 
+     * @member {string} REVIEW:
+     */
+    _type = [['_req_', Function, { $type: 'class' }]];
+
+    /**
+     * Returns the object literal.
      * 
      * @abstract
      */
-    IMarshal.prototype.getObject = function() {
+    getObject() {
         throw new ExtendError(/EL02121/, null, ['IMarshal']);
-    };
+    }
 
     /**
-     * Set the object literal by converting it to an instance.  
+     * Set the object literal by converting it to an instance.
      * 
      * @abstract
      */
-    IMarshal.prototype.setObject  = function() {
+    setObject() {
         throw new ExtendError(/EL02122/, null, ['IMarshal']);
-    };
-
-    return IMarshal;
-    
-}());
+    }
+}
 
 export default IMarshal;
 export { IMarshal };
