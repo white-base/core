@@ -42,19 +42,19 @@
     "index.js"
   ],
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/.bin/jest",
-    "test:c": "node --experimental-vm-modules node_modules/.bin/jest --coverage",
-    "test:u": "node --experimental-vm-modules node_modules/.bin/jest --updateSnapshot",
-    "test:v": "node --experimental-vm-modules node_modules/.bin/jest --verbose",
-    "http": "npx serve",
+    "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest",
+    "test:c": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --coverage",
+    "test:u": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --updateSnapshot",
+    "test:v": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --verbose",
+    "serve": "npx serve",
     "docs:en": "typedoc --readme none --out docs/en types/index.d.ts types/T.d.ts",
     "docs:ko": "typedoc --readme none --out docs/ko types/ko/index.d.ts types/ko/T.d.ts",
-    "build": "rollup -c --bundleConfigAsCjs",
+    "check": "npm run check:ts && npm run check:js",
     "check:ts": "tsc --noEmit",
     "check:js": "eslint src/ --ext .js",
-    "check:all": "npm run check:ts && npm run check:js",
     "prepare": "npm run build",
-    "update": "npm update && npm run build"
+    "update": "npm update && npm run build",
+    "build": "rollup -c --bundleConfigAsCjs"
   },
   "repository": {
     "type": "git",
