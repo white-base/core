@@ -42,7 +42,7 @@
     "index.js"
   ],
   "scripts": {
-    "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest",
+    "test": "node --experimental-vm-modules --no-warnings=ExperimentalWarning  node_modules/.bin/jest",
     "test:c": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --coverage",
     "test:u": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --updateSnapshot",
     "test:v": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --verbose",

@@ -49,7 +49,7 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
       })] : []),
       ...(config.plugins || []),
     ],
-    // external: ['path', 'url']
+    external: ['path', 'url'], // 내장 모듈은 번들 제외
   });
 
   const configs = [
@@ -94,7 +94,7 @@ export default async () => {
         }),
         // resolve({ preferBuiltins: true }),
       ],
-      // external: ['path', 'url']
+      external: ['path', 'url'], // 내장 모듈은 번들 제외
     },
       // dist 폴더 삭제 (빌드 전 처리)
     // {
