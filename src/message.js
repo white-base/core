@@ -51,12 +51,11 @@ async function _loadJSON(filePath) {
             const { readFile } = await import('fs/promises');
             const { fileURLToPath } = await import('url');
             const path = await import('path');
-          
             const __filename = fileURLToPath(import.meta.url);
             const __dirname = path.dirname(__filename);
-          
-            const absolutePath = path.join(__dirname, filePath);
-            const jsonText = await readFile(absolutePath, 'utf8');
+            
+            if (!path.isAbsolute(filePath)) filePath = path.join(__dirname, filePath);
+            const jsonText = await readFile(filePath, 'utf8');
             return JSON.parse(jsonText);
         } else if (isNode) {
             return require(filePath);
