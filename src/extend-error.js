@@ -1,6 +1,6 @@
 /**** extend-error.js | ExtendError ****/
 //==============================================================
-import Message          from './message.js';
+import Message          from './message-wrap.js';
 
 // inner function 
 function _buildMessageProp(obj) {

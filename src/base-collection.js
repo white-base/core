@@ -1,6 +1,5 @@
 /**** base-collection.js | BaseCollection ****/
 //==============================================================
-// import Message from './message.js';    
 import ExtendError          from './extend-error.js';
 import Util                 from './util.js';
 import Type                 from './type.js';

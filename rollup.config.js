@@ -35,7 +35,10 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
     },
     plugins: [
       aliasPlugin({
-        entries: alias || []
+        entries: alias || [
+            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
+            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+        ]
       }),
       json(),
       resolve({ browser }),
@@ -83,6 +86,12 @@ export default async () => {
       ],
       plugins: [
         // autoExternal(),
+        aliasPlugin({
+          entries: [
+            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
+            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+          ]
+        }),
         cleandir(OUT_DIR),
         resolve(),
         commonjs(),

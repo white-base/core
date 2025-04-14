@@ -264,7 +264,7 @@ class Message {
     
 //     console.log('importMessage가 끝난 후 실행됨');
 // }
-//  main();
+//  main();     
 
 
 Message.importMessage(defaultCode, localesPath);
@@ -278,6 +278,24 @@ Message.importMessage(defaultCode, localesPath);
 //     console.log('importMessage 완료 후 실행');
 // }
 // main();
+
+// async function main() {
+//     await Message.autoDetect();
+//     // console.log('autoDetect 완료 후 실행');
+// }
+// main();
+// 코드 내부
+
+// if (typeof module !== 'undefined' && module.exports) {
+//     // CommonJS 환경 → await 사용 X
+//     (async () => {
+//         await Message.autoDetect();
+//     })();
+// } else {
+//     // ESM 환경 → top-level await 가능
+//     await Message.autoDetect();
+// }
+
 
 // await Message.importMessage(defaultCode, localesPath);
 

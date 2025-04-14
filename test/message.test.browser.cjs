@@ -1,12 +1,15 @@
 //==============================================================
 // gobal defined
 const koCode = require("../dist/locales/ko.json");
+const fs = require('fs');
+const path = require('path');
 
 //==============================================================
 // test
 describe("BROWSER ENV TEST", () => {
     beforeEach(() => {
         jest.restoreAllMocks();
+        jest.resetModules();
         global.fetch = jest.fn(() =>
             Promise.resolve({
                 json: () => Promise.resolve(koCode),
@@ -19,17 +22,42 @@ describe("BROWSER ENV TEST", () => {
         });
     });
     describe("Message.get() : 메시지 얻기", () => {
-        it("- 기본 영어", async () => {
+        it("- 한글", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko-KR', 'ko'],
+            });
+            const {Message} = require("../dist/logic-core.browser.cjs");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");    // only ko code
+            expect(Message.get('EN')).toMatch(/OK/);
+        });
+        it("- 한글 : 모듈", async () => {
             Object.defineProperty(navigator, 'languages', {
                 configurable: true,
                 get: () => ['ko_KR', 'ko'],
             });
             const {Message} = require("logic-core/ko");
             
-            expect(Message.currentLang).toBe('default')
+            expect(Message.currentLang).toBe('ko')
             expect(Message.get('KO')).toMatch(/There is no message for code. 'KO'/);
             expect(Message.get('EN')).toMatch(/OK/);
-        });             
+        });
+        it("- 한글 : umd script 실행", () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko_KR', 'ko'],
+            });
+            const umdCode = fs.readFileSync(path.resolve(__dirname, '../dist/logic-core.js'), 'utf8');
+            const script = new Function('global', umdCode + '; return global._L;');
+            globalThis._L = script(global);
+            const {Message} = _L;
+
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch(/There is no message for code. 'KO'/);
+            expect(Message.get('EN')).toMatch(/OK/);
+        });
     });
     describe("Message.autoDetect() : 언어자동 감지", () => {
         it("- index.js", async () => {

@@ -13,13 +13,17 @@ describe("cjs", () => {
     beforeEach(() => {
         jest.resetModules();
         jest.restoreAllMocks();
+        process.env.LANG = 'en_US.UTF-8';
     });
     describe("logic-core 모듈", () => {
         it("- 기본", async () => {
-            const { PropertyCollection, ArrayCollection } = require('logic-core');
+            process.env.LANG = 'ko_KR.UTF-8';
+
+            const { PropertyCollection, ArrayCollection, Message } = require('logic-core');
             const p = new PropertyCollection();
             const a = new ArrayCollection();
             
+            expect(typeof PropertyCollection === 'function').toBe(true);
             expect(typeof PropertyCollection === 'function').toBe(true);
             expect(typeof ArrayCollection === 'function').toBe(true);
         });

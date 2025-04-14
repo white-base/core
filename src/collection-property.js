@@ -1,6 +1,6 @@
 /**** collection-property.js | PropertyCollection ****/
 //==============================================================
-import Message              from './message.js';
+import Message              from './message-wrap.js';
 import ExtendError          from './extend-error.js';
 import Type                 from './type.js';
 import Util                 from './util.js';

@@ -1,6 +1,6 @@
 /// <reference path='./types/index.d.ts' />
 
-export { Message }              from './src/message.js';
+export { Message }              from './src/message-wrap.js';
 export { ExtendError }          from './src/extend-error.js';
 export { Type }                 from './src/type.js';
 export { Util }                 from './src/util.js';

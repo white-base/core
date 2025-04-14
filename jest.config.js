@@ -9,7 +9,7 @@ export default {
       {
         displayName: "ES Module",
         testEnvironment: "node",
-        testMatch: ["**/test/*.test.js"],
+        testMatch: ["**/test/**/*.test.js"],
       },
       {
         displayName: "Browser",

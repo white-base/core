@@ -1,6 +1,6 @@
 /**** collection-array.js | ArrayCollection ****/
 //==============================================================
-import Message              from './message.js';    
+import Message              from './message-wrap.js';    
 import ExtendError          from './extend-error.js';    
 import Util                 from './util.js';
 import Type                 from './type.js';

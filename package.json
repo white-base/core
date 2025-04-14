@@ -46,7 +46,9 @@
     "test:c": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --coverage",
     "test:u": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --updateSnapshot",
     "test:v": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/.bin/jest --verbose",
-    "serve": "npx serve",
+    "serve": "node ./scripts/server.cjs",
+    "cy:run": "wait-on http://localhost:8080 && cypress run",
+    "test:e2e": "concurrently -k \"npm run serve\" \"npm run cy:run\"",
     "docs": "npm run docs:en && npm run docs:ko",
     "docs:en": "typedoc --readme none --out docs/en types/index.d.ts types/T.d.ts",
     "docs:ko": "typedoc --readme none --out docs/ko types/ko/index.d.ts types/ko/T.d.ts",
@@ -55,7 +57,8 @@
     "check:js": "eslint src/ --ext .js",
     "prepare": "npm run build",
     "update": "npm update && npm run build",
-    "build": "rollup -c --bundleConfigAsCjs"
+    "build": "rollup -c --bundleConfigAsCjs",
+    "all": "npm run check && npm run build && npm run test"
   },
   "repository": {
     "type": "git",
@@ -73,7 +76,10 @@
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-terser": "^0.4.4",
     "babel-jest": "^29.7.0",
+    "concurrently": "^9.1.2",
+    "cypress": "^14.3.0",
     "eslint": "^9.21.0",
+    "express": "^5.1.0",
     "fs": "^0.0.1-security",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
@@ -88,7 +94,8 @@
     "stringify-parse": "^1.0.6",
     "telejson": "^7.2.0",
     "typedoc": "^0.25.12",
-    "url": "^0.11.4"
+    "url": "^0.11.4",
+    "wait-on": "^8.0.3"
   },
   "publishConfig": {
     "access": "public"

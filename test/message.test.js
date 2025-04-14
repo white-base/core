@@ -10,11 +10,12 @@ describe("[target: message.js]", () => {
     beforeEach(async () => {
         jest.resetModules();
         jest.restoreAllMocks();
-        globalThis.isESM = true
+        globalThis.isESM = true;
+        process.env.LANG = 'en_US.UTF-8';
     });
     describe("Message.$storage : 메세지 저장소", () => {
         it("- $storage : 기본 언어 얻기", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
 
             expect(typeof Message.$storage).toBe('object')
             expect(typeof Message.$storage.lang).toBe('object')
@@ -25,7 +26,7 @@ describe("[target: message.js]", () => {
     describe("Message.autoDetect() : 언어자동 설정", () => {
         it("- 한글", async () => {
         process.env.LANG = 'ko_KR.UTF-8';
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             await Message.autoDetect()
             
             expect(Message.defaultLang).toBe('default')
@@ -35,17 +36,16 @@ describe("[target: message.js]", () => {
         });
         it("- 영어 환경", async () => {
             process.env.LANG = 'en_US.UTF-8';
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             await Message.autoDetect()
             
             expect(Message.defaultLang).toBe('default')
             expect(Message.currentLang).toBe('default')
         });
         it("- 일어 환경", async () => {
-            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
-
             process.env.LANG = 'ja_JP.UTF-8';
-            const {Message} = await import('../src/message');
+            const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+            const {Message} = await import('../src/message-wrap');
             await Message.autoDetect()
             
             expect(Message.defaultLang).toBe('default')
@@ -58,7 +58,7 @@ describe("[target: message.js]", () => {
             const {Message, Type} = await import('logic-core/ko');
             // const {Message, Type} = await import('../dist/logic-core.js');
             
-            expect(Message.currentLang).toBe('default');
+            expect(Message.currentLang).toBe('ko');
 
             await Message.autoDetect()
             
@@ -70,14 +70,14 @@ describe("[target: message.js]", () => {
     });
     describe("Message.getMessageByCode() : 메시지 반환", () => {
         it("- 오류 코드 메세지 : ES010", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             const code = 'ES010'
             const value = 'Other errors'
 
             expect(Message.getMessageByCode(code)).toBe(value)
         });
         it("- 없는 메세지", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             const code = 'EEEEE'
             const value = 'Other errors'
 
@@ -86,7 +86,7 @@ describe("[target: message.js]", () => {
     });
     describe("Message.importMessage() : 저장소에 메세지 추가", () => {
         it("- 추가", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             await Message.importMessage({EEEEE: 'NamespaceManager'}, './test')
 
             expect(Message.$storage.path[1].indexOf('/test') > -1).toBe(T)
@@ -94,7 +94,7 @@ describe("[target: message.js]", () => {
             expect(Message.getMessageByCode('EEEEE')).toBe('NamespaceManager')
         });
         it("- 경로 없이 추가", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             await Message.importMessage({EEEEE: 'NamespaceManager'})
 
             expect(Message.$storage.path.length > 0).toBe(T)
@@ -103,7 +103,7 @@ describe("[target: message.js]", () => {
     });
     describe("Message.changeLanguage() : 언어 변경", () => {
         it("- 언어 변경", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             await Message.changeLanguage('ko')
 
             expect(Message.currentLang).toBe('ko')
@@ -111,7 +111,7 @@ describe("[target: message.js]", () => {
         });
         it("- 없는 언어 추가", async () => {
             const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
-            const {Message} = await import('../src/message')
+            const {Message} = await import('../src/message-wrap')
             await Message.changeLanguage('jp')
             
             expect(Message.currentLang).toBe('jp')
@@ -120,19 +120,42 @@ describe("[target: message.js]", () => {
     });
     describe("Message.get() : 메세지 얻기", () => {
         it("- 메세지 얻기", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             const msg = Message.get('ES011');
             
             expect(msg).toMatch(/ES011/);
         });
+        it("- 한글", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('../src/message-wrap');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : index", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('logic-core');
+
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : esm", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('../dist/logic-core.esm.js');
+
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('EN')).toMatch("OK");
+        });
         it("- 없는 코드", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             const msg = Message.get('EEEE',);
             
             expect(msg).toBe("There is no message for code. 'EEEE'")
         });
         it("- 코드 매칭", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             Message.importMessage({TEST: 'aa=${aa}, bb=${bb}, [0]=$1, [1]=$2'})
             
             const msg1 = Message.get('TEST', {aa: 'AA', bb: 'BB'});
@@ -144,7 +167,7 @@ describe("[target: message.js]", () => {
     });
     describe("Message.init() : 언어 ", () => {
         it("- 확인", async () => {
-            const {Message} = await import('../src/message');
+            const {Message} = await import('../src/message-wrap');
             await Message.changeLanguage('ko')
 
             expect(Message.defaultLang).toBe('default')
