@@ -1,6 +1,7 @@
 /**** message-wrap-bundle.js | Message ****/
 //==============================================================
-import { Message }          from './message.js';
+const { Message } = require('./message.js');
+
 
 // await Message.autoDetect();
 
@@ -8,5 +9,5 @@ import { Message }          from './message.js';
     await Message.autoDetect();
 })();
 
-export default Message;
-export { Message };
+module.exports = { Message };
+// export { Message };

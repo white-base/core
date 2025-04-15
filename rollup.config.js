@@ -3,7 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
 import json from '@rollup/plugin-json';
 import { babel } from '@rollup/plugin-babel';
-// import autoExternal from 'rollup-plugin-auto-external';
+import autoExternal from 'rollup-plugin-auto-external';
 import bundleSize from 'rollup-plugin-bundle-size';
 import aliasPlugin from '@rollup/plugin-alias';
 import { cleandir } from 'rollup-plugin-cleandir';
@@ -15,7 +15,7 @@ const outputFileName = 'logic-core';
 const name = "_L";
 const namedInput = './index.js';
 const defaultInput = './index.js';
-const srcMap = true;
+const srcMap = false;
 const OUT_DIR = './dist';
 
 const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...config}) => {
@@ -34,12 +34,12 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
       file: `${path.dirname(file)}/${basename}.${(minified ? ['min', ...extArr] : extArr).join('.')}`
     },
     plugins: [
-      aliasPlugin({
-        entries: alias || [
-            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
-            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
-        ]
-      }),
+      // aliasPlugin({
+      //   entries: alias || [
+      //       { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
+      //       { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+      //   ]
+      // }),
       json(),
       resolve({ browser }),
       commonjs(),
@@ -52,7 +52,7 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
       })] : []),
       ...(config.plugins || []),
     ],
-    external: ['path', 'url'], // 내장 모듈은 번들 제외
+    external: ['path', 'url', 'URL'], // 내장 모듈은 번들 제외
   });
 
   const configs = [
@@ -85,14 +85,14 @@ export default async () => {
         },
       ],
       plugins: [
-        // autoExternal(),
+        autoExternal(),
+        cleandir(OUT_DIR),
         aliasPlugin({
           entries: [
             { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
             { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
           ]
         }),
-        cleandir(OUT_DIR),
         resolve(),
         commonjs(),
         json(),
@@ -103,7 +103,7 @@ export default async () => {
         }),
         // resolve({ preferBuiltins: true }),
       ],
-      external: ['path', 'url'], // 내장 모듈은 번들 제외
+      // external: ['path', 'url', 'URL'], // 내장 모듈은 번들 제외
     },
       // dist 폴더 삭제 (빌드 전 처리)
     // {
@@ -128,7 +128,15 @@ export default async () => {
         sourcemap: srcMap,
         exports: "named",
         banner
-      }
+      },
+      plugins: [
+        aliasPlugin({
+          entries: [
+            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
+            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+          ]
+        }),
+      ]
     }),
     // browser ESM bundle for CDN
     ...buildConfig({
@@ -155,7 +163,15 @@ export default async () => {
         format: "cjs",
         exports: "named",
         banner
-      }
+      },
+      plugins: [
+        aliasPlugin({
+          entries: [
+            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
+            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+          ]
+        }),
+      ]
     }),
     
   ]

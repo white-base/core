@@ -10,12 +10,14 @@
   <button id="submit">Submit</button>
   <div id="output"></div>
 
-  <script type="module" >
-    import {ArrayCollection, Message} from '../dist/logic-core.esm.js';
+  <script src="../dist/logic-core.js"></script>
+    
+  <script>
+  const {ArrayCollection, Message} = this._L;
 
-    console.log('ArrayCollection', ArrayCollection);
-    console.log('Message.$storage', Message.$storage);
-    console.log('Message.currentLang', Message.currentLang);
+  console.log('ArrayCollection', ArrayCollection);
+  console.log('Message.$storage', Message.$storage);
+  console.log('Message.currentLang', Message.currentLang);
   </script>
 </body>
 </html>

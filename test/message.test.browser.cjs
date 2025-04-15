@@ -27,10 +27,11 @@ describe("BROWSER ENV TEST", () => {
                 configurable: true,
                 get: () => ['ko-KR', 'ko'],
             });
-            const {Message} = require("../dist/logic-core.browser.cjs");
+            const {Message} = await import("../src/message-wrap");
+            // const {Message} = require("../src/message-wrap");
             
             expect(Message.currentLang).toBe('ko')
-            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");    // only ko code
+            expect(Message.get('KO')).toMatch("OK");    // only ko code
             expect(Message.get('EN')).toMatch(/OK/);
         });
         it("- 한글 : 모듈", async () => {
@@ -38,10 +39,77 @@ describe("BROWSER ENV TEST", () => {
                 configurable: true,
                 get: () => ['ko_KR', 'ko'],
             });
-            const {Message} = require("logic-core/ko");
+            const {Message} = require("logic-core");
             
             expect(Message.currentLang).toBe('ko')
             expect(Message.get('KO')).toMatch(/There is no message for code. 'KO'/);
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : 모듈 2", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko_KR', 'ko'],
+            });
+            const {Message} = await import("logic-core");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : esm", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko-KR', 'ko'],
+            });
+            // const {Message} = require("../dist/logic-core.esm.js");
+            const {Message} = await import("../dist/logic-core.esm.js");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : node", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko-KR', 'ko'],
+            });
+            const {Message} = await import("../dist/logic-core.node.cjs");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : node 2", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko-KR', 'ko'],
+            });
+            const {Message} = require("../dist/logic-core.node.cjs");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : browser", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko-KR', 'ko'],
+            });
+            const {Message} = require("../dist/logic-core.browser.cjs");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('EN')).toMatch(/OK/);
+        });
+        it("- 한글 : browser 2", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko-KR', 'ko'],
+            });
+            const {Message} = await import("../dist/logic-core.browser.cjs");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("OK");
             expect(Message.get('EN')).toMatch(/OK/);
         });
         it("- 한글 : umd script 실행", () => {

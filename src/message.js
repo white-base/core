@@ -2,7 +2,7 @@
 //==============================================================
 // import  defaultCode         from './locales/default.json' with { type: 'json' };
 import  defaultCode         from './locales/default.js';
-
+// import { readFileSync } from 'fs';
 
 
 // import { createRequire } from 'module';
@@ -49,23 +49,67 @@ async function _loadJSON(filePath) {
             // return (await import(filePath, { with: { type: 'json' } })).default;
 
             const { readFile } = await import('fs/promises');
-            const { fileURLToPath } = await import('url');
-            const path = await import('path');
-            const __filename = fileURLToPath(import.meta.url);
-            const __dirname = path.dirname(__filename);
-            
-            if (!path.isAbsolute(filePath)) filePath = path.join(__dirname, filePath);
+            // const { fileURLToPath } = await import('url');
+            // const path = await import('path');
+            // const __filename = fileURLToPath(import.meta.url);
+            // const __dirname = path.dirname(__filename);
+            // if (!path.isAbsolute(filePath)) filePath = path.join(__dirname, filePath);
+
+            filePath = await getLocalePath(filePath);
             const jsonText = await readFile(filePath, 'utf8');
             return JSON.parse(jsonText);
         } else if (isNode) {
-            return require(filePath);
+            // return require(filePath);
+            const { readFileSync } = await import('fs');
+            filePath = await getLocalePath(filePath);
+            return JSON.parse(readFileSync(filePath, 'utf8'));
         } else {
+            // const __dirname2 = new URL('.', import.meta.url).pathname;
+            // if (!isAbsolutePath(filePath))  filePath = new URL(__dirname2, filePath);
+            filePath = await getLocalePath(filePath);
             const response = await fetch(filePath);
             return await response.json();
         }
     } catch (error) {
         // console.log(`Error loading JSON file: ${filePath}`, error);
         return undefined;
+    }
+
+    // inner function
+    async function getLocalePath(filename) {
+        // 1. 브라우저 (ESM or 일반 스크립트)
+        if (typeof window !== 'undefined') {
+            let baseURL = '';
+
+            if (typeof document !== 'undefined' && document.currentScript) {
+                baseURL = document.currentScript.src;
+            } else if (typeof import.meta !== 'undefined' && import.meta.url) {
+                baseURL = import.meta.url;
+            } else {
+                throw new Error('Unable to determine base URL in browser.');
+            }
+
+            return new URL(filename, baseURL).href;
+        }
+
+        // 2. Node.js CJS
+        if (typeof __dirname !== 'undefined') {
+            const path = require('path');
+            return path.resolve(__dirname, filename);
+        }
+
+        // 3. Node.js ESM
+        if (typeof import.meta !== 'undefined' && import.meta.url && typeof process !== 'undefined') {
+            const { fileURLToPath } = await import('url');
+            const path = await import('path');
+            const __filename = fileURLToPath(import.meta.url);
+            const __dirname = path.dirname(__filename);
+            return path.resolve(__dirname, filename);
+        }
+
+
+
+        throw new Error('Unsupported environment');
     }
 }
 
@@ -249,6 +293,11 @@ class Message {
 
         if (locale === 'en') locale = 'default';
         await Message.changeLanguage(locale);
+
+        // const aa = await import('./test.cjs');
+
+        // console.log('aa', aa);
+        
     }
 }
 // console.log('Before import');

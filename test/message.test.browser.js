@@ -27,17 +27,6 @@ describe("BROWSER ENV TEST", () => {
             expect(Message.currentLang).toBe('default')
             expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
             expect(Message.get('EN')).toMatch(/OK/);
-        });           
-        it("- 한글", async () => {
-            Object.defineProperty(navigator, 'languages', {
-                configurable: true,
-                get: () => ['ko_KR', 'ko'],
-            });
-            const {Message} = await import("logic-core");
-            
-            expect(Message.currentLang).toBe('ko')
-            expect(Message.get('KO')).toMatch("[KO] OK");
-            expect(Message.get('EN')).toMatch(/OK/);
         });
         it("- 기본 : message.js", async () => {
             Object.defineProperty(navigator, 'languages', {
@@ -49,6 +38,17 @@ describe("BROWSER ENV TEST", () => {
             expect(Message.get('KO')).toMatch("OK");
             expect(Message.get('EN')).toMatch("OK");
         });
+        it("- 한글", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko_KR', 'ko'],
+            });
+            const {Message} = await import("logic-core");
+            
+            expect(Message.currentLang).toBe('ko')
+            expect(Message.get('KO')).toMatch("[KO] OK");
+            expect(Message.get('EN')).toMatch(/OK/);
+        });
         it("- 한글 : logic-core.esm", async () => {
             Object.defineProperty(navigator, 'languages', {
                 configurable: true,
@@ -58,6 +58,37 @@ describe("BROWSER ENV TEST", () => {
             
             expect(Message.currentLang).toBe('ko');
             expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : logic-core.esm", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko_KR', 'ko'],
+            });
+            const {Message} = await import('../dist/logic-core.browser.cjs');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : logic-core.node", async () => {
+            Object.defineProperty(navigator, 'languages', {
+                configurable: true,
+                get: () => ['ko_KR', 'ko'],
+            });
+            const {Message} = await import('../dist/logic-core.node.cjs');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : umd", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            await import('../dist/logic-core.js');
+            const {Message} = _L;
+            
+            expect(Message.currentLang).toBe('default');
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
             expect(Message.get('EN')).toMatch("OK");
         });
     });

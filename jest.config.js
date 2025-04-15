@@ -5,6 +5,7 @@ export default {
         displayName: "CommonJS",
         testEnvironment: "node",
         testMatch: ["**/test/*.test.cjs"],
+        // transform: {},
       },
       {
         displayName: "ES Module",

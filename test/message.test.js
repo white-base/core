@@ -127,8 +127,8 @@ describe("[target: message.js]", () => {
         });
         it("- 한글", async () => {
             process.env.LANG = 'ko_US.UTF-8';
-            const {Message} = await import('../src/message-wrap');
-            
+            const {Message}  = await import('../src/message-wrap');
+
             expect(Message.currentLang).toBe('ko');
             expect(Message.get('KO')).toMatch("OK");
             expect(Message.get('EN')).toMatch("OK");
@@ -145,6 +145,24 @@ describe("[target: message.js]", () => {
             process.env.LANG = 'ko_US.UTF-8';
             const {Message} = await import('../dist/logic-core.esm.js');
 
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : browser", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('../dist/logic-core.browser.cjs');
+
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : umd", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            await import('../dist/logic-core.js');
+            const {Message} = _L;
+            
+            expect(Message.currentLang).toBe('ko');
             expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
             expect(Message.get('EN')).toMatch("OK");
         });
@@ -164,6 +182,7 @@ describe("[target: message.js]", () => {
             expect(msg1).toBe(" [TEST] aa=AA, bb=BB, [0]=$1, [1]=$2")
             expect(msg2).toBe(" [TEST] aa=${aa}, bb=${bb}, [0]=10, [1]=20")
         });
+        
     });
     describe("Message.init() : 언어 ", () => {
         it("- 확인", async () => {

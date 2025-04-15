@@ -41,6 +41,14 @@ describe("CJS ENV TEST", () => {
             expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
             expect(Message.get('EN')).toMatch("OK");
         });
+        it.skip("- 한글", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = require('../src/message-wrap');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('EN')).toMatch("OK");
+        });
         it("- 한글", async () => {
             process.env.LANG = 'ko_US.UTF-8';
             const {Message} = require('logic-core');
@@ -57,10 +65,21 @@ describe("CJS ENV TEST", () => {
             expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
             expect(Message.get('EN')).toMatch("OK");
         });
+        it("- 한글 : browser", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = require('../dist/logic-core.browser.cjs');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('EN')).toMatch("OK");
+        });
         it("- 한글 : umd", async () => {
             process.env.LANG = 'ko_US.UTF-8';
             // const {Message} = require('../dist/logic-core.js');
+            // const core = require('../dist/logic-core.js');
+            // require('../dist/logic-core.js');
             // const {Message} = await import('../dist/logic-core.js');
+            // await require('../dist/logic-core.js');
             await import('../dist/logic-core.js');
             const {Message} = _L;
             
