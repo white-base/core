@@ -142,6 +142,7 @@ export default async () => {
     ...buildConfig({
       input: namedInput,
       minifiedVersion: true,
+      browser: false,
       output: {
         file: `dist/${outputFileName}.esm.js`,
         format: "esm",

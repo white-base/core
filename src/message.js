@@ -60,9 +60,17 @@ async function _loadJSON(filePath) {
             return JSON.parse(jsonText);
         } else if (isNode) {
             // return require(filePath);
-            const { readFileSync } = await import('fs');
-            filePath = await getLocalePath(filePath);
-            return JSON.parse(readFileSync(filePath, 'utf8'));
+
+            // const { readFileSync } = await import('fs');
+            // filePath = await getLocalePath(filePath);
+            // return JSON.parse(readFileSync(filePath, 'utf8'));
+
+            const path = require('path');
+            const fs = require('fs');
+            const aaa = path.resolve(__dirname, filePath);
+            const data = fs.readFileSync(aaa, 'utf8');
+            const parsed = JSON.parse(data);
+            return parsed;
         } else {
             // const __dirname2 = new URL('.', import.meta.url).pathname;
             // if (!isAbsolutePath(filePath))  filePath = new URL(__dirname2, filePath);

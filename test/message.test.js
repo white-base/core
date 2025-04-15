@@ -25,7 +25,7 @@ describe("[target: message.js]", () => {
     });
     describe("Message.autoDetect() : 언어자동 설정", () => {
         it("- 한글", async () => {
-        process.env.LANG = 'ko_KR.UTF-8';
+            process.env.LANG = 'ko_KR.UTF-8';
             const {Message} = await import('../src/message-wrap');
             await Message.autoDetect()
             
