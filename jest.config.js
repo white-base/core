@@ -1,5 +1,5 @@
 export default {
-    collectCoverageFrom: ['src/*.js', '!src/_*.js'],
+    collectCoverageFrom: ['src/*.js', '!src/_*.js', '!src/*.bundle.js'], 
     projects: [
       {
         displayName: "CommonJS",

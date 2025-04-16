@@ -4,6 +4,8 @@
 import  defaultCode         from './locales/default.js';
 // import { readFileSync } from 'fs';
 
+import { loadJSON } from './load-json.js';
+// const {aa} = await import('./msg.js');
 
 // import { createRequire } from 'module';
 // const require = createRequire(import.meta.url);
@@ -18,6 +20,7 @@ const localesPath = './locales';    // 상대 경로
 function _isObject(obj) {
     return obj && typeof obj === 'object' && !Array.isArray(obj);
 }
+
 function _isString(obj) {    // 공백아닌 문자 여부
     if (typeof obj === 'string' && obj.length > 0) return true;
     return false;
@@ -38,87 +41,6 @@ function _deepMerge(target, source) {
         }
     }
     return target;
-}
-
-async function _loadJSON(filePath) {
-    const isNode = typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null && globalThis.isDOM !== true;
-    const isESM = isNode && (typeof require === 'undefined' || globalThis.isESM === true);   // REVIEW: test hack
-    
-    try {
-        if (isESM) {    
-            // return (await import(filePath, { with: { type: 'json' } })).default;
-
-            const { readFile } = await import('fs/promises');
-            // const { fileURLToPath } = await import('url');
-            // const path = await import('path');
-            // const __filename = fileURLToPath(import.meta.url);
-            // const __dirname = path.dirname(__filename);
-            // if (!path.isAbsolute(filePath)) filePath = path.join(__dirname, filePath);
-
-            filePath = await getLocalePath(filePath);
-            const jsonText = await readFile(filePath, 'utf8');
-            return JSON.parse(jsonText);
-        } else if (isNode) {
-            // return require(filePath);
-
-            // const { readFileSync } = await import('fs');
-            // filePath = await getLocalePath(filePath);
-            // return JSON.parse(readFileSync(filePath, 'utf8'));
-
-            const path = require('path');
-            const fs = require('fs');
-            const aaa = path.resolve(__dirname, filePath);
-            const data = fs.readFileSync(aaa, 'utf8');
-            const parsed = JSON.parse(data);
-            return parsed;
-        } else {
-            // const __dirname2 = new URL('.', import.meta.url).pathname;
-            // if (!isAbsolutePath(filePath))  filePath = new URL(__dirname2, filePath);
-            filePath = await getLocalePath(filePath);
-            const response = await fetch(filePath);
-            return await response.json();
-        }
-    } catch (error) {
-        // console.log(`Error loading JSON file: ${filePath}`, error);
-        return undefined;
-    }
-
-    // inner function
-    async function getLocalePath(filename) {
-        // 1. 브라우저 (ESM or 일반 스크립트)
-        if (typeof window !== 'undefined') {
-            let baseURL = '';
-
-            if (typeof document !== 'undefined' && document.currentScript) {
-                baseURL = document.currentScript.src;
-            } else if (typeof import.meta !== 'undefined' && import.meta.url) {
-                baseURL = import.meta.url;
-            } else {
-                throw new Error('Unable to determine base URL in browser.');
-            }
-
-            return new URL(filename, baseURL).href;
-        }
-
-        // 2. Node.js CJS
-        if (typeof __dirname !== 'undefined') {
-            const path = require('path');
-            return path.resolve(__dirname, filename);
-        }
-
-        // 3. Node.js ESM
-        if (typeof import.meta !== 'undefined' && import.meta.url && typeof process !== 'undefined') {
-            const { fileURLToPath } = await import('url');
-            const path = await import('path');
-            const __filename = fileURLToPath(import.meta.url);
-            const __dirname = path.dirname(__filename);
-            return path.resolve(__dirname, filename);
-        }
-
-
-
-        throw new Error('Unsupported environment');
-    }
 }
 
 function _getLocale() {
@@ -240,7 +162,7 @@ class Message {
         if (p_lang === 'default') return;
         for (var i = 0; i < this.$storage.path.length; i++) {
             var localPath = this.$storage.path[i];
-            var msg = await _loadJSON(`${localPath}/${p_lang}.json`);
+            var msg = await loadJSON(`${localPath}/${p_lang}.json`);
 
             this.$storage.lang[p_lang] = this.$storage.lang[p_lang] || {};
             // if (typeof $storage.lang[p_lang] === 'undefined') $storage.lang[p_lang] = {};

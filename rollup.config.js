@@ -15,7 +15,7 @@ const outputFileName = 'logic-core';
 const name = "_L";
 const namedInput = './index.js';
 const defaultInput = './index.js';
-const srcMap = false;
+const srcMap = true;
 const OUT_DIR = './dist';
 
 const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...config}) => {
@@ -52,7 +52,7 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
       })] : []),
       ...(config.plugins || []),
     ],
-    external: ['path', 'url', 'URL'], // 내장 모듈은 번들 제외
+    external: ['path', 'fs', 'url', 'URL'], // 내장 모듈은 번들 제외
   });
 
   const configs = [
@@ -89,8 +89,9 @@ export default async () => {
         cleandir(OUT_DIR),
         aliasPlugin({
           entries: [
-            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
-            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+            { find: './message-wrap.js', replacement: './message-wrap.bundle.js'},
+            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js'},
+            { find: './load-json.js', replacement: './load-json.cjs'},
           ]
         }),
         resolve(),
@@ -103,7 +104,7 @@ export default async () => {
         }),
         // resolve({ preferBuiltins: true }),
       ],
-      // external: ['path', 'url', 'URL'], // 내장 모듈은 번들 제외
+      external: ['path', 'fs', 'url', 'URL'], // 내장 모듈은 번들 제외
     },
       // dist 폴더 삭제 (빌드 전 처리)
     // {
@@ -127,13 +128,20 @@ export default async () => {
         format: "umd",
         sourcemap: srcMap,
         exports: "named",
-        banner
+        banner,
+        // globals: {
+          // 'path': 'path',
+          // 'fs': 'fs',
+          // 'url': 'url',
+        //   'URL': 'URL'
+        // } 
       },
       plugins: [
         aliasPlugin({
           entries: [
-            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
-            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+            { find: './message-wrap.js', replacement: './message-wrap.bundle.js'},
+            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js'},
+            // { find: './load-json.js', replacement: './load-json.cjs'},
           ]
         }),
       ]
@@ -168,8 +176,9 @@ export default async () => {
       plugins: [
         aliasPlugin({
           entries: [
-            { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
-            { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
+            { find: './message-wrap.js', replacement: './message-wrap.bundle.js'},
+            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js'},
+            { find: './load-json.js', replacement: './load-json.cjs'},
           ]
         }),
       ]

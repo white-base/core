@@ -154,7 +154,15 @@ describe("[target: message.js]", () => {
             const {Message} = await import('../dist/logic-core.browser.cjs');
 
             expect(Message.currentLang).toBe('ko');
-            expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : node", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('../dist/logic-core.node.cjs');
+
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
             expect(Message.get('EN')).toMatch("OK");
         });
         it("- 한글 : umd", async () => {

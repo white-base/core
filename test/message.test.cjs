@@ -44,6 +44,15 @@ describe("CJS ENV TEST", () => {
             expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
             expect(Message.get('EN')).toMatch("OK");
         });
+        it("- 한글 wrap", async () => {
+            process.env.LANG = 'ko_KR.UTF-8';
+            globalThis.isESM = false;
+            const {Message} = await import('../src/message-wrap');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
         it.skip("- 한글", async () => {
             const {Message} = require('../src/message-wrap');
             
@@ -83,6 +92,31 @@ describe("CJS ENV TEST", () => {
             
             expect(Message.currentLang).toBe('ko');
             expect(Message.get('KO')).toMatch("There is no message for code. 'KO'");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : browser2", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('../dist/logic-core.browser.cjs');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : browser", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('../dist/logic-core.esm.js');
+            // const {Message} = require('../dist/logic-core.esm.js');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
+            expect(Message.get('EN')).toMatch("OK");
+        });
+        it("- 한글 : browser", async () => {
+            process.env.LANG = 'ko_US.UTF-8';
+            const {Message} = await import('../index.js');
+            
+            expect(Message.currentLang).toBe('ko');
+            expect(Message.get('KO')).toMatch("OK");
             expect(Message.get('EN')).toMatch("OK");
         });
         it("- 한글 : umd", async () => {
