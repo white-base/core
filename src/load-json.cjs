@@ -7,13 +7,13 @@ async function loadJSON(filePath) {
         if (isNode) {
             const path = require('path');
             const fs = require('fs');
-            const absolutePath = path.resolve(__dirname, filePath);
+            var absolutePath = path.resolve(__dirname, filePath);
             const data = fs.readFileSync(absolutePath, 'utf8');
             const parsed = JSON.parse(data);
             return parsed;
         } else {
-            filePath = await getLocalePath(filePath);
-            const response = await fetch(filePath);
+            var absolutePath = await getLocalePath(filePath);
+            const response = await fetch(absolutePath);
             return await response.json();
         }
         
@@ -31,27 +31,21 @@ async function loadJSON(filePath) {
 
 async function getLocalePath(filename) {
     try {
-        // 1. 브라우저 (ESM or 일반 스크립트)
-        
-
+        // Node.js 환경
         if (isNode) {
             const path = require('path');
             return path.resolve(__dirname, filename);
         }
-
+        // 브라우저 (ESM or 일반 스크립트)
         if (typeof window !== 'undefined') {
             let baseURL = '';
-
             if (typeof document !== 'undefined' && document.currentScript) {
                 baseURL = document.currentScript.src;
             } else {
-                // fallback: 현재 스크립트 위치 기준
                 baseURL = new URL('./', window.location.href).href;
             }
-
             return new URL(filename, baseURL).href;
         } 
-
         throw new Error('Unsupported environment');
 
     } catch (error) {
@@ -64,5 +58,5 @@ async function getLocalePath(filename) {
 
 module.exports = {
     loadJSON,
-    // default: { loadJSON } // ESM default import 대응
+    default: { loadJSON } // ESM default import 대응
 };

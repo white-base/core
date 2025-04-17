@@ -34,12 +34,6 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
       file: `${path.dirname(file)}/${basename}.${(minified ? ['min', ...extArr] : extArr).join('.')}`
     },
     plugins: [
-      // aliasPlugin({
-      //   entries: alias || [
-      //       { find: './message-wrap.js', replacement: './message-wrap-bundle.js'},
-      //       { find: './src/message-wrap.js', replacement: './src/message-wrap-bundle.js'},
-      //   ]
-      // }),
       json(),
       resolve({ browser }),
       commonjs(),
@@ -52,7 +46,7 @@ const buildConfig = ({es5, browser = true, minifiedVersion = true, alias, ...con
       })] : []),
       ...(config.plugins || []),
     ],
-    external: ['path', 'fs', 'url', 'URL'], // 내장 모듈은 번들 제외
+    external: ['path', 'fs', 'url'], // 내장 모듈은 번들 제외
   });
 
   const configs = [
@@ -104,7 +98,7 @@ export default async () => {
         }),
         // resolve({ preferBuiltins: true }),
       ],
-      external: ['path', 'fs', 'url', 'URL'], // 내장 모듈은 번들 제외
+      external: ['path', 'fs', 'url'], // 내장 모듈은 번들 제외
     },
       // dist 폴더 삭제 (빌드 전 처리)
     // {
@@ -129,19 +123,17 @@ export default async () => {
         sourcemap: srcMap,
         exports: "named",
         banner,
-        // globals: {
-          // 'path': 'path',
-          // 'fs': 'fs',
-          // 'url': 'url',
-        //   'URL': 'URL'
-        // } 
+        globals: {
+          'path': 'path',
+          'fs': 'fs',
+          'url': 'url'
+        } 
       },
       plugins: [
         aliasPlugin({
           entries: [
             { find: './message-wrap.js', replacement: './message-wrap.bundle.js'},
             { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js'},
-            // { find: './load-json.js', replacement: './load-json.cjs'},
           ]
         }),
       ]

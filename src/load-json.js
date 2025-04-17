@@ -6,12 +6,12 @@ async function loadJSON(filePath) {
     try {
         if (isNode) {    
             const { readFile } = await import('fs/promises');
-            filePath = await getLocalePath(filePath);
-            const jsonText = await readFile(filePath, 'utf8');
+            const absolutePath = await getLocalePath(filePath);
+            const jsonText = await readFile(absolutePath, 'utf8');
             return JSON.parse(jsonText);
         } else {
-            filePath = await getLocalePath(filePath);
-            const response = await fetch(filePath);
+            const absolutePath = await getLocalePath(filePath);
+            const response = await fetch(absolutePath);
             return await response.json();
         }
     } catch (error) {

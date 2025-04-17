@@ -7,16 +7,30 @@
 <body>
   <h1>Test</h1>
   <input type="text" id="input" placeholder="Type something..." />
-  <button id="submit">Submit</button>
+  <button id="submit" onclick="msg()">Submit</button>
   <div id="output"></div>
+  <!-- <script type='module' src="./dist/logic-core.js">
 
-  <script src="../dist/logic-core.js"></script>
+  const {ArrayCollection, Message} = this._L;
+  
+  console.log('ArrayCollection', ArrayCollection);
+  console.log('Message.$storage', Message.$storage);
+  console.log('Message.currentLang', Message.currentLang);
+  console.log('Message.get("KO")', Message.get('KO'));
+  </script> -->
+<script src="./dist/logic-core.js"></script>
   <script>
-    const {ArrayCollection, Message} = this._L;
+      const {ArrayCollection, Message} = this._L;
+  
+      console.log('ArrayCollection', ArrayCollection);
+      console.log('Message.$storage', Message.$storage);
+      console.log('Message.currentLang', Message.currentLang);
+      console.log('Message.get("KO")', Message.get('KO'));
 
-    console.log('ArrayCollection', ArrayCollection);
-    console.log('Message.$storage', Message.$storage);
-    console.log('Message.currentLang', Message.currentLang);
+
+      function msg() {
+        alert('Message.get("KO")' + Message.get('KO'));
+      }
   </script>
 </body>
 </html>

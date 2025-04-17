@@ -1,85 +1,64 @@
-# core
-white framework core
+# logic-core
 
-air 에서 첫  커밋
+logic-core is a lightweight TypeScript/JavaScript utility library that provides core data structures such as collections and localization support. It is framework-agnostic and designed to be used across different environments including browser, Node.js, and bundlers.
 
-커밋
+- This library provides two main collection types:
 
-3번째 커밋
+- ArrayCollection: A dynamic array with utility methods for element management.
 
+- PropertyCollection: A key-value map-style collection with index-based access.
 
-ssh-add 재부팅시 다시 해야함
-
-
-듀얼
-https://jcon.tistory.com/185
-
-수정
-
-home
+It also serves as a shared dependency for other logic-* modules.
 
 
-맥에서 재부팅시 자동 ssh-add 추가 확인중
+## 🚀 Installation
 
-https://qa.apthow.com/archives/28672
-
-Host * 를 추가하는게 핵심
+To install this package, use one of the following package managers:
 
 
-# npm 배포 정리 잘된곳
-https://heropy.blog/2019/01/31/node-js-npm-module-publish/
+```bash
+npm install logic-core
+# or
+yarn add logic-core
+```
+
+## 📦 Output Overview
+
+| Target       | File                            | Format | Description                        |
+|--------------|----------------------------------|--------|------------------------------------|
+| Node (CJS)   | `dist/logic-core.node.cjs`       | CJS    | Node.js-only version, external modules excluded |
+| Browser UMD  | `dist/logic-core.js`             | UMD    | Full-featured browser version     |
+| Browser UMD  | `dist/logic-core.min.js`         | UMD    | Minified version for CDN          |
+| Browser ESM  | `dist/logic-core.esm.js`         | ESM    | Browser-native `import` usage     |
+| Browser ESM  | `dist/logic-core.esm.min.js`     | ESM    | Minified version for CDN      |
+| Browser CJS  | `dist/logic-core.browser.cjs`    | CJS    | CJS for browser environments       |
 
 
-# for in class 변경점 우회방법
-https://developer.mozilla.org/ko/docs/Web/JavaScript/Enumerability_and_ownership_of_keys
+## Bundled Output
+
+- CommonJS (CJS): for Node.js environments
+
+- ES Module (ESM): for modern bundlers and browsers
+
+- UMD: for direct usage in browser environments
+
+Example usage in browser:
+```html
+<script src="https://unpkg.com/logic-core/dist/logic-core.js"></script>
+<script>
+  const { ArrayCollection } = this._L;
+  const list = new ArrayCollection();
+  list.add("example");
+</script>
+```
+UMD builds expose a global _L object.
 
 
-# 테스트 비교 
-https://ui.toast.com/fe-guide/ko_TEST
+<!-- ## ArrayColleciton 
 
-# php mvc 프레임웍 (임실)
-https://codeigniter.com/user_guide/database/configuration.html
+The ArrayCollection<T> class provides an indexed array-based collection that supports element management such as adding, removing, and clearing items. This class extends the BaseCollection<T>.
 
-
-## jaguer 패치 : 패치 필요
-- templ/navigation.tmpl : 
-    + <li class="item" data-name="<?js= item.longname ?>">
-    => <li class="item" data-name="-<?js= item.longname ?>">
-
-## jsdoc
-- https://jsdoc.app/tags-static.html
-
-하위 모듀 수정
-/Users/logic/PJ-Git/logic-core/node_modules/docdash/publish.js : POINT:
-
-TODO: <?js ... js>   템플릿 전차리에 추가
-TODO: getObject(3) : 모든 속성,  템플릿에서 활용될듯
-
-타입 다이어 그램을 기준으로  테스트 작성 
-
-
-gitPage 블러그 및 광고 만들기
-https://devinlife.com/howto/  
-
-https://wlqmffl0102.github.io/posts/Making-Git-blogs-for-beginners-1/
- 
-
-23년 11월 6일
-23년 11월 7일
-23년 11월 8일
-23년 11월 11일
-23년 11월 12일
-23년 11월 13일
-TODO: core 의 type 의 and, & 조건의 추가
-
-/**
-* DEBUG:
-* POINT: 빨강
-* TODO: 할것
-* ETC:
-* Branch: 커버리지
-* Line:
-* REVIEW:
-* HACK:
-* 
-*/
+### Constructor
+```js
+constructor(owner?: object);
+``` -->

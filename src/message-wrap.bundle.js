@@ -2,10 +2,13 @@
 //==============================================================
 import { Message }          from './message.js';
 
-async function init() {
+// async function init() {
+//     await Message.autoDetect();
+// }
+// init();
+(async () => {
     await Message.autoDetect();
-}
-init();
+})();
 
 export default Message;
-export { Message, init };
+export { Message };

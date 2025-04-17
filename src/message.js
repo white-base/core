@@ -168,7 +168,7 @@ class Message {
             // if (typeof $storage.lang[p_lang] === 'undefined') $storage.lang[p_lang] = {};
 
             if (typeof msg === 'object') _deepMerge(this.$storage.lang[p_lang], msg);
-            else console.warn(`Path '${localPath}/${p_lang}' does not have a file.`);
+            else console.warn(`Path '${localPath}/${p_lang}.json' does not have a file.`);
         }
     }
 
