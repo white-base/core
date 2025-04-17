@@ -1,7 +1,6 @@
 /**** message.js | Message ****/
 //==============================================================
 // import  defaultCode         from './locales/default.json' with { type: 'json' };
-import  defaultCode         from './locales/default.js';
 // import { readFileSync } from 'fs';
 
 import { loadJSON } from './load-json.js';
@@ -14,7 +13,6 @@ import { loadJSON } from './load-json.js';
 // import { fileURLToPath }    from 'url';
 // import { dirname, resolve } from 'path';
 
-const localesPath = './locales';    // 상대 경로
 
 // inner function
 function _isObject(obj) {
@@ -246,7 +244,7 @@ class Message {
 //  main();     
 
 
-Message.importMessage(defaultCode, localesPath);
+// Message.importMessage(defaultCode, localesPath);
 // console.log('After import');
 
 // (async () => {

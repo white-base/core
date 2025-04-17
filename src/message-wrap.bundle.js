@@ -1,6 +1,11 @@
 /**** message-wrap-bundle.js | Message ****/
 //==============================================================
 import { Message }          from './message.js';
+import  defaultCode         from './locales/default.js';
+
+const localesPath = './locales';    // 상대 경로
+
+Message.importMessage(defaultCode, localesPath);
 
 // async function init() {
 //     await Message.autoDetect();

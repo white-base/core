@@ -83,9 +83,9 @@ export default async () => {
         cleandir(OUT_DIR),
         aliasPlugin({
           entries: [
-            { find: './message-wrap.js', replacement: './message-wrap.bundle.js'},
-            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js'},
-            { find: './load-json.js', replacement: './load-json.cjs'},
+            { find: './message-wrap.js', replacement: './message-wrap.bundle.js' },
+            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js' },
+            { find: './load-json.js', replacement: './load-json.cjs' },
           ]
         }),
         resolve(),
@@ -132,8 +132,8 @@ export default async () => {
       plugins: [
         aliasPlugin({
           entries: [
-            { find: './message-wrap.js', replacement: './message-wrap.bundle.js'},
-            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js'},
+            { find: './message-wrap.js', replacement: './message-wrap.bundle.js' },
+            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js' },
           ]
         }),
       ]
@@ -168,9 +168,9 @@ export default async () => {
       plugins: [
         aliasPlugin({
           entries: [
-            { find: './message-wrap.js', replacement: './message-wrap.bundle.js'},
-            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js'},
-            { find: './load-json.js', replacement: './load-json.cjs'},
+            { find: './message-wrap.js', replacement: './message-wrap.bundle.js' },
+            { find: './src/message-wrap.js', replacement: './src/message-wrap.bundle.js' },
+            { find: './load-json.js', replacement: './load-json.cjs' },
           ]
         }),
       ]
