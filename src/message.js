@@ -92,7 +92,8 @@ class Message {
      */
     static $storage = {
         lang: { default: {} },
-        path: []
+        path: [],
+        _history: {},
     };
     
     /**
@@ -159,14 +160,16 @@ class Message {
         this.currentLang = p_lang;
         if (p_lang === 'default') return;
         for (var i = 0; i < this.$storage.path.length; i++) {
-            var localPath = this.$storage.path[i];
-            var msg = await loadJSON(`${localPath}/${p_lang}.json`);
+            const localPath = this.$storage.path[i];
+            const msg = await loadJSON(`${localPath}/${p_lang}.json`);
+            const _history = this.$storage._history[p_lang] || [];
 
             this.$storage.lang[p_lang] = this.$storage.lang[p_lang] || {};
-            // if (typeof $storage.lang[p_lang] === 'undefined') $storage.lang[p_lang] = {};
-
-            if (typeof msg === 'object') _deepMerge(this.$storage.lang[p_lang], msg);
-            else console.warn(`Path '${localPath}/${p_lang}.json' does not have a file.`);
+            if (_history.indexOf(localPath) >= 0) continue;
+            if (typeof msg === 'object') {
+                _deepMerge(this.$storage.lang[p_lang], msg);
+                _history.push(localPath);
+            } else console.warn(`Path '${localPath}/${p_lang}.json' does not have a file.`);
         }
     }
 
