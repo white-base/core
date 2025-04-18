@@ -157,15 +157,20 @@ class Message {
      * @param {string} p_lang language code
      */
     static async changeLanguage (p_lang) {
+        var msg;
         this.currentLang = p_lang;
         if (p_lang === 'default') return;
         for (var i = 0; i < this.$storage.path.length; i++) {
             const localPath = this.$storage.path[i];
-            const msg = await loadJSON(`${localPath}/${p_lang}.json`);
-            const _history = this.$storage._history[p_lang] || [];
-
+            // var msg = await loadJSON(`${localPath}/${p_lang}.json`);
+            // initialize the language
             this.$storage.lang[p_lang] = this.$storage.lang[p_lang] || {};
+            this.$storage._history[p_lang] = this.$storage._history[p_lang] || [];
+            
+            const _history = this.$storage._history[p_lang];
             if (_history.indexOf(localPath) >= 0) continue;
+            msg = await loadJSON(`${localPath}/${p_lang}.json`);
+
             if (typeof msg === 'object') {
                 _deepMerge(this.$storage.lang[p_lang], msg);
                 _history.push(localPath);

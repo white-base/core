@@ -138,6 +138,7 @@ describe("[target: message.js]", () => {
             const {Message} = await import('logic-core');
 
             expect(Message.currentLang).toBe('ko');
+            expect(Message.$storage._history.ko.length).toBe(1);
             expect(Message.get('KO')).toMatch("OK");
             expect(Message.get('EN')).toMatch("OK");
         });
