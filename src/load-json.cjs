@@ -1,5 +1,5 @@
-// CJS module
-// const isNode = typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null && globalThis.isDOM !== true;
+/**** load-json.cjs loadJSON() CJS module ****/
+//==============================================================
 const isNode = typeof globalThis.isDOM === 'boolean' ? !globalThis.isDOM :  typeof process !== 'undefined' && process.versions !== null && process.versions.node !== null;
 
 async function loadJSON(filePath) {
@@ -16,14 +16,6 @@ async function loadJSON(filePath) {
             const response = await fetch(absolutePath);
             return await response.json();
         }
-        
-        // if (typeof window !== 'undefined') {
-            // filePath = await getLocalePath(filePath);
-            // const response = await fetch(filePath);
-            // return await response.json();
-        // }
-        // throw new Error('Unsupported environment');
-
     } catch (error) {
         return undefined;
     }
@@ -31,12 +23,10 @@ async function loadJSON(filePath) {
 
 async function getLocalePath(filename) {
     try {
-        // Node.js 환경
         if (isNode) {
             const path = require('path');
             return path.resolve(__dirname, filename);
         }
-        // 브라우저 (ESM or 일반 스크립트)
         if (typeof window !== 'undefined') {
             let baseURL = '';
             if (typeof document !== 'undefined' && document.currentScript) {
@@ -55,7 +45,6 @@ async function getLocalePath(filename) {
 
 // exports.loadJSON = loadJSON;
 // exports.__esModule = true;
-
 module.exports = {
     loadJSON,
     default: { loadJSON } // ESM default import 대응

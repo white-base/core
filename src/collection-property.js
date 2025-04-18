@@ -37,22 +37,6 @@ var PropertyCollection  = (function (_super) {
             enumerable: false,
         });
 
-        // /** 
-        //  * 컬렉션 요소의 키값들
-        //  * @readonly
-        //  * @member {array<string>} PropertyCollection#_keys 
-        //  */
-        // Object.defineProperty(this, '_keys',
-        // {
-        //     get: function() {
-        //         var arr = [];
-        //         for (var i = 0; i < _keys.length; i++) arr.push(_keys[i]);
-        //         return arr;
-        //     },
-        //     configurable: false,
-        //     enumerable: false
-        // });
-
         // 예약어 등록 
         this.$KEYWORD = ['$keys', 'indexOf', 'exists', 'indexToKey'];
 
@@ -198,22 +182,6 @@ var PropertyCollection  = (function (_super) {
         enumerable: false
     });
 
-    // /**
-    //  * 프로퍼티 컬렉션의 인덱스 값을 조회합니다.
-    //  * @param {string | any} p_target 키 또는 요소
-    //  * @param {boolean} [p_isKey=false] 키로 조회 여부
-    //  * @returns {number} 없을시 -1
-    //  */
-    // PropertyCollection.prototype.indexOf = function(p_target, p_isKey) {
-    //     var isKey = p_isKey || false;
-        
-    //     if (!isKey) return this.$elements.indexOf(p_target);
-    //     else {
-    //         if (!_isString(p_target))  throw new ExtendError(/EL04224/, null, [typeof p_target]);
-    //         return this.$keys.indexOf(p_target);
-    //     }
-    // };
-    
     /**
      * Adds an element to the collection.  
      * 

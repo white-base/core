@@ -7,10 +7,6 @@ const localesPath = './locales';    // 상대 경로
 
 Message.importMessage(defaultCode, localesPath);
 
-// async function init() {
-//     await Message.autoDetect();
-// }
-// init();
 (async () => {
     await Message.autoDetect();
 })();

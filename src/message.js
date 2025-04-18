@@ -1,18 +1,6 @@
 /**** message.js | Message ****/
 //==============================================================
-// import  defaultCode         from './locales/default.json' with { type: 'json' };
-// import { readFileSync } from 'fs';
-
 import { loadJSON } from './load-json.js';
-// const {aa} = await import('./msg.js');
-
-// import { createRequire } from 'module';
-// const require = createRequire(import.meta.url);
-// const defaultCode = require('./locales/default.json');
-
-// import { fileURLToPath }    from 'url';
-// import { dirname, resolve } from 'path';
-
 
 // inner function
 function _isObject(obj) {
@@ -93,7 +81,7 @@ class Message {
     static $storage = {
         lang: { default: {} },
         path: [],
-        _history: {},
+        _history: {}
     };
     
     /**
@@ -110,7 +98,6 @@ class Message {
      * Sets the current language. Default is 'default'.  
      */
     static currentLang = this.defaultLang;
-
     
     /**
      * Returns a message that corresponds to the message code.  
@@ -122,8 +109,6 @@ class Message {
         var value = this.$storage.lang[this.currentLang]?.[p_code] || this.$storage.lang[this.defaultLang]?.[p_code];
         return typeof value === 'number' ? String(value) : value;
     };
-
-    
 
     /**
      * Add the message code to the storage.  
@@ -210,13 +195,7 @@ class Message {
      * Initialize the language.  
      */
     static resetLang () {
-        // let locale;
         this.currentLang = this.defaultLang;
-        // if (this.autoDetect) {
-        //     locale = _getLocale();
-        //     if (locale === 'en') locale = 'default';
-        //     await Message.changeLanguage(locale);
-        // }
     }
 
     /**
@@ -224,65 +203,11 @@ class Message {
      */
     static async autoDetect () {
         let locale = _getLocale();  // internal function
-        // let locale = await osLocale(); // external function
-        // locale = locale.split(/[_-]/)[0];
 
         if (locale === 'en') locale = 'default';
         await Message.changeLanguage(locale);
-
-        // const aa = await import('./test.cjs');
-
-        // console.log('aa', aa);
-        
     }
 }
-// console.log('Before import');
-// (async () => {
-//     await Message.importMessage(defaultCode, localesPath);
-// })();
-
-// async function main() {
-//     await (async () => {
-//     await Message.importMessage(defaultCode, localesPath);
-//     // await Messagde.importMessage(...);
-//     })(); // ← IIFE가 반환하는 promise를 여기서 await
-    
-//     console.log('importMessage가 끝난 후 실행됨');
-// }
-//  main();     
-
-
-// Message.importMessage(defaultCode, localesPath);
-// console.log('After import');
-
-// (async () => {
-//     await Message.importMessage(defaultCode, localesPath);
-// })();
-// async function main() {
-//     await Message.importMessage(defaultCode, localesPath);
-//     console.log('importMessage 완료 후 실행');
-// }
-// main();
-
-// async function main() {
-//     await Message.autoDetect();
-//     // console.log('autoDetect 완료 후 실행');
-// }
-// main();
-// 코드 내부
-
-// if (typeof module !== 'undefined' && module.exports) {
-//     // CommonJS 환경 → await 사용 X
-//     (async () => {
-//         await Message.autoDetect();
-//     })();
-// } else {
-//     // ESM 환경 → top-level await 가능
-//     await Message.autoDetect();
-// }
-
-
-// await Message.importMessage(defaultCode, localesPath);
 
 export default Message;
 export { Message };

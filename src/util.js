@@ -12,38 +12,10 @@ var OLD_ENV = _global.OLD_ENV ? _global.OLD_ENV : false;    // 커버리지 테�
  */
 var Util = {};
 
-
 // local function
 function _isObject(obj) {
     return obj !== null && typeof obj === 'object';
 }
-
-// polyfill
-if (!Array.isArray || OLD_ENV) {
-    Array.isArray = function(p_obj) {
-        return Object.prototype.toString.call(p_obj) === '[object Array]';
-    };
-}
-// REVIEW: 제거해둠, 대부분은 keys 는 기본으로 정의되어 있음
-// if (!Object.keys) {
-//     Object.keys = (function () {
-//         var hasOwnProperty = Object.prototype.hasOwnProperty;
-//         var hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString');
-//         var dontEnums = ['toString', 'toLocaleString', 'valueOf', 'hasOwnProperty', 'isPrototypeOf', 'propertyIsEnumerable', 'constructor'];
-//         var dontEnumsLength = dontEnums.length;
-//         return function (obj) {
-//             if (typeof obj !== 'object' && typeof obj !== 'function' || obj === null) throw new Error('Object.keys called on non-object');
-//             var result = [];
-//             for (var prop in obj) if (hasOwnProperty.call(obj, prop)) result.push(prop);
-//             if (hasDontEnumBug) {
-//               for (var i=0; i < dontEnumsLength; i++) {
-//                 if (hasOwnProperty.call(obj, dontEnums[i])) result.push(dontEnums[i]);
-//               }
-//             }
-//             return result;
-//         }
-//     })()
-// };
 
 /**
  * Returns the nested depth of the array.  
@@ -53,7 +25,7 @@ if (!Array.isArray || OLD_ENV) {
  * @param {number} p_depts Current depth (default: 0)
  * @returns {number} Maximum nested depth of array
  */
-Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
+function getArrayDepth(p_elem, p_depts) {
     var MAX     = 10;
     var level   = 0;
     
@@ -65,19 +37,21 @@ Util.getArrayDepth = function getArrayDepth(p_elem, p_depts) {
     }
     return level;
 };
+Util.getArrayDepth = getArrayDepth;
 
 /**
  * Creates a 36-digit GUID.  
  * 
  * @returns {string} GUID string generated
  */
-Util.createGuid = function createGuid() {
+function createGuid() {
     function _p8(s) {  
         var p = (Math.random().toString(16)+'000000000').substring(2,10);  
         return s ? '-' + p.substring(0, 4) + '-' + p.substring(4, 8) : p ;  
     }
     return _p8() + _p8(true) + _p8(true) + _p8();
 };
+Util.createGuid = createGuid;
 
 /**
  * Deep copy of the object (except prototype)  
@@ -85,7 +59,7 @@ Util.createGuid = function createGuid() {
  * @param {object} p_target Destination object to copy
  * @returns {object} copied object
  */
-Util.deepCopy = function deepCopy(p_target) {
+function deepCopy(p_target) {
     var nobj;
 
     if (!_isObject(p_target)) {
@@ -109,6 +83,7 @@ Util.deepCopy = function deepCopy(p_target) {
     }
     return nobj;
 };
+Util.deepCopy = deepCopy;
 
 /**
  * Sets the specified creator to inherit the parent creator.   
@@ -159,7 +134,8 @@ Util.inherits = (function () {
  * @param {object} p_obj object to be examined
  * @param {function?} args List of interfaces to check
  */
-Util.implements = function(p_ctor, p_obj) {
+
+function _implements(p_ctor, p_obj) {
     var _interface = [];
     var addCnt = 0;
 
@@ -238,6 +214,7 @@ Util.implements = function(p_ctor, p_obj) {
         } else return 'unknown name';
     }
 };
+Util.implements = _implements;
 
 export default Util;
 export { Util };

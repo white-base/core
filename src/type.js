@@ -412,45 +412,6 @@ function deepEqual(obj1, obj2) {
 }
 Type.deepEqual = deepEqual;
 
-// function deepEqual(obj1, obj2) {
-//     if (obj1 === obj2) return true;
-//     if (typeof obj1 !== typeof obj2) return false;
-//     if ($_isPrimitiveType(obj1) && !(obj1 === obj2)) return false;
-//     if (typeof obj1 === 'function' && !$equalFunction(obj1, obj2)) return false;
-
-//     if (Array.isArray(obj1)) {
-//         if (obj1.length !== obj2.length) return false;
-//         for (var i = 0; i < obj1.length; i++) {
-//             var val1 = obj1[i];
-//             var val2 = obj2[i];
-//             if (!deepEqual(val1, val2)) return false;
-//         }
-//     } else {
-//         if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
-//         for (var key in obj1) {
-//             if (Object.prototype.hasOwnProperty.call(obj1, key)) {
-//                 var val1 = obj1[key];
-//                 var val2 = obj2[key];
-//                 if (!deepEqual(val1, val2)) return false;
-//             }
-//         }
-//     }
-//     return true;
-//     // inner function
-//     function $equalFunction(fun1, fun2) {
-//         // if (typeof fun1 !== 'function') return false;
-//         // if (typeof fun2 !== 'function') return false;
-//         if (fun1 === fun2 || fun1.toString() === fun2.toString()) return true;
-//         return false;
-//     }
-//     function $_isPrimitiveType(obj) {
-//         if (typeof obj === 'string' || typeof obj === 'number' 
-//             || typeof obj === 'boolean' || typeof obj === 'undefined' || typeof obj === 'bigint') return true;
-//         return false;
-//     }
-// }
-
-
 /**
  * Gets the type of the given function (generator). (Can include '_UNION')  
  * The returned arrays are included in order from the specified function.  
