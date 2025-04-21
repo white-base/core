@@ -8,6 +8,10 @@ import type { NsTypeObject, PathObject } from './T.d.ts';
  */
 declare class NamespaceManager implements IList<string>, IListControl, ISerialize {
 
+    /**
+     * Create a Namespace Manager.  
+     */
+    constructor();
 
     /**
      * Namespace repository  
@@ -35,11 +39,6 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * Default is 'false' and does not allow duplication.  
      */
     allowOverlap: boolean;
-
-    /**
-     * Create a Namespace Manager.  
-     */
-    constructor();
 
     /**
      * Creates a storage initialization object.  

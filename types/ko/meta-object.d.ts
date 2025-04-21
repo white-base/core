@@ -7,6 +7,11 @@ import type IMarshal        from "./i-marshal.d.ts";
 declare class MetaObject implements IObject, IMarshal {
     
     /**
+     * MetaObject 클래스의 인스턴스를 생성합니다.
+     */
+    constructor();
+    
+    /**
      * 객체의 고유 식별자를 저장하는 내부 속성입니다.
      * 
      * @example
@@ -30,11 +35,6 @@ declare class MetaObject implements IObject, IMarshal {
      * `_type.NS`가 정적으로 정의되지 않은 경우, 부모의 네임스페이스를 기본값으로 사용합니다.
      */
     readonly _ns: string;
-
-    /**
-     * MetaObject 클래스의 인스턴스를 생성합니다.
-     */
-    constructor();
 
     /**
      * 현재 객체와 지정된 객체가 동일한지 비교합니다.  

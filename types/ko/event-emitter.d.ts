@@ -4,6 +4,11 @@
 declare class EventEmitter {
 
     /**
+     * `EventEmitter` 클래스의 인스턴스를 생성합니다.
+     */
+    constructor();
+        
+    /**
      * 등록된 이벤트를 저장하는 내부 객체입니다.  
      */
     $storage: object;
@@ -17,11 +22,6 @@ declare class EventEmitter {
      * 등록된 이벤트명을 저장하는 배열입니다. 
      */
     isLog: boolean;
-
-    /**
-     * `EventEmitter` 클래스의 인스턴스를 생성합니다.
-     */
-    constructor();
 
     /**
      * 이벤트에 대한 리스너(함수)를 추가합니다.

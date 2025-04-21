@@ -3,16 +3,6 @@
  * `ExtendError` 클래스는 확장된 오류 정보를 제공하는 사용자 정의 오류 클래스입니다.
  */
 declare class ExtendError extends Error {
-    
-    /**
-     * 이전에 발생한 메시지를 저장합니다.  
-     */
-    queue: string[];
-
-    /**
-     * 속성 타입과 관련된 오류 메시지입니다.  
-     */
-    prop: Record<string, string>;
 
     /**
      * 사용자 메시지를 사용하여 ExtendError 인스턴스를 생성합니다.  
@@ -45,8 +35,16 @@ declare class ExtendError extends Error {
      * throw new ExtendError(/EL01504/, { style: "required" }, ['value1', 'value2']);
      */
     constructor(msgPattern: RegExp, causeOrProp?: Error | ExtendError | Record<string, string>, placeholders?: string[]);
-    
-    
+        
+    /**
+     * 이전에 발생한 메시지를 저장합니다.  
+     */
+    queue: string[];
+
+    /**
+     * 속성 타입과 관련된 오류 메시지입니다.  
+     */
+    prop: Record<string, string>;    
     /**
      * 오류 메시지를 문자열로 변환합니다.  
      * 

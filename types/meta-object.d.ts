@@ -7,6 +7,11 @@ import type IMarshal        from "./i-marshal.d.ts";
 declare class MetaObject implements IObject, IMarshal {
     
     /**
+     * Creates an instance of the MetaObject class.  
+     */
+    constructor();
+
+    /**
      * Internal property that stores the unique identifier of the object.  
      * 
      * @example
@@ -30,11 +35,6 @@ declare class MetaObject implements IObject, IMarshal {
      * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
      */
     readonly _ns: string;
-
-    /**
-     * Creates an instance of the MetaObject class.  
-     */
-    constructor();
 
     /**
      * Compare the current object with the specified object.  

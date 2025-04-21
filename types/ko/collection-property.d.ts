@@ -8,16 +8,16 @@ import type BaseCollection          from "./base-collection.d.ts";
 declare class PropertyCollection<T> extends BaseCollection<T> implements IPropertyCollection<T> {
  
     /**
-     * 컬렉션의 모든 키 값을 배열로 반환합니다.
-     */
-    get $keys(): string[];
-
-    /**
      * `PropertyCollection` 클래스의 인스턴스를 생성합니다.
      * 
      * @param owner - 이 컬렉션을 소유하는 객체
      */
     constructor(owner?: object);
+    
+    /**
+     * 컬렉션의 모든 키 값을 배열로 반환합니다.
+     */
+    get $keys(): string[];
 
     /**
      * 컬렉션에서 지정된 요소를 제거하는 내부 메서드입니다.

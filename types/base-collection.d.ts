@@ -10,6 +10,14 @@ import type MetaObject      from "./meta-object.d.ts";
 declare abstract class BaseCollection<T> extends MetaObject implements ICollection<T>, IList<T> {
 
     /**
+     * The creator that creates the collection.  
+     * This is an abstract class, and you must create an instance through inheritance.  
+     * 
+     * @param owner Objects that own this collection
+     */
+    constructor(owner?: any);
+        
+    /**
     * List of strings used as reserved words in the collection.
     */
     readonly $KEYWORD: string[];
@@ -127,14 +135,6 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param collection Current collection objects
      */
     onChanged: (nextValue: T, prevValue: T, index: number, collection: object) => void;
-
-    /**
-     * The creator that creates the collection.  
-     * This is an abstract class, and you must create an instance through inheritance.  
-     * 
-     * @param owner Objects that own this collection
-     */
-    constructor(owner?: any);
 
     /**
      * Internal method that runs before adding an element.  

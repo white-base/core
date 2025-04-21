@@ -10,6 +10,14 @@ import type MetaObject      from "./meta-object.d.ts";
 declare abstract class BaseCollection<T> extends MetaObject implements ICollection<T>, IList<T> {
 
     /**
+     * 컬렉션을 생성하는 생성자입니다.  
+     * 이 클래스는 추상 클래스로, 상속을 통해 인스턴스를 생성해야 합니다.  
+     * 
+     * @param owner - 이 컬렉션을 소유하는 객체
+     */
+    constructor(owner?: any);
+    
+    /**
      * 컬렉션에서 예약어로 사용되는 문자열 목록입니다.
      */
     readonly $KEYWORD: string[];
@@ -133,14 +141,6 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param collection 현재 컬렉션 객체
      */
     onChanged: (nextValue: T, prevValue: T, index: number, collection: object) => void;
-
-    /**
-     * 컬렉션을 생성하는 생성자입니다.  
-     * 이 클래스는 추상 클래스로, 상속을 통해 인스턴스를 생성해야 합니다.  
-     * 
-     * @param owner - 이 컬렉션을 소유하는 객체
-     */
-    constructor(owner?: any);
 
     /**
      * 요소를 추가하기 전에 실행되는 내부 메서드입니다.

@@ -4,6 +4,11 @@
 declare class EventEmitter {
 
     /**
+     * Creates an instance of the class 'EventEmitter'.  
+     */
+    constructor();
+
+    /**
      * Internal object that stores registered events.  
      */
     $storage: object;
@@ -17,11 +22,6 @@ declare class EventEmitter {
      * Array that stores registered event names.  
      */
     isLog: boolean;
-
-    /**
-     * Creates an instance of the class 'EventEmitter'.  
-     */
-    constructor();
 
     /**
      * Adds a listener (function) for the event.  

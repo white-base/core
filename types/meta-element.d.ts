@@ -7,16 +7,16 @@ import type MetaObject      from "./meta-object.d.ts";
 declare class MetaElement extends MetaObject implements IElement {
 
     /**
-     * Internal property that stores the name of the element.  
-     */
-    _name: string;
-
-    /**
      * Creates an instance of the MetaElement class.  
      * 
      * @param name Name of the element
      */
     constructor(name: string);
+    
+    /**
+     * Internal property that stores the name of the element.  
+     */
+    _name: string;
 
     /**
      * Returns the object as an object literal of type GUID.  

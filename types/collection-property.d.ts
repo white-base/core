@@ -8,16 +8,16 @@ import type BaseCollection          from "./base-collection.d.ts";
 declare class PropertyCollection<T> extends BaseCollection<T> implements IPropertyCollection<T> {
  
     /**
-     * Returns all key values in the collection to an array.  
-     */
-    get $keys(): string[];
-
-    /**
      * Creates an instance of the class 'PropertyCollection'.  
      * 
      * @param owner Objects that own this collection
      */
     constructor(owner?: object);
+    
+    /**
+     * Returns all key values in the collection to an array.  
+     */
+    get $keys(): string[];
 
     /**
      * Internal method to remove the specified element from the collection.  

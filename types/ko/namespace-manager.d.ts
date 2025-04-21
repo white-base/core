@@ -9,6 +9,11 @@ import type { NsTypeObject, PathObject } from './T.d.ts';
 declare class NamespaceManager implements IList<string>, IListControl, ISerialize {
 
     /**
+     * 네임스페이스 관리자를 생성합니다.
+     */
+    constructor();
+    
+    /**
      * 네임스페이스 저장소입니다.
      */
     $storage: any[];
@@ -34,11 +39,6 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * 기본값은 `false`이며, 중복을 허용하지 않습니다.  
      */
     allowOverlap: boolean;
-
-    /**
-     * 네임스페이스 관리자를 생성합니다.
-     */
-    constructor();
 
     /**
      * 저장소 초기화 객체를 생성합니다.  

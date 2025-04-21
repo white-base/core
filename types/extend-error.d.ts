@@ -5,16 +5,6 @@
 declare class ExtendError extends Error {
     
     /**
-     * Save previously generated messages.  
-     */
-    queue: string[];
-
-    /**
-     * Error message related to property type.  
-     */
-    prop: Record<string, string>;
-
-    /**
      * Use user messages to create an ExtendError instance.  
      *
      * @param msg Error message string
@@ -46,7 +36,16 @@ declare class ExtendError extends Error {
      */
     constructor(msgPattern: RegExp, causeOrProp?: Error | ExtendError | Record<string, string>, placeholders?: string[]);
     
-    
+    /**
+     * Save previously generated messages.  
+     */
+    queue: string[];
+
+    /**
+     * Error message related to property type.  
+     */
+    prop: Record<string, string>;
+
     /**
      * Converts error messages into strings.  
      * 
