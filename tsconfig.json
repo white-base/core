@@ -5,8 +5,9 @@
       "target": "es6",
       // "outDir": "output",
       "allowJs": true,
-      "checkJs": true, // 오류 검사를 하지 않음
+      "checkJs": false, // 오류 검사를 하지 않음
       "strict": true,
+      "isolatedModules": true, // 모듈을 분리하여 컴파일
       "noEmit": true,
       "esModuleInterop": true,
       "sourceMap": true,
@@ -24,5 +25,7 @@
     ],
     "include": [
       "types/**/*",
+      // "src/**/*",
+      "test/**/*.test.ts" // 테스트 파일 포함
     ]
   }

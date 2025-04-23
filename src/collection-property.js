@@ -16,7 +16,7 @@ var PropertyCollection  = (function (_super) {
      * @constructs PropertyCollection
      * @implements {IPropertyCollection}
      * @extends BaseCollection
-     * @param {object} p_owner Objects that own this collection
+     * @param {object} [p_owner] Objects that own this collection
      */
     function PropertyCollection(p_owner) {
         _super.call(this, p_owner); 
