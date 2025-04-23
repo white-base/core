@@ -20,7 +20,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
      * @param index Index of the element to be removed
      * @returns Success or failure
      */
-    _remove(index: number): boolean;
+    protected _remove(index: number): boolean;
 
     /**
      * Returns the object as an object literal of type GUID.  

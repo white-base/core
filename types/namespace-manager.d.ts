@@ -22,7 +22,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * Namespace element type list.  
      *Allow all types if empty.  
      */
-    _elemTypes: any[];
+     protected _elemTypes: any[];
 
     /**
      * Namespace element list.  
@@ -46,7 +46,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * @returns initialized namespace type object { _type: 'ns'}
      * @private
      */
-    $createNsRefer(): NsTypeObject;
+    private $createNsRefer(): NsTypeObject;
 
     /**
      * Returns the Namespace path object.  
@@ -55,7 +55,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * @returns Namespace path object {ns: '...', key: '...'}
      * @protected
      */
-    _getPathObject(target: object | string): PathObject;
+    protected _getPathObject(target: object | string): PathObject;
 
     /**
      * Initialize the namespace.  

@@ -22,7 +22,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * 네임스페이스 요소 타입 목록입니다.  
      * 비어 있으면 모든 타입을 허용합니다.  
      */
-    _elemTypes: any[];
+    protected _elemTypes: any[];
 
     /**
      * 네임스페이스 요소 목록입니다.
@@ -46,7 +46,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * @returns 초기화된 네임스페이스 타입 객체 { _type: 'ns' }
      * @private
      */
-    $createNsRefer(): NsTypeObject;
+    private $createNsRefer(): NsTypeObject;
 
     /**
      * 네임스페이스 경로 객체를 반환합니다. 
@@ -55,7 +55,7 @@ declare class NamespaceManager implements IList<string>, IListControl, ISerializ
      * @returns 네임스페이스 경로 객체 { ns: '..', key: '...' }
      * @protected
      */
-    _getPathObject(target: object | string): PathObject;
+    protected _getPathObject(target: object | string): PathObject;
 
     /**
      * 네임스페이스를 초기화합니다.  

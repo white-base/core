@@ -34,7 +34,7 @@ declare class MetaObject implements IObject, IMarshal {
      * Indicates the object name space.  
      * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
      */
-    readonly _ns: string;
+    protected readonly _ns: string;
 
     /**
      * Compare the current object with the specified object.  

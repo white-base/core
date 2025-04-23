@@ -34,7 +34,7 @@ declare class MetaObject implements IObject, IMarshal {
      * 객체 네임스페이스를 나타냅니다.  
      * `_type.NS`가 정적으로 정의되지 않은 경우, 부모의 네임스페이스를 기본값으로 사용합니다.
      */
-    readonly _ns: string;
+    protected readonly _ns: string;
 
     /**
      * 현재 객체와 지정된 객체가 동일한지 비교합니다.  

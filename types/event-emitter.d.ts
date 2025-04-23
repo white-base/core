@@ -16,7 +16,7 @@ declare class EventEmitter {
     /**
      * Array that stores registered event names.  
      */
-    _list: string[];
+    protected _list: string[];
 
     /**
      * Array that stores registered event names.  

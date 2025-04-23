@@ -20,7 +20,7 @@ declare class ArrayCollection<T> extends BaseCollection<T> implements IArrayColl
      * @param index - 제거할 요소의 인덱스
      * @returns 성공 여부
      */
-    _remove(index: number): boolean;
+    protected _remove(index: number): boolean;
 
     /**
      * 객체를 GUID 타입의 객체 리터럴로 반환합니다.

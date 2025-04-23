@@ -25,7 +25,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
      * @param index Location of the element to be removed
      * @returns Removal successful
      */
-    _remove(index: number): boolean;
+    protected _remove(index: number): boolean;
 
     /**
      * Returns the object as an object literal of type GUID.  

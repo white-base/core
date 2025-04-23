@@ -40,12 +40,12 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     /**
      * 컬렉션의 소유 객체입니다.
      */
-    _owner: object;
+    protected _owner: object;
     
     /**
      * 컬렉션 요소의 타입 제약조건을 정의합니다.
      */
-    _elemTypes: any[];
+    protected _elemTypes: any[];
 
     /**
      * 컬렉션의 요소 목록을 저장하는 배열입니다.
@@ -149,7 +149,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index 요소가 추가될 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onAdd(elem: T, index: number): boolean | undefined;
+    protected _onAdd(elem: T, index: number): boolean | undefined;
 
     /**
      * 요소가 추가된 후 실행되는 내부 메서드입니다.
@@ -158,7 +158,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index 요소가 추가된 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onAdded(elem: T, index: number): boolean | undefined;
+    protected _onAdded(elem: T, index: number): boolean | undefined;
 
     /**
      * 요소를 제거하기 전에 실행되는 내부 메서드입니다.
@@ -167,7 +167,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index 요소가 제거될 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onRemove(elem: T, index: number): boolean | undefined;
+    protected _onRemove(elem: T, index: number): boolean | undefined;
 
     /**
      * 요소가 제거된 후 실행되는 내부 메서드입니다.
@@ -176,21 +176,21 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index 요소가 제거된 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onRemoved(elem: T, index: number): boolean | undefined;
+    protected _onRemoved(elem: T, index: number): boolean | undefined;
 
     /**
      * 모든 요소를 삭제하기 전에 실행되는 내부 메서드입니다.
      * 
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onClear(): boolean | undefined;
+    protected _onClear(): boolean | undefined;
 
     /**
      * 모든 요소가 삭제된 후 실행되는 내부 메서드입니다.
      * 
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onCleared(): boolean | undefined;
+    protected _onCleared(): boolean | undefined;
 
     /**
      * 요소가 변경되기 전에 실행되는 내부 메서드입니다.
@@ -200,7 +200,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index 변경될 요소의 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
+    protected _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * 요소가 변경된 후 실행되는 내부 메서드입니다.
@@ -210,7 +210,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index 변경된 요소의 위치
      * @returns true: 리스너 실행 완료, false: 리스너 처리 실패, undefined: 리스너 없음
      */
-    _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
+    protected _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * 특정 인덱스의 속성 디스크립터를 설정하는 내부 메서드입니다.
@@ -218,14 +218,14 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index 속성을 지정할 위치
      * @param isEnumerable 속성이 열거 가능한지 여부
      */
-    _getPropDescriptor(index: number, isEnumerable: boolean): void;
+    protected _getPropDescriptor(index: number, isEnumerable: boolean): void;
 
     /**
      * 요소를 컬렉션에서 제거하는 내부 메서드입니다.
      * 
      * @returns 삭제 성공 여부
      */
-    abstract _remove(...args: any[]): boolean;
+    protected abstract _remove(...args: any[]): boolean;
 
     /**
      * 객체를 GUID 타입의 객체 리터럴로 반환합니다.

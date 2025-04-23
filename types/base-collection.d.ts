@@ -40,12 +40,12 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     /**
     * Owned object of the collection.
     */
-    _owner: object;
+    protected _owner: object;
 
     /**
     * Defines the type constraints for the collection element.
     */
-    _elemTypes: any[];
+    protected _elemTypes: any[];
 
     /**
     * An array that stores a list of elements in a collection.
@@ -143,7 +143,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where the element will be added
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onAdd(elem: T, index: number): boolean | undefined;
+    protected _onAdd(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs after an element is added.  
@@ -152,7 +152,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Location where the element was added
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onAdded(elem: T, index: number): boolean | undefined;
+    protected _onAdded(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs before removing an element.
@@ -161,7 +161,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where the element will be removed
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onRemove(elem: T, index: number): boolean | undefined;
+    protected _onRemove(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs after the element is removed.  
@@ -170,21 +170,21 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where the element was removed
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onRemoved(elem: T, index: number): boolean | undefined;
+    protected _onRemoved(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs before deleting all elements.
      * 
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onClear(): boolean | undefined;
+    protected _onClear(): boolean | undefined;
 
     /**
      * Internal method that runs after all elements are deleted.  
      * 
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onCleared(): boolean | undefined;
+    protected _onCleared(): boolean | undefined;
 
     /**
      * Internal method that runs before the element changes.
@@ -194,7 +194,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Location of the element to be changed
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
+    protected _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs after the element changes.  
@@ -204,7 +204,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Location of changed element
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
+    protected _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * Internal method to set the attribute descriptor for a particular index.  
@@ -212,14 +212,14 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where to specify properties
      * @param isEnumerable whether the property is enumerable
      */
-    _getPropDescriptor(index: number, isEnumerable: boolean): void;
+    protected _getPropDescriptor(index: number, isEnumerable: boolean): void;
 
     /**
      * Internal method to remove elements from the collection.  
      * 
      * @returns 삭제 성공 여부
      */
-    abstract _remove(...args: any[]): boolean;
+    protected abstract _remove(...args: any[]): boolean;
 
     /**
      * 객체를 GUID 타입의 객체 리터럴로 반환합니다.

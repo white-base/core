@@ -16,7 +16,7 @@ declare class EventEmitter {
     /**
      * 등록된 이벤트명을 저장하는 배열입니다. 
      */
-    _list: string[];
+    protected _list: string[];
 
     /**
      * 등록된 이벤트명을 저장하는 배열입니다. 
