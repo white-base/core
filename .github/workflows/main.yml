@@ -20,12 +20,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    # Rollup native 모듈 문제로 npm ci 대신 install 사용
-    - name: Clean install dependencies (instead of `npm ci`)
-      run: |
-        rm -rf node_modules package-lock.json
-        npm install
-
+        
     - name: Build project
       run: npm run build
     
