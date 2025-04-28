@@ -5,7 +5,15 @@ import type BaseCollection          from "./base-collection.d.ts";
  * `PropertyCollection` 클래스는 `BaseCollection`을 상속하며 `IPropertyCollection` 인터페이스를 구현합니다.  
  * 이 클래스는 속성 기반 컬렉션을 관리하고, 각 요소에 대해 키와 값을 사용하여 접근할 수 있는 기능을 제공합니다.
  */
-type PropertyCollection<T> = {
+declare class PropertyCollection<T> extends BaseCollection<T> implements IPropertyCollection<T> {
+ 
+    /**
+     * `PropertyCollection` 클래스의 인스턴스를 생성합니다.
+     * 
+     * @param owner - 이 컬렉션을 소유하는 객체
+     */
+    constructor(owner?: object);
+    
     /**
      * 컬렉션의 모든 키 값을 배열로 반환합니다.
      */
@@ -17,7 +25,7 @@ type PropertyCollection<T> = {
      * @param index - 제거할 요소의 위치
      * @returns 제거 성공 여부
      */
-    _remove(index: number): boolean;
+    protected _remove(index: number): boolean;
 
     /**
      * 객체를 GUID 타입의 객체 리터럴로 반환합니다.
@@ -151,23 +159,7 @@ type PropertyCollection<T> = {
      * @returns  조건을 만족하는 첫 번째 요소의 인덱스, 찾지 못한 경우 `-1`
      */
     findIndex(callbackfn: (elem: T, index: number, key: string, list: T[]) => boolean, thisArg?: any): number;
-
-} & {
-
-    [key: string | number]: T;
-
-} & IPropertyCollection<T> & BaseCollection<T>;
-
-export interface PropertyCollectionConstructor {
-    /**
-     * `PropertyCollection` 클래스의 인스턴스를 생성합니다.
-     * 
-     * @param owner - 이 컬렉션을 소유하는 객체
-     */
-    new <T = string>(): PropertyCollection<T>;
 }
-  
-declare const PropertyCollection: PropertyCollectionConstructor;
-  
+
 export default PropertyCollection;
 export { PropertyCollection };
