@@ -7,16 +7,8 @@ import type MetaObject      from "./meta-object.d.ts";
 * The 'BaseCollection' class inherits the 'MetaObject' and implements the 'ICcollection' and 'IList' interfaces.
 * This class acts as the top class for all collections.
 */
-declare abstract class BaseCollection<T> extends MetaObject implements ICollection<T>, IList<T> {
+type BaseCollection<T> = MetaObject & ICollection<T> & IList<T> & {
 
-    /**
-     * The creator that creates the collection.  
-     * This is an abstract class, and you must create an instance through inheritance.  
-     * 
-     * @param owner Objects that own this collection
-     */
-    constructor(owner?: any);
-        
     /**
     * List of strings used as reserved words in the collection.
     */
@@ -40,12 +32,12 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
     /**
     * Owned object of the collection.
     */
-    protected _owner: object;
+    _owner: object;
 
     /**
     * Defines the type constraints for the collection element.
     */
-    protected _elemTypes: any[];
+    _elemTypes: any[];
 
     /**
     * An array that stores a list of elements in a collection.
@@ -143,7 +135,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where the element will be added
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onAdd(elem: T, index: number): boolean | undefined;
+    _onAdd(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs after an element is added.  
@@ -152,7 +144,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Location where the element was added
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onAdded(elem: T, index: number): boolean | undefined;
+    _onAdded(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs before removing an element.
@@ -161,7 +153,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where the element will be removed
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onRemove(elem: T, index: number): boolean | undefined;
+    _onRemove(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs after the element is removed.  
@@ -170,21 +162,21 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where the element was removed
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onRemoved(elem: T, index: number): boolean | undefined;
+    _onRemoved(elem: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs before deleting all elements.
      * 
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onClear(): boolean | undefined;
+    _onClear(): boolean | undefined;
 
     /**
      * Internal method that runs after all elements are deleted.  
      * 
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onCleared(): boolean | undefined;
+    _onCleared(): boolean | undefined;
 
     /**
      * Internal method that runs before the element changes.
@@ -194,7 +186,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Location of the element to be changed
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
+    _onChanging(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * Internal method that runs after the element changes.  
@@ -204,7 +196,7 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Location of changed element
      * @returns true: listener execution completed, false: listener processing failed, undefined: no listener
      */
-    protected _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
+    _onChanged(nextValue: T, prevValue: T, index: number): boolean | undefined;
 
     /**
      * Internal method to set the attribute descriptor for a particular index.  
@@ -212,14 +204,14 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * @param index Where to specify properties
      * @param isEnumerable whether the property is enumerable
      */
-    protected _getPropDescriptor(index: number, isEnumerable: boolean): void;
+    _getPropDescriptor(index: number, isEnumerable: boolean): void;
 
     /**
      * Internal method to remove elements from the collection.  
      * 
      * @returns 삭제 성공 여부
      */
-    protected abstract _remove(...args: any[]): boolean;
+    _remove(...args: any[]): boolean;
 
     /**
      * 객체를 GUID 타입의 객체 리터럴로 반환합니다.
@@ -278,13 +270,28 @@ declare abstract class BaseCollection<T> extends MetaObject implements ICollecti
      * 
      * @returns Index of added elements
      */
-    abstract add(...args: any[]): number;
+    add(...args: any[]): number;
 
     /**
      * Initialize the collection.
      */
-    abstract clear(): void;
+    clear(): void;
+
+} & {
+    [key: number]: T;
+};
+
+export interface BaseCollectionConstructor {
+    /**
+     * The creator that creates the collection.  
+     * This is an abstract class, and you must create an instance through inheritance.  
+     * 
+     * @param owner Objects that own this collection
+     */
+    new <T>(owner?: any): BaseCollection<T>;
 }
+
+declare const BaseCollection: BaseCollectionConstructor;
 
 export default BaseCollection;
 export { BaseCollection };

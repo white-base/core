@@ -4,7 +4,7 @@ import type IMarshal        from "./i-marshal.d.ts";
 /**
  * MetaObject 클래스는 IObject 및 IMarshal 인터페이스를 구현하여 메타 데이터를 처리하는 최상위 객체입니다.
  */
-type MetaObject = {
+type MetaObject = IObject & IMarshal & {
     
     /**
      * 객체의 고유 식별자를 저장하는 내부 속성입니다.
@@ -105,7 +105,7 @@ type MetaObject = {
      */
     setObject(guidObj: object, guidRootObj?: object): void;
 
-} & IObject & IMarshal;
+};
 
 export interface MetaObjectConstructor {
     /**

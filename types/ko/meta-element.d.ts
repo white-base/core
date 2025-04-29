@@ -4,14 +4,7 @@ import type MetaObject      from "./meta-object.d.ts";
 /**
  * MetaElement 클래스는 MetaObject를 상속하며, IElement 인터페이스를 구현합니다.
  */
-declare class MetaElement extends MetaObject implements IElement {
-
-    /**
-     * MetaElement 클래스의 인스턴스를 생성합니다.
-     * 
-     * @param name - 요소의 이름
-     */
-    constructor(name: string);
+type MetaElement = MetaObject & IElement & {
     
     /**
      * 요소의 이름을 저장하는 내부 속성입니다. 
@@ -43,8 +36,19 @@ declare class MetaElement extends MetaObject implements IElement {
      * 
      * @returns 복제된 객체
      */
-    clone(): this;
+    clone(): MetaElement;
+};
+
+export interface MetaElementConstructor {
+    /**
+     * MetaElement 클래스의 인스턴스를 생성합니다.
+     * 
+     * @param name - 요소의 이름
+     */
+    new (name: string): MetaElement;
 }
+
+declare const MetaElement: MetaElementConstructor;
 
 export default MetaElement;
 export { MetaElement };

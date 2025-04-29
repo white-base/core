@@ -1,11 +1,11 @@
-import {ArrayCollection} from 'logic-core/ko';
-import {PropertyCollection} from 'logic-core/ko';
+import {ArrayCollection} from 'logic-core';
+import {PropertyCollection} from 'logic-core';
 
 
 
-// var a =  new ArrayCollection();
-// a.add('a');
-// a[0].
+var a =  new ArrayCollection();
+a.add('a');
+a[0].charAt('a'); // 타입 추론 안됨
 // a[0].totoUpperCase(); // 타입 추론 안됨
 
 // "aa".
@@ -15,13 +15,12 @@ b.add('a', 'aa');
 b.add()
 b.exists()
 // b[0].
-b['a'].charCodeAt('a'); // 타입 추론 안됨
-b[0].endsWith('a'); // 타입 추론 안됨
-
+b['a'].concat('a'); // 타입 추론 안됨
+b[0].at('a'); // 타입 추론 안됨
 // b.
 // b.d
 // b.add(
-
+b.count
 
 // const pc = new PropertyCollection()
 //    .add('name', 'Alice')

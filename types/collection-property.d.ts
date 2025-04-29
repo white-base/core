@@ -5,14 +5,7 @@ import type BaseCollection          from "./base-collection.d.ts";
  * The 'Property Collection' class inherits the 'Base Collection' and implements the 'IProperty Collection' interface.  
  * This class manages attribute-based collections and provides the ability to access each element using keys and values.  
  */
-declare class PropertyCollection<T> extends BaseCollection<T> implements IPropertyCollection<T> {
- 
-    /**
-     * Creates an instance of the class 'PropertyCollection'.  
-     * 
-     * @param owner Objects that own this collection
-     */
-    constructor(owner?: object);
+type PropertyCollection<T> = IPropertyCollection<T> & BaseCollection<T> & {
     
     /**
      * Returns all key values in the collection to an array.  
@@ -25,7 +18,7 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
      * @param index Location of the element to be removed
      * @returns Removal successful
      */
-    protected _remove(index: number): boolean;
+    _remove(index: number): boolean;
 
     /**
      * Returns the object as an object literal of type GUID.  
@@ -159,7 +152,21 @@ declare class PropertyCollection<T> extends BaseCollection<T> implements IProper
      * @returns  Index of the first element that satisfies the condition, if not found '-1'
      */
     findIndex(callbackfn: (elem: T, index: number, key: string, list: T[]) => boolean, thisArg?: any): number;
+
+} & {
+    [key: string]: T;
+};
+
+export interface PropertyCollectionConstructor {
+    /**
+     * Creates an instance of the class 'PropertyCollection'.  
+     * 
+     * @param owner Objects that own this collection
+     */
+    new <T=string>(owner?: object): PropertyCollection<T>;
 }
+  
+declare const PropertyCollection: PropertyCollectionConstructor;
 
 export default PropertyCollection;
 export { PropertyCollection };

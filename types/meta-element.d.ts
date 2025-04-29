@@ -4,15 +4,8 @@ import type MetaObject      from "./meta-object.d.ts";
 /**
  * The MetaElement class inherits the MetaObject and implements the IElement interface.  
  */
-declare class MetaElement extends MetaObject implements IElement {
+type MetaElement = MetaObject & IElement & {
 
-    /**
-     * Creates an instance of the MetaElement class.  
-     * 
-     * @param name Name of the element
-     */
-    constructor(name: string);
-    
     /**
      * Internal property that stores the name of the element.  
      */
@@ -43,8 +36,19 @@ declare class MetaElement extends MetaObject implements IElement {
      * 
      * @returns Replicated Objects
      */
-    clone(): this;
+    clone(): MetaElement;
 }
+
+export interface MetaElementConstructor {
+    /**
+     * Creates an instance of the MetaElement class.  
+     * 
+     * @param name Name of the element
+     */
+    new (name: string): MetaElement;
+}
+
+declare const MetaElement: MetaElementConstructor;
 
 export default MetaElement;
 export { MetaElement };

@@ -9,7 +9,7 @@ declare interface IList<T> {
     _list: T[];
 
     /**
-     * 목록의 개수를 반환합니다. 
+     * 목록의 개수를 반환합니다..
      */
     count: number;
 }
