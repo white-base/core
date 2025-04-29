@@ -4,7 +4,12 @@ import type IMarshal        from "./i-marshal.d.ts";
 /**
  * The MetaObject class is a top-level object that processes metadata by implementing IOobject and IMarshal interfaces.  
  */
-type MetaObject = IObject & IMarshal & {
+declare class MetaObject implements IObject, IMarshal {
+    
+    /**
+     * Creates an instance of the MetaObject class.  
+     */
+    constructor();
 
     /**
      * Internal property that stores the unique identifier of the object.  
@@ -29,7 +34,7 @@ type MetaObject = IObject & IMarshal & {
      * Indicates the object name space.  
      * If '_type.NS' is not statically defined, use the parent's namespace as the default.  
      */
-    readonly _ns: string;
+    protected readonly _ns: string;
 
     /**
      * Compare the current object with the specified object.  
@@ -104,13 +109,6 @@ type MetaObject = IObject & IMarshal & {
      * @param guidRootObj Initial GUID literal object referenced during conversion
      */
     setObject(guidObj: object, guidRootObj?: object): void;
-}
-
-export interface MetaObjectConstructor {
-    /**
-     * Creates an instance of the MetaObject class.  
-     */
-    new (): MetaObject;
 }
 
 export default MetaObject;

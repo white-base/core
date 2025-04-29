@@ -1,5 +1,5 @@
-import {ArrayCollection} from 'logic-core';
-import {PropertyCollection} from 'logic-core';
+import {ArrayCollection} from 'logic-core/ko';
+import {PropertyCollection} from 'logic-core/ko';
 
 
 
@@ -21,6 +21,9 @@ b[0].at('a'); // 타입 추론 안됨
 // b.d
 // b.add(
 b.count
+b.equal()
+b.getTypes()
+b._guid
 
 // const pc = new PropertyCollection()
 //    .add('name', 'Alice')
