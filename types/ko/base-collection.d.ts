@@ -295,6 +295,6 @@ export interface BaseCollectionConstructor {
 
 declare const BaseCollection: BaseCollectionConstructor;
 
-
 export default BaseCollection;
 export { BaseCollection };
+

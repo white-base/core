@@ -14,6 +14,7 @@
       "experimentalDecorators": true,
       "moduleResolution": "node16",
       "typeRoots": ["./node_modules/@types"],
+      "rootDir": "./",
       "baseUrl": "./"
     },
     // "files": ["types/index.d.ts"],
@@ -24,7 +25,7 @@
     ],
     "include": [
       "types/**/*",
-      // "src/**/*",
+      "src/**/*",
       "test/**/*.test.ts" // 테스트 파일 포함
     ]
   }
