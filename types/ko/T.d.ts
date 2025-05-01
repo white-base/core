@@ -1,3 +1,10 @@
+import type MetaObject      from "./meta-object.d.ts";
+
+/**
+ * MetaObject 클래스의 타입입니다.
+ */
+export type MetaObjectType = InstanceType<typeof MetaObject>;
+
 /**
  * 메시지 객체를 정의합니다.
  * 
@@ -268,3 +275,4 @@ export declare interface Function {
      */
     _TYPE: ExtType;
 }
+

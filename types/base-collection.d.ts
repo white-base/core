@@ -1,9 +1,7 @@
 import type EventEmitter    from "./event-emitter.d.ts";
 import type ICollection     from "./i-collection.d.ts";
 import type IList           from "./i-list.d.ts";
-import type MetaObject      from "./meta-object.d.ts";
-
-type MetaObjectType = InstanceType<typeof MetaObject>;
+import type { MetaObjectType } from "./T.d.ts";
 
 /**
 * The 'BaseCollection' class inherits the 'MetaObject' and implements the 'ICcollection' and 'IList' interfaces.
@@ -278,6 +276,14 @@ type BaseCollection<T> = MetaObjectType & ICollection<T> & IList<T> & {
      * Initialize the collection.
      */
     clear(): void;
+
+    /**
+     * The creator that creates the collection.  
+     * This is an abstract class, and you must create an instance through inheritance.  
+     * 
+     * @param owner Objects that own this collection
+     */
+    new <T = string>(owner?: any): BaseCollection<T>;
 
 } & {
     [key: number]: T;

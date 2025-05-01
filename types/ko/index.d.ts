@@ -20,3 +20,7 @@ export { BaseCollection }      from "./base-collection.js";
 export { ArrayCollection }     from "./collection-array.js";
 export { PropertyCollection }  from "./collection-property.js";
 
+
+export { BaseCollectionConstructor }      from "./base-collection.js";
+export { ArrayCollectionConstructor }     from "./collection-array.js";
+export { PropertyCollectionConstructor }  from "./collection-property.js";

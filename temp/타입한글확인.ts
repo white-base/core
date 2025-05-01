@@ -1,7 +1,7 @@
 // import {ArrayCollection} from 'logic-core/ko';
 // import {PropertyCollection} from 'logic-core/ko';
-import {BaseCollection} from 'logic-core/ko';
-import {ArrayCollection} from 'logic-core';
+import {BaseCollection} from 'logic-core';
+import {ArrayCollection} from 'logic-core/ko';
 
 
 

@@ -1,5 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+
 // import {ArrayCollection} from 'logic-core/ko';
 // import {PropertyCollection} from 'logic-core/ko';
 var ko_1 = require("logic-core/ko");
@@ -8,6 +7,9 @@ var a = new ko_1.BaseCollection();
 var b = new logic_core_1.ArrayCollection();
 a.clear();
 b.clear();
+
+a
+
 // a.add('a');
 // a[0].charAt('a'); // 타입 추론 안됨
 // a[0].totoUpperCase(); // 타입 추론 안됨

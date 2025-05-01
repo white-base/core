@@ -1,3 +1,10 @@
+import type MetaObject      from "./meta-object.d.ts";
+
+/**
+* Type of MetaObject class.
+*/
+export type MetaObjectType = InstanceType<typeof MetaObject>;
+
 /**
  * 메시지 객체를 정의합니다.
  * 
