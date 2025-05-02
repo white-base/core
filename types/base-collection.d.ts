@@ -7,7 +7,7 @@ import type { MetaObjectType } from "./T.d.ts";
 * The 'BaseCollection' class inherits the 'MetaObject' and implements the 'ICcollection' and 'IList' interfaces.
 * This class acts as the top class for all collections.
 */
-type BaseCollection<T> = MetaObjectType & ICollection<T> & IList<T> & {
+type BaseCollection<T> = {
 
     /**
     * List of strings used as reserved words in the collection.
@@ -287,7 +287,7 @@ type BaseCollection<T> = MetaObjectType & ICollection<T> & IList<T> & {
 
 } & {
     [key: number]: T;
-};
+} & MetaObjectType & ICollection<T> & IList<T>;
 
 export interface BaseCollectionConstructor {
     /**

@@ -1,6 +1,6 @@
 // import {ArrayCollection} from 'logic-core/ko';
 // import {PropertyCollection} from 'logic-core/ko';
-import {BaseCollection} from 'logic-core';
+import {BaseCollection} from 'logic-core/ko';
 import {ArrayCollection} from 'logic-core/ko';
 
 
@@ -10,6 +10,18 @@ var b =  new ArrayCollection();
 
 a.clear()
 b.clear()
+a.add()
+b.add()
+b._list
+b.insertAt(1, 20)
+b.count
+b.remove(1)
+
+/**
+    add(...args: any[]): number;
+    add(...args: any[]): number;
+ * 
+ */
 
 // a.add('a');
 // a[0].charAt('a'); // 타입 추론 안됨

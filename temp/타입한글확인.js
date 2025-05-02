@@ -7,8 +7,12 @@ var a = new ko_1.BaseCollection();
 var b = new logic_core_1.ArrayCollection();
 a.clear();
 b.clear();
+a._list
+a.count
+a._guid
 
-a
+
+
 
 // a.add('a');
 // a[0].charAt('a'); // 타입 추론 안됨

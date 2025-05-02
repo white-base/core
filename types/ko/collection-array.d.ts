@@ -5,7 +5,7 @@ import type BaseCollection      from "./base-collection.d.ts";
  * `ArrayCollection` 클래스는 `BaseCollection`을 상속받으며 `IArrayCollection` 인터페이스를 구현합니다.  
  * 이 클래스는 배열 형태의 컬렉션을 관리하고, 배열 관련 작업을 위한 다양한 메서드를 제공합니다.
  */
-type ArrayCollection<T> = BaseCollection<T> & IArrayCollection<T> & {
+type ArrayCollection<T> = {
     
     /**
      * 컬렉션에서 지정된 요소를 제거하는 내부 메서드입니다.
@@ -132,7 +132,8 @@ type ArrayCollection<T> = BaseCollection<T> & IArrayCollection<T> & {
      * @returns  조건을 만족하는 첫 번째 요소의 인덱스, 찾지 못한 경우 `-1`
      */
     findIndex(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): number;
-};
+
+} & BaseCollection<T> & IArrayCollection<T>;
 
 export interface ArrayCollectionConstructor {
     /**

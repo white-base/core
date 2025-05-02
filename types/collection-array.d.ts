@@ -5,7 +5,7 @@ import type BaseCollection      from "./base-collection.d.ts";
  * The 'Array Collection' class inherits the 'Base Collection' and implements the 'Array Collection' interface.  
  * This class manages collections in the form of arrays and provides a variety of methods for array-related tasks.  
  */
-type ArrayCollection<T> = BaseCollection<T> & IArrayCollection<T> & {
+type ArrayCollection<T> = {
     
     /**
      * Internal method to remove the specified element from the collection.  
@@ -132,15 +132,16 @@ type ArrayCollection<T> = BaseCollection<T> & IArrayCollection<T> & {
      * @returns Index of the first element that satisfies the condition, if not found '-1'
      */
     findIndex(callbackfn: (elem: T, index: number, list: T[]) => boolean, thisArg?: any): number;
-}
+
+}& BaseCollection<T> & IArrayCollection<T>
 
 export interface ArrayCollectionConstructor {
     /**
      * Creates an instance of an ArrayCollection class.
-     * 
+     *
      * @param owner Objects that own this collection
      */
-    new <T=string>(owner?: object): ArrayCollection<T>;
+    new <T>(owner?: object): ArrayCollection<T>;
 }
   
 declare const ArrayCollection: ArrayCollectionConstructor;

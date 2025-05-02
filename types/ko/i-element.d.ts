@@ -3,9 +3,6 @@
  */
 declare interface IElement {
     
-    /**
-     * 요소의 이름을 저장하는 내부 속성입니다.
-     */
     _name: string;
 
     /**

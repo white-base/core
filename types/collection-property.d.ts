@@ -5,7 +5,7 @@ import type BaseCollection          from "./base-collection.d.ts";
  * The 'Property Collection' class inherits the 'Base Collection' and implements the 'IProperty Collection' interface.  
  * This class manages attribute-based collections and provides the ability to access each element using keys and values.  
  */
-type PropertyCollection<T> = IPropertyCollection<T> & BaseCollection<T> & {
+type PropertyCollection<T> = {
     
     /**
      * Returns all key values in the collection to an array.  
@@ -155,7 +155,7 @@ type PropertyCollection<T> = IPropertyCollection<T> & BaseCollection<T> & {
 
 } & {
     [key: string]: T;
-};
+} & IPropertyCollection<T> & BaseCollection<T>;
 
 export interface PropertyCollectionConstructor {
     /**

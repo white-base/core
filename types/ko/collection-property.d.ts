@@ -5,7 +5,7 @@ import type BaseCollection          from "./base-collection.d.ts";
  * `PropertyCollection` 클래스는 `BaseCollection`을 상속하며 `IPropertyCollection` 인터페이스를 구현합니다.  
  * 이 클래스는 속성 기반 컬렉션을 관리하고, 각 요소에 대해 키와 값을 사용하여 접근할 수 있는 기능을 제공합니다.
  */
-type PropertyCollection<T> = IPropertyCollection<T> & BaseCollection<T> & {
+type PropertyCollection<T> = {
     /**
      * 컬렉션의 모든 키 값을 배열로 반환합니다.
      */
@@ -154,7 +154,7 @@ type PropertyCollection<T> = IPropertyCollection<T> & BaseCollection<T> & {
 
 } & {
     [key: string]: T;
-};
+} & IPropertyCollection<T> & BaseCollection<T>;
 
 export interface PropertyCollectionConstructor {
     /**

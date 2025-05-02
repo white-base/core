@@ -7,7 +7,7 @@ import type { MetaObjectType } from "./T.d.ts";
  * `BaseCollection` 클래스는 `MetaObject`을 상속하며 `ICollection`, `IList` 인터페이스를 구현합니다.  
  * 이 클래스는 모든 컬렉션의 최상위 클래스 역할을 합니다.  
  */
-type BaseCollection<T> = MetaObjectType & ICollection<T> & IList<T> & { 
+type BaseCollection<T> = { 
     
     /**
      * 컬렉션에서 예약어로 사용되는 문자열 목록입니다.
@@ -40,7 +40,7 @@ type BaseCollection<T> = MetaObjectType & ICollection<T> & IList<T> & {
     _elemTypes: any[];
 
     /**
-     * 컬렉션의 요소 목록을 저장하는 배열입니다.
+     * 컬렉션의 요소 목록을 저장하는 배열입니다.  
      */
     _list: T[];
 
@@ -269,6 +269,7 @@ type BaseCollection<T> = MetaObjectType & ICollection<T> & IList<T> & {
      * 요소를 컬렉션에 추가합니다.
      * 
      * @returns 추가한 요소의 인덱스
+     * @overload
      */
     add(...args: any[]): number;
 
@@ -279,7 +280,7 @@ type BaseCollection<T> = MetaObjectType & ICollection<T> & IList<T> & {
 
 } & {
     [key: number]: T;
-};
+} & MetaObjectType & ICollection<T> & IList<T>;
 
 export interface BaseCollectionConstructor {
     /**

@@ -3,9 +3,6 @@
  */
 declare interface IElement {
     
-    /**
-     * Internal property that stores the name of the element.  
-     */
     _name: string;
 
     /**

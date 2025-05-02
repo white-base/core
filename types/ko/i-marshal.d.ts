@@ -3,14 +3,8 @@
  */
 declare interface IMarshal {
 
-    /**
-     * 객체의 고유 식별자를 저장하는 내부 속성입니다.
-     */
     _guid: string;
 
-    /**
-     * 객체의 생성자 타입을 저장하는 내부 속성입니다. 
-     */
     _type: Function;
 
     /**

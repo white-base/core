@@ -3,14 +3,8 @@
  */
 declare interface IMarshal {
 
-    /**
-     * Internal property that stores the unique identifier of the object.  
-     */
     _guid: string;
 
-    /**
-     * Internal property that stores the creator type of the object.  
-     */
     _type: Function;
 
     /**
