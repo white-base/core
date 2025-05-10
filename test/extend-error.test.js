@@ -3,7 +3,7 @@
 import ExtendError from '../src/extend-error';
 import {jest} from '@jest/globals';
 
-let funcA, funcB, funcC
+let funcA, funcB, funcC, funcD
 //==============================================================
 // test
 describe("[target: extend-error.js]", () => {
@@ -37,13 +37,22 @@ describe("[target: extend-error.js]", () => {
                         throw e;
                     }
                 }
+                // funcD = function funcD(msg = '[ES05]', prop = {a: 'err'}) {                    
+                //     try {
+                //         funcC();
+                //     } catch (error) {
+                //         var e = new ExtendError(msg, error);
+                //         throw e;
+                //     }
+                // }
             });
             describe("ExtendError._type: fun <타입>", () => {
                 it("- _type : function ", () => {
                     expect(()=> {throw new ExtendError('msg')}).toThrow(/msg/);     // Error 와 동일
-                    expect(()=> funcA()).toThrow(/ES01[\s\S]*a : err/);             // 속성 메제지
-                    expect(()=> funcB()).toThrow(/ES02[\s\S]*ES03[\s\S]*ES04/);     // 함수 catch 수신
-                    expect(()=> funcC()).toThrow(/ES03[\s\S]*ES04/);                // catch 수신
+                    expect(()=> funcA()).toThrow(/a : err[\s\S]*ES01/);             // 속성 메제지
+                    expect(()=> funcB()).toThrow(/ES04[\s\S]*ES03[\s\S]*ES02/);     // 함수 catch 수신
+                    expect(()=> funcC()).toThrow(/ES04[\s\S]*ES03/);                // catch 수신
+                    // expect(()=> funcD()).toThrow(/ES04/);                           // catch 수신
                 });
                 it("- _type : prop ", () => {
                     expect(()=> { throw new ExtendError('msg', {aa: '10'}) }).toThrow(/aa/);

@@ -14,12 +14,17 @@ function _buildMessageProp(obj) {
 function _buildMsgQueue(queue) {
     var msg = '';
     var queue_cnt = queue.length;
-    for (var i = queue_cnt; i > 0; i--) {
+    for (var i = 0; i < queue_cnt; i++) {
         var mark = '';
-        for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
-        msg += '' + mark + ' '+ queue[i - 1] + '\n';
+        for (var j = 0; j < i; j++) { mark += '#'; }
+        msg += '' + mark +' '+ queue[i] + '\n';
     }
-    return msg;
+    // for (var i = queue_cnt; i > 0; i--) {
+    //     var mark = '';
+    //     for (var j = i; j <= queue_cnt; j++) { mark += '#'; }
+    //     msg += '' + mark + ' '+ queue[i - 1] + '\n';
+    // }
+    return msg.trim();
 }
 
 class ExtendError extends Error {
@@ -90,16 +95,17 @@ class ExtendError extends Error {
             _msg = p_msg;
         } else if (p_msg instanceof RegExp) {
             _msg = Message.get(p_msg.source, p_codeVal);
-        } else _msg = '';
+        } else _msg = 'An unknown error occurred.';
         
-        _build = _msg + '\n';
-        
+        // _build = _msg + '\n';
+        _queue.push(_msg);
+
         if (_prop) _build += _buildMessageProp(_prop);
         if (_queue.length > 0) _build += _buildMsgQueue(_queue);
-
+        
         this.message = _build;
         this.queue = _queue;
-        this.queue.push(_msg);
+        // this.queue.push(_msg);
     }
 
     /**
