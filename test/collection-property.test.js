@@ -1372,6 +1372,35 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(()=> s.columns.findIndex({})).toThrow(/EL041113/);
             });
         });
+        describe("PropertyCollection.entries()", () => {
+            it("- entries() : 기본 동작 ", () => {
+                let s = new Student();
+                var arr = [];
+                var result;
+
+                s.columns.add('k1', 1);
+                s.columns.add('k2', 3);
+                s.columns.add('k3', 5);
+                var result = s.columns.entries();
+                expect(result).toEqual([
+                    ['k1', 1],
+                    ['k2', 3],
+                    ['k3', 5]
+                ]);
+
+                var arr = [];
+                for (let [key, value] of s.columns.entries()) {
+                    arr.push({ key, value });
+                }
+                expect(arr).toEqual([
+                    { key: 'k1', value: 1 },
+                    { key: 'k2', value: 3 },
+                    { key: 'k3', value: 5 }
+                ]);
+            });
+        });
+        
+
         describe("for in 열거 속성 검사", () => {
             it("- for in", () => {
                 var arr = [];

@@ -482,7 +482,23 @@ var PropertyCollection  = (function (_super) {
     };
     Object.defineProperty(PropertyCollection.prototype, 'findIndex', {
         enumerable: false
-    });        
+    });
+
+    /**
+     * Returns an array of key/value pairs for all elements.
+     * @returns {Array} Array of key/value pairs
+     */
+    PropertyCollection.prototype.entries = function () {
+        var out = [];
+        for (var i = 0; i < this._list.length; i++) {
+            var item = this._list[i];
+            out.push([this.$keys[i], this._list[i]]);  // 인덱스 대신 key 사용
+        }
+        return out;
+    };
+    Object.defineProperty(PropertyCollection.prototype, 'entries', {
+        enumerable: false
+    });    
 
     return PropertyCollection;
 

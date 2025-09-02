@@ -398,6 +398,18 @@ var ArrayCollection  = (function (_super) {
         enumerable: false
     });
 
+    /**
+     * Returns an array of key/value pairs for all elements.
+     * @returns 
+     */
+    ArrayCollection.prototype.entries = function () {
+        var out = [];
+        for (var i = 0; i < this._list.length; i++) out.push([i, this._list[i]]);
+        return out;
+    };
+    Object.defineProperty(ArrayCollection.prototype, 'entries', {
+        enumerable: false
+    });
 
     return ArrayCollection;
 
