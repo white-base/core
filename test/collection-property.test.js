@@ -635,6 +635,13 @@ describe("[target: collection-property.js, base-collection.js]", () => {
                 expect(s.columns.count).toBe(1);
                 expect(result > -1).toBeTruthy();
             });
+            it ("- add(name, null) 특수이름", () => {
+                let s = new Student();
+                const result = s.columns.add('a1.1', 10);
+
+                expect(s.columns['a1.1']).toBe(10);
+                expect(s.columns.count).toBe(1);
+            });
             it("- add(name, value, desc) : 읽기 전용", () => {
                 console.warn = jest.fn((val) => { expect(val).toMatch(/WS011/)});
                 let s = new Student();
