@@ -40,7 +40,9 @@ function _getLocale() {
         // Node.js 환경
         const rawLocale = process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE;
         if (rawLocale) {
-            locale = rawLocale.split(/[:_.]/)[0].replace('_', '-'); // "ko_KR.UTF-8" -> "ko"
+            const normalizedLocale = rawLocale.split(/[:@.]/)[0].replace(/_/g, '-');
+            const languageCode = normalizedLocale.split(/-/)[0]?.toLowerCase();
+            locale = languageCode && !['c', 'posix'].includes(languageCode) ? languageCode : '';
         }
     }
     return locale || 'en';
